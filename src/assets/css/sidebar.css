@@ -4,10 +4,78 @@
   height: 100vh;
   left: 0;
   background-color: white;
-  transition: all 0.3s;
+  transition: width 0.3s;
+  border-right: 1px solid #E3E3E8;
 }
 .rightSide{
   width: calc(100% - 300px);
   margin-left: auto;
   transition: all 0.3s;
+}
+.sidebarOpen + .rightSide {
+  width: calc(100% - 104px);
+}
+.sidebarOpen{
+  width: 104px;
+}
+.sidebarOpen .sidebarLink span{
+  display: none;
+}
+.sidebarOpen .sidebarLogo img{
+  width: 60px;
+}
+.sidebarLogo img{
+  width: 101px;
+  transition: all 0.3s;
+}
+.sidebarLogo{
+  width: 100%;
+  padding: 20px 0;
+  text-align: center;
+  border-bottom: 1px solid #E3E3E8;
+  margin-bottom: 8px;
+  padding-bottom: 28px;
+  height: 101px;
+}
+.heightvh{
+  height: calc(100vh - 231px);
+  overflow-y: auto;
+}
+.heightvh::-webkit-scrollbar{
+  display: none;
+}
+.sidebarLink{
+  display: flex;
+  padding: 15px 35px;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 24px;
+  gap: 15px;
+  background-color: white;
+  position: relative;
+  z-index: 1;
+  cursor: pointer;
+  border-left: 4px solid transparent;
+  margin-bottom: 5px;
+}
+.logout{
+  padding-top: 22.5px;
+  border-top: 1px solid #E3E3E8;
+  margin-top: 7.5px;
+}
+.sidebarLink:hover:not(.sidebarLink:hover.logout,.sidebarLink.active){
+  background-color:#EBF3FF;
+}
+.sidebarLink.active{
+  background: linear-gradient(90deg, rgba(5, 109, 255, 0.4) 0%, rgba(5, 109, 255, 0) 100%);
+  border-left: 4px solid #056DFF;
+}
+.selected{
+  display: none;
+}
+.sidebarLink.active .selected{
+  display: block;
+}
+.sidebarLink.active .notSelected{
+  display: none;
 }

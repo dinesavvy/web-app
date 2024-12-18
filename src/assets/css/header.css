@@ -1,0 +1,16 @@
+header{
+    padding: 23px 30px;
+    background-color: white;
+    margin-bottom: 30px;
+}
+.burgerMenu{
+    height: 34px;
+    cursor: pointer;
+}
+.notification{
+    height: 30px;
+}
+.mx292{
+    max-width: 292px;
+    width: 100%;
+}

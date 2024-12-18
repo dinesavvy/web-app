@@ -17,7 +17,23 @@
     font-size: 14px;
     line-height: 21px;
 }
+.fs-16{
+    font-size: 16px;
+    line-height: 24px;
+}
+.fs-24{
+    font-size: 24px;
+    line-height: 36px;
+}
+.fs-26{
+    font-size: 26px;
+    line-height: 39px;
+}
 .fs-28{
     font-size: 28px;
     line-height: 42px;
+}
+.fs-34{
+    font-size: 34px;
+    line-height: 51px;
 }

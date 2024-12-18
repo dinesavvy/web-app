@@ -1,0 +1,229 @@
+.dashboard{
+    padding: 0 30px;
+}
+.overviewCard{
+    padding: 16px;
+    background-color: #FFFFFF;
+    border: 1px solid #E3E3E8;
+    border-radius: 8px;
+    line-height: 11px;
+    text-align: center;
+}
+.card{
+    padding: 20px;
+    border-radius: 8px;
+    background-color: #FFFFFF;
+    border: 1px solid #E3E3E8;
+}
+
+.overviewGrid2{
+    grid-template-columns: repeat(2,1fr);
+}
+.circleinfo{
+    position: relative;
+    height: 115px;
+    width: 115px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    flex-direction: column;
+}
+.circleAbsolute{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    right: 0;
+}
+.trend{
+    color: #005CDE;
+    background: #005CDE1A;
+    border-radius: 4px;
+    padding: 4px 18px;
+    font-size: 12px;
+    line-height: 18px;
+    width: fit-content;
+    margin: 0 auto;
+}
+.p12{
+    border: 1px solid #E3E3E8;
+    border-radius: 4px;
+    padding: 12px;
+}
+.trendGreen{
+    color: #00BB12;
+    background:#00BB1233;
+}
+.z1{
+    position: relative;
+    z-index: 1;
+}
+
+
+/* Container styling */
+.tabs {
+    padding: 4px;
+    border-radius: 8px;
+    background-color: #FFFFFF;
+    border: 1px solid #E3E3E8;
+    width: calc(100% - 8px);
+  }
+  
+  /* Tab buttons */
+  .tabs {
+    display: flex;
+    justify-content: space-around;
+    gap: 16px;
+  }
+  
+  .tab-button {
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    width: 100%;
+    font-size: 16px;
+    line-height: 16px;
+    padding: 10px;
+    border-radius: 10px;
+    background-color: white;
+    font-weight: 500;
+  }
+  
+  .tab-button:hover {
+    background: #eaeaea;
+  }
+  
+  .tab-button.active {
+    background: #005CDE;
+    color: white;
+  }
+  
+  /* Tab content */
+  .tab-content {
+    position: relative;
+    height: 100%;
+    overflow: hidden;
+  }
+  .mxh{
+    max-height: 200px;
+  }
+  .tab-panel {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+  
+  .tab-panel.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  
+  .tab-panel.hidden {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  
+  .chartborder{
+    background-color: #FFFFFF;
+    border: 1px solid #E3E3E8;
+    border-radius: 8px;
+  }
+  .chartpadding{
+    padding: 20px 20px 0 20px;
+    display: flex;
+    justify-content: space-between;
+  }
+  .divider{
+    width: 100%;
+    height: 1px;
+    background-color: #C0C7D8;
+    margin: 20px 0;
+  }
+  .divider2{
+    width: 100%;
+    height: 1px;
+    background-color: #E3E3E8;
+    margin: 20px 0;
+  }
+  .chartGrid{
+    grid-template-columns: repeat(3,1fr);
+  }
+  .hchartImage{
+    height: 44px;
+  }
+  .tab2{
+    margin-bottom: 0;
+    
+  }
+  .tab2 .tabs{
+    gap: 9px;
+  }
+  .tab2 .tab-button{
+    border-radius: 5px;
+    padding: 10px 15px;
+    position: relative;
+    color: #a6a6a8;
+  }
+  .tab2 .tab-button.active{
+    color: white;
+  }
+  .tab2 .tab-button::after{
+    content: "";
+    background: #11111112;
+    height: 24px;
+    width: 1px;
+    position: absolute;
+    right: -4px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  .tab3{
+    border-bottom: 1px solid #E3E3E8;
+  }
+  .tab3 .tabs{
+    padding: 0;
+    border: 0;
+    width: fit-content;
+    gap: 0;
+  }
+  .tab3 .tab-button{
+    width: fit-content;
+    padding: 8px 32px;
+    border-radius: 12px 12px 0 0 ;
+  }
+  .accordion-header {
+  }
+  
+  .accordion-item:not(:last-child) {
+    border-bottom: none;
+  }
+  
+  .accordion-item {
+    padding: 20px;
+    border-radius: 16px;
+    background-color: #F4F5F6;
+  }
+  .accordion-item{
+    margin-bottom: 20px;
+  }
+  .accordion-body {
+    animation: fadeIn 0.3s ease-in-out;
+    margin-top: 16px;
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(-5px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  

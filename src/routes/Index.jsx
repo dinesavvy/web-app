@@ -36,13 +36,13 @@ const AppRoutes = () => {
                 </>
               ) : route?.isLayout ? (
                 <>
-                <div className="d-flex h-100 w-100 ">
-                <Sidebar isOpen={isOpen}/>
-                <div className="rightSide">
-                  <Header handleTrigger={handleTrigger} />
-                <route.element />
-                </div>
-                </div>
+                  <div className="d-flex h-100 w-100 ">
+                    <Sidebar isOpen={isOpen} />
+                    <div className="rightSide">
+                      <Header handleTrigger={handleTrigger} />
+                      <route.element />
+                    </div>
+                  </div>
                 </>
               ) : (
                 <route.element />
