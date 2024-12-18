@@ -1,0 +1,23 @@
+.fw-400{
+    font-weight: 400;
+}
+.fw-500{
+    font-weight: 500;
+}
+.fw-600{
+    font-weight: 600;
+}
+.fw-700{
+    font-weight: 700;
+}
+.fw-800{
+    font-weight: 800;
+}
+.fs-14{
+    font-size: 14px;
+    line-height: 21px;
+}
+.fs-28{
+    font-size: 28px;
+    line-height: 42px;
+}

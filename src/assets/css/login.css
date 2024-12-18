@@ -1,0 +1,38 @@
+.loginFlex {
+    height: calc(100vh);
+    display: flex;
+    background-color: white;
+}
+.mx-420 {
+    max-width: 420px;
+    width: 420px;
+}
+.logo{
+    height: 156px;
+}
+.fixLeft{
+    overflow: hidden;
+}
+.line{
+    position: relative; 
+}
+.line::after{
+    content: "";
+    height: 24px;
+    width: 1px;
+    background-color: #130C46;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    left: 56px;
+}
+.absoluteImage{
+    top: 50%;
+    transform: translateY(-50%);
+    position: absolute;
+    left: 16px;
+}
+.line input{
+    padding-left: 72px;
+    width: calc(100% - 91px);
+}

@@ -8,12 +8,13 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-	 "start:admin": "vite --env=admin",
-  "start:supplier": "vite --env=supplier",
-  "build:admin": "vite build --env=admin",
-  "build:supplier": "vite build --env=supplier"
+    "start:admin": "vite --env=admin",
+    "start:supplier": "vite --env=supplier",
+    "build:admin": "vite build --env=admin",
+    "build:supplier": "vite build --env=supplier"
   },
   "dependencies": {
+    "antd": "^5.22.5",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^7.0.2"

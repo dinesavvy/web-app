@@ -1,0 +1,13 @@
+.sidebar{
+  width: 300px;
+  position: fixed;
+  height: 100vh;
+  left: 0;
+  background-color: white;
+  transition: all 0.3s;
+}
+.rightSide{
+  width: calc(100% - 300px);
+  margin-left: auto;
+  transition: all 0.3s;
+}

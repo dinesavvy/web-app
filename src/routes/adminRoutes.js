@@ -1,4 +1,4 @@
-import Login from "./../panels/admin/auth/Login";
+import AdminLogin from "./../panels/admin/auth/AdminLogin";
 import AdminDashboard from "./../panels/admin/AdminDashboard";
 const adminRoutes = [
   {
@@ -8,10 +8,10 @@ const adminRoutes = [
     isLayout: true,
   },
   {
-    element: Login,
+    element: AdminLogin,
     path: "/admin",
     isPrivate: false,
-    isLayout: true,
+    isLayout: false,
   },
 ];
 
