@@ -157,9 +157,9 @@
 }
 
 .chartborder {
-  background-color: #FFFFFF;
+  /* background-color: #FFFFFF;
   border: 1px solid #E3E3E8;
-  border-radius: 8px;
+  border-radius: 8px; */
 }
 
 .chartpadding {
@@ -297,7 +297,18 @@
   max-width: 35%;
   width: 100%;
 }
-
+.mx510{
+  max-width: 510px;
+  width: 100%;
+}
+iframe{
+  width: 100%;
+  height: 100%;
+}
+.iframeMap{
+  border-radius: 10px;
+  overflow: hidden;
+}
 @keyframes fadeIn {
   from {
     opacity: 0;
