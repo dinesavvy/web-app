@@ -24,6 +24,7 @@ const PromotionCard = ({
         {/* <img src={chartImage} className="w-100" alt={`${title} chart`} /> */}
         {middleComponent}
       </div>
+
       <div className="btn" onClick={onButtonClick}>
         {buttonText}
       </div>

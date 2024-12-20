@@ -12,6 +12,7 @@ import olive from "../../assets/images/olive.png";
 import BarChart from "../../shared/charts/BarChart";
 import DoughnutChart from "../../shared/charts/DoughnutChart";
 import { Pagination } from "antd";
+import AreaChart from "../../shared/charts/AreaChart";
 const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState("1");
   const [activeTab2, setActiveTab2] = useState("1");
@@ -35,7 +36,17 @@ const AdminDashboard = () => {
             <div className="chartpadding mb-20">
               <div className="fs-16 fw-600 ">Habitual Users</div>
             </div>
-            <img src={chart} alt="" className="w-100 mxh" />
+            {/* <img src={chart} alt="" className="w-100 mxh" />
+             */}
+
+            <AreaChart
+              labels={["M", "T", "W", "T", "F", "S"]}
+              datas={[65, 59, 80, 81, 56, 55, 40]}
+              topColor={"rgba(2, 124, 255, 0.5)"}
+              bottomColor={"rgba(215, 210, 226, 0.2)"}
+              borderColor={"rgba(0, 123, 255, 1)"}
+              className={"w-100 mxh"}
+            />
           </div>
           <div className="card w-100">
             <div className="d-flex justify-between align-center ">
@@ -52,6 +63,8 @@ const AdminDashboard = () => {
               borderSkipped={"bottom"}
               xDisplay={true}
               yDisplay={false}
+              isDatasMap={false}
+              displayLegend={false}
             />
           </div>
         </div>
@@ -71,6 +84,8 @@ const AdminDashboard = () => {
               borderSkipped={"bottom"}
               xDisplay={true}
               yDisplay={false}
+              isDatasMap={false}
+              displayLegend={false}
             />
           </div>
           <div className="card mx369">
@@ -218,6 +233,8 @@ const AdminDashboard = () => {
                 borderSkipped={false}
                 xDisplay={false}
                 yDisplay={true}
+                isDatasMap={true}
+                displayLegend={true}
               />
             }
           />
@@ -235,6 +252,8 @@ const AdminDashboard = () => {
                 borderSkipped={false}
                 xDisplay={false}
                 yDisplay={true}
+                isDatasMap={true}
+                displayLegend={true}
               />
             }
           />{" "}
@@ -252,6 +271,8 @@ const AdminDashboard = () => {
                 borderSkipped={false}
                 xDisplay={false}
                 yDisplay={true}
+                isDatasMap={true}
+                displayLegend={true}
               />
             }
           />

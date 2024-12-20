@@ -9,6 +9,7 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
+import PropTypes from "prop-types";
 
 // Register the necessary components
 ChartJS.register(
@@ -21,17 +22,39 @@ ChartJS.register(
   Legend
 );
 
-const AreaChart = () => {
+const AreaChart = ({
+  labels,
+  datas,
+  topColor,
+  bottomColor,
+  borderColor,
+  className,
+}) => {
   // Sample data
   const data = {
-    labels: ["M", "T", "W", "T", "F", "S"],
+    labels: labels,
     datasets: [
       {
         label: "My Area Chart",
-        data: [65, 59, 80, 81, 56, 55, 40],
+        data: datas,
         fill: true, // Fill the area under the line
-        backgroundColor: "rgba(0, 123, 255, 0.2)", // Light blue fill
-        borderColor: "rgba(0, 123, 255, 1)", // Blue border
+        backgroundColor: (context) => {
+          const chart = context.chart;
+          const { ctx, chartArea } = chart;
+          if (!chartArea) {
+            return null;
+          }
+          const gradient = ctx.createLinearGradient(
+            0,
+            chartArea.top,
+            0,
+            chartArea.bottom
+          );
+          gradient.addColorStop(0, topColor); // Darker color at the top
+          gradient.addColorStop(1, bottomColor); // Lighter color at the bottom
+          return gradient;
+        },
+        borderColor: borderColor, // Blue border
         borderWidth: 2,
         tension: 0.4, // Smooth the line
       },
@@ -63,7 +86,15 @@ const AreaChart = () => {
     },
   };
 
-  return <Line data={data} options={options} className="w-100 mxh" />;
+  return <Line data={data} options={options} className={className} />;
 };
 
+AreaChart.propTypes = {
+  labels: PropTypes.array,
+  datas: PropTypes.array,
+  className: PropTypes.string,
+  topColor: PropTypes.any,
+  bottomColor: PropTypes.any,
+  borderColor: PropTypes.any,
+};
 export default AreaChart;
