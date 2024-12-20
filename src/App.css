@@ -131,6 +131,14 @@ label{
 .btn:hover{
   background-color: #0055CC;
 }
+.btnSecondary{
+  border: 1px solid #056DFF;
+  background: #EBF3FF;
+  color: #056DFF;
+}
+.btnSecondary:hover{
+  background: #EBF3FF;
+}
 @media (max-height: 700px) {
   .loginside {
     align-items: start;

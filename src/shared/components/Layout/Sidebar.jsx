@@ -23,11 +23,16 @@ import settingFull from "../../../assets/images/sidebar/settingFull.svg";
 import "react-tooltip/dist/react-tooltip.css";
 import { Tooltip } from "react-tooltip";
 
-const Sidebar = ({ isOpen }) => {
+const Sidebar = ({ isOpen ,setIsOpen}) => {
   const links = [
     { id: 1, name: "Dashboard", icon: dashboard, iconFull: dashboardFull },
     { id: 2, name: "Suppliers", icon: suppliers, iconFull: suppliersFull },
-    { id: 3, name: "Distributors", icon: distributor, iconFull: distributorFull },
+    {
+      id: 3,
+      name: "Distributors",
+      icon: distributor,
+      iconFull: distributorFull,
+    },
     { id: 4, name: "Merchants", icon: merchant, iconFull: merchantFull },
     { id: 5, name: "Consumers", icon: consumers, iconFull: consumersFull },
     { id: 6, name: "Nudges", icon: nudge, iconFull: nudgeFull },
@@ -38,6 +43,7 @@ const Sidebar = ({ isOpen }) => {
 
   return (
     <>
+    <div className={isOpen ? "overlay ": "overlay close"} onClick={()=>setIsOpen(false)}></div>
       <div className={`sidebar ${isOpen ? "sidebarOpen" : ""}`}>
         <div className="sidebarLogo">
           <img src={logo} alt="Logo" />
@@ -47,21 +53,15 @@ const Sidebar = ({ isOpen }) => {
             {links.map((link) => (
               <div
                 key={link.id}
-                className={`sidebarLink active ${isOpen ? "" : "tooltip-container"}`}
+                className={`sidebarLink active ${
+                  isOpen ? "" : "tooltip-container"
+                }`}
                 data-tooltip-id={isOpen ? "sidebar-tooltip" : undefined}
                 data-tooltip-content={isOpen ? link.name : undefined}
               >
-                <img
-                  src={link.icon}
-                  alt={link.name}
-                  className="notSelected"
-                />
-                <img
-                  src={link.iconFull}
-                  alt={link.name}
-                  className="selected"
-                />
-                {!isOpen && <span>{link.name}</span>}
+                <img src={link.icon} alt={link.name} className="notSelected" />
+                <img src={link.iconFull} alt={link.name} className="selected" />
+                <span>{link.name}</span>
               </div>
             ))}
           </div>
@@ -70,13 +70,14 @@ const Sidebar = ({ isOpen }) => {
           className="logout sidebarLink "
           data-tip={!isOpen ? "" : "Logout"}
           data-tooltip-id={isOpen ? "sidebar-tooltip" : undefined}
-                data-tooltip-content={isOpen ? "Logout" : undefined}
+          data-tooltip-content={isOpen ? "Logout" : undefined}
         >
           <img src={logout} alt="Logout" />
-          {!isOpen && <span>Logout</span>}
+           <span>Logout</span>
         </div>
         <Tooltip id="sidebar-tooltip" place="right" />
       </div>
+      
     </>
   );
 };

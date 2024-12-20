@@ -1,10 +1,10 @@
+import { useEffect, useState } from "react";
 import { Route, Routes } from "react-router-dom";
 import adminRoutes from "./adminRoutes";
 import distributorRoutes from "./distributorRoutes";
 import PrivateRoute from "./PrivateRoute";
 import Sidebar from "../shared/components/Layout/Sidebar";
 import Header from "../shared/components/Layout/Header";
-import { useState } from "react";
 import supplierRoutes from "./supplierRoutes";
 import merchantRoutes from "./merchantRoutes";
 
@@ -22,6 +22,18 @@ const AppRoutes = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleTrigger = () => setIsOpen(!isOpen);
+  useEffect(() => {
+    if (isOpen) {
+      document.body.classList.add("overflowHidden");
+    } else {
+      document.body.classList.remove("overflowHidden");
+    }
+
+    // Cleanup to avoid lingering effects if the component unmounts
+    return () => {
+      document.body.classList.remove("overflowHidden");
+    };
+  }, [isOpen]);
   return (
     <>
       <Routes>
@@ -41,7 +53,7 @@ const AppRoutes = () => {
               ) : route?.isLayout ? (
                 <>
                   <div className="d-flex h-100 w-100 ">
-                    <Sidebar isOpen={isOpen} />
+                    <Sidebar isOpen={isOpen} setIsOpen={setIsOpen} />
                     <div className="rightSide">
                       <Header handleTrigger={handleTrigger} />
                       <route.element />

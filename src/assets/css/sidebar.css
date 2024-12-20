@@ -79,3 +79,43 @@
 .sidebarLink.active .notSelected{
   display: none;
 }
+.overlay{
+  display: none
+}
+@media (max-width:1023.98px) {
+  .rightSide,.sidebarOpen + .rightSide{
+    width: 100%;
+  }
+  .sidebar{
+    transform: translateX(-300px);
+    z-index: 5;
+    transition: transform 0.5s;
+  }
+  .sidebarOpen{
+    transform: translateX(0);
+    width: 300px;
+  }
+  .sidebarOpen .sidebarLink span{
+    display: block;
+  }
+  .overlay{
+    display: block;
+    position: fixed;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.247);
+    height: 100%;
+    z-index: 4;
+  }
+  .sidebarOpen .sidebarLogo img{
+    width: 101px;
+  }
+  .close{
+    display: none;
+  }
+  .overflowHidden{
+    overflow: hidden;
+  }
+  .logout{
+    width: 226px;
+  }
+}
