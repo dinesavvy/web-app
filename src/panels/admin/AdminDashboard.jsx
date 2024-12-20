@@ -5,7 +5,10 @@ import chartnudge from "../../assets/images/chartnudge.svg";
 import chartPromotion from "../../assets/images/chartPromotion.svg";
 import chartfollower from "../../assets/images/chartfollower.svg";
 import chart from "../../assets/images/chart.jpg";
-import chart2 from "../../assets/images/chart2.jpg";
+import OverviewGrid from "../../shared/components/dashboards/OverviewGrid";
+import TabContainer from "../../shared/components/dashboards/TabContainer";
+import GraphWithCircle from "../../shared/components/dashboards/GraphWithCircle";
+import PromotionCard from "../../shared/components/dashboards/PromotionCard";
 
 const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState("1");
@@ -44,27 +47,67 @@ const AdminDashboard = () => {
     {
       id: "1",
       label: "1D",
-      content: <Test />,
+      content: (
+        <GraphWithCircle
+          title="Habitual Followers"
+          value="8,000"
+          trend={10}
+          merchantsCount={256}
+          chartImage={chart}
+        />
+      ),
     },
     {
       id: "2",
       label: "1W",
-      content: <Test />,
+      content: (
+        <GraphWithCircle
+          title="Habitual Followers"
+          value="8,000"
+          trend={10}
+          merchantsCount={256}
+          chartImage={chart}
+        />
+      ),
     },
     {
       id: "3",
       label: "3M",
-      content: <Test />,
+      content: (
+        <GraphWithCircle
+          title="Habitual Followers"
+          value="8,000"
+          trend={10}
+          merchantsCount={256}
+          chartImage={chart}
+        />
+      ),
     },
     {
       id: "4",
       label: "4M",
-      content: <Test />,
+      content: (
+        <GraphWithCircle
+          title="Habitual Followers"
+          value="8,000"
+          trend={10}
+          merchantsCount={256}
+          chartImage={chart}
+        />
+      ),
     },
     {
       id: "5",
       label: "5M",
-      content: <Test />,
+      content: (
+        <GraphWithCircle
+          title="Habitual Followers"
+          value="8,000"
+          trend={10}
+          merchantsCount={256}
+          chartImage={chart}
+        />
+      ),
     },
   ];
   const tabs2 = [
@@ -107,120 +150,43 @@ const AdminDashboard = () => {
         <div className="d-flex gap-20">
           <div className="mx292">
             <div className="overviewCard fs-16 mb-10">Overview</div>
-            <div className="card d-grid gap-20 overviewGrid2">
-              <div>
-                <div className="circleinfo mb-10">
-                  <img src={circleinfo} className="circleAbsolute" alt="" />
-                  <div className="fs-34 fw-700 z1">256</div>
-                  <div className="fs-14 z1">Merchants</div>
-                </div>
-                <div className="trend">Trend 10%</div>
-              </div>
-              <div>
-                <div className="circleinfo mb-10">
-                  <img src={circleinfo} className="circleAbsolute" alt="" />
-                  <div className="fs-34 fw-700 z1">256</div>
-                  <div className="fs-14 z1">Merchants</div>
-                </div>
-                <div className="trend">Trend 10%</div>
-              </div>
-              <div>
-                <div className="circleinfo mb-10">
-                  <img src={circleinfo} className="circleAbsolute" alt="" />
-                  <div className="fs-34 fw-700 z1">256</div>
-                  <div className="fs-14 z1">Merchants</div>
-                </div>
-                <div className="trend">Trend 10%</div>
-              </div>
-              <div>
-                <div className="circleinfo mb-10">
-                  <img src={circleinfo} className="circleAbsolute" alt="" />
-                  <div className="fs-34 fw-700 z1">256</div>
-                  <div className="fs-14 z1">Merchants</div>
-                </div>
-                <div className="trend">Trend 10%</div>
-              </div>
-            </div>
+
+            <OverviewGrid />
           </div>
           <div className="w-100">
-            <div className="h-100">
-              <div className="tabs-container h-100">
-                {/* Tab Buttons */}
-                <div className="tabs mb-10">
-                  {tabs.map((tab) => (
-                    <button
-                      key={tab.id}
-                      className={`tab-button ${
-                        activeTab === tab.id ? "active" : ""
-                      }`}
-                      onClick={() => setActiveTab(tab.id)}
-                    >
-                      {tab.label}
-                    </button>
-                  ))}
-                </div>
-
-                {/* Tab Content */}
-                <div className="tab-content">
-                  {tabs.map((tab) => (
-                    <div
-                      key={tab.id}
-                      className={`tab-panel  ${
-                        activeTab === tab.id ? "visible" : "hidden"
-                      }`}
-                    >
-                      {tab.content}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
+            <TabContainer
+              tabs={tabs}
+              activeTab={activeTab}
+              setActiveTab={setActiveTab}
+            />
           </div>
         </div>
         <div className="divider"></div>
         <div className="d-grid chartGrid gap-20">
-          <div className="card">
-            <div className="d-flex gap-20">
-              <img src={chartPromotion} className="hchartImage" alt="" />
-              <div>
-                <div className="fs-16">Promotions</div>
-                <div className="fs-26 fw-700">80</div>
-              </div>
-            </div>
-            <div className="divider2"></div>
-            <div className="mb-20">
-              <img src={chart2} className="w-100" alt="" />
-            </div>
-            <div className="btn">See promotions</div>
-          </div>
-          <div className="card">
-            <div className="d-flex gap-20">
-              <img src={chartnudge} className="hchartImage" alt="" />
-              <div>
-                <div className="fs-16">Nudges</div>
-                <div className="fs-26 fw-700">77</div>
-              </div>
-            </div>
-            <div className="divider2"></div>
-            <div className="mb-20">
-              <img src={chart2} className="w-100" alt="" />
-            </div>
-            <div className="btn">See promotions</div>
-          </div>
-          <div className="card">
-            <div className="d-flex gap-20">
-              <img src={chartfollower} className="hchartImage" alt="" />
-              <div>
-                <div className="fs-16">Followers</div>
-                <div className="fs-26 fw-700">79</div>
-              </div>
-            </div>
-            <div className="divider2"></div>
-            <div className="mb-20">
-              <img src={chart2} className="w-100" alt="" />
-            </div>
-            <div className="btn">See promotions</div>
-          </div>
+          <PromotionCard
+            title="Promotions"
+            count={80}
+            chartPromotionImage={chartPromotion}
+            buttonText="See promotions"
+            labels={["Bar 1", "Bar 2"]}
+            data={[50, 100]}
+          />
+          <PromotionCard
+            title="Nudges"
+            count={77}
+            chartPromotionImage={chartnudge}
+            buttonText="See Nudges"
+            labels={["Bar 1", "Bar 2"]}
+            data={[58, 160]}
+          />{" "}
+          <PromotionCard
+            title="Followers"
+            count={79}
+            chartPromotionImage={chartfollower}
+            buttonText="See Followers"
+            labels={["Bar 1", "Bar 2"]}
+            data={[45, 89]}
+          />
         </div>
         <div className="divider"></div>
         <div className="card">
