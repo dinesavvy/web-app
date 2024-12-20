@@ -10,7 +10,13 @@ header{
 .notification{
     height: 30px;
 }
-.mx292{
-    max-width: 292px;
-    width: 100%;
-}
+
+@media (max-width:575.98px) {
+    header{
+      padding: 16px;
+    }
+    .burgerMenu ,.burgerMenu img,.notification,.notification img{
+        height: 24px;
+        width: 24px;
+    }
+  }
