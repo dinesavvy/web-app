@@ -1,5 +1,4 @@
 import PropTypes from "prop-types";
-import BarChart from "../../charts/BarChart";
 
 const PromotionCard = ({
   title = "Promotions",
@@ -7,8 +6,7 @@ const PromotionCard = ({
   chartPromotionImage,
   buttonText = "See promotions",
   onButtonClick,
-  labels,
-  data,
+  middleComponent,
 }) => {
   return (
     <div className="card">
@@ -24,7 +22,7 @@ const PromotionCard = ({
       <div className="divider2"></div>
       <div className="mb-20">
         {/* <img src={chartImage} className="w-100" alt={`${title} chart`} /> */}
-        <BarChart labels={labels} datas={data} />
+        {middleComponent}
       </div>
       <div className="btn" onClick={onButtonClick}>
         {buttonText}
@@ -41,5 +39,6 @@ PromotionCard.propTypes = {
   onButtonClick: PropTypes.func, // Callback function for button click
   labels: PropTypes.array,
   data: PropTypes.array,
+  middleComponent: PropTypes.any,
 };
 export default PromotionCard;

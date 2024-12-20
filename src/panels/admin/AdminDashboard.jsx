@@ -1,6 +1,5 @@
 import { useState } from "react";
 import "../../assets/css/dashboard.css";
-import circleinfo from "../../assets/images/circleinfo.svg";
 import chartnudge from "../../assets/images/chartnudge.svg";
 import chartPromotion from "../../assets/images/chartPromotion.svg";
 import chartfollower from "../../assets/images/chartfollower.svg";
@@ -9,44 +8,25 @@ import OverviewGrid from "../../shared/components/dashboards/OverviewGrid";
 import TabContainer from "../../shared/components/dashboards/TabContainer";
 import GraphWithCircle from "../../shared/components/dashboards/GraphWithCircle";
 import PromotionCard from "../../shared/components/dashboards/PromotionCard";
-import chart2 from "../../assets/images/chart2.jpg";
-import chart4 from "../../assets/images/chart4.jpg";
-import chart5 from "../../assets/images/chart5.jpg";
 import olive from "../../assets/images/olive.png";
-import { Tabs } from "antd";
-
+import BarChart from "../../shared/charts/BarChart";
+import DoughnutChart from "../../shared/charts/DoughnutChart";
+import { Pagination } from "antd";
 const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState("1");
   const [activeTab2, setActiveTab2] = useState("1");
   const [activeTab3, setActiveTab3] = useState("1");
   const [openIndex, setOpenIndex] = useState(0); // Initially, the first item is open
+  const data = {
+    labels: ["Progress", "Remaining"],
+    progress: 80,
+    total: 100,
+  };
 
   const handleToggle = (index) => {
     setOpenIndex(openIndex === index ? null : index); // Toggle the clicked panel
   };
-  const Test = () => {
-    return (
-      <div className="">
-        <div className="chartpadding">
-          <div>
-            <div className="p12 mb-15">
-              <div className="fs-16">Habitual Followers</div>
-              <div className="fs-26 fw-700">8,000</div>
-            </div>
-            <div className="trend trendGreen">Trend 10%</div>
-          </div>
-          <div>
-            <div className="circleinfo mb-10">
-              <img src={circleinfo} className="circleAbsolute" alt="" />
-              <div className="fs-34 fw-700 z1">256</div>
-              <div className="fs-14 z1">Merchants</div>
-            </div>
-          </div>
-        </div>
-        <img src={chart} alt="" className="w-100 mxh" />
-      </div>
-    );
-  };
+
   const Test2 = () => {
     return (
       <>
@@ -63,7 +43,16 @@ const AdminDashboard = () => {
               <div className="fs-16 ">12/day (avg)</div>
             </div>
             <div className="divider2"></div>
-            <img src={chart4} alt="" className="w-100 mxh" />
+            {/* <img src={chart4} alt="" className="w-100 mxh" /> */}
+            <BarChart
+              labels={["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]}
+              datas={[90, 56, 58, 10, 20, 44, 56]}
+              className="w-100 mxh"
+              barThickness={80}
+              borderSkipped={"bottom"}
+              xDisplay={true}
+              yDisplay={false}
+            />
           </div>
         </div>
         <div className="d-flex gap-16 mb-16 flexWrap">
@@ -73,7 +62,16 @@ const AdminDashboard = () => {
               <div className="fs-16 ">12/day (avg)</div>
             </div>
             <div className="divider2"></div>
-            <img src={chart4} alt="" className="w-100 mxh" />
+            {/* <img src={chart4} alt="" className="w-100 mxh" /> */}
+            <BarChart
+              labels={["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]}
+              datas={[90, 56, 58, 10, 20, 44, 56]}
+              className="w-100 mxh"
+              barThickness={80}
+              borderSkipped={"bottom"}
+              xDisplay={true}
+              yDisplay={false}
+            />
           </div>
           <div className="card mx369">
             <div className="d-flex justify-between align-center mb-20">
@@ -81,7 +79,8 @@ const AdminDashboard = () => {
             </div>
             <div className="divider2"></div>
             <div className="text-center">
-              <img src={chart5} alt="" className="h-100 mxh" />
+              {/* <img src={chart5} alt="" className="h-100 mxh" /> */}
+              <DoughnutChart data={data} className="h-100 mxh" />
             </div>
           </div>
         </div>
@@ -161,29 +160,24 @@ const AdminDashboard = () => {
     {
       id: "1",
       label: "Today",
-      content: <Test />,
     },
     {
       id: "2",
       label: "Weekly",
-      content: <Test />,
     },
     {
       id: "3",
       label: "Monthly",
-      content: <Test />,
     },
   ];
   const tabs3 = [
     {
       id: "1",
       label: "Top performers",
-      content: <Test />,
     },
     {
       id: "2",
       label: "Needs attention",
-      content: <Test />,
     },
   ];
   const items = [
@@ -215,27 +209,55 @@ const AdminDashboard = () => {
             count={80}
             chartPromotionImage={chartPromotion}
             buttonText="See promotions"
-            labels={["Bar 1", "Bar 2"]}
-            data={[50, 100]}
+            middleComponent={
+              <BarChart
+                labels={["Bar 1", "Bar 2"]}
+                datas={[50, 110]}
+                className="w-100"
+                barThickness={100}
+                borderSkipped={false}
+                xDisplay={false}
+                yDisplay={true}
+              />
+            }
           />
           <PromotionCard
             title="Nudges"
             count={77}
             chartPromotionImage={chartnudge}
             buttonText="See Nudges"
-            labels={["Bar 1", "Bar 2"]}
-            data={[58, 160]}
+            middleComponent={
+              <BarChart
+                labels={["Bar 1", "Bar 2"]}
+                datas={[58, 160]}
+                className="w-100"
+                barThickness={100}
+                borderSkipped={false}
+                xDisplay={false}
+                yDisplay={true}
+              />
+            }
           />{" "}
           <PromotionCard
             title="Followers"
             count={79}
             chartPromotionImage={chartfollower}
             buttonText="See Followers"
-            labels={["Bar 1", "Bar 2"]}
-            data={[45, 89]}
+            middleComponent={
+              <BarChart
+                labels={["Bar 1", "Bar 2"]}
+                datas={[45, 89]}
+                className="w-100"
+                barThickness={100}
+                borderSkipped={false}
+                xDisplay={false}
+                yDisplay={true}
+              />
+            }
           />
         </div>
         <div className="divider"></div>
+        {/* <PerformanceCard title={"Restaurants performance"} /> */}
         <div className="card">
           <div className="d-flex align-center justify-between mb-20 flexWraplg">
             <div className="fs-24 fw-600">Restaurants performance</div>
@@ -289,6 +311,7 @@ const AdminDashboard = () => {
               </div>
             ))}
           </div>
+          <Pagination defaultCurrent={1} total={50} />
         </div>
       </div>
     </>

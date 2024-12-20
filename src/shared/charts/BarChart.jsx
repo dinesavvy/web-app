@@ -20,8 +20,15 @@ ChartJS.register(
   LinearScale
 );
 
-const BarChart = ({ labels, datas }) => {
-  console.log("datas", datas);
+const BarChart = ({
+  labels,
+  datas,
+  className,
+  barThickness,
+  borderSkipped,
+  xDisplay,
+  yDisplay,
+}) => {
   const [hoveredIndex, setHoveredIndex] = useState(null);
 
   const data = {
@@ -36,9 +43,9 @@ const BarChart = ({ labels, datas }) => {
         },
         borderColor: "rgba(75, 192, 192, 1)",
         borderWidth: 1,
-        barThickness: 100,
+        barThickness: barThickness,
         borderRadius: 10,
-        borderSkipped: false,
+        borderSkipped: borderSkipped,
       },
     ],
   };
@@ -67,21 +74,26 @@ const BarChart = ({ labels, datas }) => {
     },
     scales: {
       x: {
-        display: false,
+        display: xDisplay,
       },
       y: {
         beginAtZero: true,
-        display: true,
+        display: yDisplay,
       },
     },
   };
 
-  return <Bar data={data} options={options} className="w-100" />;
+  return <Bar data={data} options={options} className={className} />;
 };
 
 BarChart.propTypes = {
   labels: PropTypes.array,
   datas: PropTypes.array,
+  className: PropTypes.string,
+  barThickness: PropTypes.number,
+  borderSkipped: PropTypes.any,
+  xDisplay: PropTypes.bool,
+  yDisplay: PropTypes.bool,
 };
 
 export default BarChart;
