@@ -1,12 +1,7 @@
-import React from "react";
 import Login from "../../../shared/components/Login/Login";
 
-const DistributorLogin = () => {
-  return (
-    <>
-    <Login />
-    </>
-    );
-};
+const DistributorLogin = () => (
+  <Login endPoint={"distributor.com"} route={"/distributor/dashboard"} />
+);
 
 export default DistributorLogin;

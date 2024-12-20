@@ -12,7 +12,7 @@ const distributorRoutes = [
     path: "/distributor",
     element: DistributorLogin,
     isPrivate: false,
-    isLayout: true,
+    isLayout: false,
   },
 ];
 

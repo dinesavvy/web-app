@@ -14,11 +14,19 @@
     "build:supplier": "vite build --env=supplier"
   },
   "dependencies": {
+    "@reduxjs/toolkit": "^2.5.0",
     "antd": "^5.22.5",
+    "axios": "^1.7.9",
+    "crypto-js": "^4.2.0",
+    "formik": "^2.4.6",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-redux": "^9.2.0",
     "react-router-dom": "^7.0.2",
-    "react-tooltip": "^5.28.0"
+    "react-toastify": "^11.0.1",
+    "react-tooltip": "^5.28.0",
+    "redux-persist": "^6.0.0",
+    "yup": "^1.6.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.15.0",

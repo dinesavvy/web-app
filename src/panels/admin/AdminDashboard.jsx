@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import "../../assets/css/dashboard.css";
 import circleinfo from "../../assets/images/circleinfo.svg";
 import chartnudge from "../../assets/images/chartnudge.svg";
@@ -6,7 +6,6 @@ import chartPromotion from "../../assets/images/chartPromotion.svg";
 import chartfollower from "../../assets/images/chartfollower.svg";
 import chart from "../../assets/images/chart.jpg";
 import chart2 from "../../assets/images/chart2.jpg";
-import { Tabs } from "antd";
 
 const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState("1");
@@ -95,7 +94,7 @@ const AdminDashboard = () => {
       id: "2",
       label: "Needs attention",
       content: <Test />,
-    }
+    },
   ];
   const items = [
     { title: "Panel 1", content: "Content for panel 1" },
@@ -244,39 +243,35 @@ const AdminDashboard = () => {
             </div>
           </div>
           <div className="tabs-container tab3 mb-20">
-              <div className="tabs">
-                {tabs3.map((tab) => (
-                  <button
-                    key={tab.id}
-                    className={`tab-button ${
-                      activeTab3 === tab.id ? "active" : ""
-                    }`}
-                    onClick={() => setActiveTab3(tab.id)}
-                  >
-                    {tab.label}
-                  </button>
-                ))}
-              </div>
+            <div className="tabs">
+              {tabs3.map((tab) => (
+                <button
+                  key={tab.id}
+                  className={`tab-button ${
+                    activeTab3 === tab.id ? "active" : ""
+                  }`}
+                  onClick={() => setActiveTab3(tab.id)}
+                >
+                  {tab.label}
+                </button>
+              ))}
             </div>
-            <div className="accordion">
-      {items.map((item, index) => (
-        <div key={index} className="accordion-item">
-          <div
-            className="accordion-header"
-            onClick={() => handleToggle(index)}
-          >
-            {item.title}
           </div>
-          {openIndex === index && (
-            <div
-              className="accordion-body"
-            >
-              {item.content}
-            </div>
-          )}
-        </div>
-      ))}
-    </div>
+          <div className="accordion">
+            {items.map((item, index) => (
+              <div key={index} className="accordion-item">
+                <div
+                  className="accordion-header"
+                  onClick={() => handleToggle(index)}
+                >
+                  {item.title}
+                </div>
+                {openIndex === index && (
+                  <div className="accordion-body">{item.content}</div>
+                )}
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </>

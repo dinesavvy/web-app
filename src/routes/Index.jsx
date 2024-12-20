@@ -5,10 +5,14 @@ import PrivateRoute from "./PrivateRoute";
 import Sidebar from "../shared/components/Layout/Sidebar";
 import Header from "../shared/components/Layout/Header";
 import { useState } from "react";
+import supplierRoutes from "./supplierRoutes";
+import merchantRoutes from "./merchantRoutes";
 
 const routeMap = {
   admin: adminRoutes,
   distributor: distributorRoutes,
+  supplier: supplierRoutes,
+  merchant: merchantRoutes,
   // Add other panels here
 };
 
