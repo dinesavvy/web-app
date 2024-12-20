@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { useState } from "react";
 import { Bar } from "react-chartjs-2";
 import {
@@ -28,33 +29,62 @@ const BarChart = ({
   borderSkipped,
   xDisplay,
   yDisplay,
+  isDatasMap,
+  displayLegend,
 }) => {
   const [hoveredIndex, setHoveredIndex] = useState(null);
+  const colors = [
+    "rgba(75, 192, 192, 0.6)",
+    "rgb(8, 12, 241)",
+    "rgba(255, 206, 86, 0.6)",
+    "rgba(54, 162, 235, 0.6)",
+    "rgba(153, 102, 255, 0.6)",
+    "rgba(255, 159, 64, 0.6)",
+    "rgba(75, 192, 192, 0.6)",
+    "rgba(255, 99, 132, 0.6)",
+    "rgba(255, 206, 86, 0.6)",
+    "rgba(54, 162, 235, 0.6)",
+  ];
+
+  const newDataSet =
+    isDatasMap === true
+      ? Array.isArray(datas) // Check if nextDatasets is an array
+        ? datas.map((dataSet, index) => ({
+            label: `Dataset ${index + 1}`,
+            data: [dataSet],
+            backgroundColor: colors[index % colors.length],
+            borderWidth: 1,
+            borderRadius: 6,
+            borderSkipped: borderSkipped,
+          }))
+        : [] // Fallback to an empty array if nextDatasets is not an array
+      : [
+          {
+            label: "",
+            data: Array.isArray(datas) ? datas : [], // Ensure datas is an array
+            backgroundColor: (context) => {
+              const index = context.dataIndex;
+              return index === hoveredIndex
+                ? "blue"
+                : "rgba(75, 192, 192, 0.2)";
+            },
+            borderWidth: 1,
+            borderRadius: 6,
+            borderSkipped: borderSkipped,
+          },
+        ];
 
   const data = {
     labels: labels,
-    datasets: [
-      {
-        label: "My First Dataset",
-        data: datas,
-        backgroundColor: (context) => {
-          const index = context.dataIndex;
-          return index === hoveredIndex ? "blue" : "rgba(75, 192, 192, 0.2)";
-        },
-        borderColor: "rgba(75, 192, 192, 1)",
-        borderWidth: 1,
-        barThickness: barThickness,
-        borderRadius: 10,
-        borderSkipped: borderSkipped,
-      },
-    ],
+    datasets: newDataSet,
   };
 
   const options = {
     responsive: true,
     plugins: {
       legend: {
-        display: false,
+        display: displayLegend,
+        position: "bottom",
       },
       tooltip: {
         callbacks: {
@@ -75,6 +105,7 @@ const BarChart = ({
     scales: {
       x: {
         display: xDisplay,
+        stacked: false, // Set to false to allow spacing
       },
       y: {
         beginAtZero: true,
@@ -94,6 +125,8 @@ BarChart.propTypes = {
   borderSkipped: PropTypes.any,
   xDisplay: PropTypes.bool,
   yDisplay: PropTypes.bool,
+  isDatasMap: PropTypes.bool,
+  displayLegend: PropTypes.bool,
 };
 
 export default BarChart;
