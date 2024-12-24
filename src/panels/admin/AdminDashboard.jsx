@@ -312,7 +312,7 @@ const AdminDashboard = () => {
               ))}
             </div>
           </div>
-          <div className="accordion">
+          <div className="accordion mb-20">
             {items.map((item, index) => (
               <div key={index} className="accordion-item">
                 <div
@@ -331,7 +331,13 @@ const AdminDashboard = () => {
               </div>
             ))}
           </div>
-          <Pagination defaultCurrent={1} total={50} />
+          <div className="d-flex align-center justify-between flexPagination">
+            <div className="fs-16"> 
+            Showing 1 to 5 of 10 Restaurants
+            </div>
+            <Pagination defaultCurrent={1} total={50} />
+
+          </div>
         </div>
       </div>
     </>

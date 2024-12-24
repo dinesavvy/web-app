@@ -1,0 +1,224 @@
+.dropdown-container {
+    position: relative;
+    font-family: Arial, sans-serif;
+  }
+  
+  .dropdown-header {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    background-color: #f3f3f3;
+    padding: 11px 14px;
+    border-radius: 5px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+    width: fit-content;
+  }
+  
+  .dropdown-button {
+    background-color: transparent;
+    border: none;
+    font-size: 16px;
+    line-height: 24px;
+    cursor: pointer;
+    display: flex;
+    padding: 0;
+    align-items: center;
+    gap: 6px;
+  }
+  
+  .dropdown-list {
+    position: absolute;
+    top: 58px;
+    right: 0;
+    background-color: #fff;
+    border: 1px solid #F3F3F7;
+    border-radius: 8px;
+    box-shadow: 0px 0px 24px 0px #EEEEF1E5;
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 1000;
+    width: 290px;
+    padding: 16px;
+  }
+  .dropdown-list::-webkit-scrollbar{
+    display: none;
+  }
+  .dropdown-item {
+    padding: 10px;
+    display: flex;
+    align-items: center;
+  }
+  
+  .dropdown-item label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+  }
+  
+  .selected-items {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  
+  .selected-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    line-height: 21px;
+    border-radius: 44px;
+    background-color: #F2F7FD;
+    padding: 8px 16px;
+  }
+  
+  .remove-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    height: 24px;
+    padding: 0;
+  }
+
+  .merchantGrid{
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    gap: 20px;
+  }
+  .merchantCard{
+    border: 1px solid #E3E3E8;
+    background-color: white;
+    border-radius: 20px;
+  }
+  .topPadding{
+    padding: 20px 20px 0 20px;
+  }
+  .merchantImage{
+    height: 90px;
+    width: 160px;
+    margin: 0 auto 20px;
+  }
+  .merchantImage img{
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+  .bottomPadding{
+    padding: 20px;
+  }
+  .label{
+    font-size: 14px;
+    line-height: 10px;
+    color: white;
+    padding: 8px ;
+    border-radius: 4px;
+    width: fit-content;
+  }
+  .greenLabel{
+    background-color: #3CCF5C;
+  }
+  .redLabel{
+    background-color: #ED4949;
+  }
+  .grid2{
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+    gap: 20px;
+  }
+  .count{
+    padding: 6px;
+    font-size: 14px;
+    line-height: 10px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    width: fit-content;
+    border-radius: 4px;
+    background: #00DE301A;
+    color: #00DE30;
+  }
+  .countred{
+    color: #FF3939;
+    background: #FF39391A;
+
+  }
+  .gridBtn{
+    display: flex;
+    gap: 10px;
+  }
+  .gridBtn .btn{
+    width: 100%;
+  }
+  .tabPadding{
+    padding: 30px 20px;
+    background-color: white;
+  }
+  .ant-breadcrumb ol{
+    align-items: center;
+  }
+  .ant-breadcrumb ol li:last-child{
+    color: #056DFF;
+  }
+  .ant-breadcrumb .ant-breadcrumb-separator{
+    height: 18px !important;
+  }
+  .editBtn{
+    height: 24px;
+  }
+  .tabFull .tab-button{
+    width: 100%;
+    padding: 18px 36px;
+    background: transparent;
+  }
+  .tabFull .tab-button.active{  
+    background: #005CDE;
+  }
+  .tabFull .tabs{
+    width: 100%;
+    background-color: transparent ;
+  }
+  .img54{
+    height: 54px;
+    width: 54px;
+  }
+  @media (max-width: 1499.98px) {
+    .merchantGrid{
+        grid-template-columns: repeat(2,1fr);
+    }
+  }
+  @media (max-width: 767.98px) {
+      .merchantGrid{
+          grid-template-columns: repeat(1,1fr);
+        }
+        .ant-pagination-item, .ant-pagination-next, .ant-pagination-prev {
+            height: 30px !important;
+            width: 30px !important;
+            border-color: #F4F4F6 !important;
+            padding: 0 !important;
+        }
+        .flexPagination{
+            flex-direction: column;
+            gap: 10px;
+            align-items: flex-start;
+        }
+        .bottomPadding{
+            padding: 16px;
+        }
+        .gridBtn{
+            gap: 4px;
+        }
+        .ant-pagination-item{
+            margin-inline-end: 4px !important
+        }
+        .topPadding {
+            padding: 16px 16px 0 16px;
+        }
+    }
+  @media (max-width: 575.98px) {
+    .dropdown-list{
+        width: 250px;
+    }
+    .btn{
+        font-size: 14px;
+    }
+  }

@@ -1,6 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 @import url(./assets/css/font.css);
 @import url(./assets/css/space.css);
+
 button,
 button:focus,
 button:focus-visible {
@@ -8,9 +9,11 @@ button:focus-visible {
   outline: none;
   border: none;
 }
-.text-center{
+
+.text-center {
   text-align: center;
 }
+
 input:focus,
 input:focus-visible,
 input:focus-within,
@@ -26,22 +29,27 @@ select:hover {
 a {
   text-decoration: none;
 }
-body{
+
+body {
   font-size: 18px;
   margin: 0;
   padding: 0;
   background-color: #F4F4F6;
 }
-*{
-  
-  font-family: "Poppins", sans-serif !important ;
+
+* {
+
+  font-family: "Poppins", sans-serif !important;
 }
+
 .position-relative {
   position: relative;
 }
-.d-flex{
+
+.d-flex {
   display: flex;
 }
+
 .object-cover {
   object-fit: cover;
 }
@@ -61,12 +69,15 @@ body{
 .w-lg-50 {
   width: 50%;
 }
-.d-grid{
+
+.d-grid {
   display: grid;
 }
-.justify-between{
+
+.justify-between {
   justify-content: space-between;
 }
+
 .overflowy {
   overflow-y: auto;
 }
@@ -83,13 +94,17 @@ body{
   margin-left: auto;
   margin-right: auto;
 }
-.error{
+
+.error {
   color: #F05C5F;
 }
+
 .mobileShow {
   display: none;
 }
-input,textarea{
+
+input,
+textarea {
   font-size: 14px;
   line-height: 21px;
   padding: 12.5px 13px;
@@ -98,24 +113,33 @@ input,textarea{
   background-color: #F3F4F5;
   border-radius: 12px;
 }
-input:focus,textarea:focus{
+
+input:focus,
+textarea:focus {
   background-color: #F0F0F0;
   border: 1.5px solid #111111;
 }
-input:hover,textarea:hover{
+
+input:hover,
+textarea:hover {
   background-color: #F0F0F0;
 }
-input::placeholder,textarea::placeholder{
+
+input::placeholder,
+textarea::placeholder {
   color: #737373;
 }
-label{
+
+label {
   display: block;
 }
-.mx-450{
+
+.mx-450 {
   max-width: 450px;
   width: 100%;
 }
-.btn{
+
+.btn {
   background-color: #056DFF;
   border-radius: 12px;
   height: 48px;
@@ -128,19 +152,167 @@ label{
   font-weight: 600;
   cursor: pointer;
 }
-.m-0{
+
+.m-0 {
   margin: 0 !important;
 }
-.btn:hover{
+  
+.lineSearch{
+  position: relative; 
+}
+.lineSearch::after{
+  content: "";
+  height: 24px;
+  width: 1px;
+  background-color: #DCDFE5;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  left: 44px;
+}
+.absoluteImage{
+  top: 50%;
+  transform: translateY(-50%);
+  position: absolute;
+  left: 16px;
+}
+.lineSearch input{
+  padding-left: 57px;
+  width: calc(100% - 72px);
+}
+.btn:hover {
   background-color: #0055CC;
 }
-.btnSecondary{
+
+.btnSecondary {
   border: 1px solid #056DFF;
   background: #EBF3FF;
   color: #056DFF;
 }
-.btnSecondary:hover{
+
+.btnSecondary:hover {
   background: #EBF3FF;
+}
+
+.custom-checkbox {
+  display: flex;
+  align-items: center;
+  font-family: Arial, sans-serif;
+  font-size: 16px;
+}
+.cursor-pointer{
+  cursor: pointer;
+}
+.checkLabel {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  position: relative;
+  gap: 8px;
+  font-size: 14px;
+  line-height: 21px;
+}
+
+.custom-checkbox input[type="checkbox"] {
+  display: none;
+  /* Hide the default checkbox */
+}
+
+.custom-checkbox .checkmark {
+  position: relative;
+  min-height: 20px;
+  min-width: 20px;
+  background-color: #fff;
+  border: 2px solid #B3B3B3;
+  border-radius: 5px;
+  /* Rounded corners */
+  transition: all 0.3s ease;
+}
+
+/* Checkbox checked state */
+.custom-checkbox input[type="checkbox"]:checked+.checkmark {
+  background-color: #056DFF;
+  border-color: #056DFF;
+}
+
+/* Checkmark tick */
+.custom-checkbox .checkmark::after {
+  content: "";
+  position: absolute;
+  display: none;
+  left: 7px;
+  top: 2px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+/* Show tick when checked */
+.custom-checkbox input[type="checkbox"]:checked+.checkmark::after {
+  display: block;
+}
+
+/* Add hover effect */
+.custom-checkbox label:hover .checkmark {
+  border-color: #007bff;
+}
+.ant-pagination-item-link{
+  background-color: #F4F4F6 !important;
+  border-radius: 6px;
+}
+.ant-pagination-item,.ant-pagination-next,.ant-pagination-prev  {
+  height: 40px !important;
+  width: 40px !important;
+  border-color:  #F4F4F6 !important;
+}
+.ant-pagination-item a{
+  height: 100% !important;
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
+}
+.ant-pagination-item-active a{
+  color: white !important;
+}
+.ant-pagination-item-active{
+  background-color: #056DFF !important;
+  border-color: #056DFF !important;
+}
+.grey{
+  color: #73738C;
+}
+.inputGrid{
+  display: grid;
+  grid-template-columns: repeat(2,1fr);
+  gap: 40px;
+}
+.twoSpace{
+  grid-column: span 2;
+}
+.saveBtn{
+  padding: 0 32px;
+}
+table{
+  text-align: center;
+  padding: 0;
+  border-collapse: collapse;
+  border-radius: 8px;
+  overflow: hidden;
+}
+table th td{
+  background-color: #111111;
+  color: white;
+}
+table th td,table tr td{
+  padding: 16px;
+}
+table tbody tr:nth-child(odd) {
+  background-color: #F3F4F4;
+}
+.downloadIcon{
+  height: 20px;
 }
 @media (max-height: 700px) {
   .loginside {
@@ -165,7 +337,7 @@ label{
     display: block;
   }
 
-  .mx-450{
+  .mx-450 {
     padding-left: 16px;
     padding-right: 16px;
   }

@@ -22,8 +22,12 @@ import setting from "../../../assets/images/sidebar/setting.svg";
 import settingFull from "../../../assets/images/sidebar/settingFull.svg";
 import "react-tooltip/dist/react-tooltip.css";
 import { Tooltip } from "react-tooltip";
+import Item from "antd/es/list/Item";
+import { useNavigate } from "react-router-dom";
 
 const Sidebar = ({ isOpen ,setIsOpen}) => {
+  
+  const navigate = useNavigate()
   const links = [
     { id: 1, name: "Dashboard", icon: dashboard, iconFull: dashboardFull },
     { id: 2, name: "Suppliers", icon: suppliers, iconFull: suppliersFull },
@@ -33,7 +37,7 @@ const Sidebar = ({ isOpen ,setIsOpen}) => {
       icon: distributor,
       iconFull: distributorFull,
     },
-    { id: 4, name: "Merchants", icon: merchant, iconFull: merchantFull },
+    { id: 4, name: "Merchants", icon: merchant, iconFull: merchantFull , navigate: "/merchant/list" },
     { id: 5, name: "Consumers", icon: consumers, iconFull: consumersFull },
     { id: 6, name: "Nudges", icon: nudge, iconFull: nudgeFull },
     { id: 7, name: "Promotions", icon: promotions, iconFull: promotionsFull },
@@ -53,9 +57,10 @@ const Sidebar = ({ isOpen ,setIsOpen}) => {
             {links.map((link) => (
               <div
                 key={link.id}
-                className={`sidebarLink active ${
+                className={`sidebarLink  ${window.location.pathname == link.navigate ? "active" : ""}  ${
                   isOpen ? "" : "tooltip-container"
                 }`}
+                onClick={() => navigate(link.navigate)}
                 data-tooltip-id={isOpen ? "sidebar-tooltip" : undefined}
                 data-tooltip-content={isOpen ? link.name : undefined}
               >
