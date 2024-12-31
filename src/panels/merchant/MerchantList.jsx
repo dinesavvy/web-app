@@ -100,7 +100,7 @@ const MerchantList = () => {
                 </div>
                 <div className="gridBtn">
                   <div className="btnSecondary btn" onClick={()=>navigate("/merchant/details")}>Details</div>
-                  <div className="btnSecondary btn">Team</div>
+                  <div className="btnSecondary btn" onClick={()=>navigate("/merchant/team-member")}>Team</div>
                   <div className="btnSecondary btn">Nudges</div>
                 </div>
               </div>
@@ -151,7 +151,7 @@ const MerchantList = () => {
                 </div>
                 <div className="gridBtn">
                   <div className="btnSecondary btn" onClick={()=>navigate("/merchant/details")}>Details</div>
-                  <div className="btnSecondary btn">Team</div>
+                  <div className="btnSecondary btn" onClick={()=>navigate("/merchant/team-member")}>Team</div>
                   <div className="btnSecondary btn">Nudges</div>
                 </div>
               </div>
@@ -202,7 +202,7 @@ const MerchantList = () => {
                 </div>
                 <div className="gridBtn">
                   <div className="btnSecondary btn" onClick={()=>navigate("/merchant/details")}>Details</div>
-                  <div className="btnSecondary btn">Team</div>
+                  <div className="btnSecondary btn" onClick={()=>navigate("/merchant/team-member")}>Team</div>
                   <div className="btnSecondary btn">Nudges</div>
                 </div>
               </div>
@@ -253,7 +253,7 @@ const MerchantList = () => {
                 </div>
                 <div className="gridBtn">
                   <div className="btnSecondary btn" onClick={()=>navigate("/merchant/details")}>Details</div>
-                  <div className="btnSecondary btn">Team</div>
+                  <div className="btnSecondary btn" onClick={()=>navigate("/merchant/team-member")}>Team</div>
                   <div className="btnSecondary btn">Nudges</div>
                 </div>
               </div>
@@ -304,7 +304,7 @@ const MerchantList = () => {
                 </div>
                 <div className="gridBtn">
                   <div className="btnSecondary btn" onClick={()=>navigate("/merchant/details")}>Details</div>
-                  <div className="btnSecondary btn">Team</div>
+                  <div className="btnSecondary btn" onClick={()=>navigate("/merchant/team-member")}>Team</div>
                   <div className="btnSecondary btn">Nudges</div>
                 </div>
               </div>
@@ -355,7 +355,7 @@ const MerchantList = () => {
                 </div>
                 <div className="gridBtn">
                   <div className="btnSecondary btn" onClick={()=>navigate("/merchant/details")}>Details</div>
-                  <div className="btnSecondary btn">Team</div>
+                  <div className="btnSecondary btn" onClick={()=>navigate("/merchant/team-member")}>Team</div>
                   <div className="btnSecondary btn">Nudges</div>
                 </div>
               </div>
