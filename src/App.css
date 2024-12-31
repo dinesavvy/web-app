@@ -113,6 +113,15 @@ textarea {
   background-color: #F3F4F5;
   border-radius: 12px;
 }
+.input {
+  font-size: 14px !important;
+  line-height: 21px !important;
+  padding: 12.5px 13px;
+  border: 1.5px solid transparent;
+  width: calc(100% - 29px);
+  background-color: #F3F4F5;
+  border-radius: 12px;
+}
 
 input:focus,
 textarea:focus {
@@ -138,7 +147,12 @@ label {
   max-width: 450px;
   width: 100%;
 }
-
+.sc{
+  color: #056DFF;
+}
+.text-end{
+  text-align: right;
+}
 .btn {
   background-color: #056DFF;
   border-radius: 12px;
@@ -151,6 +165,17 @@ label {
   line-height: 24px;
   font-weight: 600;
   cursor: pointer;
+}
+.resendBtn {
+  background-color: #056DFF;
+  border-radius: 8px;
+  padding: 5px 10px;
+  color: white;
+  cursor: pointer;
+  position: absolute;
+  top: 50%;
+  right: 16px;
+  transform: translateY(-50%);
 }
 
 .m-0 {
@@ -193,12 +218,18 @@ label {
 .btnSecondary:hover {
   background: #EBF3FF;
 }
-
+.deleteBtn,.deleteBtn:hover{
+  border: 1px solid #F5453B;
+  color: #F5453B ;
+  background-color: transparent;
+  min-width: 50px;
+}
 .custom-checkbox {
   display: flex;
   align-items: center;
   font-family: Arial, sans-serif;
   font-size: 16px;
+  height: fit-content;
 }
 .cursor-pointer{
   cursor: pointer;
@@ -212,7 +243,11 @@ label {
   font-size: 14px;
   line-height: 21px;
 }
-
+.secondarysecond{
+  border: 2px solid #0055CC;
+  padding: 8px 20px;
+  height: unset;
+}
 .custom-checkbox input[type="checkbox"] {
   display: none;
   /* Hide the default checkbox */
@@ -294,25 +329,272 @@ label {
 .saveBtn{
   padding: 0 32px;
 }
+.text-start,.text-start th{
+  text-align: start;
+}
 table{
-  text-align: center;
   padding: 0;
   border-collapse: collapse;
   border-radius: 8px;
   overflow: hidden;
 }
-table th td{
+table th{
   background-color: #111111;
-  color: white;
+  color: white !important;
 }
-table th td,table tr td{
+table tr th{
   padding: 16px;
+  border-left: 1px solid #4D4D4D  ;
+  border-bottom: 1px solid #4D4D4D  ;
+} 
+table tr td{
+  padding: 16px;
+  border-left: 1px solid #E6E6E6  ;
+  border-bottom: 1px solid #E6E6E6  ;
 }
-table tbody tr:nth-child(odd) {
+.stripped tbody tr:nth-child(even) {
   background-color: #F3F4F4;
 }
 .downloadIcon{
   height: 20px;
+}
+.overflow{
+  overflow-x: auto;
+}
+.h-24{
+  height: 24px;
+}
+.anchor{
+  text-decoration: underline;
+  color: #111111;
+}
+.grid3{
+  grid-template-columns: repeat(3,1fr);
+}
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.my228{
+  max-height: 228px;
+}
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+.custom-select {
+  width: 100%;
+  position: relative;
+  z-index: 1;
+}
+.select-options{
+  position: absolute;
+  width: calc(100% - 3px);
+  left: 0;
+  top: calc(100% - 10px);
+  background-color: white;
+  padding-top: 10px;
+  border-radius: 0 0 10px 10px;
+  border: 1px solid #CCCCCC;
+  box-shadow: 0px 0px 40px 0px #00000012;
+  overflow: hidden;
+  z-index: 0;
+}
+.rotate .input{
+  background-color: #F0F0F0;
+  border: 1.5px solid #111111;
+}
+.select-header{
+  position: relative;
+  z-index: 1;
+}
+.options{
+  padding: 12px;
+  font-size: 14px;
+}
+.dropdownArrow{
+  position: absolute;
+  right: 12px;
+  top: 12px;
+}
+.rotate .dropdownArrow{
+  transform: rotate(180deg);
+}
+.justify-end{
+  justify-content: end;
+}
+.customTime{
+  width: 100%;
+  background-color: #F3F4F5 !important;
+}
+.customTime:hover{
+  background-color: #F0F0F0 !important;
+  border-color: transparent !important;
+}
+.ant-picker-focused,.ant-picker-outlined:focus-within{
+  outline: none !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+  border: 1.5px solid #111111 !important;
+}
+.align-end{
+  align-items: end;
+}
+.customTime .anticon {
+  display: none !important;
+}
+.addTime{
+  height: 48px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+/* Container for the slider */
+.slider-gallery {
+  text-align: center;
+  margin: 20px auto;
+  width: 80%;
+  overflow: hidden;
+}
+
+.image-slider {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  overflow-x: auto;
+}
+
+.slider-image {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  cursor: pointer;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  transition: transform 0.3s, border-color 0.3s;
+}
+
+.slider-image:hover {
+  transform: scale(1.1);
+  border-color: #007bff;
+}
+
+.open-gallery-btn {
+  margin-top: 20px;
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.open-gallery-btn:hover {
+  background-color: #0056b3;
+}
+
+/* Modal styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  position: relative;
+  background: #fff;
+  padding: 30px 60px;
+  border-radius: 10px;
+  width: 100%;
+  height: 100%;
+  max-width: 700px;
+  height: 500px;
+}
+
+.modal-image {
+width: 100%;
+height: 100%;
+}
+.viewMoreBtn{
+  margin: 0 auto;
+  padding: 12px 16px;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 24px;
+  border: 1px solid #111111;
+  border-radius: 12px;
+  width: fit-content;
+  cursor: pointer;
+}
+.nav-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgba(0, 0, 0, 0.5);
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.nav-btn img{
+  filter: invert(1);
+  transform: rotate(-90deg);
+}
+.nav-btn.prev-btn img{
+  transform: rotate(90deg);
+}
+.prev-btn {
+  left: 10px;
+}
+
+.next-btn {
+  right: 10px;
+}
+
+.nav-btn:hover {
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  background-color: transparent;
+}
+.ant-modal-content{
+  max-width: 484px !important;
+  padding: 30px !important;
+  border-radius: 32px !important;
+  position: relative;
+  overflow: hidden;
+}
+.modalbg{
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+.modalImage{
+  text-align: center;
 }
 @media (max-height: 700px) {
   .loginside {
@@ -328,17 +610,26 @@ table tbody tr:nth-child(odd) {
   .mobileHide {
     display: none;
   }
-
+  
   .w-lg-50 {
     width: 100%;
   }
-
+  
   .mobileShow {
     display: block;
   }
-
+  
   .mx-450 {
     padding-left: 16px;
     padding-right: 16px;
+  }
+}
+@media (max-width: 575.98px) {
+  .flexsm{
+    flex-direction: column;
+  }
+  .flexrightsm{
+    flex-direction: column;
+    align-items: end;
   }
 }

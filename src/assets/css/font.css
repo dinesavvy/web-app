@@ -1,3 +1,9 @@
+.o5{
+    opacity: 0.5;
+}
+.fw-300{
+    font-weight: 300;
+}
 .fw-400{
     font-weight: 400;
 }
@@ -20,6 +26,10 @@
 .fs-16{
     font-size: 16px;
     line-height: 24px;
+}
+.fs-18{
+    font-size: 18px;
+    line-height: 27px;
 }
 .fs-20{
     font-size: 20px;
