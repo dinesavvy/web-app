@@ -8,19 +8,44 @@ import logo from "../../../assets/images/logo.svg";
 import emailInput from "../../../assets/images/emailInput.svg";
 import passwordInput from "../../../assets/images/passwordInput.svg";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { handleLogin } from "../../../store/slices/auth";
-import { showToast } from "../Toast";
+import { useDispatch, useSelector } from "react-redux";
+import {  useCommonMessage } from "../CommonMessage";
+import { loginHandler, loginSliceAction } from "../../../redux/action/loginSlice";
+import { useEffect } from "react";
+import { validationSchema } from "./loginValidation";
+
 const Login = (props) => {
-  const { endPoint, route } = props;
+  const messageApi = useCommonMessage();
+  const loginSelector = useSelector((state) => state?.loginSliceDetails)
+  console.log(loginSelector,"loginSelector")
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const validationSchema = Yup.object().shape({
-    email: Yup.string()
-      .email("Please enter a valid email address")
-      .required("This field is required"),
-    password: Yup.string().required("This field is required"),
-  });
+
+  const handleFormSubmit = (values) =>{
+    let payload = {
+      email: values?.email,
+      password: values?.password
+    }
+    dispatch(loginHandler(payload))
+  }
+
+
+  useEffect(() => {
+    if (loginSelector?.data) {
+      messageApi.open({
+        type: 'success',
+        content: loginSelector?.data?.message,
+      });
+      navigate("/admin/dashboard")
+      dispatch(loginSliceAction.loginDetailsSliceReset())
+    } else if (loginSelector?.message) {
+      messageApi.open({
+        type: 'error',
+        content: loginSelector?.message,
+      });
+      dispatch(loginSliceAction.loginDetailsSliceReset())
+    }
+  }, [loginSelector])
 
   return (
     <>
@@ -35,20 +60,13 @@ const Login = (props) => {
             </div>
             <div className="fs-28 text-center fw-500 mb-40">Welcome back</div>
             <Formik
-              initialValues={{ email: "", password: "" }}
+              initialValues={{
+                email: "",
+                password: "",
+              }}
               validationSchema={validationSchema}
-              onSubmit={async (values, { setSubmitting }) => {
-                // try {
-                //   await dispatch(handleLogin({ endPoint, values })).unwrap();
-                //   // Navigate on success
-                //   setSubmitting(false);
-                //   navigate(route);
-                // } catch (error) {
-                //   // Navigate on error
-                //   showToast(error, "error");
-                //   setSubmitting(false);
-                // }
-                navigate(route);
+              onSubmit={(values, formikBag) => {
+                handleFormSubmit(values, formikBag);
               }}
             >
               {({
@@ -58,7 +76,7 @@ const Login = (props) => {
                 <Form>
                   <div className="mb-30">
                     <label className="fs-14 fw-500 mb-10" htmlFor="email">
-                      Email
+                      Email*
                     </label>
                     <div className="line">
                       <Field
@@ -77,7 +95,7 @@ const Login = (props) => {
                   </div>
                   <div className="mb-60">
                     <label className="fs-14 fw-500 mb-10" htmlFor="password">
-                      Password
+                      Password*
                     </label>
                     <div className="line">
                       <Field

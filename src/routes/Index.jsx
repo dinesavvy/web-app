@@ -7,6 +7,7 @@ import Sidebar from "../shared/components/Layout/Sidebar";
 import Header from "../shared/components/Layout/Header";
 import supplierRoutes from "./supplierRoutes";
 import merchantRoutes from "./merchantRoutes";
+import { CommonMessageProvider } from "../shared/components/CommonMessage";
 
 const routeMap = {
   admin: adminRoutes,
@@ -36,37 +37,39 @@ const AppRoutes = () => {
   }, [isOpen]);
   return (
     <>
-      <Routes>
-        {routes.map((route, index) => (
-          <Route
-            path={route?.path}
-            key={"route_" + index}
-            element={
-              route.isPrivate ? (
-                <>
-                  <PrivateRoute redirectPath="/">
-                    <Sidebar />
-                    <route.element />
-                    {/* <Footer /> */}
-                  </PrivateRoute>
-                </>
-              ) : route?.isLayout ? (
-                <>
-                  <div className="d-flex h-100 w-100 ">
-                    <Sidebar isOpen={isOpen} setIsOpen={setIsOpen} />
-                    <div className="rightSide">
-                      <Header handleTrigger={handleTrigger} />
+      <CommonMessageProvider>
+        <Routes>
+          {routes.map((route, index) => (
+            <Route
+              path={route?.path}
+              key={"route_" + index}
+              element={
+                route.isPrivate ? (
+                  <>
+                    <PrivateRoute redirectPath="/">
+                      <Sidebar />
                       <route.element />
+                      {/* <Footer /> */}
+                    </PrivateRoute>
+                  </>
+                ) : route?.isLayout ? (
+                  <>
+                    <div className="d-flex h-100 w-100 ">
+                      <Sidebar isOpen={isOpen} setIsOpen={setIsOpen} />
+                      <div className="rightSide">
+                        <Header handleTrigger={handleTrigger} />
+                        <route.element />
+                      </div>
                     </div>
-                  </div>
-                </>
-              ) : (
-                <route.element />
-              )
-            }
-          />
-        ))}
-      </Routes>
+                  </>
+                ) : (
+                  <route.element />
+                )
+              }
+            />
+          ))}
+        </Routes>
+      </CommonMessageProvider>
     </>
   );
 };

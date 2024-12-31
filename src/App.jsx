@@ -1,14 +1,16 @@
 import "./App.css";
 import { BrowserRouter } from "react-router-dom";
 import AppRoutes from "./routes/Index";
-import Toast from "./shared/components/Toast";
+import { Provider } from "react-redux";
+import store from "./redux/store";
 
-function App() {
+const  App = () => {
   return (
+    <Provider store={store}>
     <BrowserRouter>
       <AppRoutes />
-      <Toast />
     </BrowserRouter>
+    </Provider>
   );
 }
 

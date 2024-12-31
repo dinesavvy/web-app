@@ -76,6 +76,7 @@ const Sidebar = ({ isOpen ,setIsOpen}) => {
           data-tip={!isOpen ? "" : "Logout"}
           data-tooltip-id={isOpen ? "sidebar-tooltip" : undefined}
           data-tooltip-content={isOpen ? "Logout" : undefined}
+          onClick={()=>{navigate("/admin");localStorage.clear()}}
         >
           <img src={logout} alt="Logout" />
            <span>Logout</span>
