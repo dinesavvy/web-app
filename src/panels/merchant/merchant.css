@@ -382,10 +382,21 @@
   background-color: #F4F4F6;
   border-radius: 8px;
 }
-
+.activeNudge{
+  color: white ;
+  background-color: #056DFF;
+}
+.activeNudge .grey{
+  color: white;
+}
 .grid4 {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+.grid5 {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
   gap: 20px;
 }
 
@@ -411,7 +422,49 @@
   overflow: hidden;
   height: fit-content;
 }
-
+.card16{
+  padding: 16px;
+  border: 1px solid #E3E3E8;
+  border-radius: 12px;
+}
+.image80{
+  height: 80px;
+  width: 80px;
+  border-radius: 8px;
+  overflow: hidden;
+}
+.image80 img{
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+}
+.gc{
+  color: #5FEE6D;
+}
+.pc{
+  color: #056DFF;
+}
+.range{
+  width: 100%;
+  height: 12px;
+  background-color: rgba(95, 238, 109, 0.25);
+  border-radius: 20px;
+  overflow: hidden;
+}
+.rangePercentage{
+  height: 12px;
+  background-color: #5FEE6D;
+  border-radius: 20px;
+}
+.weekNudge{
+  background-color: #ECF4FF;
+  border-radius: 12px;
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
 @media (max-width: 1499.98px) {
   .merchantGrid {
     grid-template-columns: repeat(2, 1fr);

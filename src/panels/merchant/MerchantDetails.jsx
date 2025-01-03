@@ -8,6 +8,9 @@ import olive from "../../assets/images/olive.png";
 import addTime from "../../assets/images/addTime.svg";
 import createAdd from "../../assets/images/createAdd.svg";
 import map from "../../assets/images/map.jpg";
+import restaurantCard from "../../assets/images/restaurantCard.png";
+import businessPhoto from "../../assets/images/businessPhoto.png";
+import dish from "../../assets/images/dish.png";
 import chart from "../../assets/images/chart.jpg";
 import { Breadcrumb, Pagination, TimePicker } from "antd";
 import SearchSelect from "../../shared/components/SearchSelect";
@@ -25,7 +28,7 @@ import { followersListHandler } from "../../redux/action/followersList";
 import { nudgesListHandler } from "../../redux/action/nudgesList";
 
 const MerchantDetails = () => {
-  const [activeTab3, setActiveTab3] = useState("1");
+  const [activeTab3, setActiveTab3] = useState("4");
   const [editInput, setEditInput] = useState(false);
   const [switchState, setSwitchState] = useState(false);
   const [viewDetail, setViewDetail] = useState(false);
@@ -69,7 +72,7 @@ const MerchantDetails = () => {
     },
     {
       id: "4",
-      label: "Nudges",
+      label: "Nudges Details",
     },
   ];
   const handleToggle = (state) => {
@@ -1102,14 +1105,21 @@ const MerchantDetails = () => {
                   </div>
                 </div>
                 <div className="tabPadding mb-30">
-                  <div className="fs-20 fw-700 mb-10">Nudges Info</div>
-                  <div className="grid4">
-                    <div className="card">
+                  <div className="fs-20 fw-700 mb-20">Nudges Info</div>
+                  <div className="grid5">
+                    <div className="card activeNudge">
                       <div className="grey mb-10 fs-16 fw-500">
                         Nudges <br />
                         received
                       </div>
                       <div className="fs-22 fw-500">200</div>
+                    </div>
+                    <div className="card">
+                      <div className="grey mb-10 fs-16 fw-500">
+                        Nudges <br />
+                        Redeemed
+                      </div>
+                      <div className="fs-22 fw-500">20/10%</div>
                     </div>
                     <div className="card">
                       <div className="grey mb-10 fs-16 fw-500">
@@ -1131,6 +1141,80 @@ const MerchantDetails = () => {
                         no action
                       </div>
                       <div className="fs-22 fw-500">0</div>
+                    </div>
+                  </div>
+                  <div className="divider2"></div>
+                  <div className="fs-20 fw-700 mb-20">Nudges Received</div>
+                  <div className="grid2 gap-20">
+                    <div className="card16 d-flex align-center gap-16">
+                      <div className="image80">
+                        <img src={dish} alt="dish" />
+                      </div>
+                      <div>
+                        <div className="fs-16 fw-500 grey mb-5">
+                          Taste the Magic
+                        </div>
+                        <div className="fs-16 fw-500">
+                          Unlock a 20% discount on our signature dishes this
+                          week.
+                        </div>
+                      </div>
+                    </div>
+                    <div className="card16 d-flex align-center gap-16">
+                      <div className="image80">
+                        <img src={dish} alt="dish" />
+                      </div>
+                      <div>
+                        <div className="fs-16 fw-500 grey mb-5">
+                          Taste the Magic
+                        </div>
+                        <div className="fs-16 fw-500">
+                          Unlock a 20% discount on our signature dishes this
+                          week.
+                        </div>
+                      </div>
+                    </div>
+                    <div className="card16 d-flex align-center gap-16">
+                      <div className="image80">
+                        <img src={dish} alt="dish" />
+                      </div>
+                      <div>
+                        <div className="fs-16 fw-500 grey mb-5">
+                          Taste the Magic
+                        </div>
+                        <div className="fs-16 fw-500">
+                          Unlock a 20% discount on our signature dishes this
+                          week.
+                        </div>
+                      </div>
+                    </div>
+                    <div className="card16 d-flex align-center gap-16">
+                      <div className="image80">
+                        <img src={dish} alt="dish" />
+                      </div>
+                      <div>
+                        <div className="fs-16 fw-500 grey mb-5">
+                          Taste the Magic
+                        </div>
+                        <div className="fs-16 fw-500">
+                          Unlock a 20% discount on our signature dishes this
+                          week.
+                        </div>
+                      </div>
+                    </div>
+                    <div className="card16 d-flex align-center gap-16">
+                      <div className="image80">
+                        <img src={dish} alt="dish" />
+                      </div>
+                      <div>
+                        <div className="fs-16 fw-500 grey mb-5">
+                          Taste the Magic
+                        </div>
+                        <div className="fs-16 fw-500">
+                          Unlock a 20% discount on our signature dishes this
+                          week.
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -1403,7 +1487,7 @@ const MerchantDetails = () => {
           </>
         ) : activeTab3 === "4" ? (
           <>
-            <div className="tabPadding">
+            <div className="tabPadding mb-30">
               <div className="d-flex align-center gap-20 mb-30 w-100">
                 <img src={backButton} alt="" />
                 <div>
@@ -1421,185 +1505,213 @@ const MerchantDetails = () => {
                   />
                 </div>
               </div>
-              <div className="merchantGrid">
-                {nudgesListSelector?.data?.data?.records?.map((item, index) => {
-                  return (
-                    <>
-                      <div className="merchantCard" key={index}>
-                        <div className="position-relative">
-                          <img className="w-100" src={item?.photoURL} alt="" />
-                          <div className="freeAbsolute fs-16 fw-700">
-                            {item?.title}
-                          </div>
-                          <div className="nudgeTag">All Followers</div>
+              <div className="divider2"></div>
+              <div className="d-flex align-center justify-between mb-15">
+                <div>
+                  <span className="fw-16">Nudges Goal: </span>
+                  <span className="fw-700 fs-20">15</span>
+                </div>
+                <div>
+                  <span className="fs-14">Sent </span>
+                  <span className="fs-18 gc fw-700">10</span>
+                </div>
+              </div>
+              <div className="range mb-15">
+                <div className="rangePercentage" style={{ width: "50%" }}></div>
+              </div>
+              <div className="fs-14 fw-500 grey mb-20">
+                You are just 50% behind to achieve Goal
+              </div>
+              <div className="weekNudge pc mb-20">
+                <div className="fs-18 fw-600">Nudges Expected This Week</div>
+                <div className="fw-700 fs-20">124</div>
+              </div>
+              <div className="card">
+                <div className="fs-20 fw-700 d-flex gap-20 align-center justify-between">
+                  <div>Nudge Credits</div>
+                  <div>44</div>
+                </div>
+                <div className="divider2"></div>
+              </div>
+            </div>
+            <div className="merchantGrid">
+              {nudgesListSelector?.data?.data?.records?.map((item, index) => {
+                return (
+                  <>
+                    <div className="merchantCard" key={index}>
+                      <div className="position-relative">
+                        <img className="w-100" src={item?.photoURL} alt="" />
+                        <div className="freeAbsolute fs-16 fw-700">
+                          {item?.title}
                         </div>
-                        <div className="bottomPadding">
-                          <div className="grid2">
-                            <div>
-                              <div className="fs-14 mb-4">Recipients:</div>
-                              <div className="fs-14 fw-600">
-                                {item?.recipientCount}
-                              </div>
-                            </div>
-                            <div>
-                              <div className="fs-14 mb-4">Accepted:</div>
-                              <div className="fs-14 fw-600">320/60%</div>
-                            </div>
-                            <div>
-                              <div className="fs-14 mb-4">Declined:</div>
-                              <div className="fs-14 fw-600">180/40%</div>
-                            </div>
-                            <div>
-                              <div className="fs-14 mb-4">Cost:</div>
-                              <div className="fs-14 fw-600">$10.00</div>
+                        <div className="nudgeTag">All Followers</div>
+                      </div>
+                      <div className="bottomPadding">
+                        <div className="grid2">
+                          <div>
+                            <div className="fs-14 mb-4">Recipients:</div>
+                            <div className="fs-14 fw-600">
+                              {item?.recipientCount}
                             </div>
                           </div>
-                          <div
-                            className="btn btnSecondary"
-                            onClick={() => setViewDetail(true)}
-                          >
-                            View Details
+                          <div>
+                            <div className="fs-14 mb-4">Accepted:</div>
+                            <div className="fs-14 fw-600">320/60%</div>
+                          </div>
+                          <div>
+                            <div className="fs-14 mb-4">Declined:</div>
+                            <div className="fs-14 fw-600">180/40%</div>
+                          </div>
+                          <div>
+                            <div className="fs-14 mb-4">Cost:</div>
+                            <div className="fs-14 fw-600">$10.00</div>
                           </div>
                         </div>
+                        <div
+                          className="btn btnSecondary"
+                          onClick={() => setViewDetail(true)}
+                        >
+                          View Details
+                        </div>
                       </div>
-                    </>
-                  );
-                })}
-                {/* <div className="merchantCard">
-                  <div className="position-relative">
-                    <img className="w-100" src={restaurantCard} alt="" />
-                    <div className="freeAbsolute fs-16 fw-700">Free Drink</div>
-                    <div className="nudgeTag">All Followers</div>
-                  </div>
-                  <div className="bottomPadding">
-                    <div className="grid2">
-                      <div>
-                        <div className="fs-14 mb-4">Recipients:</div>
-                        <div className="fs-14 fw-600">500</div>
-                      </div>
-                      <div>
-                        <div className="fs-14 mb-4">Accepted:</div>
-                        <div className="fs-14 fw-600">320/60%</div>
-                      </div>
-                      <div>
-                        <div className="fs-14 mb-4">Declined:</div>
-                        <div className="fs-14 fw-600">180/40%</div>
-                      </div>
-                      <div>
-                        <div className="fs-14 mb-4">Cost:</div>
-                        <div className="fs-14 fw-600">$10.00</div>
-                      </div>
+                    </div>
+                  </>
+                );
+              })}
+              <div className="merchantCard">
+                <div className="position-relative">
+                  <img className="w-100" src={restaurantCard} alt="" />
+                  <div className="freeAbsolute fs-16 fw-700">Free Drink</div>
+                  <div className="nudgeTag">All Followers</div>
+                </div>
+                <div className="bottomPadding">
+                  <div className="grid2">
+                    <div>
+                      <div className="fs-14 mb-4">Recipients:</div>
+                      <div className="fs-14 fw-600">500</div>
+                    </div>
+                    <div>
+                      <div className="fs-14 mb-4">Accepted:</div>
+                      <div className="fs-14 fw-600">320/60%</div>
+                    </div>
+                    <div>
+                      <div className="fs-14 mb-4">Declined:</div>
+                      <div className="fs-14 fw-600">180/40%</div>
+                    </div>
+                    <div>
+                      <div className="fs-14 mb-4">Cost:</div>
+                      <div className="fs-14 fw-600">$10.00</div>
                     </div>
                   </div>
                 </div>
-                <div className="merchantCard">
-                  <div className="position-relative">
-                    <img className="w-100" src={restaurantCard} alt="" />
-                    <div className="freeAbsolute fs-16 fw-700">Free Drink</div>
-                    <div className="nudgeTag">All Followers</div>
-                  </div>
-                  <div className="bottomPadding">
-                    <div className="grid2">
-                      <div>
-                        <div className="fs-14 mb-4">Recipients:</div>
-                        <div className="fs-14 fw-600">500</div>
-                      </div>
-                      <div>
-                        <div className="fs-14 mb-4">Accepted:</div>
-                        <div className="fs-14 fw-600">320/60%</div>
-                      </div>
-                      <div>
-                        <div className="fs-14 mb-4">Declined:</div>
-                        <div className="fs-14 fw-600">180/40%</div>
-                      </div>
-                      <div>
-                        <div className="fs-14 mb-4">Cost:</div>
-                        <div className="fs-14 fw-600">$10.00</div>
-                      </div>
+              </div>
+              <div className="merchantCard">
+                <div className="position-relative">
+                  <img className="w-100" src={restaurantCard} alt="" />
+                  <div className="freeAbsolute fs-16 fw-700">Free Drink</div>
+                  <div className="nudgeTag">All Followers</div>
+                </div>
+                <div className="bottomPadding">
+                  <div className="grid2">
+                    <div>
+                      <div className="fs-14 mb-4">Recipients:</div>
+                      <div className="fs-14 fw-600">500</div>
+                    </div>
+                    <div>
+                      <div className="fs-14 mb-4">Accepted:</div>
+                      <div className="fs-14 fw-600">320/60%</div>
+                    </div>
+                    <div>
+                      <div className="fs-14 mb-4">Declined:</div>
+                      <div className="fs-14 fw-600">180/40%</div>
+                    </div>
+                    <div>
+                      <div className="fs-14 mb-4">Cost:</div>
+                      <div className="fs-14 fw-600">$10.00</div>
                     </div>
                   </div>
                 </div>
-                <div className="merchantCard">
-                  <div className="position-relative">
-                    <img className="w-100" src={restaurantCard} alt="" />
-                    <div className="freeAbsolute fs-16 fw-700">Free Drink</div>
-                    <div className="nudgeTag">All Followers</div>
-                  </div>
-                  <div className="bottomPadding">
-                    <div className="grid2">
-                      <div>
-                        <div className="fs-14 mb-4">Recipients:</div>
-                        <div className="fs-14 fw-600">500</div>
-                      </div>
-                      <div>
-                        <div className="fs-14 mb-4">Accepted:</div>
-                        <div className="fs-14 fw-600">320/60%</div>
-                      </div>
-                      <div>
-                        <div className="fs-14 mb-4">Declined:</div>
-                        <div className="fs-14 fw-600">180/40%</div>
-                      </div>
-                      <div>
-                        <div className="fs-14 mb-4">Cost:</div>
-                        <div className="fs-14 fw-600">$10.00</div>
-                      </div>
+              </div>
+              <div className="merchantCard">
+                <div className="position-relative">
+                  <img className="w-100" src={restaurantCard} alt="" />
+                  <div className="freeAbsolute fs-16 fw-700">Free Drink</div>
+                  <div className="nudgeTag">All Followers</div>
+                </div>
+                <div className="bottomPadding">
+                  <div className="grid2">
+                    <div>
+                      <div className="fs-14 mb-4">Recipients:</div>
+                      <div className="fs-14 fw-600">500</div>
+                    </div>
+                    <div>
+                      <div className="fs-14 mb-4">Accepted:</div>
+                      <div className="fs-14 fw-600">320/60%</div>
+                    </div>
+                    <div>
+                      <div className="fs-14 mb-4">Declined:</div>
+                      <div className="fs-14 fw-600">180/40%</div>
+                    </div>
+                    <div>
+                      <div className="fs-14 mb-4">Cost:</div>
+                      <div className="fs-14 fw-600">$10.00</div>
                     </div>
                   </div>
                 </div>
-                <div className="merchantCard">
-                  <div className="position-relative">
-                    <img className="w-100" src={restaurantCard} alt="" />
-                    <div className="freeAbsolute fs-16 fw-700">Free Drink</div>
-                    <div className="nudgeTag">All Followers</div>
-                  </div>
-                  <div className="bottomPadding">
-                    <div className="grid2">
-                      <div>
-                        <div className="fs-14 mb-4">Recipients:</div>
-                        <div className="fs-14 fw-600">500</div>
-                      </div>
-                      <div>
-                        <div className="fs-14 mb-4">Accepted:</div>
-                        <div className="fs-14 fw-600">320/60%</div>
-                      </div>
-                      <div>
-                        <div className="fs-14 mb-4">Declined:</div>
-                        <div className="fs-14 fw-600">180/40%</div>
-                      </div>
-                      <div>
-                        <div className="fs-14 mb-4">Cost:</div>
-                        <div className="fs-14 fw-600">$10.00</div>
-                      </div>
+              </div>
+              <div className="merchantCard">
+                <div className="position-relative">
+                  <img className="w-100" src={restaurantCard} alt="" />
+                  <div className="freeAbsolute fs-16 fw-700">Free Drink</div>
+                  <div className="nudgeTag">All Followers</div>
+                </div>
+                <div className="bottomPadding">
+                  <div className="grid2">
+                    <div>
+                      <div className="fs-14 mb-4">Recipients:</div>
+                      <div className="fs-14 fw-600">500</div>
+                    </div>
+                    <div>
+                      <div className="fs-14 mb-4">Accepted:</div>
+                      <div className="fs-14 fw-600">320/60%</div>
+                    </div>
+                    <div>
+                      <div className="fs-14 mb-4">Declined:</div>
+                      <div className="fs-14 fw-600">180/40%</div>
+                    </div>
+                    <div>
+                      <div className="fs-14 mb-4">Cost:</div>
+                      <div className="fs-14 fw-600">$10.00</div>
                     </div>
                   </div>
                 </div>
-                <div className="merchantCard">
-                  <div className="position-relative">
-                    <img className="w-100" src={restaurantCard} alt="" />
-                    <div className="freeAbsolute fs-16 fw-700">Free Drink</div>
-                    <div className="nudgeTag">All Followers</div>
-                  </div>
-                  <div className="bottomPadding">
-                    <div className="grid2">
-                      <div>
-                        <div className="fs-14 mb-4">Recipients:</div>
-                        <div className="fs-14 fw-600">500</div>
-                      </div>
-                      <div>
-                        <div className="fs-14 mb-4">Accepted:</div>
-                        <div className="fs-14 fw-600">320/60%</div>
-                      </div>
-                      <div>
-                        <div className="fs-14 mb-4">Declined:</div>
-                        <div className="fs-14 fw-600">180/40%</div>
-                      </div>
-                      <div>
-                        <div className="fs-14 mb-4">Cost:</div>
-                        <div className="fs-14 fw-600">$10.00</div>
-                      </div>
+              </div>
+              <div className="merchantCard">
+                <div className="position-relative">
+                  <img className="w-100" src={restaurantCard} alt="" />
+                  <div className="freeAbsolute fs-16 fw-700">Free Drink</div>
+                  <div className="nudgeTag">All Followers</div>
+                </div>
+                <div className="bottomPadding">
+                  <div className="grid2">
+                    <div>
+                      <div className="fs-14 mb-4">Recipients:</div>
+                      <div className="fs-14 fw-600">500</div>
+                    </div>
+                    <div>
+                      <div className="fs-14 mb-4">Accepted:</div>
+                      <div className="fs-14 fw-600">320/60%</div>
+                    </div>
+                    <div>
+                      <div className="fs-14 mb-4">Declined:</div>
+                      <div className="fs-14 fw-600">180/40%</div>
+                    </div>
+                    <div>
+                      <div className="fs-14 mb-4">Cost:</div>
+                      <div className="fs-14 fw-600">$10.00</div>
                     </div>
                   </div>
-                </div> */}
+                </div>
               </div>
             </div>
           </>
