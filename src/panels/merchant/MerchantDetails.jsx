@@ -34,6 +34,19 @@ const MerchantDetails = () => {
   const [searchString, setSearchString] = useState("");
   const [searchArea, setSearchArea] = useState([]);
 
+  const [checkedItems, setCheckedItems] = useState({});
+
+  const handleCheckboxChange = (index, isChecked) => {
+    setCheckedItems((prev) => ({
+      ...prev,
+      [index]: isChecked,
+    }));
+  };
+
+  const isAnyCheckboxChecked = Object.values(checkedItems).some(
+    (checked) => checked
+  );
+
   const defaultProps = {
     center: {
       lat: 10.99835602,
@@ -100,11 +113,13 @@ const MerchantDetails = () => {
 
   const handleSearchChange = (value) => {
     setSearchString(value);
+    setCheckedItems({})
     setPagination((prev) => ({ ...prev, page: 1 })); // Reset to the first page on search
   };
 
   const handleSearchAreaChange = (selectedAreas) => {
     setSearchArea(selectedAreas);
+    setCheckedItems({})
   };
 
   useEffect(() => {
@@ -125,7 +140,6 @@ const MerchantDetails = () => {
   }, [pagination, searchString, searchArea, activeTab3]);
 
   const followeListSelector = useSelector((state) => state?.followeList);
-  console.log(followeListSelector, "followeListSelector");
 
   return (
     <>
@@ -1272,80 +1286,81 @@ const MerchantDetails = () => {
                     onSearchAreaChange={handleSearchAreaChange}
                   />
                   <div className="merchantGrid mb-30">
-                    {followeListSelector?.data?.data?.records?.map(
-                      (item, index) => {
-                        console.log(item, "itemitemitem");
-                        return (
-                          <>
-                            <div className="cardFollow">
-                              <div className="d-flex justify-between gap-12">
-                                <div className="d-flex align-center gap-12">
-                                  <div className="initialName">dr</div>
-                                  <div>
-                                    <div className="fw-700">
-                                      {item?.userInfo?.displayName}
-                                    </div>
-                                    <div className="fs-14 fw-300 o5">
-                                      {/* June, 2024 */}
-                                      {moment(item?.createdAt).format(
-                                        "MMMM,YYYY"
-                                      )}
-                                    </div>
+                    {followeListSelector?.data?.data?.records?.length > 0 ? (
+                      followeListSelector?.data?.data?.records?.map(
+                        (item, index) => (
+                          <div className="cardFollow" key={index}>
+                            <div className="d-flex justify-between gap-12">
+                              <div className="d-flex align-center gap-12">
+                                <div className="initialName">dr</div>
+                                <div>
+                                  <div className="fw-700">
+                                    {item?.userInfo?.displayName}
+                                  </div>
+                                  <div className="fs-14 fw-300 o5">
+                                    {moment(item?.createdAt).format(
+                                      "MMMM, YYYY"
+                                    )}
                                   </div>
                                 </div>
-                                <div className="custom-checkbox">
-                                  <label className="checkLabel">
-                                    <input type="checkbox" />
-                                    <span className="checkmark"></span>
-                                  </label>
-                                </div>
                               </div>
-                              <div className="divider2"></div>
-                              <div className="d-flex justify-between align-center gap-12 fs-14 mb-10">
-                                <div className="d-flex align-center gap-12">
-                                  <img src={resturantIcon} alt="" />
-                                  Restaurants following:
-                                </div>
-                                <div className=" fw-500">
-                                  {item?.followerCount}
-                                </div>
-                              </div>
-                              <div className="d-flex justify-between align-center gap-12 fs-14">
-                                <div className="d-flex align-center gap-12">
-                                  <img src={nudgeIcon} alt="" />
-                                  Nudges shared
-                                </div>
-                                <div className=" fw-500">
-                                  {item?.nudgeCount}
-                                </div>
-                              </div>
-                              <div className="divider2"></div>
-                              <div className="fs-14 mb-6">Preferences</div>
-                              <div className="flexTag mb-20">
-                                {item?.customerPreferencesData
-                                  ?.personalPreference?.length > 0 ? (
-                                  // If preferences exist, map over and display them
-                                  item.customerPreferencesData.personalPreference.map(
-                                    (preference, index) => (
-                                      <div key={index}>{preference}</div>
-                                    )
-                                  )
-                                ) : (
-                                  // If no preferences exist, show a message
-                                  <div>No preferences available</div>
-                                )}
-                              </div>
-
-                              <div
-                                className="btn btnSecondary"
-                                onClick={() => setViewDetail(true)}
-                              >
-                                View Details
+                              <div className="custom-checkbox">
+                                <label className="checkLabel">
+                                  <input
+                                    type="checkbox"
+                                    onChange={(e) =>
+                                      handleCheckboxChange(
+                                        index,
+                                        e.target.checked
+                                      )
+                                    }
+                                  />
+                                  <span className="checkmark"></span>
+                                </label>
                               </div>
                             </div>
-                          </>
-                        );
-                      }
+                            <div className="divider2"></div>
+                            <div className="d-flex justify-between align-center gap-12 fs-14 mb-10">
+                              <div className="d-flex align-center gap-12">
+                                <img src={resturantIcon} alt="" />
+                                Restaurants following:
+                              </div>
+                              <div className="fw-500">
+                                {item?.followerCount}
+                              </div>
+                            </div>
+                            <div className="d-flex justify-between align-center gap-12 fs-14">
+                              <div className="d-flex align-center gap-12">
+                                <img src={nudgeIcon} alt="" />
+                                Nudges shared
+                              </div>
+                              <div className="fw-500">{item?.nudgeCount}</div>
+                            </div>
+                            <div className="divider2"></div>
+                            <div className="fs-14 mb-6">Preferences</div>
+                            <div className="flexTag mb-20">
+                              {item?.customerPreferencesData?.personalPreference
+                                ?.length > 0 ? (
+                                item.customerPreferencesData.personalPreference.map(
+                                  (preference, index) => (
+                                    <div key={index}>{preference}</div>
+                                  )
+                                )
+                              ) : (
+                                <div>No preferences available</div>
+                              )}
+                            </div>
+                            <div
+                              className="btn btnSecondary"
+                              onClick={() => setViewDetail(true)}
+                            >
+                              View Details
+                            </div>
+                          </div>
+                        )
+                      )
+                    ) : (
+                      <div>No data found</div>
                     )}
                   </div>
                   <div className="d-flex align-center justify-between flexPagination">
@@ -1361,7 +1376,11 @@ const MerchantDetails = () => {
                     />
                   </div>
                 </div>
-                <CommonToast image={createAdd} text={"Create nudge"} />
+                {/* <CommonToast image={createAdd} text={"Create nudge"} /> */}
+                {isAnyCheckboxChecked && (
+                  <CommonToast image={createAdd} text={"Create nudge"} />
+                )}
+                {/* <button>Create Nudge</button> */}
               </>
             )}
           </>

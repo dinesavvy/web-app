@@ -1,4 +1,3 @@
-import React from "react";
 import deleteList from "../../assets/images/deleteList.svg";
 
 const CommonToast = ({image,text}) => {
