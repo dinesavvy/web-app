@@ -8,8 +8,6 @@ import olive from "../../assets/images/olive.png";
 import addTime from "../../assets/images/addTime.svg";
 import createAdd from "../../assets/images/createAdd.svg";
 import map from "../../assets/images/map.jpg";
-import restaurantCard from "../../assets/images/restaurantCard.png";
-import businessPhoto from "../../assets/images/businessPhoto.png";
 import chart from "../../assets/images/chart.jpg";
 import { Breadcrumb, Pagination, TimePicker } from "antd";
 import SearchSelect from "../../shared/components/SearchSelect";
@@ -77,24 +75,24 @@ const MerchantDetails = () => {
   const handleToggle = (state) => {
     setSwitchState(state);
   };
-  const images = [
-    businessPhoto,
-    restaurantCard,
-    restaurantCard,
-    businessPhoto,
-    restaurantCard,
-    businessPhoto,
-    restaurantCard,
-  ];
-  const images2 = [
-    restaurantCard,
-    businessPhoto,
-    restaurantCard,
-    businessPhoto,
-    restaurantCard,
-    businessPhoto,
-    restaurantCard,
-  ];
+  // const images = [
+  //   businessPhoto,
+  //   restaurantCard,
+  //   restaurantCard,
+  //   businessPhoto,
+  //   restaurantCard,
+  //   businessPhoto,
+  //   restaurantCard,
+  // ];
+  // const images2 = [
+  //   restaurantCard,
+  //   businessPhoto,
+  //   restaurantCard,
+  //   businessPhoto,
+  //   restaurantCard,
+  //   businessPhoto,
+  //   restaurantCard,
+  // ];
 
   const { state } = useLocation();
   const dispatch = useDispatch();
