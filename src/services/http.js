@@ -35,7 +35,7 @@ let API_URL="https://api-stage.dinesavvy.com/api/v1";
 function getHeader() {
   // const navigate = useNavigate()
   let user = localStorage.getItem("token");
-  return user && { Authorization: "Bearer " + user };
+  return user && { Authorization:user };
 }
 export default class Http {
   static get(url) {

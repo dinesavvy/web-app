@@ -13,6 +13,7 @@ import BarChart from "../../shared/charts/BarChart";
 import DoughnutChart from "../../shared/charts/DoughnutChart";
 import { Pagination } from "antd";
 import AreaChart from "../../shared/charts/AreaChart";
+
 const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState("1");
   const [activeTab2, setActiveTab2] = useState("1");

@@ -1,19 +1,21 @@
-import React, { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import searchIcon from "../../assets/images/searchIcon.svg";
 import filterIcon from "../../assets/images/filterIcon.svg";
 import deleteList from "../../assets/images/deleteList.svg";
 
-const SearchSelect = () => {
+const SearchSelect = ({ onSearchChange, onSearchAreaChange }) => {
   const [selectedItems, setSelectedItems] = useState([]);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [searchInput, setSearchInput] = useState("");
   const dropdownRef = useRef(null); // Reference for the dropdown container
 
   const options = [
-    "Restaurants following",
-    "Number of friends",
-    "Same preferences",
-    "What they love",
-    "Same accepted nudges",
+    "city",
+    "performance",
+    "street",
+    "zipCode",
+    "district",
+    "area",
   ];
 
   const toggleDropdown = () => {
@@ -21,13 +23,26 @@ const SearchSelect = () => {
   };
 
   const handleSelect = (option) => {
-    if (!selectedItems.includes(option)) {
-      setSelectedItems([...selectedItems, option]);
-    }
+    const updatedSelectedItems = selectedItems.includes(option)
+      ? selectedItems.filter((item) => item !== option)
+      : [...selectedItems, option];
+
+    setSelectedItems(updatedSelectedItems);
+    onSearchAreaChange(updatedSelectedItems); // Notify parent
   };
 
   const handleRemove = (option) => {
-    setSelectedItems(selectedItems.filter((item) => item !== option));
+    const updatedSelectedItems = selectedItems.filter(
+      (item) => item !== option
+    );
+    setSelectedItems(updatedSelectedItems);
+    onSearchAreaChange(updatedSelectedItems); // Notify parent
+  };
+
+  const handleSearchInputChange = (e) => {
+    const value = e.target.value;
+    setSearchInput(value);
+    onSearchChange(value); // Notify parent
   };
 
   // Close dropdown when clicking outside
@@ -50,9 +65,9 @@ const SearchSelect = () => {
         <div className="lineSearch w-100">
           <input
             type="text"
-            name="text"
+            value={searchInput}
+            onChange={handleSearchInputChange}
             placeholder="Search Merchants"
-            id="text"
           />
           <img src={searchIcon} alt="" className="absoluteImage" />
         </div>

@@ -29,7 +29,7 @@ const Sidebar = ({ isOpen ,setIsOpen}) => {
   
   const navigate = useNavigate()
   const links = [
-    { id: 1, name: "Dashboard", icon: dashboard, iconFull: dashboardFull },
+    { id: 1, name: "Dashboard", icon: dashboard, iconFull: dashboardFull,navigate: "/admin/merchant/dashboard" },
     // { id: 2, name: "Suppliers", icon: suppliers, iconFull: suppliersFull },
     // {
     //   id: 3,
@@ -37,8 +37,8 @@ const Sidebar = ({ isOpen ,setIsOpen}) => {
     //   icon: distributor,
     //   iconFull: distributorFull,
     // },
-    { id: 4, name: "Merchants", icon: merchant, iconFull: merchantFull , navigate: "/merchant/list" },
-    { id: 5, name: "Followers", icon: consumers, iconFull: consumersFull, navigate: "/merchant/followers" },
+    { id: 4, name: "Merchants", icon: merchant, iconFull: merchantFull , navigate: "/admin/merchant/list" },
+    { id: 5, name: "Followers", icon: consumers, iconFull: consumersFull, navigate: "/admin/merchant/followers" },
     { id: 6, name: "Nudges", icon: nudge, iconFull: nudgeFull },
     { id: 7, name: "Promotions", icon: promotions, iconFull: promotionsFull },
     { id: 8, name: "Brands", icon: brands, iconFull: brandsFull },
@@ -48,6 +48,7 @@ const Sidebar = ({ isOpen ,setIsOpen}) => {
   const onNavigate=(path)=>{
     const width = window.innerWidth;
     navigate(path)
+    console.log(path,"pathpathpath")
 
     if (width <= 1024) {
       setIsOpen(false)

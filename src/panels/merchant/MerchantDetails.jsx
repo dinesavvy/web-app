@@ -1,12 +1,8 @@
-import React, { useState } from "react";
+import { useEffect, useState } from "react";
 import "./merchant.css";
 import backButton from "../../assets/images/backButton.svg";
 import breadCrumbIcon from "../../assets/images/breadCrumb.svg";
-import editBtn from "../../assets/images/editBtn.svg";
-import cafeIcon from "../../assets/images/cafeIcon.svg";
-import downloadIcon from "../../assets/images/downloadIcon.svg";
 import resturantIcon from "../../assets/images/resturantIcon.svg";
-import review from "../../assets/images/review.svg";
 import nudgeIcon from "../../assets/images/nudgeIcon.svg";
 import olive from "../../assets/images/olive.png";
 import addTime from "../../assets/images/addTime.svg";
@@ -19,15 +15,32 @@ import { Breadcrumb, Pagination, TimePicker } from "antd";
 import SearchSelect from "../../shared/components/SearchSelect";
 import CustomSelect from "../../shared/components/CustomSelect";
 import CustomSwitch from "../../shared/components/CustomSwitch";
-import ImageGallery from "../../shared/components/ImageGallery";
 import CommonToast from "../../shared/components/commonToast";
+import { useLocation, useNavigate } from "react-router-dom";
+import { merchantDetailsHandler } from "../../redux/action/merchantDetails";
+import { useDispatch, useSelector } from "react-redux";
+import Loader from "../../shared/components/Loader/Loader";
+import GoogleMapReact from "google-map-react";
+import { FaMapMarkerAlt } from "react-icons/fa";
+import moment from "moment";
+import { followersListHandler } from "../../redux/action/followersList";
 
 const MerchantDetails = () => {
   const [activeTab3, setActiveTab3] = useState("1");
   const [editInput, setEditInput] = useState(false);
   const [switchState, setSwitchState] = useState(false);
-  const [openImage, setOpenImage] = useState(false);
   const [viewDetail, setViewDetail] = useState(false);
+  const [pagination, setPagination] = useState({ page: 1, limit: 10 });
+  const [searchString, setSearchString] = useState("");
+  const [searchArea, setSearchArea] = useState([]);
+
+  const defaultProps = {
+    center: {
+      lat: 10.99835602,
+      lng: 77.01502627,
+    },
+    zoom: 11,
+  };
 
   const tabs3 = [
     {
@@ -68,8 +81,56 @@ const MerchantDetails = () => {
     businessPhoto,
     restaurantCard,
   ];
+
+  const { state } = useLocation();
+  const dispatch = useDispatch();
+  const merchantDetailsSelector = useSelector(
+    (state) => state?.merchantDetails
+  );
+
+  useEffect(() => {
+    dispatch(merchantDetailsHandler({ locationId: state?._id }));
+  }, []);
+
+  const navigate = useNavigate();
+
+  const handlePaginationChange = (page, pageSize) => {
+    setPagination({ page, limit: pageSize });
+  };
+
+  const handleSearchChange = (value) => {
+    setSearchString(value);
+    setPagination((prev) => ({ ...prev, page: 1 })); // Reset to the first page on search
+  };
+
+  const handleSearchAreaChange = (selectedAreas) => {
+    setSearchArea(selectedAreas);
+  };
+
+  useEffect(() => {
+    if (activeTab3 === "3") {
+      const fetchMerchants = () => {
+        const payload = {
+          locationId: state?._id,
+          page: pagination.page,
+          limit: pagination.limit,
+          searchString,
+          searchArea,
+        };
+        dispatch(followersListHandler(payload));
+      };
+
+      fetchMerchants();
+    }
+  }, [pagination, searchString, searchArea, activeTab3]);
+
+  const followeListSelector = useSelector((state) => state?.followeList);
+  console.log(followeListSelector, "followeListSelector");
+
   return (
     <>
+      {(merchantDetailsSelector?.isLoading ||
+        followeListSelector?.isLoading) && <Loader />}
       <div className="dashboard">
         <div className="tabs-container tab3 tabFull">
           <div className="tabs">
@@ -90,7 +151,12 @@ const MerchantDetails = () => {
           <>
             <div className="tabPadding mb-30">
               <div className="d-flex align-center gap-20 mb-30 w-100">
-                <img src={backButton} alt="" />
+                <img
+                  src={backButton}
+                  alt=""
+                  className="cursor-pointer"
+                  onClick={() => navigate("/admin/merchant/list")}
+                />
                 <div>
                   <div className="fs-24 fw-600 mb-4">Merchants Details</div>
                   <Breadcrumb
@@ -109,14 +175,14 @@ const MerchantDetails = () => {
               <div className="card mb-30">
                 <div className="d-flex align-center justify-between gap-20 mb-20">
                   <div className="fs-20 fw-700">About your business</div>
-                  {!editInput && (
+                  {/* {!editInput && (
                     <div
                       className="editBtn cursor-pointer"
                       onClick={() => setEditInput(true)}
                     >
                       <img src={editBtn} alt="" />
                     </div>
-                  )}
+                  )} */}
                 </div>
                 <div className="inputGrid">
                   <div>
@@ -130,7 +196,9 @@ const MerchantDetails = () => {
                         placeholder="Garden Grove Café & Bistro"
                       />
                     ) : (
-                      <div className="">Garden Grove Café & Bistro</div>
+                      <div className="">
+                        {merchantDetailsSelector?.data?.data?.businessName}
+                      </div>
                     )}
                   </div>
                   <div>
@@ -159,9 +227,8 @@ const MerchantDetails = () => {
                       />
                     ) : (
                       <div className="">
-                        Whether you're joining us for a casual lunch, a special
-                        dinner, or a weekend brunch, our elegant yet relaxed
-                        atmosphere is perfect for any occasion.
+                        {merchantDetailsSelector?.data?.data?.description ||
+                          "N/A"}
                       </div>
                     )}
                   </div>
@@ -188,14 +255,14 @@ const MerchantDetails = () => {
                   <div className="fs-20 fw-700">
                     Primary Contact information
                   </div>
-                  {!editInput && (
+                  {/* {!editInput && (
                     <div
                       className="editBtn cursor-pointer"
                       onClick={() => setEditInput(true)}
                     >
                       <img src={editBtn} alt="" />
                     </div>
-                  )}
+                  )} */}
                 </div>
                 <div className="inputGrid grid3">
                   <div>
@@ -210,7 +277,7 @@ const MerchantDetails = () => {
                       />
                     ) : (
                       <a className="anchor" href="tel:+911234567890">
-                        +91 123 456 7890
+                        +{merchantDetailsSelector?.data?.data?.phoneNumber}
                       </a>
                     )}
                   </div>
@@ -242,7 +309,7 @@ const MerchantDetails = () => {
                       />
                     ) : (
                       <a className="anchor" href="www.dinesavvy.com">
-                        www.dinesavvy.com
+                        {merchantDetailsSelector?.data?.data?.websiteUrl}
                       </a>
                     )}
                   </div>
@@ -267,14 +334,14 @@ const MerchantDetails = () => {
               <div className="card mb-30">
                 <div className="d-flex align-center justify-between gap-20 mb-20">
                   <div className="fs-20 fw-700">Location and areas</div>
-                  {!editInput && (
+                  {/* {!editInput && (
                     <div
                       className="editBtn cursor-pointer"
                       onClick={() => setEditInput(true)}
                     >
                       <img src={editBtn} alt="" />
                     </div>
-                  )}
+                  )} */}
                 </div>
                 <div>
                   {editInput === true ? (
@@ -362,12 +429,50 @@ const MerchantDetails = () => {
                         Business location
                       </label>
                       <div className="mb-20">
-                        4140 Parker Rd. Allentown, New Mexico 31134
+                        {[
+                          merchantDetailsSelector?.data?.data?.address
+                            ?.addressLine1,
+                          merchantDetailsSelector?.data?.data?.address
+                            ?.addressLine2,
+                          merchantDetailsSelector?.data?.data?.address?.country,
+                          merchantDetailsSelector?.data?.data?.address
+                            ?.locality,
+                          merchantDetailsSelector?.data?.data?.address
+                            ?.postalCode,
+                        ]
+                          .filter(Boolean) // Filters out null, undefined, or empty values
+                          .join(", ")}
                       </div>
                     </>
                   )}
                   <div className="iframeMap my228  ">
-                    <img src={map} alt="" className="w-100 h-100" />
+                    {/* <img src={map} alt="" className="w-100 h-100" /> */}
+                    <div style={{ height: "100vh", width: "100%" }}>
+                      <GoogleMapReact
+                        bootstrapURLKeys={{
+                          // key: "AIzaSyA1eBPyIdN-eBqRcf82jmHLJOpj2fTq6QU",
+                          key: "AIzaSyChtVAEkND92pGbhCk3g4QhEzHJotxm71E",
+                        }}
+                        defaultCenter={defaultProps?.center}
+                        defaultZoom={defaultProps?.zoom}
+                      >
+                        {/* {currentLocation && ( */}
+                        <FaMapMarkerAlt
+                          lat={
+                            // merchantDetailsSelector?.data?.data?.busLoc
+                            //   ?.coordinates?.[0]
+                            23.0332263
+                          }
+                          lng={
+                            // merchantDetailsSelector?.data?.data?.busLoc
+                            //   ?.coordinates?.[1]
+                            72.5046251
+                          }
+                          className="mapMarker"
+                        />
+                        {/* )} */}
+                      </GoogleMapReact>
+                    </div>
                   </div>
                 </div>
                 {editInput && (
@@ -390,22 +495,22 @@ const MerchantDetails = () => {
               <div className="card">
                 <div className="d-flex align-center justify-between gap-20 mb-20 flexmd">
                   <div className="fs-20 fw-700">Hours of operation</div>
-                  {!editInput && (
+                  {/* {!editInput && (
                     <div
                       className="editBtn cursor-pointer"
                       onClick={() => setEditInput(true)}
                     >
                       <img src={editBtn} alt="" />
                     </div>
-                  )}
+                  )} */}
                 </div>
                 {!editInput && (
                   <div>
-                    <div className="d-flex align-center justify-between">
+                    {/* <div className="d-flex align-center justify-between">
                       <div className="grey fs-16">Sunday</div>
                       <div>Closed</div>
-                    </div>
-                    <div className="divider2"></div>
+                    </div> */}
+                    {/* <div className="divider2"></div>
                     <div className="d-flex align-center justify-between">
                       <div className="grey fs-16">Monday</div>
                       <div>9:00 AM To 11:30</div>
@@ -434,267 +539,289 @@ const MerchantDetails = () => {
                     <div className="d-flex align-center justify-between">
                       <div className="grey fs-16">Saturday</div>
                       <div>9:00 AM To 11:30</div>
-                    </div>
+                    </div> */}
+                    {merchantDetailsSelector?.data?.data?.businessHours?.periods?.map(
+                      (item, index) => {
+                        return (
+                          <>
+                            <div className="divider2"></div>
+                            <div
+                              className="d-flex align-center justify-between"
+                              key={index}
+                            >
+                              <div className="grey fs-16">
+                                {item?.dayOfWeek}
+                              </div>
+                              <div>
+                                {item?.startLocalTime +
+                                  " to " +
+                                  item?.endLocalTime}
+                              </div>
+                            </div>
+                          </>
+                        );
+                      }
+                    )}
                   </div>
                 )}
                 {editInput && (
                   <>
                     <div className="overflow">
-                    <div className="minw">
-                      <div className="d-flex align-center justify-between">
-                        <div className="grey fs-16">Sunday</div>
-                        <div className="d-flex align-center gap-16">
-                          <CustomSwitch
-                            isOn={switchState}
-                            onToggle={handleToggle}
-                          />
-                          <div>Closed</div>
+                      <div className="minw">
+                        <div className="d-flex align-center justify-between">
+                          <div className="grey fs-16">Sunday</div>
+                          <div className="d-flex align-center gap-16">
+                            <CustomSwitch
+                              isOn={switchState}
+                              onToggle={handleToggle}
+                            />
+                            <div>Closed</div>
+                          </div>
                         </div>
+                        {switchState && (
+                          <div className="mt-10 d-flex align-end gap-10">
+                            <div className="w-100">
+                              <label htmlFor="" className="fs-14 fw-500 mb-10">
+                                From
+                              </label>
+                              <TimePicker className="customTime input" />
+                            </div>
+                            <div className="w-100">
+                              <label htmlFor="" className="fs-14 fw-500 mb-10">
+                                to
+                              </label>
+                              <TimePicker className="customTime input" />
+                            </div>
+                            <div className="addTime">
+                              <img src={addTime} alt="" />
+                            </div>
+                          </div>
+                        )}
                       </div>
-                      {switchState && (
-                        <div className="mt-10 d-flex align-end gap-10">
-                          <div className="w-100">
-                            <label htmlFor="" className="fs-14 fw-500 mb-10">
-                              From
-                            </label>
-                            <TimePicker className="customTime input" />
-                          </div>
-                          <div className="w-100">
-                            <label htmlFor="" className="fs-14 fw-500 mb-10">
-                              to
-                            </label>
-                            <TimePicker className="customTime input" />
-                          </div>
-                          <div className="addTime">
-                            <img src={addTime} alt="" />
+                      <div className="divider2"></div>
+                      <div className="minw">
+                        <div className="d-flex align-center justify-between">
+                          <div className="grey fs-16">Sunday</div>
+                          <div className="d-flex align-center gap-16">
+                            <CustomSwitch
+                              isOn={switchState}
+                              onToggle={handleToggle}
+                            />
+                            <div>Closed</div>
                           </div>
                         </div>
-                      )}
-                    </div>
-                    <div className="divider2"></div>
-                    <div className="minw">
-                      <div className="d-flex align-center justify-between">
-                        <div className="grey fs-16">Sunday</div>
-                        <div className="d-flex align-center gap-16">
-                          <CustomSwitch
-                            isOn={switchState}
-                            onToggle={handleToggle}
-                          />
-                          <div>Closed</div>
-                        </div>
+                        {switchState && (
+                          <div className="mt-10 d-flex align-end gap-10">
+                            <div className="w-100">
+                              <label htmlFor="" className="fs-14 fw-500 mb-10">
+                                From
+                              </label>
+                              <TimePicker className="customTime input" />
+                            </div>
+                            <div className="w-100">
+                              <label htmlFor="" className="fs-14 fw-500 mb-10">
+                                to
+                              </label>
+                              <TimePicker className="customTime input" />
+                            </div>
+                            <div className="addTime">
+                              <img src={addTime} alt="" />
+                            </div>
+                          </div>
+                        )}
                       </div>
-                      {switchState && (
-                        <div className="mt-10 d-flex align-end gap-10">
-                          <div className="w-100">
-                            <label htmlFor="" className="fs-14 fw-500 mb-10">
-                              From
-                            </label>
-                            <TimePicker className="customTime input" />
-                          </div>
-                          <div className="w-100">
-                            <label htmlFor="" className="fs-14 fw-500 mb-10">
-                            to
-                            </label>
-                            <TimePicker className="customTime input" />
-                          </div>
-                          <div className="addTime">
-                            <img src={addTime} alt="" />
+                      <div className="divider2"></div>
+                      <div className="minw">
+                        <div className="d-flex align-center justify-between">
+                          <div className="grey fs-16">Sunday</div>
+                          <div className="d-flex align-center gap-16">
+                            <CustomSwitch
+                              isOn={switchState}
+                              onToggle={handleToggle}
+                            />
+                            <div>Closed</div>
                           </div>
                         </div>
-                      )}
-                    </div>
-                    <div className="divider2"></div>
-                    <div className="minw">
-                      <div className="d-flex align-center justify-between">
-                        <div className="grey fs-16">Sunday</div>
-                        <div className="d-flex align-center gap-16">
-                          <CustomSwitch
-                            isOn={switchState}
-                            onToggle={handleToggle}
-                          />
-                          <div>Closed</div>
-                        </div>
+                        {switchState && (
+                          <div className="mt-10 d-flex align-end gap-10">
+                            <div className="w-100">
+                              <label htmlFor="" className="fs-14 fw-500 mb-10">
+                                From
+                              </label>
+                              <TimePicker className="customTime input" />
+                            </div>
+                            <div className="w-100">
+                              <label htmlFor="" className="fs-14 fw-500 mb-10">
+                                to
+                              </label>
+                              <TimePicker className="customTime input" />
+                            </div>
+                            <div className="addTime">
+                              <img src={addTime} alt="" />
+                            </div>
+                          </div>
+                        )}
                       </div>
-                      {switchState && (
-                        <div className="mt-10 d-flex align-end gap-10">
-                          <div className="w-100">
-                            <label htmlFor="" className="fs-14 fw-500 mb-10">
-                              From
-                            </label>
-                            <TimePicker className="customTime input" />
-                          </div>
-                          <div className="w-100">
-                            <label htmlFor="" className="fs-14 fw-500 mb-10">
-                            to
-                            </label>
-                            <TimePicker className="customTime input" />
-                          </div>
-                          <div className="addTime">
-                            <img src={addTime} alt="" />
+                      <div className="divider2"></div>
+                      <div className="minw">
+                        <div className="d-flex align-center justify-between">
+                          <div className="grey fs-16">Sunday</div>
+                          <div className="d-flex align-center gap-16">
+                            <CustomSwitch
+                              isOn={switchState}
+                              onToggle={handleToggle}
+                            />
+                            <div>Closed</div>
                           </div>
                         </div>
-                      )}
-                    </div>
-                    <div className="divider2"></div>
-                    <div className="minw">
-                      <div className="d-flex align-center justify-between">
-                        <div className="grey fs-16">Sunday</div>
-                        <div className="d-flex align-center gap-16">
-                          <CustomSwitch
-                            isOn={switchState}
-                            onToggle={handleToggle}
-                          />
-                          <div>Closed</div>
-                        </div>
+                        {switchState && (
+                          <div className="mt-10 d-flex align-end gap-10">
+                            <div className="w-100">
+                              <label htmlFor="" className="fs-14 fw-500 mb-10">
+                                From
+                              </label>
+                              <TimePicker className="customTime input" />
+                            </div>
+                            <div className="w-100">
+                              <label htmlFor="" className="fs-14 fw-500 mb-10">
+                                to
+                              </label>
+                              <TimePicker className="customTime input" />
+                            </div>
+                            <div className="addTime">
+                              <img src={addTime} alt="" />
+                            </div>
+                          </div>
+                        )}
                       </div>
-                      {switchState && (
-                        <div className="mt-10 d-flex align-end gap-10">
-                          <div className="w-100">
-                            <label htmlFor="" className="fs-14 fw-500 mb-10">
-                              From
-                            </label>
-                            <TimePicker className="customTime input" />
-                          </div>
-                          <div className="w-100">
-                            <label htmlFor="" className="fs-14 fw-500 mb-10">
-                            to
-                            </label>
-                            <TimePicker className="customTime input" />
-                          </div>
-                          <div className="addTime">
-                            <img src={addTime} alt="" />
+                      <div className="divider2"></div>
+                      <div className="minw">
+                        <div className="d-flex align-center justify-between">
+                          <div className="grey fs-16">Sunday</div>
+                          <div className="d-flex align-center gap-16">
+                            <CustomSwitch
+                              isOn={switchState}
+                              onToggle={handleToggle}
+                            />
+                            <div>Closed</div>
                           </div>
                         </div>
-                      )}
-                    </div>
-                    <div className="divider2"></div>
-                    <div className="minw">
-                      <div className="d-flex align-center justify-between">
-                        <div className="grey fs-16">Sunday</div>
-                        <div className="d-flex align-center gap-16">
-                          <CustomSwitch
-                            isOn={switchState}
-                            onToggle={handleToggle}
-                          />
-                          <div>Closed</div>
-                        </div>
+                        {switchState && (
+                          <div className="mt-10 d-flex align-end gap-10">
+                            <div className="w-100">
+                              <label htmlFor="" className="fs-14 fw-500 mb-10">
+                                From
+                              </label>
+                              <TimePicker className="customTime input" />
+                            </div>
+                            <div className="w-100">
+                              <label htmlFor="" className="fs-14 fw-500 mb-10">
+                                to
+                              </label>
+                              <TimePicker className="customTime input" />
+                            </div>
+                            <div className="addTime">
+                              <img src={addTime} alt="" />
+                            </div>
+                          </div>
+                        )}
                       </div>
-                      {switchState && (
-                        <div className="mt-10 d-flex align-end gap-10">
-                          <div className="w-100">
-                            <label htmlFor="" className="fs-14 fw-500 mb-10">
-                              From
-                            </label>
-                            <TimePicker className="customTime input" />
-                          </div>
-                          <div className="w-100">
-                            <label htmlFor="" className="fs-14 fw-500 mb-10">
-                            to
-                            </label>
-                            <TimePicker className="customTime input" />
-                          </div>
-                          <div className="addTime">
-                            <img src={addTime} alt="" />
+                      <div className="divider2"></div>
+                      <div className="minw">
+                        <div className="d-flex align-center justify-between">
+                          <div className="grey fs-16">Sunday</div>
+                          <div className="d-flex align-center gap-16">
+                            <CustomSwitch
+                              isOn={switchState}
+                              onToggle={handleToggle}
+                            />
+                            <div>Closed</div>
                           </div>
                         </div>
-                      )}
-                    </div>
-                    <div className="divider2"></div>
-                    <div className="minw">
-                      <div className="d-flex align-center justify-between">
-                        <div className="grey fs-16">Sunday</div>
-                        <div className="d-flex align-center gap-16">
-                          <CustomSwitch
-                            isOn={switchState}
-                            onToggle={handleToggle}
-                          />
-                          <div>Closed</div>
-                        </div>
+                        {switchState && (
+                          <div className="mt-10 d-flex align-end gap-10">
+                            <div className="w-100">
+                              <label htmlFor="" className="fs-14 fw-500 mb-10">
+                                From
+                              </label>
+                              <TimePicker className="customTime input" />
+                            </div>
+                            <div className="w-100">
+                              <label htmlFor="" className="fs-14 fw-500 mb-10">
+                                to
+                              </label>
+                              <TimePicker className="customTime input" />
+                            </div>
+                            <div className="addTime">
+                              <img src={addTime} alt="" />
+                            </div>
+                          </div>
+                        )}
                       </div>
-                      {switchState && (
-                        <div className="mt-10 d-flex align-end gap-10">
-                          <div className="w-100">
-                            <label htmlFor="" className="fs-14 fw-500 mb-10">
-                              From
-                            </label>
-                            <TimePicker className="customTime input" />
-                          </div>
-                          <div className="w-100">
-                            <label htmlFor="" className="fs-14 fw-500 mb-10">
-                            to
-                            </label>
-                            <TimePicker className="customTime input" />
-                          </div>
-                          <div className="addTime">
-                            <img src={addTime} alt="" />
+                      <div className="divider2"></div>
+                      <div className="minw">
+                        <div className="d-flex align-center justify-between">
+                          <div className="grey fs-16">Sunday</div>
+                          <div className="d-flex align-center gap-16">
+                            <CustomSwitch
+                              isOn={switchState}
+                              onToggle={handleToggle}
+                            />
+                            <div>Closed</div>
                           </div>
                         </div>
-                      )}
-                    </div>
-                    <div className="divider2"></div>
-                    <div className="minw">
-                      <div className="d-flex align-center justify-between">
-                        <div className="grey fs-16">Sunday</div>
-                        <div className="d-flex align-center gap-16">
-                          <CustomSwitch
-                            isOn={switchState}
-                            onToggle={handleToggle}
-                          />
-                          <div>Closed</div>
-                        </div>
+                        {switchState && (
+                          <div className="mt-10 d-flex align-end gap-10">
+                            <div className="w-100">
+                              <label htmlFor="" className="fs-14 fw-500 mb-10">
+                                From
+                              </label>
+                              <TimePicker className="customTime input" />
+                            </div>
+                            <div className="w-100">
+                              <label htmlFor="" className="fs-14 fw-500 mb-10">
+                                to
+                              </label>
+                              <TimePicker className="customTime input" />
+                            </div>
+                            <div className="addTime">
+                              <img src={addTime} alt="" />
+                            </div>
+                          </div>
+                        )}
                       </div>
-                      {switchState && (
-                        <div className="mt-10 d-flex align-end gap-10">
-                          <div className="w-100">
-                            <label htmlFor="" className="fs-14 fw-500 mb-10">
-                              From
-                            </label>
-                            <TimePicker className="customTime input" />
-                          </div>
-                          <div className="w-100">
-                            <label htmlFor="" className="fs-14 fw-500 mb-10">
-                            to
-                            </label>
-                            <TimePicker className="customTime input" />
-                          </div>
-                          <div className="addTime">
-                            <img src={addTime} alt="" />
+                      <div className="divider2"></div>
+                      <div className="minw">
+                        <div className="d-flex align-center justify-between">
+                          <div className="grey fs-16">Sunday</div>
+                          <div className="d-flex align-center gap-16">
+                            <CustomSwitch
+                              isOn={switchState}
+                              onToggle={handleToggle}
+                            />
+                            <div>Closed</div>
                           </div>
                         </div>
-                      )}
-                    </div>
-                    <div className="divider2"></div>
-                    <div className="minw">
-                      <div className="d-flex align-center justify-between">
-                        <div className="grey fs-16">Sunday</div>
-                        <div className="d-flex align-center gap-16">
-                          <CustomSwitch
-                            isOn={switchState}
-                            onToggle={handleToggle}
-                          />
-                          <div>Closed</div>
-                        </div>
+                        {switchState && (
+                          <div className="mt-10 d-flex align-end gap-10">
+                            <div className="w-100">
+                              <label htmlFor="" className="fs-14 fw-500 mb-10">
+                                From
+                              </label>
+                              <TimePicker className="customTime input" />
+                            </div>
+                            <div className="w-100">
+                              <label htmlFor="" className="fs-14 fw-500 mb-10">
+                                to
+                              </label>
+                              <TimePicker className="customTime input" />
+                            </div>
+                            <div className="addTime">
+                              <img src={addTime} alt="" />
+                            </div>
+                          </div>
+                        )}
                       </div>
-                      {switchState && (
-                        <div className="mt-10 d-flex align-end gap-10">
-                          <div className="w-100">
-                            <label htmlFor="" className="fs-14 fw-500 mb-10">
-                              From
-                            </label>
-                            <TimePicker className="customTime input" />
-                          </div>
-                          <div className="w-100">
-                            <label htmlFor="" className="fs-14 fw-500 mb-10">
-                            to
-                            </label>
-                            <TimePicker className="customTime input" />
-                          </div>
-                          <div className="addTime">
-                            <img src={addTime} alt="" />
-                          </div>
-                        </div>
-                      )}
-                    </div>
                     </div>
                   </>
                 )}
@@ -716,7 +843,7 @@ const MerchantDetails = () => {
                 )}
               </div>
             </div>
-            <div className="tabPadding mb-30">
+            {/* <div className="tabPadding mb-30">
               <div className="card mb-30">
                 <div className="d-flex align-center justify-between gap-20 mb-20">
                   <div className="fs-20 fw-700">Primary Business Photo</div>
@@ -751,8 +878,8 @@ const MerchantDetails = () => {
                   setOpenImage={setOpenImage}
                 />
               </div>
-            </div>
-            <div className="card">
+            </div> */}
+            {/* <div className="card">
               <div className="fs-20 fw-700 mb-20">Reviews</div>
               <div className="reviewCard mb-20">
                 <div className="d-flex gap-10 align-center justify-between mb-20 flexWrapsm">
@@ -797,7 +924,7 @@ const MerchantDetails = () => {
                 <ImageGallery images={images2} />
               </div>
               <div className="viewMoreBtn">View More</div>
-            </div>
+            </div> */}
           </>
         ) : activeTab3 === "2" ? (
           <>
@@ -819,15 +946,18 @@ const MerchantDetails = () => {
                   />
                 </div>
               </div>
+              {console.log(state, "statestate")}
               <div className="card">
                 <div className="img54 mb-16">
                   <img src={olive} alt="" className="h-100" />
                 </div>
-                <div className="fs-22 fw-600">Garden Grove Café & Bistro</div>
+                <div className="fs-22 fw-600">
+                  {merchantDetailsSelector?.data?.data?.businessName}
+                </div>
                 <div className="divider2"></div>
                 <div className="d-flex justify-between align-center gap-10 fw-500 mb-16 flexsm">
                   <div className="grey">Member Since</div>
-                  <div>September 19th, 2024</div>
+                  <div>{moment(state?.createdAt).format("MMM D, YYYY")}</div>
                 </div>
                 <div className="d-flex justify-between align-center gap-10 fw-500 mb-16 flexsm">
                   <div className="grey">Restaurant owner</div>
@@ -835,9 +965,9 @@ const MerchantDetails = () => {
                 </div>
                 <div className="d-flex justify-between align-center gap-10 fw-500 flexsm">
                   <div className="grey">Nudge credits</div>
-                  <div>120 Remaining</div>
+                  <div>{state?.nudge?.nudgeCredit} Remaining</div>
                 </div>
-                <div className="divider2"></div>
+                {/* <div className="divider2"></div>
                 <div className="fw-600 mb-10">Payment history</div>
                 <div className="overflow">
                   <table className="w-100 fs-14 text-center stripped">
@@ -884,7 +1014,7 @@ const MerchantDetails = () => {
                       </tr>
                     </tbody>
                   </table>
-                </div>
+                </div> */}
               </div>
             </div>
           </>
@@ -942,7 +1072,7 @@ const MerchantDetails = () => {
                 </div>
                 <div className="tabPadding mb-30">
                   <div className="fs-20 fw-700 mb-10">Nudges Info</div>
-                  <div className="grid4"> 
+                  <div className="grid4">
                     <div className="card">
                       <div className="grey mb-10 fs-16 fw-500">
                         Nudges <br />
@@ -975,22 +1105,22 @@ const MerchantDetails = () => {
                 </div>
                 <div className="tabPadding mb-30">
                   <div className="fs-20 fw-700 mb-10">Sharing</div>
-                  <div className="grid3"> 
+                  <div className="grid3">
                     <div className="card">
                       <div className="grey mb-10 fs-16 fw-500">
-                      Number of Sharing
+                        Number of Sharing
                       </div>
                       <div className="fs-22 fw-500">25k</div>
                     </div>
                     <div className="card">
                       <div className="grey mb-10 fs-16 fw-500">
-                      Sharing invitations sent
+                        Sharing invitations sent
                       </div>
                       <div className="fs-22 fw-500">1.25k</div>
                     </div>
                     <div className="card">
                       <div className="grey mb-10 fs-16 fw-500">
-                      Sharing invitations accepted
+                        Sharing invitations accepted
                       </div>
                       <div className="fs-22 fw-500">2.25k</div>
                     </div>
@@ -1033,76 +1163,78 @@ const MerchantDetails = () => {
                   </div>
                 </div>
                 <div className="tabPadding mb-30">
-                  <div className="fs-20 fw-700 mb-20">Dine Savvy Application Usage</div>
+                  <div className="fs-20 fw-700 mb-20">
+                    Dine Savvy Application Usage
+                  </div>
                   <div className="d-flex gap-30 flexWrap">
-                      <div className="card w-100">
-                        <div><img src={chart} className="w-100" alt="" /></div>
-                        <div className="divider2"></div>
-                        <div className="fw-600 text-center">
+                    <div className="card w-100">
+                      <div>
+                        <img src={chart} className="w-100" alt="" />
+                      </div>
+                      <div className="divider2"></div>
+                      <div className="fw-600 text-center">
                         User opens Dine Savvy
-                        </div>
                       </div>
-                      <div className="card w-100">
-                        <div><img src={chart} className="w-100" alt="" /></div>
-                        <div className="divider2"></div>
-                        <div className="fw-600 text-center">
+                    </div>
+                    <div className="card w-100">
+                      <div>
+                        <img src={chart} className="w-100" alt="" />
+                      </div>
+                      <div className="divider2"></div>
+                      <div className="fw-600 text-center">
                         User spends in Dine Savvy
-                        </div>
                       </div>
+                    </div>
                   </div>
                 </div>
                 <div className="tabPadding mb-30">
                   <div className="fs-20 fw-700 mb-20">Locations</div>
                   <div className="divider2"></div>
-                  <div className="fw-500 text-center mb-20">
-                  Weekly
-                  </div>
+                  <div className="fw-500 text-center mb-20">Weekly</div>
                   <div className="w-100 mh400 ">
                     <img src={map} className="w-100 h-100" alt="" />
                   </div>
                   <div className="divider2"></div>
                   <div className="overflow">
-                  <table className="w-100 fs-14 text-start">
-                    <thead>
-                      <tr>
-                        <th style={{ minWidth: "200px" }}>
-                        Date/Day
-                        </th>
-                        <th style={{ minWidth: "200px" }}>
-                        Time
-                        </th>
-                        <th style={{ minWidth: "400px", width: "60%" }}>
-                        Location
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>Sunday</td>
-                        <td>12:23 pm</td>
-                        <td>8502 Preston Rd. Inglewood, Maine 98380</td>
-                      </tr>
-                      <tr>
-                        <td></td>
-                        <td>12:23 pm</td>
-                        <td>8502 Preston Rd. Inglewood, Maine 98380</td>
-                      </tr>
-                      <tr>
-                        <td></td>
-                        <td>12:23 pm</td>
-                        <td>8502 Preston Rd. Inglewood, Maine 98380</td>
-                      </tr>
-                      <tr>
-                        <td>Monday</td>
-                        <td>12:23 pm</td>
-                        <td>8502 Preston Rd. Inglewood, Maine 98380</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
+                    <table className="w-100 fs-14 text-start">
+                      <thead>
+                        <tr>
+                          <th style={{ minWidth: "200px" }}>Date/Day</th>
+                          <th style={{ minWidth: "200px" }}>Time</th>
+                          <th style={{ minWidth: "400px", width: "60%" }}>
+                            Location
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>Sunday</td>
+                          <td>12:23 pm</td>
+                          <td>8502 Preston Rd. Inglewood, Maine 98380</td>
+                        </tr>
+                        <tr>
+                          <td></td>
+                          <td>12:23 pm</td>
+                          <td>8502 Preston Rd. Inglewood, Maine 98380</td>
+                        </tr>
+                        <tr>
+                          <td></td>
+                          <td>12:23 pm</td>
+                          <td>8502 Preston Rd. Inglewood, Maine 98380</td>
+                        </tr>
+                        <tr>
+                          <td>Monday</td>
+                          <td>12:23 pm</td>
+                          <td>8502 Preston Rd. Inglewood, Maine 98380</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
                 <div className="tabPadding mb-30">
-                  <div className="fs-20 fw-700 mb-20">Most common time used</div>
+                  <div className="fs-20 fw-700 mb-20">
+                    Most common time used
+                  </div>
                   <div className="flexTagFull">
                     <div>12:00 to 01:00 PM</div>
                     <div>06:00 to 07:30 PM</div>
@@ -1135,274 +1267,101 @@ const MerchantDetails = () => {
                       <div className="fs-26 sc fw-700">54</div>
                     </div>
                   </div>
-                  <SearchSelect />
+                  <SearchSelect
+                    onSearchChange={handleSearchChange}
+                    onSearchAreaChange={handleSearchAreaChange}
+                  />
                   <div className="merchantGrid mb-30">
-                    <div className="cardFollow">
-                      <div className="d-flex justify-between gap-12">
-                        <div className="d-flex align-center gap-12">
-                          <div className="initialName">dr</div>
-                          <div>
-                            <div className="fw-700">Dianne Russell</div>
-                            <div className="fs-14 fw-300 o5">June, 2024</div>
-                          </div>
-                        </div>
-                        <div className="custom-checkbox">
-                          <label className="checkLabel">
-                            <input type="checkbox" />
-                            <span class="checkmark"></span>
-                          </label>
-                        </div>
-                      </div>
-                      <div className="divider2"></div>
-                      <div className="d-flex justify-between align-center gap-12 fs-14 mb-10">
-                        <div className="d-flex align-center gap-12">
-                          <img src={resturantIcon} alt="" />
-                          Restaurants following:
-                        </div>
-                        <div className=" fw-500">32</div>
-                      </div>
-                      <div className="d-flex justify-between align-center gap-12 fs-14">
-                        <div className="d-flex align-center gap-12">
-                          <img src={nudgeIcon} alt="" />
-                          Nudges shared
-                        </div>
-                        <div className=" fw-500">32</div>
-                      </div>
-                      <div className="divider2"></div>
-                      <div className="fs-14 mb-6">Preferences</div>
-                      <div className="flexTag mb-20">
-                        <div>Wine</div>
-                        <div>Steak, Bar</div>
-                        <div>Drinks</div>
-                        <div>Weight Watchers</div>
-                        <div>Casual Dining</div>
-                      </div>
-                      <div
-                        className="btn btnSecondary"
-                        onClick={() => setViewDetail(true)}
-                      >
-                        View Details
-                      </div>
-                    </div>
-                    <div className="cardFollow">
-                      <div className="d-flex justify-between gap-12">
-                        <div className="d-flex align-center gap-12">
-                          <div className="initialName">dr</div>
-                          <div>
-                            <div className="fw-700">Dianne Russell</div>
-                            <div className="fs-14 fw-300 o5">June, 2024</div>
-                          </div>
-                        </div>
-                        <div className="custom-checkbox">
-                          <label className="checkLabel">
-                            <input type="checkbox" />
-                            <span class="checkmark"></span>
-                          </label>
-                        </div>
-                      </div>
-                      <div className="divider2"></div>
-                      <div className="d-flex justify-between align-center gap-12 fs-14 mb-10">
-                        <div className="d-flex align-center gap-12">
-                          <img src={resturantIcon} alt="" />
-                          Restaurants following:
-                        </div>
-                        <div className=" fw-500">32</div>
-                      </div>
-                      <div className="d-flex justify-between align-center gap-12 fs-14">
-                        <div className="d-flex align-center gap-12">
-                          <img src={nudgeIcon} alt="" />
-                          Nudges shared
-                        </div>
-                        <div className=" fw-500">32</div>
-                      </div>
-                      <div className="divider2"></div>
-                      <div className="fs-14 mb-6">Preferences</div>
-                      <div className="flexTag mb-20">
-                        <div>Wine</div>
-                        <div>Steak, Bar</div>
-                        <div>Drinks</div>
-                        <div>Weight Watchers</div>
-                        <div>Casual Dining</div>
-                      </div>
-                      <div className="btn btnSecondary">View Details</div>
-                    </div>
-                    <div className="cardFollow">
-                      <div className="d-flex justify-between gap-12">
-                        <div className="d-flex align-center gap-12">
-                          <div className="initialName">dr</div>
-                          <div>
-                            <div className="fw-700">Dianne Russell</div>
-                            <div className="fs-14 fw-300 o5">June, 2024</div>
-                          </div>
-                        </div>
-                        <div className="custom-checkbox">
-                          <label className="checkLabel">
-                            <input type="checkbox" />
-                            <span class="checkmark"></span>
-                          </label>
-                        </div>
-                      </div>
-                      <div className="divider2"></div>
-                      <div className="d-flex justify-between align-center gap-12 fs-14 mb-10">
-                        <div className="d-flex align-center gap-12">
-                          <img src={resturantIcon} alt="" />
-                          Restaurants following:
-                        </div>
-                        <div className=" fw-500">32</div>
-                      </div>
-                      <div className="d-flex justify-between align-center gap-12 fs-14">
-                        <div className="d-flex align-center gap-12">
-                          <img src={nudgeIcon} alt="" />
-                          Nudges shared
-                        </div>
-                        <div className=" fw-500">32</div>
-                      </div>
-                      <div className="divider2"></div>
-                      <div className="fs-14 mb-6">Preferences</div>
-                      <div className="flexTag mb-20">
-                        <div>Wine</div>
-                        <div>Steak, Bar</div>
-                        <div>Drinks</div>
-                        <div>Weight Watchers</div>
-                        <div>Casual Dining</div>
-                      </div>
-                      <div className="btn btnSecondary">View Details</div>
-                    </div>
-                    <div className="cardFollow">
-                      <div className="d-flex justify-between gap-12">
-                        <div className="d-flex align-center gap-12">
-                          <div className="initialName">dr</div>
-                          <div>
-                            <div className="fw-700">Dianne Russell</div>
-                            <div className="fs-14 fw-300 o5">June, 2024</div>
-                          </div>
-                        </div>
-                        <div className="custom-checkbox">
-                          <label className="checkLabel">
-                            <input type="checkbox" />
-                            <span class="checkmark"></span>
-                          </label>
-                        </div>
-                      </div>
-                      <div className="divider2"></div>
-                      <div className="d-flex justify-between align-center gap-12 fs-14 mb-10">
-                        <div className="d-flex align-center gap-12">
-                          <img src={resturantIcon} alt="" />
-                          Restaurants following:
-                        </div>
-                        <div className=" fw-500">32</div>
-                      </div>
-                      <div className="d-flex justify-between align-center gap-12 fs-14">
-                        <div className="d-flex align-center gap-12">
-                          <img src={nudgeIcon} alt="" />
-                          Nudges shared
-                        </div>
-                        <div className=" fw-500">32</div>
-                      </div>
-                      <div className="divider2"></div>
-                      <div className="fs-14 mb-6">Preferences</div>
-                      <div className="flexTag mb-20">
-                        <div>Wine</div>
-                        <div>Steak, Bar</div>
-                        <div>Drinks</div>
-                        <div>Weight Watchers</div>
-                        <div>Casual Dining</div>
-                      </div>
-                      <div className="btn btnSecondary">View Details</div>
-                    </div>
-                    <div className="cardFollow">
-                      <div className="d-flex justify-between gap-12">
-                        <div className="d-flex align-center gap-12">
-                          <div className="initialName">dr</div>
-                          <div>
-                            <div className="fw-700">Dianne Russell</div>
-                            <div className="fs-14 fw-300 o5">June, 2024</div>
-                          </div>
-                        </div>
-                        <div className="custom-checkbox">
-                          <label className="checkLabel">
-                            <input type="checkbox" />
-                            <span class="checkmark"></span>
-                          </label>
-                        </div>
-                      </div>
-                      <div className="divider2"></div>
-                      <div className="d-flex justify-between align-center gap-12 fs-14 mb-10">
-                        <div className="d-flex align-center gap-12">
-                          <img src={resturantIcon} alt="" />
-                          Restaurants following:
-                        </div>
-                        <div className=" fw-500">32</div>
-                      </div>
-                      <div className="d-flex justify-between align-center gap-12 fs-14">
-                        <div className="d-flex align-center gap-12">
-                          <img src={nudgeIcon} alt="" />
-                          Nudges shared
-                        </div>
-                        <div className=" fw-500">32</div>
-                      </div>
-                      <div className="divider2"></div>
-                      <div className="fs-14 mb-6">Preferences</div>
-                      <div className="flexTag mb-20">
-                        <div>Wine</div>
-                        <div>Steak, Bar</div>
-                        <div>Drinks</div>
-                        <div>Weight Watchers</div>
-                        <div>Casual Dining</div>
-                      </div>
-                      <div className="btn btnSecondary">View Details</div>
-                    </div>
-                    <div className="cardFollow">
-                      <div className="d-flex justify-between gap-12">
-                        <div className="d-flex align-center gap-12">
-                          <div className="initialName">dr</div>
-                          <div>
-                            <div className="fw-700">Dianne Russell</div>
-                            <div className="fs-14 fw-300 o5">June, 2024</div>
-                          </div>
-                        </div>
-                        <div className="custom-checkbox">
-                          <label className="checkLabel">
-                            <input type="checkbox" />
-                            <span class="checkmark"></span>
-                          </label>
-                        </div>
-                      </div>
-                      <div className="divider2"></div>
-                      <div className="d-flex justify-between align-center gap-12 fs-14 mb-10">
-                        <div className="d-flex align-center gap-12">
-                          <img src={resturantIcon} alt="" />
-                          Restaurants following:
-                        </div>
-                        <div className=" fw-500">32</div>
-                      </div>
-                      <div className="d-flex justify-between align-center gap-12 fs-14">
-                        <div className="d-flex align-center gap-12">
-                          <img src={nudgeIcon} alt="" />
-                          Nudges shared
-                        </div>
-                        <div className=" fw-500">32</div>
-                      </div>
-                      <div className="divider2"></div>
-                      <div className="fs-14 mb-6">Preferences</div>
-                      <div className="flexTag mb-20">
-                        <div>Wine</div>
-                        <div>Steak, Bar</div>
-                        <div>Drinks</div>
-                        <div>Weight Watchers</div>
-                        <div>Casual Dining</div>
-                      </div>
-                      <div className="btn btnSecondary">View Details</div>
-                    </div>
+                    {followeListSelector?.data?.data?.records?.map(
+                      (item, index) => {
+                        console.log(item, "itemitemitem");
+                        return (
+                          <>
+                            <div className="cardFollow">
+                              <div className="d-flex justify-between gap-12">
+                                <div className="d-flex align-center gap-12">
+                                  <div className="initialName">dr</div>
+                                  <div>
+                                    <div className="fw-700">
+                                      {item?.userInfo?.displayName}
+                                    </div>
+                                    <div className="fs-14 fw-300 o5">
+                                      {/* June, 2024 */}
+                                      {moment(item?.createdAt).format(
+                                        "MMMM,YYYY"
+                                      )}
+                                    </div>
+                                  </div>
+                                </div>
+                                <div className="custom-checkbox">
+                                  <label className="checkLabel">
+                                    <input type="checkbox" />
+                                    <span className="checkmark"></span>
+                                  </label>
+                                </div>
+                              </div>
+                              <div className="divider2"></div>
+                              <div className="d-flex justify-between align-center gap-12 fs-14 mb-10">
+                                <div className="d-flex align-center gap-12">
+                                  <img src={resturantIcon} alt="" />
+                                  Restaurants following:
+                                </div>
+                                <div className=" fw-500">
+                                  {item?.followerCount}
+                                </div>
+                              </div>
+                              <div className="d-flex justify-between align-center gap-12 fs-14">
+                                <div className="d-flex align-center gap-12">
+                                  <img src={nudgeIcon} alt="" />
+                                  Nudges shared
+                                </div>
+                                <div className=" fw-500">
+                                  {item?.nudgeCount}
+                                </div>
+                              </div>
+                              <div className="divider2"></div>
+                              <div className="fs-14 mb-6">Preferences</div>
+                              <div className="flexTag mb-20">
+                                {item?.customerPreferencesData
+                                  ?.personalPreference?.length > 0 ? (
+                                  // If preferences exist, map over and display them
+                                  item.customerPreferencesData.personalPreference.map(
+                                    (preference, index) => (
+                                      <div key={index}>{preference}</div>
+                                    )
+                                  )
+                                ) : (
+                                  // If no preferences exist, show a message
+                                  <div>No preferences available</div>
+                                )}
+                              </div>
+
+                              <div
+                                className="btn btnSecondary"
+                                onClick={() => setViewDetail(true)}
+                              >
+                                View Details
+                              </div>
+                            </div>
+                          </>
+                        );
+                      }
+                    )}
                   </div>
                   <div className="d-flex align-center justify-between flexPagination">
                     <div className="fs-16">
-                      Showing 1 to 5 of 10 Restaurants
+                      Showing {pagination.page} to {pagination.limit} of 50
+                      Restaurants
                     </div>
-                    <Pagination defaultCurrent={1} total={50} />
+                    <Pagination
+                      current={pagination.page}
+                      pageSize={pagination.limit}
+                      total={50}
+                      onChange={handlePaginationChange}
+                    />
                   </div>
                 </div>
-               <CommonToast image={createAdd}  text={"Create nudge"}/>
+                <CommonToast image={createAdd} text={"Create nudge"} />
               </>
             )}
           </>
@@ -1436,47 +1395,20 @@ const MerchantDetails = () => {
                   <div className="bottomPadding">
                     <div className="grid2">
                       <div>
-                        <div class="fs-14 mb-4">Recipients:</div>
-                        <div class="fs-14 fw-600">500</div>
+                        <div className="fs-14 mb-4">Recipients:</div>
+                        <div className="fs-14 fw-600">500</div>
                       </div>
                       <div>
-                        <div class="fs-14 mb-4">Accepted:</div>
-                        <div class="fs-14 fw-600">320/60%</div>
+                        <div className="fs-14 mb-4">Accepted:</div>
+                        <div className="fs-14 fw-600">320/60%</div>
                       </div>
                       <div>
-                        <div class="fs-14 mb-4">Declined:</div>
-                        <div class="fs-14 fw-600">180/40%</div>
+                        <div className="fs-14 mb-4">Declined:</div>
+                        <div className="fs-14 fw-600">180/40%</div>
                       </div>
                       <div>
-                        <div class="fs-14 mb-4">Cost:</div>
-                        <div class="fs-14 fw-600">$10.00</div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="merchantCard">
-                  <div className="position-relative">
-                    <img className="w-100" src={restaurantCard} alt="" />
-                    <div className="freeAbsolute fs-16 fw-700">Free Drink</div>
-                    <div className="nudgeTag">All Followers</div>
-                  </div>
-                  <div className="bottomPadding">
-                    <div className="grid2">
-                      <div>
-                        <div class="fs-14 mb-4">Recipients:</div>
-                        <div class="fs-14 fw-600">500</div>
-                      </div>
-                      <div>
-                        <div class="fs-14 mb-4">Accepted:</div>
-                        <div class="fs-14 fw-600">320/60%</div>
-                      </div>
-                      <div>
-                        <div class="fs-14 mb-4">Declined:</div>
-                        <div class="fs-14 fw-600">180/40%</div>
-                      </div>
-                      <div>
-                        <div class="fs-14 mb-4">Cost:</div>
-                        <div class="fs-14 fw-600">$10.00</div>
+                        <div className="fs-14 mb-4">Cost:</div>
+                        <div className="fs-14 fw-600">$10.00</div>
                       </div>
                     </div>
                   </div>
@@ -1490,47 +1422,20 @@ const MerchantDetails = () => {
                   <div className="bottomPadding">
                     <div className="grid2">
                       <div>
-                        <div class="fs-14 mb-4">Recipients:</div>
-                        <div class="fs-14 fw-600">500</div>
+                        <div className="fs-14 mb-4">Recipients:</div>
+                        <div className="fs-14 fw-600">500</div>
                       </div>
                       <div>
-                        <div class="fs-14 mb-4">Accepted:</div>
-                        <div class="fs-14 fw-600">320/60%</div>
+                        <div className="fs-14 mb-4">Accepted:</div>
+                        <div className="fs-14 fw-600">320/60%</div>
                       </div>
                       <div>
-                        <div class="fs-14 mb-4">Declined:</div>
-                        <div class="fs-14 fw-600">180/40%</div>
+                        <div className="fs-14 mb-4">Declined:</div>
+                        <div className="fs-14 fw-600">180/40%</div>
                       </div>
                       <div>
-                        <div class="fs-14 mb-4">Cost:</div>
-                        <div class="fs-14 fw-600">$10.00</div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="merchantCard">
-                  <div className="position-relative">
-                    <img className="w-100" src={restaurantCard} alt="" />
-                    <div className="freeAbsolute fs-16 fw-700">Free Drink</div>
-                    <div className="nudgeTag">All Followers</div>
-                  </div>
-                  <div className="bottomPadding">
-                    <div className="grid2">
-                      <div>
-                        <div class="fs-14 mb-4">Recipients:</div>
-                        <div class="fs-14 fw-600">500</div>
-                      </div>
-                      <div>
-                        <div class="fs-14 mb-4">Accepted:</div>
-                        <div class="fs-14 fw-600">320/60%</div>
-                      </div>
-                      <div>
-                        <div class="fs-14 mb-4">Declined:</div>
-                        <div class="fs-14 fw-600">180/40%</div>
-                      </div>
-                      <div>
-                        <div class="fs-14 mb-4">Cost:</div>
-                        <div class="fs-14 fw-600">$10.00</div>
+                        <div className="fs-14 mb-4">Cost:</div>
+                        <div className="fs-14 fw-600">$10.00</div>
                       </div>
                     </div>
                   </div>
@@ -1544,20 +1449,20 @@ const MerchantDetails = () => {
                   <div className="bottomPadding">
                     <div className="grid2">
                       <div>
-                        <div class="fs-14 mb-4">Recipients:</div>
-                        <div class="fs-14 fw-600">500</div>
+                        <div className="fs-14 mb-4">Recipients:</div>
+                        <div className="fs-14 fw-600">500</div>
                       </div>
                       <div>
-                        <div class="fs-14 mb-4">Accepted:</div>
-                        <div class="fs-14 fw-600">320/60%</div>
+                        <div className="fs-14 mb-4">Accepted:</div>
+                        <div className="fs-14 fw-600">320/60%</div>
                       </div>
                       <div>
-                        <div class="fs-14 mb-4">Declined:</div>
-                        <div class="fs-14 fw-600">180/40%</div>
+                        <div className="fs-14 mb-4">Declined:</div>
+                        <div className="fs-14 fw-600">180/40%</div>
                       </div>
                       <div>
-                        <div class="fs-14 mb-4">Cost:</div>
-                        <div class="fs-14 fw-600">$10.00</div>
+                        <div className="fs-14 mb-4">Cost:</div>
+                        <div className="fs-14 fw-600">$10.00</div>
                       </div>
                     </div>
                   </div>
@@ -1571,20 +1476,74 @@ const MerchantDetails = () => {
                   <div className="bottomPadding">
                     <div className="grid2">
                       <div>
-                        <div class="fs-14 mb-4">Recipients:</div>
-                        <div class="fs-14 fw-600">500</div>
+                        <div className="fs-14 mb-4">Recipients:</div>
+                        <div className="fs-14 fw-600">500</div>
                       </div>
                       <div>
-                        <div class="fs-14 mb-4">Accepted:</div>
-                        <div class="fs-14 fw-600">320/60%</div>
+                        <div className="fs-14 mb-4">Accepted:</div>
+                        <div className="fs-14 fw-600">320/60%</div>
                       </div>
                       <div>
-                        <div class="fs-14 mb-4">Declined:</div>
-                        <div class="fs-14 fw-600">180/40%</div>
+                        <div className="fs-14 mb-4">Declined:</div>
+                        <div className="fs-14 fw-600">180/40%</div>
                       </div>
                       <div>
-                        <div class="fs-14 mb-4">Cost:</div>
-                        <div class="fs-14 fw-600">$10.00</div>
+                        <div className="fs-14 mb-4">Cost:</div>
+                        <div className="fs-14 fw-600">$10.00</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="merchantCard">
+                  <div className="position-relative">
+                    <img className="w-100" src={restaurantCard} alt="" />
+                    <div className="freeAbsolute fs-16 fw-700">Free Drink</div>
+                    <div className="nudgeTag">All Followers</div>
+                  </div>
+                  <div className="bottomPadding">
+                    <div className="grid2">
+                      <div>
+                        <div className="fs-14 mb-4">Recipients:</div>
+                        <div className="fs-14 fw-600">500</div>
+                      </div>
+                      <div>
+                        <div className="fs-14 mb-4">Accepted:</div>
+                        <div className="fs-14 fw-600">320/60%</div>
+                      </div>
+                      <div>
+                        <div className="fs-14 mb-4">Declined:</div>
+                        <div className="fs-14 fw-600">180/40%</div>
+                      </div>
+                      <div>
+                        <div className="fs-14 mb-4">Cost:</div>
+                        <div className="fs-14 fw-600">$10.00</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="merchantCard">
+                  <div className="position-relative">
+                    <img className="w-100" src={restaurantCard} alt="" />
+                    <div className="freeAbsolute fs-16 fw-700">Free Drink</div>
+                    <div className="nudgeTag">All Followers</div>
+                  </div>
+                  <div className="bottomPadding">
+                    <div className="grid2">
+                      <div>
+                        <div className="fs-14 mb-4">Recipients:</div>
+                        <div className="fs-14 fw-600">500</div>
+                      </div>
+                      <div>
+                        <div className="fs-14 mb-4">Accepted:</div>
+                        <div className="fs-14 fw-600">320/60%</div>
+                      </div>
+                      <div>
+                        <div className="fs-14 mb-4">Declined:</div>
+                        <div className="fs-14 fw-600">180/40%</div>
+                      </div>
+                      <div>
+                        <div className="fs-14 mb-4">Cost:</div>
+                        <div className="fs-14 fw-600">$10.00</div>
                       </div>
                     </div>
                   </div>

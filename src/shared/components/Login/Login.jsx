@@ -13,6 +13,7 @@ import {  useCommonMessage } from "../CommonMessage";
 import { loginHandler, loginSliceAction } from "../../../redux/action/loginSlice";
 import { useEffect } from "react";
 import { validationSchema } from "./loginValidation";
+import Loader from "../Loader/Loader";
 
 const Login = (props) => {
   const messageApi = useCommonMessage();
@@ -36,7 +37,7 @@ const Login = (props) => {
         type: 'success',
         content: loginSelector?.data?.message,
       });
-      navigate("/admin/dashboard")
+      navigate("/admin/merchant/dashboard")
       dispatch(loginSliceAction.loginDetailsSliceReset())
     } else if (loginSelector?.message) {
       messageApi.open({
@@ -49,6 +50,7 @@ const Login = (props) => {
 
   return (
     <>
+    {loginSelector?.isLoading && <Loader />}
       <div className="loginFlex pc">
         <div className="w-50 h-100 position-relative mobileHide fixLeft">
           <img src={login} alt="" className="w-100 h-100 object-cover" />

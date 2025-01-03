@@ -6,7 +6,7 @@ const PrivateRoute = ({ children, redirectPath }) => {
   return localStorage.getItem("token") ? (
     <>{children}</>
   ) : (
-    <Navigate to={redirectPath || "/"} />
+    <Navigate to={redirectPath || "/admin"} />
   );
 };
 
