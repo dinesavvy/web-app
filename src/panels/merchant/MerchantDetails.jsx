@@ -24,6 +24,7 @@ import GoogleMapReact from "google-map-react";
 import { FaMapMarkerAlt } from "react-icons/fa";
 import moment from "moment";
 import { followersListHandler } from "../../redux/action/followersList";
+import { nudgesListHandler } from "../../redux/action/nudgesList";
 
 const MerchantDetails = () => {
   const [activeTab3, setActiveTab3] = useState("1");
@@ -113,13 +114,13 @@ const MerchantDetails = () => {
 
   const handleSearchChange = (value) => {
     setSearchString(value);
-    setCheckedItems({})
+    setCheckedItems({});
     setPagination((prev) => ({ ...prev, page: 1 })); // Reset to the first page on search
   };
 
   const handleSearchAreaChange = (selectedAreas) => {
     setSearchArea(selectedAreas);
-    setCheckedItems({})
+    setCheckedItems({});
   };
 
   useEffect(() => {
@@ -139,12 +140,30 @@ const MerchantDetails = () => {
     }
   }, [pagination, searchString, searchArea, activeTab3]);
 
-  const followeListSelector = useSelector((state) => state?.followeList);
+  const followerListSelector = useSelector((state) => state?.followeList);
+  const nudgesListSelector = useSelector((state) => state?.nudgesList);
+
+  useEffect(() => {
+    if (activeTab3 === "4") {
+      const fetchNudgesList = () => {
+        const payload = {
+          locationId: state?._id,
+          page: pagination.page,
+          limit: pagination.limit,
+          searchString,
+        };
+        dispatch(nudgesListHandler(payload));
+      };
+
+      fetchNudgesList();
+    }
+  }, [pagination, searchString, activeTab3]);
 
   return (
     <>
       {(merchantDetailsSelector?.isLoading ||
-        followeListSelector?.isLoading) && <Loader />}
+        followerListSelector?.isLoading ||
+        nudgesListSelector?.isLoading) && <Loader />}
       <div className="dashboard">
         <div className="tabs-container tab3 tabFull">
           <div className="tabs">
@@ -1286,8 +1305,8 @@ const MerchantDetails = () => {
                     onSearchAreaChange={handleSearchAreaChange}
                   />
                   <div className="merchantGrid mb-30">
-                    {followeListSelector?.data?.data?.records?.length > 0 ? (
-                      followeListSelector?.data?.data?.records?.map(
+                    {followerListSelector?.data?.data?.records?.length > 0 ? (
+                      followerListSelector?.data?.data?.records?.map(
                         (item, index) => (
                           <div className="cardFollow" key={index}>
                             <div className="d-flex justify-between gap-12">
@@ -1405,7 +1424,50 @@ const MerchantDetails = () => {
                 </div>
               </div>
               <div className="merchantGrid">
-                <div className="merchantCard">
+                {nudgesListSelector?.data?.data?.records?.map((item, index) => {
+                  return (
+                    <>
+                      <div className="merchantCard" key={index}>
+                        <div className="position-relative">
+                          <img className="w-100" src={item?.photoURL} alt="" />
+                          <div className="freeAbsolute fs-16 fw-700">
+                            {item?.title}
+                          </div>
+                          <div className="nudgeTag">All Followers</div>
+                        </div>
+                        <div className="bottomPadding">
+                          <div className="grid2">
+                            <div>
+                              <div className="fs-14 mb-4">Recipients:</div>
+                              <div className="fs-14 fw-600">
+                                {item?.recipientCount}
+                              </div>
+                            </div>
+                            <div>
+                              <div className="fs-14 mb-4">Accepted:</div>
+                              <div className="fs-14 fw-600">320/60%</div>
+                            </div>
+                            <div>
+                              <div className="fs-14 mb-4">Declined:</div>
+                              <div className="fs-14 fw-600">180/40%</div>
+                            </div>
+                            <div>
+                              <div className="fs-14 mb-4">Cost:</div>
+                              <div className="fs-14 fw-600">$10.00</div>
+                            </div>
+                          </div>
+                          <div
+                            className="btn btnSecondary"
+                            onClick={() => setViewDetail(true)}
+                          >
+                            View Details
+                          </div>
+                        </div>
+                      </div>
+                    </>
+                  );
+                })}
+                {/* <div className="merchantCard">
                   <div className="position-relative">
                     <img className="w-100" src={restaurantCard} alt="" />
                     <div className="freeAbsolute fs-16 fw-700">Free Drink</div>
@@ -1539,34 +1601,7 @@ const MerchantDetails = () => {
                       </div>
                     </div>
                   </div>
-                </div>
-                <div className="merchantCard">
-                  <div className="position-relative">
-                    <img className="w-100" src={restaurantCard} alt="" />
-                    <div className="freeAbsolute fs-16 fw-700">Free Drink</div>
-                    <div className="nudgeTag">All Followers</div>
-                  </div>
-                  <div className="bottomPadding">
-                    <div className="grid2">
-                      <div>
-                        <div className="fs-14 mb-4">Recipients:</div>
-                        <div className="fs-14 fw-600">500</div>
-                      </div>
-                      <div>
-                        <div className="fs-14 mb-4">Accepted:</div>
-                        <div className="fs-14 fw-600">320/60%</div>
-                      </div>
-                      <div>
-                        <div className="fs-14 mb-4">Declined:</div>
-                        <div className="fs-14 fw-600">180/40%</div>
-                      </div>
-                      <div>
-                        <div className="fs-14 mb-4">Cost:</div>
-                        <div className="fs-14 fw-600">$10.00</div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                </div> */}
               </div>
             </div>
           </>
