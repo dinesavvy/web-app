@@ -19,6 +19,7 @@ const MerchantList = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const merchantListSelector = useSelector((state) => state?.merchantsList);
+  console.log(merchantListSelector,"merchantListSelector")
 
 
   const handlePaginationChange = (page, pageSize) => {
@@ -111,9 +112,15 @@ const MerchantList = () => {
                       </div>
                       <div className="divider2 m-0"></div>
                       <div className="bottomPadding">
+                        {parseInt(item?.performance) > 33 ? (
                         <div className="label greenLabel mb-20">
                           Top performing
                         </div>
+                        ):(
+                          <div className="label redLabel mb-20">
+                          Under performing
+                        </div>
+                        )}
                         <div className="grid2 mb-20">
                           <div>
                             <div className="fs-14 mb-4">Date joined</div>
@@ -241,12 +248,12 @@ const MerchantList = () => {
           </div>
           <div className="d-flex align-center justify-between flexPagination">
             <div className="fs-16">
-              Showing {pagination.page} to {pagination.limit} of 50 Restaurants
+              Showing {pagination.page} to {merchantListSelector?.data?.data?.records?.length} of 50 Restaurants
             </div>
             <Pagination
               current={pagination.page}
               pageSize={pagination.limit}
-              total={50}
+              total={merchantListSelector?.data?.data?.recordsCount}
               onChange={handlePaginationChange}
             />
           </div>
