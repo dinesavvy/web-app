@@ -1,5 +1,6 @@
 import MerchantLogin from "../panels/merchant/auth/MerchantLogin";
 import EditMember from "../panels/merchant/EditMember";
+import FollowerDetail from "../panels/merchant/FollowerDetail";
 import Followers from "../panels/merchant/Followers";
 import MerchantDashboard from "../panels/merchant/MerchantDashboard";
 import MerchantDetails from "../panels/merchant/MerchantDetails";
@@ -46,6 +47,12 @@ const merchantRoutes = [
   {
     path: "/merchant/followers",
     element: Followers,
+    isPrivate: false,
+    isLayout: true,
+  },
+  {
+    path: "/merchant/followers/detail",
+    element: FollowerDetail,
     isPrivate: false,
     isLayout: true,
   },

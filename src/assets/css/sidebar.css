@@ -82,6 +82,9 @@
 .overlay{
   display: none
 }
+.closeSidebar{
+  cursor: pointer;
+}
 @media (max-width:1023.98px) {
   .rightSide,.sidebarOpen + .rightSide{
     width: 100%;
@@ -118,4 +121,7 @@
   .logout{
     width: 226px;
   }
+}
+.overflow-Hidden{
+  overflow: hidden;
 }
