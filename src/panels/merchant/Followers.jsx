@@ -1,20 +1,55 @@
-import React, { useState } from "react";
-import modalbg from "../../assets/images/modalbg.png";
-import follow from "../../assets/images/follow.svg";
-import btnArrow from "../../assets/images/btnArrow.svg";
+import { useEffect, useState } from "react";
 import emailCard from "../../assets/images/emailCard.svg";
 import phoneCard from "../../assets/images/phoneCard.svg";
 import archiveImage from "../../assets/images/archive.svg";
 import rearchive from "../../assets/images/rearchive.svg";
-import searchIcon from "../../assets/images/searchIcon.svg";
 import { Pagination } from "antd";
 import CommonToast from "../../shared/components/commonToast";
+import { useDispatch, useSelector } from "react-redux";
+import { followersListHandler } from "../../redux/action/followersList";
+import SearchSelect from "../../shared/components/SearchSelect";
+import Loader from "../../shared/components/Loader/Loader";
 
 const Followers = () => {
   const [archive, setArchive] = useState(false);
   const [arr, setArr] = useState([]);
+  const [pagination, setPagination] = useState({ page: 1, limit: 10 });
+  const [searchString, setSearchString] = useState("");
+  const [searchArea, setSearchArea] = useState([]);
 
-  console.log("arr", arr);
+  const followerListSelector = useSelector((state) => state?.followeList);
+  console.log(followerListSelector, "followerListSelector");
+
+  const dispatch = useDispatch();
+
+  const handlePaginationChange = (page, pageSize) => {
+    setPagination({ page, limit: pageSize });
+  };
+
+  const handleSearchChange = (value) => {
+    setSearchString(value);
+    setPagination((prev) => ({ ...prev, page: 1 })); // Reset to the first page on search
+  };
+
+  const handleSearchAreaChange = (selectedAreas) => {
+    setSearchArea(selectedAreas);
+  };
+
+  useEffect(() => {
+    const fetchMerchants = () => {
+      const payload = {
+        // locationId: state?._id,
+        page: pagination.page,
+        limit: pagination.limit,
+        searchString,
+        searchArea,
+      };
+      dispatch(followersListHandler(payload));
+    };
+
+    fetchMerchants();
+  }, [pagination, searchString, searchArea]);
+
   return (
     <>
       {/*********************** Empty Content ************************/}
@@ -39,6 +74,7 @@ const Followers = () => {
           </div>
         </div>
       </div> */}
+      {followerListSelector?.isLoading && <Loader />}
       <div className="dashboard">
         <div className="tabPadding">
           <div className="d-flex justify-between align-center mb-20">
@@ -52,13 +88,17 @@ const Followers = () => {
           </div>
           <div className="mb-20">
             <div className="lineSearch w-100">
-              <input
+              {/* <input
                 type="text"
                 name="text"
                 placeholder="Search for Consumer by Name"
                 id="text"
               />
-              <img src={searchIcon} alt="" className="absoluteImage" />
+              <img src={searchIcon} alt="" className="absoluteImage" /> */}
+              <SearchSelect
+                onSearchChange={handleSearchChange}
+                onSearchAreaChange={handleSearchAreaChange}
+              />
             </div>
           </div>
           {archive ? (
@@ -80,7 +120,7 @@ const Followers = () => {
                           setArr((prevState) => [...prevState, "1"])
                         }
                       />
-                      <span class="checkmark"></span>
+                      <span className="checkmark"></span>
                     </label>
                   </div>
                 </div>
@@ -116,7 +156,7 @@ const Followers = () => {
                           setArr((prevState) => [...prevState, "2"])
                         }
                       />
-                      <span class="checkmark"></span>
+                      <span className="checkmark"></span>
                     </label>
                   </div>
                 </div>
@@ -147,7 +187,7 @@ const Followers = () => {
                   <div className="custom-checkbox">
                     <label className="checkLabel">
                       <input type="checkbox" />
-                      <span class="checkmark"></span>
+                      <span className="checkmark"></span>
                     </label>
                   </div>
                 </div>
@@ -169,197 +209,65 @@ const Followers = () => {
             </div>
           ) : (
             <div className="merchantGrid mb-30">
-              <div className="cardFollow">
-                <div className="d-flex justify-between gap-12">
-                  <div className="d-flex align-center gap-12">
-                    <div className="initialName">dr</div>
-                    <div>
-                      <div className="fw-700">Jane Cooper</div>
-                      <div className="fs-14 fw-300 o5">#256501</div>
+              {followerListSelector?.data?.data?.records?.map((item, index) => {
+                console.log(item, "itemitemitemitem");
+                return (
+                  <>
+                    <div className="cardFollow" key={index}>
+                      <div className="d-flex justify-between gap-12">
+                        <div className="d-flex align-center gap-12">
+                          <div className="initialName">
+                            {item?.userInfo?.displayName.charAt(0) +
+                              item?.userInfo?.displayName.charAt(1)}
+                          </div>
+                          <div>
+                            <div className="fw-700">
+                              {item?.userInfo?.displayName}
+                            </div>
+                            <div className="fs-14 fw-300 o5">#256501</div>
+                          </div>
+                        </div>
+                        <div className="custom-checkbox">
+                          <label className="checkLabel">
+                            <input type="checkbox" />
+                            <span className="checkmark"></span>
+                          </label>
+                        </div>
+                      </div>
+                      <div className="divider2"></div>
+                      <div className="d-flex align-center gap-12 mb-10">
+                        <img src={emailCard} alt="" />
+                        <div className="fs-14">binhan628@gmail.com</div>
+                      </div>
+                      <div className="d-flex align-center gap-12">
+                        <img src={phoneCard} alt="" />
+                        <div className="fs-14">
+                          {item?.userInfo?.phoneNumber}
+                        </div>
+                      </div>
+                      <div className="divider2"></div>
+                      <div className="d-flex gap-10 mt-20 justify-end flexBtn">
+                        <div className="btnSecondary w-100 btn">Archive</div>
+                        <div className="btnSecondary w-100 btn">
+                          View Details
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                  <div className="custom-checkbox">
-                    <label className="checkLabel">
-                      <input type="checkbox" />
-                      <span class="checkmark"></span>
-                    </label>
-                  </div>
-                </div>
-                <div className="divider2"></div>
-                <div className="d-flex align-center gap-12 mb-10">
-                  <img src={emailCard} alt="" />
-                  <div className="fs-14">binhan628@gmail.com</div>
-                </div>
-                <div className="d-flex align-center gap-12">
-                  <img src={phoneCard} alt="" />
-                  <div className="fs-14">316-555-0116</div>
-                </div>
-                <div className="divider2"></div>
-                <div className="d-flex gap-10 mt-20 justify-end flexBtn">
-                  <div className="btnSecondary w-100 btn">Archive</div>
-                  <div className="btnSecondary w-100 btn">View Details</div>
-                </div>
-              </div>
-              <div className="cardFollow">
-                <div className="d-flex justify-between gap-12">
-                  <div className="d-flex align-center gap-12">
-                    <div className="initialName">dr</div>
-                    <div>
-                      <div className="fw-700">Jane Cooper</div>
-                      <div className="fs-14 fw-300 o5">#256501</div>
-                    </div>
-                  </div>
-                  <div className="custom-checkbox">
-                    <label className="checkLabel">
-                      <input type="checkbox" />
-                      <span class="checkmark"></span>
-                    </label>
-                  </div>
-                </div>
-                <div className="divider2"></div>
-                <div className="d-flex align-center gap-12 mb-10">
-                  <img src={emailCard} alt="" />
-                  <div className="fs-14">binhan628@gmail.com</div>
-                </div>
-                <div className="d-flex align-center gap-12">
-                  <img src={phoneCard} alt="" />
-                  <div className="fs-14">316-555-0116</div>
-                </div>
-                <div className="divider2"></div>
-                <div className="d-flex gap-10 mt-20 justify-end flexBtn">
-                  <div className="btnSecondary w-100 btn">Archive</div>
-                  <div className="btnSecondary w-100 btn">View Details</div>
-                </div>
-              </div>
-              <div className="cardFollow">
-                <div className="d-flex justify-between gap-12">
-                  <div className="d-flex align-center gap-12">
-                    <div className="initialName">dr</div>
-                    <div>
-                      <div className="fw-700">Jane Cooper</div>
-                      <div className="fs-14 fw-300 o5">#256501</div>
-                    </div>
-                  </div>
-                  <div className="custom-checkbox">
-                    <label className="checkLabel">
-                      <input type="checkbox" />
-                      <span class="checkmark"></span>
-                    </label>
-                  </div>
-                </div>
-                <div className="divider2"></div>
-                <div className="d-flex align-center gap-12 mb-10">
-                  <img src={emailCard} alt="" />
-                  <div className="fs-14">binhan628@gmail.com</div>
-                </div>
-                <div className="d-flex align-center gap-12">
-                  <img src={phoneCard} alt="" />
-                  <div className="fs-14">316-555-0116</div>
-                </div>
-                <div className="divider2"></div>
-                <div className="d-flex gap-10 mt-20 justify-end flexBtn">
-                  <div className="btnSecondary w-100 btn">Archive</div>
-                  <div className="btnSecondary w-100 btn">View Details</div>
-                </div>
-              </div>
-              <div className="cardFollow">
-                <div className="d-flex justify-between gap-12">
-                  <div className="d-flex align-center gap-12">
-                    <div className="initialName">dr</div>
-                    <div>
-                      <div className="fw-700">Jane Cooper</div>
-                      <div className="fs-14 fw-300 o5">#256501</div>
-                    </div>
-                  </div>
-                  <div className="custom-checkbox">
-                    <label className="checkLabel">
-                      <input type="checkbox" />
-                      <span class="checkmark"></span>
-                    </label>
-                  </div>
-                </div>
-                <div className="divider2"></div>
-                <div className="d-flex align-center gap-12 mb-10">
-                  <img src={emailCard} alt="" />
-                  <div className="fs-14">binhan628@gmail.com</div>
-                </div>
-                <div className="d-flex align-center gap-12">
-                  <img src={phoneCard} alt="" />
-                  <div className="fs-14">316-555-0116</div>
-                </div>
-                <div className="divider2"></div>
-                <div className="d-flex gap-10 mt-20 justify-end flexBtn">
-                  <div className="btnSecondary w-100 btn">Archive</div>
-                  <div className="btnSecondary w-100 btn">View Details</div>
-                </div>
-              </div>
-              <div className="cardFollow">
-                <div className="d-flex justify-between gap-12">
-                  <div className="d-flex align-center gap-12">
-                    <div className="initialName">dr</div>
-                    <div>
-                      <div className="fw-700">Jane Cooper</div>
-                      <div className="fs-14 fw-300 o5">#256501</div>
-                    </div>
-                  </div>
-                  <div className="custom-checkbox">
-                    <label className="checkLabel">
-                      <input type="checkbox" />
-                      <span class="checkmark"></span>
-                    </label>
-                  </div>
-                </div>
-                <div className="divider2"></div>
-                <div className="d-flex align-center gap-12 mb-10">
-                  <img src={emailCard} alt="" />
-                  <div className="fs-14">binhan628@gmail.com</div>
-                </div>
-                <div className="d-flex align-center gap-12">
-                  <img src={phoneCard} alt="" />
-                  <div className="fs-14">316-555-0116</div>
-                </div>
-                <div className="divider2"></div>
-                <div className="d-flex gap-10 mt-20 justify-end flexBtn">
-                  <div className="btnSecondary w-100 btn">Archive</div>
-                  <div className="btnSecondary w-100 btn">View Details</div>
-                </div>
-              </div>
-              <div className="cardFollow">
-                <div className="d-flex justify-between gap-12">
-                  <div className="d-flex align-center gap-12">
-                    <div className="initialName">dr</div>
-                    <div>
-                      <div className="fw-700">Jane Cooper</div>
-                      <div className="fs-14 fw-300 o5">#256501</div>
-                    </div>
-                  </div>
-                  <div className="custom-checkbox">
-                    <label className="checkLabel">
-                      <input type="checkbox" />
-                      <span class="checkmark"></span>
-                    </label>
-                  </div>
-                </div>
-                <div className="divider2"></div>
-                <div className="d-flex align-center gap-12 mb-10">
-                  <img src={emailCard} alt="" />
-                  <div className="fs-14">binhan628@gmail.com</div>
-                </div>
-                <div className="d-flex align-center gap-12">
-                  <img src={phoneCard} alt="" />
-                  <div className="fs-14">316-555-0116</div>
-                </div>
-                <div className="divider2"></div>
-                <div className="d-flex gap-10 mt-20 justify-end flexBtn">
-                  <div className="btnSecondary w-100 btn">Archive</div>
-                  <div className="btnSecondary w-100 btn">View Details</div>
-                </div>
-              </div>
+                  </>
+                );
+              })}
             </div>
           )}
           <div className="d-flex align-center justify-between flexPagination">
-            <div className="fs-16">Showing 1 to 5 of 10 Restaurants</div>
-            <Pagination defaultCurrent={1} total={50} />
+            <div className="fs-16">
+              Showing {pagination.page} to {pagination.limit} of 50 Restaurants
+            </div>
+            <Pagination
+              current={pagination.page}
+              pageSize={pagination.limit}
+              total={50}
+              onChange={handlePaginationChange}
+            />
           </div>
         </div>
       </div>

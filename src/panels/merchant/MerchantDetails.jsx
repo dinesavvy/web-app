@@ -98,24 +98,24 @@ const MerchantDetails = () => {
   const handleToggle = (state) => {
     setSwitchState(state);
   };
-  const images = [
-    businessPhoto,
-    restaurantCard,
-    restaurantCard,
-    businessPhoto,
-    restaurantCard,
-    businessPhoto,
-    restaurantCard,
-  ];
-  const images2 = [
-    restaurantCard,
-    businessPhoto,
-    restaurantCard,
-    businessPhoto,
-    restaurantCard,
-    businessPhoto,
-    restaurantCard,
-  ];
+  // const images = [
+  //   businessPhoto,
+  //   restaurantCard,
+  //   restaurantCard,
+  //   businessPhoto,
+  //   restaurantCard,
+  //   businessPhoto,
+  //   restaurantCard,
+  // ];
+  // const images2 = [
+  //   restaurantCard,
+  //   businessPhoto,
+  //   restaurantCard,
+  //   businessPhoto,
+  //   restaurantCard,
+  //   businessPhoto,
+  //   restaurantCard,
+  // ];
 
   const { state } = useLocation();
   const dispatch = useDispatch();
