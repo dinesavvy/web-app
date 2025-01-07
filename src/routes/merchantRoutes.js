@@ -5,6 +5,7 @@ import Followers from "../panels/merchant/Followers";
 import MerchantDashboard from "../panels/merchant/MerchantDashboard";
 import MerchantDetails from "../panels/merchant/MerchantDetails";
 import MerchantList from "../panels/merchant/MerchantList";
+import Nudges from "../panels/merchant/Nudges";
 import TeamMember from "../panels/merchant/TeamMember";
 
 const merchantRoutes = [
@@ -53,6 +54,12 @@ const merchantRoutes = [
   {
     path: "/merchant/followers/detail",
     element: FollowerDetail,
+    isPrivate: false,
+    isLayout: true,
+  },
+  {
+    path: "/merchant/nudges",
+    element: Nudges,
     isPrivate: false,
     isLayout: true,
   },

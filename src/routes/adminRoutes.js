@@ -3,6 +3,7 @@ import AdminDashboard from "./../panels/admin/AdminDashboard";
 import MerchantList from "../panels/merchant/MerchantList";
 import Followers from "../panels/merchant/Followers";
 import MerchantDetails from "../panels/merchant/MerchantDetails";
+import Nudges from "../panels/merchant/Nudges";
 const adminRoutes = [
   {
     path: "/admin/merchant/dashboard",
@@ -31,6 +32,12 @@ const adminRoutes = [
   {
     path: "/admin/merchant/details",
     element: MerchantDetails,
+    isPrivate: false,
+    isLayout: true,
+  },
+  {
+    path: "/admin/nudges",
+    element: Nudges,
     isPrivate: false,
     isLayout: true,
   },

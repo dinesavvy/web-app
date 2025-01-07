@@ -19,6 +19,10 @@
 .fw-800{
     font-weight: 800;
 }
+.fs-12{
+    font-size: 12px;
+    line-height: 18px;
+}
 .fs-14{
     font-size: 14px;
     line-height: 21px;

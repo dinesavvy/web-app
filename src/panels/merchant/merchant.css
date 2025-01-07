@@ -590,6 +590,61 @@
   border-radius: 50%;
   font-size: 16px;
 }
+.nudgeGrid{
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  height: 288px;
+  justify-content: start;
+  align-items: start;
+  width: fit-content;
+}
+input[type="radio"]{
+  display: none;
+}
+.custom-label{
+  border: 1px solid #EEF0F2;
+  background-color: white;
+  border-radius: 8px;
+  text-align: center;
+  height: 132px;
+  position: relative;
+  display: block;
+  overflow: hidden;
+  cursor: pointer;
+  width: 228px;
+}     
+.custom-radio-button{
+  display: none;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  background-color: #00000081;
+  z-index: 2;
+  align-items: center;
+  justify-content: center;
+}
+input[type="radio"]:checked + .custom-radio-button{
+  display: flex;
+}
+.radioImage{
+  height: 60px;
+  padding: 10px;
+}
+.radioImage img{
+  height: 100%;
+}
+.radioCafeName{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* padding: 12px; */
+  height: 100%;
+  background-color: #EEF0F2;
+  height: 54px;
+}
 @media (max-width: 1499.98px) {
   .merchantGrid {
     grid-template-columns: repeat(2, 1fr);

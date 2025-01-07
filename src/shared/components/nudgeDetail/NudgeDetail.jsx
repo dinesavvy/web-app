@@ -78,28 +78,43 @@ const NudgeDetail = ({ isOpen, toggleSidebar }) => {
               <div className="fs-14 fw-600 greyColor">$10.00</div>
             </div>
           </div>
-          <div className="btn">
-          Resend
-          </div>
+          <div className="btn">Resend</div>
           <div className="divider2"></div>
+          {/* Nudge Detail */}
           <div className="fs-18 fw-600 mb-16">Redeemtion History</div>
           <div className="historyFlex">
             <div className="d-flex align-center gap-8">
-            <div class="initialName fs-16">dr</div>
-               <div>
-               <div className="fs-14 lightBlack">
-                John Cooper
-                </div>
-                <div className="fs-14 fw-500">
-                December 19, 2024
-                </div>
-               </div>
+              <div class="initialName fs-16">dr</div>
+              <div>
+                <div className="fs-14 lightBlack">John Cooper</div>
+                <div className="fs-14 fw-500">December 19, 2024</div>
+              </div>
             </div>
-            <div><img src={arrowRight} alt="arrowRight" /></div>
+            <div>
+              <img src={arrowRight} alt="arrowRight" />
+            </div>
           </div>
           <div className="pc fs-16 fw-700 cursor-pointer text-center">
-          Show More
+            Show More
           </div>
+          {/* Nudge Sidebar */}
+          <div className="d-flex justify-between align-center gap-20">
+            <div className="fs-14 lightBlack ">Redeemed on</div>
+            <div className="fs-14 fw-500">Mar 26, 2024</div>
+          </div>
+          <div className="divider2"></div>
+
+          <div className="historyFlex mb-50">
+            <div>
+              <div className="fs-14 lightBlack">Select your audience</div>
+              <div className="fs-14 fw-500">By default all your followers will be sent this Nudge.</div>
+            </div>
+            <div>
+              <img src={arrowRight} alt="arrowRight" />
+            </div>
+          </div>
+          <div className="btn">Resend</div>
+          
         </div>
       </div>
     </>

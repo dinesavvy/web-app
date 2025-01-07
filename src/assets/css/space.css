@@ -40,6 +40,9 @@
 .mb-40{
     margin-bottom: 40px;
 }
+.mb-50{
+    margin-bottom: 50px !important;
+}
 .gap-8{
     gap: 8px;
 }
