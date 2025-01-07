@@ -13,8 +13,10 @@ import BarChart from "../../shared/charts/BarChart";
 import DoughnutChart from "../../shared/charts/DoughnutChart";
 import { Pagination } from "antd";
 import AreaChart from "../../shared/charts/AreaChart";
+import { useNavigate } from "react-router-dom";
 
 const AdminDashboard = () => {
+  const navigate = useNavigate()
   const [activeTab, setActiveTab] = useState("1");
   const [activeTab2, setActiveTab2] = useState("1");
   const [activeTab3, setActiveTab3] = useState("1");
@@ -243,6 +245,7 @@ const AdminDashboard = () => {
             count={77}
             chartPromotionImage={chartnudge}
             buttonText="See Nudges"
+            onButtonClick = {()=>navigate("/admin/nudges")}
             middleComponent={
               <BarChart
                 labels={["Bar 1", "Bar 2"]}
@@ -262,6 +265,7 @@ const AdminDashboard = () => {
             count={79}
             chartPromotionImage={chartfollower}
             buttonText="See Followers"
+            onButtonClick = {()=>navigate("/admin/merchant/followers")}
             middleComponent={
               <BarChart
                 labels={["Bar 1", "Bar 2"]}

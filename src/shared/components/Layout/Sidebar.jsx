@@ -22,7 +22,6 @@ import setting from "../../../assets/images/sidebar/setting.svg";
 import settingFull from "../../../assets/images/sidebar/settingFull.svg";
 import "react-tooltip/dist/react-tooltip.css";
 import { Tooltip } from "react-tooltip";
-import Item from "antd/es/list/Item";
 import { useNavigate } from "react-router-dom";
 
 const Sidebar = ({ isOpen ,setIsOpen}) => {
@@ -59,7 +58,7 @@ const Sidebar = ({ isOpen ,setIsOpen}) => {
     <>
     <div className={isOpen ? "overlay ": "overlay close"} onClick={()=>setIsOpen(false)}></div>
       <div className={`sidebar ${isOpen ? "sidebarOpen" : ""}`}>
-        <div className="sidebarLogo">
+        <div className="sidebarLogo cursor-pointer" onClick={()=>navigate("/admin/merchant/dashboard")}>
           <img src={logo} alt="Logo" />
         </div>
         <div className="heightvh">
