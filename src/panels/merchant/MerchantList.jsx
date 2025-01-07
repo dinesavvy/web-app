@@ -1,4 +1,4 @@
-import  { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import "./merchant.css";
 import SearchSelect from "../../shared/components/SearchSelect";
 import olive from "../../assets/images/olive.png";
@@ -19,8 +19,6 @@ const MerchantList = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const merchantListSelector = useSelector((state) => state?.merchantsList);
-  console.log(merchantListSelector,"merchantListSelector")
-
 
   const handlePaginationChange = (page, pageSize) => {
     setPagination({ page, limit: pageSize });
@@ -67,10 +65,10 @@ const MerchantList = () => {
 
     fetchMerchants();
   }, [pagination, activeTab2, searchString, searchArea]);
-  
+
   return (
     <>
-    {merchantListSelector?.isLoading && <Loader />}
+      {merchantListSelector?.isLoading && <Loader />}
       <div className="dashboard">
         <div className="card">
           <div className="d-flex align-center justify-between mb-20 flexWraplg">
@@ -113,13 +111,13 @@ const MerchantList = () => {
                       <div className="divider2 m-0"></div>
                       <div className="bottomPadding">
                         {parseInt(item?.performance) > 33 ? (
-                        <div className="label greenLabel mb-20">
-                          Top performing
-                        </div>
-                        ):(
+                          <div className="label greenLabel mb-20">
+                            Top performing
+                          </div>
+                        ) : (
                           <div className="label redLabel mb-20">
-                          Under performing
-                        </div>
+                            Under performing
+                          </div>
                         )}
                         <div className="grid2 mb-20">
                           <div>
@@ -164,7 +162,11 @@ const MerchantList = () => {
                         <div className="gridBtn">
                           <div
                             className="btnSecondary btn"
-                            onClick={() => navigate("/admin/merchant/details",{state:item})}
+                            onClick={() =>
+                              navigate("/admin/merchant/details", {
+                                state: item,
+                              })
+                            }
                           >
                             Details
                           </div>
@@ -248,7 +250,9 @@ const MerchantList = () => {
           </div>
           <div className="d-flex align-center justify-between flexPagination">
             <div className="fs-16">
-              Showing {pagination.page} to {merchantListSelector?.data?.data?.records?.length} of 50 Restaurants
+              Showing {pagination.page} to{" "}
+              {merchantListSelector?.data?.data?.recordsCount} of{" "}
+              {merchantListSelector?.data?.data?.recordsCount} Restaurants
             </div>
             <Pagination
               current={pagination.page}
