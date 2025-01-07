@@ -205,8 +205,14 @@ const MerchantDetails = () => {
 
   return (
     <>
-      <>
-        <div className="tabs-container tab3 tabFull">
+      {merchantDetailsSelector?.isLoading ||
+      followerListSelector?.isLoading ||
+      nudgesListSelector?.isLoading ||
+      followerDetailsSelector?.isLoading ? (
+        <Loader />
+      ) : (
+        <div className="dashboard">
+          <div className="tabs-container tab3 tabFull">
           <div className="tabs">
             {tabs3.map((tab) => (
               <button
@@ -221,14 +227,6 @@ const MerchantDetails = () => {
             ))}
           </div>
         </div>
-      </>
-      {merchantDetailsSelector?.isLoading ||
-      followerListSelector?.isLoading ||
-      nudgesListSelector?.isLoading ||
-      followerDetailsSelector?.isLoading ? (
-        <Loader />
-      ) : (
-        <div className="dashboard">
           {activeTab3 === "1" ? (
             <>
               <div className="tabPadding mb-30">
