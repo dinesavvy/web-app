@@ -10,7 +10,7 @@ const FollowerDetail = () => {
       <div className="dashboard">
         <div className="tabPadding mb-30">
           <div className="d-flex align-center gap-20 mb-30 w-100">
-            <img src={backButton} alt="" />
+            <img src={backButton} alt="backButton" className="cursor-pointer" />
             <div>
               <div className="fs-24 fw-600 mb-4">Follower Details</div>
               <Breadcrumb

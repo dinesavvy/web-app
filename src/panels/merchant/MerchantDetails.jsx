@@ -1064,7 +1064,7 @@ const MerchantDetails = () => {
             <>
               <div className="tabPadding">
                 <div className="d-flex align-center gap-20 mb-30 w-100">
-                  <img src={backButton} alt="" />
+                  <img src={backButton} alt="backButton" className="cursor-pointer" />
                   <div>
                     <div className="fs-24 fw-600 mb-4">Dine Savvy Account</div>
                     <Breadcrumb
@@ -1533,7 +1533,7 @@ const MerchantDetails = () => {
                   <div className="tabPadding">
                     <div className="d-flex align-center justify-between gap-20 mb-30 flexrightsm">
                       <div className="d-flex align-center gap-20 w-100">
-                        <img src={backButton} alt="" />
+                        <img src={backButton} alt="backButton" className="cursor-pointer" />
                         <div>
                           <div className="fs-24 fw-600 mb-4">Followers</div>
                           <Breadcrumb
@@ -1663,7 +1663,7 @@ const MerchantDetails = () => {
             <>
               <div className="tabPadding mb-30">
                 <div className="d-flex align-center gap-20 mb-30 w-100">
-                  <img src={backButton} alt="" />
+                  <img src={backButton} alt="backButton" className="cursor-pointer" />
                   <div>
                     <div className="fs-24 fw-600 mb-4">Nudges</div>
                     <Breadcrumb
@@ -1704,7 +1704,7 @@ const MerchantDetails = () => {
                 <div className="mb-16">
                   <input type="text" placeholder="Enter number of credits" />
                 </div>
-                <div className="d-flex justify-between align-center gap-20">
+                <div className="d-flex justify-between align-center gap-20 flexmd">
                   <div className="d-flex align-center gap-16 flex-wrap">
                     <div className="addNudge">
                       <img src={addnudge} alt="addnudge" />
@@ -1735,7 +1735,7 @@ const MerchantDetails = () => {
               </div>
            
             <div className="card">
-              <div className="d-flex justify-between align-center gap-20 mb-20">
+              <div className="d-flex justify-between align-center gap-20 mb-20 flexmd">
                 <div className="fs-24 fw-600">Nudges</div>
                 <div className="btn btnSecondary p16 gap-8">
                   <img src={addCredits} alt="addCredits" />
@@ -1764,7 +1764,7 @@ const MerchantDetails = () => {
                           {/* <div className="nudgeTag">All Followers</div> */}
                         </div>
                         <div className="bottomPadding">
-                          <div className="grid2">
+                          <div className="grid2 mb-20">
                             <div>
                               <div className="fs-14 mb-4">Recipients:</div>
                               <div className="fs-14 fw-600">
