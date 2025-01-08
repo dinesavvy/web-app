@@ -10,7 +10,6 @@ import createAdd from "../../assets/images/createAdd.svg";
 import addnudge from "../../assets/images/addnudge.svg";
 import addCredits from "../../assets/images/addCredits.svg";
 import map from "../../assets/images/map.jpg";
-import restaurantCard from "../../assets/images/restaurantCard.png";
 import dish from "../../assets/images/dish.png";
 import chart from "../../assets/images/chart.jpg";
 import { Breadcrumb, Pagination, TimePicker } from "antd";
@@ -29,6 +28,7 @@ import { followersListHandler } from "../../redux/action/followersList";
 import { nudgesListHandler } from "../../redux/action/nudgesList";
 import NudgeDetail from "../../shared/components/nudgeDetail/NudgeDetail";
 import { followerDetailsHandler } from "../../redux/action/followersDetails";
+import { nudgesDetailsHandler } from "../../redux/action/nudgeDetails";
 
 const MerchantDetails = () => {
   const [activeTab3, setActiveTab3] = useState("1");
@@ -42,6 +42,10 @@ const MerchantDetails = () => {
   const [checkedItems, setCheckedItems] = useState({});
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
+  const nudgeDetailsMainSelector = useSelector(
+    (state) => state?.nudgeDetailsMain
+  );
+
   useEffect(() => {
     if (isSidebarOpen) {
       document.body.classList.add("overflow-Hidden");
@@ -54,8 +58,13 @@ const MerchantDetails = () => {
       document.body.classList.remove("overflow-Hidden");
     };
   }, [isSidebarOpen]);
-  const toggleSidebar = () => {
+
+  const toggleSidebar = (item) => {
     setIsSidebarOpen((prevState) => !prevState);
+    let payload = {
+      nudgeId: item?._id,
+    };
+    dispatch(nudgesDetailsHandler(payload));
   };
 
   const handleCheckboxChange = (index, isChecked) => {
@@ -208,25 +217,26 @@ const MerchantDetails = () => {
       {merchantDetailsSelector?.isLoading ||
       followerListSelector?.isLoading ||
       nudgesListSelector?.isLoading ||
-      followerDetailsSelector?.isLoading ? (
+      followerDetailsSelector?.isLoading ||
+      nudgeDetailsMainSelector?.isLoading ? (
         <Loader />
       ) : (
         <div className="dashboard">
           <div className="tabs-container tab3 tabFull">
-          <div className="tabs">
-            {tabs3.map((tab) => (
-              <button
-                key={tab.id}
-                className={`tab-button ${
-                  activeTab3 === tab.id ? "active" : ""
-                }`}
-                onClick={() => setActiveTab3(tab.id)}
-              >
-                {tab.label}
-              </button>
-            ))}
+            <div className="tabs">
+              {tabs3.map((tab) => (
+                <button
+                  key={tab.id}
+                  className={`tab-button ${
+                    activeTab3 === tab.id ? "active" : ""
+                  }`}
+                  onClick={() => setActiveTab3(tab.id)}
+                >
+                  {tab.label}
+                </button>
+              ))}
+            </div>
           </div>
-        </div>
           {activeTab3 === "1" ? (
             <>
               <div className="tabPadding mb-30">
@@ -362,20 +372,34 @@ const MerchantDetails = () => {
                       )}
                     </div>
                     <div>
-                      <label htmlFor="name" className="grey mb-10 fs-16 fw-500">
-                        Email
-                      </label>
-                      {editInput === true ? (
+                      {/* {editInput === true ? (
                         <input
-                          type="email"
-                          className="input"
-                          placeholder="Email"
+                        type="email"
+                        className="input"
+                        placeholder="Email"
                         />
-                      ) : (
-                        <a className="anchor" href="mailto:dinesavvy@gmail.com">
-                          dinesavvy@gmail.com
-                        </a>
+                        ) : ( */}
+                      {merchantDetailsSelector?.data?.data?.ownerDetails
+                        ?.email && (
+                        <>
+                          <label
+                            htmlFor="name"
+                            className="grey mb-10 fs-16 fw-500"
+                          >
+                            Email
+                          </label>
+                          <a
+                            className="anchor"
+                            href={"mailto:dinesavvy@gmail.com"}
+                          >
+                            {
+                              merchantDetailsSelector?.data?.data?.ownerDetails
+                                ?.email
+                            }
+                          </a>
+                        </>
                       )}
+                      {/* )} */}
                     </div>
                     <div className="">
                       <label htmlFor="name" className="grey mb-10 fs-16 fw-500">
@@ -1062,7 +1086,11 @@ const MerchantDetails = () => {
             <>
               <div className="tabPadding">
                 <div className="d-flex align-center gap-20 mb-30 w-100">
-                  <img src={backButton} alt="backButton" className="cursor-pointer" />
+                  <img
+                    src={backButton}
+                    alt="backButton"
+                    className="cursor-pointer"
+                  />
                   <div>
                     <div className="fs-24 fw-600 mb-4">Dine Savvy Account</div>
                     <Breadcrumb
@@ -1092,7 +1120,10 @@ const MerchantDetails = () => {
                   </div>
                   <div className="d-flex justify-between align-center gap-10 fw-500 mb-16 flexsm">
                     <div className="grey">Restaurant owner</div>
-                    <div>Cameron Williamson</div>
+                    <div>
+                      {merchantDetailsSelector?.data?.data?.ownerDetails
+                        ?.displayName || "N/A"}
+                    </div>
                   </div>
                   <div className="d-flex justify-between align-center gap-10 fw-500 flexsm">
                     <div className="grey">Nudge credits</div>
@@ -1531,7 +1562,11 @@ const MerchantDetails = () => {
                   <div className="tabPadding">
                     <div className="d-flex align-center justify-between gap-20 mb-30 flexrightsm">
                       <div className="d-flex align-center gap-20 w-100">
-                        <img src={backButton} alt="backButton" className="cursor-pointer" />
+                        <img
+                          src={backButton}
+                          alt="backButton"
+                          className="cursor-pointer"
+                        />
                         <div>
                           <div className="fs-24 fw-600 mb-4">Followers</div>
                           <Breadcrumb
@@ -1661,7 +1696,11 @@ const MerchantDetails = () => {
             <>
               <div className="tabPadding mb-30">
                 <div className="d-flex align-center gap-20 mb-30 w-100">
-                  <img src={backButton} alt="backButton" className="cursor-pointer" />
+                  <img
+                    src={backButton}
+                    alt="backButton"
+                    className="cursor-pointer"
+                  />
                   <div>
                     <div className="fs-24 fw-600 mb-4">Nudges</div>
                     <Breadcrumb
@@ -1731,128 +1770,185 @@ const MerchantDetails = () => {
                   </div>
                 </div>
               </div>
-           
-            <div className="card">
-              <div className="d-flex justify-between align-center gap-20 mb-20 flexmd">
-                <div className="fs-24 fw-600">Nudges</div>
-                <div className="btn btnSecondary p16 gap-8">
-                  <img src={addCredits} alt="addCredits" />
-                  Create a Nudge
-                </div>
-              </div>
-              <div className="tabs-container tab3 tabing mb-20">
-                <div className="tabs">
-                  <button className="tab-button active">Active</button>
-                  <button className="tab-button ">Inactive</button>
-                </div>
-              </div>
-              <div className="merchantGrid">
-                {nudgesListSelector?.data?.data?.records?.map((item, index) => {
-                  return (
-                    <>
-                      <div className="merchantCard" key={index}>
-                        <div className="position-relative">
-                          <img className="w-100" src={item?.photoURL} alt="" />
-                          <div className="freeAbsolute">
-                            <div className=" fs-16 fw-700 mb-2">
-                              {item?.title}
-                            </div>
-                            <div className="fs-14">New York, NY</div>
-                          </div>
-                          {/* <div className="nudgeTag">All Followers</div> */}
-                        </div>
-                        <div className="bottomPadding">
-                          <div className="grid2 mb-20">
-                            <div>
-                              <div className="fs-14 mb-4">Recipients:</div>
-                              <div className="fs-14 fw-600">
-                                {item?.recipientCount}
+
+              <div className="card">
+                <div className="d-flex justify-between align-center gap-20 mb-20 flexmd">
+                  <div className="fs-24 fw-600">Nudges</div>
+                  <div className="btn btnSecondary p16 gap-8">
+                    <img src={addCredits} alt="addCredits" />
+                    Create a Nudge
+                  </div>
+                  <div className="tabs-container tab3 tabing mb-20">
+                    <div className="tabs">
+                      <button className="tab-button active">Active</button>
+                      <button className="tab-button ">Inactive</button>
+                    </div>
+                  </div>
+                  <div className="merchantGrid">
+                    {nudgesListSelector?.data?.data?.records?.map(
+                      (item, index) => {
+                        {
+                          console.log(item, "itemitemitem");
+                        }
+                        return (
+                          <>
+                            <div className="merchantCard" key={index}>
+                              <div className="position-relative">
+                                <img
+                                  className="w-100 merchantImg"
+                                  src={item?.photoURL}
+                                  alt=""
+                                />
+                                <div className="freeAbsolute">
+                                  <div className=" fs-16 fw-700 mb-2">
+                                    {item?.title}
+                                  </div>
+                                  <div className="fs-14">New York, NY</div>
+                                </div>
+                              </div>
+                              <div className="bottomPadding">
+                                <div className="lightBlack fs-14 mb-20">
+                                  Get 20% off on all large pizzas today! Limited
+                                  time offer.
+                                </div>
+                                <div className="d-flex justify-between align-center gap-20 mb-8">
+                                  <div className="fs-14 lightBlack ">
+                                    Sent date
+                                  </div>
+                                  <div className="fs-14 fw-500">
+                                    {moment(item?.createdAt).format(
+                                      "DD MMMM,YYYY"
+                                    )}
+                                  </div>
+                                </div>
+                                <div className="d-flex justify-between align-center gap-20 mb-8">
+                                  <div className="fs-14 lightBlack ">
+                                    Expiration date
+                                  </div>
+                                  <div className="fs-14 fw-500">
+                                    {moment(item?.deactivateAt).format(
+                                      "DD MMMM,YYYY"
+                                    )}
+                                  </div>
+                                </div>
+                                <div className="divider2"></div>
+                                <div className="grid2 mb-20">
+                                  <div>
+                                    <div className="fs-14 mb-4 lightBlack">
+                                      Recipients:
+                                    </div>
+                                    <div className="fs-14 fw-600">
+                                      {item?.recipientCount}
+                                    </div>
+                                  </div>
+                                  <div>
+                                    <div className="fs-14 mb-4 lightBlack">
+                                      Accepted:
+                                    </div>
+                                    <div className="fs-14 fw-600 gc">
+                                      320/60%
+                                    </div>
+                                  </div>
+                                  <div>
+                                    <div className="fs-14 mb-4 lightBlack">
+                                      Declined:
+                                    </div>
+                                    <div className="fs-14 fw-600 rc">
+                                      180/40%
+                                    </div>
+                                  </div>
+                                  <div>
+                                    <div className="fs-14 mb-4 lightBlack">
+                                      No Response
+                                    </div>
+                                    <div className="fs-14 fw-600 greyColor">
+                                      $10.00
+                                    </div>
+                                  </div>
+                                </div>
+                                <div
+                                  className="btn btnSecondary w-100"
+                                  onClick={() => toggleSidebar(item)}
+                                >
+                                  View Details
+                                </div>
                               </div>
                             </div>
-                            <div>
-                              <div className="fs-14 mb-4">Accepted:</div>
-                              <div className="fs-14 fw-600">320/60%</div>
-                            </div>
-                            <div>
-                              <div className="fs-14 mb-4">Declined:</div>
-                              <div className="fs-14 fw-600">180/40%</div>
-                            </div>
-                            <div>
-                              <div className="fs-14 mb-4">Cost:</div>
-                              <div className="fs-14 fw-600">$10.00</div>
-                            </div>
+                          </>
+                        );
+                      }
+                    )}
+                    {/* <div className="merchantCard">
+                    <div className="position-relative">
+                      <img
+                        className="w-100 merchantImg"
+                        src={restaurantCard}
+                        alt=""
+                      />
+                      <div className="freeAbsolute">
+                        <div className=" fs-16 fw-700 mb-2">Free Drink</div>
+                        <div className="fs-14">New York, NY</div>
+                      </div>
+                    </div>
+                    <div className="bottomPadding">
+                      <div className="lightBlack fs-14 mb-20">
+                        Get 20% off on all large pizzas today! Limited time
+                        offer.
+                      </div>
+                      <div className="d-flex justify-between align-center gap-20 mb-8">
+                        <div className="fs-14 lightBlack ">Sent date</div>
+                        <div className="fs-14 fw-500">Mar 19, 2024</div>
+                      </div>
+                      <div className="d-flex justify-between align-center gap-20 mb-8">
+                        <div className="fs-14 lightBlack ">Expiration date</div>
+                        <div className="fs-14 fw-500">Mar 26, 2024</div>
+                      </div>
+                      <div className="divider2"></div>
+                      <div className="grid2 mb-20">
+                        <div>
+                          <div className="fs-14 mb-4 lightBlack">
+                            Recipients:
                           </div>
-                          <div
-                            className="btn btnSecondary"
-                            onClick={() => setViewDetail(true)}
-                          >
-                            View Details
+                          <div className="fs-14 fw-600">500</div>
+                        </div>
+                        <div>
+                          <div className="fs-14 mb-4 lightBlack">Accepted:</div>
+                          <div className="fs-14 fw-600 gc">320/60%</div>
+                        </div>
+                        <div>
+                          <div className="fs-14 mb-4 lightBlack">Declined:</div>
+                          <div className="fs-14 fw-600 rc">180/40%</div>
+                        </div>
+                        <div>
+                          <div className="fs-14 mb-4 lightBlack">
+                            No Response
                           </div>
+                          <div className="fs-14 fw-600 greyColor">$10.00</div>
                         </div>
                       </div>
-                    </>
-                  );
-                })}
-                <div className="merchantCard">
-                  <div className="position-relative">
-                    <img
-                      className="w-100 merchantImg"
-                      src={restaurantCard}
-                      alt=""
-                    />
-                    <div className="freeAbsolute">
-                      <div className=" fs-16 fw-700 mb-2">Free Drink</div>
-                      <div className="fs-14">New York, NY</div>
-                    </div>
-                  </div>
-                  <div className="bottomPadding">
-                    <div className="lightBlack fs-14 mb-20">
-                      Get 20% off on all large pizzas today! Limited time offer.
-                    </div>
-                    <div className="d-flex justify-between align-center gap-20 mb-8">
-                      <div className="fs-14 lightBlack ">Sent date</div>
-                      <div className="fs-14 fw-500">Mar 19, 2024</div>
-                    </div>
-                    <div className="d-flex justify-between align-center gap-20 mb-8">
-                      <div className="fs-14 lightBlack ">Expiration date</div>
-                      <div className="fs-14 fw-500">Mar 26, 2024</div>
-                    </div>
-                    <div className="divider2"></div>
-                    <div className="grid2 mb-20">
-                      <div>
-                        <div className="fs-14 mb-4 lightBlack">Recipients:</div>
-                        <div className="fs-14 fw-600">500</div>
-                      </div>
-                      <div>
-                        <div className="fs-14 mb-4 lightBlack">Accepted:</div>
-                        <div className="fs-14 fw-600 gc">320/60%</div>
-                      </div>
-                      <div>
-                        <div className="fs-14 mb-4 lightBlack">Declined:</div>
-                        <div className="fs-14 fw-600 rc">180/40%</div>
-                      </div>
-                      <div>
-                        <div className="fs-14 mb-4 lightBlack">No Response</div>
-                        <div className="fs-14 fw-600 greyColor">$10.00</div>
+                      <div
+                        className="btn btnSecondary w-100"
+                        onClick={toggleSidebar}
+                      >
+                        View Details
                       </div>
                     </div>
-                    <div className="btn btnSecondary w-100" onClick={toggleSidebar}>
-                    View Details
-                    </div>
+                  </div> */}
                   </div>
                 </div>
+                {/* {isSidebarOpen && ( */}
+                  <NudgeDetail
+                    isOpen={isSidebarOpen}
+                    toggleSidebar={toggleSidebar}
+                  />
+                {/* )} */}
               </div>
-            </div>
-            {isSidebarOpen && (
-            <NudgeDetail isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
-            )}
-          </>
-       ) : null}
-       </div>
-     )}
-   </>
- );
+            </>
+          ) : null}
+        </div>
+      )}
+    </>
+  );
 };
-
 
 export default MerchantDetails;
