@@ -193,7 +193,7 @@
 }
 
 .tabPadding {
-  padding: 30px 20px;
+  padding: 20px 20px;
   background-color: white;
   border-radius: 16px;
 }
@@ -509,6 +509,10 @@
   height: calc(100vh - 120px);
   overflow-y: auto;
 }
+.overflowCart{
+  height: calc(100vh - 445px);
+  overflow-y: auto;
+}
 .brandFlex{
   display: flex;
   gap: 4px;
@@ -538,6 +542,9 @@
   padding: 8px 16px;
 }
 .overflowSidebar::-webkit-scrollbar{
+  display: none;
+}
+.overflowCart::-webkit-scrollbar{
   display: none;
 }
 .rightSidebar.open {
@@ -645,6 +652,48 @@ input[type="radio"]:checked + .custom-radio-button{
   background-color: #EEF0F2;
   height: 54px;
 }
+.templateGrid{
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  gap: 16px 6px;
+
+}
+.templateImage{
+  height: 142px;
+  border-radius: 15px;
+  overflow: hidden;
+  position: relative;
+}
+.templateImage img{ 
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+}
+.absoluteTemplateText{
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  color: white;
+  bottom: 20px;
+}
+.w240{
+  width: 240px;
+}
+.w164{
+  width: 164px;
+}
+.reflectImage{
+  width: 345px;
+  height: 200px;
+  border-radius: 21px;
+  overflow: hidden;
+  position: relative;
+}
+.reflectImage img{ 
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+}
 @media (max-width: 1499.98px) {
   .merchantGrid {
     grid-template-columns: repeat(2, 1fr);
@@ -687,7 +736,7 @@ input[type="radio"]:checked + .custom-radio-button{
     grid-template-columns: repeat(1, 1fr);
   }
 
-  .imgGrid {
+  .imgGrid,.templateGrid {
     grid-template-columns: repeat(2, 1fr);
   }
 
@@ -748,18 +797,31 @@ input[type="radio"]:checked + .custom-radio-button{
     flex-direction: column; 
     align-items: start;
   }
+  .tabing .tab-button{
+    padding: 10px 50px;
+  }
   .editBtn {
     align-self: flex-end;
   }
   .dropdown-list {
     width: 250px;
   }
-
+  .rightSidebar{
+    width: 100%;
+    right: -100%;
+  }
   .btn {
     font-size: 14px;
   }
   .flexBtn{
     flex-direction: column;
     align-items: end;
+  }
+  .reflectImage,.w240{
+    width: 100%;
+  }
+  .fs-18 {
+    font-size: 14px;
+    line-height: 20px;
   }
 }

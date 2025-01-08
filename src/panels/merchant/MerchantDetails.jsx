@@ -144,7 +144,7 @@ const MerchantDetails = () => {
   const merchantDetailsSelector = useSelector(
     (state) => state?.merchantDetails
   );
-  
+
   useEffect(() => {
     dispatch(merchantDetailsHandler({ locationId: state?._id }));
   }, []);
@@ -1086,7 +1086,11 @@ const MerchantDetails = () => {
             <>
               <div className="tabPadding">
                 <div className="d-flex align-center gap-20 mb-30 w-100">
-                  <img src={backButton} alt="" />
+                  <img
+                    src={backButton}
+                    alt="backButton"
+                    className="cursor-pointer"
+                  />
                   <div>
                     <div className="fs-24 fw-600 mb-4">Dine Savvy Account</div>
                     <Breadcrumb
@@ -1558,7 +1562,11 @@ const MerchantDetails = () => {
                   <div className="tabPadding">
                     <div className="d-flex align-center justify-between gap-20 mb-30 flexrightsm">
                       <div className="d-flex align-center gap-20 w-100">
-                        <img src={backButton} alt="" />
+                        <img
+                          src={backButton}
+                          alt="backButton"
+                          className="cursor-pointer"
+                        />
                         <div>
                           <div className="fs-24 fw-600 mb-4">Followers</div>
                           <Breadcrumb
@@ -1688,7 +1696,11 @@ const MerchantDetails = () => {
             <>
               <div className="tabPadding mb-30">
                 <div className="d-flex align-center gap-20 mb-30 w-100">
-                  <img src={backButton} alt="" />
+                  <img
+                    src={backButton}
+                    alt="backButton"
+                    className="cursor-pointer"
+                  />
                   <div>
                     <div className="fs-24 fw-600 mb-4">Nudges</div>
                     <Breadcrumb
@@ -1729,7 +1741,7 @@ const MerchantDetails = () => {
                 <div className="mb-16">
                   <input type="text" placeholder="Enter number of credits" />
                 </div>
-                <div className="d-flex justify-between align-center gap-20">
+                <div className="d-flex justify-between align-center gap-20 flexmd">
                   <div className="d-flex align-center gap-16 flex-wrap">
                     <div className="addNudge">
                       <img src={addnudge} alt="addnudge" />
@@ -1760,110 +1772,113 @@ const MerchantDetails = () => {
               </div>
 
               <div className="card">
-                <div className="d-flex justify-between align-center gap-20 mb-20">
+                <div className="d-flex justify-between align-center gap-20 mb-20 flexmd">
                   <div className="fs-24 fw-600">Nudges</div>
                   <div className="btn btnSecondary p16 gap-8">
                     <img src={addCredits} alt="addCredits" />
                     Create a Nudge
                   </div>
-                </div>
-                <div className="tabs-container tab3 tabing mb-20">
-                  <div className="tabs">
-                    <button className="tab-button active">Active</button>
-                    <button className="tab-button ">Inactive</button>
+                  <div className="tabs-container tab3 tabing mb-20">
+                    <div className="tabs">
+                      <button className="tab-button active">Active</button>
+                      <button className="tab-button ">Inactive</button>
+                    </div>
                   </div>
-                </div>
-                <div className="merchantGrid">
-                  {nudgesListSelector?.data?.data?.records?.map(
-                    (item, index) => {
-                      {
-                        console.log(item, "itemitemitem");
+                  <div className="merchantGrid">
+                    {nudgesListSelector?.data?.data?.records?.map(
+                      (item, index) => {
+                        {
+                          console.log(item, "itemitemitem");
+                        }
+                        return (
+                          <>
+                            <div className="merchantCard" key={index}>
+                              <div className="position-relative">
+                                <img
+                                  className="w-100 merchantImg"
+                                  src={item?.photoURL}
+                                  alt=""
+                                />
+                                <div className="freeAbsolute">
+                                  <div className=" fs-16 fw-700 mb-2">
+                                    {item?.title}
+                                  </div>
+                                  <div className="fs-14">New York, NY</div>
+                                </div>
+                              </div>
+                              <div className="bottomPadding">
+                                <div className="lightBlack fs-14 mb-20">
+                                  Get 20% off on all large pizzas today! Limited
+                                  time offer.
+                                </div>
+                                <div className="d-flex justify-between align-center gap-20 mb-8">
+                                  <div className="fs-14 lightBlack ">
+                                    Sent date
+                                  </div>
+                                  <div className="fs-14 fw-500">
+                                    {moment(item?.createdAt).format(
+                                      "DD MMMM,YYYY"
+                                    )}
+                                  </div>
+                                </div>
+                                <div className="d-flex justify-between align-center gap-20 mb-8">
+                                  <div className="fs-14 lightBlack ">
+                                    Expiration date
+                                  </div>
+                                  <div className="fs-14 fw-500">
+                                    {moment(item?.deactivateAt).format(
+                                      "DD MMMM,YYYY"
+                                    )}
+                                  </div>
+                                </div>
+                                <div className="divider2"></div>
+                                <div className="grid2 mb-20">
+                                  <div>
+                                    <div className="fs-14 mb-4 lightBlack">
+                                      Recipients:
+                                    </div>
+                                    <div className="fs-14 fw-600">
+                                      {item?.recipientCount}
+                                    </div>
+                                  </div>
+                                  <div>
+                                    <div className="fs-14 mb-4 lightBlack">
+                                      Accepted:
+                                    </div>
+                                    <div className="fs-14 fw-600 gc">
+                                      320/60%
+                                    </div>
+                                  </div>
+                                  <div>
+                                    <div className="fs-14 mb-4 lightBlack">
+                                      Declined:
+                                    </div>
+                                    <div className="fs-14 fw-600 rc">
+                                      180/40%
+                                    </div>
+                                  </div>
+                                  <div>
+                                    <div className="fs-14 mb-4 lightBlack">
+                                      No Response
+                                    </div>
+                                    <div className="fs-14 fw-600 greyColor">
+                                      $10.00
+                                    </div>
+                                  </div>
+                                </div>
+                                <div
+                                  className="btn btnSecondary w-100"
+                                  onClick={() => toggleSidebar(item)}
+                                >
+                                  View Details
+                                </div>
+                              </div>
+                            </div>
+                          </>
+                        );
                       }
-                      return (
-                        <>
-                          <div className="merchantCard" key={index}>
-                            <div className="position-relative">
-                              <img
-                                className="w-100 merchantImg"
-                                src={item?.photoURL}
-                                alt=""
-                              />
-                              <div className="freeAbsolute">
-                                <div className=" fs-16 fw-700 mb-2">
-                                  {item?.title}
-                                </div>
-                                <div className="fs-14">New York, NY</div>
-                              </div>
-                            </div>
-                            <div className="bottomPadding">
-                              <div className="lightBlack fs-14 mb-20">
-                                Get 20% off on all large pizzas today! Limited
-                                time offer.
-                              </div>
-                              <div className="d-flex justify-between align-center gap-20 mb-8">
-                                <div className="fs-14 lightBlack ">
-                                  Sent date
-                                </div>
-                                <div className="fs-14 fw-500">
-                                  {moment(item?.createdAt).format(
-                                    "DD MMMM,YYYY"
-                                  )}
-                                </div>
-                              </div>
-                              <div className="d-flex justify-between align-center gap-20 mb-8">
-                                <div className="fs-14 lightBlack ">
-                                  Expiration date
-                                </div>
-                                <div className="fs-14 fw-500">
-                                  {moment(item?.deactivateAt).format(
-                                    "DD MMMM,YYYY"
-                                  )}
-                                </div>
-                              </div>
-                              <div className="divider2"></div>
-                              <div className="grid2 mb-20">
-                                <div>
-                                  <div className="fs-14 mb-4 lightBlack">
-                                    Recipients:
-                                  </div>
-                                  <div className="fs-14 fw-600">
-                                    {item?.recipientCount}
-                                  </div>
-                                </div>
-                                <div>
-                                  <div className="fs-14 mb-4 lightBlack">
-                                    Accepted:
-                                  </div>
-                                  <div className="fs-14 fw-600 gc">320/60%</div>
-                                </div>
-                                <div>
-                                  <div className="fs-14 mb-4 lightBlack">
-                                    Declined:
-                                  </div>
-                                  <div className="fs-14 fw-600 rc">180/40%</div>
-                                </div>
-                                <div>
-                                  <div className="fs-14 mb-4 lightBlack">
-                                    No Response
-                                  </div>
-                                  <div className="fs-14 fw-600 greyColor">
-                                    $10.00
-                                  </div>
-                                </div>
-                              </div>
-                              <div
-                                className="btn btnSecondary w-100"
-                                onClick={() => toggleSidebar(item)}
-                              >
-                                View Details
-                              </div>
-                            </div>
-                          </div>
-                        </>
-                      );
-                    }
-                  )}
-                  {/* <div className="merchantCard">
+                    )}
+                    {/* <div className="merchantCard">
                     <div className="position-relative">
                       <img
                         className="w-100 merchantImg"
@@ -1919,14 +1934,15 @@ const MerchantDetails = () => {
                       </div>
                     </div>
                   </div> */}
+                  </div>
                 </div>
+                {/* {isSidebarOpen && ( */}
+                  <NudgeDetail
+                    isOpen={isSidebarOpen}
+                    toggleSidebar={toggleSidebar}
+                  />
+                {/* )} */}
               </div>
-              {isSidebarOpen && (
-                <NudgeDetail
-                  isOpen={isSidebarOpen}
-                  toggleSidebar={toggleSidebar}
-                />
-              )}
             </>
           ) : null}
         </div>

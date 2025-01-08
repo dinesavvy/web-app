@@ -2,6 +2,9 @@ import React, { useEffect, useState } from "react";
 import searchIcon from "../../assets/images/searchIcon.svg";
 import addCredits from "../../assets/images/addCredits.svg";
 import radioSelected from "../../assets/images/radioSelected.svg";
+import nudgeEmpty from "../../assets/images/nudgeEmpty.svg";
+import btnArrow from "../../assets/images/btnArrow.svg";
+import modalbg from "../../assets/images/modalbg.png";
 import olive from "../../assets/images/olive.png";
 import restaurantCard from "../../assets/images/restaurantCard.png";
 import NudgeDetail from "../../shared/components/nudgeDetail/NudgeDetail";
@@ -37,6 +40,28 @@ const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   return (
     <>
+       {/*********************** Empty Content ************************/}
+      {/* <div className="emptyHeight">
+        <div className="modal-content">
+          <div className="ant-modal-body">
+            <div className="modalbg">
+              <img src={modalbg} alt="" />
+            </div>
+            <div className="modalImage mb-30">
+              <img src={nudgeEmpty} alt="" />
+            </div>
+            <div className="text-center mb-30">
+              <div className="fs-26 fw-700 mb-15">No Nudge Yet</div>
+              <div className="fs-18">
+              Create your first promotional nudge to engage with your customers, Start by setting up a new campaign for any of your restaurants.
+              </div>
+            </div>
+            <div className="div d-flex align-center gap-16">
+              <div className="btn w-100 gap-8">Create First Nudge <img src={btnArrow} alt="" /></div>
+            </div>
+          </div>
+        </div>
+      </div> */}
       <div className="dashboard">
         <div className="tabPadding mb-30">
           <div className="fs-24 fw-600">Nudges</div>
@@ -81,7 +106,7 @@ const [isSidebarOpen, setIsSidebarOpen] = useState(false);
           </div>
         </div>
         <div className="card">
-          <div className="d-flex justify-between align-center gap-20 mb-20">
+          <div className="d-flex justify-between align-center gap-20 mb-20 flexmd" >
             <div className="fs-24 fw-600">Nudges</div>
             <div className="btn btnSecondary p16 gap-8">
               <img src={addCredits} alt="addCredits" />

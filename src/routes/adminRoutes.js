@@ -4,6 +4,7 @@ import MerchantList from "../panels/merchant/MerchantList";
 import Followers from "../panels/merchant/Followers";
 import MerchantDetails from "../panels/merchant/MerchantDetails";
 import Nudges from "../panels/merchant/Nudges";
+import NudgeTemplate from "../shared/components/nudgeDetail/NudgeTemplate";
 const adminRoutes = [
   {
     path: "/admin/merchant/dashboard",
@@ -38,6 +39,12 @@ const adminRoutes = [
   {
     path: "/admin/nudges",
     element: Nudges,
+    isPrivate: false,
+    isLayout: true,
+  },
+  {
+    path: "/admin/nudges/templates",
+    element: NudgeTemplate,
     isPrivate: false,
     isLayout: true,
   },
