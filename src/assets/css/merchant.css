@@ -215,8 +215,8 @@
 }
 
 .tabFull .tab-button {
-  width: 100%;
-  padding: 18px 36px;
+  width: 100% !important;
+  padding: 18px 36px !important;
   background: transparent;
 }
 
@@ -225,7 +225,7 @@
 }
 
 .tabFull .tabs {
-  width: 100%;
+  width: 100% !important;
   background-color: transparent;
 }
 
@@ -489,7 +489,7 @@
   font-weight: 500;
 }
 .tabing .tab-button{
-  padding: 16px 109px;
+  padding: 16px 109px !important;
   line-height: 24px;
 }
 /* Sidebar.css */
@@ -693,6 +693,52 @@ input[type="radio"]:checked + .custom-radio-button{
   height: 100%;
   width: 100%;
   object-fit: cover;
+}
+.addBtn{
+  padding: 0 42px;
+  height: 56px;
+}
+.p-10{
+  padding: 10px;
+  padding-top: 31px;
+}
+.promotionImage{
+  height: 90px;
+}
+.nailedIt{
+  background-color: #056DFF;
+  padding: 5px;
+  text-align: center;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  color: white;
+  opacity: 0;
+}
+.nailedIt.active{
+  opacity: 1;
+}
+.roi{
+  padding: 4px 12px;
+  border-radius: 4px;
+  color: white;
+}
+.roi.green{
+  background-color: #00D014;
+}
+.roi.red{
+  background-color: #BF0202;
+}
+.roi.blue{
+  background-color: #056DFF;
+}
+.overflowCart2{
+  flex: 1;
+}
+.rightSidebar2{
+  display: flex;
+  flex-direction: column;
 }
 @media (max-width: 1499.98px) {
   .merchantGrid {
