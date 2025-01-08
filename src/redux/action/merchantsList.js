@@ -1,6 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { loginAPI } from "../../services/login";
-import { setItem } from "../../utils/functions/localStorage";
 import { merchantListAPI } from "../../services/merchantsList";
 
 const data = {

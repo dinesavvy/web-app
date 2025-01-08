@@ -5,6 +5,7 @@ import merchantDetailsSlice from "../action/merchantDetails";
 import followerListSlice from "../action/followersList";
 import nudgesListSlice from "../action/nudgesList";
 import followersDetailsSlice from "../action/followersDetails";
+import nudgeDetailsMainSlice from "../action/nudgeDetails";
 
 const store = configureStore({
   reducer: {
@@ -14,6 +15,7 @@ const store = configureStore({
     followeList: followerListSlice,
     nudgesList: nudgesListSlice,
     followerDetails: followersDetailsSlice,
+    nudgeDetailsMain: nudgeDetailsMainSlice,
   },
 });
 
