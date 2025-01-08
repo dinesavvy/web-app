@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { loginAPI } from "../../services/login";
-import { setItem } from "../../utils/functions/localStorage";
+import { setItem } from "../../common/localStorage";
+import React from "react";
 
 const data = {
   isLoading: false,
