@@ -8,9 +8,10 @@
   border-right: 1px solid #E3E3E8;
 }
 .rightSide{
-  width: calc(100% - 300px);
+  width: calc(100% - 301px);
   margin-left: auto;
   transition: all 0.3s;
+  position: relative;
 }
 .sidebarOpen + .rightSide {
   width: calc(100% - 104px);

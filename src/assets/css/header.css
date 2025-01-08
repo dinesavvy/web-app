@@ -2,6 +2,9 @@ header{
     padding: 23px 30px;
     background-color: white;
     margin-bottom: 30px;
+    position: sticky;
+    top: 0  ;
+    z-index: 2;
 }
 .burgerMenu{
     height: 34px;
