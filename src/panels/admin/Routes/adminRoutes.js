@@ -1,7 +1,7 @@
 import AdminLogin from "../../admin/auth/AdminLogin";
 import MerchantList from "../Components/MerchantList";
 import Followers from "../Components/Followers";
-// import Nudges from "../panels/merchant/Nudges";
+import Nudges from "../Components/Nudges";
 import AdminDashboard from "../Components/AdminDashboard";
 import MerchantDetails from "../Components/MerchantDetails";
 
@@ -36,12 +36,12 @@ const adminRoutes = [
       isPrivate: false,
       isLayout: true,
     },
-  //   {
-  //     path: "/admin/nudges",
-  //     element: Nudges,
-  //     isPrivate: false,
-  //     isLayout: true,
-  //   },
+    {
+      path: "/admin/nudges",
+      element: Nudges,
+      isPrivate: false,
+      isLayout: true,
+    },
 ];
 
 export default adminRoutes;
