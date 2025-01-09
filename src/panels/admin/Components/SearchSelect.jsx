@@ -1,7 +1,8 @@
-import React,{ useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import searchIcon from "../../../assets/images/searchIcon.svg";
 import filterIcon from "../../../assets/images/filterIcon.svg";
 import deleteList from "../../../assets/images/deleteList.svg";
+import { useLocation } from "react-router-dom";
 
 const SearchSelect = ({ onSearchChange, onSearchAreaChange }) => {
   const [selectedItems, setSelectedItems] = useState([]);
@@ -21,6 +22,8 @@ const SearchSelect = ({ onSearchChange, onSearchAreaChange }) => {
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
+
+  const location = useLocation();
 
   const handleSelect = (option) => {
     const updatedSelectedItems = selectedItems.includes(option)
@@ -67,45 +70,47 @@ const SearchSelect = ({ onSearchChange, onSearchAreaChange }) => {
             type="text"
             value={searchInput}
             onChange={handleSearchInputChange}
-            placeholder="Search Merchants"
+            placeholder={location.pathname === "/admin/merchant/followers" ?"Search by preferences, what they love or nudges":"Search Merchants"}
           />
           <img src={searchIcon} alt="" className="absoluteImage" />
         </div>
-        <div className="dropdown-container" ref={dropdownRef}>
-          {/* Dropdown */}
-          <div className="dropdown-header" onClick={toggleDropdown}>
-            <button className="dropdown-button">
-              <img src={filterIcon} alt="" />
-              Filter
-            </button>
-          </div>
-          {isDropdownOpen && (
-            <div className="dropdown-list">
-              <div className="lineSearch w-100">
-                <input
-                  type="text"
-                  name="text"
-                  placeholder="Filter by..."
-                  id="text"
-                />
-                <img src={searchIcon} alt="" className="absoluteImage" />
-              </div>
-              {options.map((option, index) => (
-                <div key={index} className="dropdown-item custom-checkbox">
-                  <label className="checkLabel">
-                    <input
-                      type="checkbox"
-                      checked={selectedItems.includes(option)}
-                      onChange={() => handleSelect(option)}
-                    />
-                    <span class="checkmark"></span>
-                    {option}
-                  </label>
-                </div>
-              ))}
+        {location.pathname !== "/admin/merchant/followers" && (
+          <div className="dropdown-container" ref={dropdownRef}>
+            {/* Dropdown */}
+            <div className="dropdown-header" onClick={toggleDropdown}>
+              <button className="dropdown-button">
+                <img src={filterIcon} alt="" />
+                Filter
+              </button>
             </div>
-          )}
-        </div>
+            {isDropdownOpen && (
+              <div className="dropdown-list">
+                <div className="lineSearch w-100">
+                  <input
+                    type="text"
+                    name="text"
+                    placeholder="Filter by..."
+                    id="text"
+                  />
+                  <img src={searchIcon} alt="" className="absoluteImage" />
+                </div>
+                {options.map((option, index) => (
+                  <div key={index} className="dropdown-item custom-checkbox">
+                    <label className="checkLabel">
+                      <input
+                        type="checkbox"
+                        checked={selectedItems.includes(option)}
+                        onChange={() => handleSelect(option)}
+                      />
+                      <span class="checkmark"></span>
+                      {option}
+                    </label>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
       </div>
 
       {/* Selected Items */}
