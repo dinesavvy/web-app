@@ -15,7 +15,7 @@ import { useNavigate } from "react-router-dom";
 const Followers = () => {
   const [archive, setArchive] = useState(false);
   const [arr, setArr] = useState([]);
-  const [pagination, setPagination] = useState({ page: 1, limit: 10 });
+  const [pagination, setPagination] = useState({ page: 1, limit: 9 });
   const [searchString, setSearchString] = useState("");
   const [searchArea, setSearchArea] = useState([]);
 
@@ -212,7 +212,10 @@ const Followers = () => {
                             </div>
                             <div>
                               <div className="fw-700">
-                                {item?.userInfo?.displayName}
+                                {/* {item?.userInfo?.displayName} */}
+                                {item?.userInfo?.displayName &&
+      item.userInfo.displayName.charAt(0).toUpperCase() +
+      item.userInfo.displayName.slice(1)}
                               </div>
                               <div className="fs-14 fw-300 o5">#256501</div>
                             </div>

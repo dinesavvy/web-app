@@ -30,6 +30,7 @@ import { followersListHandler } from "../../../redux/action/followersList";
 import { nudgesListHandler } from "../../../redux/action/nudgesList";
 import NudgeDetail from "./NudgeDetail";
 import { followerDetailsHandler } from "../../../redux/action/followersDetails";
+import FollowerDetail from "./FollowerDetails";
 
 const MerchantDetails = () => {
   const [activeTab3, setActiveTab3] = useState("1");
@@ -47,6 +48,8 @@ const MerchantDetails = () => {
 
   const [checkedItems, setCheckedItems] = useState({});
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  // For Nudge Details Data
 
   const nudgeDetailsMainSelector = useSelector(
     (state) => state?.nudgeDetailsMain
@@ -1202,7 +1205,7 @@ const MerchantDetails = () => {
                           Follower name
                         </label>
                         <div className="fs-20">
-                          {followerDetailsSelector?.data?.data?.followerName}
+                          {followerDetailsSelector?.data?.data?.userInfo?.displayName}
                         </div>
                       </div>
                       <div>
@@ -1539,6 +1542,7 @@ const MerchantDetails = () => {
                     </div>
                   </div>
                 </>
+                // <FollowerDetail />
               ) : (
                 <>
                   <div className="tabPadding">
@@ -1867,15 +1871,27 @@ const MerchantDetails = () => {
                               </div>
                               <div className="fs-14 fw-600 greyColor">
                                 {/* {20}/{(20/200)*100}% */}
-                                {item?.recipientCount -
-                                  item?.totalAcceptedFollowerList +
-                                  item?.disLikeUserList}
+                                {/* {item?.recipientCount -
+                                  (item?.totalAcceptedFollowerList +
+                                  item?.disLikeUserList)}
                                 /
                                 {((item?.recipientCount -
-                                  item?.totalAcceptedFollowerList +
-                                  item?.disLikeUserList) /
+                                 (item?.totalAcceptedFollowerList +
+                                  item?.disLikeUserList)) /
                                   item?.recipientCount) *
                                   100}
+                                % */}
+                                {item?.recipientCount -
+                                  (item?.totalAcceptedFollowerList +
+                                    item?.disLikeUserList)}
+                                /
+                                {(
+                                  ((item?.recipientCount -
+                                    (item?.totalAcceptedFollowerList +
+                                      item?.disLikeUserList)) /
+                                    item?.recipientCount) *
+                                  100
+                                ).toFixed(2)}
                                 %
                               </div>
                             </div>

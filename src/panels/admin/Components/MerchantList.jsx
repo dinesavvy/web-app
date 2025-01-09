@@ -11,7 +11,7 @@ import moment from "moment";
 import Loader from "../../../common/Loader/Loader";
 
 const MerchantList = () => {
-  const [pagination, setPagination] = useState({ page: 1, limit: 10 });
+  const [pagination, setPagination] = useState({ page: 1, limit: 9 });
   const [searchString, setSearchString] = useState("");
   const [searchArea, setSearchArea] = useState([]);
   const [activeTab2, setActiveTab2] = useState("today");

@@ -97,10 +97,6 @@ const NudgeDetail = ({ isOpen, toggleSidebar, nudgeDetailsMainSelector }) => {
                   </div>
                 </div>
                 <div>
-                  {console.log(
-                    nudgeDetailsMainSelector,
-                    "nudgeDetailsMainSelector"
-                  )}
                   <div className="fs-14 mb-4 lightBlack">Accepted:</div>
                   <div className="fs-14 fw-600 gc">
                     {
@@ -133,16 +129,16 @@ const NudgeDetail = ({ isOpen, toggleSidebar, nudgeDetailsMainSelector }) => {
                   <div className="fs-14 mb-4 lightBlack">No Response</div>
                   <div className="fs-14 fw-600 greyColor">
                     {nudgeDetailsMainSelector?.data?.data?.recipientCount -
-                      nudgeDetailsMainSelector?.data?.data
+                      (nudgeDetailsMainSelector?.data?.data
                         ?.totalAcceptedFollowerList +
-                      nudgeDetailsMainSelector?.data?.data?.disLikeUserList}
+                      nudgeDetailsMainSelector?.data?.data?.disLikeUserList)}
                     /
-                    {((nudgeDetailsMainSelector?.data?.data?.recipientCount -
-                      nudgeDetailsMainSelector?.data?.data
+                    {(((nudgeDetailsMainSelector?.data?.data?.recipientCount -
+                      (nudgeDetailsMainSelector?.data?.data
                         ?.totalAcceptedFollowerList +
-                      nudgeDetailsMainSelector?.data?.data?.disLikeUserList) /
+                      nudgeDetailsMainSelector?.data?.data?.disLikeUserList)) /
                       nudgeDetailsMainSelector?.data?.data?.recipientCount) *
-                      100}
+                      100).toFixed(2)}
                     %
                   </div>
                 </div>
