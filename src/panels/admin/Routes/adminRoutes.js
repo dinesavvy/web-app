@@ -6,7 +6,8 @@ import AdminDashboard from "../Components/AdminDashboard";
 import MerchantDetails from "../Components/MerchantDetails";
 import NudgeTemplate from "../Components/NudgeTemplate";
 import FollowerDetail from "../Components/FollowerDetails";
-import Promotions from "../Components/Promotions";s
+import Promotions from "../Components/Promotions";
+import Brands from "../Components/Brands";
 
 const adminRoutes = [
   {
@@ -60,6 +61,12 @@ const adminRoutes = [
     {
       path: "/admin/promotions",
       element: Promotions,
+      isPrivate: false,
+      isLayout: true,
+    },
+    {
+      path: "/admin/brands",
+      element: Brands,
       isPrivate: false,
       isLayout: true,
     },
