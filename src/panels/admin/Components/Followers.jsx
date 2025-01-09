@@ -9,7 +9,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { followersListHandler } from "../../../redux/action/followersList";
 import SearchSelect from "../Components/SearchSelect";
 import Loader from "../../../common/Loader/Loader";
-import { followerArchiveHandler } from "../../../redux/action/followerArchive";
+import { followerArchiveAction, followerArchiveHandler } from "../../../redux/action/followerArchive";
+import { useNavigate } from "react-router-dom";
 
 const Followers = () => {
   const [archive, setArchive] = useState(false);
@@ -19,9 +20,9 @@ const Followers = () => {
   const [searchArea, setSearchArea] = useState([]);
 
   const followerListSelector = useSelector((state) => state?.followeList);
-  console.log(followerListSelector, "followerListSelector");
 
   const dispatch = useDispatch();
+  const navigate = useNavigate()
 
   const handlePaginationChange = (page, pageSize) => {
     setPagination({ page, limit: pageSize });
@@ -42,7 +43,7 @@ const Followers = () => {
         // locationId: state?._id,
         page: pagination.page,
         limit: pagination.limit,
-        status: "Active",
+        status: archive ? "InActive" : "Active",
         searchString,
         searchArea,
       };
@@ -50,19 +51,46 @@ const Followers = () => {
     };
 
     fetchMerchants();
-  }, [pagination, searchString, searchArea]);
+  }, [pagination, searchString, searchArea, archive]);
 
-  const followerArchiveSelector = useSelector((state)=>state?.followerArchive)
-  console.log(followerArchiveSelector,"followerArchiveSelector")
+  const followerArchiveSelector = useSelector(
+    (state) => state?.followerArchive
+  );
 
   const addToArchiveFollowers = (item) => {
-    console.log(item,"item")
     let payload = {
       status: "InActive", //InActive, Active
       customerId: item?.userInfo?.customerId,
     };
-    dispatch(followerArchiveHandler(payload))
+    dispatch(followerArchiveHandler(payload));
   };
+
+  const addToList = (item) => {
+    let payload = {
+      status: "Active", //InActive, Active
+      customerId: item?.userInfo?.customerId,
+    };
+    dispatch(followerArchiveHandler(payload));
+  };
+
+  useEffect(() => {
+    if (followerArchiveSelector?.data?.statusCode === 200) {
+      const payload = {
+        // locationId: state?._id,
+        page: pagination.page,
+        limit: pagination.limit,
+        status: archive ? "InActive" : "Active",
+        searchString,
+        searchArea,
+      };
+      dispatch(followersListHandler(payload));
+      dispatch(followerArchiveAction.followerArchiveReset())
+    }
+  }, [followerArchiveSelector]);
+
+  const navigateToFollowerDetails = (item) =>{
+    navigate("/admin/followerList/followerDetails",{state:item})
+  }
 
   return (
     <>
@@ -88,7 +116,8 @@ const Followers = () => {
           </div>
         </div>
       </div> */}
-      {(followerListSelector?.isLoading || followerArchiveSelector?.isLoading) && <Loader />}
+      {(followerListSelector?.isLoading ||
+        followerArchiveSelector?.isLoading) && <Loader />}
       <div className="dashboard">
         <div className="tabPadding">
           <div className="d-flex justify-between align-center mb-20">
@@ -117,16 +146,23 @@ const Followers = () => {
           </div>
           {archive ? (
             <div className="merchantGrid mb-30">
-              <div className="cardFollow">
-                <div className="d-flex justify-between gap-12">
-                  <div className="d-flex align-center gap-12">
-                    <div className="initialName">dr</div>
-                    <div>
-                      <div className="fw-700">Jane Cooper</div>
-                      <div className="fs-14 fw-300 o5">#256501</div>
-                    </div>
-                  </div>
-                  {/* <div className="custom-checkbox">
+              {followerListSelector?.data?.data?.records?.map((item, index) => {
+                return (
+                  <div className="cardFollow" key={index}>
+                    <div className="d-flex justify-between gap-12">
+                      <div className="d-flex align-center gap-12">
+                        <div className="initialName">
+                          {item?.userInfo?.displayName.charAt(0) +
+                            item?.userInfo?.displayName.charAt(1)}
+                        </div>
+                        <div>
+                          <div className="fw-700">
+                            {item?.userInfo?.displayName}
+                          </div>
+                          <div className="fs-14 fw-300 o5">#256501</div>
+                        </div>
+                      </div>
+                      {/* <div className="custom-checkbox">
                     <label className="checkLabel">
                       <input
                         type="checkbox"
@@ -137,143 +173,81 @@ const Followers = () => {
                       <span className="checkmark"></span>
                     </label>
                   </div> */}
-                </div>
-                <div className="divider2"></div>
-                <div className="d-flex align-center gap-12 mb-10">
-                  <img src={emailCard} alt="" />
-                  <div className="fs-14">binhan628@gmail.com</div>
-                </div>
-                <div className="d-flex align-center gap-12">
-                  <img src={phoneCard} alt="" />
-                  <div className="fs-14">316-555-0116</div>
-                </div>
-                <div className="divider2"></div>
-                <div className="d-flex gap-10 mt-20 justify-end flexBtn">
-                  <div className="btnSecondary w-100 btn">Add to List</div>
-                  <div className="btnSecondary w-100 btn">View Details</div>
-                </div>
-              </div>
-              <div className="cardFollow">
-                <div className="d-flex justify-between gap-12">
-                  <div className="d-flex align-center gap-12">
-                    <div className="initialName">dr</div>
-                    <div>
-                      <div className="fw-700">Jane Cooper</div>
-                      <div className="fs-14 fw-300 o5">#256501</div>
+                    </div>
+                    <div className="divider2"></div>
+                    <div className="d-flex align-center gap-12 mb-10">
+                      <img src={emailCard} alt="" />
+                      <div className="fs-14">binhan628@gmail.com</div>
+                    </div>
+                    <div className="d-flex align-center gap-12">
+                      <img src={phoneCard} alt="" />
+                      <div className="fs-14">{item?.userInfo?.phoneNumber}</div>
+                    </div>
+                    <div className="divider2"></div>
+                    <div className="d-flex gap-10 mt-20 justify-end flexBtn">
+                      <div
+                        className="btnSecondary w-100 btn"
+                        onClick={() => addToList(item)}
+                      >
+                        Add to List
+                      </div>
+                      <div className="btnSecondary w-100 btn">View Details</div>
                     </div>
                   </div>
-                  {/* <div className="custom-checkbox">
-                    <label className="checkLabel">
-                      <input
-                        type="checkbox"
-                        onClick={() =>
-                          setArr((prevState) => [...prevState, "2"])
-                        }
-                      />
-                      <span className="checkmark"></span>
-                    </label>
-                  </div> */}
-                </div>
-                <div className="divider2"></div>
-                <div className="d-flex align-center gap-12 mb-10">
-                  <img src={emailCard} alt="" />
-                  <div className="fs-14">binhan628@gmail.com</div>
-                </div>
-                <div className="d-flex align-center gap-12">
-                  <img src={phoneCard} alt="" />
-                  <div className="fs-14">316-555-0116</div>
-                </div>
-                <div className="divider2"></div>
-                <div className="d-flex gap-10 mt-20 justify-end flexBtn">
-                  <div className="btnSecondary w-100 btn">Add to List</div>
-                  <div className="btnSecondary w-100 btn">View Details</div>
-                </div>
-              </div>
-              <div className="cardFollow">
-                <div className="d-flex justify-between gap-12">
-                  <div className="d-flex align-center gap-12">
-                    <div className="initialName">dr</div>
-                    <div>
-                      <div className="fw-700">Jane Cooper</div>
-                      <div className="fs-14 fw-300 o5">#256501</div>
-                    </div>
-                  </div>
-                  {/* <div className="custom-checkbox">
-                    <label className="checkLabel">
-                      <input type="checkbox" />
-                      <span className="checkmark"></span>
-                    </label>
-                  </div> */}
-                </div>
-                <div className="divider2"></div>
-                <div className="d-flex align-center gap-12 mb-10">
-                  <img src={emailCard} alt="" />
-                  <div className="fs-14">binhan628@gmail.com</div>
-                </div>
-                <div className="d-flex align-center gap-12">
-                  <img src={phoneCard} alt="" />
-                  <div className="fs-14">316-555-0116</div>
-                </div>
-                <div className="divider2"></div>
-                <div className="d-flex gap-10 mt-20 justify-end flexBtn">
-                  <div className="btnSecondary w-100 btn">Add to List</div>
-                  <div className="btnSecondary w-100 btn">View Details</div>
-                </div>
-              </div>
+                );
+              })}
             </div>
           ) : (
             <div className="merchantGrid mb-30">
-              {followerListSelector?.data?.data?.records?.map((item, index) => {
-                return (
-                  <>
-                    <div className="cardFollow" key={index}>
-                      <div className="d-flex justify-between gap-12">
-                        <div className="d-flex align-center gap-12">
-                          <div className="initialName">
-                            {item?.userInfo?.displayName.charAt(0) +
-                              item?.userInfo?.displayName.charAt(1)}
-                          </div>
-                          <div>
-                            <div className="fw-700">
-                              {item?.userInfo?.displayName}
+              {followerListSelector?.data?.data?.records?.length > 0 ? (
+                followerListSelector?.data?.data?.records?.map(
+                  (item, index) => {
+                    return (
+                      <div className="cardFollow" key={index}>
+                        <div className="d-flex justify-between gap-12">
+                          <div className="d-flex align-center gap-12">
+                            <div className="initialName">
+                              {item?.userInfo?.displayName.charAt(0) +
+                                item?.userInfo?.displayName.charAt(1)}
                             </div>
-                            <div className="fs-14 fw-300 o5">#256501</div>
+                            <div>
+                              <div className="fw-700">
+                                {item?.userInfo?.displayName}
+                              </div>
+                              <div className="fs-14 fw-300 o5">#256501</div>
+                            </div>
                           </div>
                         </div>
-                        {/* <div className="custom-checkbox">
-                          <label className="checkLabel">
-                            <input type="checkbox" />
-                            <span className="checkmark"></span>
-                          </label>
-                        </div> */}
-                      </div>
-                      <div className="divider2"></div>
-                      <div className="d-flex align-center gap-12 mb-10">
-                        <img src={emailCard} alt="" />
-                        <div className="fs-14">binhan628@gmail.com</div>
-                      </div>
-                      <div className="d-flex align-center gap-12">
-                        <img src={phoneCard} alt="" />
-                        <div className="fs-14">
-                          {item?.userInfo?.phoneNumber}
+                        <div className="divider2"></div>
+                        <div className="d-flex align-center gap-12 mb-10">
+                          <img src={emailCard} alt="" />
+                          <div className="fs-14">binhan628@gmail.com</div>
+                        </div>
+                        <div className="d-flex align-center gap-12">
+                          <img src={phoneCard} alt="" />
+                          <div className="fs-14">
+                            {item?.userInfo?.phoneNumber}
+                          </div>
+                        </div>
+                        <div className="divider2"></div>
+                        <div className="d-flex gap-10 mt-20 justify-end flexBtn">
+                          <div
+                            className="btnSecondary w-100 btn"
+                            onClick={() => addToArchiveFollowers(item)}
+                          >
+                            Archive
+                          </div>
+                          <div className="btnSecondary w-100 btn" onClick={()=>navigateToFollowerDetails(item)}>
+                            View Details
+                          </div>
                         </div>
                       </div>
-                      <div className="divider2"></div>
-                      <div className="d-flex gap-10 mt-20 justify-end flexBtn">
-                        <div
-                          className="btnSecondary w-100 btn"
-                          onClick={() => addToArchiveFollowers(item)}
-                        >
-                          Archive
-                        </div>
-                        <div className="btnSecondary w-100 btn">
-                          View Details
-                        </div>
-                      </div>
-                    </div>
-                  </>
-                );
-              })}
+                    );
+                  }
+                )
+              ) : (
+                <div className="no-data-found">No data found</div>
+              )}
             </div>
           )}
           <div className="d-flex align-center justify-between flexPagination">

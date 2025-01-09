@@ -7,7 +7,6 @@ import Loader from "../../../common/Loader/Loader";
 import moment from "moment";
 
 const NudgeDetail = ({ isOpen, toggleSidebar, nudgeDetailsMainSelector }) => {
-  console.log(nudgeDetailsMainSelector, "nudgeDetailsMainSelector");
   return (
     <>
       {/* Overlay */}
