@@ -50,7 +50,7 @@ const Promotions = () => {
                 </div>
                 <div className="d-flex justify-between align-center gap-10">
                   <div className="fs-16 fw-700">Coca Cola</div>
-                  <div className="fs-16 fw-600 roi blue">ROI: 5.1%</div>
+                  <div className="fs-16 fw-600 roi blue">Redeemed: 5.1%</div>
                 </div>
               </div>
               <div className="divider m-0"></div>
@@ -61,7 +61,7 @@ const Promotions = () => {
                     <div className="fs-14 fw-600">Chocolate Cake </div>
                   </div>
                   <div>
-                    <div className="fs-14 mb-4">Launch Date</div>
+                    <div className="fs-14 mb-4">Expiration Date</div>
                     <div className="fs-14 fw-600">08/30/2024</div>
                   </div>
                   <div>
@@ -69,7 +69,7 @@ const Promotions = () => {
                     <div className="fs-14 fw-600">$1,000</div>
                   </div>
                   <div>
-                    <div className="fs-14 mb-4">Nudge Credits</div>
+                    <div className="fs-14 mb-4">Qty/ Nudge Credits</div>
                     <div className="fs-14 fw-600">$100</div>
                   </div>
                 </div>
@@ -86,7 +86,7 @@ const Promotions = () => {
                 </div>
                 <div className="d-flex justify-between align-center gap-10">
                   <div className="fs-16 fw-700">Coca Cola</div>
-                  <div className="fs-16 fw-600 roi red">ROI: 4.9%</div>
+                  <div className="fs-16 fw-600 roi red">Redeemed: 4.9%</div>
                 </div>
               </div>
               <div className="divider m-0"></div>
@@ -97,7 +97,7 @@ const Promotions = () => {
                     <div className="fs-14 fw-600">Chocolate Cake </div>
                   </div>
                   <div>
-                    <div className="fs-14 mb-4">Launch Date</div>
+                    <div className="fs-14 mb-4">Expiration Date</div>
                     <div className="fs-14 fw-600">08/30/2024</div>
                   </div>
                   <div>
@@ -105,7 +105,7 @@ const Promotions = () => {
                     <div className="fs-14 fw-600">$1,000</div>
                   </div>
                   <div>
-                    <div className="fs-14 mb-4">Nudge Credits</div>
+                    <div className="fs-14 mb-4">Qty/ Nudge Credits</div>
                     <div className="fs-14 fw-600">$100</div>
                   </div>
                 </div>
@@ -122,7 +122,7 @@ const Promotions = () => {
                 </div>
                 <div className="d-flex justify-between align-center gap-10">
                   <div className="fs-16 fw-700">Coca Cola</div>
-                  <div className="fs-16 fw-600 roi green">ROI: 52%</div>
+                  <div className="fs-16 fw-600 roi green">Redeemed: 52%</div>
                 </div>
               </div>
               <div className="divider m-0"></div>
@@ -133,7 +133,7 @@ const Promotions = () => {
                     <div className="fs-14 fw-600">Chocolate Cake </div>
                   </div>
                   <div>
-                    <div className="fs-14 mb-4">Launch Date</div>
+                    <div className="fs-14 mb-4">Expiration Date</div>
                     <div className="fs-14 fw-600">08/30/2024</div>
                   </div>
                   <div>
@@ -141,7 +141,7 @@ const Promotions = () => {
                     <div className="fs-14 fw-600">$1,000</div>
                   </div>
                   <div>
-                    <div className="fs-14 mb-4">Nudge Credits</div>
+                    <div className="fs-14 mb-4">Qty/ Nudge Credits</div>
                     <div className="fs-14 fw-600">$100</div>
                   </div>
                 </div>

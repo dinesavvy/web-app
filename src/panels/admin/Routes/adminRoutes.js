@@ -8,6 +8,9 @@ import NudgeTemplate from "../Components/NudgeTemplate";
 import FollowerDetail from "../Components/FollowerDetails";
 import Promotions from "../Components/Promotions";
 import Brands from "../Components/Brands";
+import TeamMember from "../Components/TeamMember";
+import EditMember from "../Components/EditMember";
+import EditBrands from "../Components/EditBrands";
 
 const adminRoutes = [
   {
@@ -37,6 +40,24 @@ const adminRoutes = [
     {
       path: "/admin/merchant/details",
       element: MerchantDetails,
+      isPrivate: false,
+      isLayout: true,
+    },
+    {
+      path: "/admin/merchant/team-member",
+      element: TeamMember,
+      isPrivate: false,
+      isLayout: true,
+    },
+    {
+      path: "/admin/merchant/edit-member",
+      element: EditMember,
+      isPrivate: false,
+      isLayout: true,
+    },
+    {
+      path: "/admin/brands/edit",
+      element: EditBrands,
       isPrivate: false,
       isLayout: true,
     },

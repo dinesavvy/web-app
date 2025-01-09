@@ -35,8 +35,8 @@ const Sidebar = ({ isOpen ,setIsOpen}) => {
     { id: 4, name: "Merchants", icon: merchant, iconFull: merchantFull , navigate: "/admin/merchant/list" },
     { id: 5, name: "Followers", icon: consumers, iconFull: consumersFull, navigate: "/admin/merchant/followers" },
     { id: 6, name: "Nudges", icon: nudge, iconFull: nudgeFull,navigate: "/admin/nudges" },
-    { id: 7, name: "Promotions", icon: promotions, iconFull: promotionsFull },
-    { id: 8, name: "Brands", icon: brands, iconFull: brandsFull },
+    { id: 7, name: "Promotions", icon: promotions, iconFull: promotionsFull ,navigate : "/admin/promotions"},
+    { id: 8, name: "Brands", icon: brands, iconFull: brandsFull,navigate:"/admin/brands" },
     { id: 9, name: "Settings", icon: setting, iconFull: settingFull },
   ];
 

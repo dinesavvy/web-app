@@ -134,7 +134,7 @@ const Nudges = () => {
                       <div className="pc fs-14 fw-500">
                         {option?.businessName}
                       </div>
-                      <div className="fs-12">
+                      <div className="fs-12 oneLine">
                         {option?.address?.addressLine1 +
                           " " +
                           option?.address?.addressLine2 +
