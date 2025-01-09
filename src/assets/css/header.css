@@ -4,7 +4,7 @@ header{
     margin-bottom: 30px;
     position: sticky;
     top: 0  ;
-    z-index: 2;
+    z-index: 3;
 }
 .burgerMenu{
     height: 34px;
@@ -12,6 +12,24 @@ header{
 }
 .notification{
     height: 30px;
+    position: relative;
+    cursor: pointer;
+}
+.sup{
+    position: absolute;
+    font-size: 10px;
+    line-height: 10px;
+    background-color: #056DFF;
+    border: 1.17px solid #FFFFFF;
+    color: white;
+    border-radius: 50%;
+    height: 17px;
+    width: 17px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    right: -7px;
+    top: -7px;
 }
 
 @media (max-width:575.98px) {
@@ -22,5 +40,9 @@ header{
     .burgerMenu ,.burgerMenu img,.notification,.notification img{
         height: 24px;
         width: 24px;
+    }
+    .sup{
+        height: 14px;
+        width: 14px;
     }
   }

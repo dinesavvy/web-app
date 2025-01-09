@@ -354,10 +354,11 @@
 }
 
 .custom-select .select-options .active {
-  background-color: #e0e0e0;
-  font-weight: bold;
+  color: #056DFF;
 }
-
+.w-160{
+  min-width: 160px;
+}
 .imgGrid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -720,6 +721,9 @@ input[type="radio"]:checked + .custom-radio-button{
   padding: 10px;
   padding-top: 31px;
 }
+.p-20{
+  padding: 20px;
+}
 .promotionImage{
   height: 90px;
 }
@@ -758,6 +762,30 @@ input[type="radio"]:checked + .custom-radio-button{
   display: flex;
   flex-direction: column;
 }
+.m30{
+  margin: 30px 0 !important;
+}
+.changeBrandImage{
+  width: 290px;
+  height: 120px;
+  padding: 20px;
+  background-color: #F3F3F4;
+  border-radius: 22px;
+}
+.changeBrandImage img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.flexDirection{
+  flex-direction: column;
+}
+.oneLine{
+  width: 214px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 @media (max-width: 1499.98px) {
   .merchantGrid {
     grid-template-columns: repeat(2, 1fr);
@@ -776,9 +804,7 @@ input[type="radio"]:checked + .custom-radio-button{
     grid-template-columns: repeat(2, 1fr);
   }
 
-  .twoSpace {
-    grid-column: span 1;
-  }
+ 
 }
 
 @media (max-width: 1023.98px) {
@@ -806,6 +832,9 @@ input[type="radio"]:checked + .custom-radio-button{
 
   .twoSpace {
     grid-column: span 1;
+  }
+  .grid2 .twoSpace {
+    grid-column: span 2;
   }
   .flexWrapsm{
     flex-direction: column;
@@ -883,6 +912,9 @@ input[type="radio"]:checked + .custom-radio-button{
   }
   .reflectImage,.w240{
     width: 100%;
+  }
+  .changeBrandImage{
+    width: calc(100% - 40px);
   }
   .fs-18 {
     font-size: 14px;
