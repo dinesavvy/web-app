@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import searchIcon from "../../../assets/images/searchIcon.svg";
 import addCredits from "../../../assets/images/addCredits.svg";
 import radioSelected from "../../../assets/images/radioSelected.svg";
@@ -8,6 +8,7 @@ import NudgeDetail from "../Components/NudgeDetail";
 import { merchantsListHandler } from "../../../redux/action/merchantsList";
 import { useDispatch, useSelector } from "react-redux";
 import Loader from "../../../common/Loader/Loader";
+import axios from "axios";
 
 const Nudges = () => {
   const merchantsListSelector = useSelector((state) => state?.merchantsList);
@@ -18,7 +19,10 @@ const Nudges = () => {
     { value: "2", label: "Option 2", img: olive },
     { value: "3", label: "Option 3", img: olive },
   ];
-
+  const [items, setItems] = useState([]);
+  const [page, setPage] = useState(1);
+  const [loading, setLoading] = useState(false);
+  const scrollContainerRef = useRef(null);
   const [searchString, setSearchString] = useState("");
   const [selectedValue, setSelectedValue] = useState(options[0]?.value || "");
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -26,7 +30,6 @@ const Nudges = () => {
   const handleSearchChange = (value) => {
     setSearchString(value);
   };
-
 
   // useEffect(() => {
   //   const handleHorizontalScroll = () => {
@@ -51,7 +54,6 @@ const Nudges = () => {
   //   };
   // }, []);
 
-
   useEffect(() => {
     if (isSidebarOpen) {
       document.body.classList.add("overflow-Hidden");
@@ -67,7 +69,7 @@ const Nudges = () => {
   useEffect(() => {
     const fetchMerchants = () => {
       const payload = {
-        page: 1,
+        page: page,
         limit: 10,
         timeFrame: "today",
         searchString,
@@ -76,7 +78,7 @@ const Nudges = () => {
     };
 
     fetchMerchants();
-  }, [searchString]);
+  }, [searchString, page]);
 
   const toggleSidebar = () => {
     setIsSidebarOpen((prevState) => !prevState);
@@ -84,6 +86,19 @@ const Nudges = () => {
 
   const handleChange = (event) => {
     setSelectedValue(event.target.value);
+  };
+
+  // Function to fetch data
+
+  // Check if user scrolled to the end
+  const handleScroll = () => {
+    const container = scrollContainerRef.current;
+    if (
+      container.scrollLeft + container.offsetWidth >=
+      container.scrollWidth - 10 // 10px buffer for smoothness
+    ) {
+      setPage((prevPage) => prevPage + 1);
+    }
   };
 
   return (
@@ -125,7 +140,11 @@ const Nudges = () => {
             />
             <img src={searchIcon} alt="" className="absoluteImage" />
           </div>
-          <div className="overflowy">
+          <div
+            className="overflowy"
+            ref={scrollContainerRef}
+            onScroll={handleScroll}
+          >
             <div className="gap-20 nudgeGrid">
               {merchantsListSelector?.data?.data?.records?.map((option) => (
                 <label key={option.value} className="custom-label">
