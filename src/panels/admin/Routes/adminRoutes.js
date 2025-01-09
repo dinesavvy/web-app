@@ -6,7 +6,7 @@ import AdminDashboard from "../Components/AdminDashboard";
 import MerchantDetails from "../Components/MerchantDetails";
 import NudgeTemplate from "../Components/NudgeTemplate";
 import FollowerDetail from "../Components/FollowerDetails";
-import Promotions from "../Components/Promotions";s
+import Promotions from "../Components/Promotions";
 
 const adminRoutes = [
   {

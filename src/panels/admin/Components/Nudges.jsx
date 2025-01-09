@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import searchIcon from "../../../assets/images/searchIcon.svg";
 import addCredits from "../../../assets/images/addCredits.svg";
 import radioSelected from "../../../assets/images/radioSelected.svg";
@@ -11,22 +11,11 @@ import Loader from "../../../common/Loader/Loader";
 
 const Nudges = () => {
   const merchantsListSelector = useSelector((state) => state?.merchantsList);
-  console.log(merchantsListSelector, "merchantsListSelector");
-  
+
   const dispatch = useDispatch();
   const options = [
     { value: "1", label: "Option 1", img: olive },
     { value: "2", label: "Option 2", img: olive },
-    { value: "3", label: "Option 3", img: olive },
-    { value: "3", label: "Option 3", img: olive },
-    { value: "3", label: "Option 3", img: olive },
-    { value: "3", label: "Option 3", img: olive },
-    { value: "3", label: "Option 3", img: olive },
-    { value: "3", label: "Option 3", img: olive },
-    { value: "3", label: "Option 3", img: olive },
-    { value: "3", label: "Option 3", img: olive },
-    { value: "3", label: "Option 3", img: olive },
-    { value: "3", label: "Option 3", img: olive },
     { value: "3", label: "Option 3", img: olive },
   ];
 
@@ -38,13 +27,37 @@ const Nudges = () => {
     setSearchString(value);
   };
 
+
+  // useEffect(() => {
+  //   const handleHorizontalScroll = () => {
+  //     const container = document.getElementById("scrollable-container");
+  //     if (
+  //       container.scrollLeft + container.offsetWidth >=
+  //       container.scrollWidth - 100 // 100px buffer
+  //     ) {
+  //       setPage((prevPage) => prevPage + 1);
+  //     }
+  //   };
+
+  //   const container = document.getElementById("scrollable-container");
+  //   if (container) {
+  //     container.addEventListener("scroll", handleHorizontalScroll);
+  //   }
+
+  //   return () => {
+  //     if (container) {
+  //       container.removeEventListener("scroll", handleHorizontalScroll);
+  //     }
+  //   };
+  // }, []);
+
+
   useEffect(() => {
     if (isSidebarOpen) {
       document.body.classList.add("overflow-Hidden");
     } else {
       document.body.classList.remove("overflow-Hidden");
     }
-
     // Cleanup on component unmount
     return () => {
       document.body.classList.remove("overflow-Hidden");
