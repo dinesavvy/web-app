@@ -19,10 +19,10 @@ const GraphWithCircle = ({
             <div className="fs-26 fw-700">{value}</div>
           </div>
           {/* Merchant Dashboard */}
-          <div className="p12 mb-15">
+          {/* <div className="p12 mb-15">
             <div className="fs-16">{title}</div>
             <div className="fs-26 fw-700">{value}</div>
-          </div>
+          </div> */}
           <div className={`trend ${trend > 0 ? "trendGreen" : "trendRed"}`}>
             Trend {trend}%
           </div>

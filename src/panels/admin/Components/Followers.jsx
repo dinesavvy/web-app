@@ -9,8 +9,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { followersListHandler } from "../../../redux/action/followersList";
 import SearchSelect from "../Components/SearchSelect";
 import Loader from "../../../common/Loader/Loader";
-import { followerArchiveAction, followerArchiveHandler } from "../../../redux/action/followerArchive";
+import {
+  followerArchiveAction,
+  followerArchiveHandler,
+} from "../../../redux/action/followerArchive";
 import { useNavigate } from "react-router-dom";
+import moment from "moment";
 
 const Followers = () => {
   const [archive, setArchive] = useState(false);
@@ -22,7 +26,7 @@ const Followers = () => {
   const followerListSelector = useSelector((state) => state?.followeList);
 
   const dispatch = useDispatch();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const handlePaginationChange = (page, pageSize) => {
     setPagination({ page, limit: pageSize });
@@ -84,13 +88,13 @@ const Followers = () => {
         searchArea,
       };
       dispatch(followersListHandler(payload));
-      dispatch(followerArchiveAction.followerArchiveReset())
+      dispatch(followerArchiveAction.followerArchiveReset());
     }
   }, [followerArchiveSelector]);
 
-  const navigateToFollowerDetails = (item) =>{
-    navigate("/admin/followerList/followerDetails",{state:item})
-  }
+  const navigateToFollowerDetails = (item) => {
+    navigate("/admin/followerList/followerDetails", { state: item });
+  };
 
   return (
     <>
@@ -202,6 +206,7 @@ const Followers = () => {
               {followerListSelector?.data?.data?.records?.length > 0 ? (
                 followerListSelector?.data?.data?.records?.map(
                   (item, index) => {
+                    console.log(item, "item");
                     return (
                       <div className="cardFollow" key={index}>
                         <div className="d-flex justify-between gap-12">
@@ -214,10 +219,14 @@ const Followers = () => {
                               <div className="fw-700">
                                 {/* {item?.userInfo?.displayName} */}
                                 {item?.userInfo?.displayName &&
-      item.userInfo.displayName.charAt(0).toUpperCase() +
-      item.userInfo.displayName.slice(1)}
+                                  item.userInfo.displayName
+                                    .charAt(0)
+                                    .toUpperCase() +
+                                    item.userInfo.displayName.slice(1)}
                               </div>
-                              <div className="fs-14 fw-300 o5">#256501</div>
+                              <div className="fs-14 fw-300 o5">
+                                {moment(item?.createdAt).format("MMMM,YYYY")}
+                              </div>
                             </div>
                           </div>
                         </div>
@@ -240,7 +249,10 @@ const Followers = () => {
                           >
                             Archive
                           </div>
-                          <div className="btnSecondary w-100 btn" onClick={()=>navigateToFollowerDetails(item)}>
+                          <div
+                            className="btnSecondary w-100 btn"
+                            onClick={() => navigateToFollowerDetails(item)}
+                          >
                             View Details
                           </div>
                         </div>

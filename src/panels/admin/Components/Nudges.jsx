@@ -18,10 +18,8 @@ const Nudges = () => {
   const [activeTab, setActiveTab] = useState(true);
   const merchantsListSelector = useSelector((state) => state?.merchantsList);
   const nudgesListSelector = useSelector((state) => state?.nudgesList);
-  // console.log(nudgesListSelector, "nudgesListSelector");
 
   // For Nudge Details Data
-
   const nudgeDetailsMainSelector = useSelector(
     (state) => state?.nudgeDetailsMain
   );
@@ -37,7 +35,7 @@ const Nudges = () => {
   const [searchString, setSearchString] = useState("");
   const [selectedValue, setSelectedValue] = useState("");
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-console.log(selectedValue,"selectedValue")
+  console.log(selectedValue, "selectedValue");
   const handleTabClick = (tab) => {
     setActiveTab(tab); // Update the active tab
   };
@@ -65,7 +63,7 @@ console.log(selectedValue,"selectedValue")
   useEffect(() => {
     const fetchNudgesList = () => {
       const payload = {
-        locationId: "",
+        locationId: selectedValue?._id,
         page: pagination.page,
         limit: pagination.limit,
         searchString,
@@ -74,7 +72,7 @@ console.log(selectedValue,"selectedValue")
       dispatch(nudgesListHandler(payload));
     };
     fetchNudgesList();
-  }, [pagination, searchString, activeTab]);
+  }, [pagination, searchString, activeTab,selectedValue]);
 
   useEffect(() => {
     const fetchMerchants = () => {
@@ -174,10 +172,10 @@ console.log(selectedValue,"selectedValue")
                       name="option"
                       value={option.value}
                       checked={selectedValue?._id === option?._id} // Dynamically toggle based on state
-                      onChange={()=>handleChange(option)}
+                      onChange={() => handleChange(option)}
                       autoComplete="off"
                     />
-                    {console.log(selectedValue,"selectedValue")}
+                    {console.log(selectedValue, "selectedValue")}
                     <div className="custom-radio-button">
                       <img src={radioSelected} alt="radioSelected" />
                     </div>
@@ -212,157 +210,178 @@ console.log(selectedValue,"selectedValue")
             </div>
           </div>
         </div>
-        
-        <div className="card">
-          <div className="d-flex justify-between align-center gap-20 mb-20 flexmd">
-            <div className="fs-24 fw-600">Nudges</div>
-            <div className="btn btnSecondary p16 gap-8">
+
+        {selectedValue && (
+          <>
+            <div className="card">
+              <div className="d-flex justify-between align-center gap-20 mb-20 flexmd">
+                <div className="fs-24 fw-600">
+                  {selectedValue?.businessName}
+                </div>
+                {/* <div className="btn btnSecondary p16 gap-8">
               <img src={addCredits} alt="addCredits" />
               Create a Nudge
+            </div> */}
+              </div>
+              <div class="tabs-container tab3 tabing mb-20">
+                <div class="tabs">
+                  <button
+                    className={`tab-button ${
+                      activeTab === true ? "active" : ""
+                    }`}
+                    onClick={() => handleTabClick(true)}
+                  >
+                    Active
+                  </button>
+                  <button
+                    className={`tab-button ${
+                      activeTab === false ? "active" : ""
+                    }`}
+                    onClick={() => handleTabClick(false)}
+                  >
+                    Inactive
+                  </button>
+                </div>
+              </div>
+              <div className="merchantGrid mb-20">
+                {nudgesListSelector?.data?.data?.records?.length > 0 ? (
+                  nudgesListSelector?.data?.data?.records?.map(
+                    (item, index) => {
+                      return (
+                        <div className="merchantCard" key={index}>
+                          <div className="position-relative">
+                            <img
+                              className="w-100 merchantImg"
+                              src={item?.photoURL || restaurantCard}
+                              alt={item?.title}
+                            />
+                            <div className="freeAbsolute">
+                              <div className="fs-16 fw-700 mb-2">
+                                {item?.title}
+                              </div>
+                              <div className="fs-14">
+                                {item?.locationDetails?.address?.addressLine1 +
+                                  " " +
+                                  item?.locationDetails?.address?.addressLine2 +
+                                  " " +
+                                  item?.locationDetails?.address
+                                    ?.administrativeDistrictLevel1 +
+                                  " " +
+                                  item?.locationDetails?.address?.locality +
+                                  " " +
+                                  item?.locationDetails?.address?.postalCode +
+                                  " " +
+                                  item?.locationDetails?.address?.country}
+                              </div>
+                            </div>
+                          </div>
+                          <div className="bottomPadding">
+                            <div className="lightBlack fs-14 mb-20">
+                              Get 20% off on all large pizzas today! Limited
+                              time offer.
+                            </div>
+                            <div className="d-flex justify-between align-center gap-20 mb-8">
+                              <div className="fs-14 lightBlack ">Sent date</div>
+                              <div className="fs-14 fw-500">
+                                {moment(item?.createdAt).format("DD MMMM,YYYY")}
+                              </div>
+                            </div>
+                            <div className="d-flex justify-between align-center gap-20 mb-8">
+                              <div className="fs-14 lightBlack ">
+                                Expiration date
+                              </div>
+                              <div className="fs-14 fw-500">
+                                {moment(item?.createdAt).format("DD MMMM,YYYY")}
+                              </div>
+                            </div>
+                            <div className="divider2"></div>
+                            <div className="grid2 mb-20">
+                              <div>
+                                <div className="fs-14 mb-4 lightBlack">
+                                  Recipients:
+                                </div>
+                                <div className="fs-14 fw-600">
+                                  {item?.recipientCount}
+                                </div>
+                              </div>
+                              <div>
+                                <div className="fs-14 mb-4 lightBlack">
+                                  Accepted:
+                                </div>
+                                <div className="fs-14 fw-600 gc">
+                                  {item?.totalAcceptedFollowerList}/
+                                  {(
+                                    (item?.totalAcceptedFollowerList /
+                                      item?.recipientCount) *
+                                    100
+                                  ).toFixed(0)}
+                                  %
+                                </div>
+                              </div>
+                              <div>
+                                <div className="fs-14 mb-4 lightBlack">
+                                  Declined:
+                                </div>
+                                <div className="fs-14 fw-600 rc">
+                                  {item?.disLikeUserList}/
+                                  {(
+                                    (item?.disLikeUserList /
+                                      item?.recipientCount) *
+                                    100
+                                  ).toFixed(0)}
+                                  %
+                                </div>
+                              </div>
+                              <div>
+                                <div className="fs-14 mb-4 lightBlack">
+                                  No Response
+                                </div>
+                                <div className="fs-14 fw-600 greyColor">
+                                  {item?.recipientCount -
+                                    (item?.totalAcceptedFollowerList +
+                                      item?.disLikeUserList)}
+                                  /
+                                  {(
+                                    ((item?.recipientCount -
+                                      (item?.totalAcceptedFollowerList +
+                                        item?.disLikeUserList)) /
+                                      item?.recipientCount) *
+                                    100
+                                  ).toFixed(2)}
+                                  %
+                                </div>
+                              </div>
+                            </div>
+                            <div
+                              className="btn btnSecondary w-100"
+                              onClick={() => toggleSidebar(item)}
+                            >
+                              View Details
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    }
+                  )
+                ) : (
+                  <div className="noDataFound">No Data Found</div>
+                )}
+              </div>
+              <div className="d-flex align-center justify-between flexPagination">
+                <div className="fs-16">
+                  Showing {pagination.page} to {pagination.limit} of{" "}
+                  {merchantsListSelector?.data?.data?.recordsCount} Restaurants
+                </div>
+                <Pagination
+                  current={pagination.page}
+                  pageSize={pagination.limit}
+                  total={merchantsListSelector?.data?.data?.recordsCount}
+                  onChange={handlePaginationChange}
+                />
+              </div>
             </div>
-          </div>
-          <div class="tabs-container tab3 tabing mb-20">
-            <div class="tabs">
-              <button
-                className={`tab-button ${activeTab === true ? "active" : ""}`}
-                onClick={() => handleTabClick(true)}
-              >
-                Active
-              </button>
-              <button
-                className={`tab-button ${activeTab === false ? "active" : ""}`}
-                onClick={() => handleTabClick(false)}
-              >
-                Inactive
-              </button>
-            </div>
-          </div>
-          <div className="merchantGrid mb-20">
-            {nudgesListSelector?.data?.data?.records?.length > 0 ? (
-              nudgesListSelector?.data?.data?.records?.map((item, index) => {
-                return (
-                  <div className="merchantCard" key={index}>
-                    <div className="position-relative">
-                      <img
-                        className="w-100 merchantImg"
-                        src={item?.photoURL || restaurantCard}
-                        alt={item?.title}
-                      />
-                      <div className="freeAbsolute">
-                        <div className="fs-16 fw-700 mb-2">{item?.title}</div>
-                        <div className="fs-14">
-                          {item?.locationDetails?.address?.addressLine1 +
-                            " " +
-                            item?.locationDetails?.address?.addressLine2 +
-                            " " +
-                            item?.locationDetails?.address
-                              ?.administrativeDistrictLevel1 +
-                            " " +
-                            item?.locationDetails?.address?.locality +
-                            " " +
-                            item?.locationDetails?.address?.postalCode +
-                            " " +
-                            item?.locationDetails?.address?.country}
-                        </div>
-                      </div>
-                    </div>
-                    <div className="bottomPadding">
-                      <div className="lightBlack fs-14 mb-20">
-                        Get 20% off on all large pizzas today! Limited time
-                        offer.
-                      </div>
-                      <div className="d-flex justify-between align-center gap-20 mb-8">
-                        <div className="fs-14 lightBlack ">Sent date</div>
-                        <div className="fs-14 fw-500">
-                          {moment(item?.createdAt).format("DD MMMM,YYYY")}
-                        </div>
-                      </div>
-                      <div className="d-flex justify-between align-center gap-20 mb-8">
-                        <div className="fs-14 lightBlack ">Expiration date</div>
-                        <div className="fs-14 fw-500">
-                          {moment(item?.createdAt).format("DD MMMM,YYYY")}
-                        </div>
-                      </div>
-                      <div className="divider2"></div>
-                      <div className="grid2 mb-20">
-                        <div>
-                          <div className="fs-14 mb-4 lightBlack">
-                            Recipients:
-                          </div>
-                          <div className="fs-14 fw-600">
-                            {item?.recipientCount}
-                          </div>
-                        </div>
-                        <div>
-                          <div className="fs-14 mb-4 lightBlack">Accepted:</div>
-                          <div className="fs-14 fw-600 gc">
-                            {item?.totalAcceptedFollowerList}/
-                            {(
-                              (item?.totalAcceptedFollowerList /
-                                item?.recipientCount) *
-                              100
-                            ).toFixed(0)}
-                            %
-                          </div>
-                        </div>
-                        <div>
-                          <div className="fs-14 mb-4 lightBlack">Declined:</div>
-                          <div className="fs-14 fw-600 rc">
-                            {item?.disLikeUserList}/
-                            {(
-                              (item?.disLikeUserList / item?.recipientCount) *
-                              100
-                            ).toFixed(0)}
-                            %
-                          </div>
-                        </div>
-                        <div>
-                          <div className="fs-14 mb-4 lightBlack">
-                            No Response
-                          </div>
-                          <div className="fs-14 fw-600 greyColor">
-                            {item?.recipientCount -
-                              (item?.totalAcceptedFollowerList +
-                                item?.disLikeUserList)}
-                            /
-                            {(
-                              ((item?.recipientCount -
-                                (item?.totalAcceptedFollowerList +
-                                  item?.disLikeUserList)) /
-                                item?.recipientCount) *
-                              100
-                            ).toFixed(2)}
-                            %
-                          </div>
-                        </div>
-                      </div>
-                      <div
-                        className="btn btnSecondary w-100"
-                        onClick={() => toggleSidebar(item)}
-                      >
-                        View Details
-                      </div>
-                    </div>
-                  </div>
-                );
-              })
-            ) : (
-              <div className="noDataFound">No Data Found</div>
-            )}
-          </div>
-          <div className="d-flex align-center justify-between flexPagination">
-            <div className="fs-16">
-              Showing {pagination.page} to {pagination.limit} of{" "}
-              {merchantsListSelector?.data?.data?.recordsCount} Restaurants
-            </div>
-            <Pagination
-              current={pagination.page}
-              pageSize={pagination.limit}
-              total={merchantsListSelector?.data?.data?.recordsCount}
-              onChange={handlePaginationChange}
-            />
-          </div>
-        </div>
+          </>
+        )}
       </div>
       {/* {isSidebarOpen && ( */}
       <NudgeDetail

@@ -9,6 +9,8 @@ const SearchSelect = ({ onSearchChange, onSearchAreaChange }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [searchInput, setSearchInput] = useState("");
   const dropdownRef = useRef(null); // Reference for the dropdown container
+  const location = useLocation();
+  console.log(location, "location");
 
   const options = [
     "city",
@@ -19,11 +21,17 @@ const SearchSelect = ({ onSearchChange, onSearchAreaChange }) => {
     "area",
   ];
 
+  const followerListFilter = [
+    "Restaurants following",
+    "Number of friends",
+    "Same prefences",
+    "What they love",
+    "Same accepeted nudges",
+  ];
+
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
-
-  const location = useLocation();
 
   const handleSelect = (option) => {
     const updatedSelectedItems = selectedItems.includes(option)
@@ -70,47 +78,66 @@ const SearchSelect = ({ onSearchChange, onSearchAreaChange }) => {
             type="text"
             value={searchInput}
             onChange={handleSearchInputChange}
-            placeholder={location.pathname === "/admin/merchant/followers" ?"Search by preferences, what they love or nudges":"Search Merchants"}
+            placeholder={
+              location.pathname === "/admin/merchant/followers"
+                ? "Search by preferences, what they love or nudges"
+                : "Search Merchants"
+            }
+            autoComplete="off"
           />
           <img src={searchIcon} alt="" className="absoluteImage" />
         </div>
-        {location.pathname !== "/admin/merchant/followers" && (
-          <div className="dropdown-container" ref={dropdownRef}>
-            {/* Dropdown */}
-            <div className="dropdown-header" onClick={toggleDropdown}>
-              <button className="dropdown-button">
-                <img src={filterIcon} alt="" />
-                Filter
-              </button>
-            </div>
-            {isDropdownOpen && (
-              <div className="dropdown-list">
-                <div className="lineSearch w-100">
-                  <input
-                    type="text"
-                    name="text"
-                    placeholder="Filter by..."
-                    id="text"
-                  />
-                  <img src={searchIcon} alt="" className="absoluteImage" />
-                </div>
-                {options.map((option, index) => (
-                  <div key={index} className="dropdown-item custom-checkbox">
-                    <label className="checkLabel">
-                      <input
-                        type="checkbox"
-                        checked={selectedItems.includes(option)}
-                        onChange={() => handleSelect(option)}
-                      />
-                      <span class="checkmark"></span>
-                      {option}
-                    </label>
-                  </div>
-                ))}
-              </div>
-            )}
+        {/* {location.pathname !== "/admin/merchant/followers" && ( */}
+        <div className="dropdown-container" ref={dropdownRef}>
+          {/* Dropdown */}
+          <div className="dropdown-header" onClick={toggleDropdown}>
+            <button className="dropdown-button">
+              <img src={filterIcon} alt="" />
+              Filter
+            </button>
           </div>
-        )}
+          {isDropdownOpen && (
+            <div className="dropdown-list">
+              <div className="lineSearch w-100">
+                <input
+                  type="text"
+                  name="text"
+                  placeholder="Filter by..."
+                  id="text"
+                />
+                <img src={searchIcon} alt="" className="absoluteImage" />
+              </div>
+              {location?.pathname !== "/admin/merchant/followers"
+                ? options.map((option, index) => (
+                    <div key={index} className="dropdown-item custom-checkbox">
+                      <label className="checkLabel">
+                        <input
+                          type="checkbox"
+                          checked={selectedItems.includes(option)}
+                          onChange={() => handleSelect(option)}
+                        />
+                        <span className="checkmark"></span>
+                        {option}
+                      </label>
+                    </div>
+                  ))
+                : followerListFilter.map((option, index) => (
+                    <div key={index} className="dropdown-item custom-checkbox">
+                      <label className="checkLabel">
+                        <input
+                          type="checkbox"
+                          checked={selectedItems.includes(option)}
+                          onChange={() => handleSelect(option)}
+                        />
+                        <span className="checkmark"></span>
+                        {option}
+                      </label>
+                    </div>
+                  ))}
+            </div>
+          )}
+        </div>
+        {/* )} */}
       </div>
 
       {/* Selected Items */}

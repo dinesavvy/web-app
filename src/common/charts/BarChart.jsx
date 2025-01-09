@@ -50,7 +50,7 @@ const BarChart = ({
     isDatasMap === true
       ? Array.isArray(datas) // Check if nextDatasets is an array
         ? datas.map((dataSet, index) => ({
-            label: `Dataset ${index + 1}`,
+            label: labels[index],
             data: [dataSet],
             backgroundColor: colors[index % colors.length],
             borderWidth: 1,
@@ -88,8 +88,18 @@ const BarChart = ({
       },
       tooltip: {
         callbacks: {
-          label: (tooltipItem) => {
-            return `Value: ${tooltipItem.raw}`;
+          title: function (context) {
+            // Display the x-axis label for the hovered bar
+            const dataset = context[0]?.dataset; // Current dataset
+            const dataIndex = context[0]?.dataIndex; // Index of the hovered bar
+
+            if (dataset && dataIndex != null) {
+              return dataset.label; // Show the dataset label as the title
+            }
+          },
+          label: function (context) {
+            // Display the label and data for the hovered bar
+            return `${context.dataset.label}: ${context.raw}`;
           },
         },
       },
