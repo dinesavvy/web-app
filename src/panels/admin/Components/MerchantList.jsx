@@ -3,6 +3,8 @@ import "../../../assets/css/merchant.css";
 import SearchSelect from "../Components/SearchSelect";
 import olive from "../../../assets/images/olive.png";
 import countIcon from "../../../assets/images/countIcon.svg";
+import countIconRed from "../../../assets/images/countIconRed.svg";
+
 import { Pagination } from "antd";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -153,8 +155,8 @@ const MerchantList = () => {
                           </div>
                           <div>
                             <div className="fs-14 mb-4">Nudges Accepted</div>
-                            <div className="count">
-                              <img src={countIcon} alt="" />
+                            <div className="count countred">
+                              <img src={countIconRed} alt="" />
                               {item?.nudge?.timeFrameFollowerNudgeAcceptCount}
                             </div>
                           </div>

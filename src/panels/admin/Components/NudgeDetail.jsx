@@ -52,7 +52,8 @@ const NudgeDetail = ({ isOpen, toggleSidebar, nudgeDetailsMainSelector }) => {
                     ?.postalCode}
               </div>
               <div className="lightBlack fs-14 o5">
-                Get 20% off on all large pizzas today! Limited time offer.
+                {/* Get 20% off on all large pizzas today! Limited time offer. */}
+                {nudgeDetailsMainSelector?.data?.data?.message}
               </div>
               <div className="divider2"></div>
               <div className="d-flex justify-between align-center gap-20 mb-10">
@@ -83,11 +84,11 @@ const NudgeDetail = ({ isOpen, toggleSidebar, nudgeDetailsMainSelector }) => {
               <div className="fs-14 mb-20">
                 Free drink on Happy Hours! From 07:00 PM to 08:00 PM
               </div>
-              <div className="lightBlack fs-14 mb-10">Brand</div>
+              {/* <div className="lightBlack fs-14 mb-10">Brand</div>
               <div className="brandFlex">
                 <div>Wine</div>
                 <div>Drinks</div>
-              </div>
+              </div> */}
               <div className="divider2"></div>
               <div className="grid2 mb-20">
                 <div>
