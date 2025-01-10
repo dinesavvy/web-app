@@ -1695,6 +1695,32 @@ const MerchantDetails = () => {
                   </div>
                 </div>
                 <div className="divider2"></div>
+                <div className="d-flex align-center justify-between mb-15">
+                <div>
+                  <span className="fw-16">Nudges Goal: </span>
+                  <span className="fw-700 fs-20">15</span>
+                </div>
+                <div>
+                  <span className="fs-14">Sent </span>
+                  <span className="fs-18 gc fw-700">10</span>
+                </div>
+              </div>
+              <div className="range mb-15">
+                <div className="rangePercentage" style={{ width: "50%" }}></div>
+              </div>
+              <div className="fs-14 fw-500 grey mb-20">
+                You are just 50% behind to achieve Goal
+              </div>
+              <div className="weekNudge pc mb-20">
+                <div className="fs-18 fw-600">Nudges Expected This Week</div>
+                <div className="fw-700 fs-20">124</div>
+              </div>
+              <div className="card">
+                <div className="fs-20 fw-700 d-flex gap-20 align-center justify-between">
+                  <div>Nudge Credits</div>
+                  <div>44</div>
+                </div>
+                <div className="divider2"></div>
                 <div className="d-flex justify-between align-center gap-20 mb-6">
                   <div className="fs-16 grey fw-500">Previous balance</div>
                   <div className="fs-20 fw-700">30</div>
@@ -1710,6 +1736,15 @@ const MerchantDetails = () => {
                   <div className="gc fs-20 fw-700">+7</div>
                 </div>
                 <div className="divider2"></div>
+                <div className="d-flex justify-between align-center gap-20 mb-20">
+                  <div className="fs-16 grey fw-500">
+                    Nudge credits added today
+                  </div>
+                  <div className="gc fs-20 fw-700">+14</div>
+                </div>
+                <div className="mb-16">
+                  <input type="text" placeholder="Enter number of credits" />
+                </div>
                 <div className="d-flex justify-between align-center gap-20 mb-20">
                   <div className="fs-16 grey fw-500">
                     Nudge credits added today
@@ -1747,6 +1782,7 @@ const MerchantDetails = () => {
                     Add Credits
                   </div>
                 </div>
+              </div>
               </div>
 
               <div className="card">

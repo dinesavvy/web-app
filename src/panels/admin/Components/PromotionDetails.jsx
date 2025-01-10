@@ -9,6 +9,7 @@ import PromotionCart from "./PromotionCart";
 const PromotionDetails = ({ isOpen, toggleDetails }) => {
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [openIndex, setOpenIndex] = useState(null);
+  const [addFund, setAddFund] = useState(false);
 
   const toggleAccordion = (index) => {
     setOpenIndex(index === openIndex ? null : index);
@@ -97,51 +98,107 @@ const PromotionDetails = ({ isOpen, toggleDetails }) => {
             {items.map((item, index) => (
               <>
                 <div key={index} className="accordionItem">
-                <div
-                  className="accordionHeader fs-16 fw-700"
-                  onClick={() => toggleAccordion(index)}
-                >
-                  <div>{item.title}</div>
-                  <div className="d-flex align-center gap-16">
-                  <div className="fs-16 fw-600 roi blue">
-                  Accepted
+                  <div
+                    className="accordionHeader fs-16 fw-700"
+                    onClick={() => toggleAccordion(index)}
+                  >
+                    <div>{item.title}</div>
+                    <div className="d-flex align-center gap-16">
+                      <div className="fs-16 fw-600 roi blue">Accepted</div>
+                      <div
+                        className={`arrow ${openIndex === index ? "open" : ""}`}
+                      >
+                        <img src={arrowUp} alt="arrowUp" className="arrowUp" />
+                      </div>
+                    </div>
                   </div>
                   <div
-                    className={`arrow ${openIndex === index ? "open" : ""}`}
+                    className={`accordion-content ${
+                      openIndex === index ? "open" : ""
+                    }`}
                   >
-                    <img src={arrowUp} alt="arrowUp" className="arrowUp" />
-                  </div>
+                    <div className="imageAccorddian mb-20">
+                      <img
+                        src={olive}
+                        alt="olive"
+                        className="h-100 object-cover"
+                      />
+                    </div>
+                    <div className="grid2 mb-20">
+                      <div>
+                        <div className="fs-14 mb-4">Quantity/Nudge Cedit</div>
+                        <div className="fs-14 fw-600">1,000 </div>
+                      </div>
+                      <div>
+                        <div className="fs-14 mb-4">MSRP</div>
+                        <div className="fs-14 fw-600">$23.99</div>
+                      </div>
+                      <div>
+                        <div className="fs-14 mb-4">
+                          Price for Reimbursement
+                        </div>
+                        <div className="fs-14 fw-600">$24.99</div>
+                      </div>
+                      <div>
+                        <div className="fs-14 mb-4">Promotional Funds</div>
+                        <div className="fs-14 fw-600">$500/$1000</div>
+                      </div>
+                    </div>
+                    <div className="d-flex align-center justify-between mb-4">
+                      <div className="fs-14">Redeemed</div>
+                      <div className="fs-14 fw-600">30/256</div>
+                    </div>
+                    <div className="range h22 ">
+                      <div
+                        className="rangePercentage"
+                        style={{ width: "50%" }}
+                      ></div>
+                      <div className="percentageAbsolute fs-14 fw-500">50%</div>
+                    </div>
+                    <div className="divider2"></div>
+                    {addFund === true ? (
+                      <>
+                        <div className="w-100 d-flex flexDirection h-100 justify-between mb-20">
+                          <label
+                            htmlFor="name"
+                            className="grey mb-10 fs-16 fw-500"
+                          >
+                            Promotional Funds
+                          </label>
+                          <input
+                            type="text"
+                            className="input bgWhite"
+                            placeholder="Add Funds"
+                          />
+                        </div>
+                        <div className="d-flex align-center gap-10">
+                          <div
+                            className="btn btnSecondary bgTrans w-100"
+                            onClick={() => setAddFund(false)}
+                          >
+                            Cancel
+                          </div>
+                          <div
+                            className="btn w-100"
+                            onClick={() => toggleCart()}
+                          >
+                            Continue
+                          </div>
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        <div
+                          className="btnSecondary btn bgTrans"
+                          onClick={() => setAddFund(true)}
+                        >
+                          Add Fund
+                        </div>
+                      </>
+                    )}
                   </div>
                 </div>
-                <div
-                  className={`accordion-content ${
-                    openIndex === index ? "open" : ""
-                  }`}
-                >
-                  <div className="imageAccorddian mb-20">
-                    <img src={olive} alt="olive" className="h-100 object-cover" />
-                  </div>
-                  <div className="grid2 mb-20">
-                  <div>
-                    <div className="fs-14 mb-4">Quantity/Nudge Cedit</div>
-                    <div className="fs-14 fw-600">1,000  </div>
-                  </div>
-                  <div>
-                    <div className="fs-14 mb-4">MSRP</div>
-                    <div className="fs-14 fw-600">$23.99</div>
-                  </div>
-                  <div>
-                    <div className="fs-14 mb-4">Price for Reimbursement</div>
-                    <div className="fs-14 fw-600">$24.99</div>
-                  </div>
-                  <div>
-                    <div className="fs-14 mb-4">Promotional Funds</div>
-                    <div className="fs-14 fw-600">$500/$1000</div>
-                  </div>
-                </div>
-                </div>
-              </div>
-              <div className="divider2"></div>
+                <div className="divider2"></div>
               </>
             ))}
           </div>

@@ -482,6 +482,27 @@
   background-color: #5FEE6D;
   border-radius: 20px;
 }
+.h22{
+  height: 22px;
+  position: relative;
+}
+.h22 .rangePercentage{
+  height: 22px;
+}
+
+.bgWhite{
+  background-color: white !important;
+}
+.percentageAbsolute{
+  position: absolute;
+  transform: translate(-50%,-50%);
+  left: 50%;
+  top: 50%;
+
+}
+.bgTrans{
+  background-color: transparent;
+}
 .weekNudge{
   background-color: #ECF4FF;
   border-radius: 12px;
@@ -786,6 +807,9 @@ input[type="radio"]:checked + .custom-radio-button{
 }
 .overflowCart2{
   height: calc(100vh - 120px);
+}
+.overflowCart3{
+  height: calc(100vh - 510px);
 }
 .brandImagePromo {
   width: calc(100% - 40px);

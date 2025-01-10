@@ -348,6 +348,9 @@ iframe{
   .card.w-100,.card.mx369{
     width: calc(100% - 40px) !important;
   }
+  .tab3{
+    overflow-x: auto;
+  }
 }
 @media (max-width:767.98px) {
   .overviewGrid2{
@@ -357,9 +360,7 @@ iframe{
     flex-direction: column;
     gap: 20px;
   }
-  .tab3{
-    overflow-x: auto;
-  }
+ 
   .tab2{
     width: 100%;
   }
