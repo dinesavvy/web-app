@@ -182,6 +182,7 @@ const MerchantDetails = () => {
           locationId: state?._id,
           page: pagination.page,
           limit: pagination.limit,
+          status:"Active",
           searchString,
           searchArea,
         };

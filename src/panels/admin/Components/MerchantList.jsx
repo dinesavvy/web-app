@@ -155,8 +155,15 @@ const MerchantList = () => {
                           </div>
                           <div>
                             <div className="fs-14 mb-4">Nudges Accepted</div>
-                            <div className="count countred">
-                              <img src={countIconRed} alt="" />
+                            <div className={parseInt(item?.performance) > 33?"count ":"count countred"}>
+                              <img
+                                src={
+                                  parseInt(item?.performance) > 33
+                                    ? countIcon
+                                    : countIconRed
+                                }
+                                alt=""
+                              />
                               {item?.nudge?.timeFrameFollowerNudgeAcceptCount}
                             </div>
                           </div>

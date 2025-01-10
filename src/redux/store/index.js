@@ -7,6 +7,7 @@ import nudgesListSlice from "../action/nudgesList";
 import followersDetailsSlice from "../action/followersDetails";
 import nudgeDetailsMainSlice from "../action/nudgeDetails";
 import followerArchiveSlice from "../action/followerArchive";
+import analyticsDetailsSlice from "../action/analyticsDetails";
 
 const store = configureStore({
   reducer: {
@@ -18,6 +19,7 @@ const store = configureStore({
     followerDetails: followersDetailsSlice,
     nudgeDetailsMain: nudgeDetailsMainSlice,
     followerArchive: followerArchiveSlice,
+    analyticsDetails: analyticsDetailsSlice,
   },
 });
 

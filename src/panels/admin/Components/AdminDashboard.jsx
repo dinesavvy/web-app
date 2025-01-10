@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../../../assets/css/dashboard.css";
 import chartnudge from "../../../assets/images/chartnudge.svg";
 import chartPromotion from "../../../assets/images/chartPromotion.svg";
@@ -14,6 +14,8 @@ import DoughnutChart from "../../../common/charts/DoughnutChart";
 import { Pagination } from "antd";
 import AreaChart from "../../../common/charts/AreaChart";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { analyticsDetailsHandler } from "../../../redux/action/analyticsDetails";
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
@@ -27,9 +29,18 @@ const AdminDashboard = () => {
     total: 100,
   };
 
+  const analyticsDetailsSelector = useSelector((state)=>state?.analyticsDetails)
+
   const handleToggle = (index) => {
     setOpenIndex(openIndex === index ? null : index); // Toggle the clicked panel
   };
+
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    dispatch(analyticsDetailsHandler())
+  }, [])
+  
 
   const Test2 = () => {
     return (
