@@ -37,7 +37,6 @@ const SearchSelect = ({ onSearchChange, onSearchAreaChange }) => {
     const updatedSelectedItems = selectedItems.includes(option)
       ? selectedItems.filter((item) => item !== option)
       : [...selectedItems, option];
-
     setSelectedItems(updatedSelectedItems);
     onSearchAreaChange(updatedSelectedItems); // Notify parent
   };

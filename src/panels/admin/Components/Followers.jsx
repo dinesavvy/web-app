@@ -38,6 +38,7 @@ const Followers = () => {
   };
 
   const handleSearchAreaChange = (selectedAreas) => {
+    console.log(selectedAreas,"selectedAreas")
     setSearchArea(selectedAreas);
   };
 
@@ -80,7 +81,6 @@ const Followers = () => {
   useEffect(() => {
     if (followerArchiveSelector?.data?.statusCode === 200) {
       const payload = {
-        // locationId: state?._id,
         page: pagination.page,
         limit: pagination.limit,
         status: archive ? "InActive" : "Active",

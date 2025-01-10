@@ -30,6 +30,7 @@ const AdminDashboard = () => {
   };
 
   const analyticsDetailsSelector = useSelector((state)=>state?.analyticsDetails)
+  console.log(analyticsDetailsSelector,"analyticsDetailsSelector")
 
   const handleToggle = (index) => {
     setOpenIndex(openIndex === index ? null : index); // Toggle the clicked panel
@@ -220,7 +221,7 @@ const AdminDashboard = () => {
         <div className="d-flex flexWrap gap-20">
           <div className="mx292">
             <div className="overviewCard fs-16 mb-10">Overview</div>
-            <OverviewGrid />
+            <OverviewGrid analyticsDetailsSelector ={analyticsDetailsSelector}/>
           </div>
           <div className="w-100">
             <TabContainer
@@ -234,8 +235,9 @@ const AdminDashboard = () => {
         <div className="d-grid chartGrid gap-20">
           <PromotionCard
             title="Promotions"
-            count={80}
+            count={analyticsDetailsSelector?.data?.data?.targetPromotionsCount}
             chartPromotionImage={chartPromotion}
+            // analyticsDetailsSelector ={analyticsDetailsSelector}
             buttonText="See promotions"
             middleComponent={
               <BarChart
@@ -253,7 +255,7 @@ const AdminDashboard = () => {
           />
           <PromotionCard
             title="Nudges"
-            count={77}
+            count={analyticsDetailsSelector?.data?.data?.targetNudgeCount}
             chartPromotionImage={chartnudge}
             buttonText="See Nudges"
             onButtonClick={() => navigate("/admin/nudges")}
