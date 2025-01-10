@@ -10,7 +10,7 @@ const SearchSelect = ({ onSearchChange, onSearchAreaChange }) => {
   const [searchInput, setSearchInput] = useState("");
   const dropdownRef = useRef(null); // Reference for the dropdown container
   const location = useLocation();
-  console.log(location, "location");
+  console.log(selectedItems, "selectedItems");
 
   const options = [
     "city",
@@ -37,7 +37,6 @@ const SearchSelect = ({ onSearchChange, onSearchAreaChange }) => {
     const updatedSelectedItems = selectedItems.includes(option)
       ? selectedItems.filter((item) => item !== option)
       : [...selectedItems, option];
-
     setSelectedItems(updatedSelectedItems);
     onSearchAreaChange(updatedSelectedItems); // Notify parent
   };
@@ -79,7 +78,8 @@ const SearchSelect = ({ onSearchChange, onSearchAreaChange }) => {
             value={searchInput}
             onChange={handleSearchInputChange}
             placeholder={
-              location.pathname === "/admin/merchant/followers"
+              location.pathname === "/admin/merchant/followers" ||
+              location.pathname === "/admin/merchant/details"
                 ? "Search by preferences, what they love or nudges"
                 : "Search Merchants"
             }
@@ -107,33 +107,36 @@ const SearchSelect = ({ onSearchChange, onSearchAreaChange }) => {
                 />
                 <img src={searchIcon} alt="" className="absoluteImage" />
               </div>
-              {location?.pathname !== "/admin/merchant/followers"
-                ? options.map((option, index) => (
-                    <div key={index} className="dropdown-item custom-checkbox">
-                      <label className="checkLabel">
-                        <input
-                          type="checkbox"
-                          checked={selectedItems.includes(option)}
-                          onChange={() => handleSelect(option)}
-                        />
-                        <span className="checkmark"></span>
-                        {option}
-                      </label>
-                    </div>
-                  ))
-                : followerListFilter.map((option, index) => (
-                    <div key={index} className="dropdown-item custom-checkbox">
-                      <label className="checkLabel">
-                        <input
-                          type="checkbox"
-                          checked={selectedItems.includes(option)}
-                          onChange={() => handleSelect(option)}
-                        />
-                        <span className="checkmark"></span>
-                        {option}
-                      </label>
-                    </div>
-                  ))}
+              {(location?.pathname === "/admin/merchant/followers" ||
+                location?.pathname === "/admin/merchant/details") &&
+                followerListFilter.map((option, index) => (
+                  <div key={index} className="dropdown-item custom-checkbox">
+                    <label className="checkLabel">
+                      <input
+                        type="checkbox"
+                        checked={selectedItems.includes(option)}
+                        onChange={() => handleSelect(option)}
+                      />
+                      <span className="checkmark"></span>
+                      {option}
+                    </label>
+                  </div>
+                ))}
+
+              {location?.pathname === "/admin/merchant/list" &&
+                options.map((option, index) => (
+                  <div key={index} className="dropdown-item custom-checkbox">
+                    <label className="checkLabel">
+                      <input
+                        type="checkbox"
+                        checked={selectedItems.includes(option)}
+                        onChange={() => handleSelect(option)}
+                      />
+                      <span className="checkmark"></span>
+                      {option}
+                    </label>
+                  </div>
+                ))}
             </div>
           )}
         </div>

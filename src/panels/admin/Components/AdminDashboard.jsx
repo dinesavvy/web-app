@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../../../assets/css/dashboard.css";
 import chartnudge from "../../../assets/images/chartnudge.svg";
 import chartPromotion from "../../../assets/images/chartPromotion.svg";
@@ -14,6 +14,8 @@ import DoughnutChart from "../../../common/charts/DoughnutChart";
 import { Pagination } from "antd";
 import AreaChart from "../../../common/charts/AreaChart";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { analyticsDetailsHandler } from "../../../redux/action/analyticsDetails";
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
@@ -27,9 +29,19 @@ const AdminDashboard = () => {
     total: 100,
   };
 
+  const analyticsDetailsSelector = useSelector((state)=>state?.analyticsDetails)
+  console.log(analyticsDetailsSelector,"analyticsDetailsSelector")
+
   const handleToggle = (index) => {
     setOpenIndex(openIndex === index ? null : index); // Toggle the clicked panel
   };
+
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    dispatch(analyticsDetailsHandler())
+  }, [])
+  
 
   const Test2 = () => {
     return (
@@ -209,7 +221,7 @@ const AdminDashboard = () => {
         <div className="d-flex flexWrap gap-20">
           <div className="mx292">
             <div className="overviewCard fs-16 mb-10">Overview</div>
-            <OverviewGrid />
+            <OverviewGrid analyticsDetailsSelector ={analyticsDetailsSelector}/>
           </div>
           <div className="w-100">
             <TabContainer
@@ -223,8 +235,9 @@ const AdminDashboard = () => {
         <div className="d-grid chartGrid gap-20">
           <PromotionCard
             title="Promotions"
-            count={80}
+            count={analyticsDetailsSelector?.data?.data?.targetPromotionsCount}
             chartPromotionImage={chartPromotion}
+            // analyticsDetailsSelector ={analyticsDetailsSelector}
             buttonText="See promotions"
             middleComponent={
               <BarChart
@@ -242,7 +255,7 @@ const AdminDashboard = () => {
           />
           <PromotionCard
             title="Nudges"
-            count={77}
+            count={analyticsDetailsSelector?.data?.data?.targetNudgeCount}
             chartPromotionImage={chartnudge}
             buttonText="See Nudges"
             onButtonClick={() => navigate("/admin/nudges")}

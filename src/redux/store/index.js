@@ -7,6 +7,10 @@ import nudgesListSlice from "../action/nudgesList";
 import followersDetailsSlice from "../action/followersDetails";
 import nudgeDetailsMainSlice from "../action/nudgeDetails";
 import followerArchiveSlice from "../action/followerArchive";
+import analyticsDetailsSlice from "../action/analyticsDetails";
+import createNudgeSlice from "../action/create-nudge";
+import getNudgesTemplateSlice from "../action/getNudgesTemplate";
+import listByUserIdSlice from "../action/listByUserId";
 
 const store = configureStore({
   reducer: {
@@ -18,6 +22,10 @@ const store = configureStore({
     followerDetails: followersDetailsSlice,
     nudgeDetailsMain: nudgeDetailsMainSlice,
     followerArchive: followerArchiveSlice,
+    analyticsDetails: analyticsDetailsSlice,
+    createNudge: createNudgeSlice,
+    getNudgesTemplate: getNudgesTemplateSlice,
+    listByUserId: listByUserIdSlice,
   },
 });
 

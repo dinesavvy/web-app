@@ -22,13 +22,30 @@ MerchantCard.propTypes = {
 };
 
 // eslint-disable-next-line no-unused-vars
-const OverviewGrid = ({ data }) => {
+const OverviewGrid = ({ analyticsDetailsSelector }) => {
   const merchantData = [
-    { count: 256, trend: "10%",value:"Merchants" },
-    { count: 256, trend: "10%",value:"Suppliers" },
-    { count: 256, trend: "10%" ,value:"Brands"},
-    { count: 256, trend: "10%" ,value:"Distributors"},
-  ];
+    { 
+        count: analyticsDetailsSelector?.data?.data?.merchantCount, 
+        trend: `${analyticsDetailsSelector?.data?.data?.trendMerchantCount}%`,
+        value: "Merchants" 
+    },
+    { 
+        count: analyticsDetailsSelector?.data?.data?.supplierCount, 
+        trend: `${analyticsDetailsSelector?.data?.data?.trendSupplierCount}%`,
+        value: "Suppliers" 
+    },
+    { 
+        count: analyticsDetailsSelector?.data?.data?.brandCount, 
+        trend: `${analyticsDetailsSelector?.data?.data?.trendBrandCount}%`,
+        value: "Brands" 
+    },
+    { 
+        count: analyticsDetailsSelector?.data?.data?.distributorCount, 
+        trend: `${analyticsDetailsSelector?.data?.data?.trendDistributorCount}%`,
+        value: "Distributors" 
+    },
+];
+
 
   return (
     <div className="card d-grid gap-20 overviewGrid2">

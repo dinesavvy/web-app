@@ -278,6 +278,7 @@
   flex-wrap: wrap;
   height: 78px;
   overflow: hidden;
+  word-break: break-all;
 }
 
 .flexTag div {
@@ -455,7 +456,7 @@
 }
 .image80{
   height: 80px;
-  width: 80px;
+  min-width: 80px;
   border-radius: 8px;
   overflow: hidden;
 }

@@ -43,7 +43,7 @@ const FollowerDetail = () => {
                 <img
                   src={backButton}
                   alt=""
-                  onClick={() => setViewDetail(false)}
+                  // onClick={() => setViewDetail(false)}
                 />
                 <div>
                   <div className="fs-24 fw-600 mb-4">Followers</div>

@@ -7,6 +7,7 @@ import nudgeIcon from "../../../assets/images/nudgeIcon.svg";
 import olive from "../../../assets/images/olive.png";
 import addTime from "../../../assets/images/addTime.svg";
 import createAdd from "../../../assets/images/createAdd.svg";
+import deleteList from "../../../assets/images/deleteList.svg";
 import addnudge from "../../../assets/images/addnudge.svg";
 import addCredits from "../../../assets/images/addCredits.svg";
 import map from "../../../assets/images/map.jpg";
@@ -31,6 +32,7 @@ import { nudgesListHandler } from "../../../redux/action/nudgesList";
 import NudgeDetail from "./NudgeDetail";
 import { followerDetailsHandler } from "../../../redux/action/followersDetails";
 import FollowerDetail from "./FollowerDetails";
+import { listByUserIdHandler } from "../../../redux/action/listByUserId";
 
 const MerchantDetails = () => {
   const [activeTab3, setActiveTab3] = useState("1");
@@ -40,10 +42,26 @@ const MerchantDetails = () => {
   const [pagination, setPagination] = useState({ page: 1, limit: 10 });
   const [searchString, setSearchString] = useState("");
   const [searchArea, setSearchArea] = useState([]);
-  const [activeTab, setActiveTab] = useState(true); // Default active tab
+  const [activeNudgeClass, setActiveNudgeClass] = useState("received");
+  const [activeTab, setActiveTab] = useState(true);
+
+const listByUserIdSelector = useSelector((state)=>state?.listByUserId)
 
   const handleTabClick = (tab) => {
-    setActiveTab(tab); // Update the active tab
+    setActiveTab(tab);
+  };
+  // console.log(viewDetail, "viewDetail");
+  const handleCardClick = (cardType) => {
+    setActiveNudgeClass(cardType); // Update active card state
+    let payload = {
+      page: 1,
+      limit: 10,
+      userId: "674092a443c6769cede44dd5",
+      nudgeType: "Received", // "Received", "Accepted", "Denied", "NoAnswer", "Redeemed",
+      isActive: true,
+    };
+
+    // dispatch(listByUserIdHandler(payload));
   };
 
   const [checkedItems, setCheckedItems] = useState({});
@@ -86,6 +104,8 @@ const MerchantDetails = () => {
   const isAnyCheckboxChecked = Object.values(checkedItems).some(
     (checked) => checked
   );
+
+  console.log(isAnyCheckboxChecked,"isAnyCheckboxChecked")
 
   const followerDetailsSelector = useSelector(
     (state) => state?.followerDetails
@@ -182,6 +202,7 @@ const MerchantDetails = () => {
           locationId: state?._id,
           page: pagination.page,
           limit: pagination.limit,
+          status: "Active",
           searchString,
           searchArea,
         };
@@ -225,7 +246,6 @@ const MerchantDetails = () => {
   return (
     <>
       {merchantDetailsSelector?.isLoading ||
-      followerListSelector?.isLoading ||
       nudgesListSelector?.isLoading ||
       followerDetailsSelector?.isLoading ? (
         <Loader />
@@ -239,7 +259,11 @@ const MerchantDetails = () => {
                   className={`tab-button ${
                     activeTab3 === tab.id ? "active" : ""
                   }`}
-                  onClick={() => setActiveTab3(tab.id)}
+                  onClick={() => {
+                    setActiveTab3(tab.id);
+                    setViewDetail(false);
+                    setCheckedItems({})
+                  }}
                 >
                   {tab.label}
                 </button>
@@ -1075,7 +1099,7 @@ const MerchantDetails = () => {
             <>
               <div className="tabPadding">
                 <div className="d-flex align-center gap-20 mb-30 w-100">
-                  <img src={backButton} alt="" />
+                  <img src={backButton} alt="" className="cursor-pointer" />
                   <div>
                     <div className="fs-24 fw-600 mb-4">Dine Savvy Account</div>
                     <Breadcrumb
@@ -1173,8 +1197,12 @@ const MerchantDetails = () => {
                     <div className="d-flex align-center justify-between gap-20 mb-30 flexrightsm">
                       <div className="d-flex align-center gap-20 w-100">
                         <img
+                          className="cursor-pointer"
                           src={backButton}
-                          alt=""
+                          alt={
+                            followerDetailsSelector?.data?.data?.userInfo
+                              ?.displayName
+                          }
                           onClick={() => setViewDetail(false)}
                         />
                         <div>
@@ -1205,7 +1233,10 @@ const MerchantDetails = () => {
                           Follower name
                         </label>
                         <div className="fs-20">
-                          {followerDetailsSelector?.data?.data?.userInfo?.displayName}
+                          {
+                            followerDetailsSelector?.data?.data?.userInfo
+                              ?.displayName
+                          }
                         </div>
                       </div>
                       <div>
@@ -1240,7 +1271,14 @@ const MerchantDetails = () => {
                   <div className="tabPadding mb-30">
                     <div className="fs-20 fw-700 mb-20">Nudges Info</div>
                     <div className="grid5">
-                      <div className="card activeNudge">
+                      <div
+                        className={
+                          activeNudgeClass === "received"
+                            ? "card activeNudge"
+                            : "card"
+                        }
+                        onClick={() => handleCardClick("received")}
+                      >
                         <div className="grey mb-10 fs-16 fw-500">
                           Nudges <br />
                           received
@@ -1252,7 +1290,14 @@ const MerchantDetails = () => {
                           }
                         </div>
                       </div>
-                      <div className="card">
+                      <div
+                        className={
+                          activeNudgeClass === "redeemed"
+                            ? "card activeNudge"
+                            : "card"
+                        }
+                        onClick={() => handleCardClick("redeemed")}
+                      >
                         <div className="grey mb-10 fs-16 fw-500">
                           Nudges <br />
                           Redeemed
@@ -1264,14 +1309,20 @@ const MerchantDetails = () => {
                           }
                         </div>
                       </div>
-                      <div className="card">
+                      <div
+                        className={
+                          activeNudgeClass === "accepted"
+                            ? "card activeNudge"
+                            : "card"
+                        }
+                        onClick={() => handleCardClick("accepted")}
+                      >
                         <div className="grey mb-10 fs-16 fw-500">
                           Nudges <br />
                           accepted
                         </div>
-                        {/* <div className="fs-22 fw-500">{followerDetailsSelector?.data?.data?.nudge?.acceptNudge}</div> */}
                         <div className="fs-22 fw-500">
-                          {(() => {
+                          {/* {(() => {
                             const totalNudge =
                               followerDetailsSelector?.data?.data?.nudge
                                 ?.totalNudge || 0;
@@ -1288,10 +1339,30 @@ const MerchantDetails = () => {
                               : 0;
 
                             return `${acceptNudge}/${percentage}%`;
-                          })()}
+                          })()} */}
+                          {
+                            followerDetailsSelector?.data?.data?.nudge
+                              ?.acceptNudge
+                          }
+                          /
+                          {(
+                            (followerDetailsSelector?.data?.data?.nudge
+                              ?.acceptNudge /
+                              followerDetailsSelector?.data?.data?.nudge
+                                ?.totalNudge) *
+                            100
+                          ).toFixed(2)}
+                          %
                         </div>
                       </div>
-                      <div className="card">
+                      <div
+                        className={
+                          activeNudgeClass === "declined"
+                            ? "card activeNudge"
+                            : "card"
+                        }
+                        onClick={() => handleCardClick("declined")}
+                      >
                         <div className="grey mb-10 fs-16 fw-500">
                           Nudges <br />
                           declined
@@ -1301,7 +1372,7 @@ const MerchantDetails = () => {
                           followerDetailsSelector?.data?.data?.nudge
                             ?.declinedNudge
                         } */}
-                          {(() => {
+                          {/* {(() => {
                             const totalNudge =
                               followerDetailsSelector?.data?.data?.nudge
                                 ?.totalNudge || 0;
@@ -1318,19 +1389,81 @@ const MerchantDetails = () => {
                               : 0;
 
                             return `${declinedNudges}/${percentage}%`;
-                          })()}
+                          })()} */}
+                          {
+                            followerDetailsSelector?.data?.data?.nudge
+                              ?.declinedNudge
+                          }
+                          /
+                          {(
+                            (followerDetailsSelector?.data?.data?.nudge
+                              ?.declinedNudge /
+                              followerDetailsSelector?.data?.data?.nudge
+                                ?.totalNudge) *
+                            100
+                          ).toFixed(2)}
+                          %
                         </div>
                       </div>
-                      <div className="card">
+                      <div
+                        // className="card"
+                        onClick={() => handleCardClick("no-action")}
+                        className={
+                          activeNudgeClass === "no-action"
+                            ? "card activeNudge"
+                            : "card"
+                        }
+                      >
                         <div className="grey mb-10 fs-16 fw-500">
                           Nudges with <br />
                           no action
                         </div>
-                        <div className="fs-22 fw-500">0</div>
+                        <div className="fs-22 fw-500">
+                          {/* {
+                            followerDetailsSelector?.data?.data?.nudge
+                              ?.declinedNudge
+                          }
+                          /
+                          {(
+                            (followerDetailsSelector?.data?.data?.nudge
+                              ?.declinedNudge /
+                              followerDetailsSelector?.data?.data?.nudge
+                                ?.totalNudge) *
+                            100
+                          ).toFixed(2)}
+                          % */}
+                          {followerDetailsSelector?.data?.data?.nudge
+                            ?.totalNudge -
+                            (followerDetailsSelector?.data?.data?.nudge
+                              ?.acceptNudge +
+                              followerDetailsSelector?.data?.data?.nudge
+                                ?.declinedNudge)}
+                          /
+                          {(
+                            ((followerDetailsSelector?.data?.data?.nudge
+                              ?.totalNudge -
+                              (followerDetailsSelector?.data?.data?.nudge
+                                ?.acceptNudge +
+                                followerDetailsSelector?.data?.data?.nudge
+                                  ?.declinedNudge)) /
+                              followerDetailsSelector?.data?.data?.nudge
+                                ?.totalNudge) *
+                            100
+                          ).toFixed(2)}
+                          %
+                        </div>
                       </div>
                     </div>
                     <div className="divider2"></div>
-                    <div className="fs-20 fw-700 mb-20">Nudges Received</div>
+                    <div className="fs-20 fw-700 mb-20">
+                      {{
+                        received: "Nudges Received",
+                        redeemed: "Nudges Redeemed",
+                        accepted: "Nudges Accepted",
+                        declined: "Nudges Declined",
+                        "no-action": "Nudges with no action",
+                      }[activeNudgeClass] || ""}
+                    </div>
                     <div className="grid2 gap-20">
                       <div className="card16 d-flex align-center gap-16">
                         <div className="image80">
@@ -1430,7 +1563,7 @@ const MerchantDetails = () => {
                   <div className="tabPadding mb-30">
                     <div className="fs-20 fw-700 mb-20">Merchants</div>
                     <div className="flexTag2">
-                      <div>Garden Grove Café & Bistro</div>
+                      {/* <div>Garden Grove Café & Bistro</div>
                       <div>The Rolling Pin Bakery</div>
                       <div>Firefly Lounge & Bar</div>
                       <div>Golden Harvest Farmhouse</div>
@@ -1439,35 +1572,53 @@ const MerchantDetails = () => {
                       <div>Blue Horizon Coastal Grill</div>
                       <div>Sweet Basil Wine Bar</div>
                       <div>Red Oak Smokehouse BBQ</div>
-                      <div>See more</div>
+                      <div>See more</div> */}
+                      No data found
                     </div>
                   </div>
                   <div className="tabPadding mb-30">
                     <div className="fs-20 fw-700 mb-20">Items favorited</div>
                     <div className="flexTagFull">
-                      <div>French dip</div>
+                      {/* <div>French dip</div>
                       <div>Cioppino</div>
                       <div>Avocado toast</div>
                       <div>Mac and Cheese Pizza</div>
                       <div>Burrito</div>
-                      <div>Mission burrito</div>
+                      <div>Mission burrito</div> */}
+                      {followerDetailsSelector?.data?.data
+                        ?.customerPreferenceData?.filterData?.length > 0 ? (
+                        followerDetailsSelector.data.data.customerPreferenceData?.filterData?.map(
+                          (item, index) => <div key={index}>{item}</div>
+                        )
+                      ) : (
+                        <div>No data found</div>
+                      )}
                     </div>
                   </div>
                   <div className="tabPadding mb-30">
                     <div className="fs-20 fw-700 mb-20">Preferences</div>
                     <div className="flexTagFull">
-                      <div>Casual Dining</div>
+                      {/* <div>Casual Dining</div>
                       <div>Weight Watchers</div>
                       <div>Drinks</div>
                       <div>Steak, Bar</div>
-                      <div>Wine</div>
+                      <div>Wine</div> */}
+                      {followerDetailsSelector?.data?.data
+                        ?.customerPreferenceData?.personalPreference?.length >
+                      0 ? (
+                        followerDetailsSelector.data.data.customerPreferenceData.personalPreference.map(
+                          (item, index) => <div key={index}>{item}</div>
+                        )
+                      ) : (
+                        <div>No data found</div>
+                      )}
                     </div>
                   </div>
                   <div className="tabPadding mb-30">
                     <div className="fs-20 fw-700 mb-20">
                       Dine Savvy Application Usage
                     </div>
-                    <div className="d-flex gap-30 flexWrap">
+                    {/* <div className="d-flex gap-30 flexWrap">
                       <div className="card w-100">
                         <div>
                           <img src={chart} className="w-100" alt="" />
@@ -1486,16 +1637,19 @@ const MerchantDetails = () => {
                           User spends in Dine Savvy
                         </div>
                       </div>
-                    </div>
+                    </div> */}
+                    No data found
                   </div>
                   <div className="tabPadding mb-30">
-                    <div className="fs-20 fw-700 mb-20">Locations</div>
+                    {/* <div className="fs-20 fw-700 mb-20">Locations</div>
                     <div className="divider2"></div>
                     <div className="fw-500 text-center mb-20">Weekly</div>
                     <div className="w-100 mh400 ">
                       <img src={map} className="w-100 h-100" alt="" />
-                    </div>
-                    <div className="divider2"></div>
+                    </div> */}
+                    <div className="fs-20 fw-700 mb-20">Locations</div>
+                    No data found
+                    {/* <div className="divider2"></div>
                     <div className="overflow">
                       <table className="w-100 fs-14 text-start">
                         <thead>
@@ -1530,25 +1684,31 @@ const MerchantDetails = () => {
                           </tr>
                         </tbody>
                       </table>
-                    </div>
+                    </div> */}
                   </div>
                   <div className="tabPadding mb-30">
                     <div className="fs-20 fw-700 mb-20">
                       Most common time used
                     </div>
                     <div className="flexTagFull">
-                      <div>12:00 to 01:00 PM</div>
-                      <div>06:00 to 07:30 PM</div>
+                      {/* <div>12:00 to 01:00 PM</div>
+                      <div>06:00 to 07:30 PM</div> */}
+                      No data found
                     </div>
                   </div>
                 </>
-                // <FollowerDetail />
               ) : (
+                // <FollowerDetail />
                 <>
+                  {followerListSelector?.isLoading && <Loader />}
                   <div className="tabPadding">
                     <div className="d-flex align-center justify-between gap-20 mb-30 flexrightsm">
                       <div className="d-flex align-center gap-20 w-100">
-                        <img src={backButton} alt="" />
+                        <img
+                          src={backButton}
+                          alt=""
+                          className="cursor-pointer"
+                        />
                         <div>
                           <div className="fs-24 fw-600 mb-4">Followers</div>
                           <Breadcrumb
@@ -1582,10 +1742,16 @@ const MerchantDetails = () => {
                             <div className="cardFollow" key={index}>
                               <div className="d-flex justify-between gap-12">
                                 <div className="d-flex align-center gap-12">
-                                  <div className="initialName">dr</div>
+                                  <div className="initialName">
+                                    {item?.userInfo?.displayName?.slice(0, 2)}
+                                  </div>
                                   <div>
                                     <div className="fw-700">
-                                      {item?.userInfo?.displayName}
+                                      {item?.userInfo?.displayName &&
+                                        item.userInfo.displayName
+                                          .charAt(0)
+                                          .toUpperCase() +
+                                          item.userInfo.displayName.slice(1)}
                                     </div>
                                     <div className="fs-14 fw-300 o5">
                                       {moment(item?.createdAt).format(
@@ -1655,22 +1821,36 @@ const MerchantDetails = () => {
                     </div>
                     <div className="d-flex align-center justify-between flexPagination">
                       <div className="fs-16">
-                        Showing {pagination.page} to {pagination.limit} of 50
+                        Showing {pagination.page} to {pagination.limit} of{" "}
+                        {followerListSelector?.data?.data?.recordsCount}{" "}
                         Restaurants
                       </div>
                       <Pagination
                         current={pagination.page}
                         pageSize={pagination.limit}
-                        total={50}
+                        total={followerListSelector?.data?.data?.recordsCount}
                         onChange={handlePaginationChange}
                       />
                     </div>
                   </div>
-                  {/* <CommonToast image={createAdd} text={"Create nudge"} /> */}
                   {isAnyCheckboxChecked && (
-                    <CommonToast image={createAdd} text={"Create nudge"} />
+                    <div className="floatAdd">
+                      <div
+                        className="btn fs-16"
+                        onClick={() =>
+                          navigate("/admin/nudges/template", {
+                            state: { locationId: state?._id },
+                          })
+                        }
+                      >
+                        <img src={createAdd} alt="image" />
+                        <div>Create nudge</div>
+                      </div>
+                      <div className="h-24 cursor-pointer">
+                        <img src={deleteList} className="w-100 h-100" alt="" />
+                      </div>
+                    </div>
                   )}
-                  {/* <button>Create Nudge</button> */}
                 </>
               )}
             </>

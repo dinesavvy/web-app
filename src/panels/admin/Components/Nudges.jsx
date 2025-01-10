@@ -247,6 +247,7 @@ const Nudges = () => {
                 {nudgesListSelector?.data?.data?.records?.length > 0 ? (
                   nudgesListSelector?.data?.data?.records?.map(
                     (item, index) => {
+                      console.log(item,"itemitemitemitem")
                       return (
                         <div className="merchantCard" key={index}>
                           <div className="position-relative">
@@ -277,8 +278,9 @@ const Nudges = () => {
                           </div>
                           <div className="bottomPadding">
                             <div className="lightBlack fs-14 mb-20">
-                              Get 20% off on all large pizzas today! Limited
-                              time offer.
+                              {/* Get 20% off on all large pizzas today! Limited
+                              time offer. */}
+                              {item?.message}
                             </div>
                             <div className="d-flex justify-between align-center gap-20 mb-8">
                               <div className="fs-14 lightBlack ">Sent date</div>
