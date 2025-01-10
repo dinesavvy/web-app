@@ -3,13 +3,13 @@ import addBtn from "../../../assets/images/addBtn.svg";
 import coke from "../../../assets/images/coke.svg";
 import SearchSelect from "./SearchSelect";
 import { Pagination } from "antd";
-import PromotionCart from "./PromotionCart";
+import PromotionDetails from "./PromotionDetails";
 
 const Promotions = () => {
-      const [isCartOpen, setIsCartOpen] = useState(false);
+      const [isDetailsOpen, setIsDetailsOpen] = useState(false);
         
           useEffect(() => {
-            if (isCartOpen) {
+            if (isDetailsOpen) {
               document.body.classList.add("overflow-Hidden");
             } else {
               document.body.classList.remove("overflow-Hidden");
@@ -19,9 +19,9 @@ const Promotions = () => {
             return () => {
               document.body.classList.remove("overflow-Hidden");
             };
-          }, [isCartOpen]);
-          const toggleCart = () => {
-            setIsCartOpen((prevState) => !prevState);
+          }, [isDetailsOpen]);
+          const toggleDetails = () => {
+            setIsDetailsOpen((prevState) => !prevState);
           };
   return (
     <>
@@ -73,7 +73,7 @@ const Promotions = () => {
                     <div className="fs-14 fw-600">$100</div>
                   </div>
                 </div>
-                <div className="btn btnSecondary" onClick={toggleCart}>
+                <div className="btn btnSecondary" onClick={toggleDetails}>
                 View Details
                 </div>
               </div>
@@ -109,7 +109,7 @@ const Promotions = () => {
                     <div className="fs-14 fw-600">$100</div>
                   </div>
                 </div>
-                <div className="btn btnSecondary" onClick={toggleCart}>
+                <div className="btn btnSecondary" onClick={toggleDetails}>
                 View Details
                 </div>
               </div>
@@ -145,7 +145,7 @@ const Promotions = () => {
                     <div className="fs-14 fw-600">$100</div>
                   </div>
                 </div>
-                <div className="btn btnSecondary" onClick={toggleCart}>
+                <div className="btn btnSecondary" onClick={toggleDetails}>
                 View Details
                 </div>
               </div>
@@ -157,7 +157,7 @@ const Promotions = () => {
           </div>
         </div>
       </div>
-      <PromotionCart isOpen={isCartOpen} toggleCart={toggleCart} />
+      <PromotionDetails isOpen={isDetailsOpen} toggleDetails={toggleDetails} />
     </>
   );
 };

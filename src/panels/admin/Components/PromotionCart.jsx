@@ -17,7 +17,7 @@ const PromotionCart = ({ isOpen, toggleCart }) => {
           </div>
         </div>
         <div className="divider2"></div>
-        <div className="overflowCart2">
+        <div className="overflowCart">
           <div className="">
             <div className="dividerbtn">
               <img

@@ -755,13 +755,7 @@ input[type="radio"]:checked + .custom-radio-button{
 .roi.blue{
   background-color: #056DFF;
 }
-.overflowCart2{
-  flex: 1;
-}
-.rightSidebar2{
-  display: flex;
-  flex-direction: column;
-}
+
 .m30{
   margin: 30px 0 !important;
 }
@@ -786,6 +780,77 @@ input[type="radio"]:checked + .custom-radio-button{
   overflow: hidden;
   text-overflow: ellipsis;
 }
+.rightSidebar2{
+  width: 500px;
+  right: -500px;
+}
+.overflowCart2{
+  height: calc(100vh - 120px);
+}
+.brandImagePromo {
+  width: calc(100% - 40px);
+  height: 90px;
+  padding: 10px 20px;
+  background-color: #F3F3F5;
+  border-radius: 4px;
+  text-align: center;
+}
+.brandImagePromo img {
+
+  height: 100%;
+  object-fit: contain;
+}
+.accordionCustom {
+  width: 100%;
+}
+
+.accordionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+}
+
+.accordionItem{
+  padding: 16px;
+  border-radius: 12px;
+  background-color: #F2F3F5;
+}
+.arrowUp,.arrow{
+  height: 24px;
+}
+.arrow {
+  transition: transform 0.3s;
+}
+
+.arrow.open {
+  transform: rotate(180deg);
+}
+
+.accordion-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+  opacity: 0;
+}
+
+.accordion-content.open {
+  opacity: 1;
+  margin-top: 16px;
+  padding-top: 16px;
+  max-height: fit-content; /* Adjust as needed */
+  border-top: 1px solid #E6E6E6;
+}
+
+.imageAccorddian{
+  padding: 12px 0;
+  width: 100%;
+  text-align: center;
+  background-color: white;
+  border-radius: 6px;
+  height: 60px;
+}
+
 @media (max-width: 1499.98px) {
   .merchantGrid {
     grid-template-columns: repeat(2, 1fr);
