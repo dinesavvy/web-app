@@ -11,6 +11,8 @@ import analyticsDetailsSlice from "../action/analyticsDetails";
 import createNudgeSlice from "../action/create-nudge";
 import getNudgesTemplateSlice from "../action/getNudgesTemplate";
 import listByUserIdSlice from "../action/listByUserId";
+import merchantPerformanceAnalyticsListSlice from "../action/merchantPerfomanceAnalyticsList";
+import fileuploadSlice from "../action/fileUpload";
 
 const store = configureStore({
   reducer: {
@@ -26,6 +28,8 @@ const store = configureStore({
     createNudge: createNudgeSlice,
     getNudgesTemplate: getNudgesTemplateSlice,
     listByUserId: listByUserIdSlice,
+    merchantPerformanceAnalyticsList: merchantPerformanceAnalyticsListSlice,
+    fileupload: fileuploadSlice,
   },
 });
 

@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import closeRightSidebar from "../../../assets/images/closeRightSidebar.svg";
 import loactionIcon from "../../../assets/images/loactionIcon.svg";
 import arrowRight from "../../../assets/images/arrowRight.svg";
-import restaurantCard from "../../../assets/images/restaurantCard.png";
+// import restaurantCard from "../../../assets/images/restaurantCard.png";
 import Loader from "../../../common/Loader/Loader";
 import moment from "moment";
 
@@ -30,10 +30,10 @@ const NudgeDetail = ({ isOpen, toggleSidebar, nudgeDetailsMainSelector }) => {
                 <div class="initialName">
                   {nudgeDetailsMainSelector?.data?.data?.title.slice(0, 2)}
                 </div>
-                <div className="text-end">
+                {/* <div className="text-end">
                   <div className="fs-14 mb-4">Nudge ID</div>
                   <div className="fs-14 fw-600">#123456</div>
-                </div>
+                </div> */}
               </div>
               <div className="fs-18 fw-600 mb-2">
                 {nudgeDetailsMainSelector?.data?.data?.title}
@@ -82,7 +82,8 @@ const NudgeDetail = ({ isOpen, toggleSidebar, nudgeDetailsMainSelector }) => {
                 {nudgeDetailsMainSelector?.data?.data?.title}
               </div>
               <div className="fs-14 mb-20">
-                Free drink on Happy Hours! From 07:00 PM to 08:00 PM
+                {/* Free drink on Happy Hours! From 07:00 PM to 08:00 PM */}
+                {nudgeDetailsMainSelector?.data?.data?.message}
               </div>
               {/* <div className="lightBlack fs-14 mb-10">Brand</div>
               <div className="brandFlex">

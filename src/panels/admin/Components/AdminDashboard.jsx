@@ -16,11 +16,14 @@ import AreaChart from "../../../common/charts/AreaChart";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { analyticsDetailsHandler } from "../../../redux/action/analyticsDetails";
+import Loader from "../../../common/Loader/Loader";
+import { merchantPerfomanceAnalyticsListHandler } from "../../../redux/action/merchantPerfomanceAnalyticsList";
 
 const AdminDashboard = () => {
+  const [pagination, setPagination] = useState({ page: 1, limit: 9 });
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("1");
-  const [activeTab2, setActiveTab2] = useState("1");
+  const [activeTab2, setActiveTab2] = useState("today");
   const [activeTab3, setActiveTab3] = useState("1");
   const [openIndex, setOpenIndex] = useState(0); // Initially, the first item is open
   const data = {
@@ -29,19 +32,23 @@ const AdminDashboard = () => {
     total: 100,
   };
 
-  const analyticsDetailsSelector = useSelector((state)=>state?.analyticsDetails)
-  console.log(analyticsDetailsSelector,"analyticsDetailsSelector")
+  const handlePaginationChange = (page, pageSize) => {
+    setPagination({ page, limit: pageSize });
+  };
+
+  const analyticsDetailsSelector = useSelector(
+    (state) => state?.analyticsDetails
+  );
 
   const handleToggle = (index) => {
     setOpenIndex(openIndex === index ? null : index); // Toggle the clicked panel
   };
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(analyticsDetailsHandler())
-  }, [])
-  
+    dispatch(analyticsDetailsHandler());
+  }, []);
 
   const Test2 = () => {
     return (
@@ -188,15 +195,15 @@ const AdminDashboard = () => {
   ];
   const tabs2 = [
     {
-      id: "1",
+      value: "today",
       label: "Today",
     },
     {
-      id: "2",
+      value: "weekly",
       label: "Weekly",
     },
     {
-      id: "3",
+      value: "monthly",
       label: "Monthly",
     },
   ];
@@ -215,13 +222,35 @@ const AdminDashboard = () => {
     { id: "2", title: "Olive Garden", titleImage: olive, content: <Test2 /> },
     { id: "3", title: "Olive Garden", titleImage: olive, content: <Test2 /> },
   ];
+
+  const merchantPerformanceAnalyticsListSelector = useSelector(
+    (state) => state?.merchantPerformanceAnalyticsList
+  );
+  console.log(
+    merchantPerformanceAnalyticsListSelector,
+    "merchantPerformanceAnalyticsListSelector"
+  );
+
+  useEffect(() => {
+    let payload = {
+      page: pagination.page,
+        limit: pagination.limit,
+      timeFrame: activeTab2,
+      sortOn: "performance",
+      holdingSort: activeTab3 === "1" ? true : false,
+    };
+    dispatch(merchantPerfomanceAnalyticsListHandler(payload));
+  }, [activeTab2, activeTab3]);
+
   return (
     <>
+      {(analyticsDetailsSelector?.isLoading ||
+        merchantPerformanceAnalyticsListSelector?.isLoading) && <Loader />}
       <div className="dashboard">
         <div className="d-flex flexWrap gap-20">
           <div className="mx292">
             <div className="overviewCard fs-16 mb-10">Overview</div>
-            <OverviewGrid analyticsDetailsSelector ={analyticsDetailsSelector}/>
+            <OverviewGrid analyticsDetailsSelector={analyticsDetailsSelector} />
           </div>
           <div className="w-100">
             <TabContainer
@@ -238,6 +267,7 @@ const AdminDashboard = () => {
             count={analyticsDetailsSelector?.data?.data?.targetPromotionsCount}
             chartPromotionImage={chartPromotion}
             // analyticsDetailsSelector ={analyticsDetailsSelector}
+            onButtonClick={() => navigate("/admin/promotions")}
             buttonText="See promotions"
             middleComponent={
               <BarChart
@@ -303,11 +333,11 @@ const AdminDashboard = () => {
               <div className="tabs">
                 {tabs2.map((tab) => (
                   <button
-                    key={tab.id}
+                    key={tab.value}
                     className={`tab-button ${
-                      activeTab2 === tab.id ? "active" : ""
+                      activeTab2 === tab.value ? "active" : ""
                     }`}
-                    onClick={() => setActiveTab2(tab.id)}
+                    onClick={() => setActiveTab2(tab.value)}
                   >
                     {tab.label}
                   </button>
@@ -331,27 +361,46 @@ const AdminDashboard = () => {
             </div>
           </div>
           <div className="accordion mb-20">
-            {items.map((item, index) => (
-              <div key={index} className="accordion-item">
-                <div
-                  className="accordion-header"
-                  onClick={() => handleToggle(index)}
-                >
-                  <img src={item.titleImage} alt="" />
-                  <div className="fs-18 fw-600">{item.title}</div>
-                  <div className="tag">
-                    <div className="tagAbsolute">#{item.id}</div>
+            {merchantPerformanceAnalyticsListSelector?.data?.data?.records?.map(
+              (item, index) => (
+                <div key={index} className="accordion-item">
+                  <div
+                    className="accordion-header"
+                    onClick={() => handleToggle(index)}
+                  >
+                    <img src={item.logoUrl || olive} alt="" />
+                    <div className="fs-18 fw-600">{item.businessName}</div>
+                    <div className="tag">
+                      <div className="tagAbsolute">#{index + 1}</div>
+                    </div>
                   </div>
+                  {openIndex === index && (
+                    <div className="accordion-body">{item.content}</div>
+                  )}
                 </div>
-                {openIndex === index && (
-                  <div className="accordion-body">{item.content}</div>
-                )}
-              </div>
-            ))}
+              )
+            )}
           </div>
           <div className="d-flex align-center justify-between flexPagination">
-            <div className="fs-16">Showing 1 to 5 of 10 Restaurants</div>
-            <Pagination defaultCurrent={1} total={50} />
+            <div className="fs-16">
+              Showing {pagination.page} to {merchantPerformanceAnalyticsListSelector?.data?.data
+                  ?.limit} of{" "}
+              {
+                merchantPerformanceAnalyticsListSelector?.data?.data
+                  ?.recordsCount
+              }{" "}
+              Restaurants
+            </div>
+            <Pagination
+              defaultCurrent={1}
+              current={pagination.page}
+              pageSize={pagination.limit}
+              total={
+                merchantPerformanceAnalyticsListSelector?.data?.data
+                  ?.recordsCount
+              }
+              onChange={handlePaginationChange}
+            />
           </div>
         </div>
       </div>

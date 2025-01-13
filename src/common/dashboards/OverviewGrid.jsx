@@ -26,22 +26,22 @@ const OverviewGrid = ({ analyticsDetailsSelector }) => {
   const merchantData = [
     { 
         count: analyticsDetailsSelector?.data?.data?.merchantCount, 
-        trend: `${analyticsDetailsSelector?.data?.data?.trendMerchantCount}%`,
+        trend: `${analyticsDetailsSelector?.data?.data?.trendMerchantCount.toFixed(2)}%`,
         value: "Merchants" 
     },
     { 
         count: analyticsDetailsSelector?.data?.data?.supplierCount, 
-        trend: `${analyticsDetailsSelector?.data?.data?.trendSupplierCount}%`,
+        trend: `${analyticsDetailsSelector?.data?.data?.trendSupplierCount.toFixed(2)}%`,
         value: "Suppliers" 
     },
     { 
         count: analyticsDetailsSelector?.data?.data?.brandCount, 
-        trend: `${analyticsDetailsSelector?.data?.data?.trendBrandCount}%`,
+        trend: `${analyticsDetailsSelector?.data?.data?.trendBrandCount.toFixed(2)}%`,
         value: "Brands" 
     },
     { 
         count: analyticsDetailsSelector?.data?.data?.distributorCount, 
-        trend: `${analyticsDetailsSelector?.data?.data?.trendDistributorCount}%`,
+        trend: `${analyticsDetailsSelector?.data?.data?.trendDistributorCount.toFixed(2)}%`,
         value: "Distributors" 
     },
 ];

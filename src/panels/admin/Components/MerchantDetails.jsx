@@ -42,27 +42,45 @@ const MerchantDetails = () => {
   const [pagination, setPagination] = useState({ page: 1, limit: 10 });
   const [searchString, setSearchString] = useState("");
   const [searchArea, setSearchArea] = useState([]);
-  const [activeNudgeClass, setActiveNudgeClass] = useState("received");
+  const [activeNudgeClass, setActiveNudgeClass] = useState("Received");
   const [activeTab, setActiveTab] = useState(true);
 
-const listByUserIdSelector = useSelector((state)=>state?.listByUserId)
+  const listByUserIdSelector = useSelector((state) => state?.listByUserId);
+
+  const { state } = useLocation();
+  const dispatch = useDispatch();
+
+  console.log(state, "state");
+
+  const merchantDetailsSelector = useSelector(
+    (state) => state?.merchantDetails
+  );
+
+  const followerDetailsSelector = useSelector(
+    (state) => state?.followerDetails
+  );
 
   const handleTabClick = (tab) => {
     setActiveTab(tab);
   };
-  // console.log(viewDetail, "viewDetail");
-  const handleCardClick = (cardType) => {
-    setActiveNudgeClass(cardType); // Update active card state
-    let payload = {
-      page: 1,
-      limit: 10,
-      userId: "674092a443c6769cede44dd5",
-      nudgeType: "Received", // "Received", "Accepted", "Denied", "NoAnswer", "Redeemed",
-      isActive: true,
-    };
 
-    // dispatch(listByUserIdHandler(payload));
+  const handleCardClick = (cardType) => {
+    setActiveNudgeClass(cardType);
   };
+
+  useEffect(() => {
+    if (activeNudgeClass) {
+      let payload = {
+        page: 1,
+        limit: 10,
+        userId: followerDetailsSelector?.data?.data?.userId,
+        nudgeType: activeNudgeClass, // "Received", "Accepted", "Denied", "NoAnswer", "Redeemed",
+        isActive: activeNudgeClass === "Received" ? activeTab : undefined,
+      };
+
+      dispatch(listByUserIdHandler(payload));
+    }
+  }, [activeNudgeClass, followerDetailsSelector, activeTab]);
 
   const [checkedItems, setCheckedItems] = useState({});
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -93,22 +111,28 @@ const listByUserIdSelector = useSelector((state)=>state?.listByUserId)
     };
     dispatch(nudgesDetailsHandler(payload));
   };
+  const [selectedItems, setSelectedItems] = useState([]);
+  console.log(selectedItems,"selectedItems")
 
-  const handleCheckboxChange = (index, isChecked) => {
+  const handleCheckboxChange = (index, isChecked, item) => {
     setCheckedItems((prev) => ({
       ...prev,
       [index]: isChecked,
     }));
+
+    if (isChecked) {
+      // Add the item to the selectedItems array
+      setSelectedItems((prev) => [...prev, item]);
+    } else {
+      // Remove the item from the selectedItems array
+      setSelectedItems((prev) =>
+        prev.filter((selectedItem) => selectedItem !== item)
+      );
+    }
   };
 
   const isAnyCheckboxChecked = Object.values(checkedItems).some(
     (checked) => checked
-  );
-
-  console.log(isAnyCheckboxChecked,"isAnyCheckboxChecked")
-
-  const followerDetailsSelector = useSelector(
-    (state) => state?.followerDetails
   );
 
   const defaultProps = {
@@ -118,15 +142,6 @@ const listByUserIdSelector = useSelector((state)=>state?.listByUserId)
     },
     zoom: 11,
   };
-
-  // useEffect(() => {
-  //   if(viewDetail){
-  //     let payload = {
-  //       followerId:""
-  //     }
-  //     dispatch(followerDetailsHandler())
-  //   }
-  // }, [])
 
   const tabs3 = [
     {
@@ -168,14 +183,13 @@ const listByUserIdSelector = useSelector((state)=>state?.listByUserId)
   //   restaurantCard,
   // ];
 
-  const { state } = useLocation();
-  const dispatch = useDispatch();
-  const merchantDetailsSelector = useSelector(
-    (state) => state?.merchantDetails
-  );
-
   useEffect(() => {
-    dispatch(merchantDetailsHandler({ locationId: state?._id }));
+    dispatch(
+      merchantDetailsHandler({
+        locationId:
+          state?._id || state?.locationId || localStorage.getItem("merchantId"),
+      })
+    );
   }, []);
 
   const navigate = useNavigate();
@@ -262,7 +276,7 @@ const listByUserIdSelector = useSelector((state)=>state?.listByUserId)
                   onClick={() => {
                     setActiveTab3(tab.id);
                     setViewDetail(false);
-                    setCheckedItems({})
+                    setCheckedItems({});
                   }}
                 >
                   {tab.label}
@@ -1130,7 +1144,7 @@ const listByUserIdSelector = useSelector((state)=>state?.listByUserId)
                   <div className="d-flex justify-between align-center gap-10 fw-500 mb-16 flexsm">
                     <div className="grey">Restaurant owner</div>
                     <div>
-                      {merchantDetailsSelector.data.data.owenerDetails
+                      {merchantDetailsSelector.data.data.ownerDetails
                         ?.displayName || "N/A"}
                     </div>
                   </div>
@@ -1193,6 +1207,7 @@ const listByUserIdSelector = useSelector((state)=>state?.listByUserId)
             <>
               {viewDetail ? (
                 <>
+                  {listByUserIdSelector?.isLoading && <Loader />}
                   <div className="tabPadding mb-30">
                     <div className="d-flex align-center justify-between gap-20 mb-30 flexrightsm">
                       <div className="d-flex align-center gap-20 w-100">
@@ -1273,11 +1288,11 @@ const listByUserIdSelector = useSelector((state)=>state?.listByUserId)
                     <div className="grid5">
                       <div
                         className={
-                          activeNudgeClass === "received"
+                          activeNudgeClass === "Received"
                             ? "card activeNudge"
                             : "card"
                         }
-                        onClick={() => handleCardClick("received")}
+                        onClick={() => handleCardClick("Received")}
                       >
                         <div className="grey mb-10 fs-16 fw-500">
                           Nudges <br />
@@ -1292,11 +1307,14 @@ const listByUserIdSelector = useSelector((state)=>state?.listByUserId)
                       </div>
                       <div
                         className={
-                          activeNudgeClass === "redeemed"
+                          activeNudgeClass === "Redeemed"
                             ? "card activeNudge"
                             : "card"
                         }
-                        onClick={() => handleCardClick("redeemed")}
+                        onClick={() => {
+                          handleCardClick("Redeemed");
+                          setActiveTab(false);
+                        }}
                       >
                         <div className="grey mb-10 fs-16 fw-500">
                           Nudges <br />
@@ -1311,35 +1329,20 @@ const listByUserIdSelector = useSelector((state)=>state?.listByUserId)
                       </div>
                       <div
                         className={
-                          activeNudgeClass === "accepted"
+                          activeNudgeClass === "Accepted"
                             ? "card activeNudge"
                             : "card"
                         }
-                        onClick={() => handleCardClick("accepted")}
+                        onClick={() => {
+                          handleCardClick("Accepted");
+                          setActiveTab(false);
+                        }}
                       >
                         <div className="grey mb-10 fs-16 fw-500">
                           Nudges <br />
                           accepted
                         </div>
                         <div className="fs-22 fw-500">
-                          {/* {(() => {
-                            const totalNudge =
-                              followerDetailsSelector?.data?.data?.nudge
-                                ?.totalNudge || 0;
-                            const acceptNudge =
-                              followerDetailsSelector?.data?.data?.nudge
-                                ?.acceptNudge || 0;
-
-                            if (acceptNudge === 0) {
-                              return `0`; // Show only 0 when no nudges are accepted
-                            }
-
-                            const percentage = totalNudge
-                              ? ((acceptNudge / totalNudge) * 100).toFixed(0)
-                              : 0;
-
-                            return `${acceptNudge}/${percentage}%`;
-                          })()} */}
                           {
                             followerDetailsSelector?.data?.data?.nudge
                               ?.acceptNudge
@@ -1357,39 +1360,20 @@ const listByUserIdSelector = useSelector((state)=>state?.listByUserId)
                       </div>
                       <div
                         className={
-                          activeNudgeClass === "declined"
+                          activeNudgeClass === "Denied"
                             ? "card activeNudge"
                             : "card"
                         }
-                        onClick={() => handleCardClick("declined")}
+                        onClick={() => {
+                          handleCardClick("Denied");
+                          setActiveTab(false);
+                        }}
                       >
                         <div className="grey mb-10 fs-16 fw-500">
                           Nudges <br />
                           declined
                         </div>
                         <div className="fs-22 fw-500">
-                          {/* {
-                          followerDetailsSelector?.data?.data?.nudge
-                            ?.declinedNudge
-                        } */}
-                          {/* {(() => {
-                            const totalNudge =
-                              followerDetailsSelector?.data?.data?.nudge
-                                ?.totalNudge || 0;
-                            const declinedNudges =
-                              followerDetailsSelector?.data?.data?.nudge
-                                ?.declinedNudge || 0;
-
-                            if (declinedNudges === 0) {
-                              return `0`; // Show only 0 when no nudges are accepted
-                            }
-
-                            const percentage = totalNudge
-                              ? ((declinedNudges / totalNudge) * 100).toFixed(0)
-                              : 0;
-
-                            return `${declinedNudges}/${percentage}%`;
-                          })()} */}
                           {
                             followerDetailsSelector?.data?.data?.nudge
                               ?.declinedNudge
@@ -1406,10 +1390,12 @@ const listByUserIdSelector = useSelector((state)=>state?.listByUserId)
                         </div>
                       </div>
                       <div
-                        // className="card"
-                        onClick={() => handleCardClick("no-action")}
+                        onClick={() => {
+                          handleCardClick("NoAnswer");
+                          setActiveTab(false);
+                        }}
                         className={
-                          activeNudgeClass === "no-action"
+                          activeNudgeClass === "NoAnswer"
                             ? "card activeNudge"
                             : "card"
                         }
@@ -1419,19 +1405,6 @@ const listByUserIdSelector = useSelector((state)=>state?.listByUserId)
                           no action
                         </div>
                         <div className="fs-22 fw-500">
-                          {/* {
-                            followerDetailsSelector?.data?.data?.nudge
-                              ?.declinedNudge
-                          }
-                          /
-                          {(
-                            (followerDetailsSelector?.data?.data?.nudge
-                              ?.declinedNudge /
-                              followerDetailsSelector?.data?.data?.nudge
-                                ?.totalNudge) *
-                            100
-                          ).toFixed(2)}
-                          % */}
                           {followerDetailsSelector?.data?.data?.nudge
                             ?.totalNudge -
                             (followerDetailsSelector?.data?.data?.nudge
@@ -1457,84 +1430,66 @@ const listByUserIdSelector = useSelector((state)=>state?.listByUserId)
                     <div className="divider2"></div>
                     <div className="fs-20 fw-700 mb-20">
                       {{
-                        received: "Nudges Received",
-                        redeemed: "Nudges Redeemed",
-                        accepted: "Nudges Accepted",
-                        declined: "Nudges Declined",
-                        "no-action": "Nudges with no action",
+                        Received: "Nudges Received",
+                        Redeemed: "Nudges Redeemed",
+                        Accepted: "Nudges Accepted",
+                        Denied: "Nudges Declined",
+                        NoAnswer: "Nudges with no action",
                       }[activeNudgeClass] || ""}
                     </div>
+                    {activeNudgeClass === "Received" && (
+                      <div className="tabs-container tab3 tabing mb-20">
+                        <div className="tabs">
+                          <button
+                            className={`tab-button ${
+                              activeTab === true ? "active" : ""
+                            }`}
+                            onClick={() => handleTabClick(true)}
+                          >
+                            Active
+                          </button>
+                          <button
+                            className={`tab-button ${
+                              activeTab === false ? "active" : ""
+                            }`}
+                            onClick={() => handleTabClick(false)}
+                          >
+                            Inactive
+                          </button>
+                        </div>
+                      </div>
+                    )}
+
                     <div className="grid2 gap-20">
-                      <div className="card16 d-flex align-center gap-16">
-                        <div className="image80">
-                          <img src={dish} alt="dish" />
-                        </div>
-                        <div>
-                          <div className="fs-16 fw-500 grey mb-5">
-                            Taste the Magic
-                          </div>
-                          <div className="fs-16 fw-500">
-                            Unlock a 20% discount on our signature dishes this
-                            week.
-                          </div>
-                        </div>
-                      </div>
-                      <div className="card16 d-flex align-center gap-16">
-                        <div className="image80">
-                          <img src={dish} alt="dish" />
-                        </div>
-                        <div>
-                          <div className="fs-16 fw-500 grey mb-5">
-                            Taste the Magic
-                          </div>
-                          <div className="fs-16 fw-500">
-                            Unlock a 20% discount on our signature dishes this
-                            week.
-                          </div>
-                        </div>
-                      </div>
-                      <div className="card16 d-flex align-center gap-16">
-                        <div className="image80">
-                          <img src={dish} alt="dish" />
-                        </div>
-                        <div>
-                          <div className="fs-16 fw-500 grey mb-5">
-                            Taste the Magic
-                          </div>
-                          <div className="fs-16 fw-500">
-                            Unlock a 20% discount on our signature dishes this
-                            week.
-                          </div>
-                        </div>
-                      </div>
-                      <div className="card16 d-flex align-center gap-16">
-                        <div className="image80">
-                          <img src={dish} alt="dish" />
-                        </div>
-                        <div>
-                          <div className="fs-16 fw-500 grey mb-5">
-                            Taste the Magic
-                          </div>
-                          <div className="fs-16 fw-500">
-                            Unlock a 20% discount on our signature dishes this
-                            week.
-                          </div>
-                        </div>
-                      </div>
-                      <div className="card16 d-flex align-center gap-16">
-                        <div className="image80">
-                          <img src={dish} alt="dish" />
-                        </div>
-                        <div>
-                          <div className="fs-16 fw-500 grey mb-5">
-                            Taste the Magic
-                          </div>
-                          <div className="fs-16 fw-500">
-                            Unlock a 20% discount on our signature dishes this
-                            week.
-                          </div>
-                        </div>
-                      </div>
+                      {listByUserIdSelector?.data?.data?.records?.length > 0 ? (
+                        listByUserIdSelector?.data?.data?.records?.map(
+                          (item, index) => {
+                            return (
+                              <div
+                                className="card16 d-flex align-center gap-16"
+                                key={index}
+                              >
+                                <div className="image80">
+                                  <img
+                                    src={item?.photoURL ?? dish}
+                                    alt="dish"
+                                  />
+                                </div>
+                                <div>
+                                  <div className="fs-16 fw-500 grey mb-5">
+                                    {item?.title}
+                                  </div>
+                                  <div className="fs-16 fw-500">
+                                    {item?.message}
+                                  </div>
+                                </div>
+                              </div>
+                            );
+                          }
+                        )
+                      ) : (
+                        <div className="fs-16 fw-500 grey">No Data Found</div>
+                      )}
                     </div>
                   </div>
                   <div className="tabPadding mb-30">
@@ -1585,6 +1540,10 @@ const listByUserIdSelector = useSelector((state)=>state?.listByUserId)
                       <div>Mac and Cheese Pizza</div>
                       <div>Burrito</div>
                       <div>Mission burrito</div> */}
+                      {console.log(
+                        followerDetailsSelector,
+                        "followerDetailsSelector"
+                      )}
                       {followerDetailsSelector?.data?.data
                         ?.customerPreferenceData?.filterData?.length > 0 ? (
                         followerDetailsSelector.data.data.customerPreferenceData?.filterData?.map(
@@ -1764,10 +1723,12 @@ const listByUserIdSelector = useSelector((state)=>state?.listByUserId)
                                   <label className="checkLabel">
                                     <input
                                       type="checkbox"
+                                      checked={checkedItems[index] || false}
                                       onChange={(e) =>
                                         handleCheckboxChange(
                                           index,
-                                          e.target.checked
+                                          e.target.checked,
+                                          item
                                         )
                                       }
                                     />
@@ -1839,7 +1800,7 @@ const listByUserIdSelector = useSelector((state)=>state?.listByUserId)
                         className="btn fs-16"
                         onClick={() =>
                           navigate("/admin/nudges/template", {
-                            state: { locationId: state?._id },
+                            state: { locationId: state?._id, selectedItems },
                           })
                         }
                       >
@@ -1875,32 +1836,6 @@ const listByUserIdSelector = useSelector((state)=>state?.listByUserId)
                   </div>
                 </div>
                 <div className="divider2"></div>
-                <div className="d-flex align-center justify-between mb-15">
-                <div>
-                  <span className="fw-16">Nudges Goal: </span>
-                  <span className="fw-700 fs-20">15</span>
-                </div>
-                <div>
-                  <span className="fs-14">Sent </span>
-                  <span className="fs-18 gc fw-700">10</span>
-                </div>
-              </div>
-              <div className="range mb-15">
-                <div className="rangePercentage" style={{ width: "50%" }}></div>
-              </div>
-              <div className="fs-14 fw-500 grey mb-20">
-                You are just 50% behind to achieve Goal
-              </div>
-              <div className="weekNudge pc mb-20">
-                <div className="fs-18 fw-600">Nudges Expected This Week</div>
-                <div className="fw-700 fs-20">124</div>
-              </div>
-              <div className="card">
-                <div className="fs-20 fw-700 d-flex gap-20 align-center justify-between">
-                  <div>Nudge Credits</div>
-                  <div>44</div>
-                </div>
-                <div className="divider2"></div>
                 <div className="d-flex justify-between align-center gap-20 mb-6">
                   <div className="fs-16 grey fw-500">Previous balance</div>
                   <div className="fs-20 fw-700">30</div>
@@ -1916,15 +1851,6 @@ const listByUserIdSelector = useSelector((state)=>state?.listByUserId)
                   <div className="gc fs-20 fw-700">+7</div>
                 </div>
                 <div className="divider2"></div>
-                <div className="d-flex justify-between align-center gap-20 mb-20">
-                  <div className="fs-16 grey fw-500">
-                    Nudge credits added today
-                  </div>
-                  <div className="gc fs-20 fw-700">+14</div>
-                </div>
-                <div className="mb-16">
-                  <input type="text" placeholder="Enter number of credits" />
-                </div>
                 <div className="d-flex justify-between align-center gap-20 mb-20">
                   <div className="fs-16 grey fw-500">
                     Nudge credits added today
@@ -1962,7 +1888,6 @@ const listByUserIdSelector = useSelector((state)=>state?.listByUserId)
                     Add Credits
                   </div>
                 </div>
-              </div>
               </div>
 
               <div className="card">
@@ -2019,8 +1944,9 @@ const listByUserIdSelector = useSelector((state)=>state?.listByUserId)
                         </div>
                         <div className="bottomPadding">
                           <div className="lightBlack fs-14 mb-20">
-                            Get 20% off on all large pizzas today! Limited time
-                            offer.
+                            {/* Get 20% off on all large pizzas today! Limited time
+                            offer. */}
+                            {item?.message}
                           </div>
                           <div className="d-flex justify-between align-center gap-20 mb-8">
                             <div className="fs-14 lightBlack">Sent date</div>
@@ -2081,7 +2007,6 @@ const listByUserIdSelector = useSelector((state)=>state?.listByUserId)
                               </div>
                             </div>
                             <div>
-                              {console.log(item, "itemitemitem")}
                               <div className="fs-14 mb-4 lightBlack">
                                 No Response
                               </div>

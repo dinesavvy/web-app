@@ -155,7 +155,13 @@ const MerchantList = () => {
                           </div>
                           <div>
                             <div className="fs-14 mb-4">Nudges Accepted</div>
-                            <div className={parseInt(item?.performance) > 33?"count ":"count countred"}>
+                            <div
+                              className={
+                                parseInt(item?.performance) > 33
+                                  ? "count "
+                                  : "count countred"
+                              }
+                            >
                               <img
                                 src={
                                   parseInt(item?.performance) > 33
@@ -171,11 +177,12 @@ const MerchantList = () => {
                         <div className="gridBtn">
                           <div
                             className="btnSecondary btn"
-                            onClick={() =>
+                            onClick={() => {
                               navigate("/admin/merchant/details", {
                                 state: item,
-                              })
-                            }
+                              });
+                              localStorage.setItem("merchantId", item?._id);
+                            }}
                           >
                             Details
                           </div>

@@ -550,10 +550,10 @@
   height: calc(100vh - 120px);
   overflow-y: auto;
 }
-.overflowCart{
+/* .overflowCart{
   height: calc(100vh - 445px);
   overflow-y: auto;
-}
+} */
 .brandFlex{
   display: flex;
   gap: 4px;

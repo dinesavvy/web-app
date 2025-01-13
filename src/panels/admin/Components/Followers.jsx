@@ -34,11 +34,10 @@ const Followers = () => {
 
   const handleSearchChange = (value) => {
     setSearchString(value);
-    setPagination((prev) => ({ ...prev, page: 1 })); // Reset to the first page on search
+    setPagination((prev) => ({ ...prev, page: 1 })); 
   };
 
   const handleSearchAreaChange = (selectedAreas) => {
-    console.log(selectedAreas,"selectedAreas")
     setSearchArea(selectedAreas);
   };
 
@@ -179,14 +178,20 @@ const Followers = () => {
                   </div> */}
                     </div>
                     <div className="divider2"></div>
-                    <div className="d-flex align-center gap-12 mb-10">
-                      <img src={emailCard} alt="" />
-                      <div className="fs-14">binhan628@gmail.com</div>
-                    </div>
-                    <div className="d-flex align-center gap-12">
-                      <img src={phoneCard} alt="" />
-                      <div className="fs-14">{item?.userInfo?.phoneNumber}</div>
-                    </div>
+                    {item?.userInfo?.email && (
+                      <div className="d-flex align-center gap-12 mb-10">
+                        <img src={emailCard} alt="" />
+                        <div className="fs-14">{item?.userInfo?.email}</div>
+                      </div>
+                    )}
+                    {item?.userInfo?.phoneNumber !== "" && (
+                      <div className="d-flex align-center gap-12">
+                        <img src={phoneCard} alt="" />
+                        <div className="fs-14">
+                          {item?.userInfo?.phoneNumber}
+                        </div>
+                      </div>
+                    )}
                     <div className="divider2"></div>
                     <div className="d-flex gap-10 mt-20 justify-end flexBtn">
                       <div
@@ -206,7 +211,6 @@ const Followers = () => {
               {followerListSelector?.data?.data?.records?.length > 0 ? (
                 followerListSelector?.data?.data?.records?.map(
                   (item, index) => {
-                    console.log(item, "item");
                     return (
                       <div className="cardFollow" key={index}>
                         <div className="d-flex justify-between gap-12">
@@ -231,16 +235,20 @@ const Followers = () => {
                           </div>
                         </div>
                         <div className="divider2"></div>
-                        <div className="d-flex align-center gap-12 mb-10">
-                          <img src={emailCard} alt="" />
-                          <div className="fs-14">binhan628@gmail.com</div>
-                        </div>
-                        <div className="d-flex align-center gap-12">
-                          <img src={phoneCard} alt="" />
-                          <div className="fs-14">
-                            {item?.userInfo?.phoneNumber}
+                        {item?.userInfo?.email && (
+                          <div className="d-flex align-center gap-12 mb-10">
+                            <img src={emailCard} alt="" />
+                            <div className="fs-14">{item?.userInfo?.email}</div>
                           </div>
-                        </div>
+                        )}
+                        {item?.userInfo?.phoneNumber && (
+                          <div className="d-flex align-center gap-12">
+                            <img src={phoneCard} alt="" />
+                            <div className="fs-14">
+                              {item?.userInfo?.phoneNumber}
+                            </div>
+                          </div>
+                        )}
                         <div className="divider2"></div>
                         <div className="d-flex gap-10 mt-20 justify-end flexBtn">
                           <div
