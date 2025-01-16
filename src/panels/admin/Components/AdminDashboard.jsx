@@ -253,7 +253,6 @@ const AdminDashboard = () => {
 
 
   const handleCommunicate = (item) => {
-    console.log(item, "itemitemitemitem");
     setCommunicateItem(item)
     let payload = {
       timeFrame: activeTab2,
@@ -415,12 +414,12 @@ const AdminDashboard = () => {
                   {openIndex === index && (
                     <div className="accordion-body">{item.content}</div>
                   )}
-                  <div
+                  {/* <div
                     className="btnSecondary btn"
                     onClick={() => handleCommunicate(item)}
                   >
                     Communicate
-                  </div>
+                  </div> */}
                   {/* {restaurantPerformance && <Test2 />} */}
                 </div>
               )
