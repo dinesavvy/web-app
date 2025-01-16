@@ -4,6 +4,7 @@ import SearchSelect from "../Components/SearchSelect";
 import olive from "../../../assets/images/olive.png";
 import countIcon from "../../../assets/images/countIcon.svg";
 import countIconRed from "../../../assets/images/countIconRed.svg";
+import noImageFound from "../../../assets/images/noImageFound.png";
 
 import { Pagination } from "antd";
 import { useNavigate } from "react-router-dom";
@@ -103,7 +104,7 @@ const MerchantList = () => {
                     <div className="merchantCard" key={index}>
                       <div className="topPadding">
                         <div className="merchantImage">
-                          <img src={item?.photoURL||olive} alt="" />
+                          <img src={item?.photoURL||noImageFound} alt="" />
                         </div>
                         <div className="fs-16 fw-700 mb-10">
                           {/* Garden Grove Café & Bistro */}
