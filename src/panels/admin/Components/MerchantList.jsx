@@ -189,7 +189,7 @@ const MerchantList = () => {
                           </div>
                           <div
                             className="btnSecondary btn"
-                            onClick={() => navigate("/merchant/team-member")}
+                            onClick={() => navigate("/admin/merchant/team-member")}
                           >
                             Team
                           </div>
@@ -256,7 +256,7 @@ const MerchantList = () => {
                   </div>
                   <div
                     className="btnSecondary btn"
-                    onClick={() => navigate("/merchant/team-member")}
+                    onClick={() => navigate("/admin/merchant/team-member")}
                   >
                     Team
                   </div>
