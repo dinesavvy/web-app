@@ -10,7 +10,6 @@ const SearchSelect = ({ onSearchChange, onSearchAreaChange }) => {
   const [searchInput, setSearchInput] = useState("");
   const dropdownRef = useRef(null); // Reference for the dropdown container
   const location = useLocation();
-  console.log(selectedItems, "selectedItems");
 
   const options = [
     "city",

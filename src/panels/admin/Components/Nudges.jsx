@@ -35,7 +35,7 @@ const Nudges = () => {
   const [searchString, setSearchString] = useState("");
   const [selectedValue, setSelectedValue] = useState("");
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  console.log(selectedValue, "selectedValue");
+
   const handleTabClick = (tab) => {
     setActiveTab(tab); // Update the active tab
   };
@@ -165,7 +165,7 @@ const Nudges = () => {
               }
             >
               {merchantsListSelector?.data?.data?.records?.length > 0 ? (
-                merchantsListSelector?.data?.data?.records.map((option) => (
+                merchantsListSelector?.data?.data?.records?.map((option) => (
                   <label key={option.value} className="custom-label">
                     <input
                       type="radio"
@@ -175,7 +175,6 @@ const Nudges = () => {
                       onChange={() => handleChange(option)}
                       autoComplete="off"
                     />
-                    {console.log(selectedValue, "selectedValue")}
                     <div className="custom-radio-button">
                       <img src={radioSelected} alt="radioSelected" />
                     </div>

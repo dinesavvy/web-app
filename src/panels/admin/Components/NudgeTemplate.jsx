@@ -15,7 +15,6 @@ import { fileUploadHandler } from "../../../redux/action/fileUpload";
 const NudgeTemplate = () => {
   const dispatch = useDispatch();
   const { state } = useLocation();
-  console.log(state,"statestatestatestatestate")
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [nudgesCards, setNudgesCard] = useState();
   const getNudgesTemplateSelector = useSelector(
@@ -32,6 +31,7 @@ const NudgeTemplate = () => {
     description: Yup.string()
       .required("Description is required")
       .max(200, "Description must be 200 characters or less"),
+    quantity: Yup.string().required("Please enter quantity"),
   });
 
   useEffect(() => {
@@ -55,7 +55,7 @@ const NudgeTemplate = () => {
     let payload = {
       page: 1,
       limit: 10,
-      locationId: state?.locationId || localStorage.getItem("merchantId"),
+      locationId: localStorage.getItem("merchantId"),
     };
     dispatch(getNudgesTemplateHandler(payload));
   }, []);
@@ -89,8 +89,7 @@ const NudgeTemplate = () => {
     }
   };
 
-
-  console.log(fileuploadSelector,"fileuploadSelector")
+  console.log(fileuploadSelector, "fileuploadSelector");
 
   return (
     <>
@@ -209,7 +208,7 @@ const NudgeTemplate = () => {
             validationSchema={validationSchema}
             onSubmit={handleSubmit}
           >
-            {({ errors, touched, values }) => (
+            {({ errors, touched, values,isValid }) => (
               <Form>
                 {nudgesCards && (
                   <>
@@ -241,7 +240,7 @@ const NudgeTemplate = () => {
                             htmlFor="title"
                             className="grey mb-10 fs-16 fw-500"
                           >
-                            Title
+                            Title*
                           </label>
                           <Field
                             id="title"
@@ -261,7 +260,7 @@ const NudgeTemplate = () => {
                             htmlFor="description"
                             className="grey mb-10 fs-16 fw-500"
                           >
-                            Total Quantity
+                            Total Quantity*
                           </label>
                           <Field
                             id="quantity"
@@ -274,6 +273,11 @@ const NudgeTemplate = () => {
                                 : ""
                             }
                           />
+                          {errors.quantity && touched.quantity && (
+                            <div className="error-message">
+                              {errors.quantity}
+                            </div>
+                          )}
                         </div>
 
                         <div className="twoSpace">
@@ -281,7 +285,7 @@ const NudgeTemplate = () => {
                             htmlFor="description"
                             className="grey mb-10 fs-16 fw-500"
                           >
-                            Description
+                            Description*
                           </label>
                           <Field
                             id="description"
@@ -304,11 +308,11 @@ const NudgeTemplate = () => {
                     </div>
                     <div
                       className="tabPadding mb-20"
-                      onClick={() =>
+                      onClick={() => {
                         navigate("/admin/merchant/details", {
                           state: state,
-                        })
-                      }
+                        });
+                      }}
                     >
                       <div className="d-flex justify-between align-center gap-20 w-100">
                         <div>
@@ -318,7 +322,6 @@ const NudgeTemplate = () => {
                           <div className="fs-16 darkBlack">
                             {/* By default all your followers will be sent this
                               Nudge. */}
-
                             <div className="flexTagFull">
                               {state?.selectedItems?.map((item) => {
                                 return <div>{item?.userInfo?.displayName}</div>;
@@ -357,7 +360,7 @@ const NudgeTemplate = () => {
                       </div>
                     </div>
                     <div className="d-flex justify-end">
-                      <div className="btn w164 " onClick={toggleCart}>
+                      <div className="btn w164 " onClick={values?.quantity && values?.title && values?.description ? toggleCart : undefined}>
                         Add to Cart
                       </div>
                     </div>

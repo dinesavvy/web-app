@@ -18,10 +18,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { analyticsDetailsHandler } from "../../../redux/action/analyticsDetails";
 import Loader from "../../../common/Loader/Loader";
 import { merchantPerfomanceAnalyticsListHandler } from "../../../redux/action/merchantPerfomanceAnalyticsList";
+import {
+  merchantPerformanceAnalyticsDetailsAction,
+  merchantPerformanceAnalyticsDetailsHandler,
+} from "../../../redux/action/merchantPerformanceAnalyticsDetails";
+import { useCommonMessage } from "../../../common/CommonMessage";
 
 const AdminDashboard = () => {
   const [pagination, setPagination] = useState({ page: 1, limit: 9 });
-  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("1");
   const [activeTab2, setActiveTab2] = useState("today");
   const [activeTab3, setActiveTab3] = useState("1");
@@ -31,6 +35,9 @@ const AdminDashboard = () => {
     progress: 80,
     total: 100,
   };
+
+  const navigate = useNavigate();
+  const messageApi = useCommonMessage();
 
   const handlePaginationChange = (page, pageSize) => {
     setPagination({ page, limit: pageSize });
@@ -226,15 +233,11 @@ const AdminDashboard = () => {
   const merchantPerformanceAnalyticsListSelector = useSelector(
     (state) => state?.merchantPerformanceAnalyticsList
   );
-  console.log(
-    merchantPerformanceAnalyticsListSelector,
-    "merchantPerformanceAnalyticsListSelector"
-  );
 
   useEffect(() => {
     let payload = {
       page: pagination.page,
-        limit: pagination.limit,
+      limit: pagination.limit,
       timeFrame: activeTab2,
       sortOn: "performance",
       holdingSort: activeTab3 === "1" ? true : false,
@@ -242,10 +245,45 @@ const AdminDashboard = () => {
     dispatch(merchantPerfomanceAnalyticsListHandler(payload));
   }, [activeTab2, activeTab3]);
 
+  const merchantPerformanceAnalyticsDetailsSelector = useSelector(
+    (state) => state?.merchantPerformanceAnalyticsDetails
+  );
+
+  const [communicateItem,setCommunicateItem] = useState()
+
+
+  const handleCommunicate = (item) => {
+    console.log(item, "itemitemitemitem");
+    setCommunicateItem(item)
+    let payload = {
+      timeFrame: activeTab2,
+      locationId: item?._id,
+      followerLocationId: item?.locationId,
+    };
+    dispatch(merchantPerformanceAnalyticsDetailsHandler(payload));
+  };
+
+  useEffect(() => {
+    if (merchantPerformanceAnalyticsDetailsSelector?.data?.statusCode === 200) {
+      messageApi.open({
+        type: "success",
+        content: merchantPerformanceAnalyticsDetailsSelector?.data?.message,
+      });
+      dispatch(
+        merchantPerformanceAnalyticsDetailsAction.merchantPerformanceAnalyticsDetailsReset()
+      );
+      if(communicateItem){
+        localStorage.setItem("merchantId", communicateItem?._id);
+        navigate("/admin/merchant/details",{state:communicateItem});
+      }
+    }
+  }, [merchantPerformanceAnalyticsDetailsSelector]);
+
   return (
     <>
       {(analyticsDetailsSelector?.isLoading ||
-        merchantPerformanceAnalyticsListSelector?.isLoading) && <Loader />}
+        merchantPerformanceAnalyticsListSelector?.isLoading ||
+        merchantPerformanceAnalyticsDetailsSelector?.isLoading) && <Loader />}
       <div className="dashboard">
         <div className="d-flex flexWrap gap-20">
           <div className="mx292">
@@ -368,7 +406,7 @@ const AdminDashboard = () => {
                     className="accordion-header"
                     onClick={() => handleToggle(index)}
                   >
-                    <img src={item.logoUrl || olive} alt="" />
+                    <img src={item.logoUrl || olive} alt={item.businessName} />
                     <div className="fs-18 fw-600">{item.businessName}</div>
                     <div className="tag">
                       <div className="tagAbsolute">#{index + 1}</div>
@@ -377,14 +415,21 @@ const AdminDashboard = () => {
                   {openIndex === index && (
                     <div className="accordion-body">{item.content}</div>
                   )}
+                  <div
+                    className="btnSecondary btn"
+                    onClick={() => handleCommunicate(item)}
+                  >
+                    Communicate
+                  </div>
+                  {/* {restaurantPerformance && <Test2 />} */}
                 </div>
               )
             )}
           </div>
           <div className="d-flex align-center justify-between flexPagination">
             <div className="fs-16">
-              Showing {pagination.page} to {merchantPerformanceAnalyticsListSelector?.data?.data
-                  ?.limit} of{" "}
+              Showing {pagination.page} to{" "}
+              {merchantPerformanceAnalyticsListSelector?.data?.data?.limit} of{" "}
               {
                 merchantPerformanceAnalyticsListSelector?.data?.data
                   ?.recordsCount

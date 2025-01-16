@@ -6,7 +6,12 @@ import arrowRight from "../../../assets/images/arrowRight.svg";
 import Loader from "../../../common/Loader/Loader";
 import moment from "moment";
 
-const NudgeDetail = ({ isOpen, toggleSidebar, nudgeDetailsMainSelector }) => {
+const NudgeDetail = ({
+  isOpen,
+  toggleSidebar,
+  nudgeDetailsMainSelector,
+  activeTab,
+}) => {
   return (
     <>
       {/* Overlay */}
@@ -133,20 +138,27 @@ const NudgeDetail = ({ isOpen, toggleSidebar, nudgeDetailsMainSelector }) => {
                     {nudgeDetailsMainSelector?.data?.data?.recipientCount -
                       (nudgeDetailsMainSelector?.data?.data
                         ?.totalAcceptedFollowerList +
-                      nudgeDetailsMainSelector?.data?.data?.disLikeUserList)}
+                        nudgeDetailsMainSelector?.data?.data?.disLikeUserList)}
                     /
-                    {(((nudgeDetailsMainSelector?.data?.data?.recipientCount -
-                      (nudgeDetailsMainSelector?.data?.data
-                        ?.totalAcceptedFollowerList +
-                      nudgeDetailsMainSelector?.data?.data?.disLikeUserList)) /
-                      nudgeDetailsMainSelector?.data?.data?.recipientCount) *
-                      100).toFixed(2)}
+                    {(
+                      ((nudgeDetailsMainSelector?.data?.data?.recipientCount -
+                        (nudgeDetailsMainSelector?.data?.data
+                          ?.totalAcceptedFollowerList +
+                          nudgeDetailsMainSelector?.data?.data
+                            ?.disLikeUserList)) /
+                        nudgeDetailsMainSelector?.data?.data?.recipientCount) *
+                      100
+                    ).toFixed(2)}
                     %
                   </div>
                 </div>
               </div>
-              <div className="btn">Resend</div>
-              <div className="divider2"></div>
+              {!activeTab && (
+                <>
+                  <div className="btn">Resend</div>
+                  <div className="divider2"></div>
+                </>
+              )}
               {/* Nudge Detail */}
               <div className="fs-18 fw-600 mb-16">Redeemtion History</div>
               <div className="historyFlex">

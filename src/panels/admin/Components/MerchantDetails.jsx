@@ -44,13 +44,32 @@ const MerchantDetails = () => {
   const [searchArea, setSearchArea] = useState([]);
   const [activeNudgeClass, setActiveNudgeClass] = useState("Received");
   const [activeTab, setActiveTab] = useState(true);
+  const [checkedItems, setCheckedItems] = useState({});
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [selectedItems, setSelectedItems] = useState([]);
 
   const listByUserIdSelector = useSelector((state) => state?.listByUserId);
+  const followerListSelector = useSelector((state) => state?.followeList);
+  const nudgesListSelector = useSelector((state) => state?.nudgesList);
 
   const { state } = useLocation();
   const dispatch = useDispatch();
 
-  console.log(state, "state");
+  useEffect(() => {
+    if (state?.selectedItems?.length > 0) {
+      setActiveTab3("3");
+      const updatedCheckedItems = {};
+      followerListSelector?.data?.data?.records?.forEach((item, index) => {
+        // Mark as checked if the item is in selectedItems
+        const isSelected = state?.selectedItems.some(
+          (selectedItem) => selectedItem?._id === item?._id
+        );
+        updatedCheckedItems[index] = isSelected;
+      });
+      setCheckedItems(updatedCheckedItems);
+      setSelectedItems(state?.selectedItems); // Ensure selectedItems is in sync
+    }
+  }, [state?.selectedItems, followerListSelector]);
 
   const merchantDetailsSelector = useSelector(
     (state) => state?.merchantDetails
@@ -82,11 +101,7 @@ const MerchantDetails = () => {
     }
   }, [activeNudgeClass, followerDetailsSelector, activeTab]);
 
-  const [checkedItems, setCheckedItems] = useState({});
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-
   // For Nudge Details Data
-
   const nudgeDetailsMainSelector = useSelector(
     (state) => state?.nudgeDetailsMain
   );
@@ -106,14 +121,30 @@ const MerchantDetails = () => {
 
   const toggleSidebar = (item) => {
     setIsSidebarOpen((prevState) => !prevState);
-    let payload = {
-      nudgeId: item?._id,
-    };
-    dispatch(nudgesDetailsHandler(payload));
+    if (!isSidebarOpen) {
+      let payload = {
+        nudgeId: item?._id,
+      };
+      dispatch(nudgesDetailsHandler(payload));
+    }
   };
-  const [selectedItems, setSelectedItems] = useState([]);
-  console.log(selectedItems,"selectedItems")
 
+  // const handleCheckboxChange = (index, isChecked, item) => {
+  //   setCheckedItems((prev) => ({
+  //     ...prev,
+  //     [index]: isChecked,
+  //   }));
+
+  //   if (isChecked) {
+  //     // Add the item to the selectedItems array
+  //     setSelectedItems((prev) => [...prev, item]);
+  //   } else {
+  //     // Remove the item from the selectedItems array
+  //     setSelectedItems((prev) =>
+  //       prev.filter((selectedItem) => selectedItem !== item)
+  //     );
+  //   }
+  // };
   const handleCheckboxChange = (index, isChecked, item) => {
     setCheckedItems((prev) => ({
       ...prev,
@@ -121,12 +152,16 @@ const MerchantDetails = () => {
     }));
 
     if (isChecked) {
-      // Add the item to the selectedItems array
-      setSelectedItems((prev) => [...prev, item]);
+      // Add the item to the selectedItems array if not already present
+      setSelectedItems((prev) =>
+        prev.some((selectedItem) => selectedItem?._id === item?._id)
+          ? prev
+          : [...prev, item]
+      );
     } else {
       // Remove the item from the selectedItems array
       setSelectedItems((prev) =>
-        prev.filter((selectedItem) => selectedItem !== item)
+        prev.filter((selectedItem) => selectedItem?._id !== item?._id)
       );
     }
   };
@@ -184,12 +219,16 @@ const MerchantDetails = () => {
   // ];
 
   useEffect(() => {
-    dispatch(
-      merchantDetailsHandler({
-        locationId:
-          state?._id || state?.locationId || localStorage.getItem("merchantId"),
-      })
-    );
+    // dispatch(
+    //   merchantDetailsHandler({
+    //     locationId:
+    //       localStorage.getItem("merchantId"),
+    //   })
+    // );
+    let payload = {
+      locationId: localStorage.getItem("merchantId"),
+    };
+    dispatch(merchantDetailsHandler(payload));
   }, []);
 
   const navigate = useNavigate();
@@ -213,7 +252,7 @@ const MerchantDetails = () => {
     if (activeTab3 === "3") {
       const fetchMerchants = () => {
         const payload = {
-          locationId: state?._id,
+          locationId: localStorage.getItem("merchantId"),
           page: pagination.page,
           limit: pagination.limit,
           status: "Active",
@@ -227,14 +266,11 @@ const MerchantDetails = () => {
     }
   }, [pagination, searchString, searchArea, activeTab3]);
 
-  const followerListSelector = useSelector((state) => state?.followeList);
-  const nudgesListSelector = useSelector((state) => state?.nudgesList);
-
   useEffect(() => {
     if (activeTab3 === "4") {
       const fetchNudgesList = () => {
         const payload = {
-          locationId: state?._id,
+          locationId: localStorage.getItem("merchantId"),
           page: pagination.page,
           limit: pagination.limit,
           searchString,
@@ -260,7 +296,6 @@ const MerchantDetails = () => {
   return (
     <>
       {merchantDetailsSelector?.isLoading ||
-      nudgesListSelector?.isLoading ||
       followerDetailsSelector?.isLoading ? (
         <Loader />
       ) : (
@@ -418,10 +453,7 @@ const MerchantDetails = () => {
                         </a>
                       )}
                     </div>
-                    {console.log(
-                      merchantDetailsSelector,
-                      "merchantDetailsSelector"
-                    )}
+
                     <div>
                       {/* {editInput === true ? (
                         <input
@@ -1540,10 +1572,7 @@ const MerchantDetails = () => {
                       <div>Mac and Cheese Pizza</div>
                       <div>Burrito</div>
                       <div>Mission burrito</div> */}
-                      {console.log(
-                        followerDetailsSelector,
-                        "followerDetailsSelector"
-                      )}
+
                       {followerDetailsSelector?.data?.data
                         ?.customerPreferenceData?.filterData?.length > 0 ? (
                         followerDetailsSelector.data.data.customerPreferenceData?.filterData?.map(
@@ -1723,6 +1752,7 @@ const MerchantDetails = () => {
                                   <label className="checkLabel">
                                     <input
                                       type="checkbox"
+                                      // checked={checkedItems[index] || false}
                                       checked={checkedItems[index] || false}
                                       onChange={(e) =>
                                         handleCheckboxChange(
@@ -1800,16 +1830,16 @@ const MerchantDetails = () => {
                         className="btn fs-16"
                         onClick={() =>
                           navigate("/admin/nudges/template", {
-                            state: { locationId: state?._id, selectedItems },
+                            state: { locationId: state, selectedItems },
                           })
                         }
                       >
                         <img src={createAdd} alt="image" />
                         <div>Create nudge</div>
                       </div>
-                      <div className="h-24 cursor-pointer">
+                      {/* <div className="h-24 cursor-pointer">
                         <img src={deleteList} className="w-100 h-100" alt="" />
-                      </div>
+                      </div> */}
                     </div>
                   )}
                 </>
@@ -1817,6 +1847,7 @@ const MerchantDetails = () => {
             </>
           ) : activeTab3 === "4" ? (
             <>
+              {nudgesListSelector?.isLoading && <Loader />}
               <div className="tabPadding mb-30">
                 <div className="d-flex align-center gap-20 mb-30 w-100">
                   <img src={backButton} alt="" />
@@ -1975,7 +2006,6 @@ const MerchantDetails = () => {
                                 {item?.recipientCount}
                               </div>
                             </div>
-                            {console.log(item, "itemitemitemitem")}
                             <div>
                               <div className="fs-14 mb-4 lightBlack">
                                 Accepted:
@@ -2011,17 +2041,6 @@ const MerchantDetails = () => {
                                 No Response
                               </div>
                               <div className="fs-14 fw-600 greyColor">
-                                {/* {20}/{(20/200)*100}% */}
-                                {/* {item?.recipientCount -
-                                  (item?.totalAcceptedFollowerList +
-                                  item?.disLikeUserList)}
-                                /
-                                {((item?.recipientCount -
-                                 (item?.totalAcceptedFollowerList +
-                                  item?.disLikeUserList)) /
-                                  item?.recipientCount) *
-                                  100}
-                                % */}
                                 {item?.recipientCount -
                                   (item?.totalAcceptedFollowerList +
                                     item?.disLikeUserList)}
@@ -2056,6 +2075,7 @@ const MerchantDetails = () => {
                 isOpen={isSidebarOpen}
                 toggleSidebar={toggleSidebar}
                 nudgeDetailsMainSelector={nudgeDetailsMainSelector}
+                activeTab={activeTab}
               />
               {/* )} */}
             </>
