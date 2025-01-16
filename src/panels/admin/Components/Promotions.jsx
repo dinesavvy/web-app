@@ -1,37 +1,69 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import addBtn from "../../../assets/images/addBtn.svg";
 import coke from "../../../assets/images/coke.svg";
 import SearchSelect from "./SearchSelect";
 import { Pagination } from "antd";
 import PromotionDetails from "./PromotionDetails";
+import { useNavigate } from "react-router-dom";
 
 const Promotions = () => {
-      const [isDetailsOpen, setIsDetailsOpen] = useState(false);
-        
-          useEffect(() => {
-            if (isDetailsOpen) {
-              document.body.classList.add("overflow-Hidden");
-            } else {
-              document.body.classList.remove("overflow-Hidden");
-            }
-        
-            // Cleanup on component unmount
-            return () => {
-              document.body.classList.remove("overflow-Hidden");
-            };
-          }, [isDetailsOpen]);
-          const toggleDetails = () => {
-            setIsDetailsOpen((prevState) => !prevState);
-          };
+  const [isDetailsOpen, setIsDetailsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const toggleDropdown = () => {
+    setIsOpen((prev) => !prev);
+  };
+  const selectRef = useRef(null);
+  const navigate = useNavigate()
+  // Handle clicks outside of the component
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (selectRef.current && !selectRef.current.contains(event.target)) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+  useEffect(() => {
+    if (isDetailsOpen) {
+      document.body.classList.add("overflow-Hidden");
+    } else {
+      document.body.classList.remove("overflow-Hidden");
+    }
+
+    // Cleanup on component unmount
+    return () => {
+      document.body.classList.remove("overflow-Hidden");
+    };
+  }, [isDetailsOpen]);
+  const toggleDetails = () => {
+    setIsDetailsOpen((prevState) => !prevState);
+  };
   return (
     <>
       <div className="dashboard">
         <div className="tabPadding">
           <div className="d-flex justify-between align-center mb-20">
             <div className="fs-24 fw-600">Promotions</div>
-            <div className="btn gap-8 addBtn">
-              Create New Promotion
-              <img src={addBtn} alt="addBtn" />
+            <div
+              className={`position-relative ${isOpen ? "rotate" : ""} `}
+              ref={selectRef}
+            >
+              <div className="gap-8 addBtn btn z1" onClick={toggleDropdown}>
+                Create New Promotion
+                <img src={addBtn} alt="addBtn" />
+              </div>
+              {isOpen && (
+                <>
+                  <div className="select-options">
+                    <div className="options cursor-pointer" onClick={()=>navigate("/admin/add-promotions")}>Single Promotion</div>
+                    <div className="options cursor-pointer" onClick={()=>navigate("/admin/add-promotions")}>Group Promotion</div>
+                  </div>
+                </>
+              )}
             </div>
           </div>
           <div class="tabs-container tab3 tabing mb-20">
@@ -74,7 +106,7 @@ const Promotions = () => {
                   </div>
                 </div>
                 <div className="btn btnSecondary" onClick={toggleDetails}>
-                View Details
+                  View Details
                 </div>
               </div>
             </div>
@@ -110,7 +142,7 @@ const Promotions = () => {
                   </div>
                 </div>
                 <div className="btn btnSecondary" onClick={toggleDetails}>
-                View Details
+                  View Details
                 </div>
               </div>
             </div>
@@ -146,7 +178,7 @@ const Promotions = () => {
                   </div>
                 </div>
                 <div className="btn btnSecondary" onClick={toggleDetails}>
-                View Details
+                  View Details
                 </div>
               </div>
             </div>

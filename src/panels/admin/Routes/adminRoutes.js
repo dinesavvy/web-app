@@ -11,6 +11,7 @@ import Brands from "../Components/Brands";
 import TeamMember from "../Components/TeamMember";
 import EditMember from "../Components/EditMember";
 import EditBrands from "../Components/EditBrands";
+import AddPromotion from "../Components/AddPromotion";
 
 const adminRoutes = [
   {
@@ -82,6 +83,12 @@ const adminRoutes = [
     {
       path: "/admin/promotions",
       element: Promotions,
+      isPrivate: false,
+      isLayout: true,
+    },
+    {
+      path: "/admin/add-promotions",
+      element: AddPromotion,
       isPrivate: false,
       isLayout: true,
     },

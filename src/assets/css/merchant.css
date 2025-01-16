@@ -820,15 +820,57 @@ input[type="radio"]:checked + .custom-radio-button{
   border-radius: 4px;
   text-align: center;
 }
+.addBtn + .select-options .options:not(:last-child){
+  border-bottom: 1px solid #E6E6E6;
+}
+.padding20{
+  padding: 20px;
+  border-radius: 12px 12px 0 0;
+  background-color: white;
+  border-bottom: 1px solid #E6E6E6;
+}
+.addPlus{
+  height: unset;
+  padding: 12px;
+  gap: 4px;
+}
 .brandImagePromo img {
-
   height: 100%;
   object-fit: contain;
 }
 .accordionCustom {
   width: 100%;
 }
-
+.paddingb20{
+  background-color: white;
+  padding: 20px;
+  border-radius: 0 0 12px 12px;
+  max-height: 300px;
+  overflow-y: auto;  
+}
+.selectGrid3{
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  gap: 20px;
+}
+.brandItem{
+  border: 1px solid #E6E6E6;
+  border-radius: 6px;
+  padding: 12px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-height: 83px;
+  cursor: grab;
+}
+.brandItem img{
+  max-width: 100%;
+  max-height: 100%;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
 .accordionHeader {
   display: flex;
   justify-content: space-between;
@@ -875,7 +917,26 @@ input[type="radio"]:checked + .custom-radio-button{
   border-radius: 6px;
   height: 60px;
 }
-
+.addTitleInput{
+  background-color: transparent !important;
+  padding: 0;
+  border: none !important;
+  font-size: 18px;
+  line-height: 27px;
+  color: #005CDE;
+  font-weight: 700;
+}
+.addTitleInput::placeholder{
+  color: #005CDE;
+}
+.addThing{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px dashed  #056DFF;
+  border-radius: 8px;
+  padding: 20px;
+}
 @media (max-width: 1499.98px) {
   .merchantGrid {
     grid-template-columns: repeat(2, 1fr);
