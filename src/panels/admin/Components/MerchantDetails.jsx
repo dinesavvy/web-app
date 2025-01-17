@@ -10,6 +10,7 @@ import createAdd from "../../../assets/images/createAdd.svg";
 import deleteList from "../../../assets/images/deleteList.svg";
 import addnudge from "../../../assets/images/addnudge.svg";
 import addCredits from "../../../assets/images/addCredits.svg";
+import noImageFound from "../../../assets/images/noImageFound.png";
 import map from "../../../assets/images/map.jpg";
 import restaurantCard from "../../../assets/images/restaurantCard.png";
 import dish from "../../../assets/images/dish.png";
@@ -53,23 +54,46 @@ const MerchantDetails = () => {
   const nudgesListSelector = useSelector((state) => state?.nudgesList);
 
   const { state } = useLocation();
+  console.log(state, "statestate");
   const dispatch = useDispatch();
 
+  // useEffect(() => {
+  //   if (state?.selectedItems?.length > 0) {
+  //     setActiveTab3("3");
+  //     const updatedCheckedItems = {};
+  //     followerListSelector?.data?.data?.records?.forEach((item, index) => {
+  //       // Mark as checked if the item is in selectedItems
+  //       const isSelected = state?.selectedItems.some(
+  //         (selectedItem) => selectedItem?._id === item?._id
+  //       );
+  //       updatedCheckedItems[index] = isSelected;
+  //     });
+  //     setCheckedItems(updatedCheckedItems);
+  //     setSelectedItems(state?.selectedItems); // Ensure selectedItems is in sync
+  //   }
+  // }, [state?.selectedItems, followerListSelector]);
+
   useEffect(() => {
-    if (state?.selectedItems?.length > 0) {
+    if (
+      (Array.isArray(state?.selectedItems) && state?.selectedItems.length > 0) || 
+      state?.locationId?.locationId
+    ) {
       setActiveTab3("3");
       const updatedCheckedItems = {};
+      
       followerListSelector?.data?.data?.records?.forEach((item, index) => {
         // Mark as checked if the item is in selectedItems
-        const isSelected = state?.selectedItems.some(
+        const isSelected = Array.isArray(state?.selectedItems) && state?.selectedItems.some(
           (selectedItem) => selectedItem?._id === item?._id
         );
         updatedCheckedItems[index] = isSelected;
       });
+  
       setCheckedItems(updatedCheckedItems);
-      setSelectedItems(state?.selectedItems); // Ensure selectedItems is in sync
+      setSelectedItems(state?.selectedItems || []); // Ensure selectedItems is an array
     }
   }, [state?.selectedItems, followerListSelector]);
+  
 
   const merchantDetailsSelector = useSelector(
     (state) => state?.merchantDetails
@@ -1143,6 +1167,8 @@ const MerchantDetails = () => {
             </>
           ) : activeTab3 === "2" ? (
             <>
+              {console.log(merchantDetailsSelector, "merchantDetailsSelector")}
+
               <div className="tabPadding">
                 <div className="d-flex align-center gap-20 mb-30 w-100">
                   <img src={backButton} alt="" className="cursor-pointer" />
@@ -1163,7 +1189,14 @@ const MerchantDetails = () => {
                 </div>
                 <div className="card">
                   <div className="img54 mb-16">
-                    <img src={olive} alt="" className="h-100" />
+                    <img
+                      src={
+                        merchantDetailsSelector?.data?.data?.owenerDetails
+                          ?.photoURL || noImageFound
+                      }
+                      alt=""
+                      className="h-100"
+                    />
                   </div>
                   <div className="fs-22 fw-600">
                     {merchantDetailsSelector?.data?.data?.businessName}
@@ -1842,6 +1875,25 @@ const MerchantDetails = () => {
                       </div> */}
                     </div>
                   )}
+
+                  {isAnyCheckboxChecked &&state?.locationId?.locationId && (
+                    <div className="floatAdd">
+                      <div
+                        className="btn fs-16"
+                        onClick={() =>
+                          navigate("/admin/nudges/template", {
+                            state: { locationId: state, selectedItems },
+                          })
+                        }
+                      >
+                        {/* <img src={createAdd} alt="image" /> */}
+                        <div>Continue</div>
+                      </div>
+                      {/* <div className="h-24 cursor-pointer">
+                        <img src={deleteList} className="w-100 h-100" alt="" />
+                      </div> */}
+                    </div>
+                  )}
                 </>
               )}
             </>
@@ -1924,7 +1976,15 @@ const MerchantDetails = () => {
               <div className="card">
                 <div className="d-flex justify-between align-center gap-20 mb-20">
                   <div className="fs-24 fw-600">Nudges</div>
-                  <div className="btn btnSecondary p16 gap-8">
+                  <div
+                    className="btn btnSecondary p16 gap-8"
+                    onClick={() => {
+                      navigate("/admin/nudges/template", {
+                        state: { locationId: state },
+                      });
+                      localStorage.setItem("createNudgeFromMerchant", true);
+                    }}
+                  >
                     <img src={addCredits} alt="addCredits" />
                     Create a Nudge
                   </div>
@@ -1965,10 +2025,14 @@ const MerchantDetails = () => {
                             </div>
                             <div className="fs-14">
                               {item?.locationDetails?.address?.addressLine1 +
+                                " " +
                                 item?.locationDetails?.address?.addressLine2 +
+                                " " +
                                 item?.locationDetails?.address
                                   ?.administrativeDistrictLevel1 +
+                                " " +
                                 item?.locationDetails?.address?.country +
+                                " " +
                                 item?.locationDetails?.address?.postalCode}
                             </div>
                           </div>

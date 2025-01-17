@@ -11,6 +11,7 @@ import {
   Legend,
 } from "chart.js";
 import PropTypes from "prop-types";
+import moment from "moment";
 
 // Register the necessary components
 ChartJS.register(
@@ -24,19 +25,29 @@ ChartJS.register(
 );
 
 const AreaChart = ({
-  labels,
-  datas,
+  // labels,
+  // datas,
   topColor,
   bottomColor,
   borderColor,
   className,
+  merchantPerformanceAnalyticsDetailsSelector
 }) => {
+
+
+  const sortedData = merchantPerformanceAnalyticsDetailsSelector
+  ? [...merchantPerformanceAnalyticsDetailsSelector].sort((a, b) => new Date(a._id) - new Date(b._id))
+  : [];
+  // Extract labels and data points
+  const labels = sortedData?.map((item) => moment(item?._id).format('DD HH:mm'));
+  const datas = sortedData?.map((item) => item.value);
+
   // Sample data
   const data = {
     labels: labels,
     datasets: [
       {
-        label: "My Area Chart",
+        label: "Habitual Users",
         data: datas,
         fill: true, // Fill the area under the line
         backgroundColor: (context) => {

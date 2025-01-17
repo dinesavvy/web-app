@@ -322,11 +322,17 @@ const NudgeTemplate = () => {
                           <div className="fs-16 darkBlack">
                             {/* By default all your followers will be sent this
                               Nudge. */}
+                              {state?.selectedItems?.length>0 ?(
+
                             <div className="flexTagFull">
                               {state?.selectedItems?.map((item) => {
                                 return <div>{item?.userInfo?.displayName}</div>;
                               })}
                             </div>
+                              ):(
+                               <div>By default all your followers will be sent this
+                              Nudge.</div> 
+                              )}
                           </div>
                         </div>
                         <div>

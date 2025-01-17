@@ -203,67 +203,6 @@ const MerchantList = () => {
             ) : (
               <div>No data found</div>
             )}
-            {/* <div className="merchantCard">
-              <div className="topPadding">
-                <div className="merchantImage">
-                  <img src={olive} alt="" />
-                </div>
-                <div className="fs-16 fw-700 mb-10">
-                  Garden Grove Café & Bistro
-                </div>
-              </div>
-              <div className="divider2 m-0"></div>
-              <div className="bottomPadding">
-                <div className="label redLabel mb-20">Top performing</div>
-                <div className="grid2 mb-20">
-                  <div>
-                    <div className="fs-14 mb-4">Date joined</div>
-                    <div className="fs-14 fw-600">Sep 9, 2024</div>
-                  </div>
-                  <div>
-                    <div className="fs-14 mb-4">Followers</div>
-                    <div className="fs-14 fw-600">89</div>
-                  </div>
-                  <div>
-                    <div className="fs-14 mb-4">Nudges Sent</div>
-                    <div className="fs-14 fw-600">196</div>
-                  </div>
-                  <div>
-                    <div className="fs-14 mb-4">Nudge Credits</div>
-                    <div className="fs-14 fw-600">568</div>
-                  </div>
-                  <div>
-                    <div className="fs-14 mb-4">Followers added</div>
-                    <div className="count">
-                      <img src={countIcon} alt="" />
-                      45
-                    </div>
-                  </div>
-                  <div>
-                    <div className="fs-14 mb-4">Nudges Accepted</div>
-                    <div className="count countred">
-                      <img src={countIconRed} alt="" />
-                      124
-                    </div>
-                  </div>
-                </div>
-                <div className="gridBtn">
-                  <div
-                    className="btnSecondary btn"
-                    onClick={() => navigate("/merchant/details")}
-                  >
-                    Details
-                  </div>
-                  <div
-                    className="btnSecondary btn"
-                    onClick={() => navigate("/admin/merchant/team-member")}
-                  >
-                    Team
-                  </div>
-                  <div className="btnSecondary btn">Nudges</div>
-                </div>
-              </div>
-            </div> */}
           </div>
           <div className="d-flex align-center justify-between flexPagination">
             <div className="fs-16">

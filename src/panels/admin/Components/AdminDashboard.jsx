@@ -11,6 +11,8 @@ import PromotionCard from "../../../common/dashboards/PromotionCard";
 import olive from "../../../assets/images/olive.png";
 import BarChart from "../../../common/charts/BarChart";
 import DoughnutChart from "../../../common/charts/DoughnutChart";
+import noImageFound from "../../../assets/images/noImageFound.png";
+
 import { Pagination } from "antd";
 import AreaChart from "../../../common/charts/AreaChart";
 import { useNavigate } from "react-router-dom";
@@ -25,6 +27,7 @@ import {
 import { useCommonMessage } from "../../../common/CommonMessage";
 
 const AdminDashboard = () => {
+  const [communicateItem, setCommunicateItem] = useState();
   const [pagination, setPagination] = useState({ page: 1, limit: 9 });
   const [activeTab, setActiveTab] = useState("1");
   const [activeTab2, setActiveTab2] = useState("today");
@@ -48,7 +51,8 @@ const AdminDashboard = () => {
   );
 
   const handleToggle = (index) => {
-    setOpenIndex(openIndex === index ? null : index); // Toggle the clicked panel
+    // setOpenIndex(openIndex === index ? null : index); // Toggle the clicked panel
+    setOpenIndex((prevIndex) => (prevIndex === index ? null : index));
   };
 
   const dispatch = useDispatch();
@@ -57,7 +61,11 @@ const AdminDashboard = () => {
     dispatch(analyticsDetailsHandler());
   }, []);
 
-  const Test2 = () => {
+  const Test2 = ({ merchantPerformanceAnalyticsDetailsSelector, item }) => {
+    console.log(
+      merchantPerformanceAnalyticsDetailsSelector,
+      "merchantPerformanceAnalyticsDetailsSelector"
+    );
     return (
       <>
         <div className="d-flex gap-16 mb-16 flexWrap">
@@ -69,24 +77,28 @@ const AdminDashboard = () => {
              */}
 
             <AreaChart
-              labels={["M", "T", "W", "T", "F", "S"]}
-              datas={[65, 59, 80, 81, 56, 55, 40]}
+              // labels={["M", "T", "W", "T", "F", "S"]}
+              // datas={[65, 59, 80, 81, 56, 55, 40]}
               topColor={"rgba(2, 124, 255, 0.5)"}
               bottomColor={"rgba(215, 210, 226, 0.2)"}
               borderColor={"rgba(0, 123, 255, 1)"}
               className={"w-100 mxh"}
+              merchantPerformanceAnalyticsDetailsSelector={
+                merchantPerformanceAnalyticsDetailsSelector?.data?.data
+                  ?.userData
+              }
             />
           </div>
           <div className="card w-100">
             <div className="d-flex justify-between align-center ">
-              <div className="fs-16 fw-600 ">Habitual Users</div>
+              <div className="fs-16 fw-600 ">New Followers Added</div>
               <div className="fs-16 ">12/day (avg)</div>
             </div>
             <div className="divider2"></div>
             {/* <img src={chart4} alt="" className="w-100 mxh" /> */}
             <BarChart
-              labels={["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]}
-              datas={[90, 56, 58, 10, 20, 44, 56]}
+              // labels={["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]}
+              // datas={[90, 56, 58, 10, 20, 44, 56]}
               className="w-100 mxh"
               barThickness={80}
               borderSkipped={"bottom"}
@@ -94,20 +106,24 @@ const AdminDashboard = () => {
               yDisplay={false}
               isDatasMap={false}
               displayLegend={false}
+              merchantPerformanceAnalyticsDetailsSelector={
+                merchantPerformanceAnalyticsDetailsSelector?.data?.data
+                  ?.followerData
+              }
             />
           </div>
         </div>
         <div className="d-flex gap-16 mb-16 flexWrap">
           <div className="card w-100">
             <div className="d-flex justify-between align-center mb-20">
-              <div className="fs-16 fw-600 ">Habitual Users</div>
+              <div className="fs-16 fw-600 ">Nudges Sent</div>
               <div className="fs-16 ">12/day (avg)</div>
             </div>
             <div className="divider2"></div>
             {/* <img src={chart4} alt="" className="w-100 mxh" /> */}
             <BarChart
-              labels={["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]}
-              datas={[90, 56, 58, 10, 20, 44, 56]}
+              labelsStatic={["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]}
+              datasStatic={[90, 56, 58, 10, 20, 44, 56]}
               className="w-100 mxh"
               barThickness={80}
               borderSkipped={"bottom"}
@@ -119,7 +135,7 @@ const AdminDashboard = () => {
           </div>
           <div className="card mx369">
             <div className="d-flex justify-between align-center mb-20">
-              <div className="fs-16 fw-600 ">Habitual Users</div>
+              <div className="fs-16 fw-600 ">Nudge Acceptance Rate</div>
             </div>
             <div className="divider2"></div>
             <div className="text-center">
@@ -128,7 +144,7 @@ const AdminDashboard = () => {
             </div>
           </div>
         </div>
-        <div className="btnSecondary btn">Communicate</div>
+        {/* <div className="btnSecondary btn">Communicate</div> */}
       </>
     );
   };
@@ -249,34 +265,40 @@ const AdminDashboard = () => {
     (state) => state?.merchantPerformanceAnalyticsDetails
   );
 
-  const [communicateItem,setCommunicateItem] = useState()
+  // useEffect(() => {
+  //   if (merchantPerformanceAnalyticsDetailsSelector?.data?.statusCode === 200) {
+  //     messageApi.open({
+  //       type: "success",
+  //       content: merchantPerformanceAnalyticsDetailsSelector?.data?.message,
+  //     });
+  //     dispatch(
+  //       merchantPerformanceAnalyticsDetailsAction.merchantPerformanceAnalyticsDetailsReset()
+  //     );
+  //     if (communicateItem) {
+  //       localStorage.setItem("merchantId", communicateItem?._id);
+  //       navigate("/admin/merchant/details", { state: communicateItem });
+  //     }
+  //   }
+  // }, [merchantPerformanceAnalyticsDetailsSelector]);
 
-
-  const handleCommunicate = (item) => {
-    setCommunicateItem(item)
-    let payload = {
-      timeFrame: activeTab2,
-      locationId: item?._id,
-      followerLocationId: item?.locationId,
-    };
-    dispatch(merchantPerformanceAnalyticsDetailsHandler(payload));
+  const restaurantItemClick = (item, index) => {
+    console.log(item, "index");
+    setOpenIndex(index);
+    if (item?._id) {
+      let payload = {
+        timeFrame: activeTab2,
+        locationId: item?._id,
+        followerLocationId: item?.locationId,
+      };
+      dispatch(merchantPerformanceAnalyticsDetailsHandler(payload));
+    }
   };
 
-  useEffect(() => {
-    if (merchantPerformanceAnalyticsDetailsSelector?.data?.statusCode === 200) {
-      messageApi.open({
-        type: "success",
-        content: merchantPerformanceAnalyticsDetailsSelector?.data?.message,
-      });
-      dispatch(
-        merchantPerformanceAnalyticsDetailsAction.merchantPerformanceAnalyticsDetailsReset()
-      );
-      if(communicateItem){
-        localStorage.setItem("merchantId", communicateItem?._id);
-        navigate("/admin/merchant/details",{state:communicateItem});
-      }
-    }
-  }, [merchantPerformanceAnalyticsDetailsSelector]);
+  const handleCommunicate = (item) => {
+    setCommunicateItem(item);
+    localStorage.setItem("merchantId", item?._id);
+    navigate("/admin/merchant/details", { state: item });
+  };
 
   return (
     <>
@@ -400,26 +422,46 @@ const AdminDashboard = () => {
           <div className="accordion mb-20">
             {merchantPerformanceAnalyticsListSelector?.data?.data?.records?.map(
               (item, index) => (
-                <div key={index} className="accordion-item">
+                <div
+                  key={index}
+                  className="accordion-item"
+                  onClick={() => restaurantItemClick(item, index)}
+                >
                   <div
                     className="accordion-header"
                     onClick={() => handleToggle(index)}
                   >
-                    <img src={item.logoUrl || olive} alt={item.businessName} />
+                    <img
+                      src={item.logoUrl || noImageFound}
+                      alt={item.businessName}
+                    />
                     <div className="fs-18 fw-600">{item.businessName}</div>
                     <div className="tag">
                       <div className="tagAbsolute">#{index + 1}</div>
                     </div>
                   </div>
                   {openIndex === index && (
-                    <div className="accordion-body">{item.content}</div>
+                    <>
+                      <div className="accordion-body">{item.content}</div>
+                      {merchantPerformanceAnalyticsDetailsSelector?.data
+                        ?.statusCode === 200 && (
+                        <>
+                          <Test2
+                            merchantPerformanceAnalyticsDetailsSelector={
+                              merchantPerformanceAnalyticsDetailsSelector
+                            }
+                            item={item}
+                          />
+                          <div
+                            className="btnSecondary btn"
+                            onClick={() => handleCommunicate(item)}
+                          >
+                            Communicate
+                          </div>
+                        </>
+                      )}
+                    </>
                   )}
-                  {/* <div
-                    className="btnSecondary btn"
-                    onClick={() => handleCommunicate(item)}
-                  >
-                    Communicate
-                  </div> */}
                   {/* {restaurantPerformance && <Test2 />} */}
                 </div>
               )
