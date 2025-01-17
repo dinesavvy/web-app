@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import coke from "../../../assets/images/coke.svg";
 import pepsi from "../../../assets/images/pepsi.svg";
-import Draggable from "react-draggable";
 
 const AddPromotion = () => {
   const [brands, setBrands] = useState([
@@ -93,12 +92,12 @@ const AddPromotion = () => {
               </div>
             </div>
           </div>
-          <Draggable>
+          {/* <Draggable>
             <div>I can now be moved around!1</div>
           </Draggable>
           <Draggable>
             <div>I can now be moved around!2</div>
-          </Draggable>
+          </Draggable> */}
         </div>
 
         {/* Drop Area */}

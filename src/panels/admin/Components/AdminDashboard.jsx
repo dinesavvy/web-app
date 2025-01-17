@@ -77,8 +77,8 @@ const AdminDashboard = () => {
              */}
 
             <AreaChart
-              // labels={["M", "T", "W", "T", "F", "S"]}
-              // datas={[65, 59, 80, 81, 56, 55, 40]}
+              labels={["M", "T", "W", "T", "F", "S"]}
+              datas={[65, 59, 80, 81, 56, 55, 40]}
               topColor={"rgba(2, 124, 255, 0.5)"}
               bottomColor={"rgba(215, 210, 226, 0.2)"}
               borderColor={"rgba(0, 123, 255, 1)"}
@@ -97,8 +97,8 @@ const AdminDashboard = () => {
             <div className="divider2"></div>
             {/* <img src={chart4} alt="" className="w-100 mxh" /> */}
             <BarChart
-              // labels={["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]}
-              // datas={[90, 56, 58, 10, 20, 44, 56]}
+              labels={["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]}
+              datas={[90, 56, 58, 10, 20, 44, 56]}
               className="w-100 mxh"
               barThickness={80}
               borderSkipped={"bottom"}
@@ -122,8 +122,8 @@ const AdminDashboard = () => {
             <div className="divider2"></div>
             {/* <img src={chart4} alt="" className="w-100 mxh" /> */}
             <BarChart
-              labelsStatic={["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]}
-              datasStatic={[90, 56, 58, 10, 20, 44, 56]}
+              labels={["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]}
+              datas={[90, 56, 58, 10, 20, 44, 56]}
               className="w-100 mxh"
               barThickness={80}
               borderSkipped={"bottom"}
