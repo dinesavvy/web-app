@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import coke from "../../../assets/images/coke.svg";
 import pepsi from "../../../assets/images/pepsi.svg";
+import Draggable from "react-draggable";
 
 const AddPromotion = () => {
   const [brands, setBrands] = useState([
@@ -22,7 +23,9 @@ const AddPromotion = () => {
 
   // Handle drag start
   const handleDragStart = (e) => {
-    const selectedBrands = brands.filter((brand) => selectedItems.includes(brand.id));
+    const selectedBrands = brands.filter((brand) =>
+      selectedItems.includes(brand.id)
+    );
     e.dataTransfer.setData("selectedBrands", JSON.stringify(selectedBrands));
   };
 
@@ -44,9 +47,13 @@ const AddPromotion = () => {
     try {
       const draggedItems = JSON.parse(data);
 
-      // Add dropped items to the new container and remove from the original list
-      setDroppedItems((prev) => [...prev, ...draggedItems]);
-      setBrands((prev) => prev.filter((brand) => !draggedItems.some((item) => item.id === brand.id)));
+      // Add dropped items to the new container without removing them from the original list
+      setDroppedItems((prev) => {
+        const newItems = draggedItems.filter(
+          (item) => !prev.some((droppedItem) => droppedItem.id === item.id)
+        );
+        return [...prev, ...newItems];
+      });
       setSelectedItems([]); // Clear selection
     } catch (error) {
       console.error("Failed to parse drag data:", error);
@@ -54,7 +61,8 @@ const AddPromotion = () => {
   };
 
   return (
-    <div className="dashboard">
+   <>
+     <div className="dashboard">
       <div className="d-flex gap-20">
         {/* Brands List */}
         <div className="w-100">
@@ -69,8 +77,13 @@ const AddPromotion = () => {
                 {brands.map((brand) => (
                   <div
                     key={brand.id}
-                    className={`brandItem ${selectedItems.includes(brand.id) ? "selected" : ""}`}
-                    draggable={selectedItems.length > 0 && selectedItems.includes(brand.id)}
+                    className={`brandItem ${
+                      selectedItems.includes(brand.id) ? "selected" : ""
+                    }`}
+                    draggable={
+                      selectedItems.length > 0 &&
+                      selectedItems.includes(brand.id)
+                    }
                     onClick={() => handleSelect(brand.id)} // Toggle selection
                     onDragStart={handleDragStart}
                   >
@@ -80,6 +93,12 @@ const AddPromotion = () => {
               </div>
             </div>
           </div>
+          <Draggable>
+            <div>I can now be moved around!1</div>
+          </Draggable>
+          <Draggable>
+            <div>I can now be moved around!2</div>
+          </Draggable>
         </div>
 
         {/* Drop Area */}
@@ -106,6 +125,7 @@ const AddPromotion = () => {
         </div>
       </div>
     </div>
+   </>
   );
 };
 

@@ -1,12 +1,12 @@
 import React from "react";
 import PropTypes from "prop-types";
-import circleinfo from "../../assets/images/circleinfo.svg";
+import circleAbsolute2 from "../../assets/images/circleAbsolute2.gif";
 
 const MerchantCard = ({ count, trend,value }) => {
   return (
     <>
       <div className="circleinfo mb-10">
-        <img src={circleinfo} className="circleAbsolute" alt="" />
+        <img src={circleAbsolute2} className="circleAbsolute" alt="" />
         <div className="fs-34 fw-700 z1">{count}</div>
         <div className="fs-14 z1">{value}</div>
       </div>
