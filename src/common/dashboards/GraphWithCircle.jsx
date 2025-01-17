@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import circleinfo from "../../assets/images/circleinfo.svg";
+import circleinfo from "../../assets/images/circleinfo.gif";
 import AreaChart from "../charts/AreaChart";
 
 const GraphWithCircle = ({
