@@ -979,9 +979,9 @@ input[type="radio"]:checked + .custom-radio-button{
   width: 20px;
   transform: translateY(-50%);
 }
-.disable{
+.disabled {
   opacity: 0.5;
-  cursor: not-allowed;
+  cursor: not-allowed !important;
 }
 @media (max-width: 1499.98px) {
   .merchantGrid {
