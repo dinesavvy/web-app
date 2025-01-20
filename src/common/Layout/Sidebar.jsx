@@ -32,19 +32,17 @@ const Sidebar = ({ isOpen ,setIsOpen}) => {
     //   icon: distributor,
     //   iconFull: distributorFull,
     // },
-    { id: 4, name: "Merchants", icon: merchant, iconFull: merchantFull , navigate: "/admin/merchant/list" },
-    { id: 5, name: "Followers", icon: consumers, iconFull: consumersFull, navigate: "/admin/merchant/followers" },
-    { id: 6, name: "Nudges", icon: nudge, iconFull: nudgeFull,navigate: "/admin/nudges" },
-    { id: 7, name: "Promotions", icon: promotions, iconFull: promotionsFull ,navigate : "/admin/promotions"},
-    { id: 8, name: "Brands", icon: brands, iconFull: brandsFull,navigate:"/admin/brands" },
-    { id: 9, name: "Settings", icon: setting, iconFull: settingFull },
+    { id: 4, name: "Merchants", icon: merchant, iconFull: merchantFull , navigate: "/admin/merchant/list",disabled:"" },
+    { id: 5, name: "Followers", icon: consumers, iconFull: consumersFull, navigate: "/admin/merchant/followers",disabled:"" },
+    { id: 6, name: "Nudges", icon: nudge, iconFull: nudgeFull,navigate: "/admin/nudges",disabled:"" },
+    { id: 7, name: "Promotions", icon: promotions, iconFull: promotionsFull,disabled:true},
+    { id: 8, name: "Brands", icon: brands, iconFull: brandsFull,disabled:true},
+    { id: 9, name: "Settings", icon: setting, iconFull: settingFull,disabled:true },
   ];
 
   const onNavigate=(path)=>{
     const width = window.innerWidth;
     navigate(path)
-    console.log(path,"pathpathpath")
-
     if (width <= 1024) {
       setIsOpen(false)
     }
@@ -62,9 +60,9 @@ const Sidebar = ({ isOpen ,setIsOpen}) => {
             {links.map((link) => (
               <div
                 key={link.id}
-                className={`sidebarLink  ${window.location.pathname == link.navigate ? "active" : ""}  ${
+                className={`sidebarLink ${window.location.pathname === link.navigate ? "active" : ""} ${
                   isOpen ? "" : "tooltip-container"
-                }`}
+                } ${link?.disabled ? "disabled" : ""}`}
                 onClick={() => onNavigate(link.navigate)}
                 data-tooltip-id={isOpen ? "sidebar-tooltip" : undefined}
                 data-tooltip-content={isOpen ? link.name : undefined}

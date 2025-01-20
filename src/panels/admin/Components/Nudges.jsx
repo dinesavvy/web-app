@@ -12,6 +12,7 @@ import { nudgesListHandler } from "../../../redux/action/nudgesList";
 import { Pagination } from "antd";
 import moment from "moment";
 import { nudgesDetailsHandler } from "../../../redux/action/nudgeDetails";
+import noImageFound from "../../../assets/images/noImageFound.png";
 
 const Nudges = () => {
   const [pagination, setPagination] = useState({ page: 1, limit: 9 });
@@ -25,11 +26,6 @@ const Nudges = () => {
   );
 
   const dispatch = useDispatch();
-  const options = [
-    { value: "1", label: "Option 1", img: olive },
-    { value: "2", label: "Option 2", img: olive },
-    { value: "3", label: "Option 3", img: olive },
-  ];
   const [page, setPage] = useState(1);
   const scrollContainerRef = useRef(null);
   const [searchString, setSearchString] = useState("");
@@ -72,7 +68,7 @@ const Nudges = () => {
       dispatch(nudgesListHandler(payload));
     };
     fetchNudgesList();
-  }, [pagination, searchString, activeTab,selectedValue]);
+  }, [pagination, searchString, activeTab, selectedValue]);
 
   useEffect(() => {
     const fetchMerchants = () => {
@@ -101,15 +97,15 @@ const Nudges = () => {
   };
 
   // Check if user scrolled to the end
-  const handleScroll = () => {
-    const container = scrollContainerRef.current;
-    if (
-      container.scrollLeft + container.offsetWidth >=
-      container.scrollWidth - 10 // 10px buffer for smoothness
-    ) {
-      setPage((prevPage) => prevPage + 1);
-    }
-  };
+  // const handleScroll = () => {
+  //   const container = scrollContainerRef.current;
+  //   if (
+  //     container.scrollLeft + container.offsetWidth >=
+  //     container.scrollWidth - 10 // 10px buffer for smoothness
+  //   ) {
+  //     setPage((prevPage) => prevPage + 1);
+  //   }
+  // };
 
   return (
     <>
@@ -154,8 +150,8 @@ const Nudges = () => {
           </div>
           <div
             className="overflowy"
-            ref={scrollContainerRef}
-            onScroll={handleScroll}
+            // ref={scrollContainerRef}
+            // onScroll={handleScroll}
           >
             <div
               className={
@@ -165,47 +161,58 @@ const Nudges = () => {
               }
             >
               {merchantsListSelector?.data?.data?.records?.length > 0 ? (
-                merchantsListSelector?.data?.data?.records?.map((option) => (
-                  <label key={option.value} className="custom-label">
-                    <input
-                      type="radio"
-                      name="option"
-                      value={option.value}
-                      checked={selectedValue?._id === option?._id} // Dynamically toggle based on state
-                      onChange={() => handleChange(option)}
-                      autoComplete="off"
-                    />
-                    <div className="custom-radio-button">
-                      <img src={radioSelected} alt="radioSelected" />
-                    </div>
-                    <div className="radioImage">
-                      <img src={option.logoUrl || olive} alt="" />
-                    </div>
-                    <div className="radioCafeName">
-                      <div>
-                        <div className="pc fs-14 fw-500">
-                          {option?.businessName}
-                        </div>
-                        <div className="fs-12 oneLine">
-                          {option?.address?.addressLine1 +
-                            " " +
-                            option?.address?.addressLine2 +
-                            " " +
-                            option?.address?.administrativeDistrictLevel1 +
-                            " " +
-                            option?.address?.locality +
-                            " " +
-                            option?.address?.postalCode +
-                            " " +
-                            option?.address?.country}
+                <>
+                  {merchantsListSelector?.data?.data?.records?.map((option) => (
+                    <label key={option.value} className="custom-label">
+                      <input
+                        type="radio"
+                        name="option"
+                        value={option.value}
+                        checked={selectedValue?._id === option?._id} // Dynamically toggle based on state
+                        onChange={() => handleChange(option)}
+                        autoComplete="off"
+                      />
+                      <div className="custom-radio-button">
+                        <img src={radioSelected} alt="radioSelected" />
+                      </div>
+                      <div className="radioImage">
+                        <img src={option.logoUrl || noImageFound} alt="" />
+                      </div>
+                      <div className="radioCafeName">
+                        <div>
+                          <div className="pc fs-14 fw-500">
+                            {option?.businessName}
+                          </div>
+                          <div className="fs-12 oneLine">
+                            {`${option?.address?.addressLine1 || ""} ${
+                              option?.address?.addressLine2 || ""
+                            } ${
+                              option?.address?.administrativeDistrictLevel1 ||
+                              ""
+                            } ${option?.address?.locality || ""} ${
+                              option?.address?.postalCode || ""
+                            } ${option?.address?.country || ""}`}
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </label>
-                ))
+                    </label>
+                  ))}
+                </>
               ) : (
                 <div className="no-restaurants-found">No restaurant found</div>
               )}
+            </div>
+            <div className="d-flex align-center justify-between flexPagination mt-20">
+              <div className="fs-16">
+                Showing {pagination.page} to {pagination.limit} of{" "}
+                {merchantsListSelector?.data?.data?.recordsCount} Restaurants
+              </div>
+              <Pagination
+                current={pagination.page}
+                pageSize={pagination.limit}
+                total={merchantsListSelector?.data?.data?.recordsCount}
+                onChange={handlePaginationChange}
+              />
             </div>
           </div>
         </div>
@@ -246,7 +253,7 @@ const Nudges = () => {
                 {nudgesListSelector?.data?.data?.records?.length > 0 ? (
                   nudgesListSelector?.data?.data?.records?.map(
                     (item, index) => {
-                      console.log(item,"itemitemitemitem")
+                      console.log(item, "itemitemitemitem");
                       return (
                         <div className="merchantCard" key={index}>
                           <div className="position-relative">
@@ -291,8 +298,11 @@ const Nudges = () => {
                               <div className="fs-14 lightBlack ">
                                 Expiration date
                               </div>
+                              {console.log(item, "ioioioioioio")}
                               <div className="fs-14 fw-500">
-                                {moment(item?.createdAt).format("DD MMMM,YYYY")}
+                                {moment(item?.deactivateAt).format(
+                                  "DD MMMM,YYYY"
+                                )}
                               </div>
                             </div>
                             <div className="divider2"></div>

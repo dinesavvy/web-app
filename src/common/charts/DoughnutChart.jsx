@@ -7,7 +7,14 @@ import PropTypes from "prop-types";
 // Register the necessary components
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-const DoughnutChart = ({ data, className }) => {
+const DoughnutChart = ({ data,className,merchantPerformanceAnalyticsDetailsSelector }) => {
+  console.log(merchantPerformanceAnalyticsDetailsSelector?.map((item)=>((item?.nudgeAcceptCount / item?.nudgeSentCount)*100).toFixed(2)),"merchantPerformanceAnalyticsDetailsSelector")
+  // const data = {
+  //   labels: ["Progress", "Remaining"],
+  //   progress: merchantPerformanceAnalyticsDetailsSelector?.map((item)=>((item?.nudgeAcceptCount / item?.nudgeSentCount)*100).toFixed(2)),
+  //   total: 100,
+  // };
+
   const percentage = ((data?.progress / data?.total) * 100).toFixed(2);
   const chartData = {
     labels: data.labels,

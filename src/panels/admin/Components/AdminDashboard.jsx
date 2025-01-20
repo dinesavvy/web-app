@@ -62,14 +62,11 @@ const AdminDashboard = () => {
   }, []);
 
   const Test2 = ({ merchantPerformanceAnalyticsDetailsSelector, item }) => {
-    console.log(
-      merchantPerformanceAnalyticsDetailsSelector,
-      "merchantPerformanceAnalyticsDetailsSelector"
-    );
     return (
       <>
         <div className="d-flex gap-16 mb-16 flexWrap">
-          <div className="chartborder mx369">
+          {/* <div className="chartborder card mx369"> */}
+          <div className="card mx369">
             <div className="chartpadding mb-20">
               <div className="fs-16 fw-600 ">Habitual Users</div>
             </div>
@@ -119,6 +116,10 @@ const AdminDashboard = () => {
               <div className="fs-16 fw-600 ">Nudges Sent</div>
               <div className="fs-16 ">12/day (avg)</div>
             </div>
+            {console.log(
+              merchantPerformanceAnalyticsDetailsSelector?.data?.data,
+              "merchantPerformanceAnalyticsDetailsSelector?.data?.data"
+            )}
             <div className="divider2"></div>
             {/* <img src={chart4} alt="" className="w-100 mxh" /> */}
             <BarChart
@@ -131,6 +132,10 @@ const AdminDashboard = () => {
               yDisplay={false}
               isDatasMap={false}
               displayLegend={false}
+              merchantPerformanceAnalyticsDetailsSelector={
+                merchantPerformanceAnalyticsDetailsSelector?.data?.data
+                  ?.nudgeData
+              }
             />
           </div>
           <div className="card mx369">
@@ -140,7 +145,14 @@ const AdminDashboard = () => {
             <div className="divider2"></div>
             <div className="text-center">
               {/* <img src={chart5} alt="" className="h-100 mxh" /> */}
-              <DoughnutChart data={data} className="h-100 mxh" />
+              <DoughnutChart
+                data={data}
+                className="h-100 mxh"
+                merchantPerformanceAnalyticsDetailsSelector={
+                  merchantPerformanceAnalyticsDetailsSelector?.data?.data
+                    ?.nudgeData
+                }
+              />
             </div>
           </div>
         </div>
@@ -425,11 +437,14 @@ const AdminDashboard = () => {
                 <div
                   key={index}
                   className="accordion-item"
-                  onClick={() => restaurantItemClick(item, index)}
+                  // onClick={() => restaurantItemClick(item, index)}
                 >
                   <div
                     className="accordion-header"
-                    onClick={() => handleToggle(index)}
+                    onClick={() => {
+                      handleToggle(index);
+                      restaurantItemClick(item, index);
+                    }}
                   >
                     <img
                       src={item.logoUrl || noImageFound}

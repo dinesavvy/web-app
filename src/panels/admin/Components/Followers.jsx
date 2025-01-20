@@ -178,20 +178,20 @@ const Followers = () => {
                   </div> */}
                     </div>
                     <div className="divider2"></div>
-                    {item?.userInfo?.email && (
+                    {/* {item?.userInfo?.email && ( */}
                       <div className="d-flex align-center gap-12 mb-10">
                         <img src={emailCard} alt="" />
-                        <div className="fs-14">{item?.userInfo?.email}</div>
+                        <div className="fs-14">{item?.userInfo?.email || "-"}</div>
                       </div>
-                    )}
-                    {item?.userInfo?.phoneNumber !== "" && (
+                    {/* )} */}
+                    {/* {item?.userInfo?.phoneNumber !== "" && ( */}
                       <div className="d-flex align-center gap-12">
                         <img src={phoneCard} alt="" />
                         <div className="fs-14">
-                          {item?.userInfo?.phoneNumber}
+                          {item?.userInfo?.phoneNumber || "-"}
                         </div>
                       </div>
-                    )}
+                    {/* )} */}
                     <div className="divider2"></div>
                     <div className="d-flex gap-10 mt-20 justify-end flexBtn">
                       <div
@@ -235,20 +235,20 @@ const Followers = () => {
                           </div>
                         </div>
                         <div className="divider2"></div>
-                        {item?.userInfo?.email && (
+                        {/* {item?.userInfo?.email && ( */}
                           <div className="d-flex align-center gap-12 mb-10">
                             <img src={emailCard} alt="" />
-                            <div className="fs-14">{item?.userInfo?.email}</div>
+                            <div className="fs-14">{item?.userInfo?.email || "-"}</div>
                           </div>
-                        )}
-                        {item?.userInfo?.phoneNumber && (
+                        {/* )} */}
+                        {/* {item?.userInfo?.phoneNumber && ( */}
                           <div className="d-flex align-center gap-12">
                             <img src={phoneCard} alt="" />
                             <div className="fs-14">
-                              {item?.userInfo?.phoneNumber}
+                              {item?.userInfo?.phoneNumber||"-"}
                             </div>
                           </div>
-                        )}
+                        {/* )} */}
                         <div className="divider2"></div>
                         <div className="d-flex gap-10 mt-20 justify-end flexBtn">
                           <div

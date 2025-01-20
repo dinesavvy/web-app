@@ -153,29 +153,30 @@ const NudgeDetail = ({
                   </div>
                 </div>
               </div>
-              {!activeTab && (
+              {/* {!activeTab && (
                 <>
                   <div className="btn">Resend</div>
                   <div className="divider2"></div>
                 </>
-              )}
+              )} */}
               {/* Nudge Detail */}
               <div className="fs-18 fw-600 mb-16">Redeemtion History</div>
               <div className="historyFlex">
                 <div className="d-flex align-center gap-8">
-                  <div class="initialName fs-16">dr</div>
+                  {/* <div class="initialName fs-16">dr</div>
                   <div>
                     <div className="fs-14 lightBlack">John Cooper</div>
                     <div className="fs-14 fw-500">December 19, 2024</div>
-                  </div>
+                  </div> */}
+                  No data available
                 </div>
-                <div>
+                {/* <div>
                   <img src={arrowRight} alt="arrowRight" />
-                </div>
+                </div> */}
               </div>
-              <div className="pc fs-16 fw-700 cursor-pointer text-center">
+              {/* <div className="pc fs-16 fw-700 cursor-pointer text-center">
                 Show More
-              </div>
+              </div> */}
               {/* Nudge Sidebar */}
               {/* <div className="d-flex justify-between align-center gap-20">
                 <div className="fs-14 lightBlack ">Redeemed on</div>

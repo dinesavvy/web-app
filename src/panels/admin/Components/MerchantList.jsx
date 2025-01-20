@@ -176,6 +176,17 @@ const MerchantList = () => {
                           </div>
                         </div>
                         <div className="gridBtn">
+                        <div
+                            className="btnSecondary btn"
+                            // onClick={() => {
+                            //   navigate("/admin/merchant/details", {
+                            //     state: item,
+                            //   });
+                            //   localStorage.setItem("merchantId", item?._id);
+                            // }}
+                          >
+                            Promote
+                          </div>
                           <div
                             className="btnSecondary btn"
                             onClick={() => {
@@ -193,7 +204,7 @@ const MerchantList = () => {
                           >
                             Team
                           </div>
-                          <div className="btnSecondary btn">Nudges</div>
+                          {/* <div className="btnSecondary btn">Nudges</div> */}
                         </div>
                       </div>
                     </div>

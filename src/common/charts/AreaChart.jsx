@@ -25,8 +25,8 @@ ChartJS.register(
 );
 
 const AreaChart = ({
-  labels,
-  datas,
+  // labels,
+  // datas,
   topColor,
   bottomColor,
   borderColor,
@@ -36,11 +36,11 @@ const AreaChart = ({
 
 
   const sortedData = merchantPerformanceAnalyticsDetailsSelector
-  // ? [...merchantPerformanceAnalyticsDetailsSelector].sort((a, b) => new Date(a._id) - new Date(b._id))
-  // : [];
-  // // Extract labels and data points
-  // const labels = sortedData?.map((item) => moment(item?._id).format('DD HH:mm'));
-  // const datas = sortedData?.map((item) => item.value);
+  ? [...merchantPerformanceAnalyticsDetailsSelector].sort((a, b) => new Date(a._id) - new Date(b._id))
+  : [];
+  // Extract labels and data points
+  const labels = sortedData?.map((item) => moment(item?._id).format('DD-MM'));
+  const datas = sortedData?.map((item) => item.value);
 
   // Sample data
   const data = {

@@ -208,7 +208,7 @@ const NudgeTemplate = () => {
             validationSchema={validationSchema}
             onSubmit={handleSubmit}
           >
-            {({ errors, touched, values,isValid }) => (
+            {({ errors, touched, values, isValid }) => (
               <Form>
                 {nudgesCards && (
                   <>
@@ -322,17 +322,20 @@ const NudgeTemplate = () => {
                           <div className="fs-16 darkBlack">
                             {/* By default all your followers will be sent this
                               Nudge. */}
-                              {state?.selectedItems?.length>0 ?(
-
-                            <div className="flexTagFull">
-                              {state?.selectedItems?.map((item) => {
-                                return <div>{item?.userInfo?.displayName}</div>;
-                              })}
-                            </div>
-                              ):(
-                               <div>By default all your followers will be sent this
-                              Nudge.</div> 
-                              )}
+                            {state?.selectedItems?.length > 0 ? (
+                              <div className="flexTagFull">
+                                {state?.selectedItems?.map((item) => {
+                                  return (
+                                    <div>{item?.userInfo?.displayName}</div>
+                                  );
+                                })}
+                              </div>
+                            ) : (
+                              <div>
+                                By default all your followers will be sent this
+                                Nudge.
+                              </div>
+                            )}
                           </div>
                         </div>
                         <div>
@@ -366,7 +369,16 @@ const NudgeTemplate = () => {
                       </div>
                     </div>
                     <div className="d-flex justify-end">
-                      <div className="btn w164 " onClick={values?.quantity && values?.title && values?.description ? toggleCart : undefined}>
+                      <div
+                        className="btn w164 "
+                        onClick={
+                          values?.quantity &&
+                          values?.title &&
+                          values?.description
+                            ? toggleCart
+                            : undefined
+                        }
+                      >
                         Add to Cart
                       </div>
                     </div>

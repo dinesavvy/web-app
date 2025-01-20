@@ -7,7 +7,7 @@ import map from "../../../assets/images/map.jpg";
 import chart from "../../../assets/images/chart.jpg";
 import { useDispatch, useSelector } from "react-redux";
 import { followerDetailsHandler } from "../../../redux/action/followersDetails";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Loader from "../../../common/Loader/Loader";
 import moment from "moment";
 import { listByUserIdHandler } from "../../../redux/action/listByUserId";
@@ -16,6 +16,7 @@ const FollowerDetail = () => {
   const [activeNudgeClass, setActiveNudgeClass] = useState("Received");
   const [activeTab, setActiveTab] = useState(true);
   const { state } = useLocation();
+  const navigate = useNavigate()
 
   const dispatch = useDispatch();
   const followerDetailsSelector = useSelector(
@@ -68,6 +69,7 @@ const FollowerDetail = () => {
                 src={backButton}
                 alt=""
                 // onClick={() => setViewDetail(false)}
+                onClick={()=>navigate("/admin/nudges")}
               />
               <div>
                 <div className="fs-24 fw-600 mb-4">Followers</div>

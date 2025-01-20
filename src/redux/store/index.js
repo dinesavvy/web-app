@@ -14,6 +14,7 @@ import listByUserIdSlice from "../action/listByUserId";
 import merchantPerformanceAnalyticsListSlice from "../action/merchantPerfomanceAnalyticsList";
 import fileuploadSlice from "../action/fileUpload";
 import merchantPerformanceAnalyticsDetailsSlice from "../action/merchantPerformanceAnalyticsDetails";
+import teamListInfoSlice from "../action/teamsList";
 
 const store = configureStore({
   reducer: {
@@ -33,6 +34,7 @@ const store = configureStore({
     fileupload: fileuploadSlice,
     merchantPerformanceAnalyticsDetails:
       merchantPerformanceAnalyticsDetailsSlice,
+    teamList: teamListInfoSlice,
   },
 });
 
