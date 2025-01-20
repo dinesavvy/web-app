@@ -50,7 +50,7 @@
   padding: 16px;
 }
 
-.dropdown-list::-webkit-scrollbar {
+.dropdown-list::-webkit-scrollbar,.paddingb20::-webkit-scrollbar {
   display: none;
 }
 
@@ -831,8 +831,9 @@ input[type="radio"]:checked + .custom-radio-button{
 }
 .addPlus{
   height: unset;
-  padding: 12px;
+  padding: 11px 12px;
   gap: 4px;
+  border-radius: 4px;
 }
 .brandImagePromo img {
   height: 100%;
@@ -863,6 +864,8 @@ input[type="radio"]:checked + .custom-radio-button{
   justify-content: center;
   max-height: 83px;
   cursor: grab;
+  position: relative;
+  overflow: hidden;
 }
 .brandItem img{
   max-width: 100%;
@@ -870,6 +873,28 @@ input[type="radio"]:checked + .custom-radio-button{
   width: 100%;
   height: 100%;
   object-fit: contain;
+}
+.closeIcon{
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  background-color: rgba(0, 0, 0,0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.brandItem:hover .closeIcon{
+  opacity: 1;
+}
+.closeIcon img{
+  width: 30px;
+  height: 30px;
+
 }
 .accordionHeader {
   display: flex;
@@ -925,6 +950,7 @@ input[type="radio"]:checked + .custom-radio-button{
   line-height: 27px;
   color: #005CDE;
   font-weight: 700;
+  border-radius: 0;
 }
 .addTitleInput::placeholder{
   color: #005CDE;
@@ -936,6 +962,26 @@ input[type="radio"]:checked + .custom-radio-button{
   border: 2px dashed  #056DFF;
   border-radius: 8px;
   padding: 20px;
+  grid-column: span 3;
+}
+.addThing img{
+  height: 24px;
+  width: 24px;
+}
+.threeSpace{
+  grid-column: span 3;
+}
+.datePickerImg{
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  height: 20px;
+  width: 20px;
+  transform: translateY(-50%);
+}
+.disable{
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 @media (max-width: 1499.98px) {
   .merchantGrid {
