@@ -22,9 +22,9 @@ ChartJS.register(
   LinearScale
 );
 
-const BarChart = ({
-  // labels,
-  // datas,
+const BarChartProtion = ({
+  labels,
+  datas,
   className,
   barThickness,
   borderSkipped,
@@ -37,33 +37,18 @@ const BarChart = ({
 }) => {
   const [hoveredIndex, setHoveredIndex] = useState(null);
   const colors = [
-    "rgba(75, 192, 192, 0.6)",
-    "rgb(8, 12, 241)",
+    "#005CDE1A",
+    "#005CDE",
     "rgba(255, 206, 86, 0.6)",
     "rgba(54, 162, 235, 0.6)",
     "rgba(153, 102, 255, 0.6)",
     "rgba(255, 159, 64, 0.6)",
-    "rgba(75, 192, 192, 0.6)",
+    "#005CDE1A",
     "rgba(255, 99, 132, 0.6)",
     "rgba(255, 206, 86, 0.6)",
     "rgba(54, 162, 235, 0.6)",
   ];
 
-  const sortedData = merchantPerformanceAnalyticsDetailsSelector
-    ? [...merchantPerformanceAnalyticsDetailsSelector].sort(
-        (a, b) => new Date(a._id) - new Date(b._id)
-      )
-    : [];
-  // Extract labels and data points
-  const labels = sortedData?.map((item) =>
-    moment(item?._id).format("DD HH:mm")
-  );
-  const datas = sortedData?.map((item) => item.value);
-
-  console.log(
-    analyticsDetailsSelector?.data?.data?.targetNudgeCount,
-    "analyticsDetailsSelector"
-  );
   const newDataSet =
     isDatasMap === true
       ? Array.isArray(datas)  // Check if nextDatasets is an array
@@ -145,7 +130,7 @@ const BarChart = ({
   return <Bar data={data} options={options} className={className} />;
 };
 
-BarChart.propTypes = {
+BarChartProtion.propTypes = {
   labels: PropTypes.array,
   datas: PropTypes.array,
   className: PropTypes.string,
@@ -157,4 +142,4 @@ BarChart.propTypes = {
   displayLegend: PropTypes.bool,
 };
 
-export default BarChart;
+export default BarChartProtion;

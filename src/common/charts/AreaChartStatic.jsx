@@ -24,9 +24,9 @@ ChartJS.register(
   Legend
 );
 
-const AreaChart = ({
-  // labels,
-  // datas,
+const AreaChartStatic = ({
+  labels,
+  datas,
   topColor,
   bottomColor,
   borderColor,
@@ -35,12 +35,6 @@ const AreaChart = ({
   merchantPerformanceAnalyticsDetailsSelector
 }) => {
 
-  const sortedData = merchantPerformanceAnalyticsDetailsSelector
-  ? [...merchantPerformanceAnalyticsDetailsSelector].sort((a, b) => new Date(a._id) - new Date(b._id))
-  : [];
-  // Extract labels and data points
-  const labels = sortedData?.map((item) => moment(item?._id).format('DD-MM'));
-  const datas = sortedData?.map((item) => item.value);
 
   // Sample data
   const data = {
@@ -101,7 +95,7 @@ const AreaChart = ({
   return <Line data={data} options={options} className={className} />;
 };
 
-AreaChart.propTypes = {
+AreaChartStatic.propTypes = {
   labels: PropTypes.array,
   datas: PropTypes.array,
   className: PropTypes.string,
@@ -109,4 +103,4 @@ AreaChart.propTypes = {
   bottomColor: PropTypes.any,
   borderColor: PropTypes.any,
 };
-export default AreaChart;
+export default AreaChartStatic;

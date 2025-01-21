@@ -2,13 +2,14 @@ import React from "react";
 import PropTypes from "prop-types";
 import circleinfo from "../../assets/images/circleinfo.gif";
 import AreaChart from "../charts/AreaChart";
+import AreaChartStatic from "../charts/AreaChartStatic";
 
 const GraphWithCircle = ({
   title,
   value,
   trend,
   merchantsCount,
-  //   chartImage,
+    chartImage,
 }) => {
   return (
     <div className="chartborder">
@@ -35,7 +36,7 @@ const GraphWithCircle = ({
           </div>
         </div>
       </div>
-      <AreaChart
+      <AreaChartStatic
         labels={["M", "T", "W", "T", "F", "S"]}
         datas={[65, 59, 80, 81, 56, 55, 40]}
         topColor={"rgba(2, 124, 255, 0.5)"}
