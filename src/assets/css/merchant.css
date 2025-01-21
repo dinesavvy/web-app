@@ -200,6 +200,10 @@
 .gridBtn .btn {
   width: 100%;
 }
+.detailBtn{
+  padding: 0 16px;
+  width: unset !important;
+}
 
 .tabPadding {
   padding: 20px 20px;
@@ -979,7 +983,7 @@ input[type="radio"]:checked + .custom-radio-button{
   width: 20px;
   transform: translateY(-50%);
 }
-.disabled {
+.disabled ,.btn:disabled{
   opacity: 0.5;
   cursor: not-allowed !important;
 }
@@ -1001,7 +1005,9 @@ input[type="radio"]:checked + .custom-radio-button{
     grid-template-columns: repeat(2, 1fr);
   }
 
- 
+  .twoSpace {
+    grid-column: span 1;
+  }
 }
 
 @media (max-width: 1023.98px) {

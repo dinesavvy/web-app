@@ -60,10 +60,6 @@ const BarChart = ({
   );
   const datas = sortedData?.map((item) => item.value);
 
-  console.log(
-    analyticsDetailsSelector?.data?.data?.targetNudgeCount,
-    "analyticsDetailsSelector"
-  );
   const newDataSet =
     isDatasMap === true
       ? Array.isArray(datas)  // Check if nextDatasets is an array
@@ -78,7 +74,7 @@ const BarChart = ({
         : [] // Fallback to an empty array if nextDatasets is not an array
       : [
           {
-            label: "Target Count",
+            label: "",
             data: Array.isArray(datas) ? datas : [], // Ensure datas is an array
             backgroundColor: (context) => {
               const index = context.dataIndex;

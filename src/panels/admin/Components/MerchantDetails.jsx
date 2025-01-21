@@ -34,6 +34,7 @@ import NudgeDetail from "./NudgeDetail";
 import { followerDetailsHandler } from "../../../redux/action/followersDetails";
 import FollowerDetail from "./FollowerDetails";
 import { listByUserIdHandler } from "../../../redux/action/listByUserId";
+import TeamMember from "./TeamMember";
 
 const MerchantDetails = () => {
   const [activeTab3, setActiveTab3] = useState("1");
@@ -75,15 +76,15 @@ const MerchantDetails = () => {
 
   useEffect(() => {
     if (
-      (Array.isArray(state?.selectedItems) && state?.selectedItems.length > 0) || 
-      state?.locationId?.locationId
+      (Array.isArray(state?.state?.selectedItems) && state?.state?.selectedItems.length > 0) || 
+      state?.state?.locationId?.locationId
     ) {
       setActiveTab3("3");
       const updatedCheckedItems = {};
       
       followerListSelector?.data?.data?.records?.forEach((item, index) => {
         // Mark as checked if the item is in selectedItems
-        const isSelected = Array.isArray(state?.selectedItems) && state?.selectedItems.some(
+        const isSelected = Array.isArray(state?.state?.selectedItems) && state?.state?.selectedItems.some(
           (selectedItem) => selectedItem?._id === item?._id
         );
         updatedCheckedItems[index] = isSelected;
@@ -92,7 +93,7 @@ const MerchantDetails = () => {
       setCheckedItems(updatedCheckedItems);
       setSelectedItems(state?.selectedItems || []); // Ensure selectedItems is an array
     }
-  }, [state?.selectedItems, followerListSelector]);
+  }, [state?.state?.selectedItems, followerListSelector]);
   
 
   const merchantDetailsSelector = useSelector(
@@ -194,14 +195,6 @@ const MerchantDetails = () => {
     (checked) => checked
   );
 
-  const defaultProps = {
-    center: {
-      lat: 10.99835602,
-      lng: 77.01502627,
-    },
-    zoom: 11,
-  };
-
   const tabs3 = [
     {
       id: "1",
@@ -214,6 +207,10 @@ const MerchantDetails = () => {
     {
       id: "3",
       label: "Followers",
+    },
+    {
+      id: "5",
+      label: "Team Members",
     },
     {
       id: "4",
@@ -396,6 +393,7 @@ const MerchantDetails = () => {
                           {merchantDetailsSelector?.data?.data?.businessName}
                         </div>
                       )}
+                      {console.log(merchantDetailsSelector,"merchantDetailsSelector")}
                     </div>
                     <div>
                       <label htmlFor="name" className="grey mb-10 fs-16 fw-500">
@@ -1167,8 +1165,6 @@ const MerchantDetails = () => {
             </>
           ) : activeTab3 === "2" ? (
             <>
-              {console.log(merchantDetailsSelector, "merchantDetailsSelector")}
-
               <div className="tabPadding">
                 <div className="d-flex align-center gap-20 mb-30 w-100">
                   <img src={backButton} alt="" className="cursor-pointer" />
@@ -1408,7 +1404,7 @@ const MerchantDetails = () => {
                           accepted
                         </div>
                         <div className="fs-22 fw-500">
-                          {
+                          {/* {
                             followerDetailsSelector?.data?.data?.nudge
                               ?.acceptNudge
                           }
@@ -1420,7 +1416,17 @@ const MerchantDetails = () => {
                                 ?.totalNudge) *
                             100
                           ).toFixed(2)}
-                          %
+                          % */}
+                          {followerDetailsSelector?.data?.data?.nudge?.totalNudge > 0
+  ? `${followerDetailsSelector?.data?.data?.nudge?.acceptNudge || 0}/${
+      (
+        ((followerDetailsSelector?.data?.data?.nudge?.acceptNudge || 0) /
+          followerDetailsSelector?.data?.data?.nudge?.totalNudge) *
+        100
+      ).toFixed(2)
+    }%`
+  : "0"}
+
                         </div>
                       </div>
                       <div
@@ -1439,7 +1445,7 @@ const MerchantDetails = () => {
                           declined
                         </div>
                         <div className="fs-22 fw-500">
-                          {
+                          {/* {
                             followerDetailsSelector?.data?.data?.nudge
                               ?.declinedNudge
                           }
@@ -1451,7 +1457,17 @@ const MerchantDetails = () => {
                                 ?.totalNudge) *
                             100
                           ).toFixed(2)}
-                          %
+                          % */}
+                          {followerDetailsSelector?.data?.data?.nudge?.totalNudge > 0
+  ? `${followerDetailsSelector?.data?.data?.nudge?.declinedNudge || 0}/${
+      (
+        ((followerDetailsSelector?.data?.data?.nudge?.declinedNudge || 0) /
+          followerDetailsSelector?.data?.data?.nudge?.totalNudge) *
+        100
+      ).toFixed(2)
+    }%`
+  : "0"}
+
                         </div>
                       </div>
                       <div
@@ -1470,7 +1486,7 @@ const MerchantDetails = () => {
                           no action
                         </div>
                         <div className="fs-22 fw-500">
-                          {followerDetailsSelector?.data?.data?.nudge
+                          {/* {followerDetailsSelector?.data?.data?.nudge
                             ?.totalNudge -
                             (followerDetailsSelector?.data?.data?.nudge
                               ?.acceptNudge +
@@ -1488,7 +1504,21 @@ const MerchantDetails = () => {
                                 ?.totalNudge) *
                             100
                           ).toFixed(2)}
-                          %
+                          % */}
+                          {followerDetailsSelector?.data?.data?.nudge?.totalNudge > 0
+  ? `${followerDetailsSelector?.data?.data?.nudge?.totalNudge -
+      ((followerDetailsSelector?.data?.data?.nudge?.acceptNudge || 0) +
+        (followerDetailsSelector?.data?.data?.nudge?.declinedNudge || 0))}/${
+      (
+        ((followerDetailsSelector?.data?.data?.nudge?.totalNudge -
+          ((followerDetailsSelector?.data?.data?.nudge?.acceptNudge || 0) +
+            (followerDetailsSelector?.data?.data?.nudge?.declinedNudge || 0))) /
+          followerDetailsSelector?.data?.data?.nudge?.totalNudge) *
+        100
+      ).toFixed(2)
+    }%`
+  : "0"}
+
                         </div>
                       </div>
                     </div>
@@ -1876,7 +1906,7 @@ const MerchantDetails = () => {
                     </div>
                   )}
 
-                  {isAnyCheckboxChecked &&state?.locationId?.locationId && (
+                  {isAnyCheckboxChecked &&state?.state?.locationId?.locationId && (
                     <div className="floatAdd">
                       <div
                         className="btn fs-16"
@@ -2143,7 +2173,11 @@ const MerchantDetails = () => {
               />
               {/* )} */}
             </>
-          ) : null}
+          ) :activeTab3 === "5"? (
+            <>
+            <TeamMember />
+            </>
+          ):null}
         </div>
       )}
     </>

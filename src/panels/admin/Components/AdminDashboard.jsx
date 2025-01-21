@@ -8,11 +8,11 @@ import OverviewGrid from "../../../common/dashboards/OverviewGrid";
 import TabContainer from "../../../common/dashboards/TabContainer";
 import GraphWithCircle from "../../../common/dashboards/GraphWithCircle";
 import PromotionCard from "../../../common/dashboards/PromotionCard";
-import olive from "../../../assets/images/olive.png";
 import BarChart from "../../../common/charts/BarChart";
+import BarChart1 from "../../../common/charts/BarChart1";
+import BarChart2 from "../../../common/charts/BarChart2";
 import DoughnutChart from "../../../common/charts/DoughnutChart";
 import noImageFound from "../../../assets/images/noImageFound.png";
-
 import { Pagination } from "antd";
 import AreaChart from "../../../common/charts/AreaChart";
 import { useNavigate } from "react-router-dom";
@@ -21,10 +21,9 @@ import { analyticsDetailsHandler } from "../../../redux/action/analyticsDetails"
 import Loader from "../../../common/Loader/Loader";
 import { merchantPerfomanceAnalyticsListHandler } from "../../../redux/action/merchantPerfomanceAnalyticsList";
 import {
-  merchantPerformanceAnalyticsDetailsAction,
   merchantPerformanceAnalyticsDetailsHandler,
 } from "../../../redux/action/merchantPerformanceAnalyticsDetails";
-import { useCommonMessage } from "../../../common/CommonMessage";
+import BarChartProtion from "../../../common/charts/BarChartPromotion";
 
 const AdminDashboard = () => {
   const [communicateItem, setCommunicateItem] = useState();
@@ -33,14 +32,22 @@ const AdminDashboard = () => {
   const [activeTab2, setActiveTab2] = useState("today");
   const [activeTab3, setActiveTab3] = useState("1");
   const [openIndex, setOpenIndex] = useState(0); // Initially, the first item is open
+
+  const merchantPerformanceAnalyticsListSelector = useSelector(
+    (state) => state?.merchantPerformanceAnalyticsList
+  );
+
+  const merchantPerformanceAnalyticsDetailsSelector = useSelector(
+    (state) => state?.merchantPerformanceAnalyticsDetails
+  );
+
   const data = {
     labels: ["Progress", "Remaining"],
     progress: 80,
-    total: 100,
+    total: 80,
   };
 
   const navigate = useNavigate();
-  const messageApi = useCommonMessage();
 
   const handlePaginationChange = (page, pageSize) => {
     setPagination({ page, limit: pageSize });
@@ -75,7 +82,7 @@ const AdminDashboard = () => {
 
             <AreaChart
               labels={["M", "T", "W", "T", "F", "S"]}
-              datas={[65, 59, 80, 81, 56, 55, 40]}
+              datas1={[65, 59, 80, 81, 56, 55, 40]}
               topColor={"rgba(2, 124, 255, 0.5)"}
               bottomColor={"rgba(215, 210, 226, 0.2)"}
               borderColor={"rgba(0, 123, 255, 1)"}
@@ -116,10 +123,6 @@ const AdminDashboard = () => {
               <div className="fs-16 fw-600 ">Nudges Sent</div>
               <div className="fs-16 ">12/day (avg)</div>
             </div>
-            {console.log(
-              merchantPerformanceAnalyticsDetailsSelector?.data?.data,
-              "merchantPerformanceAnalyticsDetailsSelector?.data?.data"
-            )}
             <div className="divider2"></div>
             {/* <img src={chart4} alt="" className="w-100 mxh" /> */}
             <BarChart
@@ -149,8 +152,7 @@ const AdminDashboard = () => {
                 data={data}
                 className="h-100 mxh"
                 merchantPerformanceAnalyticsDetailsSelector={
-                  merchantPerformanceAnalyticsDetailsSelector?.data?.data
-                    ?.nudgeData
+                  merchantPerformanceAnalyticsDetailsSelector
                 }
               />
             </div>
@@ -252,15 +254,6 @@ const AdminDashboard = () => {
       label: "Needs attention",
     },
   ];
-  const items = [
-    { id: "1", title: "Olive Garden", titleImage: olive, content: <Test2 /> },
-    { id: "2", title: "Olive Garden", titleImage: olive, content: <Test2 /> },
-    { id: "3", title: "Olive Garden", titleImage: olive, content: <Test2 /> },
-  ];
-
-  const merchantPerformanceAnalyticsListSelector = useSelector(
-    (state) => state?.merchantPerformanceAnalyticsList
-  );
 
   useEffect(() => {
     let payload = {
@@ -273,9 +266,7 @@ const AdminDashboard = () => {
     dispatch(merchantPerfomanceAnalyticsListHandler(payload));
   }, [activeTab2, activeTab3]);
 
-  const merchantPerformanceAnalyticsDetailsSelector = useSelector(
-    (state) => state?.merchantPerformanceAnalyticsDetails
-  );
+
 
   // useEffect(() => {
   //   if (merchantPerformanceAnalyticsDetailsSelector?.data?.statusCode === 200) {
@@ -294,7 +285,6 @@ const AdminDashboard = () => {
   // }, [merchantPerformanceAnalyticsDetailsSelector]);
 
   const restaurantItemClick = (item, index) => {
-    console.log(item, "index");
     setOpenIndex(index);
     if (item?._id) {
       let payload = {
@@ -335,15 +325,15 @@ const AdminDashboard = () => {
         <div className="d-grid chartGrid gap-20">
           <PromotionCard
             title="Promotions"
-            count={analyticsDetailsSelector?.data?.data?.targetPromotionsCount}
+            count={analyticsDetailsSelector?.data?.data?.targetPromotionsCount + analyticsDetailsSelector?.data?.data?.promotionsCount}
             chartPromotionImage={chartPromotion}
             // analyticsDetailsSelector ={analyticsDetailsSelector}
             onButtonClick={() => navigate("/admin/promotions")}
             buttonText="See promotions"
             middleComponent={
-              <BarChart
-                labels={["Bar 1", "Bar 2"]}
-                datas={[50, 110]}
+              <BarChartProtion
+                labels={["Target Promotion", "Promotions"]}
+                datas={[analyticsDetailsSelector?.data?.data?.targetPromotionsCount, analyticsDetailsSelector?.data?.data?.promotionsCount]}
                 className="w-100"
                 barThickness={100}
                 borderSkipped={false}
@@ -356,41 +346,43 @@ const AdminDashboard = () => {
           />
           <PromotionCard
             title="Nudges"
-            count={analyticsDetailsSelector?.data?.data?.targetNudgeCount}
+            count={analyticsDetailsSelector?.data?.data?.targetNudgeCount + analyticsDetailsSelector?.data?.data?.nudgeCount}
             chartPromotionImage={chartnudge}
             buttonText="See Nudges"
             onButtonClick={() => navigate("/admin/nudges")}
             middleComponent={
-              <BarChart
-                labels={["Bar 1", "Bar 2"]}
-                datas={[58, 160]}
+              <BarChart1
+                labels={["Target Nudges", "Nudges"]}
+                datas={[analyticsDetailsSelector?.data?.data?.targetNudgeCount,analyticsDetailsSelector?.data?.data?.nudgeCount]}
                 className="w-100"
-                barThickness={100}
+                barThickness={80}
                 borderSkipped={false}
                 xDisplay={false}
                 yDisplay={true}
                 isDatasMap={true}
                 displayLegend={true}
+                analyticsDetailsSelector={analyticsDetailsSelector}
               />
             }
           />{" "}
           <PromotionCard
             title="Followers"
-            count={79}
+            count={analyticsDetailsSelector?.data?.data?.targetFollowerCount + analyticsDetailsSelector?.data?.data?.followerCount}
             chartPromotionImage={chartfollower}
             buttonText="See Followers"
             onButtonClick={() => navigate("/admin/merchant/followers")}
             middleComponent={
-              <BarChart
-                labels={["Bar 1", "Bar 2"]}
-                datas={[45, 89]}
+              <BarChart2
+                labels={["Target Followers", "Followers"]}
+                datas={[analyticsDetailsSelector?.data?.data?.targetFollowerCount, analyticsDetailsSelector?.data?.data?.followerCount]}
                 className="w-100"
-                barThickness={100}
+                barThickness={80}
                 borderSkipped={false}
                 xDisplay={false}
                 yDisplay={true}
                 isDatasMap={true}
                 displayLegend={true}
+                analyticsDetailsSelector={analyticsDetailsSelector}
               />
             }
           />

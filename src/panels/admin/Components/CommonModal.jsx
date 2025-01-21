@@ -2,7 +2,8 @@ import React from 'react'
 import modalbg from "../../../assets/images/modalbg.png";
 import { Modal } from 'antd';
 
-const CommonModal = ({modal2Open,setModal2Open,modalImage}) => {
+const CommonModal = ({modal2Open,setModal2Open,modalImage,removeTeamMember}) => {
+  console.log(removeTeamMember,"removeTeamMember")
   return (
     <Modal
     centered
@@ -24,11 +25,11 @@ const CommonModal = ({modal2Open,setModal2Open,modalImage}) => {
         </div>
         <div className='fs-18'>
         Are you sure you want to remove <span className="fw-600">
-        Leslie Alexander</span> from the team?
+        {removeTeamMember?.displayName}</span> from the team?
         </div>
     </div>
     <div className="div d-flex align-center gap-16">
-        <div className="btn w-100">
+        <div className="btn w-100" onClick={()=>setModal2Open(false)}>
         Cancel
         </div>
         <div className="btn btnSecondary w-100">

@@ -136,13 +136,13 @@ const MerchantList = () => {
                             </div>
                           </div>
                           <div>
-                            <div className="fs-14 mb-4">Nudges Sent</div>
+                            <div className="fs-14 mb-4">Volume Potential</div>
                             <div className="fs-14 fw-600">
                               {item?.nudge?.timeFrameFollowerNudgeSentCount}
                             </div>
                           </div>
                           <div>
-                            <div className="fs-14 mb-4">Nudge Credits</div>
+                            <div className="fs-14 mb-4">Depletions Potential</div>
                             <div className="fs-14 fw-600">
                               {item?.nudge?.nudgeCredit}
                             </div>
@@ -177,7 +177,7 @@ const MerchantList = () => {
                         </div>
                         <div className="gridBtn">
                         <div
-                            className="btnSecondary btn"
+                            className="btn disabled"
                             // onClick={() => {
                             //   navigate("/admin/merchant/details", {
                             //     state: item,
@@ -188,7 +188,7 @@ const MerchantList = () => {
                             Promote
                           </div>
                           <div
-                            className="btnSecondary btn"
+                            className="btnSecondary detailBtn btn"
                             onClick={() => {
                               navigate("/admin/merchant/details", {
                                 state: item,
