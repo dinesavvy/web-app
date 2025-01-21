@@ -16,7 +16,7 @@ const FollowerDetail = () => {
   const [activeNudgeClass, setActiveNudgeClass] = useState("Received");
   const [activeTab, setActiveTab] = useState(true);
   const { state } = useLocation();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const dispatch = useDispatch();
   const followerDetailsSelector = useSelector(
@@ -31,8 +31,6 @@ const FollowerDetail = () => {
   const handleCardClick = (cardType) => {
     setActiveNudgeClass(cardType);
   };
-
-  console.log(followerDetailsSelector, "followerDetailsSelector");
 
   useEffect(() => {
     if (state) {
@@ -69,7 +67,7 @@ const FollowerDetail = () => {
                 src={backButton}
                 alt=""
                 // onClick={() => setViewDetail(false)}
-                onClick={()=>navigate("/admin/nudges")}
+                onClick={() => navigate("/admin/merchant/followers")}
               />
               <div>
                 <div className="fs-24 fw-600 mb-4">Followers</div>
@@ -168,30 +166,19 @@ const FollowerDetail = () => {
               </div>
               {/* <div className="fs-22 fw-500">{followerDetailsSelector?.data?.data?.nudge?.acceptNudge}</div> */}
               <div className="fs-22 fw-500">
-                {/* {(() => {
-                  const totalNudge =
-                    followerDetailsSelector?.data?.data?.nudge?.totalNudge || 0;
-                  const acceptNudge =
-                    followerDetailsSelector?.data?.data?.nudge?.acceptNudge ||
-                    0;
-
-                  if (acceptNudge === 0) {
-                    return `0`; // Show only 0 when no nudges are accepted
-                  }
-
-                  const percentage = totalNudge
-                    ? ((acceptNudge / totalNudge) * 100).toFixed(0)
-                    : 0;
-
-                  return `${acceptNudge}/${percentage}%`;
-                })()} */}
-                {followerDetailsSelector?.data?.data?.nudge?.acceptNudge}/
-                {(
-                  (followerDetailsSelector?.data?.data?.nudge?.acceptNudge /
-                    followerDetailsSelector?.data?.data?.nudge?.totalNudge) *
-                  100
-                ).toFixed(2)}
-                %
+                {followerDetailsSelector?.data?.data?.nudge?.totalNudge
+                  ? `${
+                      followerDetailsSelector?.data?.data?.nudge?.acceptNudge ||
+                      0
+                    }/${
+                      followerDetailsSelector?.data?.data?.nudge?.totalNudge
+                    } (${(
+                      (followerDetailsSelector?.data?.data?.nudge?.acceptNudge /
+                        followerDetailsSelector?.data?.data?.nudge
+                          ?.totalNudge) *
+                      100
+                    ).toFixed(2)}%)`
+                  : 0}
               </div>
             </div>
             <div
@@ -208,17 +195,25 @@ const FollowerDetail = () => {
                 declined
               </div>
               <div className="fs-22 fw-500">
-                {/* {
-                                followerDetailsSelector?.data?.data?.nudge
-                                  ?.declinedNudge
-                              } */}
-                {followerDetailsSelector?.data?.data?.nudge?.declinedNudge}/
+                {/* {followerDetailsSelector?.data?.data?.nudge?.declinedNudge}/
                 {(
                   (followerDetailsSelector?.data?.data?.nudge?.declinedNudge /
                     followerDetailsSelector?.data?.data?.nudge?.totalNudge) *
                   100
                 ).toFixed(2)}
-                %
+                % */}
+                {followerDetailsSelector?.data?.data?.nudge?.totalNudge > 0
+                  ? `${
+                      followerDetailsSelector?.data?.data?.nudge
+                        ?.declinedNudge || 0
+                    }/${(
+                      (followerDetailsSelector?.data?.data?.nudge
+                        ?.declinedNudge /
+                        followerDetailsSelector?.data?.data?.nudge
+                          ?.totalNudge) *
+                      100
+                    ).toFixed(2)}%`
+                  : 0}
               </div>
             </div>
             <div
@@ -235,7 +230,7 @@ const FollowerDetail = () => {
                 no action
               </div>
               <div className="fs-22 fw-500">
-                {followerDetailsSelector?.data?.data?.nudge?.totalNudge -
+                {/* {followerDetailsSelector?.data?.data?.nudge?.totalNudge -
                   (followerDetailsSelector?.data?.data?.nudge?.acceptNudge +
                     followerDetailsSelector?.data?.data?.nudge?.declinedNudge)}
                 /
@@ -247,7 +242,25 @@ const FollowerDetail = () => {
                     followerDetailsSelector?.data?.data?.nudge?.totalNudge) *
                   100
                 ).toFixed(2)}
-                %
+                % */}
+                {followerDetailsSelector?.data?.data?.nudge?.totalNudge > 0
+                  ? `${
+                      followerDetailsSelector?.data?.data?.nudge?.totalNudge -
+                      ((followerDetailsSelector?.data?.data?.nudge
+                        ?.acceptNudge || 0) +
+                        (followerDetailsSelector?.data?.data?.nudge
+                          ?.declinedNudge || 0))
+                    }/${(
+                      ((followerDetailsSelector?.data?.data?.nudge?.totalNudge -
+                        ((followerDetailsSelector?.data?.data?.nudge
+                          ?.acceptNudge || 0) +
+                          (followerDetailsSelector?.data?.data?.nudge
+                            ?.declinedNudge || 0))) /
+                        followerDetailsSelector?.data?.data?.nudge
+                          ?.totalNudge) *
+                      100
+                    ).toFixed(2)}%`
+                  : 0}
               </div>
             </div>
           </div>

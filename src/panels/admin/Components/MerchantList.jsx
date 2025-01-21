@@ -198,12 +198,12 @@ const MerchantList = () => {
                           >
                             Details
                           </div>
-                          <div
+                          {/* <div
                             className="btnSecondary btn"
                             onClick={() => navigate("/admin/merchant/team-member")}
                           >
                             Team
-                          </div>
+                          </div> */}
                           {/* <div className="btnSecondary btn">Nudges</div> */}
                         </div>
                       </div>
