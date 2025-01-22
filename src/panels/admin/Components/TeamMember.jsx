@@ -106,6 +106,7 @@ const TeamMember = ({ merchantDetailsSelector,activeTab3,setActiveTab3 }) => {
                                 item: item,
                                 merchantDetailsSelector:
                                   merchantDetailsSelector,
+                                  activeTabs:5
                               },
                             })
                           }

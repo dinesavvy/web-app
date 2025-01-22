@@ -35,7 +35,7 @@ const NudgeCart = ({
       isPublic: false,
       followerList: state?.selectedItems?.map((item) => item?.userInfo?.customerId),
       photoURL:
-        nudgesCards?.imageUrl[0] ||state?.locationId?.nudgesCards?.imageUrl[0]||
+        nudgesCards?.imageUrl?.[0] ||state?.locationId?.nudgePrev?.imageUrl?.[0]||
         fileuploadSelector?.data?.data?.map((item) => item?.src),
       deactivateAt: Date.now() + 24 * 60 * 60 * 1000,
       imageId: "",
@@ -74,7 +74,7 @@ const NudgeCart = ({
             <div className="dividerbtn">
               <img
                 className="w-100 merchantImg br10 mb-6"
-                src={uploadedImage || nudgesCards?.imageUrl[0] || state?.locationId?.nudgesCards?.imageUrl[0]}
+                src={uploadedImage || nudgesCards?.imageUrl?.[0] || state?.locationId?.nudgePrev?.imageUrl?.[0]}
                 alt={nudgesCards?.title}
               />
               <div className="fs-16 fw-600">{values?.title}</div>

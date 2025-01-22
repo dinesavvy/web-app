@@ -96,41 +96,8 @@ const Nudges = () => {
     setSelectedValue(value);
   };
 
-  // Check if user scrolled to the end
-  // const handleScroll = () => {
-  //   const container = scrollContainerRef.current;
-  //   if (
-  //     container.scrollLeft + container.offsetWidth >=
-  //     container.scrollWidth - 10 // 10px buffer for smoothness
-  //   ) {
-  //     setPage((prevPage) => prevPage + 1);
-  //   }
-  // };
-
   return (
     <>
-      {/********************** Empty Content ***********************/}
-      {/* <div className="emptyHeight">
-        <div className="modal-content">
-          <div className="ant-modal-body">
-            <div className="modalbg">
-              <img src={modalbg} alt="" />
-            </div>
-            <div className="modalImage mb-30">
-              <img src={nudgeEmpty} alt="" />
-            </div>
-            <div className="text-center mb-30">
-              <div className="fs-26 fw-700 mb-15">No Nudge Yet</div>
-              <div className="fs-18">
-              Create your first promotional nudge to engage with your customers, Start by setting up a new campaign for any of your restaurants.
-              </div>
-            </div>
-            <div className="div d-flex align-center gap-16">
-              <div className="btn w-100 gap-8">Create First Nudge <img src={btnArrow} alt="" /></div>
-            </div>
-          </div>
-        </div>
-      </div> */}
       {(merchantsListSelector?.isLoading || nudgesListSelector?.isLoading) && (
         <Loader />
       )}
@@ -148,11 +115,7 @@ const Nudges = () => {
             />
             <img src={searchIcon} alt="" className="absoluteImage" />
           </div>
-          <div
-            className="overflowy"
-            // ref={scrollContainerRef}
-            // onScroll={handleScroll}
-          >
+          <div className="overflowy">
             <div
               className={
                 merchantsListSelector?.data?.data?.records?.length > 0
@@ -181,7 +144,7 @@ const Nudges = () => {
                       <div className="radioCafeName">
                         <div>
                           <div className="pc fs-14 fw-500">
-                            {option?.businessName}
+                          {option?.businessName && option.businessName.charAt(0).toUpperCase() + option.businessName.slice(1)}
                           </div>
                           <div className="fs-12 oneLine">
                             {`${option?.address?.addressLine1 || ""} ${

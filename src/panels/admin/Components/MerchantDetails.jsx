@@ -37,6 +37,7 @@ import TeamMember from "./TeamMember";
 
 const MerchantDetails = () => {
   const { state } = useLocation();
+  console.log(state,"lllllllllllll")
   const [activeTab3, setActiveTab3] = useState("1");
   const [editInput, setEditInput] = useState(false);
   const [switchState, setSwitchState] = useState(false);
@@ -50,48 +51,34 @@ const MerchantDetails = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [selectedItems, setSelectedItems] = useState([]);
 
+  console.log(selectedItems,"selectedItemsselectedItems")
+
   const listByUserIdSelector = useSelector((state) => state?.listByUserId);
   const followerListSelector = useSelector((state) => state?.followeList);
   const nudgesListSelector = useSelector((state) => state?.nudgesList);
 
   const dispatch = useDispatch();
 
-  // useEffect(() => {
-  //   if (state?.selectedItems?.length > 0) {
-  //     setActiveTab3("3");
-  //     const updatedCheckedItems = {};
-  //     followerListSelector?.data?.data?.records?.forEach((item, index) => {
-  //       // Mark as checked if the item is in selectedItems
-  //       const isSelected = state?.selectedItems.some(
-  //         (selectedItem) => selectedItem?._id === item?._id
-  //       );
-  //       updatedCheckedItems[index] = isSelected;
-  //     });
-  //     setCheckedItems(updatedCheckedItems);
-  //     setSelectedItems(state?.selectedItems); // Ensure selectedItems is in sync
-  //   }
-  // }, [state?.selectedItems, followerListSelector]);
-
   useEffect(() => {
     if (
-      (Array.isArray(state?.state?.selectedItems) && state?.state?.selectedItems.length > 0) || 
-      state?.state?.locationId?.locationId
+      (Array.isArray(state?.statePrev?.selectedItems) && state?.statePrev?.selectedItems?.length > 0) || 
+      state?.statePrev?.locationId?.locationId
     ) {
       setActiveTab3("3");
       const updatedCheckedItems = {};
       
       followerListSelector?.data?.data?.records?.forEach((item, index) => {
         // Mark as checked if the item is in selectedItems
-        const isSelected = Array.isArray(state?.state?.selectedItems) && state?.state?.selectedItems.some(
+        const isSelected = Array.isArray(state?.statePrev?.selectedItems) && state?.statePrev?.selectedItems?.some(
           (selectedItem) => selectedItem?._id === item?._id
         );
         updatedCheckedItems[index] = isSelected;
       });
   
       setCheckedItems(updatedCheckedItems);
-      setSelectedItems(state?.selectedItems || []); // Ensure selectedItems is an array
+      setSelectedItems(state?.statePrev?.selectedItems || state?.statePrev?.selectedItems||[]); // Ensure selectedItems is an array
     }
-  }, [state?.state?.selectedItems, followerListSelector]);
+  }, [state?.statePrev?.selectedItems, followerListSelector]);
   
 
   const merchantDetailsSelector = useSelector(
@@ -306,6 +293,23 @@ const MerchantDetails = () => {
       dispatch(followerDetailsHandler(payload));
       setViewDetail(true);
     }
+  };
+
+  const handleDelete = () => {
+    // Remove from checkedItems
+    const updatedCheckedItems = { ...checkedItems };
+    Object.keys(checkedItems).forEach((key) => {
+      if (checkedItems[key]) {
+        delete updatedCheckedItems[key];
+      }
+    });
+    setCheckedItems(updatedCheckedItems);
+  
+    // Remove from selectedItems
+    const updatedSelectedItems = selectedItems.filter(
+      (item, index) => !checkedItems[index]
+    );
+    setSelectedItems(updatedSelectedItems);
   };
 
   return (
@@ -1880,7 +1884,7 @@ const MerchantDetails = () => {
                       />
                     </div>
                   </div>
-                  {isAnyCheckboxChecked && (
+                  {isAnyCheckboxChecked && !state?.statePrev?.selectedItems && (
                     <div className="floatAdd">
                       <div
                         className="btn fs-16"
@@ -1893,13 +1897,13 @@ const MerchantDetails = () => {
                         <img src={createAdd} alt="image" />
                         <div>Create nudge</div>
                       </div>
-                      {/* <div className="h-24 cursor-pointer">
+                      <div className="h-24 cursor-pointer" onClick={handleDelete}>
                         <img src={deleteList} className="w-100 h-100" alt="" />
-                      </div> */}
+                      </div>
                     </div>
                   )}
 
-                  {isAnyCheckboxChecked &&state?.state?.locationId?.locationId && (
+                  {isAnyCheckboxChecked &&state?.statePrev?.selectedItems && (
                     <div className="floatAdd">
                       <div
                         className="btn fs-16"
@@ -1909,12 +1913,13 @@ const MerchantDetails = () => {
                           })
                         }
                       >
+                        {console.log(state,"test data")}
                         {/* <img src={createAdd} alt="image" /> */}
                         <div>Continue</div>
                       </div>
-                      {/* <div className="h-24 cursor-pointer">
+                      <div className="h-24 cursor-pointer" onClick={handleDelete}>
                         <img src={deleteList} className="w-100 h-100" alt="" />
-                      </div> */}
+                      </div>
                     </div>
                   )}
                 </>
