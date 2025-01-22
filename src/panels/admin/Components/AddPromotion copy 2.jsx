@@ -13,7 +13,6 @@ import DropMerchantZone from "./DropMerchantZone";
 import { TimePicker } from "antd";
 import DropBrandsZone from "./DropBrandsZone";
 import DragBrandsItem from "./DragBrandsItem";
-import CustomDragLayer from "./CustomDragLayer";
 
 const AddPromotion = () => {
   const [mercahnts, setMercahnts] = useState([
@@ -36,20 +35,13 @@ const AddPromotion = () => {
   ]);
   const [droppedMerchants, setDroppedMerchants] = useState([]);
   const [selectedMerchants, setSelectedMerchants] = useState([]);
-  const [dragging, setDragging] = useState(false);
+
   const handleCheckboxChange = (itemId) => {
     setSelectedMerchants((prevSelected) =>
       prevSelected.includes(itemId)
         ? prevSelected.filter((id) => id !== itemId)
         : [...prevSelected, itemId]
     );
-  };
-  const handleDragStartMerchant = () => {
-    setDragging(true);
-  };
-
-  const handleDragEndMerchant = () => {
-    setDragging(false);
   };
 
   const handleRemoveDroppedMerchants = (id) => {
@@ -60,7 +52,12 @@ const AddPromotion = () => {
     setMercahnts((prevMercahnts) => [...prevMercahnts, removedItem]);
   };
 
-  const handleDropMerchant = (draggedItem) => {
+  const handleDragStart2 = (item) => {
+    console.log("Dragging Item:", item);
+    console.log("Selected Items:", selectedMerchants);
+  };
+
+  const handleDrop2 = (draggedItem) => {
     const draggedIds = draggedItem.ids || [];
     const draggedItems = mercahnts.filter((item) =>
       draggedIds.includes(item.id)
@@ -77,38 +74,15 @@ const AddPromotion = () => {
     // Clear selected items
     setSelectedMerchants([]);
   };
-  const handleAddToDropZone = (item) => {
-    // Add the clicked item to the dropped merchants array
-    setDroppedMerchants((prevDropped) => [...prevDropped, item]);
 
-    // Remove the item from the available list
-    setMercahnts((prevMercahnts) =>
-      prevMercahnts.filter((mercahnt) => mercahnt.id !== item.id)
-    );
-  };
+
+
   // Brands
 
-  const [brands, setBrands] = useState([
-    {
-      id: 1,
-      name: coke,
-      info: {
-        name: "Coca-Cola Beverages",
-        price: "$24.99 per case",
-        description: "Case of 24 bottles (12 oz each)",
-        sku: "COC-24x12-001",
-      },
-    },
-    {
-      id: 2,
-      name: pepsi,
-      info: {
-        name: "Pepsi Beverages",
-        price: "$19.99 per case",
-        description: "Case of 24 bottles (12 oz each)",
-        sku: "PEP-24x12-001",
-      },
-    },
+
+ const [brands, setBrands] = useState([
+    { id: 1, name: coke },
+    { id: 2, name: pepsi },
     { id: 3, name: coke },
     { id: 4, name: pepsi },
     { id: 5, name: coke },
@@ -124,39 +98,31 @@ const AddPromotion = () => {
     { id: 15, name: coke },
     { id: 16, name: pepsi },
   ]);
-
   const [droppedBrand, setDroppedBrand] = useState(null);
-  const [draggingItem, setDraggingItem] = useState(null);
 
   const handleBrandDrop = (item) => {
-    if (!droppedBrand) {
-      setBrands((prevBrands) => prevBrands.filter((i) => i.id !== item.id));
-      setDroppedBrand(item);
-      setDraggingItem(null);
-    }
+    // Remove the item from the list and add it to the drop zone
+    setBrands((prevBrands) => prevBrands.filter((i) => i.id !== item.id));
+    setDroppedBrand(item);
   };
 
   const handleBrandClick = (item) => {
-    if (!droppedBrand) {
-      setBrands((prevBrands) => prevBrands.filter((i) => i.id !== item.id));
-      setDroppedBrand(item);
-    }
+    // Same behavior as drop: remove from list and add to drop zone
+    setBrands((prevBrands) => prevBrands.filter((i) => i.id !== item.id));
+    setDroppedBrand(item);
   };
-
   const handleDragStart = (item) => {
-    if (!droppedBrand) {
-      console.log(`Dragging item: ${item.name}`);
-      setDraggingItem(item);
-      setDragging(true);
-    }
+    console.log(`Dragging item: ${item.name}`);
   };
-
   const handleRemoveBrand = () => {
     if (droppedBrand) {
+      // Return the dropped item back to the list
       setBrands((prevBrands) => [...prevBrands, droppedBrand]);
       setDroppedBrand(null);
     }
   };
+
+
 
   const [openIndex, setOpenIndex] = useState(null);
 
@@ -181,10 +147,10 @@ const AddPromotion = () => {
     <>
       <div className="dashboard">
         <DndProvider backend={HTML5Backend}>
-          <div className="d-flex gap-20 position-relative">
+          <div className="d-flex gap-20">
             {/* Brands List */}
-            <div className="w-100 positionSticky">
-              <div className="mb-20 ">
+            <div className="w-100">
+            <div className="mb-20">
                 <div className="padding20">
                   <div className="d-flex justify-between align-center gap-10">
                     <div className="fs-18 fw-700">Brands</div>
@@ -211,21 +177,13 @@ const AddPromotion = () => {
                         <div
                           key={item.id}
                           onClick={() => handleBrandClick(item)}
-                          style={{
-                            cursor:
-                              draggingItem || droppedBrand
-                                ? "not-allowed"
-                                : "pointer",
-                          }}
+                          style={{ cursor: "pointer" }}
                         >
                           <DragBrandsItem
                             id={item.id}
                             name={item.name}
-                            info={item.info}
-                            onDragEnd={handleDragEndMerchant}
-                            type="brand"
+                            selectedBrands={setDroppedBrand} 
                             onDragStart={() => handleDragStart(item)}
-                            disabled={!!draggingItem || !!droppedBrand}
                           />
                         </div>
                       </>
@@ -233,9 +191,9 @@ const AddPromotion = () => {
                   </div>
                 </div>
               </div>
-              <div className="mb-20 ">
-                <div className="padding20 ">
-                  <div className="d-flex justify-between align-center gap-10 ">
+              <div className="mb-20">
+                <div className="padding20">
+                  <div className="d-flex justify-between align-center gap-10">
                     <div className="fs-18 fw-700">Merchants</div>
                     <div className="d-flex  align-center gap-16">
                       <div className="lineSearch w-100">
@@ -252,43 +210,28 @@ const AddPromotion = () => {
                       </div>
                     </div>
                   </div>
-                  <div className="tabs-container tab3 tabFull marginminus">
+                </div>
+                <div className="paddingb20">
+                <div className="tabs-container tab3 tabFull">
                     <div className="tabs">
                       <button className="tab-button active">Merchants</button>
                       <button className="tab-button ">Groups</button>
                     </div>
                   </div>
-                </div>
-
-                <div className="paddingb20">
-                  <div className="selectMerchant">
+                  <div className="selectGrid3">
                     {mercahnts.map((item) => (
-                      <div
-                        key={item.id}
-                        className="cursor-pointer position-relative"
-                       // Add item to drop zone on click
-                      >
-                        <div className="custom-checkbox">
-                          <label className="checkLabel">
-                            <input
-                              type="checkbox"
-                              checked={selectedMerchants.includes(item.id)}
-                              onChange={() => handleCheckboxChange(item.id)}
-                            />
-                            <span class="checkmark"></span>
-                          </label>
-                        </div>
-                        <div  onClick={() => handleAddToDropZone(item)} >
+                      <div key={item.id} style={{ cursor: "pointer" }}>
+                        <input
+                          type="checkbox"
+                          checked={selectedMerchants.includes(item.id)}
+                          onChange={() => handleCheckboxChange(item.id)}
+                        />
                         <DragMerchantItem
-                          type="merchant"
                           id={item.id}
                           name={item.name}
                           selectedMerchants={selectedMerchants} // Pass selected items
-                          onDragStart={() => handleDragStartMerchant(item)}
+                          onDragStart={() => handleDragStart2(item)}
                         />
-                      </div>
-                        <div className="divider2"></div>
-                        <CustomDragLayer merchants={mercahnts} />
                       </div>
                     ))}
                   </div>
@@ -297,7 +240,7 @@ const AddPromotion = () => {
             </div>
 
             {/* Drop Area */}
-            <div className="w-100 positionSticky">
+            <div className="w-100">
               <div className="tabPadding mb-20">
                 <input
                   type="text"
@@ -311,14 +254,9 @@ const AddPromotion = () => {
                 <div className="fs-18 fw-700">Add Brand</div>
                 <div className="divider2"></div>
                 <div className="selectGrid3">
-                  {!droppedBrand && (
-                    <DropBrandsZone
-                      allowedType="brand"
-                      onDropBrand={handleBrandDrop}
-                    />
-                  )}
+                  {!droppedBrand && <DropBrandsZone onDrop={handleBrandDrop} />}
                   {droppedBrand && (
-                    <div key={droppedBrand.id} className="brandItem">
+                    <div className="brandItem">
                       <img src={droppedBrand.name} alt={droppedBrand.name} />
                       <div onClick={handleRemoveBrand} className="closeIcon">
                         <img src={closeIcon} alt="Remove" />
@@ -330,24 +268,19 @@ const AddPromotion = () => {
               <div className="tabPadding mb-20">
                 <div className="fs-18 fw-700">Add Merchants</div>
                 <div className="divider2"></div>
-                <div className="overflowy h310">
-                  <div className="selectGrid3">
-                    <DropMerchantZone
-                      allowedType="merchant"
-                      onDropMerchant={handleDropMerchant}
-                    />
-                    {droppedMerchants.map((item) => (
-                      <div key={item.id} className="brandItem">
-                        <img src={item.name} alt={item.name} />
-                        <div
-                          onClick={() => handleRemoveDroppedMerchants(item.id)}
-                          className="closeIcon"
-                        >
-                          <img src={closeIcon} alt="Remove" />
-                        </div>
+                <div className="selectGrid3">
+                  <DropMerchantZone onDrop={handleDrop2} />
+                  {droppedMerchants.map((item) => (
+                    <div key={item.id} className="brandItem">
+                      <img src={item.name} alt={item.name} />
+                      <div
+                        onClick={() => handleRemoveDroppedMerchants(item.id)}
+                        className="closeIcon"
+                      >
+                        <img src={closeIcon} alt="Remove" />
                       </div>
-                    ))}
-                  </div>
+                    </div>
+                  ))}
                 </div>
               </div>
               <div className="tabPadding mb-20">
