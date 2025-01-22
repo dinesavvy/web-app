@@ -49,14 +49,14 @@ const Login = () => {
   return (
     <>
       {loginSelector?.isLoading && <Loader />}
-      <div className="loginFlex pc">
+      <div className="loginFlex ">
         <div className="w-50 h-100 position-relative mobileHide fixLeft">
           <img src={login} alt="" className="w-100 h-100 object-cover" />
         </div>
         <div className="d-flex align-center justify-center w-lg-50 loginside overflowy">
           <div className="mx-450 mx-auto">
             <div className="logo mb-30 text-center">
-              <img src={logo} alt="" />
+              <img src={logo} alt="" className="h-100" />
             </div>
             <div className="fs-28 text-center fw-500 mb-40">Welcome back</div>
             <Formik
