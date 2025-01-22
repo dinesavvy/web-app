@@ -55,7 +55,6 @@ const MerchantDetails = () => {
   const nudgesListSelector = useSelector((state) => state?.nudgesList);
 
   const { state } = useLocation();
-  console.log(state, "statestate");
   const dispatch = useDispatch();
 
   // useEffect(() => {
@@ -99,6 +98,8 @@ const MerchantDetails = () => {
   const merchantDetailsSelector = useSelector(
     (state) => state?.merchantDetails
   );
+
+  console.log(merchantDetailsSelector,"merchantDetailsSelector")
 
   const followerDetailsSelector = useSelector(
     (state) => state?.followerDetails
@@ -240,16 +241,12 @@ const MerchantDetails = () => {
   // ];
 
   useEffect(() => {
-    // dispatch(
-    //   merchantDetailsHandler({
-    //     locationId:
-    //       localStorage.getItem("merchantId"),
-    //   })
-    // );
-    let payload = {
-      locationId: localStorage.getItem("merchantId"),
-    };
-    dispatch(merchantDetailsHandler(payload));
+    if(localStorage.getItem("merchantId")){
+      let payload = {
+        locationId: localStorage.getItem("merchantId"),
+      };
+      dispatch(merchantDetailsHandler(payload));
+    }
   }, []);
 
   const navigate = useNavigate();
@@ -2175,7 +2172,7 @@ const MerchantDetails = () => {
             </>
           ) :activeTab3 === "5"? (
             <>
-            <TeamMember />
+            <TeamMember merchantDetailsSelector={merchantDetailsSelector}/>
             </>
           ):null}
         </div>

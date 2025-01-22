@@ -135,8 +135,9 @@ textarea:hover {
 }
 
 input::placeholder,
-textarea::placeholder {
-  color: #737373;
+textarea::placeholder ,.ant-picker .ant-picker-input >input::placeholder{
+  color: #737373 !important;
+  opacity: 1 !important;
 }
 
 label {

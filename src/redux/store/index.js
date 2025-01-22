@@ -17,6 +17,9 @@ import merchantPerformanceAnalyticsDetailsSlice from "../action/merchantPerforma
 import teamListInfoSlice from "../action/teamsList";
 import merchantTeamsSlice from "../action/merchantTeams";
 import removeTeamMemberSlice from "../action/removeTeamMember";
+import roleListActionSlice from "../action/roleList";
+import updateTeamSlice from "../action/updateTeam";
+import resendInviteLinkSlice from "../action/resendInviteLink";
 
 const store = configureStore({
   reducer: {
@@ -39,6 +42,9 @@ const store = configureStore({
     teamList: teamListInfoSlice,
     merchantTeamsList: merchantTeamsSlice,
     removeTeamMember: removeTeamMemberSlice,
+    roleList: roleListActionSlice,
+    updateTeam: updateTeamSlice,
+    resendInviteLink: resendInviteLinkSlice,
   },
 });
 

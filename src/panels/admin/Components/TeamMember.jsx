@@ -12,9 +12,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { merchantTeamsHandler } from "../../../redux/action/merchantTeams";
 import Loader from "../../../common/Loader/Loader";
 
-const TeamMember = () => {
+const TeamMember = ({ merchantDetailsSelector }) => {
   const [pagination, setPagination] = useState({ page: 1, limit: 9 });
-  const [removeTeamMember,setRemoveTeamMember] = useState({})
+  const [removeTeamMember, setRemoveTeamMember] = useState({});
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -101,7 +101,13 @@ const TeamMember = () => {
                         <div
                           className="btn btnSecondary w-100 gap-8"
                           onClick={() =>
-                            navigate("/admin/merchant/edit-member",{state:item})
+                            navigate("/admin/merchant/edit-member", {
+                              state: {
+                                item: item,
+                                merchantDetailsSelector:
+                                  merchantDetailsSelector,
+                              },
+                            })
                           }
                         >
                           <img src={editMember} alt="" />
@@ -109,7 +115,10 @@ const TeamMember = () => {
                         </div>
                         <div
                           className="deleteBtn btn"
-                          onClick={() => {setModal2Open(true);setRemoveTeamMember(item)}}
+                          onClick={() => {
+                            setModal2Open(true);
+                            setRemoveTeamMember(item);
+                          }}
                         >
                           <img src={deleteMember} alt="" />
                         </div>
@@ -141,7 +150,7 @@ const TeamMember = () => {
         modal2Open={modal2Open}
         setModal2Open={setModal2Open}
         modalImage={deleteModal}
-        removeTeamMember = {removeTeamMember}
+        removeTeamMember={removeTeamMember}
       />
     </>
   );

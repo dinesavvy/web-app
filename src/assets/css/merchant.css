@@ -987,6 +987,11 @@ input[type="radio"]:checked + .custom-radio-button{
   opacity: 0.5;
   cursor: not-allowed !important;
 }
+.positionBlock .ant-space{
+  width: 100% !important;
+  display: block !important;
+}
+
 @media (max-width: 1499.98px) {
   .merchantGrid {
     grid-template-columns: repeat(2, 1fr);

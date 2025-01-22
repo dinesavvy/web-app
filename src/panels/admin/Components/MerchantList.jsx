@@ -194,6 +194,7 @@ const MerchantList = () => {
                                 state: item,
                               });
                               localStorage.setItem("merchantId", item?._id);
+                              // localStorage.setItem("merchantData", JSON.stringify(item));
                             }}
                           >
                             Details
