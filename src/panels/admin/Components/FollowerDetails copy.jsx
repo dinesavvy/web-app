@@ -16,8 +16,6 @@ const FollowerDetail = () => {
     (state) => state?.followerDetails
   );
 
-  console.log(followerDetailsSelector,"followerDetailsSelector")
-
   useEffect(() => {
     let payload = {
       followerId: state?._id,

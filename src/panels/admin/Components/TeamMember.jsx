@@ -12,7 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { merchantTeamsHandler } from "../../../redux/action/merchantTeams";
 import Loader from "../../../common/Loader/Loader";
 
-const TeamMember = ({ merchantDetailsSelector }) => {
+const TeamMember = ({ merchantDetailsSelector,activeTab3,setActiveTab3 }) => {
   const [pagination, setPagination] = useState({ page: 1, limit: 9 });
   const [removeTeamMember, setRemoveTeamMember] = useState({});
   const navigate = useNavigate();

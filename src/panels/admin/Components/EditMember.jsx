@@ -87,7 +87,13 @@ const EditMember = () => {
         content: updateTeamSelector?.data?.message,
       });
       dispatch(updateTeamAction.updateTeamReset());
-      navigate("/admin/merchant/list")
+      navigate("/admin/merchant/details")
+    }else if (updateTeamSelector?.data?.statusCode === 400){
+      messageApi.open({
+        type: "error",
+        content: updateTeamSelector?.message,
+      });
+      dispatch(updateTeamAction.updateTeamReset());
     }
   }, [updateTeamSelector]);
 
@@ -378,7 +384,7 @@ const EditMember = () => {
                   </div>
                 )}
                 <div className="d-flex align-center justify-end gap-16">
-                  <div className="btn btnSecondary w-172" onClick={()=>navigate("/admin/merchant/list")}>Discard</div>
+                  <div className="btn btnSecondary w-172" onClick={()=>navigate("/admin/merchant/details")}>Discard</div>
                   <button className="btn w-172" type="submit">
                     Save Changes
                   </button>

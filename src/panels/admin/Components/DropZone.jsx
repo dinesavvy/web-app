@@ -5,7 +5,6 @@ const DropZone = ({ onDrop }) => {
   const [, drop] = useDrop(() => ({
     accept: "ITEM",
     drop: (item) => {
-      console.log(`Dropped item: ${item.name}`);
       onDrop(item); // Notify the parent about the dropped item
     },
     collect: (monitor) => ({

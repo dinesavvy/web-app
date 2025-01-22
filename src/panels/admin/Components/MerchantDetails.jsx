@@ -32,11 +32,11 @@ import { followersListHandler } from "../../../redux/action/followersList";
 import { nudgesListHandler } from "../../../redux/action/nudgesList";
 import NudgeDetail from "./NudgeDetail";
 import { followerDetailsHandler } from "../../../redux/action/followersDetails";
-import FollowerDetail from "./FollowerDetails";
 import { listByUserIdHandler } from "../../../redux/action/listByUserId";
 import TeamMember from "./TeamMember";
 
 const MerchantDetails = () => {
+  const { state } = useLocation();
   const [activeTab3, setActiveTab3] = useState("1");
   const [editInput, setEditInput] = useState(false);
   const [switchState, setSwitchState] = useState(false);
@@ -54,7 +54,6 @@ const MerchantDetails = () => {
   const followerListSelector = useSelector((state) => state?.followeList);
   const nudgesListSelector = useSelector((state) => state?.nudgesList);
 
-  const { state } = useLocation();
   const dispatch = useDispatch();
 
   // useEffect(() => {
@@ -98,8 +97,6 @@ const MerchantDetails = () => {
   const merchantDetailsSelector = useSelector(
     (state) => state?.merchantDetails
   );
-
-  console.log(merchantDetailsSelector,"merchantDetailsSelector")
 
   const followerDetailsSelector = useSelector(
     (state) => state?.followerDetails
@@ -390,7 +387,6 @@ const MerchantDetails = () => {
                           {merchantDetailsSelector?.data?.data?.businessName}
                         </div>
                       )}
-                      {console.log(merchantDetailsSelector,"merchantDetailsSelector")}
                     </div>
                     <div>
                       <label htmlFor="name" className="grey mb-10 fs-16 fw-500">
@@ -2172,7 +2168,7 @@ const MerchantDetails = () => {
             </>
           ) :activeTab3 === "5"? (
             <>
-            <TeamMember merchantDetailsSelector={merchantDetailsSelector}/>
+            <TeamMember merchantDetailsSelector={merchantDetailsSelector} activeTab3 = {activeTab3} setActiveTab3 = {setActiveTab3}/>
             </>
           ):null}
         </div>

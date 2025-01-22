@@ -21,7 +21,6 @@ const NudgeTemplate = () => {
   const getNudgesTemplateSelector = useSelector(
     (state) => state?.getNudgesTemplate
   );
-  console.log(state, "state");
   const fileuploadSelector = useSelector((state) => state?.fileupload);
 
   const navigate = useNavigate();
@@ -90,8 +89,6 @@ const NudgeTemplate = () => {
       fileInputRef.current.click(); // Trigger the file input click
     }
   };
-
-  console.log(fileuploadSelector, "fileuploadSelector");
 
   return (
     <>
@@ -359,8 +356,6 @@ const NudgeTemplate = () => {
                                 Nudge.
                               </div>
                             )}
-
-                            {/* {console.log(state,"statestatestatestatestatestatestatestate")} */}
                           </div>
                         </div>
                         <div>

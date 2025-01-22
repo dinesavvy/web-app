@@ -23,7 +23,6 @@ const NudgeCart = ({
   setIsCartOpen,
 }) => {
   const createNudgeSelector = useSelector((state) => state?.createNudge);
-  console.log(state, "state temp");
   const messageApi = useCommonMessage();
   const dispatch = useDispatch();
   const navigate = useNavigate()
