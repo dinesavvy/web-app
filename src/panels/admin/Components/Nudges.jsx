@@ -253,7 +253,6 @@ const Nudges = () => {
                 {nudgesListSelector?.data?.data?.records?.length > 0 ? (
                   nudgesListSelector?.data?.data?.records?.map(
                     (item, index) => {
-                      console.log(item, "itemitemitemitem");
                       return (
                         <div className="merchantCard" key={index}>
                           <div className="position-relative">
@@ -298,7 +297,6 @@ const Nudges = () => {
                               <div className="fs-14 lightBlack ">
                                 Expiration date
                               </div>
-                              {console.log(item, "ioioioioioio")}
                               <div className="fs-14 fw-500">
                                 {moment(item?.deactivateAt).format(
                                   "DD MMMM,YYYY"

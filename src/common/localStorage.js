@@ -31,7 +31,6 @@ export const getItem = (key) => {
     try {
       return decryptData(encryptedValue);
     } catch (error) {
-      console.error("Error decrypting data:", error);
       return null; // or handle the error as needed
     }
   }

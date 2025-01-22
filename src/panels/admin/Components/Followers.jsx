@@ -9,6 +9,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { followersListHandler } from "../../../redux/action/followersList";
 import SearchSelect from "../Components/SearchSelect";
 import Loader from "../../../common/Loader/Loader";
+import resturantIcon from "../../../assets/images/resturantIcon.svg";
+
 import {
   followerArchiveAction,
   followerArchiveHandler,
@@ -34,7 +36,7 @@ const Followers = () => {
 
   const handleSearchChange = (value) => {
     setSearchString(value);
-    setPagination((prev) => ({ ...prev, page: 1 })); 
+    setPagination((prev) => ({ ...prev, page: 1 }));
   };
 
   const handleSearchAreaChange = (selectedAreas) => {
@@ -162,7 +164,9 @@ const Followers = () => {
                           <div className="fw-700">
                             {item?.userInfo?.displayName}
                           </div>
-                          <div className="fs-14 fw-300 o5">#256501</div>
+                          <div className="fs-14 fw-300 o5">
+                            {moment(item?.createdAt).format("MMMM,YYYY")}
+                          </div>
                         </div>
                       </div>
                       {/* <div className="custom-checkbox">
@@ -179,18 +183,27 @@ const Followers = () => {
                     </div>
                     <div className="divider2"></div>
                     {/* {item?.userInfo?.email && ( */}
-                      <div className="d-flex align-center gap-12 mb-10">
-                        <img src={emailCard} alt="" />
-                        <div className="fs-14">{item?.userInfo?.email || "-"}</div>
+                    <div className="d-flex align-center gap-12 mb-10">
+                      <img src={emailCard} alt="" />
+                      <div className="fs-14">
+                        {item?.userInfo?.email || "-"}
                       </div>
+                    </div>
                     {/* )} */}
                     {/* {item?.userInfo?.phoneNumber !== "" && ( */}
-                      <div className="d-flex align-center gap-12">
-                        <img src={phoneCard} alt="" />
-                        <div className="fs-14">
-                          {item?.userInfo?.phoneNumber || "-"}
-                        </div>
+                    <div className="d-flex align-center gap-12">
+                      <img src={phoneCard} alt="" />
+                      <div className="fs-14">
+                        {item?.userInfo?.phoneNumber || "-"}
                       </div>
+                    </div>
+                    <div className="d-flex justify-between align-center gap-12 fs-14 mb-10">
+                          <div className="d-flex align-center gap-12">
+                            <img src={resturantIcon} alt="" />
+                            Restaurants following:
+                          </div>
+                          <div className="fw-500">{item?.followerCount || "-"}</div>
+                        </div>
                     {/* )} */}
                     <div className="divider2"></div>
                     <div className="d-flex gap-10 mt-20 justify-end flexBtn">
@@ -200,7 +213,12 @@ const Followers = () => {
                       >
                         Add to List
                       </div>
-                      <div className="btnSecondary w-100 btn">View Details</div>
+                      <div
+                        className="btnSecondary w-100 btn"
+                        onClick={() => navigateToFollowerDetails(item)}
+                      >
+                        View Details
+                      </div>
                     </div>
                   </div>
                 );
@@ -236,19 +254,28 @@ const Followers = () => {
                         </div>
                         <div className="divider2"></div>
                         {/* {item?.userInfo?.email && ( */}
-                          <div className="d-flex align-center gap-12 mb-10">
-                            <img src={emailCard} alt="" />
-                            <div className="fs-14">{item?.userInfo?.email || "-"}</div>
+                        <div className="d-flex align-center gap-12 mb-10">
+                          <img src={emailCard} alt="" />
+                          <div className="fs-14">
+                            {item?.userInfo?.email || "-"}
                           </div>
+                        </div>
                         {/* )} */}
                         {/* {item?.userInfo?.phoneNumber && ( */}
-                          <div className="d-flex align-center gap-12">
-                            <img src={phoneCard} alt="" />
-                            <div className="fs-14">
-                              {item?.userInfo?.phoneNumber||"-"}
-                            </div>
+                        <div className="d-flex align-center gap-12">
+                          <img src={phoneCard} alt="" />
+                          <div className="fs-14">
+                            {item?.userInfo?.phoneNumber || "-"}
                           </div>
+                        </div>
                         {/* )} */}
+                        <div className="d-flex justify-between align-center gap-12 fs-14 mt-10">
+                          <div className="d-flex align-center gap-12">
+                            <img src={resturantIcon} alt="" />
+                            Restaurants following:
+                          </div>
+                          <div className="fw-500">{item?.followerCount || "-"}</div>
+                        </div>
                         <div className="divider2"></div>
                         <div className="d-flex gap-10 mt-20 justify-end flexBtn">
                           <div

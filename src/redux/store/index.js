@@ -15,6 +15,11 @@ import merchantPerformanceAnalyticsListSlice from "../action/merchantPerfomanceA
 import fileuploadSlice from "../action/fileUpload";
 import merchantPerformanceAnalyticsDetailsSlice from "../action/merchantPerformanceAnalyticsDetails";
 import teamListInfoSlice from "../action/teamsList";
+import merchantTeamsSlice from "../action/merchantTeams";
+import removeTeamMemberSlice from "../action/removeTeamMember";
+import roleListActionSlice from "../action/roleList";
+import updateTeamSlice from "../action/updateTeam";
+import resendInviteLinkSlice from "../action/resendInviteLink";
 
 const store = configureStore({
   reducer: {
@@ -35,6 +40,11 @@ const store = configureStore({
     merchantPerformanceAnalyticsDetails:
       merchantPerformanceAnalyticsDetailsSlice,
     teamList: teamListInfoSlice,
+    merchantTeamsList: merchantTeamsSlice,
+    removeTeamMember: removeTeamMemberSlice,
+    roleList: roleListActionSlice,
+    updateTeam: updateTeamSlice,
+    resendInviteLink: resendInviteLinkSlice,
   },
 });
 

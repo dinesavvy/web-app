@@ -15,7 +15,7 @@ import { useEffect } from "react";
 import { validationSchema } from "./loginValidation";
 import Loader from "../Loader/Loader";
 
-const Login = (props) => {
+const Login = () => {
   const messageApi = useCommonMessage();
   const loginSelector = useSelector((state) => state?.loginSliceDetails);
   const navigate = useNavigate();
@@ -122,15 +122,8 @@ const Login = (props) => {
                     type="submit"
                     disabled={isSubmitting}
                   >
-                    Enter your Email address
+                    Continue
                   </button>
-
-                  {/* <div
-                    className="btn"
-                    role="button" // Add role for accessibility
-                  >
-                    Enter your Email address
-                  </div> */}
                 </Form>
               )}
             </Formik>

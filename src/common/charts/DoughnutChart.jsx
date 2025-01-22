@@ -1,5 +1,5 @@
 // DoughnutChart.js
-import React from "react";
+import React, { useEffect } from "react";
 import { Doughnut } from "react-chartjs-2";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import PropTypes from "prop-types";
@@ -8,20 +8,23 @@ import PropTypes from "prop-types";
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 const DoughnutChart = ({ data,className,merchantPerformanceAnalyticsDetailsSelector }) => {
-  console.log(merchantPerformanceAnalyticsDetailsSelector?.map((item)=>((item?.nudgeAcceptCount / item?.nudgeSentCount)*100).toFixed(2)),"merchantPerformanceAnalyticsDetailsSelector")
-  // const data = {
-  //   labels: ["Progress", "Remaining"],
-  //   progress: merchantPerformanceAnalyticsDetailsSelector?.map((item)=>((item?.nudgeAcceptCount / item?.nudgeSentCount)*100).toFixed(2)),
-  //   total: 100,
-  // };
 
-  const percentage = ((data?.progress / data?.total) * 100).toFixed(2);
+
+let totalNudgeAcceptCount = 0;
+let totalNudgeSentCount = 0;
+
+merchantPerformanceAnalyticsDetailsSelector?.data?.data?.nudgeData?.forEach(item => {
+  totalNudgeAcceptCount += item.nudgeAcceptCount;
+  totalNudgeSentCount += item.nudgeSentCount;
+});
+
+  const percentage = ((totalNudgeAcceptCount / totalNudgeSentCount) * 100).toFixed(2);
   const chartData = {
     labels: data.labels,
     datasets: [
       {
         label: "My Dataset",
-        data: [data?.progress, data?.total - data?.progress],
+        data: [totalNudgeAcceptCount, totalNudgeSentCount - totalNudgeAcceptCount],
         backgroundColor: [
           "rgba(75, 192, 192, 0.6)", // Progress color
           "rgba(201, 203, 207, 0.6)", // Remaining color

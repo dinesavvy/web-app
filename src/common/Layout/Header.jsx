@@ -15,12 +15,12 @@ const Header = ({ handleTrigger }) => {
         <div className="fs-24 fw-600">Dine Savvy Dashboard</div>
       </div>
       <div className="d-flex align-center gap-20">
-        <div className="notification">
+        {/* <div className="notification">
           <img src={cartIcon} alt="icon" className="h-100" />
           <div className="sup">
             4
           </div>
-        </div>
+        </div> */}
         <div className="notification">
           <img src={notification} alt="icon" className="h-100" />
         </div>
