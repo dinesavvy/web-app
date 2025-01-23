@@ -1,25 +1,71 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
-import React from "react";
+import React, { useRef, useState } from "react";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import "../../../assets/css/Login.css";
+import "../../../app.css";
 import login from "../../../assets/images/login.jpg";
 import logo from "../../../assets/images/logo.svg";
 import phoneInput from "../../../assets/images/phoneInput.svg";
-import passwordInput from "../../../assets/images/passwordInput.svg";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useCommonMessage } from "../../../common/CommonMessage";
-import { loginHandler, loginSliceAction } from "../../../redux/action/loginSlice";
+import {
+  loginHandler,
+  loginSliceAction,
+} from "../../../redux/action/loginSlice";
 import { useEffect } from "react";
 import { validationSchema } from "./merchantLoginValidation";
 import Loader from "../../../common/Loader/Loader";
 
-const MerchantLogin = () => {
+const RequestedCode = () => {
   const messageApi = useCommonMessage();
   const loginSelector = useSelector((state) => state?.loginSliceDetails);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  const [otp, setOtp] = useState(new Array(6).fill(""));
+  const inputRefs = useRef([]);
+
+  const handleChange = (value, index) => {
+    if (!/^\d?$/.test(value)) return; // Allow only digits
+
+    // Update the OTP array
+    const newOtp = [...otp];
+    newOtp[index] = value;
+    setOtp(newOtp);
+
+    // Move to the next input field if a value is entered
+    if (value && index < otp.length - 1) {
+      inputRefs.current[index + 1].focus();
+    }
+  };
+
+  const handleKeyDown = (e, index) => {
+    if (e.key === "Backspace") {
+      const newOtp = [...otp];
+      newOtp[index] = ""; // Clear the current field
+      setOtp(newOtp);
+
+      if (index > 0 && !otp[index]) {
+        inputRefs.current[index - 1].focus();
+      }
+    }
+  };
+
+  const handlePaste = (e) => {
+    e.preventDefault();
+    const pasteData = e.clipboardData.getData("text").slice(0, 6).split("");
+    const newOtp = otp.map((_, i) => pasteData[i] || "");
+    setOtp(newOtp);
+
+    // Focus the appropriate input after paste
+    const lastIndex = Math.min(pasteData.length - 1, otp.length - 1);
+    inputRefs.current[lastIndex].focus();
+  };
+
+  const handleFocus = (e) => e.target.select();
+
 
   const handleFormSubmit = (values) => {
     let payload = {
@@ -74,33 +120,43 @@ const MerchantLogin = () => {
                 /* and other goodies */
               }) => (
                 <Form>
-                  <div className="mb-30">
-                    <label className="fs-14 fw-500 mb-10" htmlFor="email">
-                    Phone number*
-                    </label>
-                    <div className="line">
-                      <Field
-                        type="number"
-                        name="phone"
-                        placeholder="Enter your phone number"
-                        id="phone"
-                      />
-                      <img src={phoneInput} alt="" className="absoluteImage" />
-                    </div>
-                    <ErrorMessage
-                      name="email"
-                      component="div"
-                      className="mt-10 fw-500 fs-14 error"
+                  <div className="fs-24 fw-700 mb-8">Verification</div>
+                  <div className="grey fs-18">
+                    Enter the 6 digit code sent to your phone number
+                  </div>
+                  <div className="divider3"></div>
+                  <div
+                    onPaste={handlePaste}
+                    className="d-flex gap-10 align-center mb-16 otpFlex"
+                  >
+                    {otp.map((digit, index) => (
+                      <input
+                      key={index}
+                      type="text"
+                      value={digit}
+                      onChange={(e) => handleChange(e.target.value, index)}
+                      onKeyDown={(e) => handleKeyDown(e, index)}
+                      onFocus={handleFocus}
+                      ref={(el) => (inputRefs.current[index] = el)}
+                      maxLength={1} // Ensure only one character per input
+
                     />
+                    ))}
+                  </div>
+                  <div className="fs-14 mb-30 fw-500 sc text-end cursor-pointer">
+                  Edit phone number
                   </div>
                   <button
-                    className="btn w-100"
+                    className="btn w-100 mb-30"
                     type="submit"
                     // disabled={isSubmitting}
-                    onClick={()=>navigate('/requested-code')}
+                    onClick={() => navigate("/merchant/dashboard")}
                   >
-                    Request Code
+                    Verify
                   </button>
+                  <div className="fs-14 text-center">
+                    <span className="grey">Didn't receive code? </span><span className="fw-500 cursor-pointer">Request again in 01:59</span>
+                  </div>
                 </Form>
               )}
             </Formik>
@@ -111,4 +167,4 @@ const MerchantLogin = () => {
   );
 };
 
-export default MerchantLogin;
+export default RequestedCode;
