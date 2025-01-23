@@ -12,6 +12,7 @@ const routeMap = {
 };
 
 
+
 const AppRoutesMerchant = () => {
   const routes = routeMap["merchant"] || [];
   const [isOpen, setIsOpen] = useState(false);
