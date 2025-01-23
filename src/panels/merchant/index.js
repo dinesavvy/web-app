@@ -1,7 +1,7 @@
 // src/index.js
 import React from "react";
 import { createRoot } from "react-dom/client"; // Import createRoot
-import AdminApp from "./App";
+import MerchantApp from "./App";
 
 // Get the root element
 const rootElement = document.getElementById("root");
@@ -10,4 +10,4 @@ const rootElement = document.getElementById("root");
 const root = createRoot(rootElement);
 
 // Render the app
-root.render(<AdminApp />);
+root.render(<MerchantApp />);
