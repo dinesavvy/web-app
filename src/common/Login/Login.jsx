@@ -18,6 +18,7 @@ import Loader from "../Loader/Loader";
 const Login = () => {
   const messageApi = useCommonMessage();
   const loginSelector = useSelector((state) => state?.loginSliceDetails);
+  console.log(loginSelector,"loginSelector")
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -37,10 +38,10 @@ const Login = () => {
       });
       navigate("/admin/merchant/dashboard");
       dispatch(loginSliceAction.loginDetailsSliceReset());
-    } else if (loginSelector?.message) {
+    } else if (loginSelector?.message?.status===400) {
       messageApi.open({
         type: "error",
-        content: loginSelector?.message,
+        content: loginSelector?.message?.message,
       });
       dispatch(loginSliceAction.loginDetailsSliceReset());
     }
@@ -120,7 +121,7 @@ const Login = () => {
                   <button
                     className="btn w-100"
                     type="submit"
-                    disabled={isSubmitting}
+                    // disabled={isSubmitting}
                   >
                     Continue
                   </button>
