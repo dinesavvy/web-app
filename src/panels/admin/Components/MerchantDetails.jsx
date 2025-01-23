@@ -355,10 +355,12 @@ const MerchantDetails = () => {
                   <div>
                     <div className="fs-24 fw-600 mb-4">Merchants Details</div>
                     <Breadcrumb
+                      className="cursor-pointer"
                       separator={<img src={breadCrumbIcon} />}
                       items={[
                         {
                           title: "Merchants",
+                          onClick: () => navigate("/admin/merchant/list"),
                         },
                         {
                           title: "Merchants Details",
@@ -1172,10 +1174,12 @@ const MerchantDetails = () => {
                   <div>
                     <div className="fs-24 fw-600 mb-4">Dine Savvy Account</div>
                     <Breadcrumb
+                    className="cursor-pointer"
                       separator={<img src={breadCrumbIcon} />}
                       items={[
                         {
                           title: "Merchants",
+                          onClick: () => navigate("/admin/merchant/list"),
                         },
                         {
                           title: "Dine Savvy Account",
@@ -1285,10 +1289,12 @@ const MerchantDetails = () => {
                         <div>
                           <div className="fs-24 fw-600 mb-4">Followers</div>
                           <Breadcrumb
+                          className="cursor-pointer"
                             separator={<img src={breadCrumbIcon} />}
                             items={[
                               {
                                 title: "Merchants",
+                                onClick: () => navigate("/admin/merchant/list"),
                               },
                               {
                                 title: "Followers",
@@ -1731,11 +1737,13 @@ const MerchantDetails = () => {
                         />
                         <div>
                           <div className="fs-24 fw-600 mb-4">Followers</div>
-                          <Breadcrumb
+                          <Breadcrumb 
+                          className="cursor-pointer"
                             separator={<img src={breadCrumbIcon} />}
                             items={[
                               {
                                 title: "Merchants",
+                                onClick: () => navigate("/admin/merchant/list"),
                               },
                               {
                                 title: "Followers",
@@ -1912,10 +1920,12 @@ const MerchantDetails = () => {
                   <div>
                     <div className="fs-24 fw-600 mb-4">Nudges</div>
                     <Breadcrumb
+                    className="cursor-pointer"
                       separator={<img src={breadCrumbIcon} />}
                       items={[
                         {
                           title: "Merchants",
+                          onClick: () => navigate("/admin/merchant/list"),
                         },
                         {
                           title: "Nudges",

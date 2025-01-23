@@ -72,13 +72,16 @@ const FollowerDetail = () => {
               <div>
                 <div className="fs-24 fw-600 mb-4">Followers</div>
                 <Breadcrumb
+                className="cursor-pointer"
                   separator={<img src={breadCrumbIcon} />}
                   items={[
                     {
                       title: "Merchants",
+                      onClick: () => navigate("/admin/merchant/list"),
                     },
                     {
                       title: "Followers",
+                      onClick: () => navigate("/admin/merchant/followers"),
                     },
                     {
                       title: "Follower Details",
