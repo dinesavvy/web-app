@@ -164,7 +164,11 @@ const Followers = () => {
                         </div>
                         <div>
                           <div className="fw-700">
-                            {item?.userInfo?.displayName}
+                            {item?.userInfo?.displayName &&
+                                  item.userInfo.displayName
+                                    .charAt(0)
+                                    .toUpperCase() +
+                                    item.userInfo.displayName.slice(1)}
                           </div>
                           <div className="fs-14 fw-300 o5">
                             {moment(item?.createdAt).format("MMMM,YYYY")}

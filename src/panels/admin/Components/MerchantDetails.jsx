@@ -37,12 +37,12 @@ import TeamMember from "./TeamMember";
 
 const MerchantDetails = () => {
   const { state } = useLocation();
-  console.log(state,"lllllllllllll")
+  console.log(state, "lllllllllllll");
   const [activeTab3, setActiveTab3] = useState("1");
   const [editInput, setEditInput] = useState(false);
   const [switchState, setSwitchState] = useState(false);
   const [viewDetail, setViewDetail] = useState(false);
-  const [pagination, setPagination] = useState({ page: 1, limit: 10 });
+  const [pagination, setPagination] = useState({ page: 1, limit: 9 });
   const [searchString, setSearchString] = useState("");
   const [searchArea, setSearchArea] = useState([]);
   const [activeNudgeClass, setActiveNudgeClass] = useState("Received");
@@ -51,7 +51,7 @@ const MerchantDetails = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [selectedItems, setSelectedItems] = useState([]);
 
-  console.log(selectedItems,"selectedItemsselectedItems")
+  console.log(selectedItems, "selectedItemsselectedItems");
 
   const listByUserIdSelector = useSelector((state) => state?.listByUserId);
   const followerListSelector = useSelector((state) => state?.followeList);
@@ -61,25 +61,29 @@ const MerchantDetails = () => {
 
   useEffect(() => {
     if (
-      (Array.isArray(state?.statePrev?.selectedItems) && state?.statePrev?.selectedItems?.length > 0) || 
+      (Array.isArray(state?.statePrev?.selectedItems) &&
+        state?.statePrev?.selectedItems?.length > 0) ||
       state?.statePrev?.locationId?.locationId
     ) {
       setActiveTab3("3");
       const updatedCheckedItems = {};
-      
+
       followerListSelector?.data?.data?.records?.forEach((item, index) => {
         // Mark as checked if the item is in selectedItems
-        const isSelected = Array.isArray(state?.statePrev?.selectedItems) && state?.statePrev?.selectedItems?.some(
-          (selectedItem) => selectedItem?._id === item?._id
-        );
+        const isSelected =
+          Array.isArray(state?.statePrev?.selectedItems) &&
+          state?.statePrev?.selectedItems?.some(
+            (selectedItem) => selectedItem?._id === item?._id
+          );
         updatedCheckedItems[index] = isSelected;
       });
-  
+
       setCheckedItems(updatedCheckedItems);
-      setSelectedItems(state?.statePrev?.selectedItems || state?.statePrev?.selectedItems||[]); // Ensure selectedItems is an array
+      setSelectedItems(
+        state?.statePrev?.selectedItems || state?.statePrev?.selectedItems || []
+      ); // Ensure selectedItems is an array
     }
   }, [state?.statePrev?.selectedItems, followerListSelector]);
-  
 
   const merchantDetailsSelector = useSelector(
     (state) => state?.merchantDetails
@@ -225,7 +229,7 @@ const MerchantDetails = () => {
   // ];
 
   useEffect(() => {
-    if(localStorage.getItem("merchantId")){
+    if (localStorage.getItem("merchantId")) {
       let payload = {
         locationId: localStorage.getItem("merchantId"),
       };
@@ -304,7 +308,7 @@ const MerchantDetails = () => {
       }
     });
     setCheckedItems(updatedCheckedItems);
-  
+
     // Remove from selectedItems
     const updatedSelectedItems = selectedItems.filter(
       (item, index) => !checkedItems[index]
@@ -1401,29 +1405,19 @@ const MerchantDetails = () => {
                           accepted
                         </div>
                         <div className="fs-22 fw-500">
-                          {/* {
-                            followerDetailsSelector?.data?.data?.nudge
-                              ?.acceptNudge
-                          }
-                          /
-                          {(
-                            (followerDetailsSelector?.data?.data?.nudge
-                              ?.acceptNudge /
-                              followerDetailsSelector?.data?.data?.nudge
-                                ?.totalNudge) *
-                            100
-                          ).toFixed(2)}
-                          % */}
-                          {followerDetailsSelector?.data?.data?.nudge?.totalNudge > 0
-  ? `${followerDetailsSelector?.data?.data?.nudge?.acceptNudge || 0}/${
-      (
-        ((followerDetailsSelector?.data?.data?.nudge?.acceptNudge || 0) /
-          followerDetailsSelector?.data?.data?.nudge?.totalNudge) *
-        100
-      ).toFixed(2)
-    }%`
-  : "0"}
-
+                          {followerDetailsSelector?.data?.data?.nudge
+                            ?.totalNudge > 0
+                            ? `${
+                                followerDetailsSelector?.data?.data?.nudge
+                                  ?.acceptNudge || 0
+                              }/${(
+                                ((followerDetailsSelector?.data?.data?.nudge
+                                  ?.acceptNudge || 0) /
+                                  followerDetailsSelector?.data?.data?.nudge
+                                    ?.totalNudge) *
+                                100
+                              ).toFixed(2)}%`
+                            : "0"}
                         </div>
                       </div>
                       <div
@@ -1442,29 +1436,19 @@ const MerchantDetails = () => {
                           declined
                         </div>
                         <div className="fs-22 fw-500">
-                          {/* {
-                            followerDetailsSelector?.data?.data?.nudge
-                              ?.declinedNudge
-                          }
-                          /
-                          {(
-                            (followerDetailsSelector?.data?.data?.nudge
-                              ?.declinedNudge /
-                              followerDetailsSelector?.data?.data?.nudge
-                                ?.totalNudge) *
-                            100
-                          ).toFixed(2)}
-                          % */}
-                          {followerDetailsSelector?.data?.data?.nudge?.totalNudge > 0
-  ? `${followerDetailsSelector?.data?.data?.nudge?.declinedNudge || 0}/${
-      (
-        ((followerDetailsSelector?.data?.data?.nudge?.declinedNudge || 0) /
-          followerDetailsSelector?.data?.data?.nudge?.totalNudge) *
-        100
-      ).toFixed(2)
-    }%`
-  : "0"}
-
+                          {followerDetailsSelector?.data?.data?.nudge
+                            ?.totalNudge > 0
+                            ? `${
+                                followerDetailsSelector?.data?.data?.nudge
+                                  ?.declinedNudge || 0
+                              }/${(
+                                ((followerDetailsSelector?.data?.data?.nudge
+                                  ?.declinedNudge || 0) /
+                                  followerDetailsSelector?.data?.data?.nudge
+                                    ?.totalNudge) *
+                                100
+                              ).toFixed(2)}%`
+                            : "0"}
                         </div>
                       </div>
                       <div
@@ -1483,39 +1467,27 @@ const MerchantDetails = () => {
                           no action
                         </div>
                         <div className="fs-22 fw-500">
-                          {/* {followerDetailsSelector?.data?.data?.nudge
-                            ?.totalNudge -
-                            (followerDetailsSelector?.data?.data?.nudge
-                              ?.acceptNudge +
-                              followerDetailsSelector?.data?.data?.nudge
-                                ?.declinedNudge)}
-                          /
-                          {(
-                            ((followerDetailsSelector?.data?.data?.nudge
-                              ?.totalNudge -
-                              (followerDetailsSelector?.data?.data?.nudge
-                                ?.acceptNudge +
+                          {followerDetailsSelector?.data?.data?.nudge
+                            ?.totalNudge > 0
+                            ? `${
                                 followerDetailsSelector?.data?.data?.nudge
-                                  ?.declinedNudge)) /
-                              followerDetailsSelector?.data?.data?.nudge
-                                ?.totalNudge) *
-                            100
-                          ).toFixed(2)}
-                          % */}
-                          {followerDetailsSelector?.data?.data?.nudge?.totalNudge > 0
-  ? `${followerDetailsSelector?.data?.data?.nudge?.totalNudge -
-      ((followerDetailsSelector?.data?.data?.nudge?.acceptNudge || 0) +
-        (followerDetailsSelector?.data?.data?.nudge?.declinedNudge || 0))}/${
-      (
-        ((followerDetailsSelector?.data?.data?.nudge?.totalNudge -
-          ((followerDetailsSelector?.data?.data?.nudge?.acceptNudge || 0) +
-            (followerDetailsSelector?.data?.data?.nudge?.declinedNudge || 0))) /
-          followerDetailsSelector?.data?.data?.nudge?.totalNudge) *
-        100
-      ).toFixed(2)
-    }%`
-  : "0"}
-
+                                  ?.totalNudge -
+                                ((followerDetailsSelector?.data?.data?.nudge
+                                  ?.acceptNudge || 0) +
+                                  (followerDetailsSelector?.data?.data?.nudge
+                                    ?.declinedNudge || 0))
+                              }/${(
+                                ((followerDetailsSelector?.data?.data?.nudge
+                                  ?.totalNudge -
+                                  ((followerDetailsSelector?.data?.data?.nudge
+                                    ?.acceptNudge || 0) +
+                                    (followerDetailsSelector?.data?.data?.nudge
+                                      ?.declinedNudge || 0))) /
+                                  followerDetailsSelector?.data?.data?.nudge
+                                    ?.totalNudge) *
+                                100
+                              ).toFixed(2)}%`
+                            : "0"}
                         </div>
                       </div>
                     </div>
@@ -1897,13 +1869,16 @@ const MerchantDetails = () => {
                         <img src={createAdd} alt="image" />
                         <div>Create nudge</div>
                       </div>
-                      <div className="h-24 cursor-pointer" onClick={handleDelete}>
+                      <div
+                        className="h-24 cursor-pointer"
+                        onClick={handleDelete}
+                      >
                         <img src={deleteList} className="w-100 h-100" alt="" />
                       </div>
                     </div>
                   )}
 
-                  {isAnyCheckboxChecked &&state?.statePrev?.selectedItems && (
+                  {isAnyCheckboxChecked && state?.statePrev?.selectedItems && (
                     <div className="floatAdd">
                       <div
                         className="btn fs-16"
@@ -1913,11 +1888,14 @@ const MerchantDetails = () => {
                           })
                         }
                       >
-                        {console.log(state,"test data")}
+                        {console.log(state, "test data")}
                         {/* <img src={createAdd} alt="image" /> */}
                         <div>Continue</div>
                       </div>
-                      <div className="h-24 cursor-pointer" onClick={handleDelete}>
+                      <div
+                        className="h-24 cursor-pointer"
+                        onClick={handleDelete}
+                      >
                         <img src={deleteList} className="w-100 h-100" alt="" />
                       </div>
                     </div>
@@ -2171,11 +2149,15 @@ const MerchantDetails = () => {
               />
               {/* )} */}
             </>
-          ) :activeTab3 === "5"? (
+          ) : activeTab3 === "5" ? (
             <>
-            <TeamMember merchantDetailsSelector={merchantDetailsSelector} activeTab3 = {activeTab3} setActiveTab3 = {setActiveTab3}/>
+              <TeamMember
+                merchantDetailsSelector={merchantDetailsSelector}
+                activeTab3={activeTab3}
+                setActiveTab3={setActiveTab3}
+              />
             </>
-          ):null}
+          ) : null}
         </div>
       )}
     </>

@@ -219,7 +219,7 @@ const MerchantList = () => {
           <div className="d-flex align-center justify-between flexPagination">
             <div className="fs-16">
               Showing {pagination.page} to{" "}
-              {merchantListSelector?.data?.data?.recordsCount} of{" "}
+              {pagination.limit} of{" "}
               {merchantListSelector?.data?.data?.recordsCount} Restaurants
             </div>
             <Pagination
