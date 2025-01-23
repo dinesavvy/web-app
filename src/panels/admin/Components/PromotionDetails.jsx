@@ -97,7 +97,7 @@ const PromotionDetails = ({ isOpen, toggleDetails }) => {
           <div className="accordionCustom">
             {items.map((item, index) => (
               <>
-                <div key={index} className="accordionItem">
+                <div key={index} className=" accordion-item">
                   <div
                     className="accordionHeader fs-16 fw-700"
                     onClick={() => toggleAccordion(index)}
@@ -201,6 +201,9 @@ const PromotionDetails = ({ isOpen, toggleDetails }) => {
                 <div className="divider2"></div>
               </>
             ))}
+          </div>
+          <div className="deleteBtn btn">
+          End Promotion
           </div>
         </div>
       </div>

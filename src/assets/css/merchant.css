@@ -585,10 +585,10 @@
   overflow-y: auto;
 }
 
-/* .overflowCart{
+.overflowCart{
   height: calc(100vh - 445px);
   overflow-y: auto;
-} */
+}
 .brandFlex {
   display: flex;
   gap: 4px;
@@ -885,7 +885,7 @@ input[type="radio"]:checked+.custom-radio-button {
 }
 
 .overflowCart2 {
-  height: calc(100vh - 510px);
+  height: calc(100vh - 120px);
 }
 
 .overflowCart3 {
@@ -939,9 +939,7 @@ input[type="radio"]:checked+.custom-radio-button {
   overflow-y: auto;
   overflow-x: hidden;
 }
-.addTitleInput:focus::placeholder{
-  color: #777;
-}
+
 .color80{
   color: rgba(255, 255, 255, 0.8);
 }
@@ -1001,18 +999,6 @@ input[type="radio"]:checked+.custom-radio-button {
 
 }
 
-.accordionHeader {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  cursor: pointer;
-}
-
-.accordionItem {
-  padding: 16px;
-  border-radius: 12px;
-  background-color: white !important;
-}
 
 .arrowUp,
 .arrow {
@@ -1039,13 +1025,15 @@ input[type="radio"]:checked+.custom-radio-button {
   transition: max-height 0.3s ease;
   opacity: 0;
   opacity: 1;
+}
+.accordionContent{
   margin-top: 16px;
   padding-top: 16px;
   max-height: fit-content;
   /* Adjust as needed */
   border-top: 1px solid #E6E6E6;
-}
 
+}
 .accordion-content.open {
   opacity: 1;
   margin-top: 16px;
@@ -1053,6 +1041,18 @@ input[type="radio"]:checked+.custom-radio-button {
   max-height: fit-content;
   /* Adjust as needed */
   border-top: 1px solid #E6E6E6;
+}
+.accordionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+}
+
+.accordionItem {
+  padding: 16px;
+  border-radius: 12px;
+  background-color: white !important;
 }
 
 .imageAccorddian {
@@ -1075,10 +1075,12 @@ input[type="radio"]:checked+.custom-radio-button {
   border-radius: 0;
 }
 
-.addTitleInput::placeholder {
+input.addTitleInput::placeholder {
   color: #005CDE;
 }
-
+.addTitleInput:focus::placeholder{
+  /* color: #777; */
+}
 .addThing {
   display: flex;
   align-items: center;

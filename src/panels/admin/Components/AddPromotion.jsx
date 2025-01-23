@@ -387,7 +387,7 @@ const AddPromotion = () => {
                   <div className={`accordionHeader fs-18 fw-700 `}>
                     <div>Merchant</div>
                   </div>
-                  <div className="accordion-content">
+                  <div className="accordion-content accordionContent">
                     <div className="d-flex gap-20">
                       <div className="brandItem mx167">
                         <img src={coke} alt="" />
@@ -460,7 +460,7 @@ const AddPromotion = () => {
                       />
                     </div>
                     {openIndex === index && (
-                      <div className="accordion-content">
+                      <div className="accordionContent">
                         <div className="d-flex gap-20">
                           <div className="brandItem mx167">
                             <img src={coke} alt="" />
