@@ -12,7 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { merchantTeamsHandler } from "../../../redux/action/merchantTeams";
 import Loader from "../../../common/Loader/Loader";
 
-const TeamMember = ({ merchantDetailsSelector,activeTab3,setActiveTab3 }) => {
+const TeamMember = ({ merchantDetailsSelector, activeTab3, setActiveTab3 }) => {
   const [pagination, setPagination] = useState({ page: 1, limit: 9 });
   const [removeTeamMember, setRemoveTeamMember] = useState({});
   const navigate = useNavigate();
@@ -47,10 +47,12 @@ const TeamMember = ({ merchantDetailsSelector,activeTab3,setActiveTab3 }) => {
           <div>
             <div className="fs-24 fw-600 mb-4">Team Members</div>
             <Breadcrumb
+              className="cursor-pointer"
               separator={<img src={breadCrumbIcon} />}
               items={[
                 {
                   title: "Merchants",
+                  onClick: () => navigate("/admin/merchant/list"),
                 },
                 {
                   title: "Team Members",
@@ -106,6 +108,7 @@ const TeamMember = ({ merchantDetailsSelector,activeTab3,setActiveTab3 }) => {
                                 item: item,
                                 merchantDetailsSelector:
                                   merchantDetailsSelector,
+                                activeTabs: 5,
                               },
                             })
                           }

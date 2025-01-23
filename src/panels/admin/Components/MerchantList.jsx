@@ -108,7 +108,7 @@ const MerchantList = () => {
                         </div>
                         <div className="fs-16 fw-700 mb-10">
                           {/* Garden Grove Café & Bistro */}
-                          {item?.businessName}
+                          {item?.businessName && item.businessName.charAt(0).toUpperCase() + item.businessName.slice(1)}
                         </div>
                       </div>
                       <div className="divider2 m-0"></div>
@@ -130,9 +130,9 @@ const MerchantList = () => {
                             </div>
                           </div>
                           <div>
-                            <div className="fs-14 mb-4">Followers</div>
+                            <div className="fs-14 mb-4">Nudge Sent</div>
                             <div className="fs-14 fw-600">
-                              {item?.followerCount}
+                              {item?.nudge?.timeFrameFollowerNudgeSentCount}
                             </div>
                           </div>
                           <div>
@@ -219,7 +219,7 @@ const MerchantList = () => {
           <div className="d-flex align-center justify-between flexPagination">
             <div className="fs-16">
               Showing {pagination.page} to{" "}
-              {merchantListSelector?.data?.data?.recordsCount} of{" "}
+              {pagination.limit} of{" "}
               {merchantListSelector?.data?.data?.recordsCount} Restaurants
             </div>
             <Pagination

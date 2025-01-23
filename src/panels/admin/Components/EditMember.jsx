@@ -88,6 +88,7 @@ const EditMember = () => {
       });
       dispatch(updateTeamAction.updateTeamReset());
       navigate("/admin/merchant/details")
+      
     }else if (updateTeamSelector?.data?.statusCode === 400){
       messageApi.open({
         type: "error",

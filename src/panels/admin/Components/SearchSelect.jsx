@@ -97,7 +97,7 @@ const SearchSelect = ({ onSearchChange, onSearchAreaChange }) => {
           </div>
           {isDropdownOpen && (
             <div className="dropdown-list">
-              <div className="lineSearch w-100">
+              {/* <div className="lineSearch w-100">
                 <input
                   type="text"
                   name="text"
@@ -105,7 +105,7 @@ const SearchSelect = ({ onSearchChange, onSearchAreaChange }) => {
                   id="text"
                 />
                 <img src={searchIcon} alt="" className="absoluteImage" />
-              </div>
+              </div> */}
               {(location?.pathname === "/admin/merchant/followers" ||
                 location?.pathname === "/admin/merchant/details") &&
                 followerListFilter.map((option, index) => (
@@ -117,7 +117,8 @@ const SearchSelect = ({ onSearchChange, onSearchAreaChange }) => {
                         onChange={() => handleSelect(option)}
                       />
                       <span className="checkmark"></span>
-                      {option}
+                      {/* {option} */}
+                      {option.charAt(0).toUpperCase() + option.slice(1)}
                     </label>
                   </div>
                 ))}
@@ -132,7 +133,8 @@ const SearchSelect = ({ onSearchChange, onSearchAreaChange }) => {
                         onChange={() => handleSelect(option)}
                       />
                       <span className="checkmark"></span>
-                      {option}
+                      {/* {option} */}
+                      {option.charAt(0).toUpperCase() + option.slice(1)}
                     </label>
                   </div>
                 ))}
@@ -146,7 +148,8 @@ const SearchSelect = ({ onSearchChange, onSearchAreaChange }) => {
       <div className="selected-items mb-20">
         {selectedItems.map((item, index) => (
           <div key={index} className="selected-item">
-            {item}
+            {/* {item} */}
+            {item.charAt(0).toUpperCase() + item.slice(1)}
             <button
               className="remove-button"
               onClick={() => handleRemove(item)}

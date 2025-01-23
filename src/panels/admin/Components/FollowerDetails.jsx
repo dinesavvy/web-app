@@ -72,13 +72,16 @@ const FollowerDetail = () => {
               <div>
                 <div className="fs-24 fw-600 mb-4">Followers</div>
                 <Breadcrumb
+                  className="cursor-pointer"
                   separator={<img src={breadCrumbIcon} />}
                   items={[
                     {
                       title: "Merchants",
+                      onClick: () => navigate("/admin/merchant/list"),
                     },
                     {
                       title: "Followers",
+                      onClick: () => navigate("/admin/merchant/followers"),
                     },
                     {
                       title: "Follower Details",
@@ -429,18 +432,23 @@ const FollowerDetail = () => {
         </div>
         <div className="tabPadding mb-30">
           <div className="fs-20 fw-700 mb-20">Preferences</div>
-          <div className="flexTagFull">
-            {/* <div>Casual Dining</div>
+          {/* <div className="flexTagFull"> */}
+          {/* <div>Casual Dining</div>
               <div>Weight Watchers</div>
               <div>Drinks</div>
               <div>Steak, Bar</div>
               <div>Wine</div> */}
-            {followerDetailsSelector?.data?.data?.customerPreferenceData?.personalPreference?.map(
+          {followerDetailsSelector?.data?.data?.customerPreferenceData
+            ?.personalPreference?.length > 0 ? (
+            followerDetailsSelector?.data?.data?.customerPreferenceData?.personalPreference.map(
               (item, index) => {
-                return <div>{item}</div>;
+                return <div key={index}>{item}</div>;
               }
-            )}
-          </div>
+            )
+          ) : (
+            <div className="d-flex gap-30 flexWrap">No data found</div>
+          )}
+          {/* </div> */}
         </div>
         <div className="tabPadding mb-30">
           <div className="fs-20 fw-700 mb-20">Dine Savvy Application Usage</div>

@@ -15,13 +15,22 @@ import { fileUploadHandler } from "../../../redux/action/fileUpload";
 const NudgeTemplate = () => {
   const dispatch = useDispatch();
   const { state } = useLocation();
+  console.log(state, "statestatestatestate");
 
   const [isCartOpen, setIsCartOpen] = useState(false);
-  const [nudgesCards, setNudgesCard] = useState();
+  const [nudgesCards, setNudgesCard] = useState(null);
   const getNudgesTemplateSelector = useSelector(
     (state) => state?.getNudgesTemplate
   );
   const fileuploadSelector = useSelector((state) => state?.fileupload);
+
+
+  useEffect(() => {
+    if(state?.locationId?.nudgePrev){
+      setNudgesCard(state?.locationId?.nudgePrev)
+    }
+  }, [state])
+  
 
   const navigate = useNavigate();
 
@@ -42,7 +51,6 @@ const NudgeTemplate = () => {
       document.body.classList.remove("overflow-Hidden");
     }
 
-    // Cleanup on component unmount
     return () => {
       document.body.classList.remove("overflow-Hidden");
     };
@@ -63,10 +71,6 @@ const NudgeTemplate = () => {
 
   const handleSubmit = (values) => {
     console.log("Form values:", values);
-    // setNudgesCards((prev) => ({
-    //   ...prev,
-    //   ...values,
-    // }));
   };
   const [uploadedImage, setUploadedImage] = useState(nudgesCards?.imageUrl[0]);
   const handleFileChange = (e) => {
@@ -130,87 +134,20 @@ const NudgeTemplate = () => {
               )}
             </div>
           </div>
-          {/* {nudgesCards && (
-              <>
-                <div className="tabPadding mb-20">
-                  <div className="fs-24 fw-600">{nudgesCards?.title}</div>
-                  <div className="divider"></div>
-                  <div className="d-flex align-end gap-16 mb-20 flexWrapsm">
-                    <div className="reflectImage">
-                      <img src={nudgesCards?.imageUrl[0]} alt="" />
-                    </div>
-                    <div className="btn w240">Change Photo</div>
-                  </div>
-                  <div className="inputGrid gap-20">
-                    <div>
-                      <label htmlFor="name" className="grey mb-10 fs-16 fw-500">
-                        Title
-                      </label>
-                      <input type="text" placeholder="Free appetizer" />
-                    </div>
-                    <div>
-                      <label htmlFor="name" className="grey mb-10 fs-16 fw-500">
-                        Description
-                      </label>
-                      <input
-                        type="text"
-                        placeholder="Free appetizer on Happy Hours! From 07:00 PM to 08:00 PM"
-                      />
-                    </div>
-                  </div>
-                </div>
-                <div className="tabPadding mb-20">
-                  <div className="d-flex justify-between align-center gap-20 w-100">
-                    <div>
-                      <div className="fs-20 fw-600 mb-10">
-                        Select your audience
-                      </div>
-                      <div className="fs-16 darkBlack">
-                        By default all your followers will be sent this Nudge.
-                      </div>
-                    </div>
-                    <div>
-                      <img src={arrowRight} alt="arrowRight" />
-                    </div>
-                  </div>
-                </div>
-                <div className="tabPadding mb-20">
-                  <div className="d-flex align-center justify-between gap-20">
-                    <div className="fs-20 fw-700">Total</div>
-                    <div className="fs-16 darkBlack">$99.99</div>
-                  </div>
-                </div>
-                <div className="tabPadding mb-40">
-                  <div className="fs-20 fw-700 mb-20">Preview</div>
-                  <div className="d-flex gap-12">
-                    <div className="image80">
-                      <img src={dish} alt="dish" />
-                    </div>
-                    <div>
-                      <div className="fs-20 fw-600">Free drink</div>
-                      <div className="fs-14">
-                        Free drink on Happy Hours! From <br /> 07:00 PM to 08:00
-                        PM
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </>
-            )} */}
           <Formik
             enableReinitialize
             initialValues={{
               title:
                 nudgesCards?.title ||
-                state?.locationId?.nudgesCards?.title ||
+                state?.locationId?.nudgePrev?.title ||
                 "",
               description:
                 nudgesCards?.description ||
-                state?.locationId?.nudgesCards?.description ||
+                state?.locationId?.nudgePrev?.description ||
                 "",
               quantity:
                 nudgesCards?.quantity ||
-                state?.locationId?.nudgesCards?.quantity ||
+                state?.locationId?.nudgePrev?.quantity ||
                 "",
             }}
             validationSchema={validationSchema}
@@ -218,12 +155,12 @@ const NudgeTemplate = () => {
           >
             {({ errors, touched, values, isValid }) => (
               <Form>
-                {(nudgesCards || state?.locationId?.nudgesCards) && (
+                {(nudgesCards || state?.locationId?.nudgePrev) && (
                   <>
                     <div className="tabPadding mb-20">
                       <div className="fs-24 fw-600">
                         {nudgesCards?.title ||
-                          state?.locationId?.nudgesCards?.title}
+                          state?.locationId?.nudgePrev?.title}
                       </div>
                       <div className="divider"></div>
                       <div className="d-flex align-end gap-16 mb-20 flexWrapsm">
@@ -232,7 +169,7 @@ const NudgeTemplate = () => {
                             src={
                               uploadedImage ||
                               nudgesCards?.imageUrl[0] ||
-                              state?.locationId?.nudgesCards?.imageUrl[0]
+                              state?.locationId?.nudgePrev?.imageUrl[0]
                             }
                             alt=""
                           />
@@ -267,7 +204,9 @@ const NudgeTemplate = () => {
                             }
                           />
                           {errors.title && touched.title && (
-                            <div className="mt-10 fw-500 fs-14 error">{errors.title}</div>
+                            <div className="mt-10 fw-500 fs-14 error">
+                              {errors.title}
+                            </div>
                           )}
                         </div>
                         <div>
@@ -325,7 +264,7 @@ const NudgeTemplate = () => {
                       className="tabPadding mb-20"
                       onClick={() => {
                         navigate("/admin/merchant/details", {
-                          state: { state, nudgesCards },
+                          state: { statePrev: state, nudgePrev: nudgesCards }
                         });
                       }}
                     >
@@ -337,7 +276,7 @@ const NudgeTemplate = () => {
                           <div className="fs-16 darkBlack">
                             {/* By default all your followers will be sent this
                               Nudge. */}
-                            {state?.selectedItems?.length > 0 ||
+                            {/* {state?.selectedItems?.length > 0 ||
                             state?.locationId?.state?.selectedItems?.length >
                               0 ? (
                               <div className="flexTagFull">
@@ -345,6 +284,20 @@ const NudgeTemplate = () => {
                                   state?.locationId?.state?.selectedItems ||
                                   state?.selectedItems
                                 )?.map((item, index) => (
+                                  <div key={index}>
+                                    {item?.userInfo?.displayName}
+                                  </div>
+                                ))}
+                              </div>
+                            ) : (
+                              <div>
+                                By default all your followers will be sent this
+                                Nudge.
+                              </div>
+                            )} */}
+                            {state?.selectedItems?.length > 0 ? (
+                              <div className="flexTagFull">
+                                {state?.selectedItems?.map((item, index) => (
                                   <div key={index}>
                                     {item?.userInfo?.displayName}
                                   </div>
@@ -371,7 +324,7 @@ const NudgeTemplate = () => {
                             src={
                               uploadedImage ||
                               nudgesCards?.imageUrl?.[0] ||
-                              state?.locationId?.nudgesCards?.imageUrl[0] ||
+                              state?.locationId?.nudgePrev?.imageUrl[0] ||
                               dish
                             }
                             alt="dish"
@@ -380,13 +333,13 @@ const NudgeTemplate = () => {
                         <div>
                           <div className="fs-20 fw-600">
                             {nudgesCards?.title ||
-                              state?.locationId?.nudgesCards?.title}
+                              state?.locationId?.nudgePrev?.title}
                           </div>
                           <div className="fs-14">
                             {/* Free drink on Happy Hours! From <br /> 07:00 PM to
                               08:00 PM */}
                             {nudgesCards?.description ||
-                              state?.locationId?.nudgesCards?.description}
+                              state?.locationId?.nudgePrev?.description}
                           </div>
                         </div>
                       </div>
@@ -394,8 +347,20 @@ const NudgeTemplate = () => {
                     <div className="d-flex justify-end">
                       <button
                         className="btn w164 "
-                        onClick={values?.quantity && values?.title && values?.description ? toggleCart : undefined}
-                        disabled={!(values?.quantity && values?.title && values?.description)}
+                        onClick={
+                          values?.quantity &&
+                          values?.title &&
+                          values?.description
+                            ? toggleCart
+                            : undefined
+                        }
+                        disabled={
+                          !(
+                            values?.quantity &&
+                            values?.title &&
+                            values?.description
+                          )
+                        }
                       >
                         Add to Cart
                       </button>

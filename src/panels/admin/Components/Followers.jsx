@@ -6,6 +6,8 @@ import rearchive from "../../../assets/images/rearchive.svg";
 import { Pagination } from "antd";
 import CommonToast from "../../../common/toast/CommonToast";
 import { useDispatch, useSelector } from "react-redux";
+import nudgeIcon from "../../../assets/images/nudgeIcon.svg";
+
 import { followersListHandler } from "../../../redux/action/followersList";
 import SearchSelect from "../Components/SearchSelect";
 import Loader from "../../../common/Loader/Loader";
@@ -162,7 +164,11 @@ const Followers = () => {
                         </div>
                         <div>
                           <div className="fw-700">
-                            {item?.userInfo?.displayName}
+                            {item?.userInfo?.displayName &&
+                                  item.userInfo.displayName
+                                    .charAt(0)
+                                    .toUpperCase() +
+                                    item.userInfo.displayName.slice(1)}
                           </div>
                           <div className="fs-14 fw-300 o5">
                             {moment(item?.createdAt).format("MMMM,YYYY")}
@@ -197,13 +203,36 @@ const Followers = () => {
                         {item?.userInfo?.phoneNumber || "-"}
                       </div>
                     </div>
-                    <div className="d-flex justify-between align-center gap-12 fs-14 mb-10">
-                          <div className="d-flex align-center gap-12">
-                            <img src={resturantIcon} alt="" />
-                            Restaurants following:
-                          </div>
-                          <div className="fw-500">{item?.followerCount || "-"}</div>
-                        </div>
+                    <div className="d-flex justify-between align-center gap-12 fs-14 mt-10">
+                      <div className="d-flex align-center gap-12">
+                        <img src={resturantIcon} alt="" />
+                        Restaurants following:
+                      </div>
+                      <div className="fw-500">{item?.followerCount || "-"}</div>
+                    </div>
+
+                    <div className="d-flex justify-between align-center gap-12 fs-14 mt-10">
+                      <div className="d-flex align-center gap-12">
+                        <img src={nudgeIcon} alt="" />
+                        Nudges shared
+                      </div>
+                      <div className="fw-500">{item?.nudgeCount}</div>
+                    </div>
+                    <div className="divider2"></div>
+                    <div className="fs-14 mb-6">Preferences</div>
+                    <div className="flexTag mb-20">
+                      {item?.customerPreferencesData?.personalPreference
+                        ?.length > 0 ? (
+                        item.customerPreferencesData.personalPreference.map(
+                          (preference, index) => (
+                            <div key={index}>{preference}</div>
+                          )
+                        )
+                      ) : (
+                        <div>No preferences available</div>
+                      )}
+                    </div>
+
                     {/* )} */}
                     <div className="divider2"></div>
                     <div className="d-flex gap-10 mt-20 justify-end flexBtn">
@@ -274,7 +303,30 @@ const Followers = () => {
                             <img src={resturantIcon} alt="" />
                             Restaurants following:
                           </div>
-                          <div className="fw-500">{item?.followerCount || "-"}</div>
+                          <div className="fw-500">
+                            {item?.followerCount || "-"}
+                          </div>
+                        </div>
+                        <div className="d-flex justify-between align-center gap-12 fs-14 mt-10">
+                          <div className="d-flex align-center gap-12">
+                            <img src={nudgeIcon} alt="" />
+                            Nudges shared
+                          </div>
+                          <div className="fw-500">{item?.nudgeCount}</div>
+                        </div>
+                        <div className="divider2"></div>
+                        <div className="fs-14 mb-6">Preferences</div>
+                        <div className="flexTag mb-20">
+                          {item?.customerPreferencesData?.personalPreference
+                            ?.length > 0 ? (
+                            item.customerPreferencesData.personalPreference.map(
+                              (preference, index) => (
+                                <div key={index}>{preference}</div>
+                              )
+                            )
+                          ) : (
+                            <div>No preferences available</div>
+                          )}
                         </div>
                         <div className="divider2"></div>
                         <div className="d-flex gap-10 mt-20 justify-end flexBtn">
