@@ -1081,6 +1081,53 @@ input.addTitleInput::placeholder {
 .addTitleInput:focus::placeholder{
   /* color: #777; */
 }
+.ant-modal-close-x{
+  display: none !important;
+}
+.selecModal .ant-modal-content{
+  padding: 0 !important;
+}
+.selecModal .topPadding{
+  padding: 30px;
+  border-bottom:1px solid #E3E3E8;
+}
+.modal-item:not(:last-child){
+  border-bottom:1px solid #E3E3E8;
+  margin-bottom: 16px;
+  padding-bottom: 16px;
+}
+.rightIcon{
+  opacity: 0;
+  height: 32px;
+}
+.active .rightIcon{
+  opacity: 1;
+}
+.modal-item{
+  cursor: pointer;
+}
+.padding30{
+  padding: 30px;
+}
+.selectCommon{
+  border: 1px solid #E6E6E6;
+  border-radius: 12px;
+  padding: 7.5px 12px;
+}
+.selectCommon img{
+  height: 16px;
+  width: 16px;
+  display: block;
+}
+.selectCommon .fs-16{
+  width: 123px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.h16{
+  height: 16px;
+}
 .addThing {
   display: flex;
   align-items: center;
