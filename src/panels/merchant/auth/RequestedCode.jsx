@@ -19,6 +19,8 @@ import { validationSchema } from "./merchantLoginValidation";
 import Loader from "../../../common/Loader/Loader";
 
 const RequestedCode = () => {
+  const [minutes, setMinutes] = useState(0);
+  const [seconds, setSeconds] = useState(60);
   const messageApi = useCommonMessage();
   const loginSelector = useSelector((state) => state?.loginSliceDetails);
   const navigate = useNavigate();
@@ -27,17 +29,38 @@ const RequestedCode = () => {
   const [otp, setOtp] = useState(new Array(6).fill(""));
   const inputRefs = useRef([]);
 
-  const handleChange = (value, index) => {
-    if (!/^\d?$/.test(value)) return; // Allow only digits
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (seconds > 0) {
+        setSeconds(seconds - 1);
+      }
 
-    // Update the OTP array
+      if (seconds === 0) {
+        if (minutes === 0) {
+          clearInterval(interval);
+        } else {
+          setSeconds(59);
+          setMinutes(minutes - 1);
+        }
+      }
+    }, 1000);
+
+    return () => {
+      clearInterval(interval);
+    };
+  }, [seconds]);
+
+  const handleChange = (value, index) => {
+    if (!/^\d?$/.test(value)) return; // Allow only single digits
+  
+    // Update the OTP array at the specific index
     const newOtp = [...otp];
     newOtp[index] = value;
     setOtp(newOtp);
-
+  
     // Move to the next input field if a value is entered
     if (value && index < otp.length - 1) {
-      inputRefs.current[index + 1].focus();
+      inputRefs.current[index + 1]?.focus();
     }
   };
 
@@ -66,13 +89,13 @@ const RequestedCode = () => {
 
   const handleFocus = (e) => e.target.select();
 
-
-  const handleFormSubmit = (values) => {
+  const onSubmit = (values) => {
+    event.preventDefault()
     let payload = {
-      email: values?.email,
-      password: values?.password,
+      otp: values?.otp,
     };
-    dispatch(loginHandler(payload));
+    navigate("/merchant/dashboard");
+    // dispatch(loginHandler(payload));
   };
 
   useEffect(() => {
@@ -92,6 +115,10 @@ const RequestedCode = () => {
     }
   }, [loginSelector]);
 
+  const resendOTP = () => {
+    setSeconds(60);
+  };
+
   return (
     <>
       {loginSelector?.isLoading && <Loader />}
@@ -105,61 +132,67 @@ const RequestedCode = () => {
               <img src={logo} alt="" className="h-100" />
             </div>
             <div className="fs-28 text-center fw-500 mb-40">Welcome back</div>
-            <Formik
-              initialValues={{
-                email: "",
-                password: "",
-              }}
-              validationSchema={validationSchema}
-              onSubmit={(values, formikBag) => {
-                handleFormSubmit(values, formikBag);
-              }}
-            >
-              {({
-                isSubmitting,
-                /* and other goodies */
-              }) => (
-                <Form>
-                  <div className="fs-24 fw-700 mb-8">Verification</div>
-                  <div className="grey fs-18">
-                    Enter the 6 digit code sent to your phone number
-                  </div>
-                  <div className="divider3"></div>
-                  <div
-                    onPaste={handlePaste}
-                    className="d-flex gap-10 align-center mb-16 otpFlex"
-                  >
-                    {otp.map((digit, index) => (
-                      <input
-                      key={index}
-                      type="text"
-                      value={digit}
-                      onChange={(e) => handleChange(e.target.value, index)}
-                      onKeyDown={(e) => handleKeyDown(e, index)}
-                      onFocus={handleFocus}
-                      ref={(el) => (inputRefs.current[index] = el)}
-                      maxLength={1} // Ensure only one character per input
-
-                    />
-                    ))}
-                  </div>
-                  <div className="fs-14 mb-30 fw-500 sc text-end cursor-pointer">
-                  Edit phone number
-                  </div>
-                  <button
-                    className="btn w-100 mb-30"
-                    type="submit"
-                    // disabled={isSubmitting}
-                    onClick={() => navigate("/merchant/dashboard")}
-                  >
-                    Verify
-                  </button>
-                  <div className="fs-14 text-center">
-                    <span className="grey">Didn't receive code? </span><span className="fw-500 cursor-pointer">Request again in 01:59</span>
-                  </div>
-                </Form>
-              )}
-            </Formik>
+            <form onSubmit={onSubmit}>
+              <div className="fs-24 fw-700 mb-8">Verification</div>
+              <div className="grey fs-18">
+                Enter the 6 digit code sent to your phone number
+              </div>
+              <div className="divider3"></div>
+              <div
+                onPaste={handlePaste}
+                className="d-flex gap-10 align-center mb-16 otpFlex"
+              >
+                {otp?.map((digit, index) => (
+                  <input
+                    key={index}
+                    type="text"
+                    value={digit}
+                    onChange={(e) => handleChange(e.target.value, index)}
+                    onKeyDown={(e) => handleKeyDown(e, index)}
+                    onFocus={handleFocus}
+                    ref={(el) => (inputRefs.current[index] = el)}
+                    maxLength={1} // Ensure only one character per input
+                  />
+                ))}
+              </div>
+              <div className="fs-14 mb-30 fw-500 sc text-end cursor-pointer">
+                Edit phone number
+              </div>
+              <button
+                className="btn w-100 mb-30"
+                type="submit"
+                style={{ cursor: otp?.length < 6 ? "not-allowed" : "pointer" }}
+              disabled={otp?.length < 6 ? true : false}
+                // disabled={isSubmitting}
+                // onClick={() => navigate("/merchant/dashboard")}
+              >
+                Verify
+              </button>
+              <div className="fs-14 text-center">
+                <span className="grey">Didn't receive code? </span>
+                <span className="fw-500 cursor-pointer">
+                  {seconds > 0 || minutes > 0 ? (
+                    <p>
+                      Request again in :{" "}
+                      {minutes < 10 ? `0${minutes}` : minutes}:
+                      {seconds < 10 ? `0${seconds}` : seconds}
+                    </p>
+                  ) : (
+                    <>
+                      <p>
+                        <p className="resend">
+                          Didn't receive code? (&nbsp;
+                          <span className="span-primary" onClick={resendOTP}>
+                            Resend OTP
+                          </span>
+                          &nbsp;)
+                        </p>
+                      </p>
+                    </>
+                  )}
+                </span>
+              </div>
+            </form>
           </div>
         </div>
       </div>
