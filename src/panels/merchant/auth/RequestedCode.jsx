@@ -15,18 +15,19 @@ import {
   loginSliceAction,
 } from "../../../redux/action/loginSlice";
 import { useEffect } from "react";
-import { validationSchema } from "./merchantLoginValidation";
 import Loader from "../../../common/Loader/Loader";
+import { businessLoginAction, businessLoginHandler } from "../../../redux/action/businessAction/businessLoginSlice";
 
-const RequestedCode = () => {
+const RequestedCode = ({loginValue}) => {
   const [minutes, setMinutes] = useState(0);
   const [seconds, setSeconds] = useState(60);
   const messageApi = useCommonMessage();
-  const loginSelector = useSelector((state) => state?.loginSliceDetails);
+  const businessLoginSelector = useSelector((state) => state?.businessLogin);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const [otp, setOtp] = useState(new Array(6).fill(""));
+  console.log(otp, "otpotpotpotp");
   const inputRefs = useRef([]);
 
   useEffect(() => {
@@ -52,12 +53,12 @@ const RequestedCode = () => {
 
   const handleChange = (value, index) => {
     if (!/^\d?$/.test(value)) return; // Allow only single digits
-  
+
     // Update the OTP array at the specific index
     const newOtp = [...otp];
     newOtp[index] = value;
     setOtp(newOtp);
-  
+
     // Move to the next input field if a value is entered
     if (value && index < otp.length - 1) {
       inputRefs.current[index + 1]?.focus();
@@ -90,30 +91,32 @@ const RequestedCode = () => {
   const handleFocus = (e) => e.target.select();
 
   const onSubmit = (values) => {
-    event.preventDefault()
+    event.preventDefault();
     let payload = {
-      otp: values?.otp,
+      phoneNumber: loginValue?.phoneNumber,
+      otp: otp?.join(""),
+      deviceType: "Ios",
+      deviceId: "deviceId",
     };
-    navigate("/merchant/dashboard");
-    // dispatch(loginHandler(payload));
+    dispatch(businessLoginHandler(payload));
   };
 
   useEffect(() => {
-    if (loginSelector?.data) {
+    if (businessLoginSelector?.data) {
       messageApi.open({
         type: "success",
-        content: loginSelector?.data?.message,
+        content: businessLoginSelector?.data?.message,
       });
-      // navigate("/admin/merchant/dashboard");
-      dispatch(loginSliceAction.loginDetailsSliceReset());
-    } else if (loginSelector?.message) {
+      navigate("/merchant/dashboard");
+      dispatch(businessLoginAction.businessLoginSliceReset());
+    } else if (businessLoginSelector?.message) {
       messageApi.open({
         type: "error",
-        content: loginSelector?.message,
+        content: businessLoginSelector?.message,
       });
-      dispatch(loginSliceAction.loginDetailsSliceReset());
+      dispatch(businessLoginAction.businessLoginSliceReset());
     }
-  }, [loginSelector]);
+  }, [businessLoginSelector]);
 
   const resendOTP = () => {
     setSeconds(60);
@@ -121,7 +124,7 @@ const RequestedCode = () => {
 
   return (
     <>
-      {loginSelector?.isLoading && <Loader />}
+      {businessLoginSelector?.isLoading && <Loader />}
       <div className="loginFlex ">
         <div className="w-50 h-100 position-relative mobileHide fixLeft">
           <img src={login} alt="" className="w-100 h-100 object-cover" />
@@ -162,7 +165,7 @@ const RequestedCode = () => {
                 className="btn w-100 mb-30"
                 type="submit"
                 style={{ cursor: otp?.length < 6 ? "not-allowed" : "pointer" }}
-              disabled={otp?.length < 6 ? true : false}
+                disabled={otp?.length < 6 ? true : false}
                 // disabled={isSubmitting}
                 // onClick={() => navigate("/merchant/dashboard")}
               >

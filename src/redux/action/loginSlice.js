@@ -1,7 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { loginAPI } from "../../services/login";
-import { setItem } from "../../common/localStorage";
-import React from "react";
 
 const data = {
   isLoading: false,
@@ -41,8 +39,8 @@ export const loginHandler = (data) => async (dispatch) => {
     dispatch(loginSliceAction.loginDetailsSliceInfo());
     const response = await loginAPI(data);
     dispatch(loginSliceAction.loginDetailsSliceSuccess(response));
-    localStorage.setItem("token", response?.data?.deviceData?.deviceToken)
-    setItem("adminId", response?.data?.id)
+    // localStorage.setItem("token", response?.data?.deviceData?.deviceToken)
+    // setItem("adminId", response?.data?.id)
   } catch (e) {
     dispatch(loginSliceAction.loginDetailsSliceFailure(e));
   }

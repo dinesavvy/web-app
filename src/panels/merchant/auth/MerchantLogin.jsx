@@ -18,53 +18,60 @@ import { useEffect } from "react";
 import { validationSchema } from "./merchantLoginValidation";
 import Loader from "../../../common/Loader/Loader";
 import RequestedCode from "./RequestedCode";
-import { businessLoginAction, businessLoginHandler } from "../../../redux/action/businessAction/businessLoginSlice";
+import {
+  businessLoginAction,
+  businessLoginHandler,
+} from "../../../redux/action/businessAction/businessLoginSlice";
+import {
+  businessSendOtpAction,
+  businessSendOtpHandler,
+} from "../../../redux/action/businessAction/businessSendOtp";
 
 const MerchantLogin = () => {
   const messageApi = useCommonMessage();
-  const businessLoginSelector = useSelector((state) => state?.businessLogin);
+  const businessSendOtpSelector = useSelector(
+    (state) => state?.businessSendOtp
+  );
   const [requestLogin, setRequestLogin] = useState(false);
+  const [loginValue,setLoginValue] = useState()
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  console.log(businessLoginSelector,"businessLoginSelector")
-
   const handleFormSubmit = (values) => {
+    setLoginValue(values)
     let payload = {
       phoneNumber: values?.phoneNumber,
-      otp:"987654",
-      deviceType:"Ios",
-      deviceId:"deviceId"
+      appSignature: "TlVIT4Yl0sS",
     };
-    dispatch(businessLoginHandler(payload));
+    dispatch(businessSendOtpHandler(payload));
   };
 
   useEffect(() => {
-    if (businessLoginSelector?.data?.statusCode===200) {
+    if (businessSendOtpSelector?.data?.statusCode === 200) {
       messageApi.open({
         type: "success",
-        content: businessLoginSelector?.data?.message,
+        content: businessSendOtpSelector?.data?.message,
       });
-    // setRequestLogin(true);
+      setRequestLogin(true);
 
       // navigate("/admin/merchant/dashboard");
-      dispatch(businessLoginAction.businessLoginSliceReset());
-    } else if (businessLoginSelector?.message?.status===400) {
+      dispatch(businessSendOtpAction.businessSendOtpSliceReset());
+    } else if (businessSendOtpSelector?.message?.status === 400) {
       messageApi.open({
         type: "error",
-        content: businessLoginSelector?.message?.message,
+        content: businessSendOtpSelector?.message?.message,
       });
-      dispatch(businessLoginAction.businessLoginSliceReset());
+      dispatch(businessSendOtpAction.businessSendOtpSliceReset());
     }
-  }, [businessLoginSelector]);
+  }, [businessSendOtpSelector]);
 
   return (
     <>
       {requestLogin ? (
-        <RequestedCode />
+        <RequestedCode  loginValue={loginValue}/>
       ) : (
         <>
-          {businessLoginSelector?.isLoading && <Loader />}
+          {businessSendOtpSelector?.isLoading && <Loader />}
           <div className="loginFlex ">
             <div className="w-50 h-100 position-relative mobileHide fixLeft">
               <img src={login} alt="" className="w-100 h-100 object-cover" />
