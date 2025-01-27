@@ -226,7 +226,7 @@ label {
   padding-left: 57px;
   width: calc(100% - 72px);
 }
-.btn:hover {
+.btn:hover{
   background-color: #0055CC;
 }
 
@@ -648,6 +648,7 @@ height: 100%;
 .greyColor{
   color: #66728E;
 }
+
 
 
 @media (max-height: 700px) {

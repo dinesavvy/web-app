@@ -1081,6 +1081,14 @@ input.addTitleInput::placeholder {
 .addTitleInput:focus::placeholder{
   /* color: #777; */
 }
+.lh1{
+  line-height: 1;
+}
+.noborderbtn{
+  border: none !important;
+  background-color: #056DFF1A !important;
+}
+
 .ant-modal-close-x{
   display: none !important;
 }

@@ -1,6 +1,7 @@
 import MerchantDashboard from "../merchantDashboard/MerchantDashboard";
 import MerchantLogin from "../auth/MerchantLogin";
 import RequestedCode from "../auth/RequestedCode";
+import FollowerDetails from "../auth/FollowerDetails";
 
 const merchantRoutes = [
   {
@@ -18,6 +19,12 @@ const merchantRoutes = [
   {
     path: "/merchant/dashboard",
     element: MerchantDashboard,
+    isPrivate: false,
+    isLayout: true,
+  },
+  {
+    path: "/merchant/followers",
+    element: FollowerDetails,
     isPrivate: false,
     isLayout: true,
   },
