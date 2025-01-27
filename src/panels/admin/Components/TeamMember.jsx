@@ -43,7 +43,12 @@ const TeamMember = ({ merchantDetailsSelector, activeTab3, setActiveTab3 }) => {
       {merchantTeamsSelector?.isLoading && <Loader />}
       <div className="tabPadding">
         <div className="d-flex align-center gap-20 mb-20 w-100">
-          <img src={backButton} alt="backButton" className="cursor-pointer" />
+          <img
+            src={backButton}
+            alt="backButton"
+            className="cursor-pointer"
+            onClick={() => navigate("/admin/merchant/list")}
+          />
           <div>
             <div className="fs-24 fw-600 mb-4">Team Members</div>
             <Breadcrumb

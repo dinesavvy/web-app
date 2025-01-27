@@ -108,7 +108,7 @@ const MerchantList = () => {
                         </div>
                         <div className="fs-16 fw-700 mb-10">
                           {/* Garden Grove Café & Bistro */}
-                          {item?.businessName && item.businessName.charAt(0).toUpperCase() + item.businessName.slice(1)}
+                          {item?.businessName && item?.businessName.charAt(0).toUpperCase() + item?.businessName.slice(1)}
                         </div>
                       </div>
                       <div className="divider2 m-0"></div>
@@ -194,6 +194,7 @@ const MerchantList = () => {
                                 state: item,
                               });
                               localStorage.setItem("merchantId", item?._id);
+                              localStorage.setItem("restaurantName",item?.businessName)
                               // localStorage.setItem("merchantData", JSON.stringify(item));
                             }}
                           >

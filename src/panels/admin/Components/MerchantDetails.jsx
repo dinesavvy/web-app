@@ -37,7 +37,6 @@ import TeamMember from "./TeamMember";
 
 const MerchantDetails = () => {
   const { state } = useLocation();
-  console.log(state, "lllllllllllll");
   const [activeTab3, setActiveTab3] = useState("1");
   const [editInput, setEditInput] = useState(false);
   const [switchState, setSwitchState] = useState(false);
@@ -50,8 +49,6 @@ const MerchantDetails = () => {
   const [checkedItems, setCheckedItems] = useState({});
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [selectedItems, setSelectedItems] = useState([]);
-
-  console.log(selectedItems, "selectedItemsselectedItems");
 
   const listByUserIdSelector = useSelector((state) => state?.listByUserId);
   const followerListSelector = useSelector((state) => state?.followeList);
@@ -474,7 +471,7 @@ const MerchantDetails = () => {
                         />
                       ) : (
                         <a className="anchor" href="tel:+911234567890">
-                          +{merchantDetailsSelector?.data?.data?.phoneNumber}
+                          + {merchantDetailsSelector?.data?.data?.phoneNumber}
                         </a>
                       )}
                     </div>
@@ -487,7 +484,7 @@ const MerchantDetails = () => {
                           placeholder="Email"
                         />
                         ) : ( */}
-                      {merchantDetailsSelector?.data?.data?.owenerDetails
+                      {merchantDetailsSelector?.data?.data?.ownerDetails
                         ?.email && (
                         <>
                           <label
@@ -499,14 +496,14 @@ const MerchantDetails = () => {
                           <a
                             className="anchor"
                             href={
-                              merchantDetailsSelector?.data?.data?.owenerDetails
+                              merchantDetailsSelector?.data?.data?.ownerDetails
                                 ?.email
-                                ? `mailto:${merchantDetailsSelector.data.data.owenerDetails.email}`
+                                ? `mailto:${merchantDetailsSelector.data.data.ownerDetails.email}`
                                 : "#"
                             }
                           >
                             {
-                              merchantDetailsSelector?.data?.data?.owenerDetails
+                              merchantDetailsSelector?.data?.data?.ownerDetails
                                 ?.email
                             }
                           </a>
@@ -525,7 +522,7 @@ const MerchantDetails = () => {
                           placeholder="www.dinesavvy.com"
                         />
                       ) : (
-                        <a className="anchor" href="www.dinesavvy.com">
+                        <a className="anchor" href={merchantDetailsSelector?.data?.data?.websiteUrl} target="_blank">
                           {merchantDetailsSelector?.data?.data?.websiteUrl}
                         </a>
                       )}
@@ -1170,11 +1167,16 @@ const MerchantDetails = () => {
             <>
               <div className="tabPadding">
                 <div className="d-flex align-center gap-20 mb-30 w-100">
-                  <img src={backButton} alt="" className="cursor-pointer" />
+                  <img
+                    src={backButton}
+                    alt=""
+                    className="cursor-pointer"
+                    onClick={() => navigate("/admin/merchant/list")}
+                  />
                   <div>
                     <div className="fs-24 fw-600 mb-4">Dine Savvy Account</div>
                     <Breadcrumb
-                    className="cursor-pointer"
+                      className="cursor-pointer"
                       separator={<img src={breadCrumbIcon} />}
                       items={[
                         {
@@ -1289,7 +1291,7 @@ const MerchantDetails = () => {
                         <div>
                           <div className="fs-24 fw-600 mb-4">Followers</div>
                           <Breadcrumb
-                          className="cursor-pointer"
+                            className="cursor-pointer"
                             separator={<img src={breadCrumbIcon} />}
                             items={[
                               {
@@ -1734,11 +1736,12 @@ const MerchantDetails = () => {
                           src={backButton}
                           alt=""
                           className="cursor-pointer"
+                          onClick={() => navigate("/admin/merchant/list")}
                         />
                         <div>
                           <div className="fs-24 fw-600 mb-4">Followers</div>
-                          <Breadcrumb 
-                          className="cursor-pointer"
+                          <Breadcrumb
+                            className="cursor-pointer"
                             separator={<img src={breadCrumbIcon} />}
                             items={[
                               {
@@ -1896,7 +1899,6 @@ const MerchantDetails = () => {
                           })
                         }
                       >
-                        {console.log(state, "test data")}
                         {/* <img src={createAdd} alt="image" /> */}
                         <div>Continue</div>
                       </div>
@@ -1916,11 +1918,16 @@ const MerchantDetails = () => {
               {nudgesListSelector?.isLoading && <Loader />}
               <div className="tabPadding mb-30">
                 <div className="d-flex align-center gap-20 mb-30 w-100">
-                  <img src={backButton} alt="" />
+                  <img
+                    src={backButton}
+                    alt=""
+                    className="cursor-pointer"
+                    onClick={() => navigate("/admin/merchant/list")}
+                  />
                   <div>
                     <div className="fs-24 fw-600 mb-4">Nudges</div>
                     <Breadcrumb
-                    className="cursor-pointer"
+                      className="cursor-pointer"
                       separator={<img src={breadCrumbIcon} />}
                       items={[
                         {
