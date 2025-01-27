@@ -522,7 +522,11 @@ const MerchantDetails = () => {
                           placeholder="www.dinesavvy.com"
                         />
                       ) : (
-                        <a className="anchor" href={merchantDetailsSelector?.data?.data?.websiteUrl} target="_blank">
+                        <a
+                          className="anchor"
+                          href={merchantDetailsSelector?.data?.data?.websiteUrl}
+                          target="_blank"
+                        >
                           {merchantDetailsSelector?.data?.data?.websiteUrl}
                         </a>
                       )}
@@ -1942,56 +1946,90 @@ const MerchantDetails = () => {
                   </div>
                 </div>
                 <div className="divider2"></div>
-                <div className="d-flex justify-between align-center gap-20 mb-6">
-                  <div className="fs-16 grey fw-500">Previous balance</div>
-                  <div className="fs-20 fw-700">30</div>
-                </div>
-                <div className="d-flex justify-between align-center gap-20 mb-6">
-                  <div className="fs-16 grey fw-500">Followers added today</div>
-                  <div className="gc fs-20 fw-700">+7</div>
-                </div>
-                <div className="d-flex justify-between align-center gap-20">
-                  <div className="fs-16 grey fw-500">
-                    Promotional credits added today
-                  </div>
-                  <div className="gc fs-20 fw-700">+7</div>
-                </div>
                 <div className="divider2"></div>
-                <div className="d-flex justify-between align-center gap-20 mb-20">
-                  <div className="fs-16 grey fw-500">
-                    Nudge credits added today
+                <div className="d-flex align-center justify-between mb-15">
+                  <div>
+                    <span className="fw-16">Nudges Goal: </span>
+                    <span className="fw-700 fs-20">15</span>
                   </div>
-                  <div className="gc fs-20 fw-700">+14</div>
-                </div>
-                <div className="mb-16">
-                  <input type="text" placeholder="Enter number of credits" />
-                </div>
-                <div className="d-flex justify-between align-center gap-20">
-                  <div className="d-flex align-center gap-16 flex-wrap">
-                    <div className="addNudge">
-                      <img src={addnudge} alt="addnudge" />
-                      250
-                    </div>
-                    <div className="addNudge">
-                      <img src={addnudge} alt="addnudge" />
-                      500
-                    </div>
-                    <div className="addNudge">
-                      <img src={addnudge} alt="addnudge" />
-                      1000
-                    </div>
-                    <div className="addNudge">
-                      <img src={addnudge} alt="addnudge" />
-                      2500
-                    </div>
-                    <div className="addNudge">
-                      <img src={addnudge} alt="addnudge" />
-                      50000
-                    </div>
+                  <div>
+                    <span className="fs-14">Sent </span>
+                    <span className="fs-18 gc fw-700">10</span>
                   </div>
-                  <div className="btn btnSecondary p16 gap-8">
-                    <img src={addCredits} alt="addCredits" />
-                    Add Credits
+                </div>
+                <div className="range mb-15">
+                  <div
+                    className="rangePercentage"
+                    style={{ width: "50%" }}
+                  ></div>
+                </div>
+                <div className="fs-14 fw-500 grey mb-20">
+                  You are just 50% behind to achieve Goal
+                </div>
+                <div className="weekNudge pc mb-20">
+                  <div className="fs-18 fw-600">Nudges Expected This Week</div>
+                  <div className="fw-700 fs-20">124</div>
+                </div>
+                <div className="card">
+                  <div className="fs-20 fw-700 d-flex gap-20 align-center justify-between">
+                    <div>Nudge Credits</div>
+                    <div>44</div>
+                  </div>
+                  <div className="divider2"></div>
+
+                  <div className="d-flex justify-between align-center gap-20 mb-6">
+                    <div className="fs-16 grey fw-500">Previous balance</div>
+                    <div className="fs-20 fw-700">30</div>
+                  </div>
+                  <div className="d-flex justify-between align-center gap-20 mb-6">
+                    <div className="fs-16 grey fw-500">
+                      Followers added today
+                    </div>
+                    <div className="gc fs-20 fw-700">+7</div>
+                  </div>
+                  <div className="d-flex justify-between align-center gap-20">
+                    <div className="fs-16 grey fw-500">
+                      Promotional credits added today
+                    </div>
+                    <div className="gc fs-20 fw-700">+7</div>
+                  </div>
+                  <div className="divider2"></div>
+                  <div className="d-flex justify-between align-center gap-20 mb-20">
+                    <div className="fs-16 grey fw-500">
+                      Nudge credits added today
+                    </div>
+                    <div className="gc fs-20 fw-700">+14</div>
+                  </div>
+                  <div className="mb-16">
+                    <input type="text" placeholder="Enter number of credits" />
+                  </div>
+                  <div className="d-flex justify-between align-center gap-20">
+                    <div className="d-flex align-center gap-16 flex-wrap">
+                      <div className="addNudge">
+                        <img src={addnudge} alt="addnudge" />
+                        250
+                      </div>
+                      <div className="addNudge">
+                        <img src={addnudge} alt="addnudge" />
+                        500
+                      </div>
+                      <div className="addNudge">
+                        <img src={addnudge} alt="addnudge" />
+                        1000
+                      </div>
+                      <div className="addNudge">
+                        <img src={addnudge} alt="addnudge" />
+                        2500
+                      </div>
+                      <div className="addNudge">
+                        <img src={addnudge} alt="addnudge" />
+                        50000
+                      </div>
+                    </div>
+                    <div className="btn btnSecondary p16 gap-8">
+                      <img src={addCredits} alt="addCredits" />
+                      Add Credits
+                    </div>
                   </div>
                 </div>
               </div>

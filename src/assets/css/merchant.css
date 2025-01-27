@@ -583,8 +583,28 @@
   background-color: #E0EDFF;
   font-size: 16px;
   font-weight: 500;
+  cursor: pointer;
 }
+.addNudge2 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  width: 120px;
+  height: 40px;
+  border: 1px dashed #056DFF;
+  border-radius: 8px;
+  background-color: #E0EDFF;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+}
+.addNudge2.active{
+  background-color: #056DFF;
+  border: 1px solid #056DFF;
+  color: white;
 
+}
 .tabing .tab-button {
   padding: 16px 109px !important;
   line-height: 24px;
@@ -1254,7 +1274,33 @@ input.addTitleInput::placeholder {
   width: 100% !important;
   display: block !important;
 }
-
+.image150{
+  width: 160px;
+  min-width: 160px;
+  height: 150px;
+}
+.nudgeImageSub,.nudgeCardImage{
+  position: absolute;
+  height: 100%;
+  right: 0;
+  top: 0;
+}
+.image150 img:first-child{
+  position: absolute;
+  
+}
+.cardNudge{
+  border: 1px solid #D9D9D9;
+  border-radius: 8px;
+  /* overflow: hidden; */
+  position: relative;
+}
+.nudgeCardImage{
+  background-color: white;
+  right: -1px;
+  height: calc(100% + 2px);
+  top: -1px;
+}
 @media (max-width: 1499.98px) {
   .merchantGrid {
     grid-template-columns: repeat(2, 1fr);
