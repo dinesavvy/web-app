@@ -72,9 +72,11 @@ const Sidebar = ({ isOpen ,setIsOpen}) => {
                   <img src={link.iconFull} alt={link.name} className="selected" />
                 <span>{link.name}</span>
                   </div>
+                  {link?.tag && (
                 <div className="tagNumber fs-14 fw-500">
                   {link?.tag}
                 </div>
+                  )}
               </div>
             ))}
           </div>
