@@ -291,10 +291,22 @@
   overflow: hidden;
   word-break: break-all;
 }
+.flexTagHfull {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  word-break: break-all;
+}
 
 .flexTag div {
   background-color: #EBF3FF;
   border-radius: 20px;
+  padding: 5px 10px;
+
+}
+.flexTagHfull div {
+  background-color: #EBF3FF;
+  border-radius:8px;
   padding: 5px 10px;
 
 }
@@ -481,6 +493,18 @@
 }
 
 .image80 img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+}
+.image70 {
+  height: 70px;
+  min-width: 70px;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.image70 img {
   height: 100%;
   width: 100%;
   object-fit: cover;

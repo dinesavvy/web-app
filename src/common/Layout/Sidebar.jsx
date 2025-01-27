@@ -35,7 +35,7 @@ const Sidebar = ({ isOpen ,setIsOpen}) => {
     { id: 4, name: "Merchants", icon: merchant, iconFull: merchantFull , navigate: "/admin/merchant/list",disabled:"" },
     { id: 5, name: "Followers", icon: consumers, iconFull: consumersFull, navigate: "/admin/merchant/followers",disabled:"" },
     { id: 6, name: "Nudges", icon: nudge, iconFull: nudgeFull,navigate: "/admin/nudges",disabled:"" },
-    { id: 7, name: "Promotions", icon: promotions, iconFull: promotionsFull,disabled:true},
+    { id: 7, name: "Promotions", icon: promotions, iconFull: promotionsFull,disabled:true , tag:"19"} ,
     { id: 8, name: "Brands", icon: brands, iconFull: brandsFull,disabled:true},
     { id: 9, name: "Settings", icon: setting, iconFull: settingFull,disabled:true },
   ];
@@ -60,16 +60,21 @@ const Sidebar = ({ isOpen ,setIsOpen}) => {
             {links.map((link) => (
               <div
                 key={link.id}
-                className={`sidebarLink ${window.location.pathname === link.navigate ? "active" : ""} ${
+                className={`sidebarLink justify-between ${window.location.pathname === link.navigate ? "active" : ""} ${
                   isOpen ? "" : "tooltip-container"
                 } ${link?.disabled ? "disabled" : ""}`}
                 onClick={() => onNavigate(link.navigate)}
                 data-tooltip-id={isOpen ? "sidebar-tooltip" : undefined}
                 data-tooltip-content={isOpen ? link.name : undefined}
               >
-                <img src={link.icon} alt={link.name} className="notSelected" />
-                <img src={link.iconFull} alt={link.name} className="selected" />
+                  <div className="d-flex align-center gap-15">
+                  <img src={link.icon} alt={link.name} className="notSelected" />
+                  <img src={link.iconFull} alt={link.name} className="selected" />
                 <span>{link.name}</span>
+                  </div>
+                <div className="tagNumber fs-14 fw-500">
+                  {link?.tag}
+                </div>
               </div>
             ))}
           </div>

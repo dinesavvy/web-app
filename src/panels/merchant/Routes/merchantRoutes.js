@@ -1,7 +1,8 @@
 import MerchantDashboard from "../merchantDashboard/MerchantDashboard";
 import MerchantLogin from "../auth/MerchantLogin";
 import RequestedCode from "../auth/RequestedCode";
-import FollowerDetails from "../auth/FollowerDetails";
+import Followers from "../auth/Followers";
+import ReverseNudge from "../auth/ReverseNudge";
 
 const merchantRoutes = [
   {
@@ -24,7 +25,13 @@ const merchantRoutes = [
   },
   {
     path: "/merchant/followers",
-    element: FollowerDetails,
+    element: Followers,
+    isPrivate: false,
+    isLayout: true,
+  },
+  {
+    path: "/merchant/reverse-nudge",
+    element: ReverseNudge,
     isPrivate: false,
     isLayout: true,
   },
