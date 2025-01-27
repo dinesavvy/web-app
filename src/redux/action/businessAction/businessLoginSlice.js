@@ -21,8 +21,9 @@ const businessLoginDetailsSlice = createSlice({
       state.message = "";
     },
     businessLoginSliceFailure(state, action) {
+
       state.isLoading = false;
-      state.message = action.payload;
+      state.message = action.payload.message;
       state.data = null;
     },
     businessLoginSliceReset(state) {
@@ -39,7 +40,7 @@ export const businessLoginHandler = (data) => async (dispatch) => {
     dispatch(businessLoginAction.businessLoginDetailsSliceInfo());
     const response = await businessLoginAPI(data);
     dispatch(businessLoginAction.businessLoginSliceSuccess(response));
-    // localStorage.setItem("token", response?.data?.deviceData?.deviceToken);
+    localStorage.setItem("token", response?.data?.deviceDetails?.[0]?.deviceToken);
     // setItem("adminId", response?.data?.id);
   } catch (e) {
     dispatch(businessLoginAction.businessLoginSliceFailure(e));

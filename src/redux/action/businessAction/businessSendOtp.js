@@ -38,6 +38,7 @@ export const businessSendOtpHandler = (data) => async (dispatch) => {
   try {
     dispatch(businessSendOtpAction.businessSendOtpDetailsSliceInfo());
     const response = await businessSendOtpAPI(data);
+
     dispatch(businessSendOtpAction.businessSendOtpSliceSuccess(response));
   } catch (e) {
     dispatch(businessSendOtpAction.businessSendOtpSliceFailure(e));

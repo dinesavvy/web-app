@@ -10,23 +10,12 @@ import passwordInput from "../../../assets/images/passwordInput.svg";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useCommonMessage } from "../../../common/CommonMessage";
-// import PhoneInput from "react-phone-input-2";
-// import "react-phone-input-2/lib/style.css";
 import "react-phone-number-input/style.css";
 import PhoneInput from "react-phone-number-input";
-
-import {
-  loginHandler,
-  loginSliceAction,
-} from "../../../redux/action/loginSlice";
 import { useEffect } from "react";
 import { validationSchema } from "./merchantLoginValidation";
 import Loader from "../../../common/Loader/Loader";
 import RequestedCode from "./RequestedCode";
-import {
-  businessLoginAction,
-  businessLoginHandler,
-} from "../../../redux/action/businessAction/businessLoginSlice";
 import {
   businessSendOtpAction,
   businessSendOtpHandler,
