@@ -64,6 +64,7 @@ const FollowerDetail = () => {
           <div className="d-flex align-center justify-between gap-20 mb-30 flexrightsm">
             <div className="d-flex align-center gap-20 w-100">
               <img
+              className="cursor-pointer"
                 src={backButton}
                 alt=""
                 // onClick={() => setViewDetail(false)}
