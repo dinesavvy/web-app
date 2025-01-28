@@ -41,6 +41,7 @@ export const businessLoginHandler = (data) => async (dispatch) => {
     const response = await businessLoginAPI(data);
     dispatch(businessLoginAction.businessLoginSliceSuccess(response));
     localStorage.setItem("token", response?.data?.deviceDetails?.[0]?.deviceToken);
+    localStorage.setItem("merchantLogin", true);
     // setItem("adminId", response?.data?.id);
   } catch (e) {
     dispatch(businessLoginAction.businessLoginSliceFailure(e));

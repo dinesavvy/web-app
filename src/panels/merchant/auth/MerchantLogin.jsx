@@ -103,12 +103,12 @@ const MerchantLogin = () => {
                           Phone number*
                         </label>
                         <div className="line">
-                          {/* <Field
+                          <Field
                             type="text"
                             name="phoneNumber"
                             placeholder="Enter your phone number"
                             id="phone"
-                          /> */}
+                          />
                           {/* <PhoneInput
                             country={'us'}
                             countries={['us', 'ca', 'gb', 'in']}
@@ -119,19 +119,19 @@ const MerchantLogin = () => {
                                setFieldValue("phoneNumber", "+" + " " +phone);
                              }}
                           /> */}
-                          <PhoneInput
+                          {/* <PhoneInput
                              placeholder="Enter phone number"
                              value={values?.phoneNumber}
                              onChange={(phone) => setFieldValue("phoneNumber", phone)}
                              defaultCountry="US"  // Change this to the default country code you want
                              international  // Only show country names (without flags)
                              countrySelectProps={{ unicodeFlags: false }} // Optionally remove unicode flags
-                          />
-                          {/* <img
+                          /> */}
+                          <img
                             src={phoneInput}
                             alt=""
                             className="absoluteImage"
-                          /> */}
+                          />
                         </div>
                         <ErrorMessage
                           name="phoneNumber"

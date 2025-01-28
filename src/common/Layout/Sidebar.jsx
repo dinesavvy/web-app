@@ -20,39 +20,113 @@ import "react-tooltip/dist/react-tooltip.css";
 import { Tooltip } from "react-tooltip";
 import { useNavigate } from "react-router-dom";
 
-const Sidebar = ({ isOpen ,setIsOpen}) => {
-  
-  const navigate = useNavigate()
-  const links = [
-    { id: 1, name: "Dashboard", icon: dashboard, iconFull: dashboardFull,navigate: "/admin/merchant/dashboard" },
-    // { id: 2, name: "Suppliers", icon: suppliers, iconFull: suppliersFull },
-    // {
-    //   id: 3,
-    //   name: "Distributors",
-    //   icon: distributor,
-    //   iconFull: distributorFull,
-    // },
-    { id: 4, name: "Merchants", icon: merchant, iconFull: merchantFull , navigate: "/admin/merchant/list",disabled:"" },
-    { id: 5, name: "Followers", icon: consumers, iconFull: consumersFull, navigate: "/admin/merchant/followers",disabled:"" },
-    { id: 6, name: "Nudges", icon: nudge, iconFull: nudgeFull,navigate: "/admin/nudges",disabled:"" },
-    { id: 7, name: "Promotions", icon: promotions, iconFull: promotionsFull,disabled:true , tag:"19"} ,
-    { id: 8, name: "Brands", icon: brands, iconFull: brandsFull,disabled:true},
-    { id: 9, name: "Settings", icon: setting, iconFull: settingFull,disabled:true },
-  ];
+const Sidebar = ({ isOpen, setIsOpen }) => {
+  const getLoggedInDetails = localStorage.getItem("merchantLogin");
 
-  const onNavigate=(path)=>{
+  const navigate = useNavigate();
+  const links = [
+    {
+      id: 1,
+      name: "Dashboard",
+      icon: dashboard,
+      iconFull: dashboardFull,
+      navigate: getLoggedInDetails
+        ? "/merchant/dashboard"
+        : "/admin/merchant/dashboard",
+    },
+    ...(getLoggedInDetails
+      ? []
+      : [
+          {
+            id: 4,
+            name: "Merchants",
+            icon: merchant,
+            iconFull: merchantFull,
+            navigate: "/admin/merchant/list",
+            disabled: "",
+          },
+        ]),
+    {
+      id: 5,
+      name: "Followers",
+      icon: consumers,
+      iconFull: consumersFull,
+      navigate: getLoggedInDetails
+        ? "/merchant/followers"
+        : "/admin/merchant/followers",
+      disabled: "",
+    },
+    {
+      id: 6,
+      name: "Nudges",
+      icon: nudge,
+      iconFull: nudgeFull,
+      navigate: getLoggedInDetails ? "/merchant/nudges" : "/admin/nudges",
+      disabled: "",
+    },
+    ...(getLoggedInDetails
+      ? [
+          {
+            id: 10,
+            name: "Profile",
+            // icon: profileIcon,
+            // iconFull: profileIconFull,
+            navigate: "/merchant/profile",
+          },
+          {
+            id: 11,
+            name: "Hierarchy",
+            // icon: hierarchyIcon,
+            // iconFull: hierarchyIconFull,
+            navigate: "/merchant/hierarchy",
+          },
+        ]
+      : [
+          {
+            id: 7,
+            name: "Promotions",
+            icon: promotions,
+            // iconFull: promotionsFull,
+            disabled: true,
+            tag: "19",
+          },
+          {
+            id: 8,
+            name: "Brands",
+            icon: brands,
+            iconFull: brandsFull,
+            disabled: true,
+          },
+          {
+            id: 9,
+            name: "Settings",
+            icon: setting,
+            iconFull: settingFull,
+            disabled: true,
+          },
+        ]),
+  ];
+  
+
+  const onNavigate = (path) => {
     const width = window.innerWidth;
-    navigate(path)
+    navigate(path);
     if (width <= 1024) {
-      setIsOpen(false)
+      setIsOpen(false);
     }
-  }
+  };
 
   return (
     <>
-    <div className={isOpen ? "overlay ": "overlay close"} onClick={()=>setIsOpen(false)}></div>
+      <div
+        className={isOpen ? "overlay " : "overlay close"}
+        onClick={() => setIsOpen(false)}
+      ></div>
       <div className={`sidebar ${isOpen ? "sidebarOpen" : ""}`}>
-        <div className="sidebarLogo cursor-pointer" onClick={()=>navigate("/admin/merchant/dashboard")}>
+        <div
+          className="sidebarLogo cursor-pointer"
+          onClick={() => navigate("/admin/merchant/dashboard")}
+        >
           <img src={logo} alt="Logo" />
         </div>
         <div className="heightvh">
@@ -60,23 +134,31 @@ const Sidebar = ({ isOpen ,setIsOpen}) => {
             {links.map((link) => (
               <div
                 key={link.id}
-                className={`sidebarLink justify-between ${window.location.pathname === link.navigate ? "active" : ""} ${
-                  isOpen ? "" : "tooltip-container"
-                } ${link?.disabled ? "disabled" : ""}`}
+                className={`sidebarLink justify-between ${
+                  window.location.pathname === link.navigate ? "active" : ""
+                } ${isOpen ? "" : "tooltip-container"} ${
+                  link?.disabled ? "disabled" : ""
+                }`}
                 onClick={() => onNavigate(link.navigate)}
                 data-tooltip-id={isOpen ? "sidebar-tooltip" : undefined}
                 data-tooltip-content={isOpen ? link.name : undefined}
               >
-                  <div className="d-flex align-center gap-15">
-                  <img src={link.icon} alt={link.name} className="notSelected" />
-                  <img src={link.iconFull} alt={link.name} className="selected" />
-                <span>{link.name}</span>
-                  </div>
-                  {link?.tag && (
-                <div className="tagNumber fs-14 fw-500">
-                  {link?.tag}
+                <div className="d-flex align-center gap-15">
+                  <img
+                    src={link.icon}
+                    alt={link.name}
+                    className="notSelected"
+                  />
+                  <img
+                    src={link.iconFull}
+                    alt={link.name}
+                    className="selected"
+                  />
+                  <span>{link.name}</span>
                 </div>
-                  )}
+                {link?.tag && (
+                  <div className="tagNumber fs-14 fw-500">{link?.tag}</div>
+                )}
               </div>
             ))}
           </div>
@@ -86,14 +168,16 @@ const Sidebar = ({ isOpen ,setIsOpen}) => {
           data-tip={!isOpen ? "" : "Logout"}
           data-tooltip-id={isOpen ? "sidebar-tooltip" : undefined}
           data-tooltip-content={isOpen ? "Logout" : undefined}
-          onClick={()=>{navigate("/");localStorage.clear()}}
+          onClick={() => {
+            navigate("/");
+            localStorage.clear();
+          }}
         >
           <img src={logout} alt="Logout" />
-           <span>Logout</span>
+          <span>Logout</span>
         </div>
         <Tooltip id="sidebar-tooltip" place="right" />
       </div>
-      
     </>
   );
 };

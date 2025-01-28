@@ -31,7 +31,6 @@ const RequestedCode = ({ loginValue,requestLogin,setRequestLogin }) => {
   const messageApi = useCommonMessage();
   const businessLoginSelector = useSelector((state) => state?.businessLogin);
   const businessSendOtpSelector = useSelector((state) => state?.businessSendOtp);
-  console.log(businessSendOtpSelector, "businessSendOtpSelector");
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
