@@ -14,12 +14,17 @@ import { Breadcrumb } from "antd";
 import PercentageFiller from "./PercentageFiller";
 import CommonModal from "./CommonModal";
 import MerchantNudgeDetails from "./MerchantNudgeDetails";
+import PaymentSidebar from "./PaymentSidebar";
 
 const Nudges = () => {
         const [modal2Open, setModal2Open] = useState(false);
         const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+        const [isPaymentSidebar, setIsPaymentSidebar] = useState(false);
         const toggleSidebar = (item) => {
           setIsSidebarOpen((prevState) => !prevState);
+        };
+        const togglePaymentSidebar = (item) => {
+          setIsPaymentSidebar((prevState) => !prevState);
         };
         useEffect(() => {
           if (isSidebarOpen) {
@@ -125,7 +130,7 @@ const Nudges = () => {
                 <div className="addNudge2">20 Nudges</div>
                 <div className="addNudge2">25 Nudges</div>
               </div>
-              <div className="btn btnSecondary p16 gap-8">
+              <div className="btn btnSecondary p16 gap-8" onClick={()=>togglePaymentSidebar()}>
                 <img src={addCredits} alt="addCredits" />
                 Add Nudge Credits
               </div>
@@ -360,6 +365,10 @@ const Nudges = () => {
       setIsSidebarOpen={setIsSidebarOpen}
         isSidebarOpen={isSidebarOpen}
         toggleSidebar={toggleSidebar}
+      />
+      <PaymentSidebar
+        isPaymentSidebar={isPaymentSidebar}
+        togglePaymentSidebar={togglePaymentSidebar}
       />
     </>
   );
