@@ -14,9 +14,18 @@ import chartfollower from "../../../assets/images/chartfollowerfill.svg";
 import logoutBg from "../../../assets/images/logoutBg.svg";
 import modalbg from "../../../assets/images/modalbg.png";
 import emptyBG from "../../../assets/images/emptyBG.png";
+import { useNavigate } from "react-router-dom";
 
 const MerchantDashboard = () => {
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("1");
+
+  const getSelectedBusiness = JSON.parse(
+    localStorage.getItem("selectedBusiness")
+  );
+
+  console.log(getSelectedBusiness, "getSelectedBusiness");
+
   const tabs = [
     {
       id: "1",
@@ -87,109 +96,119 @@ const MerchantDashboard = () => {
   return (
     <>
       {/*********************** Empty Content ************************/}
-      {/* <div className="dashboard">
-        <div className="emptyHeight position-relative">
-          <img src={emptyBG} alt="" className="emptyBG" />
-          <div className="modal-content">
-            <div className="ant-modal-body">
-              <div className="modalbg">
-                <img src={modalbg} alt="" />
-              </div>
-              <div className="modalImage mb-30">
-                <img src={logoutBg} alt="" />
-              </div>
-              <div className="text-center mb-30">
-                <div className="fs-26 fw-700 mb-15">
-                  Welcome to Your <br />
-                  Restaurant Dashboard
+      {getSelectedBusiness?.roleTitle !== "Owner" &&
+      getSelectedBusiness?.roleData?.permissions?.viewAnalytics !== 2 ? (
+        <div className="dashboard">
+          <div className="emptyHeight position-relative">
+            <img src={emptyBG} alt="" className="emptyBG" />
+            <div className="modal-content">
+              <div className="ant-modal-body">
+                <div className="modalbg">
+                  <img src={modalbg} alt="" />
                 </div>
-                <div className="fs-18">
-                  You do not have permission to access any business yet. Please
-                  contact your administrator for assistance.
+                <div className="modalImage mb-30">
+                  <img src={logoutBg} alt="" />
                 </div>
-              </div>
-              <div className="div d-flex align-center gap-16">
-                <div className="btn deleteBtnfull w-100 gap-8"> Logout</div>
+                <div className="text-center mb-30">
+                  <div className="fs-26 fw-700 mb-15">
+                    Welcome to Your <br />
+                    Restaurant Dashboard
+                  </div>
+                  <div className="fs-18">
+                    You do not have permission to access any business yet.
+                    Please contact your administrator for assistance.
+                  </div>
+                </div>
+                <div
+                  className="div d-flex align-center gap-16"
+                  onClick={() => {
+                    localStorage.clear();
+                    navigate("/");
+                  }}
+                >
+                  <div className="btn deleteBtnfull w-100 gap-8"> Logout</div>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div> */}
-      <div className="dashboard">
-        <div className="card">
-          <div className="d-flex flexWrap gap-20">
-            <div className="mx510">
-              <div className="overviewCard fs-16 mb-10">
-                Competitive Landscape
-              </div>
-              <div className="iframeMap">
+      ) : (
+        <div className="dashboard">
+          <div className="card">
+            <div className="d-flex flexWrap gap-20">
+              <div className="mx510">
+                <div className="overviewCard fs-16 mb-10">
+                  Competitive Landscape
+                </div>
+                <div className="iframeMap">
                   <img src={map} alt="" />
+                </div>
+              </div>
+              <div className="w-100">
+                <TabContainer
+                  tabs={tabs}
+                  activeTab={activeTab}
+                  setActiveTab={setActiveTab}
+                />
               </div>
             </div>
-            <div className="w-100">
-              <TabContainer
-                tabs={tabs}
-                activeTab={activeTab}
-                setActiveTab={setActiveTab}
+            <div className="divider"></div>
+            <div className="d-grid chartGrid gap-20">
+              <PromotionCard
+                title="Promotions"
+                count={80}
+                chartPromotionImage={chartPromotion}
+                buttonText="You need promotions"
+                middleComponent={
+                  <BarChart
+                    labels={["Bar 1", "Bar 2"]}
+                    datas={[50, 110]}
+                    className="w-100"
+                    barThickness={100}
+                    borderSkipped={false}
+                    xDisplay={false}
+                    yDisplay={true}
+                  />
+                }
+              />
+              <PromotionCard
+                title="Nudges"
+                count={77}
+                chartPromotionImage={chartnudge}
+                buttonText="See Nudges"
+                middleComponent={
+                  <BarChart
+                    labels={["Bar 1", "Bar 2"]}
+                    datas={[58, 160]}
+                    className="w-100"
+                    barThickness={100}
+                    borderSkipped={false}
+                    xDisplay={false}
+                    yDisplay={true}
+                  />
+                }
+              />{" "}
+              <PromotionCard
+                title="Followers"
+                count={79}
+                chartPromotionImage={chartfollower}
+                buttonText="See Followers"
+                middleComponent={
+                  <BarChart
+                    labels={["Bar 1", "Bar 2"]}
+                    datas={[45, 89]}
+                    className="w-100"
+                    barThickness={100}
+                    borderSkipped={false}
+                    xDisplay={false}
+                    yDisplay={true}
+                  />
+                }
               />
             </div>
           </div>
-           <div className="divider"></div>
-                  <div className="d-grid chartGrid gap-20">
-                    <PromotionCard
-                      title="Promotions"
-                      count={80}
-                      chartPromotionImage={chartPromotion}
-                      buttonText="You need promotions"
-                      middleComponent={
-                        <BarChart
-                          labels={["Bar 1", "Bar 2"]}
-                          datas={[50, 110]}
-                          className="w-100"
-                          barThickness={100}
-                          borderSkipped={false}
-                          xDisplay={false}
-                          yDisplay={true}
-                        />
-                      }
-                    />
-                    <PromotionCard
-                      title="Nudges"
-                      count={77}
-                      chartPromotionImage={chartnudge}
-                      buttonText="See Nudges"
-                      middleComponent={
-                        <BarChart
-                          labels={["Bar 1", "Bar 2"]}
-                          datas={[58, 160]}
-                          className="w-100"
-                          barThickness={100}
-                          borderSkipped={false}
-                          xDisplay={false}
-                          yDisplay={true}
-                        />
-                      }
-                    />{" "}
-                    <PromotionCard
-                      title="Followers"
-                      count={79}
-                      chartPromotionImage={chartfollower}
-                      buttonText="See Followers"
-                      middleComponent={
-                        <BarChart
-                          labels={["Bar 1", "Bar 2"]}
-                          datas={[45, 89]}
-                          className="w-100"
-                          barThickness={100}
-                          borderSkipped={false}
-                          xDisplay={false}
-                          yDisplay={true}
-                        />
-                      }
-                    />
-                  </div>
         </div>
-      </div>
+      )}
     </>
   );
 };

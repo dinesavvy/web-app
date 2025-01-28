@@ -4,6 +4,7 @@ import RequestedCode from "../auth/RequestedCode";
 import Followers from "../auth/Followers";
 import ReverseNudge from "../auth/ReverseNudge";
 import Nudges from "../auth/Nudges";
+import NudgeTemplateMerchant from "../auth/NudgeTemplateMerchant";
 
 const merchantRoutes = [
   {
@@ -27,6 +28,13 @@ const merchantRoutes = [
   {
     path: "/merchant/followers",
     element: Followers,
+    isPrivate: false,
+    isLayout: true,
+  },
+
+  {
+    path: "/merchant/create-nudge",
+    element: NudgeTemplateMerchant,
     isPrivate: false,
     isLayout: true,
   },

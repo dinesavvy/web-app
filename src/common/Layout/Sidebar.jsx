@@ -26,6 +26,7 @@ import { useNavigate } from "react-router-dom";
 
 const Sidebar = ({ isOpen, setIsOpen }) => {
   const getLoggedInDetails = localStorage.getItem("merchantLogin");
+  
 
   const navigate = useNavigate();
   const links = [

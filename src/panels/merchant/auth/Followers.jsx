@@ -261,11 +261,12 @@ const Followers = () => {
             <div className="floatAdd">
               <div
                 className="btn fs-16"
-                onClick={() =>
-                  navigate("/admin/nudges/template", {
-                    state: { locationId: state, selectedItems },
-                  })
-                }
+                // onClick={() =>
+                //   navigate("/admin/nudges/template", {
+                //     state: { locationId: state, selectedItems },
+                //   })
+                // }
+                onClick={()=>navigate("/merchant/create-nudge")}
               >
                 <img src={createAdd} alt="image" />
                 <div>Create nudge</div>

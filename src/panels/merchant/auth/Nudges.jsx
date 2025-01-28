@@ -9,32 +9,75 @@ import deleteModal from "../../../assets/images/deleteModal.svg";
 import nudgeEmpty from "../../../assets/images/nudgeEmpty.svg";
 import btnArrow from "../../../assets/images/btnArrow.svg";
 import dish2 from "../../../assets/images/dish2.png";
-import modalbg from "../../../assets/images/modalbg.png";
-import { Breadcrumb } from "antd";
 import PercentageFiller from "./PercentageFiller";
 import CommonModal from "./CommonModal";
 import MerchantNudgeDetails from "./MerchantNudgeDetails";
+import { useDispatch, useSelector } from "react-redux";
+import { businessNudgesListHandler } from "../../../redux/action/businessAction/businessNudgesList";
+import moment from "moment";
+import Loader from "../../../common/Loader/Loader";
 
 const Nudges = () => {
-        const [modal2Open, setModal2Open] = useState(false);
-        const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-        const toggleSidebar = (item) => {
-          setIsSidebarOpen((prevState) => !prevState);
-        };
-        useEffect(() => {
-          if (isSidebarOpen) {
-            document.body.classList.add("overflow-Hidden");
-          } else {
-            document.body.classList.remove("overflow-Hidden");
-          }
-      
-          // Cleanup on component unmount
-          return () => {
-            document.body.classList.remove("overflow-Hidden");
-          };
-        }, [isSidebarOpen]);
+  const [modal2Open, setModal2Open] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState("active"); // Default active tab is 'active'
+
+  const businessNudgesListSelector = useSelector(
+    (state) => state?.businessNudgesList
+  );
+  console.log(businessNudgesListSelector, "businessNudgesListSelector");
+
+  const getSelectedBusiness = JSON.parse(
+    localStorage.getItem("selectedBusiness")
+  );
+  console.log(getSelectedBusiness, "getSelectedBusiness");
+
+  const dispatch = useDispatch();
+
+  const toggleSidebar = (item) => {
+    setIsSidebarOpen((prevState) => !prevState);
+  };
+  useEffect(() => {
+    if (isSidebarOpen) {
+      document.body.classList.add("overflow-Hidden");
+    } else {
+      document.body.classList.remove("overflow-Hidden");
+    }
+
+    // Cleanup on component unmount
+    return () => {
+      document.body.classList.remove("overflow-Hidden");
+    };
+  }, [isSidebarOpen]);
+
+  const handleTabClick = (tab) => {
+    setActiveTab(tab); // Update the active tab
+  };
+
+  useEffect(() => {
+    let payload = {
+      page: 1,
+      limit: 10,
+      locationId: getSelectedBusiness?._id,
+      isActive: activeTab === "active" ? true : false,
+    };
+    dispatch(businessNudgesListHandler(payload));
+  }, [activeTab]);
+
+  // const getTimeRemaining = (createdAt) => {
+  //   const createdTime = moment(createdAt);
+  //   const now = moment();
+  //   const duration = moment.duration(now.diff(createdTime));
+
+  //   const hours = duration.hours();
+  //   const minutes = duration.minutes();
+
+  //   return `${hours}h ${minutes}m remaining`;
+  // };
+
   return (
     <>
+      {businessNudgesListSelector?.isLoading && <Loader />}
       {/* <div className="emptyHeight">
         <div className="modal-content">
           <div className="ant-modal-body">
@@ -226,15 +269,97 @@ const Nudges = () => {
           </div>
         </div>
         <div class="tabs-container tab3 tabFull ">
-          <div class="tabs">
-            <button class="tab-button active">Active Nudges</button>
-            <button class="tab-button ">Inactive Nudges</button>
-            <button class="tab-button ">Reverse Nudges</button>
+          <div className="tabs">
+            <button
+              className={`tab-button ${activeTab === "active" ? "active" : ""}`}
+              onClick={() => handleTabClick("active")}
+            >
+              Active Nudges
+            </button>
+            <button
+              className={`tab-button ${
+                activeTab === "inactive" ? "active" : ""
+              }`}
+              onClick={() => handleTabClick("inactive")}
+            >
+              Inactive Nudges
+            </button>
+            <button
+              // className={`tab-button ${
+              //   activeTab === "reverse" ? "active" : ""
+              // }`}
+              className="tab-button disabled"
+              // onClick={() => handleTabClick("reverse")}
+            >
+              Reverse Nudges
+            </button>
           </div>
         </div>
         <div className="tabPadding">
           <div className="merchantGrid mb-20">
-            <div className="merchantCard position-relative">
+            {businessNudgesListSelector?.data?.data?.length > 0 ? (
+              businessNudgesListSelector?.data?.data?.map((item) => {
+                return (
+                  <div
+                    className="merchantCard position-relative"
+                    key={item?.id}
+                  >
+                    <div>
+                      {/* <div className="nailedIt active fs-14">
+                        {getTimeRemaining(item?.createdAt)}
+                      </div> */}
+                      <div className="text-center nudgeCardImage180">
+                        <img
+                          src={item?.image || dish2}
+                          alt=""
+                          className="h-100 w-100"
+                        />
+                      </div>
+                    </div>
+                    <div className="bottomPadding">
+                      <div className="fs-16 fw-700 mb-8">{item?.title}</div>
+                      <div className="fs-14 mb-20">{item?.description}</div>
+                      <div className="d-flex gap-8 align-center mb-20">
+                        <div className="position-relative d-flex">
+                          {item?.acceptedFollowerList?.map((itemFollower, index) => (
+                              <div className="imageCollaps" key={index}>
+                                <img
+                                  src={itemFollower?.photoURL}
+                                  alt={item?.title}
+                                  className="w-100 h-100"
+                                />
+                              </div>
+                            ))}
+                        </div>
+                        {item?.totalAcceptedFollowerList > 0 && (
+                          <div className="fs-14 fw-700 gc">
+                            {item?.totalAcceptedFollowerList} people accepted
+                          </div>
+                        )}
+                      </div>
+                      <div className="d-flex gap-10">
+                        <div
+                          className="btn btnSecondary w-100"
+                          onClick={() => toggleSidebar()}
+                        >
+                          View Details
+                        </div>
+                        <div
+                          className="btn deleteBtnfull w-100"
+                          onClick={() => setModal2Open(true)}
+                        >
+                          End Nudge
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })
+            ) : (
+              <div>No data available</div>
+            )}
+
+            {/* <div className="merchantCard position-relative">
               <div className="">
                 <div className="nailedIt active fs-14">12h 20m remaining</div>
                 <div className="text-center nudgeCardImage180">
@@ -243,10 +368,10 @@ const Nudges = () => {
               </div>
               <div className="bottomPadding">
                 <div className="fs-16 fw-700 mb-8">
-                Double the Flavor, Half the Price
+                  Double the Flavor, Half the Price
                 </div>
                 <div className="fs-14 mb-20">
-                Get 20% off on all large pizzas today! Limited time offer.
+                  Get 20% off on all large pizzas today! Limited time offer.
                 </div>
                 <div className="d-flex gap-8 align-center mb-20">
                   <div className="position-relative d-flex">
@@ -269,52 +394,12 @@ const Nudges = () => {
                   <div className="fs-14 fw-700 gc">52 people accepted</div>
                 </div>
                 <div className="d-flex gap-10">
-                <div className="btn btnSecondary w-100" onClick={() => toggleSidebar()}>View Details</div>
-                <div className="btn deleteBtnfull w-100" onClick={() => setModal2Open(true)}>End Nudge</div>
+                  <div className="btn btnSecondary w-100">View Details</div>
+                  <div className="btn  w-100">Relaunch</div>
                 </div>
               </div>
-            </div>
-            <div className="merchantCard position-relative">
-              <div className="">
-                <div className="nailedIt active fs-14">12h 20m remaining</div>
-                <div className="text-center nudgeCardImage180">
-                  <img src={dish2} alt="" className="h-100 w-100" />
-                </div>
-              </div>
-              <div className="bottomPadding">
-                <div className="fs-16 fw-700 mb-8">
-                Double the Flavor, Half the Price
-                </div>
-                <div className="fs-14 mb-20">
-                Get 20% off on all large pizzas today! Limited time offer.
-                </div>
-                <div className="d-flex gap-8 align-center mb-20">
-                  <div className="position-relative d-flex">
-                    <div className="imageCollaps">
-                      <img src={dish2} alt="" className="w-100 h-100" />
-                    </div>
-                    <div className="imageCollaps">
-                      <img src={dish2} alt="" className="w-100 h-100" />
-                    </div>
-                    <div className="imageCollaps">
-                      <img src={dish2} alt="" className="w-100 h-100" />
-                    </div>
-                    <div className="imageCollaps">
-                      <img src={dish2} alt="" className="w-100 h-100" />
-                    </div>
-                    <div className="imageCollaps">
-                      <img src={dish2} alt="" className="w-100 h-100" />
-                    </div>
-                  </div>
-                  <div className="fs-14 fw-700 gc">52 people accepted</div>
-                </div>
-                <div className="d-flex gap-10">
-                <div className="btn btnSecondary w-100">View Details</div>
-                <div className="btn  w-100">Relaunch</div>
-                </div>
-              </div>
-            </div>
-            <div className="merchantCard position-relative">
+            </div> */}
+            {/* <div className="merchantCard position-relative">
               <div className="">
                 <div className="text-center nudgeCardImage180">
                   <img src={dish2} alt="" className="h-100 w-100" />
@@ -322,10 +407,10 @@ const Nudges = () => {
               </div>
               <div className="bottomPadding">
                 <div className="fs-16 fw-700 mb-8">
-                Double the Flavor, Half the Price
+                  Double the Flavor, Half the Price
                 </div>
                 <div className="fs-14 mb-20">
-                Get 20% off on all large pizzas today! Limited time offer.
+                  Get 20% off on all large pizzas today! Limited time offer.
                 </div>
                 <div className="d-flex gap-8 align-center mb-20">
                   <div className="position-relative d-flex">
@@ -348,16 +433,20 @@ const Nudges = () => {
                   <div className="fs-14 fw-700 gc">52 people accepted</div>
                 </div>
                 <div className="d-flex gap-10">
-                <div className="btn btnSecondary w-100">View Details</div>
+                  <div className="btn btnSecondary w-100">View Details</div>
                 </div>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
-      <CommonModal modal2Open={modal2Open} setModal2Open={setModal2Open} modalImage={deleteModal}/>
+      <CommonModal
+        modal2Open={modal2Open}
+        setModal2Open={setModal2Open}
+        modalImage={deleteModal}
+      />
       <MerchantNudgeDetails
-      setIsSidebarOpen={setIsSidebarOpen}
+        setIsSidebarOpen={setIsSidebarOpen}
         isSidebarOpen={isSidebarOpen}
         toggleSidebar={toggleSidebar}
       />
