@@ -1,0 +1,192 @@
+import React, { useState } from "react";
+import qrImage from "../../../assets/images/qrImage.svg";
+import arrowUp from "../../../assets/images/arrow-up.svg";
+import addCircle from "../../../assets/images/addCircle.svg";
+import closeRightSidebar from "../../../assets/images/closeRightSidebar.svg";
+import uploadImage from "../../../assets/images/uploadImage.svg";
+import AboutProfile from "./AboutProfile";
+import AccountInfoProfile from "./AccountInfoProfile";
+import HoursProfile from "./HoursProfile";
+import restaurantCard from "../../../assets/images/restaurantCard.png";
+import businessPhoto from "../../../assets/images/businessPhoto.png";
+import ImageGallery from "./ImageGallery";
+import { Modal } from "antd";
+
+const Profile = () => {
+  const [openIndex, setOpenIndex] = useState(null);
+  const [openImage, setOpenImage] = useState(false);
+  const [isModalOpen, setModalOpen] = useState(false);
+  const toggleAccordion = (index) => {
+    setOpenIndex(index === openIndex ? null : index);
+  };
+  const items = [
+    {
+      title: "About",
+      content: <AboutProfile />,
+    },
+    {
+      title: "Account Info",
+      content: <AccountInfoProfile />,
+    },
+    {
+      title: "Hours",
+      content: <HoursProfile />,
+    },
+  ];
+  const toggleModal = () => {
+    setModalOpen(!isModalOpen);
+  };
+  const images = [
+    businessPhoto,
+    restaurantCard,
+    restaurantCard,
+    businessPhoto,
+    restaurantCard,
+    businessPhoto,
+    restaurantCard,
+    restaurantCard,
+    businessPhoto,
+    restaurantCard,
+    businessPhoto,
+    restaurantCard,
+  ];
+  return (
+    <>
+      <div className="dashboard">
+        <div className="tabPadding mb-30">
+          <div className="d-flex justify-between align-center">
+            <div className="fs-24 fw-600">Basic Info</div>
+            <div className="qrImage">
+              <img src={qrImage} alt="" />
+            </div>
+          </div>
+          <div className="divider2"></div>
+          <div className="d-flex align-center gap-20">
+            <div className="profileImage">gh</div>
+            <div>
+              <div className="fs-24 fw-600 mb-10">Myles Leighton</div>
+              <div className="positionTag fs-16 fw-600">Owner</div>
+            </div>
+          </div>
+          <div className="divider2"></div>
+          <div className="inputGrid gap-20">
+            <div>
+              <label htmlFor="name" className="grey mb-10 fs-16 fw-500">
+                Business name
+              </label>
+              <input
+                type="text"
+                className="input"
+                placeholder="Business name"
+              />
+            </div>
+            <div>
+              <label htmlFor="name" className="grey mb-10 fs-16 fw-500">
+                Street address
+              </label>
+              <input
+                type="text"
+                className="input"
+                placeholder="Street address"
+              />
+            </div>
+            <div>
+              <label htmlFor="name" className="grey mb-10 fs-16 fw-500">
+                Location
+              </label>
+              <input
+                type="text"
+                className="input"
+                placeholder="Street address"
+              />
+            </div>
+          </div>
+        </div>
+        <div className="accordionCustom nudgeAccourdian">
+          {items.map((item, index) => (
+            <>
+              <div key={index} className=" accordionItem  mb-30">
+                <div
+                  className="accordionHeader fs-20 fw-600"
+                  onClick={() => toggleAccordion(index)}
+                >
+                  <div>{item.title}</div>
+                  <div className="d-flex align-center gap-16">
+                    <div
+                      className={`arrow ${openIndex === index ? "open" : ""}`}
+                    >
+                      <img src={arrowUp} alt="arrowUp" className="arrowUp" />
+                    </div>
+                  </div>
+                </div>
+                <div
+                  className={` accordion-content ${
+                    openIndex === index ? "open" : ""
+                  }`}
+                >
+                  {item.content}
+                </div>
+              </div>
+            </>
+          ))}
+        </div>
+        <div className="tabPadding">
+          <div className="d-flex align-center justify-between mb-20">
+            <div className="fs-20 fw-600">Gallery</div>
+            <div className="addCircle cursor-pointer" onClick={()=>toggleModal()}>
+              <img src={addCircle} alt="" />
+            </div>
+          </div>
+          <div className="tabs-container tab3 tabFull mb-20">
+            <div className="tabs">
+              <button className="tab-button active">Drinks</button>
+              <button className="tab-button ">Appetizers</button>
+              <button className="tab-button ">Meals</button>
+              <button className="tab-button ">Restaurant</button>
+              <button className="tab-button ">Customer Submitted</button>
+            </div>
+          </div>
+          <ImageGallery
+            images={images}
+            openImage={openImage}
+            setOpenImage={setOpenImage}
+          />
+        </div>
+      </div>
+      <Modal
+        centered
+        visible={isModalOpen} // Control the visibility of the modal  // Handle close
+        footer={null} // Hide the footer (buttons)
+        closable={false}
+        className="selecModal"
+      >
+        <div className="p20">
+          <div className=" d-flex justify-between align-center">
+            <div className="fs-18 fw-700">Upload Photo</div>
+            <div className="closeSidebar" onClick={() => setModalOpen(false)}>
+              <img src={closeRightSidebar} alt="closeRightSidebar" />
+            </div>
+          </div>
+          <div className="divider2"></div>
+          <label className="uploadDrag text-center" for="file">
+            <input type="file" id="file" className="d-none" />
+                <div>
+                    <div className="fs-14 mb-16">
+                    Drag images here
+                    </div>
+                    <div className="fs-14 grey mb-16">
+                    or
+                    </div>
+                    <div className="btn gap-8 px16 fw-500">
+                        <img src={uploadImage} alt="" />
+                        Choose from gallery
+                    </div>
+                </div>
+          </label>
+        </div>
+      </Modal>
+    </>
+  );
+};
+
+export default Profile;

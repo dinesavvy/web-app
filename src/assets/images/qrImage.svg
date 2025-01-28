@@ -1,0 +1,11 @@
+<svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="44" height="44" rx="22" fill="#056DFF"/>
+<path d="M12.0039 19V16.5C12.0039 14.01 14.0139 12 16.5039 12H19.0039" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M25 12H27.5C29.99 12 32 14.01 32 16.5V19" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M31.9961 26V27.5C31.9961 29.99 29.9861 32 27.4961 32H25.9961" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M19.0039 32H16.5039C14.0139 32 12.0039 29.99 12.0039 27.5V25" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M20.4961 17V19C20.4961 20 19.9961 20.5 18.9961 20.5H16.9961C15.9961 20.5 15.4961 20 15.4961 19V17C15.4961 16 15.9961 15.5 16.9961 15.5H18.9961C19.9961 15.5 20.4961 16 20.4961 17Z" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M28.5 17V19C28.5 20 28 20.5 27 20.5H25C24 20.5 23.5 20 23.5 19V17C23.5 16 24 15.5 25 15.5H27C28 15.5 28.5 16 28.5 17Z" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M20.4961 25V27C20.4961 28 19.9961 28.5 18.9961 28.5H16.9961C15.9961 28.5 15.4961 28 15.4961 27V25C15.4961 24 15.9961 23.5 16.9961 23.5H18.9961C19.9961 23.5 20.4961 24 20.4961 25Z" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M28.5 25V27C28.5 28 28 28.5 27 28.5H25C24 28.5 23.5 28 23.5 27V25C23.5 24 24 23.5 25 23.5H27C28 23.5 28.5 24 28.5 25Z" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

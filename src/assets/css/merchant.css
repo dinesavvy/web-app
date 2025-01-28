@@ -281,6 +281,20 @@
   justify-content: center;
   align-items: center;
 }
+.profileImage {
+  text-transform: uppercase;
+  font-size: 38px;
+  line-height: 27px;
+  color: white;
+  font-weight: 600;
+  border-radius: 50%;
+  min-height: 100px;
+  min-width: 100px;
+  background-color: #056DFF;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
 .flexTag {
   display: flex;
@@ -736,7 +750,19 @@
   object-fit: cover;
   border-radius: 50%;
 }
-
+.profileImage img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+.positionTag{
+  color: white;
+  background-color: #00D014;
+  border-radius: 4px;
+  padding: 4px 12px;
+  width: fit-content;
+}
 .historyFlex .initialName {
   height: 42px;
   width: 42px;
@@ -1113,6 +1139,20 @@ input[type="radio"]:checked+.custom-radio-button {
   border-top: 1px solid #E6E6E6;
 
 }
+.textWord{
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  color: #808080;
+}
+.px16{
+  padding: 0 16px;
+}
+.lineBtn{
+  height: 40px;
+  width: 1px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, #FFFFFF 50%, rgba(255, 255, 255, 0) 100%);
+}
 .accordion-content.open {
   opacity: 1;
   margin-top: 16px;
@@ -1133,7 +1173,9 @@ input[type="radio"]:checked+.custom-radio-button {
   border-radius: 12px;
   background-color: white !important;
 }
-
+.nudgeAccourdian .accordionItem {
+  padding: 20px;
+}
 .imageAccorddian {
   padding: 12px 0;
   width: 100%;
@@ -1175,13 +1217,28 @@ input.addTitleInput::placeholder {
   padding: 0 !important;
 }
 .selecModal .topPadding{
-  padding: 30px;
+  padding: 20px 30px;
   border-bottom:1px solid #E3E3E8;
+}
+.p20{
+  padding: 20px;
 }
 .modal-item:not(:last-child){
   border-bottom:1px solid #E3E3E8;
   margin-bottom: 16px;
   padding-bottom: 16px;
+}
+.d-none{
+  display: none;
+}
+.uploadDrag{
+  height: 210px;
+  border: 1px dashed #CACACA;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  cursor: pointer;
 }
 .rightIcon{
   opacity: 0;
