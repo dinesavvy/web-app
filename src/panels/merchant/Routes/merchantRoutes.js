@@ -5,6 +5,8 @@ import Followers from "../auth/Followers";
 import ReverseNudge from "../auth/ReverseNudge";
 import Nudges from "../auth/Nudges";
 import NudgeTemplateMerchant from "../auth/NudgeTemplateMerchant";
+import Profile from "../auth/Profile";
+import Hierarchy from "../auth/Hierarchy";
 
 const merchantRoutes = [
   {
@@ -47,6 +49,18 @@ const merchantRoutes = [
   {
     path: "/merchant/nudges",
     element: Nudges,
+    isPrivate: false,
+    isLayout: true,
+  },
+  {
+    path: "/merchant/profile",
+    element: Profile,
+    isPrivate: false,
+    isLayout: true,
+  },
+  {
+    path: "/merchant/hierarchy",
+    element: Hierarchy,
     isPrivate: false,
     isLayout: true,
   },

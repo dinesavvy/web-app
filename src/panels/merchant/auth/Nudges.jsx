@@ -14,13 +14,18 @@ import CommonModal from "./CommonModal";
 import MerchantNudgeDetails from "./MerchantNudgeDetails";
 import { useDispatch, useSelector } from "react-redux";
 import { businessNudgesListHandler } from "../../../redux/action/businessAction/businessNudgesList";
-import moment from "moment";
 import Loader from "../../../common/Loader/Loader";
+import PaymentSidebar from "./PaymentSidebar"
 
 const Nudges = () => {
   const [modal2Open, setModal2Open] = useState(false);
+  const [isPaymentSidebar, setIsPaymentSidebar] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("active"); // Default active tab is 'active'
+
+  const togglePaymentSidebar = (item) => {
+              setIsPaymentSidebar((prevState) => !prevState);
+            };
 
   const businessNudgesListSelector = useSelector(
     (state) => state?.businessNudgesList
@@ -75,6 +80,30 @@ const Nudges = () => {
   //   return `${hours}h ${minutes}m remaining`;
   // };
 
+// import PaymentSidebar from "./PaymentSidebar";
+
+// const Nudges = () => {
+//         const [modal2Open, setModal2Open] = useState(false);
+//         const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+//         const [isPaymentSidebar, setIsPaymentSidebar] = useState(false);
+//         const toggleSidebar = (item) => {
+//           setIsSidebarOpen((prevState) => !prevState);
+//         };
+//         const togglePaymentSidebar = (item) => {
+//           setIsPaymentSidebar((prevState) => !prevState);
+//         };
+//         useEffect(() => {
+//           if (isSidebarOpen) {
+//             document.body.classList.add("overflow-Hidden");
+//           } else {
+//             document.body.classList.remove("overflow-Hidden");
+//           }
+      
+//           // Cleanup on component unmount
+//           return () => {
+//             document.body.classList.remove("overflow-Hidden");
+//           };
+//         }, [isSidebarOpen]);
   return (
     <>
       {businessNudgesListSelector?.isLoading && <Loader />}
@@ -168,7 +197,7 @@ const Nudges = () => {
                 <div className="addNudge2">20 Nudges</div>
                 <div className="addNudge2">25 Nudges</div>
               </div>
-              <div className="btn btnSecondary p16 gap-8">
+              <div className="btn btnSecondary p16 gap-8" onClick={()=>togglePaymentSidebar()}>
                 <img src={addCredits} alt="addCredits" />
                 Add Nudge Credits
               </div>
@@ -449,6 +478,10 @@ const Nudges = () => {
         setIsSidebarOpen={setIsSidebarOpen}
         isSidebarOpen={isSidebarOpen}
         toggleSidebar={toggleSidebar}
+      />
+      <PaymentSidebar
+        isPaymentSidebar={isPaymentSidebar}
+        togglePaymentSidebar={togglePaymentSidebar}
       />
     </>
   );
