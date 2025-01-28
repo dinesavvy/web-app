@@ -1,14 +1,6 @@
-import React, { useEffect } from "react";
+import React from "react";
 import modalbg from "../../../assets/images/modalbg.png";
 import { Modal } from "antd";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  removeTeamMemberAction,
-  removeTeamMemberHandler,
-} from "../../../redux/action/removeTeamMember";
-import Loader from "../../../common/Loader/Loader";
-import { useCommonMessage } from "../../../common/CommonMessage";
-import { merchantTeamsHandler } from "../../../redux/action/merchantTeams";
 
 const CommonModal = ({
   modal2Open,
@@ -18,19 +10,11 @@ const CommonModal = ({
   isSidebarOpen,
   setIsSidebarOpen
 }) => {
-  const messageApi = useCommonMessage();
-  const getMerchantId = localStorage.getItem("merchantId");
-  const dispatch = useDispatch();
-
-  const removeTeamMemberSelector = useSelector(
-    (state) => state?.removeTeamMember
-  );
 
 
 
   return (
     <>
-      {removeTeamMemberSelector?.isLoading && <Loader />}
       <Modal
         centered
         open={modal2Open}

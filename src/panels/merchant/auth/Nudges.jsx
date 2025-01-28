@@ -104,6 +104,20 @@ const Nudges = () => {
 //             document.body.classList.remove("overflow-Hidden");
 //           };
 //         }, [isSidebarOpen]);
+
+useEffect(() => {
+  if (isPaymentSidebar) {
+    document.body.classList.add("overflow-Hidden");
+  } else {
+    document.body.classList.remove("overflow-Hidden");
+  }
+
+  // Cleanup on component unmount
+  return () => {
+    document.body.classList.remove("overflow-Hidden");
+  };
+}, [isPaymentSidebar]);
+
   return (
     <>
       {businessNudgesListSelector?.isLoading && <Loader />}

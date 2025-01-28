@@ -1,20 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import closeRightSidebar from "../../../assets/images/closeRightSidebar.svg";
-import dish2 from "../../../assets/images/dish2.png";
 import google from "../../../assets/images/google.svg";
 import apple from "../../../assets/images/apple.svg";
-import arrowRight from "../../../assets/images/arrowRight.svg";
-// import restaurantCard from "../../../assets/images/restaurantCard.png";
-import Loader from "../../../common/Loader/Loader";
-import moment from "moment";
-import { useNavigate } from "react-router-dom";
-import CommonModal from "./CommonModal";
 
 const PaymentSidebar = ({
   isPaymentSidebar,
   togglePaymentSidebar,
 }) => {
-  const navigate = useNavigate();
   return (
     <>
       {isPaymentSidebar && (
