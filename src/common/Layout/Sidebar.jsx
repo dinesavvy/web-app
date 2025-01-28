@@ -16,6 +16,10 @@ import brands from "../../assets/images/sidebar/brands.svg";
 import brandsFull from "../../assets/images/sidebar/brandsFull.svg";
 import setting from "../../assets/images/sidebar/setting.svg";
 import settingFull from "../../assets/images/sidebar/settingFull.svg";
+import profile from "../../assets/images/sidebar/profile.svg";
+import profileFull from "../../assets/images/sidebar/profileFull.svg";
+import hierarchy from "../../assets/images/sidebar/hierarchy.svg";
+import hierarchyFull from "../../assets/images/sidebar/hierarchyFull.svg";
 import "react-tooltip/dist/react-tooltip.css";
 import { Tooltip } from "react-tooltip";
 import { useNavigate } from "react-router-dom";
@@ -69,15 +73,15 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
           {
             id: 10,
             name: "Profile",
-            // icon: profileIcon,
-            // iconFull: profileIconFull,
+            icon: profile,
+            iconFull: profileFull,
             navigate: "/merchant/profile",
           },
           {
             id: 11,
             name: "Hierarchy",
-            // icon: hierarchyIcon,
-            // iconFull: hierarchyIconFull,
+            icon: hierarchy,
+            iconFull: hierarchyFull,
             navigate: "/merchant/hierarchy",
           },
         ]
