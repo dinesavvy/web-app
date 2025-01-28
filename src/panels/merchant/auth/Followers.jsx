@@ -10,9 +10,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { businessFollowerListHandler } from "../../../redux/action/businessAction/businessFollowers";
 import Loader from "../../../common/Loader/Loader";
 import moment from "moment";
+import createAdd from "../../../assets/images/createAdd.svg";
+import deleteList from "../../../assets/images/deleteList.svg";
 
 const Followers = () => {
   const [searchQuery, setSearchQuery] = useState("");
+  const [checkedItems, setCheckedItems] = useState({});
+  const [selectedItems, setSelectedItems] = useState([]);
   const navigate = useNavigate();
   const [pagination, setPagination] = useState({ page: 1, limit: 9 });
   const dispatch = useDispatch();
@@ -29,10 +33,50 @@ const Followers = () => {
   const businessListFollowerListSelector = useSelector(
     (state) => state?.businessListFollowerList
   );
-  console.log(
-    businessListFollowerListSelector,
-    "businessListFollowerListSelector"
+  const isAnyCheckboxChecked = Object.values(checkedItems).some(
+    (checked) => checked
   );
+
+  // Checkbox onChange
+  const handleCheckboxChange = (index, isChecked, item) => {
+    setCheckedItems((prev) => ({
+      ...prev,
+      [index]: isChecked,
+    }));
+
+    if (isChecked) {
+      // Add the item to the selectedItems array if not already present
+      setSelectedItems((prev) =>
+        prev.some((selectedItem) => selectedItem?._id === item?._id)
+          ? prev
+          : [...prev, item]
+      );
+    } else {
+      // Remove the item from the selectedItems array
+      setSelectedItems((prev) =>
+        prev.filter((selectedItem) => selectedItem?._id !== item?._id)
+      );
+    }
+  };
+
+  // Delete Selected items
+
+  const handleDelete = () => {
+    // Remove from checkedItems
+    const updatedCheckedItems = { ...checkedItems };
+    Object.keys(checkedItems).forEach((key) => {
+      if (checkedItems[key]) {
+        delete updatedCheckedItems[key];
+      }
+    });
+    setCheckedItems(updatedCheckedItems);
+
+    // Remove from selectedItems
+    const updatedSelectedItems = selectedItems.filter(
+      (item, index) => !checkedItems[index]
+    );
+    setSelectedItems(updatedSelectedItems);
+  };
 
   useEffect(() => {
     if (isSidebarOpen) {
@@ -158,7 +202,17 @@ const Followers = () => {
                       </div>
                       <div className="custom-checkbox">
                         <label className="checkLabel">
-                          <input type="checkbox" />
+                          <input
+                            type="checkbox"
+                            checked={checkedItems[index] || false}
+                            onChange={(e) =>
+                              handleCheckboxChange(
+                                index,
+                                e.target.checked,
+                                item
+                              )
+                            }
+                          />
                           <span class="checkmark"></span>
                         </label>
                       </div>
@@ -203,6 +257,24 @@ const Followers = () => {
               onChange={handlePaginationChange}
             />
           </div>
+          {isAnyCheckboxChecked  && (
+            <div className="floatAdd">
+              <div
+                className="btn fs-16"
+                onClick={() =>
+                  navigate("/admin/nudges/template", {
+                    state: { locationId: state, selectedItems },
+                  })
+                }
+              >
+                <img src={createAdd} alt="image" />
+                <div>Create nudge</div>
+              </div>
+              <div className="h-24 cursor-pointer" onClick={handleDelete}>
+                <img src={deleteList} className="w-100 h-100" alt="" />
+              </div>
+            </div>
+          )}
         </div>
         <FollowerDetails
           isOpen={isSidebarOpen}

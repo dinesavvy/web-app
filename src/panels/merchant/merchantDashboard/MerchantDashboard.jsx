@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import TabContainer from "../../../common/dashboards/TabContainer";
 import BarChart from "../../../common/charts/BarChart";
-
 import GraphWithCircle from "../../../common/dashboards/GraphWithCircle";
 import chart from "../../../assets/images/chart.jpg";
 import map from "../../../assets/images/map.jpg";
