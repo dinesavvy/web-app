@@ -1,20 +1,40 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import closeRightSidebar from "../../../assets/images/closeRightSidebar.svg";
 import dish2 from "../../../assets/images/dish2.png";
+import deleteModal from "../../../assets/images/deleteModal.svg";
 import arrowRight from "../../../assets/images/arrowRight.svg";
 // import restaurantCard from "../../../assets/images/restaurantCard.png";
 import Loader from "../../../common/Loader/Loader";
 import moment from "moment";
 import { useNavigate } from "react-router-dom";
+import CommonModal from "./CommonModal";
+import MerchantNudgeFollowers from "./MerchantNudgeFollowers";
 
-const ActiveNudge = ({ isOpen, toggleSidebar }) => {
+const MerchantNudgeDetails = ({ isSidebarOpen, toggleSidebar,setIsSidebarOpen }) => {
+        const [modal2Open, setModal2Open] = useState(false);
   const navigate = useNavigate();
+    const [isMercahntNudgeFollowers, setIsMercahntNudgeFollowers] = useState(false);
+          const toggleSidebarNudgeFollower = (item) => {
+            setIsMercahntNudgeFollowers((prevState) => !prevState);
+          };
+          useEffect(() => {
+            if (isMercahntNudgeFollowers) {
+              document.body.classList.add("overflow-Hidden");
+            } else {
+              document.body.classList.remove("overflow-Hidden");
+            }
+        
+            // Cleanup on component unmount
+            return () => {
+              document.body.classList.remove("overflow-Hidden");
+            };
+          }, [isMercahntNudgeFollowers]);
   return (
     <>
-      {isOpen && <div className="overlay2" onClick={toggleSidebar}></div>}
+      {isSidebarOpen && <div className="overlay2" onClick={toggleSidebar}></div>}
 
       {/* Sidebar */}
-      <div className={`rightSidebar ${isOpen ? "open" : ""}`}>
+      <div className={`rightSidebar ${isSidebarOpen ? "open" : ""}`}>
         <div className="d-flex justify-between align-center">
           <div className="fs-20 fw-600">Active Nudge Details</div>
           <div className="closeSidebar" onClick={toggleSidebar}>
@@ -64,7 +84,7 @@ const ActiveNudge = ({ isOpen, toggleSidebar }) => {
                   <img src={dish2} alt="" className="w-100 h-100" />
                 </div>
               </div>
-              <div className="fs-14 pc cursor-pointer">+44 People</div>
+              <div className="fs-14 pc cursor-pointer" onClick={()=>toggleSidebarNudgeFollower()}>+44 People</div>
             </div>
             <div className="fs-14">52 people</div>
           </div>
@@ -89,7 +109,7 @@ const ActiveNudge = ({ isOpen, toggleSidebar }) => {
                   <img src={dish2} alt="" className="w-100 h-100" />
                 </div>
               </div>
-              <div className="fs-14 pc cursor-pointer">+44 People</div>
+              <div className="fs-14 pc cursor-pointer" onClick={()=>toggleSidebarNudgeFollower()}>+44 People</div>
             </div>
             <div className="fs-14">52 people</div>
           </div>
@@ -114,14 +134,20 @@ const ActiveNudge = ({ isOpen, toggleSidebar }) => {
                   <img src={dish2} alt="" className="w-100 h-100" />
                 </div>
               </div>
-              <div className="fs-14 pc cursor-pointer">+44 People</div>
+              <div className="fs-14 pc cursor-pointer" onClick={()=>toggleSidebarNudgeFollower()}>+44 People</div>
             </div>
             <div className="fs-14">52 people</div>
           </div>
+          <div className="divider2"></div>
+
+          <div className="btn deleteBtnfull w-100" onClick={() => setModal2Open(true)}>End Nudge</div>
         </div>
       </div>
+      <CommonModal setIsSidebarOpen={setIsSidebarOpen} isSidebarOpen={isSidebarOpen} modal2Open={modal2Open} setModal2Open={setModal2Open} modalImage={deleteModal}/>
+      <MerchantNudgeFollowers toggleSidebarNudgeFollower={toggleSidebarNudgeFollower}
+        isMercahntNudgeFollowers={isMercahntNudgeFollowers} />
     </>
   );
 };
 
-export default ActiveNudge;
+export default MerchantNudgeDetails;
