@@ -10,18 +10,12 @@ import passwordInput from "../../../assets/images/passwordInput.svg";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useCommonMessage } from "../../../common/CommonMessage";
-import {
-  loginHandler,
-  loginSliceAction,
-} from "../../../redux/action/loginSlice";
+import "react-phone-number-input/style.css";
+import PhoneInput from "react-phone-number-input";
 import { useEffect } from "react";
 import { validationSchema } from "./merchantLoginValidation";
 import Loader from "../../../common/Loader/Loader";
 import RequestedCode from "./RequestedCode";
-import {
-  businessLoginAction,
-  businessLoginHandler,
-} from "../../../redux/action/businessAction/businessLoginSlice";
 import {
   businessSendOtpAction,
   businessSendOtpHandler,
@@ -33,12 +27,12 @@ const MerchantLogin = () => {
     (state) => state?.businessSendOtp
   );
   const [requestLogin, setRequestLogin] = useState(false);
-  const [loginValue,setLoginValue] = useState()
+  const [loginValue, setLoginValue] = useState();
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const handleFormSubmit = (values) => {
-    setLoginValue(values)
+    setLoginValue(values);
     let payload = {
       phoneNumber: values?.phoneNumber,
       appSignature: "TlVIT4Yl0sS",
@@ -68,7 +62,11 @@ const MerchantLogin = () => {
   return (
     <>
       {requestLogin ? (
-        <RequestedCode  loginValue={loginValue}/>
+        <RequestedCode
+          loginValue={loginValue}
+          requestLogin={requestLogin}
+          setRequestLogin={setRequestLogin}
+        />
       ) : (
         <>
           {businessSendOtpSelector?.isLoading && <Loader />}
@@ -95,6 +93,8 @@ const MerchantLogin = () => {
                 >
                   {({
                     isSubmitting,
+                    values,
+                    setFieldValue,
                     /* and other goodies */
                   }) => (
                     <Form>
@@ -109,6 +109,24 @@ const MerchantLogin = () => {
                             placeholder="Enter your phone number"
                             id="phone"
                           />
+                          {/* <PhoneInput
+                            country={'us'}
+                            countries={['us', 'ca', 'gb', 'in']}
+                             value={values?.phoneNumber}
+                             onChange={(phone) => {
+                               console.log(phone, "phone value");
+                               // Update the formik value or state here
+                               setFieldValue("phoneNumber", "+" + " " +phone);
+                             }}
+                          /> */}
+                          {/* <PhoneInput
+                             placeholder="Enter phone number"
+                             value={values?.phoneNumber}
+                             onChange={(phone) => setFieldValue("phoneNumber", phone)}
+                             defaultCountry="US"  // Change this to the default country code you want
+                             international  // Only show country names (without flags)
+                             countrySelectProps={{ unicodeFlags: false }} // Optionally remove unicode flags
+                          /> */}
                           <img
                             src={phoneInput}
                             alt=""

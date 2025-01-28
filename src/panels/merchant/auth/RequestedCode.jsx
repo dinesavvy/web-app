@@ -16,18 +16,26 @@ import {
 } from "../../../redux/action/loginSlice";
 import { useEffect } from "react";
 import Loader from "../../../common/Loader/Loader";
-import { businessLoginAction, businessLoginHandler } from "../../../redux/action/businessAction/businessLoginSlice";
+import {
+  businessLoginAction,
+  businessLoginHandler,
+} from "../../../redux/action/businessAction/businessLoginSlice";
+import {
+  businessSendOtpAction,
+  businessSendOtpHandler,
+} from "../../../redux/action/businessAction/businessSendOtp";
 
-const RequestedCode = ({loginValue}) => {
+const RequestedCode = ({ loginValue,requestLogin,setRequestLogin }) => {
   const [minutes, setMinutes] = useState(0);
   const [seconds, setSeconds] = useState(60);
   const messageApi = useCommonMessage();
   const businessLoginSelector = useSelector((state) => state?.businessLogin);
+  const businessSendOtpSelector = useSelector((state) => state?.businessSendOtp);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const [otp, setOtp] = useState(new Array(6).fill(""));
-  console.log(otp, "otpotpotpotp");
+  console.log(loginValue, "loginValue");
   const inputRefs = useRef([]);
 
   useEffect(() => {
@@ -119,12 +127,33 @@ const RequestedCode = ({loginValue}) => {
   }, [businessLoginSelector]);
 
   const resendOTP = () => {
-    setSeconds(60);
+    // setSeconds(60);
+    let payload = {
+      phoneNumber: loginValue?.phoneNumber,
+      appSignature: "TlVIT4Yl0sS",
+    };
+    dispatch(businessSendOtpHandler(payload));
   };
+
+  useEffect(() => {
+    if (businessSendOtpSelector?.data?.statusCode === 200) {
+      messageApi.open({
+        type: "success",
+        content: businessSendOtpSelector?.data?.message,
+      });
+      dispatch(businessSendOtpAction.businessSendOtpSliceReset());
+    } else if (businessSendOtpSelector?.data?.statusCode === 400) {
+      messageApi.open({
+        type: "error",
+        content: businessSendOtpSelector?.message?.message,
+      });
+      dispatch(businessSendOtpAction.businessSendOtpSliceReset());
+    }
+  }, [businessSendOtpSelector]);
 
   return (
     <>
-      {businessLoginSelector?.isLoading && <Loader />}
+      {(businessLoginSelector?.isLoading ||businessSendOtpSelector?.isLoading) && <Loader />}
       <div className="loginFlex ">
         <div className="w-50 h-100 position-relative mobileHide fixLeft">
           <img src={login} alt="" className="w-100 h-100 object-cover" />
@@ -138,7 +167,7 @@ const RequestedCode = ({loginValue}) => {
             <form onSubmit={onSubmit}>
               <div className="fs-24 fw-700 mb-8">Verification</div>
               <div className="grey fs-18">
-                Enter the 6 digit code sent to your phone number
+                Enter the 6 digit code sent to your phone number {loginValue?.phoneNumber}
               </div>
               <div className="divider3"></div>
               <div
@@ -164,15 +193,18 @@ const RequestedCode = ({loginValue}) => {
               <button
                 className="btn w-100 mb-30"
                 type="submit"
-                style={{ cursor: otp?.length < 6 ? "not-allowed" : "pointer" }}
-                disabled={otp?.length < 6 ? true : false}
+                style={{
+                  cursor: otp.every((value) => value.trim() !== "")
+                    ? "pointer"
+                    : "not-allowed",
+                }}
+                disabled={!otp.every((value) => value.trim() !== "")}
                 // disabled={isSubmitting}
                 // onClick={() => navigate("/merchant/dashboard")}
               >
                 Verify
               </button>
               <div className="fs-14 text-center">
-                <span className="grey">Didn't receive code? </span>
                 <span className="fw-500 cursor-pointer">
                   {seconds > 0 || minutes > 0 ? (
                     <p>
@@ -183,7 +215,7 @@ const RequestedCode = ({loginValue}) => {
                   ) : (
                     <>
                       <p>
-                        <p className="resend">
+                        <p className="grey">
                           Didn't receive code? (&nbsp;
                           <span className="span-primary" onClick={resendOTP}>
                             Resend OTP
