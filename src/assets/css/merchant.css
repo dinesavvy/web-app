@@ -349,7 +349,20 @@
   color: white;
   background-color: #056DFF;
 }
-
+.TagFull {
+  border: 1px solid #056DFF;
+  border-radius: 20px;
+  padding: 5px 10px;
+  font-size: 14px;
+  line-height: 21px;
+  color: white;
+  background-color: #056DFF;
+  text-align: center;
+  width: calc(100% - 42px);
+}
+.bgGrey{
+  background: #F4F5F6;
+}
 .mh400 {
   max-height: 400px;
   height: 400px;
@@ -463,11 +476,12 @@
 }
 
 .emptyHeight {
-  height: calc(100vh - 112px);
+  height: calc(100vh - 147px);
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
+  min-height: 600px;
 }
 
 .modal-content {
@@ -612,11 +626,11 @@
 
 /* Sidebar.css */
 .rightSidebar {
-  width: 400px;
+  width: 500px;
   height: 100vh;
   position: fixed;
   top: 0;
-  right: -400px;
+  right: -500px;
   transition: right 0.3s ease;
   padding: 20px;
   box-sizing: border-box;
@@ -859,7 +873,18 @@ input[type="radio"]:checked+.custom-radio-button {
 .promotionImage {
   height: 90px;
 }
-
+.nudgeCardImage180{
+  height: 180px;
+}
+.nudgeCardImage180 img{
+  object-fit: cover;
+}
+.emptyBG{
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+}
 .nailedIt {
   background-color: #056DFF;
   padding: 5px;
@@ -992,7 +1017,16 @@ input[type="radio"]:checked+.custom-radio-button {
   grid-template-columns: repeat(3, 1fr);
   gap: 20px;
 }
-
+.nudgeGrid3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+}
+.nudgeCard{
+  background-color: #F4F5F6;
+  border-radius: 8px;
+  padding: 15px;
+}
 .brandItem {
   border: 1px solid #E6E6E6;
   border-radius: 6px;
@@ -1277,7 +1311,9 @@ input.addTitleInput::placeholder {
 .image150{
   width: 160px;
   min-width: 160px;
-  height: 150px;
+  height: 100%;
+  border-radius: 8px;
+  overflow:hidden ;
 }
 .nudgeImageSub,.nudgeCardImage{
   position: absolute;
@@ -1287,19 +1323,49 @@ input.addTitleInput::placeholder {
 }
 .image150 img:first-child{
   position: absolute;
-  
+  object-fit: cover;
 }
 .cardNudge{
   border: 1px solid #D9D9D9;
   border-radius: 8px;
   /* overflow: hidden; */
   position: relative;
+  display: flex;
 }
 .nudgeCardImage{
   background-color: white;
   right: -1px;
   height: calc(100% + 2px);
   top: -1px;
+}
+.imageCollaps{
+  border: 1.82px solid white;
+  border-radius: 50%;
+  height: 30px;
+  width: 30px;
+  overflow: hidden;
+  position: relative;
+}
+.imageCollaps:not(:first-child){
+  margin-left: -12px;
+}
+.nudgePadding{
+  padding: 10px 15px;
+}
+.absolutetext{
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%,-50%);
+}
+.percentageFiller{
+  position: relative;
+  width: fit-content;
+  height: 110px;
+}
+.percentageFiller svg{
+  border-radius: 50%;
+  background-color: #005CDE33;
 }
 @media (max-width: 1499.98px) {
   .merchantGrid {

@@ -1,4 +1,4 @@
-  import React, { useState } from "react";
+import React, { useState } from "react";
 import TabContainer from "../../../common/dashboards/TabContainer";
 import BarChart from "../../../common/charts/BarChart";
 
@@ -12,7 +12,9 @@ import "../../../assets/css/merchant.css";
 import chartnudge from "../../../assets/images/chartnudgefill.svg";
 import chartPromotion from "../../../assets/images/chartPromotionfill.svg";
 import chartfollower from "../../../assets/images/chartfollowerfill.svg";
-
+import logoutBg from "../../../assets/images/logoutBg.svg";
+import modalbg from "../../../assets/images/modalbg.png";
+import emptyBG from "../../../assets/images/emptyBG.png";
 
 const MerchantDashboard = () => {
   const [activeTab, setActiveTab] = useState("1");
@@ -85,6 +87,35 @@ const MerchantDashboard = () => {
   ];
   return (
     <>
+      {/*********************** Empty Content ************************/}
+      {/* <div className="dashboard">
+        <div className="emptyHeight position-relative">
+          <img src={emptyBG} alt="" className="emptyBG" />
+          <div className="modal-content">
+            <div className="ant-modal-body">
+              <div className="modalbg">
+                <img src={modalbg} alt="" />
+              </div>
+              <div className="modalImage mb-30">
+                <img src={logoutBg} alt="" />
+              </div>
+              <div className="text-center mb-30">
+                <div className="fs-26 fw-700 mb-15">
+                  Welcome to Your <br />
+                  Restaurant Dashboard
+                </div>
+                <div className="fs-18">
+                  You do not have permission to access any business yet. Please
+                  contact your administrator for assistance.
+                </div>
+              </div>
+              <div className="div d-flex align-center gap-16">
+                <div className="btn deleteBtnfull w-100 gap-8"> Logout</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div> */}
       <div className="dashboard">
         <div className="card">
           <div className="d-flex flexWrap gap-20">
