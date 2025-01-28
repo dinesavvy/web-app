@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import addnudge from "../../../assets/images/addnudge.svg";
 import addCredits from "../../../assets/images/addCredits.svg";
 import searchIcon from "../../../assets/images/searchIcon.svg";
@@ -13,7 +13,7 @@ import modalbg from "../../../assets/images/modalbg.png";
 import { Breadcrumb } from "antd";
 import PercentageFiller from "./PercentageFiller";
 import CommonModal from "./CommonModal";
-import ActiveNudge from "./ActiveNudge";
+import MerchantNudgeDetails from "./MerchantNudgeDetails";
 
 const Nudges = () => {
         const [modal2Open, setModal2Open] = useState(false);
@@ -21,6 +21,18 @@ const Nudges = () => {
         const toggleSidebar = (item) => {
           setIsSidebarOpen((prevState) => !prevState);
         };
+        useEffect(() => {
+          if (isSidebarOpen) {
+            document.body.classList.add("overflow-Hidden");
+          } else {
+            document.body.classList.remove("overflow-Hidden");
+          }
+      
+          // Cleanup on component unmount
+          return () => {
+            document.body.classList.remove("overflow-Hidden");
+          };
+        }, [isSidebarOpen]);
   return (
     <>
       {/* <div className="emptyHeight">
@@ -139,17 +151,17 @@ const Nudges = () => {
               </div>
               <div className="gc fs-20 fw-700">$7</div>
             </div>
-            <div className="divider2"></div>
+            {/* <div className="divider2"></div>
             <div className="d-flex justify-between align-center gap-20 mb-20">
               <div className="fs-16 grey fw-500">
                 Promotional credits needed
               </div>
               <div className="gc fs-20 fw-700">$7</div>
-            </div>
+            </div> */}
             {/* <div className="mb-16">
               <input type="text" placeholder="Enter number of credits" />
             </div> */}
-            <div className="d-flex justify-between align-center gap-20 ">
+            {/* <div className="d-flex justify-between align-center gap-20 ">
               <div className="d-flex align-center gap-16 flex-wrap">
                 <div className="addNudge2 active">5 Nudges</div>
                 <div className="addNudge2">10 Nudges</div>
@@ -161,7 +173,7 @@ const Nudges = () => {
                 <img src={addCredits} alt="addCredits" />
                 Add Promotional Credits
               </div>
-            </div>
+            </div> */}
           </div>
           <div className="fs-20 fw-700 mb-10">Top Nudge</div>
           <div className="d-flex gap-20 ">
@@ -344,8 +356,9 @@ const Nudges = () => {
         </div>
       </div>
       <CommonModal modal2Open={modal2Open} setModal2Open={setModal2Open} modalImage={deleteModal}/>
-      <ActiveNudge
-        isOpen={isSidebarOpen}
+      <MerchantNudgeDetails
+      setIsSidebarOpen={setIsSidebarOpen}
+        isSidebarOpen={isSidebarOpen}
         toggleSidebar={toggleSidebar}
       />
     </>

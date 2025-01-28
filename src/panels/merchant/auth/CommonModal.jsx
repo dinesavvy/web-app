@@ -15,6 +15,8 @@ const CommonModal = ({
   setModal2Open,
   modalImage,
   removeTeamMember,
+  isSidebarOpen,
+  setIsSidebarOpen
 }) => {
   const messageApi = useCommonMessage();
   const getMerchantId = localStorage.getItem("merchantId");
@@ -24,29 +26,7 @@ const CommonModal = ({
     (state) => state?.removeTeamMember
   );
 
-  const deleteTeam = () => {
-    let payload = {
-      teamMappingId: removeTeamMember?._id,
-    };
-    dispatch(removeTeamMemberHandler(payload));
-  };
 
-  useEffect(() => {
-    if (removeTeamMemberSelector?.data?.statusCode === 200) {
-      messageApi.open({
-        type: "success",
-        content: removeTeamMemberSelector?.data?.message,
-      });
-      setModal2Open(false)
-      dispatch(removeTeamMemberAction.removeTeamMemberReset());
-      if (getMerchantId) {
-            let payload = {
-              locationId: getMerchantId,
-            };
-            dispatch(merchantTeamsHandler(payload));
-          }
-    }
-  }, [removeTeamMemberSelector]);
 
   return (
     <>
@@ -72,7 +52,7 @@ const CommonModal = ({
           </div>
         </div>
         <div className="div d-flex align-center gap-16">
-          <div className="btn btnSecondary w-100" onClick={deleteTeam}>
+          <div className="btn btnSecondary w-100" onClick={()=>{setIsSidebarOpen(false);setModal2Open(false)}}>
           Yes
           </div>
           <div className="btn w-100" onClick={() => setModal2Open(false)}>
