@@ -69,6 +69,7 @@ const Header = ({ handleTrigger }) => {
     "/merchant/dashboard": "Merchant Dashboard",
     "/merchant/followers": "Followers",
     "/merchant/nudges": "Nudges",
+    "/admin/nudges/template":"Nudge Templates"
   };
 
   return (
