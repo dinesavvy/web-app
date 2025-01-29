@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import addCircle from "../../../assets/images/addCircle.svg";
 import arrowRight from "../../../assets/images/arrowRight.svg";
 import MemberHierarchy from "./MemberHierarchy";
+import MemberPermissions from "./MemberPermissions";
 
 const Hierarchy = () => {
    const [isMemberHierarchy, setIsMemberHierarchy] = useState(false);
@@ -20,6 +21,22 @@ const Hierarchy = () => {
               document.body.classList.remove("overflow-Hidden");
             };
           }, [isMemberHierarchy]);
+   const [isMemberPermissions, setIsMemberPermissions] = useState(false);
+          const toggleMemberPermissions = (item) => {
+            setIsMemberPermissions((prevState) => !prevState);
+          };
+          useEffect(() => {
+            if (isMemberPermissions) {
+              document.body.classList.add("overflow-Hidden");
+            } else {
+              document.body.classList.remove("overflow-Hidden");
+            }
+        
+            // Cleanup on component unmount
+            return () => {
+              document.body.classList.remove("overflow-Hidden");
+            };
+          }, [isMemberPermissions]);
   return (
     <>
       <div className="dashboard">
@@ -97,7 +114,7 @@ const Hierarchy = () => {
           <div className="divider2"></div>
           <div className="fs-20 fw-600 mb-20">My Roles</div>
           <div className="merchantGrid">
-            <div className="myteamFlex">
+            <div className="myteamFlex" onClick={()=>toggleMemberPermissions()}>
               <div className="d-flex align-center gap-8">
                 <div>
                   <div className="fs-16 ">Manager</div>
@@ -113,6 +130,9 @@ const Hierarchy = () => {
       <MemberHierarchy
         isMemberHierarchy={isMemberHierarchy}
         toggleMemberHierarchy={toggleMemberHierarchy} />
+      <MemberPermissions
+        isMemberPermissions={isMemberPermissions}
+        toggleMemberPermissions={toggleMemberPermissions} />
     </>
   );
 };

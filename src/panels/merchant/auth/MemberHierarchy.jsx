@@ -1,7 +1,8 @@
 import React from "react";
 import closeRightSidebar from "../../../assets/images/closeRightSidebar.svg";
-import google from "../../../assets/images/google.svg";
-import apple from "../../../assets/images/apple.svg";
+import phoneEdit from "../../../assets/images/phoneEdit.svg";
+import editMember from "../../../assets/images/editMember.svg";
+import deleteMember from "../../../assets/images/deleteMember.svg";
 
 const MemberHierarchy = ({ isMemberHierarchy, toggleMemberHierarchy }) => {
   return (
@@ -20,6 +21,7 @@ const MemberHierarchy = ({ isMemberHierarchy, toggleMemberHierarchy }) => {
         </div>
         <div className="divider2"></div>
         <div className="overflowSidebar">
+          {/* Add and Edit Member */}
           <div className="mb-40">
             <div className="mb-20">
               <label htmlFor="name" className="grey mb-10 fs-16 fw-500">
@@ -36,13 +38,18 @@ const MemberHierarchy = ({ isMemberHierarchy, toggleMemberHierarchy }) => {
               <label htmlFor="number" className="grey mb-10 fs-16 fw-500">
                 Phone number
               </label>
-              <input
-                type="text"
-                name="phone_number"
-                placeholder="Enter your phone number"
-                id="phone_number"
-                className="input"
-              />
+              <div className="position-relative">
+                <input
+                  type="text"
+                  name="phone_number"
+                  placeholder="Enter your phone number"
+                  id="phone_number"
+                  className="input"
+                />
+                <div className="inputIcon">
+                  <img src={phoneEdit} alt="" />
+                </div>
+              </div>
             </div>
             <div className="mb-20">
               <label htmlFor="location" className="grey mb-10 fs-16 fw-500">
@@ -82,8 +89,14 @@ const MemberHierarchy = ({ isMemberHierarchy, toggleMemberHierarchy }) => {
               </div>
             </div>
           </div>
-          <div className="btn w-100">
-            Add
+          {/* Add Details */}
+          <div className="btn w-100">Add</div>
+          {/* Update Details*/}
+          <div className="d-flex align-center gap-10">
+            <div className="btn  w-100 gap-8">Update</div>
+            <div className="deleteBtn btn">
+              <img src={deleteMember} alt="" />
+            </div>
           </div>
         </div>
       </div>
