@@ -5,13 +5,14 @@ import circleinfo from "../../../assets/images/circleinfo.gif";
 import circleAbsolute2 from "../../../assets/images/circleAbsolute2.gif";
 import { Pagination } from "antd";
 import FollowerDetails from "./FollowerDetails";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { businessFollowerListHandler } from "../../../redux/action/businessAction/businessFollowers";
 import Loader from "../../../common/Loader/Loader";
 import moment from "moment";
 import createAdd from "../../../assets/images/createAdd.svg";
 import deleteList from "../../../assets/images/deleteList.svg";
+import { followerAnalyticsHandler } from "../../../redux/action/businessAction/followerAnalytics";
 
 const Followers = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -22,6 +23,51 @@ const Followers = () => {
   const dispatch = useDispatch();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
+  const { state } = useLocation();
+  const businessListFollowerListSelector = useSelector(
+    (state) => state?.businessListFollowerList
+  );
+  const isAnyCheckboxChecked = Object.values(checkedItems).some(
+    (checked) => checked
+  );
+
+  const filteredFollowers =
+    businessListFollowerListSelector?.data?.data?.records?.filter((item) =>
+      item.userId.displayName?.toLowerCase().includes(searchQuery.toLowerCase())
+    ) || [];
+  console.log(state, "statestate");
+
+  useEffect(() => {
+    if (
+      (Array.isArray(state?.statePrev?.selectedItems) &&
+        state?.statePrev?.selectedItems?.length > 0) ||
+      state?.statePrev?.locationId?.locationId
+    ) {
+      const updatedCheckedItems = {};
+
+      businessListFollowerListSelector?.data?.data?.records?.forEach(
+        (item, index) => {
+          // Mark as checked if the item is in selectedItems
+          const isSelected =
+            Array.isArray(state?.statePrev?.selectedItems) &&
+            state?.statePrev?.selectedItems?.some(
+              (selectedItem) => selectedItem?._id === item?._id
+            );
+          updatedCheckedItems[index] = isSelected;
+        }
+      );
+      setCheckedItems(updatedCheckedItems);
+      setSelectedItems(state?.statePrev?.selectedItems || []); // Ensure selectedItems is an array
+    }
+  }, [state?.statePrev?.selectedItems, businessListFollowerListSelector]);
+
+  const followerAnalyticsSelector = useSelector(
+    (state) => state?.followerAnalytics
+  );
+  useEffect(() => {
+    dispatch(followerAnalyticsHandler());
+  }, []);
+
   const getMerchantBusinessSelector = JSON.parse(
     localStorage.getItem("selectedBusiness")
   );
@@ -29,13 +75,6 @@ const Followers = () => {
   const handlePaginationChange = (page, pageSize) => {
     setPagination({ page, limit: pageSize });
   };
-
-  const businessListFollowerListSelector = useSelector(
-    (state) => state?.businessListFollowerList
-  );
-  const isAnyCheckboxChecked = Object.values(checkedItems).some(
-    (checked) => checked
-  );
 
   // Checkbox onChange
   const handleCheckboxChange = (index, isChecked, item) => {
@@ -108,11 +147,6 @@ const Followers = () => {
     dispatch(businessFollowerListHandler(payload));
   }, [searchQuery]);
 
-  const filteredFollowers =
-    businessListFollowerListSelector?.data?.data?.records?.filter((item) =>
-      item.userId.displayName?.toLowerCase().includes(searchQuery.toLowerCase())
-    ) || [];
-
   return (
     <>
       {businessListFollowerListSelector?.isLoading && <Loader />}
@@ -124,7 +158,9 @@ const Followers = () => {
             <div>
               <div className="circleinfo mb-10">
                 <img src={circleAbsolute2} className="circleAbsolute" alt="" />
-                <div className="fs-34 fw-700 z1">10</div>
+                <div className="fs-34 fw-700 z1">
+                  {followerAnalyticsSelector?.data?.data?.followerCount}
+                </div>
                 <div className="fs-14 z1">to go</div>
               </div>
             </div>
@@ -135,7 +171,9 @@ const Followers = () => {
             <div>
               <div className="circleinfo mb-10">
                 <img src={circleinfo} className="circleAbsolute" alt="" />
-                <div className="fs-34 fw-700 z1">256</div>
+                <div className="fs-34 fw-700 z1">
+                  {followerAnalyticsSelector?.data?.data?.nearByFollowerCount}
+                </div>
               </div>
             </div>
           </div>
@@ -145,7 +183,9 @@ const Followers = () => {
             <div>
               <div className="circleinfo mb-10">
                 <img src={circleAbsolute2} className="circleAbsolute" alt="" />
-                <div className="fs-34 fw-700 z1">15</div>
+                <div className="fs-34 fw-700 z1">
+                  {followerAnalyticsSelector?.data?.data?.loyaltyFollowerCount}
+                </div>
                 <div className="fs-14 z1">to go</div>
               </div>
             </div>
@@ -175,9 +215,9 @@ const Followers = () => {
             <img src={searchIcon} alt="" className="absoluteImage" />
           </div>
           <div className="merchantGrid mb-30">
-            {filteredFollowers?.map((item, index) => {
-              return (
-                <>
+            {filteredFollowers && filteredFollowers?.length > 0 ? (
+              filteredFollowers?.map((item, index) => {
+                return (
                   <div className="cardFollow" key={index}>
                     <div className="d-flex justify-between gap-12">
                       <div className="d-flex align-center gap-12">
@@ -196,7 +236,7 @@ const Followers = () => {
                               item?.userId?.displayName?.slice(1)}
                           </div>
                           <div className="fs-14 fw-300 o5">
-                            {moment(item?.createdAt).format("MMMM,YYYY")}
+                            {moment(item?.createdAt).format("MMMM, YYYY")}
                           </div>
                         </div>
                       </div>
@@ -213,12 +253,11 @@ const Followers = () => {
                               )
                             }
                           />
-                          <span class="checkmark"></span>
+                          <span className="checkmark"></span>
                         </label>
                       </div>
                     </div>
                     <div className="divider2"></div>
-
                     <div className="fs-14 mb-6">Preferences</div>
                     <div className="flexTag mb-20">
                       {item?.customerPreferenceData?.map((item, index) => {
@@ -238,9 +277,11 @@ const Followers = () => {
                       View Details
                     </div>
                   </div>
-                </>
-              );
-            })}
+                );
+              })
+            ) : (
+              <div className="no-data">No Data Found</div>
+            )}
           </div>
           <div className="d-flex align-center justify-between flexPagination">
             {/* <div className="fs-16">Showing 1 to 5 of 10 Restaurants</div> */}
@@ -257,19 +298,42 @@ const Followers = () => {
               onChange={handlePaginationChange}
             />
           </div>
-          {isAnyCheckboxChecked  && (
+          {isAnyCheckboxChecked && !state?.statePrev?.selectedItems && (
             <div className="floatAdd">
               <div
                 className="btn fs-16"
+                onClick={() =>
+                  navigate("/merchant/create-nudge", {
+                    state: { locationId: state, selectedItems },
+                  })
+                }
                 // onClick={() =>
-                //   navigate("/admin/nudges/template", {
-                //     state: { locationId: state, selectedItems },
+                //   navigate("/merchant/create-nudge", {
+                //     state: { selectedItems: selectedItems },
                 //   })
                 // }
-                onClick={()=>navigate("/merchant/create-nudge")}
               >
                 <img src={createAdd} alt="image" />
                 <div>Create nudge</div>
+              </div>
+              <div className="h-24 cursor-pointer" onClick={handleDelete}>
+                <img src={deleteList} className="w-100 h-100" alt="" />
+              </div>
+            </div>
+          )}
+
+          {isAnyCheckboxChecked && state?.statePrev?.selectedItems && (
+            <div className="floatAdd">
+              <div
+                className="btn fs-16"
+                onClick={() =>
+                  navigate("/merchant/create-nudge", {
+                    state: { locationId: state, selectedItems },
+                  })
+                }
+              >
+                {/* <img src={createAdd} alt="image" /> */}
+                <div>Continue</div>
               </div>
               <div className="h-24 cursor-pointer" onClick={handleDelete}>
                 <img src={deleteList} className="w-100 h-100" alt="" />

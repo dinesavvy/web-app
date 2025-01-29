@@ -10,27 +10,30 @@ import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import { fileUploadHandler } from "../../../redux/action/fileUpload";
 import { businessNudgesTemplateHandler } from "../../../redux/action/businessAction/businessNudgesTemplate";
+import MerchantNudgecart from "./MerchantNudgeCart";
+import { businessFileUploadHandler } from "../../../redux/action/businessAction/businessFileUpload";
 
 const NudgeTemplateMerchant = () => {
   const [uploadedImage, setUploadedImage] = useState(nudgesCards?.imageUrl[0]);
 
   const dispatch = useDispatch();
   const { state } = useLocation();
+  console.log(state,"statestatestatestate")
 
-  const selectedBusiness = JSON.parse(localStorage.getItem("selectedBusiness"))
+  const selectedBusiness = JSON.parse(localStorage.getItem("selectedBusiness"));
 
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [nudgesCards, setNudgesCard] = useState(null);
   const getBusinessNudgesTemplateSelector = useSelector(
     (state) => state?.businessNudgesTemplate
   );
-  const fileuploadSelector = useSelector((state) => state?.fileupload);
+  const fileuploadSelector = useSelector((state) => state?.businessFileUpload);
 
   useEffect(() => {
-    if(state?.locationId?.nudgePrev){
-      setNudgesCard(state?.locationId?.nudgePrev)
+    if (state?.locationId?.nudgePrev) {
+      setNudgesCard(state?.locationId?.nudgePrev);
     }
-  }, [state])
+  }, [state]);
 
   const navigate = useNavigate();
 
@@ -81,7 +84,7 @@ const NudgeTemplateMerchant = () => {
       let payload = {
         fileList: [{ fileName: file?.name }],
       };
-      dispatch(fileUploadHandler(payload));
+      dispatch(businessFileUploadHandler(payload));
     }
   };
 
@@ -137,16 +140,14 @@ const NudgeTemplateMerchant = () => {
             enableReinitialize
             initialValues={{
               title:
-                nudgesCards?.title ||
-                state?.locationId?.nudgePrev?.title ||
-                "",
+                nudgesCards?.title || state?.locationId?.statePrev?.title || "",
               description:
                 nudgesCards?.description ||
-                state?.locationId?.nudgePrev?.description ||
+                state?.locationId?.statePrev?.description ||
                 "",
               quantity:
                 nudgesCards?.quantity ||
-                state?.locationId?.nudgePrev?.quantity ||
+                state?.locationId?.statePrev?.quantity ||
                 "",
             }}
             validationSchema={validationSchema}
@@ -154,12 +155,12 @@ const NudgeTemplateMerchant = () => {
           >
             {({ errors, touched, values, isValid }) => (
               <Form>
-                {(nudgesCards || state?.locationId?.nudgePrev) && (
+                {(nudgesCards || state?.locationId?.statePrev) && (
                   <>
                     <div className="tabPadding mb-20">
                       <div className="fs-24 fw-600">
                         {nudgesCards?.title ||
-                          state?.locationId?.nudgePrev?.title}
+                          state?.locationId?.statePrev?.title}
                       </div>
                       <div className="divider"></div>
                       <div className="d-flex align-end gap-16 mb-20 flexWrapsm">
@@ -167,8 +168,7 @@ const NudgeTemplateMerchant = () => {
                           <img
                             src={
                               uploadedImage ||
-                              nudgesCards?.imageUrl[0] ||
-                              state?.locationId?.nudgePrev?.imageUrl[0]
+                              nudgesCards?.imageUrl[0] 
                             }
                             alt=""
                           />
@@ -261,11 +261,16 @@ const NudgeTemplateMerchant = () => {
                     </div>
                     <div
                       className="tabPadding mb-20"
-                      onClick={() => {
-                        navigate("/admin/merchant/details", {
-                          state: { statePrev: state, nudgePrev: nudgesCards }
-                        });
-                      }}
+                      // onClick={() => {
+                      //   navigate("/merchant/followers", {
+                      //     state: { statePrev: state, nudgePrev: nudgesCards }
+                      //   });
+                      // }}
+                      onClick={() =>
+                        navigate("/merchant/followers", {
+                          state: { statePrev: state },
+                        })
+                      }
                     >
                       <div className="d-flex justify-between align-center gap-20 w-100">
                         <div>
@@ -273,32 +278,11 @@ const NudgeTemplateMerchant = () => {
                             Select your audience
                           </div>
                           <div className="fs-16 darkBlack">
-                            {/* By default all your followers will be sent this
-                              Nudge. */}
-                            {/* {state?.selectedItems?.length > 0 ||
-                            state?.locationId?.state?.selectedItems?.length >
-                              0 ? (
-                              <div className="flexTagFull">
-                                {(
-                                  state?.locationId?.state?.selectedItems ||
-                                  state?.selectedItems
-                                )?.map((item, index) => (
-                                  <div key={index}>
-                                    {item?.userInfo?.displayName}
-                                  </div>
-                                ))}
-                              </div>
-                            ) : (
-                              <div>
-                                By default all your followers will be sent this
-                                Nudge.
-                              </div>
-                            )} */}
                             {state?.selectedItems?.length > 0 ? (
                               <div className="flexTagFull">
                                 {state?.selectedItems?.map((item, index) => (
                                   <div key={index}>
-                                    {item?.userInfo?.displayName}
+                                    {item?.userId?.displayName}
                                   </div>
                                 ))}
                               </div>
@@ -364,7 +348,7 @@ const NudgeTemplateMerchant = () => {
                         Add to Cart
                       </button>
                     </div>
-                    {/* <NudgeCart
+                    <MerchantNudgecart
                       isOpen={isCartOpen}
                       toggleCart={toggleCart}
                       uploadedImage={uploadedImage}
@@ -373,7 +357,7 @@ const NudgeTemplateMerchant = () => {
                       state={state}
                       fileuploadSelector={fileuploadSelector}
                       setIsCartOpen={setIsCartOpen}
-                    /> */}
+                    />
                   </>
                 )}
               </Form>

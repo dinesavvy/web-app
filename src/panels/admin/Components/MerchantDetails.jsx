@@ -139,23 +139,7 @@ const MerchantDetails = () => {
       dispatch(nudgesDetailsHandler(payload));
     }
   };
-
-  // const handleCheckboxChange = (index, isChecked, item) => {
-  //   setCheckedItems((prev) => ({
-  //     ...prev,
-  //     [index]: isChecked,
-  //   }));
-
-  //   if (isChecked) {
-  //     // Add the item to the selectedItems array
-  //     setSelectedItems((prev) => [...prev, item]);
-  //   } else {
-  //     // Remove the item from the selectedItems array
-  //     setSelectedItems((prev) =>
-  //       prev.filter((selectedItem) => selectedItem !== item)
-  //     );
-  //   }
-  // };
+  
   const handleCheckboxChange = (index, isChecked, item) => {
     setCheckedItems((prev) => ({
       ...prev,

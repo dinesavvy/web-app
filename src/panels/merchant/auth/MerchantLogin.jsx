@@ -122,7 +122,7 @@ const MerchantLogin = () => {
                           {/* <PhoneInput
                              placeholder="Enter phone number"
                              value={values?.phoneNumber}
-                             onChange={(phone) => setFieldValue("phoneNumber", phone)}
+                             onChange={(phone) => {setFieldValue("phoneNumber", phone);console.log(phone,"phone")}}
                              defaultCountry="US"  // Change this to the default country code you want
                              international  // Only show country names (without flags)
                              countrySelectProps={{ unicodeFlags: false }} // Optionally remove unicode flags
