@@ -528,6 +528,8 @@
 .image70 {
   height: 70px;
   min-width: 70px;
+  width: 70px;
+  max-width: 70px;
   border-radius: 8px;
   overflow: hidden;
 }
@@ -646,11 +648,11 @@
 }
 /* Sidebar.css */
 .rightSidebar {
-  width: 500px;
+  width: 400px;
   height: 100vh;
   position: fixed;
   top: 0;
-  right: -500px;
+  right: -400px;
   transition: right 0.3s ease;
   padding: 20px;
   box-sizing: border-box;

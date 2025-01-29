@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import TabContainer from "../../../common/dashboards/TabContainer";
 import BarChart from "../../../common/charts/BarChart";
 import GraphWithCircle from "../../../common/dashboards/GraphWithCircle";
@@ -15,14 +15,27 @@ import logoutBg from "../../../assets/images/logoutBg.svg";
 import modalbg from "../../../assets/images/modalbg.png";
 import emptyBG from "../../../assets/images/emptyBG.png";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { businessDashboardHandler } from "../../../redux/action/businessAction/businessDashboard";
+import LineChart from "../../../common/charts/LineChart";
 
 const MerchantDashboard = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [activeTab, setActiveTab] = useState("1");
+
+  const businessDashBoardSelector = useSelector(
+    (state) => state?.businessDashboard
+  );
+  console.log(businessDashBoardSelector, "businessDashBoardSelector");
 
   const getSelectedBusiness = JSON.parse(
     localStorage.getItem("selectedBusiness")
   );
+
+  useEffect(() => {
+    dispatch(businessDashboardHandler());
+  }, []);
 
   console.log(getSelectedBusiness, "getSelectedBusiness");
 
@@ -93,6 +106,10 @@ const MerchantDashboard = () => {
       ),
     },
   ];
+
+  const labels = businessDashBoardSelector?.data?.data?.nudgeData.map((item) => `${item._id}`); 
+  const datas = businessDashBoardSelector?.data?.data?.nudgeData.map((item) => item.value); 
+
   return (
     <>
       {/*********************** Empty Content ************************/}
@@ -173,35 +190,36 @@ const MerchantDashboard = () => {
               />
               <PromotionCard
                 title="Nudges"
-                count={77}
+                count={businessDashBoardSelector?.data?.data?.nudgeData?.length}
                 chartPromotionImage={chartnudge}
                 buttonText="See Nudges"
+                onButtonClick={() => navigate("/merchant/nudges")}
                 middleComponent={
-                  <BarChart
-                    labels={["Bar 1", "Bar 2"]}
-                    datas={[58, 160]}
-                    className="w-100"
-                    barThickness={100}
-                    borderSkipped={false}
-                    xDisplay={false}
-                    yDisplay={true}
-                  />
+                  // <BarChart
+                  //   labels={["Bar 1", "Bar 2"]}
+                  //   datas={[58, 160]}
+                  //   className="w-100"
+                  //   barThickness={100}
+                  //   borderSkipped={false}
+                  //   xDisplay={false}
+                  //   yDisplay={true}
+                  // />
+                  <LineChart labels={["",""]} datas={datas} className="w-100" />
                 }
               />{" "}
               <PromotionCard
                 title="Followers"
-                count={79}
+                count={
+                  businessDashBoardSelector?.data?.data?.followerData?.length
+                }
+                onButtonClick={() => navigate("/merchant/followers")}
                 chartPromotionImage={chartfollower}
                 buttonText="See Followers"
                 middleComponent={
-                  <BarChart
-                    labels={["Bar 1", "Bar 2"]}
+                  <LineChart
+                    labels={["", ""]}
                     datas={[45, 89]}
                     className="w-100"
-                    barThickness={100}
-                    borderSkipped={false}
-                    xDisplay={false}
-                    yDisplay={true}
                   />
                 }
               />

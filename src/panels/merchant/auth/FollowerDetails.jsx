@@ -10,29 +10,43 @@ import { useDispatch, useSelector } from "react-redux";
 
 const FollowerDetails = ({ isOpen, toggleSidebar, followerDetails }) => {
   const navigate = useNavigate();
-// console.log(followerDetails,"followerDetails")
+  // console.log(followerDetails,"followerDetails")
 
-const businessListByUserIdSelector = useSelector((state)=>state?.businessListByUserId)
-console.log(followerDetails,"followerDetails")
+  const businessListByUserIdSelectorAccepted = useSelector(
+    (state) => state?.businessListByUserId
+  );
 
-const dispatch = useDispatch()
+  const businessListByUserIdSelectorDeclined = useSelector(
+    (state) => state?.businessListByUserId
+  );
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (followerDetails) {
-      let payload = {
+      let payloadAccepted = {
         page: 1,
         limit: 10,
         userId: followerDetails?.userId?._id,
-        nudgeType: "Accepted", // "Received", "Accepted", "Denied", "NoAnswer", "Redeemed"
+        nudgeType: "Accepted",
       };
-      dispatch(businessListByUserIdHandler(payload))
+
+      let payloadDenied = {
+        page: 1,
+        limit: 10,
+        userId: followerDetails?.userId?._id,
+        nudgeType: "Denied",
+      };
+
+      dispatch(businessListByUserIdHandler(payloadAccepted));
+      dispatch(businessListByUserIdHandler(payloadDenied));
     }
   }, [followerDetails]);
 
   return (
     <>
+      {/* {businessListByUserIdSelectorAccepted?.isLoading && <Loader />} */}
       {isOpen && <div className="overlay2" onClick={toggleSidebar}></div>}
-
       {/* Sidebar */}
       <div className={`rightSidebar ${isOpen ? "open" : ""}`}>
         <div className="d-flex justify-between align-center">
@@ -100,34 +114,66 @@ const dispatch = useDispatch()
             })}
           </div>
           <div className="fs-14 mb-16">Accepted Nudges</div>
-          <div className=" d-flex align-center gap-16">
-            <div className="image70">
-              <img src={dish} alt="dish" />
+          {businessListByUserIdSelectorAccepted?.acceptedList?.data?.records
+            ?.length > 0 ? (
+            businessListByUserIdSelectorAccepted.acceptedList.data.records.map(
+              (itemAcceptNudges, indexAcceptNudges) => {
+                return (
+                  <React.Fragment key={indexAcceptNudges}>
+                    <div className="d-flex align-center gap-16">
+                      <div className="image70">
+                        <img src={itemAcceptNudges?.photoURL} alt="dish" />
+                      </div>
+                      <div>
+                        <div className="fs-16 fw-700 mb-5">
+                          {itemAcceptNudges?.title}
+                        </div>
+                        <div className="fs-14">{itemAcceptNudges?.message}</div>
+                      </div>
+                    </div>
+                    <div className="divider2"></div>
+                  </React.Fragment>
+                );
+              }
+            )
+          ) : (
+            <div className="fs-16 fw-700 text-center mt-3">
+              No data available
             </div>
-            <div>
-              <div className="fs-16 fw-700  mb-5">Free drink</div>
-              <div className="fs-14">
-                Free drink on Happy Hours! From 07:00 PM to 08:00 PM
-              </div>
-            </div>
-          </div>
-          <div className="divider2"></div>
+          )}
+
           <div className="pc fs-16 fw-700 cursor-pointer text-center mb-20">
             Show More
           </div>
           <div className="fs-14 mb-16">Declined Nudges</div>
-          <div className=" d-flex align-center gap-16">
-            <div className="image70">
-              <img src={dish} alt="dish" />
+          {businessListByUserIdSelectorDeclined?.deniedList?.data?.records
+            ?.length > 0 ? (
+            businessListByUserIdSelectorDeclined.deniedList.data.records.map(
+              (itemDeclined, indexDeclined) => {
+                return (
+                  <React.Fragment key={indexDeclined}>
+                    <div className="d-flex align-center gap-16">
+                      <div className="image70">
+                        <img src={itemDeclined?.photoURL} alt="dish" />
+                      </div>
+                      <div>
+                        <div className="fs-16 fw-700 mb-5">
+                          {itemDeclined?.title}
+                        </div>
+                        <div className="fs-14">{itemDeclined?.message}</div>
+                      </div>
+                    </div>
+                    <div className="divider2"></div>
+                  </React.Fragment>
+                );
+              }
+            )
+          ) : (
+            <div className="fs-16 fw-700 text-center mt-3">
+              No data available
             </div>
-            <div>
-              <div className="fs-16 fw-700  mb-5">Free drink</div>
-              <div className="fs-14">
-                Free drink on Happy Hours! From 07:00 PM to 08:00 PM
-              </div>
-            </div>
-          </div>
-          <div className="divider2"></div>
+          )}
+
           <div className="pc fs-16 fw-700 cursor-pointer text-center mb-20">
             Show More
           </div>

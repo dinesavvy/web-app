@@ -9,6 +9,7 @@ import businessNudgesTemplateSlice from "../action/businessAction/businessNudges
 import businessFileUploadSlice from "../action/businessAction/businessFileUpload";
 import followerAnalyticsSlice from "../action/businessAction/followerAnalytics";
 import businessListByUserIdSlice from "../action/businessAction/businessListByUserId";
+import businessDashboardSlice from "../action/businessAction/businessDashboard"
 
 const store = configureStore({
   reducer: {
@@ -22,6 +23,7 @@ const store = configureStore({
     businessFileUpload: businessFileUploadSlice,
     followerAnalytics: followerAnalyticsSlice,
     businessListByUserId: businessListByUserIdSlice,
+    businessDashboard:businessDashboardSlice
   },
 });
 

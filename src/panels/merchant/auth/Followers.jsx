@@ -35,7 +35,6 @@ const Followers = () => {
     businessListFollowerListSelector?.data?.data?.records?.filter((item) =>
       item.userId.displayName?.toLowerCase().includes(searchQuery.toLowerCase())
     ) || [];
-  console.log(state, "statestate");
 
   useEffect(() => {
     if (
