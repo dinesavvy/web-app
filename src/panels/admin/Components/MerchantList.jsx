@@ -104,11 +104,13 @@ const MerchantList = () => {
                     <div className="merchantCard" key={index}>
                       <div className="topPadding">
                         <div className="merchantImage">
-                          <img src={item?.photoURL||noImageFound} alt="" />
+                          <img src={item?.photoURL || noImageFound} alt="" />
                         </div>
                         <div className="fs-16 fw-700 mb-10">
                           {/* Garden Grove Café & Bistro */}
-                          {item?.businessName && item?.businessName.charAt(0).toUpperCase() + item?.businessName.slice(1)}
+                          {item?.businessName &&
+                            item?.businessName.charAt(0).toUpperCase() +
+                              item?.businessName.slice(1)}
                         </div>
                       </div>
                       <div className="divider2 m-0"></div>
@@ -142,7 +144,9 @@ const MerchantList = () => {
                             </div>
                           </div>
                           <div>
-                            <div className="fs-14 mb-4">Depletions Potential</div>
+                            <div className="fs-14 mb-4">
+                              Depletions Potential
+                            </div>
                             <div className="fs-14 fw-600">
                               {item?.nudge?.nudgeCredit}
                             </div>
@@ -176,7 +180,7 @@ const MerchantList = () => {
                           </div>
                         </div>
                         <div className="gridBtn">
-                        <div
+                          <div
                             className="btn disabled"
                             // onClick={() => {
                             //   navigate("/admin/merchant/details", {
@@ -194,7 +198,10 @@ const MerchantList = () => {
                                 state: item,
                               });
                               localStorage.setItem("merchantId", item?._id);
-                              localStorage.setItem("restaurantName",item?.businessName)
+                              localStorage.setItem(
+                                "restaurantName",
+                                item?.businessName
+                              );
                               // localStorage.setItem("merchantData", JSON.stringify(item));
                             }}
                           >
@@ -217,19 +224,20 @@ const MerchantList = () => {
               <div>No data found</div>
             )}
           </div>
-          <div className="d-flex align-center justify-between flexPagination">
-            <div className="fs-16">
-              Showing {pagination.page} to{" "}
-              {pagination.limit} of{" "}
-              {merchantListSelector?.data?.data?.recordsCount} Restaurants
+          {merchantListSelector?.data?.data?.records?.length > 0 && (
+            <div className="d-flex align-center justify-between flexPagination">
+              <div className="fs-16">
+                Showing {pagination.page} to {pagination.limit} of{" "}
+                {merchantListSelector?.data?.data?.recordsCount} Restaurants
+              </div>
+              <Pagination
+                current={pagination.page}
+                pageSize={pagination.limit}
+                total={merchantListSelector?.data?.data?.recordsCount}
+                onChange={handlePaginationChange}
+              />
             </div>
-            <Pagination
-              current={pagination.page}
-              pageSize={pagination.limit}
-              total={merchantListSelector?.data?.data?.recordsCount}
-              onChange={handlePaginationChange}
-            />
-          </div>
+          )}
         </div>
       </div>
     </>

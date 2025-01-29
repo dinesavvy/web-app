@@ -1841,11 +1841,12 @@ const MerchantDetails = () => {
                         <div>No data found</div>
                       )}
                     </div>
+                    {followerListSelector?.data?.data?.records?.length > 0 && (
                     <div className="d-flex align-center justify-between flexPagination">
                       <div className="fs-16">
                         Showing {pagination.page} to {pagination.limit} of{" "}
                         {followerListSelector?.data?.data?.recordsCount}{" "}
-                        Restaurants
+                        Followers
                       </div>
                       <Pagination
                         current={pagination.page}
@@ -1854,6 +1855,7 @@ const MerchantDetails = () => {
                         onChange={handlePaginationChange}
                       />
                     </div>
+                    )}
                   </div>
                   {isAnyCheckboxChecked && !state?.statePrev?.selectedItems && (
                     <div className="floatAdd">

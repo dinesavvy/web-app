@@ -140,19 +140,21 @@ const TeamMember = ({ merchantDetailsSelector, activeTab3, setActiveTab3 }) => {
             <div>No data found</div>
           )}
         </div>
-        <div className="d-flex align-center justify-between flexPagination">
-          <div className="fs-16">
-            Showing {pagination.page} to{" "}
-            {merchantTeamsSelector?.data?.data?.recordsCount} of{" "}
-            {merchantTeamsSelector?.data?.data?.recordsCount} Teams
+        {merchantTeamsSelector?.data?.data?.records?.length > 0 && (
+          <div className="d-flex align-center justify-between flexPagination">
+            <div className="fs-16">
+              Showing {pagination.page} to{" "}
+              {merchantTeamsSelector?.data?.data?.recordsCount} of{" "}
+              {merchantTeamsSelector?.data?.data?.recordsCount} Teams
+            </div>
+            <Pagination
+              current={pagination.page}
+              pageSize={pagination.limit}
+              total={merchantTeamsSelector?.data?.data?.recordsCount}
+              onChange={handlePaginationChange}
+            />
           </div>
-          <Pagination
-            current={pagination.page}
-            pageSize={pagination.limit}
-            total={merchantTeamsSelector?.data?.data?.recordsCount}
-            onChange={handlePaginationChange}
-          />
-        </div>
+        )}
       </div>
       <CommonModal
         modal2Open={modal2Open}

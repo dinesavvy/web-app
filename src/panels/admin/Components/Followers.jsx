@@ -362,18 +362,20 @@ const Followers = () => {
               )}
             </div>
           )}
-          <div className="d-flex align-center justify-between flexPagination">
-            <div className="fs-16">
-              Showing {pagination.page} to {pagination.limit} of{" "}
-              {followerListSelector?.data?.data?.recordsCount} Restaurants
+          {followerListSelector?.data?.data?.records?.length > 0 && (
+            <div className="d-flex align-center justify-between flexPagination">
+              <div className="fs-16">
+                Showing {pagination.page} to {pagination.limit} of{" "}
+                {followerListSelector?.data?.data?.recordsCount} Followers
+              </div>
+              <Pagination
+                current={pagination.page}
+                pageSize={pagination.limit}
+                total={followerListSelector?.data?.data?.recordsCount}
+                onChange={handlePaginationChange}
+              />
             </div>
-            <Pagination
-              current={pagination.page}
-              pageSize={pagination.limit}
-              total={followerListSelector?.data?.data?.recordsCount}
-              onChange={handlePaginationChange}
-            />
-          </div>
+          )}
         </div>
       </div>
       {arr?.length ? (

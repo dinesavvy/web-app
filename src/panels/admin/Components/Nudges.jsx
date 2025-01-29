@@ -144,7 +144,9 @@ const Nudges = () => {
                       <div className="radioCafeName">
                         <div>
                           <div className="pc fs-14 fw-500">
-                          {option?.businessName && option.businessName.charAt(0).toUpperCase() + option.businessName.slice(1)}
+                            {option?.businessName &&
+                              option.businessName.charAt(0).toUpperCase() +
+                                option.businessName.slice(1)}
                           </div>
                           <div className="fs-12 oneLine">
                             {`${option?.address?.addressLine1 || ""} ${
@@ -165,6 +167,7 @@ const Nudges = () => {
                 <div className="no-restaurants-found">No restaurant found</div>
               )}
             </div>
+            {merchantsListSelector?.data?.data?.records?.length > 0 && (
             <div className="d-flex align-center justify-between flexPagination mt-20">
               <div className="fs-16">
                 Showing {pagination.page} to {pagination.limit} of{" "}
@@ -177,6 +180,7 @@ const Nudges = () => {
                 onChange={handlePaginationChange}
               />
             </div>
+            )}
           </div>
         </div>
 
@@ -339,18 +343,21 @@ const Nudges = () => {
                   <div className="noDataFound">No Data Found</div>
                 )}
               </div>
-              <div className="d-flex align-center justify-between flexPagination">
-                <div className="fs-16">
-                  Showing {pagination.page} to {pagination.limit} of{" "}
-                  {merchantsListSelector?.data?.data?.recordsCount} Restaurants
+              {nudgesListSelector?.data?.data?.records?.length > 0 && (
+                <div className="d-flex align-center justify-between flexPagination">
+                  <div className="fs-16">
+                    Showing {pagination.page} to {pagination.limit} of{" "}
+                    {merchantsListSelector?.data?.data?.recordsCount}{" "}
+                    Restaurants
+                  </div>
+                  <Pagination
+                    current={pagination.page}
+                    pageSize={pagination.limit}
+                    total={merchantsListSelector?.data?.data?.recordsCount}
+                    onChange={handlePaginationChange}
+                  />
                 </div>
-                <Pagination
-                  current={pagination.page}
-                  pageSize={pagination.limit}
-                  total={merchantsListSelector?.data?.data?.recordsCount}
-                  onChange={handlePaginationChange}
-                />
-              </div>
+              )}
             </div>
           </>
         )}
