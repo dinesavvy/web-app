@@ -6,6 +6,9 @@ import businessListFollowerListSlice from "../action/businessAction/businessFoll
 import businessNudgesListSlice from "../action/businessAction/businessNudgesList";
 import businessCreateNudgeSlice from "../action/businessAction/businessCreateNudge";
 import businessNudgesTemplateSlice from "../action/businessAction/businessNudgesTemplate";
+import businessFileUploadSlice from "../action/businessAction/businessFileUpload";
+import followerAnalyticsSlice from "../action/businessAction/followerAnalytics";
+import businessListByUserIdSlice from "../action/businessAction/businessListByUserId";
 
 const store = configureStore({
   reducer: {
@@ -16,6 +19,9 @@ const store = configureStore({
     businessNudgesList: businessNudgesListSlice,
     businessCreateNudge: businessCreateNudgeSlice,
     businessNudgesTemplate: businessNudgesTemplateSlice,
+    businessFileUpload: businessFileUploadSlice,
+    followerAnalytics: followerAnalyticsSlice,
+    businessListByUserId: businessListByUserIdSlice,
   },
 });
 

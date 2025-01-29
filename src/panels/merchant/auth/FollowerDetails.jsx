@@ -5,9 +5,30 @@ import dish from "../../../assets/images/dish.png";
 import Loader from "../../../common/Loader/Loader";
 import moment from "moment";
 import { useNavigate } from "react-router-dom";
+import { businessListByUserIdHandler } from "../../../redux/action/businessAction/businessListByUserId";
+import { useDispatch, useSelector } from "react-redux";
 
 const FollowerDetails = ({ isOpen, toggleSidebar, followerDetails }) => {
   const navigate = useNavigate();
+// console.log(followerDetails,"followerDetails")
+
+const businessListByUserIdSelector = useSelector((state)=>state?.businessListByUserId)
+console.log(followerDetails,"followerDetails")
+
+const dispatch = useDispatch()
+
+  useEffect(() => {
+    if (followerDetails) {
+      let payload = {
+        page: 1,
+        limit: 10,
+        userId: followerDetails?.userId?._id,
+        nudgeType: "Accepted", // "Received", "Accepted", "Denied", "NoAnswer", "Redeemed"
+      };
+      dispatch(businessListByUserIdHandler(payload))
+    }
+  }, [followerDetails]);
+
   return (
     <>
       {isOpen && <div className="overlay2" onClick={toggleSidebar}></div>}

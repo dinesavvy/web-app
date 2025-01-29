@@ -32,11 +32,31 @@ let API_URL="https://api-stage.dinesavvy.com/api/v1";
 //LOCAL ENVIROMENET
 // const API_URL = "http://127.0.0.1:8000/api/v1";
 
+// function getHeader() {
+//   // const navigate = useNavigate()
+//   let user = localStorage.getItem("token");
+//   return user && { Authorization:user };
+// }
+// Set Headers
 function getHeader() {
-  // const navigate = useNavigate()
-  let user = localStorage.getItem("token");
-  return user && { Authorization:user };
+  let user = localStorage.getItem("token"); // Authorization token
+  let businessid = JSON.parse(localStorage.getItem("selectedBusiness"))?.businessId; // Business ID
+  let locationid = JSON.parse(localStorage.getItem("selectedBusiness"))?._id;  // Location ID
+
+  let headers = {};
+  if (user) {
+    headers.Authorization = user;
+  }
+  if (businessid) {
+    headers.businessid = businessid;
+  }
+  if (locationid) {
+    headers.locationid = locationid;
+  }
+
+  return headers;
 }
+
 export default class Http {
   static get(url) {
     return new Promise((resolve, reject) => {
