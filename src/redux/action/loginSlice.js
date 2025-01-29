@@ -38,9 +38,10 @@ export const loginHandler = (data) => async (dispatch) => {
   try {
     dispatch(loginSliceAction.loginDetailsSliceInfo());
     const response = await loginAPI(data);
+    console.log(response,"response")
     dispatch(loginSliceAction.loginDetailsSliceSuccess(response));
-    // localStorage.setItem("token", response?.data?.deviceData?.deviceToken)
-    // setItem("adminId", response?.data?.id)
+    localStorage.setItem("token", response?.data?.deviceData?.deviceToken)
+    localStorage.setItem("adminId", response?.data?._id)
   } catch (e) {
     dispatch(loginSliceAction.loginDetailsSliceFailure(e));
   }

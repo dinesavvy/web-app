@@ -15,7 +15,11 @@ import MerchantNudgeDetails from "./MerchantNudgeDetails";
 import { useDispatch, useSelector } from "react-redux";
 import { businessNudgesListHandler } from "../../../redux/action/businessAction/businessNudgesList";
 import Loader from "../../../common/Loader/Loader";
-import PaymentSidebar from "./PaymentSidebar"
+import PaymentSidebar from "./PaymentSidebar";
+import {
+  businessNudgeDetailAction,
+  businessNudgeDetailsHandler,
+} from "../../../redux/action/businessAction/businessNudgeDetails";
 
 const Nudges = () => {
   const [modal2Open, setModal2Open] = useState(false);
@@ -24,24 +28,33 @@ const Nudges = () => {
   const [activeTab, setActiveTab] = useState("active"); // Default active tab is 'active'
 
   const togglePaymentSidebar = (item) => {
-              setIsPaymentSidebar((prevState) => !prevState);
-            };
+    setIsPaymentSidebar((prevState) => !prevState);
+  };
 
   const businessNudgesListSelector = useSelector(
     (state) => state?.businessNudgesList
   );
-  console.log(businessNudgesListSelector, "businessNudgesListSelector");
+
+  const businessNudgeDetailsSelector = useSelector(
+    (state) => state?.businessNudgeDetails
+  );
+  console.log("businessNudgeDetailsSelector", businessNudgeDetailsSelector);
 
   const getSelectedBusiness = JSON.parse(
     localStorage.getItem("selectedBusiness")
   );
-  console.log(getSelectedBusiness, "getSelectedBusiness");
 
   const dispatch = useDispatch();
 
   const toggleSidebar = (item) => {
-    setIsSidebarOpen((prevState) => !prevState);
+    //
+    console.log(item, "itemitemitemitem");
+    let payload = {
+      nudgeId: item?._id,
+    };
+    dispatch(businessNudgeDetailsHandler(payload));
   };
+
   useEffect(() => {
     if (isSidebarOpen) {
       document.body.classList.add("overflow-Hidden");
@@ -69,58 +82,30 @@ const Nudges = () => {
     dispatch(businessNudgesListHandler(payload));
   }, [activeTab]);
 
-  // const getTimeRemaining = (createdAt) => {
-  //   const createdTime = moment(createdAt);
-  //   const now = moment();
-  //   const duration = moment.duration(now.diff(createdTime));
+  useEffect(() => {
+    if (isPaymentSidebar) {
+      document.body.classList.add("overflow-Hidden");
+    } else {
+      document.body.classList.remove("overflow-Hidden");
+    }
 
-  //   const hours = duration.hours();
-  //   const minutes = duration.minutes();
+    // Cleanup on component unmount
+    return () => {
+      document.body.classList.remove("overflow-Hidden");
+    };
+  }, [isPaymentSidebar]);
 
-  //   return `${hours}h ${minutes}m remaining`;
-  // };
-
-// import PaymentSidebar from "./PaymentSidebar";
-
-// const Nudges = () => {
-//         const [modal2Open, setModal2Open] = useState(false);
-//         const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-//         const [isPaymentSidebar, setIsPaymentSidebar] = useState(false);
-//         const toggleSidebar = (item) => {
-//           setIsSidebarOpen((prevState) => !prevState);
-//         };
-//         const togglePaymentSidebar = (item) => {
-//           setIsPaymentSidebar((prevState) => !prevState);
-//         };
-//         useEffect(() => {
-//           if (isSidebarOpen) {
-//             document.body.classList.add("overflow-Hidden");
-//           } else {
-//             document.body.classList.remove("overflow-Hidden");
-//           }
-      
-//           // Cleanup on component unmount
-//           return () => {
-//             document.body.classList.remove("overflow-Hidden");
-//           };
-//         }, [isSidebarOpen]);
-
-useEffect(() => {
-  if (isPaymentSidebar) {
-    document.body.classList.add("overflow-Hidden");
-  } else {
-    document.body.classList.remove("overflow-Hidden");
-  }
-
-  // Cleanup on component unmount
-  return () => {
-    document.body.classList.remove("overflow-Hidden");
-  };
-}, [isPaymentSidebar]);
+  useEffect(() => {
+    if (businessNudgeDetailsSelector?.data?.statusCode === 200) {
+      setIsSidebarOpen((prevState) => !prevState);
+      // dispatch(businessNudgeDetailAction.businessNudgeDetailsReset());
+    }
+  }, [businessNudgeDetailsSelector]);
 
   return (
     <>
-      {businessNudgesListSelector?.isLoading && <Loader />}
+      {(businessNudgesListSelector?.isLoading ||
+        businessNudgeDetailsSelector?.isLoading) && <Loader />}
       {/* <div className="emptyHeight">
         <div className="modal-content">
           <div className="ant-modal-body">
@@ -211,7 +196,10 @@ useEffect(() => {
                 <div className="addNudge2">20 Nudges</div>
                 <div className="addNudge2">25 Nudges</div>
               </div>
-              <div className="btn btnSecondary p16 gap-8" onClick={()=>togglePaymentSidebar()}>
+              <div
+                className="btn btnSecondary p16 gap-8"
+                onClick={() => togglePaymentSidebar()}
+              >
                 <img src={addCredits} alt="addCredits" />
                 Add Nudge Credits
               </div>
@@ -364,7 +352,8 @@ useEffect(() => {
                       <div className="fs-14 mb-20">{item?.description}</div>
                       <div className="d-flex gap-8 align-center mb-20">
                         <div className="position-relative d-flex">
-                          {item?.acceptedFollowerList?.map((itemFollower, index) => (
+                          {item?.acceptedFollowerList?.map(
+                            (itemFollower, index) => (
                               <div className="imageCollaps" key={index}>
                                 <img
                                   src={itemFollower?.photoURL}
@@ -372,7 +361,8 @@ useEffect(() => {
                                   className="w-100 h-100"
                                 />
                               </div>
-                            ))}
+                            )
+                          )}
                         </div>
                         {item?.totalAcceptedFollowerList > 0 && (
                           <div className="fs-14 fw-700 gc">
@@ -383,7 +373,7 @@ useEffect(() => {
                       <div className="d-flex gap-10">
                         <div
                           className="btn btnSecondary w-100"
-                          onClick={() => toggleSidebar()}
+                          onClick={() => toggleSidebar(item)}
                         >
                           View Details
                         </div>
@@ -492,6 +482,8 @@ useEffect(() => {
         setIsSidebarOpen={setIsSidebarOpen}
         isSidebarOpen={isSidebarOpen}
         toggleSidebar={toggleSidebar}
+        activeTab={activeTab}
+        businessNudgeDetailsSelector={businessNudgeDetailsSelector}
       />
       <PaymentSidebar
         isPaymentSidebar={isPaymentSidebar}
