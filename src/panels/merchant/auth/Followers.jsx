@@ -282,21 +282,25 @@ const Followers = () => {
               <div className="no-data">No Data Found</div>
             )}
           </div>
-          <div className="d-flex align-center justify-between flexPagination">
-            {/* <div className="fs-16">Showing 1 to 5 of 10 Restaurants</div> */}
-            <div className="fs-16">
-              Showing {pagination.page} to {pagination.limit} of{" "}
-              {businessListFollowerListSelector?.data?.data?.recordsCount}{" "}
-              followers
+          {filteredFollowers?.length > 0 && (
+            <div className="d-flex align-center justify-between flexPagination">
+              {/* <div className="fs-16">Showing 1 to 5 of 10 Restaurants</div> */}
+              <div className="fs-16">
+                Showing {pagination.page} to {pagination.limit} of{" "}
+                {businessListFollowerListSelector?.data?.data?.recordsCount}{" "}
+                followers
+              </div>
+              {/* <Pagination defaultCurrent={1} total={50} /> */}
+              <Pagination
+                current={pagination.page}
+                pageSize={pagination.limit}
+                total={
+                  businessListFollowerListSelector?.data?.data?.recordsCount
+                }
+                onChange={handlePaginationChange}
+              />
             </div>
-            {/* <Pagination defaultCurrent={1} total={50} /> */}
-            <Pagination
-              current={pagination.page}
-              pageSize={pagination.limit}
-              total={businessListFollowerListSelector?.data?.data?.recordsCount}
-              onChange={handlePaginationChange}
-            />
-          </div>
+          )}
           {isAnyCheckboxChecked && !state?.statePrev?.selectedItems && (
             <div className="floatAdd">
               <div

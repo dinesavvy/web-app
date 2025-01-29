@@ -6,12 +6,12 @@ import "../../../assets/css/Login.css";
 import login from "../../../assets/images/login.jpg";
 import logo from "../../../assets/images/logo.svg";
 import phoneInput from "../../../assets/images/phoneInput.svg";
-import passwordInput from "../../../assets/images/passwordInput.svg";
+// import passwordInput from "../../../assets/images/passwordInput.svg";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useCommonMessage } from "../../../common/CommonMessage";
 import "react-phone-number-input/style.css";
-import PhoneInput from "react-phone-number-input";
+// import PhoneInput from "react-phone-number-input";
 import { useEffect } from "react";
 import { validationSchema } from "./merchantLoginValidation";
 import Loader from "../../../common/Loader/Loader";
@@ -20,6 +20,8 @@ import {
   businessSendOtpAction,
   businessSendOtpHandler,
 } from "../../../redux/action/businessAction/businessSendOtp";
+import PhoneInput from "react-phone-input-2"; // Assuming you're using react-phone-input-2
+import "react-phone-input-2/lib/style.css"; // Ensure the styles are imported if needed
 
 const MerchantLogin = () => {
   const messageApi = useCommonMessage();
@@ -38,6 +40,7 @@ const MerchantLogin = () => {
       appSignature: "TlVIT4Yl0sS",
     };
     dispatch(businessSendOtpHandler(payload));
+    // console.log(payload, "payload");
   };
 
   useEffect(() => {
@@ -109,24 +112,6 @@ const MerchantLogin = () => {
                             placeholder="Enter your phone number"
                             id="phone"
                           />
-                          {/* <PhoneInput
-                            country={'us'}
-                            countries={['us', 'ca', 'gb', 'in']}
-                             value={values?.phoneNumber}
-                             onChange={(phone) => {
-                               console.log(phone, "phone value");
-                               // Update the formik value or state here
-                               setFieldValue("phoneNumber", "+" + " " +phone);
-                             }}
-                          /> */}
-                          {/* <PhoneInput
-                             placeholder="Enter phone number"
-                             value={values?.phoneNumber}
-                             onChange={(phone) => {setFieldValue("phoneNumber", phone);console.log(phone,"phone")}}
-                             defaultCountry="US"  // Change this to the default country code you want
-                             international  // Only show country names (without flags)
-                             countrySelectProps={{ unicodeFlags: false }} // Optionally remove unicode flags
-                          /> */}
                           <img
                             src={phoneInput}
                             alt=""

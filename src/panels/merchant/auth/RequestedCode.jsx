@@ -187,9 +187,9 @@ const RequestedCode = ({ loginValue,requestLogin,setRequestLogin }) => {
                   />
                 ))}
               </div>
-              <div className="fs-14 mb-30 fw-500 sc text-end cursor-pointer">
+              {/* <div className="fs-14 mb-30 fw-500 sc text-end cursor-pointer">
                 Edit phone number
-              </div>
+              </div> */}
               <button
                 className="btn w-100 mb-30"
                 type="submit"

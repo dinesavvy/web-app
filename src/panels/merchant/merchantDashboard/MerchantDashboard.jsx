@@ -116,7 +116,7 @@ const MerchantDashboard = () => {
   return (
     <>
       {/*********************** Empty Content ************************/}
-      {getSelectedBusiness?.roleTitle !== "Owner" &&
+      {getSelectedBusiness !== null && getSelectedBusiness?.roleTitle !== "Owner" && 
       getSelectedBusiness?.roleData?.permissions?.viewAnalytics !== 2 ? (
         <div className="dashboard">
           <div className="emptyHeight position-relative">
