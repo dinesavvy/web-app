@@ -9,7 +9,6 @@ export const BusinessProvider = ({ children }) => {
   });
   
   const businessListSelector = useSelector((state) => state?.businessList);
-  console.log(businessListSelector?.data?.data?.records?.[0],"11111")
   useEffect(() => {
     // Check if it's the first time the user is loading (no selectedBusiness in localStorage)
     if (!selectedBusiness && businessListSelector?.data?.data?.records?.length > 0) {

@@ -19,7 +19,6 @@ const SelectModal = ({
   setModalOpen,
   selectedBusiness,
 }) => {
-  console.log(businessListSelector, "businessListSelector");
   return (
     <>
       {businessListSelector?.isLoading && <Loader />}

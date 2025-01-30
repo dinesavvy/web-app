@@ -36,7 +36,6 @@ const MerchantLogin = () => {
   const [country, setCountry] = useState(""); // Stores the country code like "pk", "us"
 
   const handlePhoneChange = (value, data) => {
-    console.log("countryCode", countryCode);
     const dialCode = `${data?.dialCode}`;
     let number = value.replace(dialCode, "").trim(); // Remove country code from phone number
 
@@ -52,7 +51,6 @@ const MerchantLogin = () => {
       appSignature: "TlVIT4Yl0sS",
     };
     dispatch(businessSendOtpHandler(payload));
-    // console.log(payload, "payload");
   };
 
   useEffect(() => {

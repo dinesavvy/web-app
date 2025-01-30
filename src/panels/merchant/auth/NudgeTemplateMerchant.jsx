@@ -18,7 +18,6 @@ const NudgeTemplateMerchant = () => {
 
   const dispatch = useDispatch();
   const { state } = useLocation();
-  console.log(state,"statestatestatestate")
 
   const selectedBusiness = JSON.parse(localStorage.getItem("selectedBusiness"));
 

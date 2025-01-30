@@ -5,7 +5,6 @@ import deleteList from "../../../assets/images/deleteList.svg"
 
 const ImageGallery = ({images , openImage, setOpenImage}) => {
  
-console.log(openImage, "imagesimages")
   const [isModalOpen, setIsModalOpen] = useState(openImage || false);
   const [selectedIndex, setSelectedIndex] = useState(0);
 

@@ -26,15 +26,12 @@ const EditMember = () => {
   const { state } = useLocation();
   const navigate = useNavigate()
   const messageApi = useCommonMessage();
-  console.log(state, "statestatestatestate");
   const roleListSelector = useSelector((state) => state?.roleList);
-  // console.log(state?.item, "roleListSelector");
   const resendInviteLinkSelector = useSelector(
     (state) => state?.resendInviteLink
   );
 
   const updateTeamSelector = useSelector((state) => state?.updateTeam);
-  console.log(resendInviteLinkSelector, "resendInviteLinkSelector");
 
   useEffect(() => {
     if (state) {
@@ -49,7 +46,6 @@ const EditMember = () => {
     const selectedRole = roleListSelector?.data?.data?.records?.find(
       (role) => role.title === values.role
     );
-    console.log(selectedRole, "selectedRole");
 
     let payload = {
       teamMappingId: state?.item?._id,
@@ -60,7 +56,6 @@ const EditMember = () => {
         state?.merchantDetailsSelector?.data?.data?._id ||
         localStorage.getItem("merchantId"),
     };
-    console.log(payload, "payload");
     dispatch(updateTeamHandler(payload));
   };
 
@@ -352,7 +347,6 @@ const EditMember = () => {
                     <div>
                       {/* <h3>Permissions for {values.role}:</h3> */}
                       <div className="grid4">
-                        {console.log(values, "values")}
                         {Object.entries(values.permissions).map(
                           ([key, value]) => {
                             const label = key

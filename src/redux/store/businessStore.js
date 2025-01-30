@@ -12,6 +12,9 @@ import businessListByUserIdSlice from "../action/businessAction/businessListByUs
 import businessDashboardSlice from "../action/businessAction/businessDashboard";
 import businessNudgeDetailsSlice from "../action/businessAction/businessNudgeDetails";
 import businessTeamListSlice from "../action/businessAction/businessTeamList";
+import businessRoleListSlice from "../action/businessAction/businessRoleList";
+import createTeamSlice from "../action/businessAction/createTeam";
+import getBusinessTeamSlice from "../action/businessAction/getBusinessTeam";
 
 const store = configureStore({
   reducer: {
@@ -28,6 +31,9 @@ const store = configureStore({
     businessDashboard: businessDashboardSlice,
     businessNudgeDetails: businessNudgeDetailsSlice,
     businessTeamList: businessTeamListSlice,
+    businessRoleList: businessRoleListSlice,
+    createTeam: createTeamSlice,
+    getBusinessTeam: getBusinessTeamSlice,
   },
 });
 

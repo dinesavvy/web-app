@@ -20,7 +20,6 @@ import 'react-phone-input-2/lib/style.css'
 const Login = () => {
   const messageApi = useCommonMessage();
   const loginSelector = useSelector((state) => state?.loginSliceDetails);
-  console.log(loginSelector,"loginSelector")
   const navigate = useNavigate();
   const dispatch = useDispatch();
 

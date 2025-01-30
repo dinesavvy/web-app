@@ -6,20 +6,34 @@ import MemberPermissions from "./MemberPermissions";
 import { businessTeamListHandler } from "../../../redux/action/businessAction/businessTeamList";
 import { useDispatch, useSelector } from "react-redux";
 import Loader from "../../../common/Loader/Loader";
+import { getBusinessTeamHandler } from "../../../redux/action/businessAction/getBusinessTeam";
 
 const Hierarchy = () => {
   const dispatch = useDispatch();
   const [isMemberHierarchy, setIsMemberHierarchy] = useState(false);
+  const [addTeamModal, setAddTeamModal] = useState(false);
   const [isMemberPermissions, setIsMemberPermissions] = useState(false);
+  const [selectTeam, setSelectTeam] = useState();
 
   const businessTeamListSelector = useSelector(
     (state) => state?.businessTeamList
   );
-  console.log(businessTeamListSelector, "businessTeamListSelector");
+  const getBusinessTeamSelector = useSelector(
+    (state) => state?.getBusinessTeam
+  );
 
   const toggleMemberHierarchy = (item) => {
+    setSelectTeam(item);
     setIsMemberHierarchy((prevState) => !prevState);
+    let payload = {
+      teamMappingId: item?._id,
+    };
+    dispatch(getBusinessTeamHandler(payload));
   };
+  const addTeam = () => {
+    setAddTeamModal((prevState) => !prevState);
+  };
+
   useEffect(() => {
     if (isMemberHierarchy) {
       document.body.classList.add("overflow-Hidden");
@@ -68,14 +82,17 @@ const Hierarchy = () => {
           </div>
           <div className="d-flex align-center justify-between mb-20">
             <div className="fs-20 fw-600">My team</div>
-            <div className="addCircle cursor-pointer">
+            <div
+              className="addCircle cursor-pointer"
+              onClick={() => addTeam("")}
+            >
               <img src={addCircle} alt="" />
             </div>
           </div>
           <div className="merchantGrid">
             {/* <div className="myteamFlex" onClick={() => toggleMemberHierarchy()}>
               <div className="d-flex align-center gap-8">
-                <div class="initialName fs-16">dr</div>
+                <div className="initialName fs-16">dr</div>
                 <div>
                   <div className="fs-16 ">John Cooper</div>
                   <div className="fs-14  grey">Manager</div>
@@ -89,9 +106,13 @@ const Hierarchy = () => {
             {businessTeamListSelector?.data?.data?.records?.map(
               (item, index) => {
                 return (
-                  <div className="myteamFlex" key={index}>
+                  <div
+                    className="myteamFlex"
+                    key={index}
+                    onClick={() => toggleMemberHierarchy(item)}
+                  >
                     <div className="d-flex align-center gap-8">
-                      <div class="initialName fs-16">
+                      <div className="initialName fs-16">
                         {item?.displayName?.charAt(0).toLowerCase()}
                         {item?.displayName
                           ?.split(" ")[1]
@@ -137,6 +158,11 @@ const Hierarchy = () => {
       <MemberHierarchy
         isMemberHierarchy={isMemberHierarchy}
         toggleMemberHierarchy={toggleMemberHierarchy}
+        selectTeam={selectTeam}
+        setAddTeamModal={setAddTeamModal}
+        addTeamModal={addTeamModal}
+        addTeam={addTeam}
+        getBusinessTeamSelector={getBusinessTeamSelector}
       />
       <MemberPermissions
         isMemberPermissions={isMemberPermissions}

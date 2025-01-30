@@ -10,7 +10,6 @@ import { useDispatch, useSelector } from "react-redux";
 
 const FollowerDetails = ({ isOpen, toggleSidebar, followerDetails }) => {
   const navigate = useNavigate();
-  // console.log(followerDetails,"followerDetails")
 
   const businessListByUserIdSelectorAccepted = useSelector(
     (state) => state?.businessListByUserId
@@ -58,8 +57,8 @@ const FollowerDetails = ({ isOpen, toggleSidebar, followerDetails }) => {
         <div className="divider2"></div>
         <div className="overflowSidebar">
           <div className="d-flex  align-center mb-10 gap-12">
-            {/* <div class="initialName">JJ</div> */}
-            <div class="initialName">
+            {/* <div className="initialName">JJ</div> */}
+            <div className="initialName">
               {" "}
               {followerDetails?.userId?.displayName
                 .split(" ")

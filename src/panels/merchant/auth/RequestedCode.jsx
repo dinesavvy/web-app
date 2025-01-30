@@ -35,8 +35,7 @@ const RequestedCode = ({ loginValue,requestLogin,setRequestLogin,countryCode,pho
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const [otp, setOtp] = useState(new Array(6).fill(""));
-  console.log(loginValue, "loginValue");
+  const [otp, setOtp] = useState(new Array(6)?.fill(""));
   const inputRefs = useRef([]);
 
   useEffect(() => {

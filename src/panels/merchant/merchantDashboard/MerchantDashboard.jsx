@@ -31,12 +31,8 @@ const MerchantDashboard = () => {
   const getSelectedBusiness = JSON.parse(
     localStorage.getItem("selectedBusiness")
   );
-
-  
   const businessListSelector = useSelector((state) => state?.businessList);
-  console.log(getSelectedBusiness, "getSelectedBusiness");
-
-
+  
   useEffect(() => {
     dispatch(businessDashboardHandler());
   }, []);

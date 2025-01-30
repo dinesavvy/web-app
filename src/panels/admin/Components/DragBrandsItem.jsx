@@ -5,7 +5,6 @@ import pepsi from "../../../assets/images/pepsi.svg";
 import { Tooltip } from "react-tooltip";
 
 const DragBrandsItem = ({ id, name, selectedBrands = [], onClick, info }) => {
-  console.log("info", info);
   const [{ isDragging }, drag] = useDrag({
     type: "brand",
     item: { id, name, selectedBrands }, // Correctly pass the item data

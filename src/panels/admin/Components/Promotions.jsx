@@ -66,10 +66,10 @@ const Promotions = () => {
               )}
             </div>
           </div>
-          <div class="tabs-container tab3 tabing mb-20">
-            <div class="tabs">
-              <button class="tab-button active">Active</button>
-              <button class="tab-button ">Inactive</button>
+          <div className="tabs-container tab3 tabing mb-20">
+            <div className="tabs">
+              <button className="tab-button active">Active</button>
+              <button className="tab-button ">Inactive</button>
             </div>
           </div>
           <SearchSelect />

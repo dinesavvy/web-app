@@ -22,7 +22,6 @@ const Header = ({ handleTrigger }) => {
     localStorage.getItem("selectedBusiness")
   );
   const businessListSelector = useSelector((state) => state?.businessList);
-  // console.log(businessListSelector,"businessListSelector")
 
   const items = [
     { name: "McDold's", address: "10 N Carpenter St, Chicago, IL - MapQuest" },

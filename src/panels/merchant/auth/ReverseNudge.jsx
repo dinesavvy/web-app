@@ -63,7 +63,7 @@ const ReverseNudge = () => {
             <div className="custom-checkbox">
               <label className="checkLabel">
                 <input type="checkbox" />
-                <span class="checkmark"></span>
+                <span className="checkmark"></span>
               </label>
             </div>
           </div>
@@ -93,7 +93,7 @@ const ReverseNudge = () => {
             <div className="custom-checkbox">
               <label className="checkLabel">
                 <input type="checkbox" />
-                <span class="checkmark"></span>
+                <span className="checkmark"></span>
               </label>
             </div>
           </div>
@@ -123,7 +123,7 @@ const ReverseNudge = () => {
             <div className="custom-checkbox">
               <label className="checkLabel">
                 <input type="checkbox" />
-                <span class="checkmark"></span>
+                <span className="checkmark"></span>
               </label>
             </div>
           </div>
@@ -153,7 +153,7 @@ const ReverseNudge = () => {
             <div className="custom-checkbox">
               <label className="checkLabel">
                 <input type="checkbox" />
-                <span class="checkmark"></span>
+                <span className="checkmark"></span>
               </label>
             </div>
           </div>

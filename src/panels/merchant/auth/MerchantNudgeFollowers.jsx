@@ -32,7 +32,7 @@ const MerchantNudgeFollowers = ({
         <div className="overflowSidebar">
           <div className="historyFlex">
             <div className="d-flex align-center gap-8">
-              <div class="initialName fs-16">dr</div>
+              <div className="initialName fs-16">dr</div>
               <div>
                 <div className="fs-14 lightBlack">John Cooper</div>
                 <div className="fs-14 fw-500">December 19, 2024</div>

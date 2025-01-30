@@ -145,7 +145,6 @@ const AddPromotion = () => {
 
   const handleDragStart = (item) => {
     if (!droppedBrand) {
-      console.log(`Dragging item: ${item.name}`);
       setDraggingItem(item);
       setDragging(true);
     }
@@ -275,7 +274,7 @@ const AddPromotion = () => {
                               checked={selectedMerchants.includes(item.id)}
                               onChange={() => handleCheckboxChange(item.id)}
                             />
-                            <span class="checkmark"></span>
+                            <span className="checkmark"></span>
                           </label>
                         </div>
                         <div  onClick={() => handleAddToDropZone(item)} >

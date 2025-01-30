@@ -27,7 +27,6 @@ const MerchantNudgecart = ({
   const navigate = useNavigate()
 
   const selectedBusinessSelector = JSON.parse(localStorage.getItem("selectedBusiness"))
-  console.log(fileuploadSelector,"fileuploadSelector")
 
   const sendNudge = () => {
     let payload = {
@@ -44,7 +43,6 @@ const MerchantNudgecart = ({
       totalQuantity: Number(values?.quantity),
     };
     dispatch(businessCreateNudgeHandler(payload));
-    console.log(payload,"payload merchant")
   };
 
   useEffect(() => {

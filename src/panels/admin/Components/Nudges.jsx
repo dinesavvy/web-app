@@ -196,8 +196,8 @@ const Nudges = () => {
               Create a Nudge
             </div> */}
               </div>
-              <div class="tabs-container tab3 tabing mb-20">
-                <div class="tabs">
+              <div className="tabs-container tab3 tabing mb-20">
+                <div className="tabs">
                   <button
                     className={`tab-button ${
                       activeTab === true ? "active" : ""

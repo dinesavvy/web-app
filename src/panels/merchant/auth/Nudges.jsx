@@ -38,7 +38,6 @@ const Nudges = () => {
   const businessNudgeDetailsSelector = useSelector(
     (state) => state?.businessNudgeDetails
   );
-  console.log("businessNudgeDetailsSelector", businessNudgeDetailsSelector);
 
   const getSelectedBusiness = JSON.parse(
     localStorage.getItem("selectedBusiness")
@@ -47,8 +46,6 @@ const Nudges = () => {
   const dispatch = useDispatch();
 
   const toggleSidebar = (item) => {
-    //
-    console.log(item, "itemitemitemitem");
     let payload = {
       nudgeId: item?._id,
     };
@@ -299,7 +296,7 @@ const Nudges = () => {
             </div>
           </div>
         </div>
-        <div class="tabs-container tab3 tabFull ">
+        <div className="tabs-container tab3 tabFull ">
           <div className="tabs">
             <button
               className={`tab-button ${activeTab === "active" ? "active" : ""}`}

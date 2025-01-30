@@ -32,7 +32,7 @@ const NudgeDetail = ({
             <div className="divider2"></div>
             <div className="overflowSidebar">
               <div className="d-flex justify-between align-center mb-10">
-                <div class="initialName">
+                <div className="initialName">
                   {nudgeDetailsMainSelector?.data?.data?.title.slice(0, 2)}
                 </div>
                 {/* <div className="text-end">
@@ -163,7 +163,7 @@ const NudgeDetail = ({
               <div className="fs-18 fw-600 mb-16">Redeemtion History</div>
               <div className="historyFlex">
                 <div className="d-flex align-center gap-8">
-                  {/* <div class="initialName fs-16">dr</div>
+                  {/* <div className="initialName fs-16">dr</div>
                   <div>
                     <div className="fs-14 lightBlack">John Cooper</div>
                     <div className="fs-14 fw-500">December 19, 2024</div>

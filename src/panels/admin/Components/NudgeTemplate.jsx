@@ -15,7 +15,6 @@ import { fileUploadHandler } from "../../../redux/action/fileUpload";
 const NudgeTemplate = () => {
   const dispatch = useDispatch();
   const { state } = useLocation();
-  console.log(state, "statestatestatestate");
 
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [nudgesCards, setNudgesCard] = useState(null);
