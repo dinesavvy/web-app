@@ -3,42 +3,57 @@ import addCircle from "../../../assets/images/addCircle.svg";
 import arrowRight from "../../../assets/images/arrowRight.svg";
 import MemberHierarchy from "./MemberHierarchy";
 import MemberPermissions from "./MemberPermissions";
+import { businessTeamListHandler } from "../../../redux/action/businessAction/businessTeamList";
+import { useDispatch, useSelector } from "react-redux";
+import Loader from "../../../common/Loader/Loader";
 
 const Hierarchy = () => {
-   const [isMemberHierarchy, setIsMemberHierarchy] = useState(false);
-          const toggleMemberHierarchy = (item) => {
-            setIsMemberHierarchy((prevState) => !prevState);
-          };
-          useEffect(() => {
-            if (isMemberHierarchy) {
-              document.body.classList.add("overflow-Hidden");
-            } else {
-              document.body.classList.remove("overflow-Hidden");
-            }
-        
-            // Cleanup on component unmount
-            return () => {
-              document.body.classList.remove("overflow-Hidden");
-            };
-          }, [isMemberHierarchy]);
-   const [isMemberPermissions, setIsMemberPermissions] = useState(false);
-          const toggleMemberPermissions = (item) => {
-            setIsMemberPermissions((prevState) => !prevState);
-          };
-          useEffect(() => {
-            if (isMemberPermissions) {
-              document.body.classList.add("overflow-Hidden");
-            } else {
-              document.body.classList.remove("overflow-Hidden");
-            }
-        
-            // Cleanup on component unmount
-            return () => {
-              document.body.classList.remove("overflow-Hidden");
-            };
-          }, [isMemberPermissions]);
+  const dispatch = useDispatch();
+  const [isMemberHierarchy, setIsMemberHierarchy] = useState(false);
+  const [isMemberPermissions, setIsMemberPermissions] = useState(false);
+
+  const businessTeamListSelector = useSelector(
+    (state) => state?.businessTeamList
+  );
+  console.log(businessTeamListSelector, "businessTeamListSelector");
+
+  const toggleMemberHierarchy = (item) => {
+    setIsMemberHierarchy((prevState) => !prevState);
+  };
+  useEffect(() => {
+    if (isMemberHierarchy) {
+      document.body.classList.add("overflow-Hidden");
+    } else {
+      document.body.classList.remove("overflow-Hidden");
+    }
+
+    // Cleanup on component unmount
+    return () => {
+      document.body.classList.remove("overflow-Hidden");
+    };
+  }, [isMemberHierarchy]);
+
+  const toggleMemberPermissions = (item) => {
+    setIsMemberPermissions((prevState) => !prevState);
+  };
+
+  useEffect(() => {
+    dispatch(businessTeamListHandler());
+    if (isMemberPermissions) {
+      document.body.classList.add("overflow-Hidden");
+    } else {
+      document.body.classList.remove("overflow-Hidden");
+    }
+
+    // Cleanup on component unmount
+    return () => {
+      document.body.classList.remove("overflow-Hidden");
+    };
+  }, [isMemberPermissions]);
+
   return (
     <>
+      {businessTeamListSelector?.isLoading && <Loader />}
       <div className="dashboard">
         <div className="tabPadding mb-30">
           <div className="fs-24 fw-600">Hierarchy </div>
@@ -58,7 +73,7 @@ const Hierarchy = () => {
             </div>
           </div>
           <div className="merchantGrid">
-            <div className="myteamFlex" onClick={()=>toggleMemberHierarchy()}>
+            {/* <div className="myteamFlex" onClick={() => toggleMemberHierarchy()}>
               <div className="d-flex align-center gap-8">
                 <div class="initialName fs-16">dr</div>
                 <div>
@@ -70,51 +85,43 @@ const Hierarchy = () => {
                 <div className="blueTag fs-14">Pending</div>
                 <img src={arrowRight} alt="arrowRight" className="arrowRight" />
               </div>
-            </div>
-            <div className="myteamFlex">
-              <div className="d-flex align-center gap-8">
-                <div class="initialName fs-16">dr</div>
-                <div>
-                  <div className="fs-16 ">John Cooper</div>
-                  <div className="fs-14  grey">Manager</div>
-                </div>
-              </div>
-              <div className="d-flex align-center gap-4">
-                
-                <img src={arrowRight} alt="arrowRight" className="arrowRight" />
-              </div>
-            </div>
-            <div className="myteamFlex">
-              <div className="d-flex align-center gap-8">
-                <div class="initialName fs-16">dr</div>
-                <div>
-                  <div className="fs-16 ">John Cooper</div>
-                  <div className="fs-14  grey">Manager</div>
-                </div>
-              </div>
-              <div className="d-flex align-center gap-4">
-                
-                <img src={arrowRight} alt="arrowRight" className="arrowRight" />
-              </div>
-            </div>
-            <div className="myteamFlex">
-              <div className="d-flex align-center gap-8">
-                <div class="initialName fs-16">dr</div>
-                <div>
-                  <div className="fs-16 ">John Cooper</div>
-                  <div className="fs-14  grey">Manager</div>
-                </div>
-              </div>
-              <div className="d-flex align-center gap-4">
-                <div className="blueTag fs-14">Pending</div>
-                <img src={arrowRight} alt="arrowRight" className="arrowRight" />
-              </div>
-            </div>
+            </div> */}
+            {businessTeamListSelector?.data?.data?.records?.map(
+              (item, index) => {
+                return (
+                  <div className="myteamFlex" key={index}>
+                    <div className="d-flex align-center gap-8">
+                      <div class="initialName fs-16">
+                        {item?.displayName?.charAt(0).toLowerCase()}
+                        {item?.displayName
+                          ?.split(" ")[1]
+                          ?.charAt(0)
+                          .toLowerCase()}
+                      </div>
+                      <div>
+                        <div className="fs-16 ">{item?.displayName}</div>
+                        <div className="fs-14  grey">{item?.roleId?.title}</div>
+                      </div>
+                    </div>
+                    <div className="d-flex align-center gap-4">
+                      <img
+                        src={arrowRight}
+                        alt="arrowRight"
+                        className="arrowRight"
+                      />
+                    </div>
+                  </div>
+                );
+              }
+            )}
           </div>
           <div className="divider2"></div>
           <div className="fs-20 fw-600 mb-20">My Roles</div>
           <div className="merchantGrid">
-            <div className="myteamFlex" onClick={()=>toggleMemberPermissions()}>
+            <div
+              className="myteamFlex"
+              onClick={() => toggleMemberPermissions()}
+            >
               <div className="d-flex align-center gap-8">
                 <div>
                   <div className="fs-16 ">Manager</div>
@@ -129,10 +136,12 @@ const Hierarchy = () => {
       </div>
       <MemberHierarchy
         isMemberHierarchy={isMemberHierarchy}
-        toggleMemberHierarchy={toggleMemberHierarchy} />
+        toggleMemberHierarchy={toggleMemberHierarchy}
+      />
       <MemberPermissions
         isMemberPermissions={isMemberPermissions}
-        toggleMemberPermissions={toggleMemberPermissions} />
+        toggleMemberPermissions={toggleMemberPermissions}
+      />
     </>
   );
 };

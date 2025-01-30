@@ -36,6 +36,7 @@ const Followers = () => {
       item.userId.displayName?.toLowerCase().includes(searchQuery.toLowerCase())
     ) || [];
 
+
   useEffect(() => {
     if (
       (Array.isArray(state?.statePrev?.selectedItems) &&

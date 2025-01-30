@@ -8,11 +8,13 @@ import SelectModal from "../../panels/merchant/auth/SelectModal";
 import { useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { businessListHandler } from "../../redux/action/businessAction/businessListSlice";
+import { useBusiness } from "./BusinessContext";
 
 const Header = ({ handleTrigger }) => {
   const [isModalOpen, setModalOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
   const dispatch = useDispatch();
+  const { selectedBusiness, setSelectedBusiness } = useBusiness();
 
   const location = useLocation();
   const getRestaurantName = localStorage.getItem("restaurantName");
@@ -20,6 +22,7 @@ const Header = ({ handleTrigger }) => {
     localStorage.getItem("selectedBusiness")
   );
   const businessListSelector = useSelector((state) => state?.businessList);
+  // console.log(businessListSelector,"businessListSelector")
 
   const items = [
     { name: "McDold's", address: "10 N Carpenter St, Chicago, IL - MapQuest" },
@@ -41,21 +44,23 @@ const Header = ({ handleTrigger }) => {
     dispatch(businessListHandler(payload));
   }, []);
 
-  useEffect(() => {
-    if (businessListSelector?.data?.data?.records?.[0]) {
-      localStorage.setItem(
-        "selectedBusiness",
-        JSON.stringify(businessListSelector?.data?.data?.records?.[0])
-      );
-    } else if (selectedItem) {
-      localStorage.setItem("selectedBusiness", JSON.stringify(selectedItem));
-    }
-  }, [businessListSelector]);
+  // useEffect(() => {
+  //   if (businessListSelector?.data?.data?.records?.[0]) {
+  //     localStorage.setItem(
+  //       "selectedBusiness",
+  //       JSON.stringify(businessListSelector?.data?.data?.records?.[0])
+  //     );
+  //   } else if (selectedItem) {
+  //     localStorage.setItem("selectedBusiness", JSON.stringify(selectedItem));
+  //   }
+  // }, [businessListSelector]);
 
   // Handle Selection
   const handleSelect = (item) => {
-    setSelectedItem(item);
-    localStorage.setItem("selectedBusiness", JSON.stringify(item));
+    setSelectedBusiness(item);
+    window.location.reload("/merchant/dashboard")
+    // localStorage.setItem("selectedBusiness", JSON.stringify(item));
+    setModalOpen(false);
   };
 
   // const { selectedBusiness, handleSelect } = useContext(BusinessContext);
@@ -69,7 +74,7 @@ const Header = ({ handleTrigger }) => {
     "/merchant/dashboard": "Merchant Dashboard",
     "/merchant/followers": "Followers",
     "/merchant/nudges": "Nudges",
-    "/admin/nudges/template":"Nudge Templates"
+    "/admin/nudges/template": "Nudge Templates",
   };
 
   return (
@@ -91,21 +96,29 @@ const Header = ({ handleTrigger }) => {
             4
           </div>
         </div> */}
-        {getMerchantBusinessSelector!==null && (
-          <div
-            className="d-flex selectCommon cursor-pointer align-center gap-6 "
-            onClick={toggleModal}
-          >
-            <div className="fs-16">
-              {getMerchantBusinessSelector
+          {/* {getMerchantBusinessSelector!==null && ( */}
+          {businessListSelector?.data?.data?.records?.length > 0 && (
+            <div
+              className="d-flex selectCommon cursor-pointer align-center gap-6 "
+              onClick={toggleModal}
+            >
+              <div className="fs-16">
+                {/* {getMerchantBusinessSelector
                 ? getMerchantBusinessSelector?.businessName
-                : businessListSelector?.data?.data?.records?.[0]?.businessName}
+                : businessListSelector?.data?.data?.records?.[0]?.businessName} */}
+                <>
+                  {selectedBusiness?.businessName
+                    ? selectedBusiness?.businessName
+                    : businessListSelector?.data?.data?.records?.[0]
+                        ?.businessName}
+                </>
+              </div>
+              <div className="h16">
+                <img src={arrowRight} alt="arrowRight" />
+              </div>
             </div>
-            <div className="h16">
-              <img src={arrowRight} alt="arrowRight" />
-            </div>
-          </div>
-        )}
+          )}
+          {/* )} */}
           {/* Modal Component */}
 
           <div className="notification">
@@ -120,6 +133,7 @@ const Header = ({ handleTrigger }) => {
         items={items}
         selectedItem={selectedItem}
         businessListSelector={businessListSelector}
+        selectedBusiness={selectedBusiness}
       />
     </>
   );

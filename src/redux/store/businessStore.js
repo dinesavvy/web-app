@@ -11,6 +11,7 @@ import followerAnalyticsSlice from "../action/businessAction/followerAnalytics";
 import businessListByUserIdSlice from "../action/businessAction/businessListByUserId";
 import businessDashboardSlice from "../action/businessAction/businessDashboard";
 import businessNudgeDetailsSlice from "../action/businessAction/businessNudgeDetails";
+import businessTeamListSlice from "../action/businessAction/businessTeamList";
 
 const store = configureStore({
   reducer: {
@@ -26,6 +27,7 @@ const store = configureStore({
     businessListByUserId: businessListByUserIdSlice,
     businessDashboard: businessDashboardSlice,
     businessNudgeDetails: businessNudgeDetailsSlice,
+    businessTeamList: businessTeamListSlice,
   },
 });
 

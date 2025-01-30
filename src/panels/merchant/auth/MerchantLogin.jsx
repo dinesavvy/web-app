@@ -5,23 +5,21 @@ import { ErrorMessage, Field, Form, Formik } from "formik";
 import "../../../assets/css/Login.css";
 import login from "../../../assets/images/login.jpg";
 import logo from "../../../assets/images/logo.svg";
-import phoneInput from "../../../assets/images/phoneInput.svg";
 // import passwordInput from "../../../assets/images/passwordInput.svg";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useCommonMessage } from "../../../common/CommonMessage";
 import "react-phone-number-input/style.css";
-// import PhoneInput from "react-phone-number-input";
 import { useEffect } from "react";
-import { validationSchema } from "./merchantLoginValidation";
+// import { validationSchema } from "./merchantLoginValidation";
 import Loader from "../../../common/Loader/Loader";
 import RequestedCode from "./RequestedCode";
 import {
   businessSendOtpAction,
   businessSendOtpHandler,
 } from "../../../redux/action/businessAction/businessSendOtp";
-import PhoneInput from "react-phone-input-2"; // Assuming you're using react-phone-input-2
-import "react-phone-input-2/lib/style.css"; // Ensure the styles are imported if needed
+import PhoneInput from "react-phone-input-2";
+import "react-phone-input-2/lib/style.css";
 
 const MerchantLogin = () => {
   const messageApi = useCommonMessage();
@@ -33,10 +31,24 @@ const MerchantLogin = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  const [phone, setPhone] = useState("");
+  const [countryCode, setCountryCode] = useState("");
+  const [country, setCountry] = useState(""); // Stores the country code like "pk", "us"
+
+  const handlePhoneChange = (value, data) => {
+    console.log("countryCode", countryCode);
+    const dialCode = `${data?.dialCode}`;
+    let number = value.replace(dialCode, "").trim(); // Remove country code from phone number
+
+    setCountry(data.countryCode); // Update country dynamically
+    setCountryCode(dialCode);
+    setPhone(number);
+  };
+
   const handleFormSubmit = (values) => {
     setLoginValue(values);
     let payload = {
-      phoneNumber: values?.phoneNumber,
+      phoneNumber: "+" + countryCode + " " + phone,
       appSignature: "TlVIT4Yl0sS",
     };
     dispatch(businessSendOtpHandler(payload));
@@ -69,6 +81,8 @@ const MerchantLogin = () => {
           loginValue={loginValue}
           requestLogin={requestLogin}
           setRequestLogin={setRequestLogin}
+          countryCode={countryCode}
+          phone={phone}
         />
       ) : (
         <>
@@ -89,7 +103,7 @@ const MerchantLogin = () => {
                   initialValues={{
                     phoneNumber: "",
                   }}
-                  validationSchema={validationSchema}
+                  // validationSchema={validationSchema}
                   onSubmit={(values, formikBag) => {
                     handleFormSubmit(values, formikBag);
                   }}
@@ -106,7 +120,7 @@ const MerchantLogin = () => {
                           Phone number*
                         </label>
                         <div className="line">
-                          <Field
+                          {/* <Field
                             type="text"
                             name="phoneNumber"
                             placeholder="Enter your phone number"
@@ -116,16 +130,26 @@ const MerchantLogin = () => {
                             src={phoneInput}
                             alt=""
                             className="absoluteImage"
+                          /> */}
+                          <PhoneInput
+                            country={country || undefined} // Set country dynamically when user types a code
+                            value={countryCode + phone} // Show full value but keep them separate in state
+                            onChange={handlePhoneChange}
+                            disableCountryGuess={false} // Allow auto-detection of typed country code
+                            disableDropdown={false} // Allow manual input and dropdown selection
+                            placeholder="Enter phone number"
                           />
                         </div>
-                        <ErrorMessage
+                        {/* <ErrorMessage
                           name="phoneNumber"
                           component="div"
                           className="mt-10 fw-500 fs-14 error"
-                        />
+                        /> */}
                       </div>
                       <button
-                        className="btn w-100"
+                        className={
+                          phone?.length > 0 ? "btn w-100" : "btn w-100 disabled"
+                        }
                         type="submit"
                         // disabled={isSubmitting}
                         // onClick={()=>navigate('/requested-code')}

@@ -1,12 +1,12 @@
+import React from "react";
 import { Modal } from "antd";
 import closeRightSidebar from "../../../assets/images/closeRightSidebar.svg";
 import rightactive from "../../../assets/images/rightactive.svg";
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  businessListAction,
-  businessListHandler,
-} from "../../../redux/action/businessAction/businessListSlice";
+// import { useDispatch, useSelector } from "react-redux";
+// import {
+//   businessListAction,
+//   businessListHandler,
+// } from "../../../redux/action/businessAction/businessListSlice";
 import Loader from "../../../common/Loader/Loader";
 
 const SelectModal = ({
@@ -17,12 +17,12 @@ const SelectModal = ({
   selectedItem,
   businessListSelector,
   setModalOpen,
+  selectedBusiness,
 }) => {
-
+  console.log(businessListSelector, "businessListSelector");
   return (
     <>
       {businessListSelector?.isLoading && <Loader />}
-
       <Modal
         centered
         visible={isModalOpen} // Control the visibility of the modal  // Handle close
@@ -39,33 +39,47 @@ const SelectModal = ({
           </div>
           {/* List of items */}
           <div className="padding30">
-            {businessListSelector?.data?.data?.records?.map((item, index) => (
-              <div
-                key={index}
-                className={`modal-item d-flex justify-between align-center gap-16 ${
-                  selectedItem?.name === item.name ? "active" : ""
-                }`}
-                onClick={() => {
-                  onSelect(item); // Select the item
-                  setModalOpen(false) // Close the modal
-                }}
-              >
-                <div>
-                  <div className="fs-18 fw-500 mb-4">{item.businessName}</div>
-                  <div className="fs-14 grey">
-                    {item.address?.addressLine1 +
-                      item.address?.addressLine2 +
-                      item.address?.locality +
-                      item.address?.administrativeDistrictLevel1 +
-                      item.address?.country +
-                      item.address?.postalCode}
-                  </div>
-                </div>
-                <div className="rightIcon">
-                  <img src={rightactive} alt="rightactive" />
-                </div>
-              </div>
-            ))}
+            {businessListSelector?.data?.data?.records?.length > 0 ? (
+              <>
+                {businessListSelector?.data?.data?.records?.map(
+                  (item, index) => (
+                    <div
+                      key={index}
+                      className={`modal-item d-flex justify-between align-center gap-16 ${
+                        selectedBusiness?.name === item?.name ? "active" : ""
+                      }`}
+                      onClick={() => {
+                        onSelect(item); // Select the item
+                        setModalOpen(false); // Close the modal
+                      }}
+                    >
+                      <div>
+                        <div className="fs-18 fw-500 mb-4">
+                          {item.businessName}
+                        </div>
+                        <div className="fs-14 grey">
+                          {[
+                            item.address?.addressLine1,
+                            item.address?.addressLine2,
+                            item.address?.locality,
+                            item.address?.administrativeDistrictLevel1,
+                            item.address?.country,
+                            item.address?.postalCode,
+                          ]
+                            .filter(Boolean)
+                            .join(" ")}
+                        </div>
+                      </div>
+                      <div className="rightIcon">
+                        <img src={rightactive} alt="rightactive" />
+                      </div>
+                    </div>
+                  )
+                )}
+              </>
+            ) : (
+              <div>No data available</div>
+            )}
           </div>
         </div>
       </Modal>

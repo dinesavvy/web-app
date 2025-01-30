@@ -24,8 +24,9 @@ import {
   businessSendOtpAction,
   businessSendOtpHandler,
 } from "../../../redux/action/businessAction/businessSendOtp";
+import { date } from "yup";
 
-const RequestedCode = ({ loginValue,requestLogin,setRequestLogin }) => {
+const RequestedCode = ({ loginValue,requestLogin,setRequestLogin,countryCode,phone }) => {
   const [minutes, setMinutes] = useState(0);
   const [seconds, setSeconds] = useState(60);
   const messageApi = useCommonMessage();
@@ -101,11 +102,11 @@ const RequestedCode = ({ loginValue,requestLogin,setRequestLogin }) => {
   const onSubmit = (values) => {
     event.preventDefault();
     let payload = {
-      phoneNumber: loginValue?.phoneNumber,
+      phoneNumber: "+" + countryCode + " " + phone,
       otp: otp?.join(""),
       deviceType: "Ios",
-      deviceId: "deviceId",
-    };
+      deviceId: Date.now() + "deviceId",
+    }
     dispatch(businessLoginHandler(payload));
   };
 
@@ -129,7 +130,7 @@ const RequestedCode = ({ loginValue,requestLogin,setRequestLogin }) => {
   const resendOTP = () => {
     // setSeconds(60);
     let payload = {
-      phoneNumber: loginValue?.phoneNumber,
+      phoneNumber: "+" + countryCode + " " + phone,
       appSignature: "TlVIT4Yl0sS",
     };
     dispatch(businessSendOtpHandler(payload));
@@ -167,7 +168,7 @@ const RequestedCode = ({ loginValue,requestLogin,setRequestLogin }) => {
             <form onSubmit={onSubmit}>
               <div className="fs-24 fw-700 mb-8">Verification</div>
               <div className="grey fs-18">
-                Enter the 6 digit code sent to your phone number {loginValue?.phoneNumber}
+                Enter the 6 digit code sent to your phone number {"+"+countryCode + phone}
               </div>
               <div className="divider3"></div>
               <div

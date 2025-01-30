@@ -31,16 +31,15 @@ const MerchantDashboard = () => {
   const getSelectedBusiness = JSON.parse(
     localStorage.getItem("selectedBusiness")
   );
+
   
   const businessListSelector = useSelector((state) => state?.businessList);
-  console.log(businessListSelector, "businessListSelector");
+  console.log(getSelectedBusiness, "getSelectedBusiness");
 
 
   useEffect(() => {
     dispatch(businessDashboardHandler());
   }, []);
-
-  console.log(getSelectedBusiness, "getSelectedBusiness");
 
   const tabs = [
     {
@@ -116,8 +115,8 @@ const MerchantDashboard = () => {
   return (
     <>
       {/*********************** Empty Content ************************/}
-      {getSelectedBusiness !== null && getSelectedBusiness?.roleTitle !== "Owner" && 
-      getSelectedBusiness?.roleData?.permissions?.viewAnalytics !== 2 ? (
+      {(getSelectedBusiness !== null && getSelectedBusiness?.roleTitle !== "Owner" && 
+      getSelectedBusiness?.roleData?.permissions?.viewAnalytics !== 2|| businessListSelector?.data?.data?.records?.length===0) ? (
         <div className="dashboard">
           <div className="emptyHeight position-relative">
             <img src={emptyBG} alt="" className="emptyBG" />
@@ -221,7 +220,7 @@ const MerchantDashboard = () => {
                 middleComponent={
                   <LineChart
                     labels={["", ""]}
-                    datas={[45, 89]}
+                    datas={["", ""]}
                     className="w-100"
                   />
                 }
