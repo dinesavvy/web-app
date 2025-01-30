@@ -9,12 +9,19 @@ import {
 import Loader from "../../../common/Loader/Loader";
 import { useCommonMessage } from "../../../common/CommonMessage";
 import { merchantTeamsHandler } from "../../../redux/action/merchantTeams";
+import {
+  removeTeamMemberBusinessAction,
+  removeTeamMemberBusinessHandler,
+} from "../../../redux/action/businessAction/removeTeamMember";
+import { businessTeamListHandler } from "../../../redux/action/businessAction/businessTeamList";
 
 const CommonModal = ({
   modal2Open,
   setModal2Open,
   modalImage,
   removeTeamMember,
+  merchantApp,
+  selectTeam,
 }) => {
   const messageApi = useCommonMessage();
   const getMerchantId = localStorage.getItem("merchantId");
@@ -24,29 +31,59 @@ const CommonModal = ({
     (state) => state?.removeTeamMember
   );
 
+  const removeTeamMemberBusinessSelector = useSelector(
+    (state) => state?.removeTeamMemberBusiness
+  );
+
+  console.log(
+    removeTeamMemberBusinessSelector,
+    "removeTeamMemberBusinessSelector"
+  );
+
   const deleteTeam = () => {
-    let payload = {
-      teamMappingId: removeTeamMember?._id,
-    };
-    dispatch(removeTeamMemberHandler(payload));
+    if (!merchantApp) {
+      let payload = {
+        teamMappingId: removeTeamMember?._id,
+      };
+      dispatch(removeTeamMemberHandler(payload));
+    } else if (merchantApp) {
+      let payload = {
+        teamMappingId: removeTeamMember?._id,
+      };
+      dispatch(removeTeamMemberBusinessHandler(payload));
+    }
   };
 
   useEffect(() => {
-    if (removeTeamMemberSelector?.data?.statusCode === 200) {
-      messageApi.open({
-        type: "success",
-        content: removeTeamMemberSelector?.data?.message,
-      });
-      setModal2Open(false)
-      dispatch(removeTeamMemberAction.removeTeamMemberReset());
-      if (getMerchantId) {
-            let payload = {
-              locationId: getMerchantId,
-            };
-            dispatch(merchantTeamsHandler(payload));
-          }
+    if (!merchantApp) {
+      if (removeTeamMemberSelector?.data?.statusCode === 200) {
+        messageApi.open({
+          type: "success",
+          content: removeTeamMemberSelector?.data?.message,
+        });
+        setModal2Open(false);
+        dispatch(removeTeamMemberAction.removeTeamMemberReset());
+        if (getMerchantId) {
+          let payload = {
+            locationId: getMerchantId,
+          };
+          dispatch(merchantTeamsHandler(payload));
+        }
+      }
+    } else if (merchantApp) {
+      if (removeTeamMemberBusinessSelector?.data?.statusCode === 200) {
+        messageApi.open({
+          type: "success",
+          content: removeTeamMemberBusinessSelector?.data?.message,
+        });
+        setModal2Open(false);
+        dispatch(
+          removeTeamMemberBusinessAction.removeTeamMemberBusinessReset()
+        );
+        dispatch(businessTeamListHandler());
+      }
     }
-  }, [removeTeamMemberSelector]);
+  }, [removeTeamMemberSelector,removeTeamMemberBusinessSelector, merchantApp]);
 
   return (
     <>

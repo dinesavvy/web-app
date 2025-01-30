@@ -640,12 +640,14 @@
   line-height: 24px;
 }
 
-.blueTag{
-  background-color: #056DFF;
-  color: white;
+.blueTag {
+  color: #056DFF;
   padding: 2px 8px;
   border-radius: 4px;
+  border: 1px solid #056DFF !important; 
+  height: fit-content;
 }
+
 /* Sidebar.css */
 .rightSidebar {
   width: 400px;

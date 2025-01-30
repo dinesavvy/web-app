@@ -15,6 +15,8 @@ import businessTeamListSlice from "../action/businessAction/businessTeamList";
 import businessRoleListSlice from "../action/businessAction/businessRoleList";
 import createTeamSlice from "../action/businessAction/createTeam";
 import getBusinessTeamSlice from "../action/businessAction/getBusinessTeam";
+import removeTeamMemberSlice from "../action/businessAction/removeTeamMember";
+import businessRoleUpdateSlice from "../action/businessAction/businessRoleUpdate";
 
 const store = configureStore({
   reducer: {
@@ -34,6 +36,8 @@ const store = configureStore({
     businessRoleList: businessRoleListSlice,
     createTeam: createTeamSlice,
     getBusinessTeam: getBusinessTeamSlice,
+    removeTeamMemberBusiness: removeTeamMemberSlice,
+    businessRoleUpdate: businessRoleUpdateSlice,
   },
 });
 

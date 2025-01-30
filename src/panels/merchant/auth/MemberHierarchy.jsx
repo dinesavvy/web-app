@@ -14,6 +14,9 @@ import {
   createTeamHandler,
 } from "../../../redux/action/businessAction/createTeam";
 import { useCommonMessage } from "../../../common/CommonMessage";
+import { removeTeamMemberHandler } from "../../../redux/action/businessAction/removeTeamMember";
+import moment from "moment";
+import { businessTeamListHandler } from "../../../redux/action/businessAction/businessTeamList";
 
 const MemberHierarchy = ({
   isMemberHierarchy,
@@ -22,7 +25,7 @@ const MemberHierarchy = ({
   addTeamModal,
   setAddTeamModal,
   addTeam,
-  getBusinessTeamSelector
+  getBusinessTeamSelector,
 }) => {
   const dispatch = useDispatch();
   const messageApi = useCommonMessage();
@@ -32,6 +35,7 @@ const MemberHierarchy = ({
     (state) => state?.businessRoleList
   );
   const createTeamSelector = useSelector((state) => state?.createTeam);
+  console.log(createTeamSelector, "createTeamSelectorcreateTeamSelector");
 
   // const validationSchema = Yup.object({
   //   name: Yup.string().required("Name is required"),
@@ -45,7 +49,7 @@ const MemberHierarchy = ({
   // });
 
   useEffect(() => {
-    if (addTeamModal) {
+    if (addTeamModal === true || selectTeam) {
       let payload = {
         page: 1,
         limit: 10,
@@ -53,7 +57,7 @@ const MemberHierarchy = ({
       dispatch(businessListHandler(payload));
       dispatch(businessRoleListHandler());
     }
-  }, [addTeamModal]);
+  }, [addTeamModal, selectTeam]);
 
   const handleFormSubmit = (values) => {
     let payload = {
@@ -70,6 +74,14 @@ const MemberHierarchy = ({
         type: "error",
         content: createTeamSelector?.message,
       });
+      dispatch(createTeamAction.createTeamReset());
+    } else if (createTeamSelector?.data?.statusCode === 200) {
+      messageApi.open({
+        type: "success",
+        content: createTeamSelector?.data?.message,
+      });
+      setAddTeamModal(false);
+      dispatch(businessTeamListHandler());
       dispatch(createTeamAction.createTeamReset());
     }
   }, [createTeamSelector]);
@@ -91,14 +103,15 @@ const MemberHierarchy = ({
         <div className="overflowSidebar">
           {/* Add and Edit Member */}
           <Formik
-          enableReinitialize
+            enableReinitialize
             initialValues={{
-              name: getBusinessTeamSelector?.data?.data?.displayName||"",
-              phone_number: "",
-              location: "",
-              role: "",
+              name: getBusinessTeamSelector?.data?.data?.displayName || "",
+              phone_number: selectTeam?.assignUserId?.phoneNumber || "",
+              location: selectTeam?.locationId?._id || "",
+              role: selectTeam?.roleId?._id || "",
               invitedDate: "",
-              joinedDate: "",
+              joinedDate:
+                moment(selectTeam?.createdAt).format("DD-MM-YYYY") || "",
             }}
             // validationSchema={validationSchema}
             onSubmit={(values) => {
@@ -226,28 +239,30 @@ const MemberHierarchy = ({
                           Pending
                         </div>
                       </div>
-                      <div className="mb-20">
-                        <label
-                          htmlFor="joinedDate"
-                          className="grey mb-10 fs-16 fw-500"
-                        >
-                          Date Joined
-                        </label>
-                        <div className="fixedDate position-relative w-100">
-                          <Field
-                            type="text"
+                      {selectTeam?.status === "pending" && (
+                        <div className="mb-20">
+                          <label
+                            htmlFor="joinedDate"
+                            className="grey mb-10 fs-16 fw-500"
+                          >
+                            Date Joined
+                          </label>
+                          <div className="fixedDate position-relative w-100">
+                            <Field
+                              type="text"
+                              name="joinedDate"
+                              id="joinedDate"
+                              className="input"
+                            />
+                            <div className="resendBtn fs-14">Resend</div>
+                          </div>
+                          <ErrorMessage
                             name="joinedDate"
-                            id="joinedDate"
-                            className="input"
+                            component="div"
+                            className="error"
                           />
-                          <div className="resendBtn fs-14">Resend</div>
                         </div>
-                        <ErrorMessage
-                          name="joinedDate"
-                          component="div"
-                          className="error"
-                        />
-                      </div>
+                      )}
                     </>
                   )}
                 </div>
@@ -262,9 +277,9 @@ const MemberHierarchy = ({
                       <button type="submit" className="btn w-100 gap-8">
                         Update
                       </button>
-                      <div className="deleteBtn btn">
+                      {/* <div className="deleteBtn btn" onClick={removeTeamMember}>
                         <img src={deleteMember} alt="" />
-                      </div>
+                      </div> */}
                     </div>
                   </>
                 )}
