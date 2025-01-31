@@ -505,6 +505,7 @@
   position: relative;
   overflow: hidden;
   height: fit-content;
+  box-shadow: 0px 0px 20px 0px #0000000A ;
 }
 
 .card16 {

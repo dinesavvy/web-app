@@ -2,13 +2,15 @@ import React from "react";
 import emptyBG from "../../../assets/images/emptyBG.png";
 import logoutBg from "../../../assets/images/logoutBg.svg";
 import modalbg from "../../../assets/images/modalbg.png";
+import { useNavigate } from "react-router-dom";
 
 const AccessDeniedModal = () => {
+  const navigate = useNavigate()
   return (
     <>
       <div className="dashboard">
         <div className="emptyHeight position-relative">
-          <img src={emptyBG} alt="" className="emptyBG" />
+          {/* <img src={emptyBG} alt="" className="emptyBG" /> */}
           <div className="modal-content">
             <div className="ant-modal-body">
               <div className="modalbg">

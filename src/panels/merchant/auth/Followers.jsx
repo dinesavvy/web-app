@@ -166,7 +166,7 @@ const Followers = () => {
     };
     dispatch(businessFollowerListHandler(payload));
   }, [searchQuery]);
-console.log(tempState,"tempState")
+  
   return (
     <>
       {businessListFollowerListSelector?.isLoading && <Loader />}

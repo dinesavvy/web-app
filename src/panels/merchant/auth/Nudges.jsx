@@ -20,8 +20,11 @@ import {
   businessNudgeDetailAction,
   businessNudgeDetailsHandler,
 } from "../../../redux/action/businessAction/businessNudgeDetails";
+import { useBusiness } from "../../../common/Layout/BusinessContext";
+import AccessDeniedModal from "../accessDeniedModal/accessDeniedModal";
 
 const Nudges = () => {
+  const [tempState, setTempState] = useState([]);
   const [modal2Open, setModal2Open] = useState(false);
   const [isPaymentSidebar, setIsPaymentSidebar] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -44,6 +47,22 @@ const Nudges = () => {
   );
 
   const dispatch = useDispatch();
+
+  // For Ghost Screen
+  const { selectedBusiness, setSelectedBusiness } = useBusiness();
+  const businessListSelector = useSelector((state) => state?.businessList);
+
+  useEffect(() => {
+    if (businessListSelector?.data?.data?.records?.length) {
+      const matchedBusiness = businessListSelector?.data?.data?.records?.find(
+        (element) => element?._id === selectedBusiness?._id
+      );
+
+      if (matchedBusiness) {
+        setTempState(matchedBusiness);
+      }
+    }
+  }, [businessListSelector, selectedBusiness]);
 
   const toggleSidebar = (item) => {
     let payload = {
@@ -99,6 +118,15 @@ const Nudges = () => {
     }
   }, [businessNudgeDetailsSelector]);
 
+  const [isChecked, setIsChecked] = useState(false);
+  
+  const createNudge = () => {
+    if (tempState?.roleTitle!== "Owner"&& tempState?.roleData?.permissions?.sendNudges !== 2) {
+      console.log("test")
+      setIsChecked(true);
+    }
+  };
+
   return (
     <>
       {(businessNudgesListSelector?.isLoading ||
@@ -124,115 +152,129 @@ const Nudges = () => {
           </div>
         </div>
       </div> */}
-      <div className="dashboard">
-        <div className="tabPadding mb-30">
-          <div className="d-flex align-center justify-between gap-20 mb-20 w-100">
-            <div className="fs-24 fw-600 ">Nudges</div>
-            <div className="btn btnSecondary p16 gap-8">
-              <img src={addCredits} alt="addCredits" />
-              Create a Nudge
-            </div>
-          </div>
-          <div className="lineSearch w-100 mb-20">
-            <input type="text" placeholder="Search Nudges" />
-            <img src={searchIcon} alt="" className="absoluteImage" />
-          </div>
-          <div className="d-flex align-center justify-between mb-15">
-            <div>
-              <span className="fw-16">Nudges Goal: </span>
-              <span className="fw-700 fs-20">15</span>
-            </div>
-            <div>
-              <span className="fs-14">Sent </span>
-              <span className="fs-18 gc fw-700">10</span>
-            </div>
-          </div>
-          <div className="range mb-15">
-            <div className="rangePercentage" style={{ width: "50%" }}></div>
-          </div>
-          <div className="fs-14 fw-500 grey mb-20">
-            You are just 50% behind to achieve Goal
-          </div>
-          {/* <div className="weekNudge pc mb-20">
+      {/* {tempState?.roleTitle !== "Owner" &&
+      tempState?.roleData?.permissions?.sendNudges !== 1 ? (
+        <AccessDeniedModal />
+      ) : (
+        <> */}
+      {isChecked ? (
+        <AccessDeniedModal />
+      ) : (
+        <>
+          <div className="dashboard">
+            <div className="tabPadding mb-30">
+              <div className="d-flex align-center justify-between gap-20 mb-20 w-100">
+                <div className="fs-24 fw-600 ">Nudges</div>
+                <div
+                  className="btn btnSecondary p16 gap-8"
+                  onClick={createNudge}
+                >
+                  <img src={addCredits} alt="addCredits" />
+                  Create a Nudge
+                </div>
+              </div>
+              <div className="lineSearch w-100 mb-20">
+                <input type="text" placeholder="Search Nudges" />
+                <img src={searchIcon} alt="" className="absoluteImage" />
+              </div>
+              <div className="d-flex align-center justify-between mb-15">
+                <div>
+                  <span className="fw-16">Nudges Goal: </span>
+                  <span className="fw-700 fs-20">15</span>
+                </div>
+                <div>
+                  <span className="fs-14">Sent </span>
+                  <span className="fs-18 gc fw-700">10</span>
+                </div>
+              </div>
+              <div className="range mb-15">
+                <div className="rangePercentage" style={{ width: "50%" }}></div>
+              </div>
+              <div className="fs-14 fw-500 grey mb-20">
+                You are just 50% behind to achieve Goal
+              </div>
+              {/* <div className="weekNudge pc mb-20">
             <div className="fs-18 fw-600">Nudges Expected This Week</div>
             <div className="fw-700 fs-20">124</div>
           </div> */}
-          <div className="card mb-20">
-            <div className="fs-20 fw-700 d-flex gap-20 align-center justify-between">
-              <div>Nudge Credits</div>
-              <div>44</div>
-            </div>
-            <div className="divider2"></div>
-            <div className="d-flex justify-between align-center gap-20 mb-6">
-              <div className="fs-16 grey fw-500">Previous balance</div>
-              <div className="fs-20 fw-700">30</div>
-            </div>
-            <div className="d-flex justify-between align-center gap-20 mb-6">
-              <div className="fs-16 grey fw-500">Followers added today</div>
-              <div className="gc fs-20 fw-700">+7</div>
-            </div>
-            <div className="d-flex justify-between align-center gap-20">
-              <div className="fs-16 grey fw-500">
-                Promotional credits added today
-              </div>
-              <div className="gc fs-20 fw-700">+7</div>
-            </div>
-            <div className="divider2"></div>
-            <div className="d-flex justify-between align-center gap-20 mb-20">
-              <div className="fs-16 grey fw-500">Nudge credits needed</div>
-              <div className="gc fs-20 fw-700">7</div>
-            </div>
-            {/* <div className="mb-16">
+              <div className="card mb-20">
+                <div className="fs-20 fw-700 d-flex gap-20 align-center justify-between">
+                  <div>Nudge Credits</div>
+                  <div>44</div>
+                </div>
+                <div className="divider2"></div>
+                <div className="d-flex justify-between align-center gap-20 mb-6">
+                  <div className="fs-16 grey fw-500">Previous balance</div>
+                  <div className="fs-20 fw-700">30</div>
+                </div>
+                <div className="d-flex justify-between align-center gap-20 mb-6">
+                  <div className="fs-16 grey fw-500">Followers added today</div>
+                  <div className="gc fs-20 fw-700">+7</div>
+                </div>
+                <div className="d-flex justify-between align-center gap-20">
+                  <div className="fs-16 grey fw-500">
+                    Promotional credits added today
+                  </div>
+                  <div className="gc fs-20 fw-700">+7</div>
+                </div>
+                <div className="divider2"></div>
+                <div className="d-flex justify-between align-center gap-20 mb-20">
+                  <div className="fs-16 grey fw-500">Nudge credits needed</div>
+                  <div className="gc fs-20 fw-700">7</div>
+                </div>
+                {/* <div className="mb-16">
               <input type="text" placeholder="Enter number of credits" />
             </div> */}
-            <div className="d-flex justify-between align-center gap-20 ">
-              <div className="d-flex align-center gap-16 flex-wrap">
-                <div className="addNudge2 active">5 Nudges</div>
-                <div className="addNudge2">10 Nudges</div>
-                <div className="addNudge2">15 Nudges</div>
-                <div className="addNudge2">20 Nudges</div>
-                <div className="addNudge2">25 Nudges</div>
+                <div className="d-flex justify-between align-center gap-20 ">
+                  <div className="d-flex align-center gap-16 flex-wrap">
+                    <div className="addNudge2 active">5 Nudges</div>
+                    <div className="addNudge2">10 Nudges</div>
+                    <div className="addNudge2">15 Nudges</div>
+                    <div className="addNudge2">20 Nudges</div>
+                    <div className="addNudge2">25 Nudges</div>
+                  </div>
+                  <div
+                    className="btn btnSecondary p16 gap-8"
+                    onClick={() => togglePaymentSidebar()}
+                  >
+                    <img src={addCredits} alt="addCredits" />
+                    Add Nudge Credits
+                  </div>
+                </div>
               </div>
-              <div
-                className="btn btnSecondary p16 gap-8"
-                onClick={() => togglePaymentSidebar()}
-              >
-                <img src={addCredits} alt="addCredits" />
-                Add Nudge Credits
-              </div>
-            </div>
-          </div>
-          <div className="card mb-20">
-            <div className="fs-20 fw-700 d-flex gap-20 align-center justify-between">
-              <div>Promotional Credits</div>
-              <div>$44</div>
-            </div>
-            <div className="divider2"></div>
-            <div className="d-flex justify-between align-center gap-20 mb-6">
-              <div className="fs-16 grey fw-500">Previous balance</div>
-              <div className="fs-20 fw-700">$30</div>
-            </div>
-            <div className="d-flex justify-between align-center gap-20 mb-6">
-              <div className="fs-16 grey fw-500">Promotions accepted today</div>
-              <div className="gc fs-20 fw-700">7</div>
-            </div>
-            <div className="d-flex justify-between align-center gap-20">
-              <div className="fs-16 grey fw-500">
-                Promotional credits added today
-              </div>
-              <div className="gc fs-20 fw-700">$7</div>
-            </div>
-            {/* <div className="divider2"></div>
+              <div className="card mb-20">
+                <div className="fs-20 fw-700 d-flex gap-20 align-center justify-between">
+                  <div>Promotional Credits</div>
+                  <div>$44</div>
+                </div>
+                <div className="divider2"></div>
+                <div className="d-flex justify-between align-center gap-20 mb-6">
+                  <div className="fs-16 grey fw-500">Previous balance</div>
+                  <div className="fs-20 fw-700">$30</div>
+                </div>
+                <div className="d-flex justify-between align-center gap-20 mb-6">
+                  <div className="fs-16 grey fw-500">
+                    Promotions accepted today
+                  </div>
+                  <div className="gc fs-20 fw-700">7</div>
+                </div>
+                <div className="d-flex justify-between align-center gap-20">
+                  <div className="fs-16 grey fw-500">
+                    Promotional credits added today
+                  </div>
+                  <div className="gc fs-20 fw-700">$7</div>
+                </div>
+                {/* <div className="divider2"></div>
             <div className="d-flex justify-between align-center gap-20 mb-20">
               <div className="fs-16 grey fw-500">
                 Promotional credits needed
               </div>
               <div className="gc fs-20 fw-700">$7</div>
             </div> */}
-            {/* <div className="mb-16">
+                {/* <div className="mb-16">
               <input type="text" placeholder="Enter number of credits" />
             </div> */}
-            {/* <div className="d-flex justify-between align-center gap-20 ">
+                {/* <div className="d-flex justify-between align-center gap-20 ">
               <div className="d-flex align-center gap-16 flex-wrap">
                 <div className="addNudge2 active">5 Nudges</div>
                 <div className="addNudge2">10 Nudges</div>
@@ -245,151 +287,154 @@ const Nudges = () => {
                 Add Promotional Credits
               </div>
             </div> */}
-          </div>
-          <div className="fs-20 fw-700 mb-10">Top Nudge</div>
-          <div className="d-flex gap-20 ">
-            <div className="cardNudge w-100">
-              <div className="image150 position-relative ">
-                <img src={dish2} alt="" className="w-100 h-100" />
-                <img src={nudgeImageSub} className="nudgeImageSub" alt="" />
               </div>
-              <img src={nudgeCardImage} className="nudgeCardImage" alt="" />
-              <div className="nudgePadding w-100">
-                <div className="fs-18 fw-700">Dine Savvy</div>
-                <div className="fs-14 mb-8">
-                  <span className="grey">Get </span>
-                  <span className="fw-700">10%</span>
-                  <span className="grey"> off at your next visit </span>
+              <div className="fs-20 fw-700 mb-10">Top Nudge</div>
+              <div className="d-flex gap-20 ">
+                <div className="cardNudge w-100">
+                  <div className="image150 position-relative ">
+                    <img src={dish2} alt="" className="w-100 h-100" />
+                    <img src={nudgeImageSub} className="nudgeImageSub" alt="" />
+                  </div>
+                  <img src={nudgeCardImage} className="nudgeCardImage" alt="" />
+                  <div className="nudgePadding w-100">
+                    <div className="fs-18 fw-700">Dine Savvy</div>
+                    <div className="fs-14 mb-8">
+                      <span className="grey">Get </span>
+                      <span className="fw-700">10%</span>
+                      <span className="grey"> off at your next visit </span>
+                    </div>
+                    <div className="d-flex gap-8 align-center mb-12">
+                      <div className="position-relative d-flex">
+                        <div className="imageCollaps">
+                          <img src={dish2} alt="" className="w-100 h-100" />
+                        </div>
+                        <div className="imageCollaps">
+                          <img src={dish2} alt="" className="w-100 h-100" />
+                        </div>
+                        <div className="imageCollaps">
+                          <img src={dish2} alt="" className="w-100 h-100" />
+                        </div>
+                        <div className="imageCollaps">
+                          <img src={dish2} alt="" className="w-100 h-100" />
+                        </div>
+                        <div className="imageCollaps">
+                          <img src={dish2} alt="" className="w-100 h-100" />
+                        </div>
+                      </div>
+                      <div className="fs-14 fw-700 gc">52 people accepted</div>
+                    </div>
+                    <div className="TagFull">Valid till 1st September 2024</div>
+                  </div>
                 </div>
-                <div className="d-flex gap-8 align-center mb-12">
-                  <div className="position-relative d-flex">
-                    <div className="imageCollaps">
-                      <img src={dish2} alt="" className="w-100 h-100" />
-                    </div>
-                    <div className="imageCollaps">
-                      <img src={dish2} alt="" className="w-100 h-100" />
-                    </div>
-                    <div className="imageCollaps">
-                      <img src={dish2} alt="" className="w-100 h-100" />
-                    </div>
-                    <div className="imageCollaps">
-                      <img src={dish2} alt="" className="w-100 h-100" />
-                    </div>
-                    <div className="imageCollaps">
-                      <img src={dish2} alt="" className="w-100 h-100" />
+                <div className="w-100 card bgGrey d-flex gap-20 align-center">
+                  <PercentageFiller percentage={50} />
+                  <div>
+                    <div className="fs-24 fw-700 mb-8 gc">Hooray! 🎉</div>
+                    <div className="fs-16">
+                      <span className="gc fw-700">85%</span> of people who got
+                      the nudge came in!
                     </div>
                   </div>
-                  <div className="fs-14 fw-700 gc">52 people accepted</div>
-                </div>
-                <div className="TagFull">Valid till 1st September 2024</div>
-              </div>
-            </div>
-            <div className="w-100 card bgGrey d-flex gap-20 align-center">
-              <PercentageFiller percentage={50} />
-              <div>
-                <div className="fs-24 fw-700 mb-8 gc">Hooray! 🎉</div>
-                <div className="fs-16">
-                  <span className="gc fw-700">85%</span> of people who got the
-                  nudge came in!
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-        <div className="tabs-container tab3 tabFull ">
-          <div className="tabs">
-            <button
-              className={`tab-button ${activeTab === "active" ? "active" : ""}`}
-              onClick={() => handleTabClick("active")}
-            >
-              Active Nudges
-            </button>
-            <button
-              className={`tab-button ${
-                activeTab === "inactive" ? "active" : ""
-              }`}
-              onClick={() => handleTabClick("inactive")}
-            >
-              Inactive Nudges
-            </button>
-            <button
-              // className={`tab-button ${
-              //   activeTab === "reverse" ? "active" : ""
-              // }`}
-              className="tab-button disabled"
-              // onClick={() => handleTabClick("reverse")}
-            >
-              Reverse Nudges
-            </button>
-          </div>
-        </div>
-        <div className="tabPadding">
-          <div className="merchantGrid mb-20">
-            {businessNudgesListSelector?.data?.data?.length > 0 ? (
-              businessNudgesListSelector?.data?.data?.map((item) => {
-                return (
-                  <div
-                    className="merchantCard position-relative"
-                    key={item?.id}
-                  >
-                    <div>
-                      {/* <div className="nailedIt active fs-14">
+            <div className="tabs-container tab3 tabFull ">
+              <div className="tabs">
+                <button
+                  className={`tab-button ${
+                    activeTab === "active" ? "active" : ""
+                  }`}
+                  onClick={() => handleTabClick("active")}
+                >
+                  Active Nudges
+                </button>
+                <button
+                  className={`tab-button ${
+                    activeTab === "inactive" ? "active" : ""
+                  }`}
+                  onClick={() => handleTabClick("inactive")}
+                >
+                  Inactive Nudges
+                </button>
+                <button
+                  // className={`tab-button ${
+                  //   activeTab === "reverse" ? "active" : ""
+                  // }`}
+                  className="tab-button disabled"
+                  // onClick={() => handleTabClick("reverse")}
+                >
+                  Reverse Nudges
+                </button>
+              </div>
+            </div>
+            <div className="tabPadding">
+              <div className="merchantGrid mb-20">
+                {businessNudgesListSelector?.data?.data?.length > 0 ? (
+                  businessNudgesListSelector?.data?.data?.map((item) => {
+                    return (
+                      <div
+                        className="merchantCard position-relative"
+                        key={item?.id}
+                      >
+                        <div>
+                          {/* <div className="nailedIt active fs-14">
                         {getTimeRemaining(item?.createdAt)}
                       </div> */}
-                      <div className="text-center nudgeCardImage180">
-                        <img
-                          src={item?.image || dish2}
-                          alt=""
-                          className="h-100 w-100"
-                        />
-                      </div>
-                    </div>
-                    <div className="bottomPadding">
-                      <div className="fs-16 fw-700 mb-8">{item?.title}</div>
-                      <div className="fs-14 mb-20">{item?.description}</div>
-                      <div className="d-flex gap-8 align-center mb-20">
-                        <div className="position-relative d-flex">
-                          {item?.acceptedFollowerList?.map(
-                            (itemFollower, index) => (
-                              <div className="imageCollaps" key={index}>
-                                <img
-                                  src={itemFollower?.photoURL}
-                                  alt={item?.title}
-                                  className="w-100 h-100"
-                                />
-                              </div>
-                            )
-                          )}
-                        </div>
-                        {item?.totalAcceptedFollowerList > 0 && (
-                          <div className="fs-14 fw-700 gc">
-                            {item?.totalAcceptedFollowerList} people accepted
+                          <div className="text-center nudgeCardImage180">
+                            <img
+                              src={item?.image || dish2}
+                              alt=""
+                              className="h-100 w-100"
+                            />
                           </div>
-                        )}
-                      </div>
-                      <div className="d-flex gap-10">
-                        <div
-                          className="btn btnSecondary w-100"
-                          onClick={() => toggleSidebar(item)}
-                        >
-                          View Details
                         </div>
-                        <div
-                          className="btn deleteBtnfull w-100"
-                          onClick={() => setModal2Open(true)}
-                        >
-                          End Nudge
+                        <div className="bottomPadding">
+                          <div className="fs-16 fw-700 mb-8">{item?.title}</div>
+                          <div className="fs-14 mb-20">{item?.description}</div>
+                          <div className="d-flex gap-8 align-center mb-20">
+                            <div className="position-relative d-flex">
+                              {item?.acceptedFollowerList?.map(
+                                (itemFollower, index) => (
+                                  <div className="imageCollaps" key={index}>
+                                    <img
+                                      src={itemFollower?.photoURL}
+                                      alt={item?.title}
+                                      className="w-100 h-100"
+                                    />
+                                  </div>
+                                )
+                              )}
+                            </div>
+                            {item?.totalAcceptedFollowerList > 0 && (
+                              <div className="fs-14 fw-700 gc">
+                                {item?.totalAcceptedFollowerList} people
+                                accepted
+                              </div>
+                            )}
+                          </div>
+                          <div className="d-flex gap-10">
+                            <div
+                              className="btn btnSecondary w-100"
+                              onClick={() => toggleSidebar(item)}
+                            >
+                              View Details
+                            </div>
+                            <div
+                              className="btn deleteBtnfull w-100"
+                              onClick={() => setModal2Open(true)}
+                            >
+                              End Nudge
+                            </div>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </div>
-                );
-              })
-            ) : (
-              <div>No data available</div>
-            )}
+                    );
+                  })
+                ) : (
+                  <div>No data available</div>
+                )}
 
-            {/* <div className="merchantCard position-relative">
+                {/* <div className="merchantCard position-relative">
               <div className="">
                 <div className="nailedIt active fs-14">12h 20m remaining</div>
                 <div className="text-center nudgeCardImage180">
@@ -429,7 +474,7 @@ const Nudges = () => {
                 </div>
               </div>
             </div> */}
-            {/* <div className="merchantCard position-relative">
+                {/* <div className="merchantCard position-relative">
               <div className="">
                 <div className="text-center nudgeCardImage180">
                   <img src={dish2} alt="" className="h-100 w-100" />
@@ -467,26 +512,31 @@ const Nudges = () => {
                 </div>
               </div>
             </div> */}
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
-      <CommonModal
-        modal2Open={modal2Open}
-        setModal2Open={setModal2Open}
-        modalImage={deleteModal}
-      />
-      <MerchantNudgeDetails
-        setIsSidebarOpen={setIsSidebarOpen}
-        isSidebarOpen={isSidebarOpen}
-        toggleSidebar={toggleSidebar}
-        activeTab={activeTab}
-        businessNudgeDetailsSelector={businessNudgeDetailsSelector}
-      />
-      <PaymentSidebar
-        isPaymentSidebar={isPaymentSidebar}
-        togglePaymentSidebar={togglePaymentSidebar}
-      />
+          <CommonModal
+            modal2Open={modal2Open}
+            setModal2Open={setModal2Open}
+            modalImage={deleteModal}
+          />
+          <MerchantNudgeDetails
+            setIsSidebarOpen={setIsSidebarOpen}
+            isSidebarOpen={isSidebarOpen}
+            toggleSidebar={toggleSidebar}
+            activeTab={activeTab}
+            businessNudgeDetailsSelector={businessNudgeDetailsSelector}
+          />
+          <PaymentSidebar
+            isPaymentSidebar={isPaymentSidebar}
+            togglePaymentSidebar={togglePaymentSidebar}
+          />
+        </>
+      )}
+      {/* {isChecked && <AccessDeniedModal />} */}
     </>
+    // )}
+    // </>
   );
 };
 
