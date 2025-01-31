@@ -121,7 +121,7 @@ const Header = ({ handleTrigger }) => {
         setModalOpen={setModalOpen}
         onSelect={handleSelect}
         items={items}
-        selectedItem={selectedItem}
+        // selectedItem={selectedItem}
         businessListSelector={businessListSelector}
         selectedBusiness={selectedBusiness}
       />

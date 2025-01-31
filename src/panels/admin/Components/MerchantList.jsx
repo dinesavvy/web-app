@@ -104,7 +104,7 @@ const MerchantList = () => {
                     <div className="merchantCard" key={index}>
                       <div className="topPadding">
                         <div className="merchantImage">
-                          <img src={item?.photoURL || noImageFound} alt="" />
+                          <img src={item?.logoUrl || noImageFound} alt="" />
                         </div>
                         <div className="fs-16 fw-700 mb-10">
                           {/* Garden Grove Café & Bistro */}

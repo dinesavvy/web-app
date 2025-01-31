@@ -18,10 +18,14 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { businessDashboardHandler } from "../../../redux/action/businessAction/businessDashboard";
 import LineChart from "../../../common/charts/LineChart";
+import { useBusiness } from "../../../common/Layout/BusinessContext";
+import Loader from "../../../common/Loader/Loader";
 
 const MerchantDashboard = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { selectedBusiness, setSelectedBusiness } = useBusiness();
+  console.log(selectedBusiness,"selectedBusiness")
   const [activeTab, setActiveTab] = useState("1");
 
   const businessDashBoardSelector = useSelector(
@@ -32,7 +36,22 @@ const MerchantDashboard = () => {
     localStorage.getItem("selectedBusiness")
   );
   const businessListSelector = useSelector((state) => state?.businessList);
+
+const [tempState,setTempState] = useState([]) 
+
+  useEffect(() => {
+    if (businessListSelector?.data?.data?.records?.length) {
+      const matchedBusiness = businessListSelector.data.data.records.find(
+        (element) => element?._id === selectedBusiness?._id
+      );
   
+      if (matchedBusiness) {
+        console.log(matchedBusiness, "Matching business found");
+        setTempState(matchedBusiness)
+      }
+    }
+  }, [businessListSelector, selectedBusiness]);
+
   useEffect(() => {
     dispatch(businessDashboardHandler());
   }, []);
@@ -110,9 +129,11 @@ const MerchantDashboard = () => {
 
   return (
     <>
+    {businessDashBoardSelector?.isLoading && <Loader />}
       {/*********************** Empty Content ************************/}
-      {(getSelectedBusiness !== null && getSelectedBusiness?.roleTitle !== "Owner" && 
-      getSelectedBusiness?.roleData?.permissions?.viewAnalytics !== 2|| businessListSelector?.data?.data?.records?.length===0) ? (
+      {/* {(getSelectedBusiness !== null && getSelectedBusiness?.roleTitle !== "Owner" && 
+      getSelectedBusiness?.roleData?.permissions?.viewAnalytics !== 2|| businessListSelector?.data?.data?.records?.length===0) ? ( */}
+      {tempState?.roleData?.permissions?.viewAnalytics !== 2 ?(
         <div className="dashboard">
           <div className="emptyHeight position-relative">
             <img src={emptyBG} alt="" className="emptyBG" />
@@ -147,7 +168,8 @@ const MerchantDashboard = () => {
             </div>
           </div>
         </div>
-      ) : (
+      ):(
+        <>
         <div className="dashboard">
           <div className="card">
             <div className="d-flex flexWrap gap-20">
@@ -224,7 +246,10 @@ const MerchantDashboard = () => {
             </div>
           </div>
         </div>
+        </>
       )}
+      {/* ) : ( */}
+      {/* )} */}
     </>
   );
 };
