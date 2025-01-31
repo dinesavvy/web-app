@@ -1,45 +1,46 @@
 import React, { useEffect, useState } from "react";
 import closeRightSidebar from "../../../assets/images/closeRightSidebar.svg";
-import { businessRoleUpdateHandler } from "../../../redux/action/businessAction/businessRoleUpdate";
-import { useDispatch } from "react-redux";
+import {
+  businessRoleUpdateAction,
+  businessRoleUpdateHandler,
+} from "../../../redux/action/businessAction/businessRoleUpdate";
+import { useDispatch, useSelector } from "react-redux";
+import { useCommonMessage } from "../../../common/CommonMessage";
 
 const MemberPermissions = ({
   isMemberPermissions,
+  setIsMemberPermissions,
   toggleMemberPermissions,
   rolesItems,
 }) => {
-
   const dispatch = useDispatch();
-
+  const messageApi = useCommonMessage();
   const [selectedPermissions, setSelectedPermissions] = useState([]);
 
-  const getSelectedBusiness = JSON.parse(localStorage.getItem("selectedBusiness"));
+  const businessRoleUpdateSelector = useSelector(
+    (state) => state?.businessRoleUpdate
+  );
 
   useEffect(() => {
-    if (rolesItems && rolesItems.permissions) {
-      // Filter permissions with value 2 or 1 (those with permission)
-      const filteredPermissions = Object.entries(rolesItems.permissions)
-        .filter(([key, value]) => value === 2 || value === 1) // Filter permissions with value 2 or 1
+    if (rolesItems && rolesItems?.permissions) {
+      const filteredPermissions = Object.entries(rolesItems?.permissions)
+        .filter(([key, value]) => value === 2 || value === 1)
         .map(([key, value]) => ({ key, value }));
-
-      setSelectedPermissions(filteredPermissions); // Set the filtered permissions as default selected
+      setSelectedPermissions(filteredPermissions);
     }
   }, [rolesItems]);
 
   const handleCheckboxChange = (key) => {
     setSelectedPermissions((prevState) => {
-      // Find the index of the permission in the selected permissions list
       const permissionIndex = prevState.findIndex((perm) => perm.key === key);
 
       if (permissionIndex === -1) {
-        // If the permission is not in the list, add it (checked, value 2)
         return [...prevState, { key, value: 2 }];
       } else {
-        // If the permission is already in the list, toggle its checked state
         const updatedPermissions = [...prevState];
         updatedPermissions[permissionIndex] = {
           ...updatedPermissions[permissionIndex],
-          value: updatedPermissions[permissionIndex].value === 2 ? 1 : 2, // Toggle value between 2 (checked) and 1 (unchecked)
+          value: updatedPermissions[permissionIndex].value === 2 ? 1 : 2,
         };
         return updatedPermissions;
       }
@@ -47,25 +48,36 @@ const MemberPermissions = ({
   };
 
   const handleUpdateClick = () => {
-    // Update the rolesItems.permissions object with the selected permissions
-    const updatedPermissions = { ...rolesItems.permissions };
+    const updatedPermissions = { ...rolesItems?.permissions };
 
-    // Update only the permissions that were selected/changed
     selectedPermissions.forEach(({ key, value }) => {
-      updatedPermissions[key] = value; // Set permission to value (2 for checked, 1 for unchecked)
+      updatedPermissions[key] = value;
     });
 
     const payload = {
-      businessRoleId: rolesItems?._id, // Business ID
-      permissions: updatedPermissions, // Permissions object with updated values
+      businessRoleId: rolesItems?._id,
+      permissions: updatedPermissions,
     };
 
-    dispatch(businessRoleUpdateHandler(payload)); // Dispatch the updated permissions
+    dispatch(businessRoleUpdateHandler(payload));
   };
 
-
-console.log(selectedPermissions,"selectedPermissions")
-
+  useEffect(() => {
+    if (businessRoleUpdateSelector?.data?.statusCode === 200) {
+      messageApi.open({
+        type: "success",
+        content: businessRoleUpdateSelector?.data?.message,
+      });
+      setIsMemberPermissions(false);
+      dispatch(businessRoleUpdateAction.businessRoleUpdateReset());
+    } else if (businessRoleUpdateSelector?.message) {
+      messageApi.open({
+        type: "error",
+        content: businessRoleUpdateSelector?.message,
+      });
+      dispatch(businessRoleUpdateAction.businessRoleUpdateReset());
+    }
+  }, [businessRoleUpdateSelector]);
 
   return (
     <>
@@ -88,19 +100,30 @@ console.log(selectedPermissions,"selectedPermissions")
           <div className="mb-40">
             {selectedPermissions?.map((permission) => {
               const isChecked = permission?.value === 2;
-              // const permissionTitles = {
-              //   addTeamMembers: "Add Team Members",
-              //   editSettings: "Edit Settings", 
-              //   deleteUsers: "Delete Users",
-              //   // Add more mappings as needed
-              // };
-            
+              const permissionTitles = {
+                editSettings: "Edit Settings",
+                deleteUsers: "Delete Users",
+                editAccount: "Edit account",
+                addTeamMembers: "Add Team members",
+                editRoles: "Edit Roles",
+                editGallery: "Edit Gallery",
+                viewAnalytics: "Analytics",
+                editGoals: "Edit Goals",
+                editMetrics: "Edit Metrics",
+                viewFollowers: "View Followers",
+                addFollowers: "Add Followers",
+                sendNudges: "Send Nudges",
+                sendTriggers: "Send Triggers",
+                // Add more mappings as needed
+              };
+
               return (
                 <label
                   className="selectPermission mb-12 fs-14"
                   key={permission?.key}
                 >
-                  {permission?.key} 
+                  {/* {permission?.key}  */}
+                  {permissionTitles[permission?.key] || permission?.key}
                   {/* {permissionTitles[permission?.key] || permission?.key} */}
                   <div className="custom-checkbox">
                     <label className="checkLabel">

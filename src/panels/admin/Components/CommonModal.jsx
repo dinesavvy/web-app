@@ -35,10 +35,6 @@ const CommonModal = ({
     (state) => state?.removeTeamMemberBusiness
   );
 
-  console.log(
-    removeTeamMemberBusinessSelector,
-    "removeTeamMemberBusinessSelector"
-  );
 
   const deleteTeam = () => {
     if (!merchantApp) {

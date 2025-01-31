@@ -22,7 +22,11 @@ const Hierarchy = () => {
   const [isMemberPermissions, setIsMemberPermissions] = useState(false);
   const [selectTeam, setSelectTeam] = useState();
   const [modal2Open, setModal2Open] = useState(false);
-const [rolesItems,setRolesItems] = useState()
+  const [rolesItems, setRolesItems] = useState();
+
+  const getSelectedBusinessData = JSON.parse(
+    localStorage.getItem("selectedBusiness")
+  );
 
   const businessTeamListSelector = useSelector(
     (state) => state?.businessTeamList
@@ -38,11 +42,17 @@ const [rolesItems,setRolesItems] = useState()
   const toggleMemberHierarchy = (item) => {
     setSelectTeam(item);
     setIsMemberHierarchy((prevState) => !prevState);
-    let payload = {
-      teamMappingId: item?._id,
-    };
-    dispatch(getBusinessTeamHandler(payload));
   };
+
+  useEffect(() => {
+    if (isMemberHierarchy) {
+      let payload = {
+        teamMappingId: selectTeam?._id,
+      };
+      dispatch(getBusinessTeamHandler(payload));
+    }
+  }, [isMemberHierarchy]);
+
   const addTeam = () => {
     setAddTeamModal((prevState) => !prevState);
   };
@@ -65,7 +75,7 @@ const [rolesItems,setRolesItems] = useState()
   }, []);
 
   const toggleMemberPermissions = (item) => {
-    setRolesItems(item)
+    setRolesItems(item);
     setIsMemberPermissions((prevState) => !prevState);
   };
 
@@ -92,10 +102,21 @@ const [rolesItems,setRolesItems] = useState()
 
           <div className="divider2"></div>
           <div className="d-flex align-center gap-20 mb-20">
-            <div className="profileImage">gh</div>
+            <div className="profileImage">
+              {JSON.parse(
+                localStorage.getItem("loginResponse")
+              )?.firstName?.charAt(0)}
+              {JSON.parse(
+                localStorage.getItem("loginResponse")
+              )?.lastName?.charAt(0)}
+            </div>
             <div>
-              <div className="fs-24 fw-600 mb-10">Myles Leighton</div>
-              <div className="positionTag fs-16 fw-600">Owner</div>
+              <div className="fs-24 fw-600 mb-10">
+                {JSON.parse(localStorage.getItem("loginResponse")).firstName}
+              </div>
+              <div className="positionTag fs-16 fw-600">
+                {getSelectedBusinessData?.roleTitle}
+              </div>
             </div>
           </div>
           <div className="d-flex align-center justify-between mb-20">
@@ -233,9 +254,10 @@ const [rolesItems,setRolesItems] = useState()
       />
       <MemberPermissions
         isMemberPermissions={isMemberPermissions}
+        setIsMemberPermissions={setIsMemberPermissions}
         toggleMemberPermissions={toggleMemberPermissions}
         rolesItems={rolesItems}
-        setRolesItems = {setRolesItems}
+        setRolesItems={setRolesItems}
       />
       <CommonModal
         modal2Open={modal2Open}

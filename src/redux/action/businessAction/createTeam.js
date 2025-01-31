@@ -22,7 +22,7 @@ const createTeamSlice = createSlice({
     },
     createTeamFailure(state, action) {
       state.isLoading = false;
-      state.message = action.payload.message;
+      state.message = action.payload;
       state.data = null;
     },
     createTeamReset(state) {
@@ -40,7 +40,7 @@ export const createTeamHandler = (data) => async (dispatch) => {
     const response = await createTeamAPI(data);
     dispatch(createTeamAction.createTeamSuccess(response));
   } catch (e) {
-    dispatch(createTeamAction.createTeamFailure(e));
+    dispatch(createTeamAction.createTeamFailure(e.response.data.message));
   }
 };
 export default createTeamSlice.reducer;

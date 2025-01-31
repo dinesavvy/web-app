@@ -17,6 +17,8 @@ import createTeamSlice from "../action/businessAction/createTeam";
 import getBusinessTeamSlice from "../action/businessAction/getBusinessTeam";
 import removeTeamMemberSlice from "../action/businessAction/removeTeamMember";
 import businessRoleUpdateSlice from "../action/businessAction/businessRoleUpdate";
+import updateTeamBusinessSlice from "../action/businessAction/updateTeamBusiness";
+import businessResendInviteLinkSlice from "../action/businessAction/businessResendInviteLink";
 
 const store = configureStore({
   reducer: {
@@ -38,6 +40,8 @@ const store = configureStore({
     getBusinessTeam: getBusinessTeamSlice,
     removeTeamMemberBusiness: removeTeamMemberSlice,
     businessRoleUpdate: businessRoleUpdateSlice,
+    updateTeamBusiness: updateTeamBusinessSlice,
+    businessResendInviteLink: businessResendInviteLinkSlice,
   },
 });
 

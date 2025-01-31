@@ -43,22 +43,11 @@ const Header = ({ handleTrigger }) => {
     dispatch(businessListHandler(payload));
   }, []);
 
-  // useEffect(() => {
-  //   if (businessListSelector?.data?.data?.records?.[0]) {
-  //     localStorage.setItem(
-  //       "selectedBusiness",
-  //       JSON.stringify(businessListSelector?.data?.data?.records?.[0])
-  //     );
-  //   } else if (selectedItem) {
-  //     localStorage.setItem("selectedBusiness", JSON.stringify(selectedItem));
-  //   }
-  // }, [businessListSelector]);
-
+ 
   // Handle Selection
   const handleSelect = (item) => {
     setSelectedBusiness(item);
     window.location.reload("/merchant/dashboard")
-    // localStorage.setItem("selectedBusiness", JSON.stringify(item));
     setModalOpen(false);
   };
 
@@ -74,6 +63,8 @@ const Header = ({ handleTrigger }) => {
     "/merchant/followers": "Followers",
     "/merchant/nudges": "Nudges",
     "/admin/nudges/template": "Nudge Templates",
+    "/merchant/hierarchy":"Profile Hierarchy",
+    "/merchant/profile":"Profile"
   };
 
   return (
