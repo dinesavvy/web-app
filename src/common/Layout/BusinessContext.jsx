@@ -11,16 +11,15 @@ export const BusinessProvider = ({ children }) => {
 
   const dispatch = useDispatch()
 
-   useEffect(() => {
-      let payload = {
-        page: 1,
-        limit: 10,
-      };
-      dispatch(businessListHandler(payload));
-    }, []);
+  //  useEffect(() => {
+  //     let payload = {
+  //       page: 1,
+  //       limit: 10,
+  //     };
+  //     dispatch(businessListHandler(payload));
+  //   }, []);
 
   const businessListSelector = useSelector((state) => state?.businessList);
-  console.log(businessListSelector?.data?.data?.records, "businessListSelector");
 
   useEffect(() => {
     // Check if it's the first time the user is loading (no selectedBusiness in localStorage)
