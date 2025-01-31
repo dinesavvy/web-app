@@ -32,7 +32,7 @@ const MerchantLogin = () => {
   const dispatch = useDispatch();
 
   const [phone, setPhone] = useState("");
-  const [countryCode, setCountryCode] = useState("");
+  const [countryCode, setCountryCode] = useState("+91");
   const [country, setCountry] = useState(""); // Stores the country code like "pk", "us"
 
   const handlePhoneChange = (value, data) => {
@@ -117,7 +117,7 @@ const MerchantLogin = () => {
                         <label className="fs-14 fw-500 mb-10" htmlFor="email">
                           Phone number*
                         </label>
-                        <div className="line">
+                        <div className="">
                           {/* <Field
                             type="text"
                             name="phoneNumber"
@@ -136,6 +136,7 @@ const MerchantLogin = () => {
                             disableCountryGuess={false} // Allow auto-detection of typed country code
                             disableDropdown={false} // Allow manual input and dropdown selection
                             placeholder="Enter phone number"
+                            className="phoneInput"
                           />
                         </div>
                         {/* <ErrorMessage

@@ -1467,6 +1467,34 @@ input.addTitleInput::placeholder {
   border-radius: 50%;
   background-color: #005CDE33;
 }
+.react-tel-input.phoneInput .form-control  {
+  font-size: 14px !important;
+  line-height: 21px !important;
+  padding: 12.5px 13px !important;
+  border: 1.5px solid transparent !important;
+  width: calc(100% - 29px) !important;
+  background-color: #F3F4F5 !important;
+  border-radius: 12px !important;
+  height: unset !important;
+  order: 2;
+}
+.react-tel-input .flag-dropdown{
+  position: static !important;
+  font-size: 14px !important;
+  line-height: 21px !important;
+  padding: 12.5px 13px !important;
+  border: 1.5px solid transparent !important;
+  /* width: calc(100% - 29px) !important; */
+  background-color: #F3F4F5 !important;
+  border-radius: 12px !important;
+}
+.phoneInput{
+  display: flex;
+  gap: 8px;
+}
+.react-tel-input .selected-flag:hover, .react-tel-input .selected-flag:focus{
+  background-color: transparent !important;
+}
 @media (max-width: 1499.98px) {
   .merchantGrid {
     grid-template-columns: repeat(2, 1fr);
