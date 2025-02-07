@@ -1211,7 +1211,7 @@ input.addTitleInput::placeholder {
   color: #005CDE;
 }
 .addTitleInput:focus::placeholder{
-  /* color: #777; */
+  color: #777;
 }
 .lh1{
   line-height: 1;
@@ -1232,7 +1232,10 @@ input.addTitleInput::placeholder {
   border-bottom:1px solid #E3E3E8;
 }
 .p20{
-  padding: 20px;
+  padding: 20px !important;
+}
+.my-16{
+  margin: 16px 0;
 }
 .modal-item:not(:last-child){
   border-bottom:1px solid #E3E3E8;
@@ -1495,6 +1498,12 @@ input.addTitleInput::placeholder {
 }
 .react-tel-input .selected-flag:hover, .react-tel-input .selected-flag:focus{
   background-color: transparent !important;
+}
+.image-preview{
+  width: 100%;
+  height: 300px;
+  border-radius: 8px;
+  overflow: hidden;
 }
 @media (max-width: 1499.98px) {
   .merchantGrid {

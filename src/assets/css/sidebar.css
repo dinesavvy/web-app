@@ -86,6 +86,7 @@
 }
 .closeSidebar{
   cursor: pointer;
+  height: 36px;
 }
 .tagNumber{
   padding: 0px 8px;
