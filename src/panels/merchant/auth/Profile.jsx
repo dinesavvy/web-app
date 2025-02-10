@@ -236,7 +236,15 @@ const Profile = () => {
                   >
                     Cancel
                   </div>
-                  <div className="w-100 btn" onClick={()=>{setModalOpen(false);handleDelete()}}>Upload</div>
+                  <div
+                    className="w-100 btn"
+                    onClick={() => {
+                      setModalOpen(false);
+                      handleDelete();
+                    }}
+                  >
+                    Upload
+                  </div>
                 </div>
               </div>
             </div>

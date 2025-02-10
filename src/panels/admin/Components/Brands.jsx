@@ -1,16 +1,34 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import addBtn from "../../../assets/images/addBtn.svg";
 import coke from "../../../assets/images/coke.svg";
 import editMember from "../../../assets/images/editMember.svg";
-import deleteMember from "../../../assets/images/deleteMember.svg";
+import onlyArrowBtn from "../../../assets/images/onlyArrowBtn.svg";
 import deleteModal from "../../../assets/images/deleteModal.svg";
 import SearchSelect from "./SearchSelect";
 import CommonModal from "./CommonModal";
 import { useNavigate } from "react-router-dom";
+import { Pagination } from "antd";
+import BrandDetails from "./BrandDetails";
 
 const Brands = () => {
-       const [modal2Open, setModal2Open] = useState(false);
-       const navigate = useNavigate()
+  const [brandDetails, setBrandDetails] = useState(false);
+  const navigate = useNavigate();
+  const [isDetailsOpen, setIsDetailsOpen] = useState(false);
+  useEffect(() => {
+    if (isDetailsOpen) {
+      document.body.classList.add("overflow-Hidden");
+    } else {
+      document.body.classList.remove("overflow-Hidden");
+    }
+
+    // Cleanup on component unmount
+    return () => {
+      document.body.classList.remove("overflow-Hidden");
+    };
+  }, [isDetailsOpen]);
+  const toggleDetails = () => {
+    setIsDetailsOpen((prevState) => !prevState);
+  };
   return (
     <>
       <div className="dashboard">
@@ -23,7 +41,7 @@ const Brands = () => {
             </div>
           </div>
           <SearchSelect />
-          <div className="merchantGrid ">
+          <div className="merchantGrid mb-20">
             <div className="merchantCard">
               <div className="p-20">
                 <div className="text-center promotionImage">
@@ -33,43 +51,35 @@ const Brands = () => {
               <div className="divider m-0"></div>
               <div className="bottomPadding">
                 <div className="fs-16 fw-700 mb-20">Coca Cola</div>
-                <div className="grid2 mb-20">
-                  <div>
-                    <div className="lightBlack fs-14 mb-4">MSRP</div>
-                    <div className="fs-14 fw-600">$19.99 per case</div>
-                  </div>
-                  <div>
-                    <div className="lightBlack fs-14 mb-4">SKUs</div>
-                    <div className="fs-14 fw-600">COKE-12x12-002</div>
-                  </div>
-                  <div className="twoSpace">
-                    <div className="lightBlack fs-14 mb-4">Description</div>
-                    <div className="fs-14 fw-600">
-                      Coca Cola - Classic 12 oz cans (12-pack)
-                    </div>
-                  </div>
+              
+                <div className="fs-16 fw-600 roi green mb-20">
+                  Redeemed: 52%
                 </div>
                 <div className="d-flex align-center gap-10">
                   <div
                     className="btn btnSecondary w-100 gap-8"
-                    onClick={() => navigate("/admin/brands/edit")}
+                    onClick={() => navigate("/admin/add-promotions")}
                   >
                     <img src={editMember} alt="" />
-                    Edit
+                    Promote
                   </div>
                   <div
-                    className="deleteBtn btn"
-                    onClick={() => setModal2Open(true)}
+                    className="onlyArrowBtn btn"
+                    onClick={() => toggleDetails()}
                   >
-                    <img src={deleteMember} alt="" />
+                    <img src={onlyArrowBtn} alt="" />
                   </div>
                 </div>
               </div>
             </div>
           </div>
+          <div className="d-flex align-center justify-between flexPagination">
+            <div className="fs-16">Showing 1 to 5 of 10 Restaurants</div>
+            <Pagination defaultCurrent={1} total={50} />
+          </div>
         </div>
       </div>
-      <CommonModal modal2Open={modal2Open} setModal2Open={setModal2Open} modalImage={deleteModal}/>
+      <BrandDetails isOpen={isDetailsOpen} toggleDetails={toggleDetails} />
     </>
   );
 };

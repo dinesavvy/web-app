@@ -14,7 +14,7 @@ const Header = ({ handleTrigger }) => {
   const [isModalOpen, setModalOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
   const dispatch = useDispatch();
-  const { selectedBusiness, setSelectedBusiness } = useBusiness();
+  // const { selectedBusiness, setSelectedBusiness } = useBusiness();
 
   const location = useLocation();
   const getRestaurantName = localStorage.getItem("restaurantName");
@@ -46,7 +46,7 @@ const Header = ({ handleTrigger }) => {
  
   // Handle Selection
   const handleSelect = (item) => {
-    setSelectedBusiness(item);
+    // setSelectedBusiness(item);
     window.location.reload("/merchant/dashboard")
     setModalOpen(false);
   };
@@ -97,10 +97,10 @@ const Header = ({ handleTrigger }) => {
                 ? getMerchantBusinessSelector?.businessName
                 : businessListSelector?.data?.data?.records?.[0]?.businessName} */}
                 <>
-                  {selectedBusiness?.businessName
+                  {/* {selectedBusiness?.businessName
                     ? selectedBusiness?.businessName
                     : businessListSelector?.data?.data?.records?.[0]
-                        ?.businessName}
+                        ?.businessName} */}
                 </>
               </div>
               <div className="h16">
@@ -123,7 +123,7 @@ const Header = ({ handleTrigger }) => {
         items={items}
         // selectedItem={selectedItem}
         businessListSelector={businessListSelector}
-        selectedBusiness={selectedBusiness}
+        // selectedBusiness={selectedBusiness}
       />
     </>
   );

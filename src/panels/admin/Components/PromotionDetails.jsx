@@ -97,7 +97,7 @@ const PromotionDetails = ({ isOpen, toggleDetails }) => {
           <div className="accordionCustom">
             {items.map((item, index) => (
               <>
-                <div key={index} className=" accordionItem">
+                <div key={index} className=" accordion-item">
                   <div
                     className="accordionHeader fs-16 fw-700"
                     onClick={() => toggleAccordion(index)}
@@ -113,7 +113,7 @@ const PromotionDetails = ({ isOpen, toggleDetails }) => {
                     </div>
                   </div>
                   <div
-                    className={`accordionContent accordion-content ${
+                    className={` accordion-content ${
                       openIndex === index ? "open" : ""
                     }`}
                   >

@@ -48,7 +48,7 @@ const Promotions = () => {
         <div className="tabPadding">
           <div className="d-flex justify-between align-center mb-20">
             <div className="fs-24 fw-600">Promotions</div>
-            <div
+            {/* <div
               className={`position-relative ${isOpen ? "rotate" : ""} `}
               ref={selectRef}
             >
@@ -64,6 +64,17 @@ const Promotions = () => {
                   </div>
                 </>
               )}
+            </div> */}
+            <div
+              className="position-relative d-flex align-center gap-10"
+            >
+              <div className="gap-8 btnSecondary p32 btn z1" onClick={()=>navigate("/admin/add-promotions")}>
+              Single Promotion
+              </div>
+              <div className="gap-8 btnSecondary p32 btn z1" onClick={()=>navigate("/admin/add-promotions")}>
+              Group Promotion
+              </div>
+           
             </div>
           </div>
           <div className="tabs-container tab3 tabing mb-20">
