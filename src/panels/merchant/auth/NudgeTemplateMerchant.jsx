@@ -107,6 +107,7 @@ const NudgeTemplateMerchant = () => {
                 src={backButton}
                 alt="backButton"
                 className="cursor-pointer"
+                onClick={()=>navigate("/merchant/nudges")}
               />
               <div>
                 <div className="fs-24 fw-600">Nudges Template</div>

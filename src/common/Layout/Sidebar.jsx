@@ -26,7 +26,6 @@ import { useNavigate } from "react-router-dom";
 
 const Sidebar = ({ isOpen, setIsOpen }) => {
   const getLoggedInDetails = localStorage.getItem("merchantLogin");
-  
 
   const navigate = useNavigate();
   const links = [
@@ -111,7 +110,6 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
           },
         ]),
   ];
-  
 
   const onNavigate = (path) => {
     const width = window.innerWidth;
@@ -130,7 +128,11 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
       <div className={`sidebar ${isOpen ? "sidebarOpen" : ""}`}>
         <div
           className="sidebarLogo cursor-pointer"
-          onClick={() => navigate("/admin/merchant/dashboard")}
+          onClick={() => {
+            getLoggedInDetails
+              ? navigate("/merchant/dashboard")
+              : navigate("/admin/merchant/dashboard");
+          }}
         >
           <img src={logo} alt="Logo" />
         </div>

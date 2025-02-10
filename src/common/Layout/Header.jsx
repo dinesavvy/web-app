@@ -12,9 +12,9 @@ import { useBusiness } from "./BusinessContext";
 
 const Header = ({ handleTrigger }) => {
   const [isModalOpen, setModalOpen] = useState(false);
-  const [selectedItem, setSelectedItem] = useState(null);
   const dispatch = useDispatch();
-  const { selectedBusiness, setSelectedBusiness } = useBusiness();
+
+  // const { selectedBusiness, setSelectedBusiness } = useBusiness();
 
   const location = useLocation();
   const getRestaurantName = localStorage.getItem("restaurantName");
@@ -36,22 +36,23 @@ const Header = ({ handleTrigger }) => {
   };
 
   useEffect(() => {
-    let payload = {
-      page: 1,
-      limit: 10,
-    };
-    dispatch(businessListHandler(payload));
+    if(localStorage.getItem("merchantLogin")===true){
+      let payload = {
+        page: 1,
+        limit: 10,
+      };
+      dispatch(businessListHandler(payload));
+    }
   }, []);
 
  
   // Handle Selection
   const handleSelect = (item) => {
-    setSelectedBusiness(item);
+    // setSelectedBusiness(item);
     window.location.reload("/merchant/dashboard")
     setModalOpen(false);
   };
 
-  // const { selectedBusiness, handleSelect } = useContext(BusinessContext);
 
   const pageTitles = {
     "/admin/merchant/list": "Merchants",
@@ -64,7 +65,8 @@ const Header = ({ handleTrigger }) => {
     "/merchant/nudges": "Nudges",
     "/admin/nudges/template": "Nudge Templates",
     "/merchant/hierarchy":"Profile Hierarchy",
-    "/merchant/profile":"Profile"
+    "/merchant/profile":"Profile",
+    "/merchant/create-nudge":"Nudges"
   };
 
   return (
@@ -75,8 +77,8 @@ const Header = ({ handleTrigger }) => {
             <img src={burgerMenu} alt="icon" />
           </div>
           {/* <div className="fs-24 fw-600">Dine Savvy Dashboard</div> */}
-          {pageTitles[location.pathname] && (
-            <div className="fs-24 fw-600">{pageTitles[location.pathname]}</div>
+          {pageTitles[location?.pathname] && (
+            <div className="fs-24 fw-600">{pageTitles[location?.pathname]}</div>
           )}
         </div>
         <div className="d-flex align-center gap-20">
@@ -87,27 +89,24 @@ const Header = ({ handleTrigger }) => {
           </div>
         </div> */}
           {/* {getMerchantBusinessSelector!==null && ( */}
-          {businessListSelector?.data?.data?.records?.length > 0 && (
+          {/* {businessListSelector?.data?.data?.records?.length > 0 && localStorage.getItem("merchantLogin")===true &&selectedBusiness !==undefin &&  (
             <div
               className="d-flex selectCommon cursor-pointer align-center gap-6 "
               onClick={toggleModal}
             >
               <div className="fs-16">
-                {/* {getMerchantBusinessSelector
-                ? getMerchantBusinessSelector?.businessName
-                : businessListSelector?.data?.data?.records?.[0]?.businessName} */}
                 <>
-                  {selectedBusiness?.businessName
+                   {selectedBusiness?.businessName
                     ? selectedBusiness?.businessName
                     : businessListSelector?.data?.data?.records?.[0]
-                        ?.businessName}
+                        ?.businessName} 
                 </>
               </div>
               <div className="h16">
                 <img src={arrowRight} alt="arrowRight" />
               </div>
             </div>
-          )}
+          )} */}
           {/* )} */}
           {/* Modal Component */}
 
@@ -116,6 +115,7 @@ const Header = ({ handleTrigger }) => {
           </div>
         </div>
       </header>
+      {/* {localStorage.getItem("merchantLogin")===true&&selectedBusiness&& (
       <SelectModal
         isModalOpen={isModalOpen}
         setModalOpen={setModalOpen}
@@ -125,6 +125,7 @@ const Header = ({ handleTrigger }) => {
         businessListSelector={businessListSelector}
         selectedBusiness={selectedBusiness}
       />
+      )} */}
     </>
   );
 };

@@ -19,6 +19,10 @@ const Profile = () => {
   const toggleAccordion = (index) => {
     setOpenIndex(index === openIndex ? null : index);
   };
+  const getSelectedBusinessData = JSON.parse(
+    localStorage.getItem("selectedBusiness")
+  );
+
   const items = [
     {
       title: "About",
@@ -62,10 +66,15 @@ const Profile = () => {
           </div>
           <div className="divider2"></div>
           <div className="d-flex align-center gap-20">
-            <div className="profileImage">gh</div>
+            <div className="profileImage">{JSON.parse(
+                localStorage.getItem("loginResponse")
+              )?.firstName?.charAt(0)}
+              {JSON.parse(
+                localStorage.getItem("loginResponse")
+              )?.lastName?.charAt(0)}</div>
             <div>
-              <div className="fs-24 fw-600 mb-10">Myles Leighton</div>
-              <div className="positionTag fs-16 fw-600">Owner</div>
+              <div className="fs-24 fw-600 mb-10">{JSON.parse(localStorage.getItem("loginResponse")).firstName}</div>
+              <div className="positionTag fs-16 fw-600">{getSelectedBusinessData?.roleTitle}</div>
             </div>
           </div>
           <div className="divider2"></div>
@@ -133,7 +142,10 @@ const Profile = () => {
         <div className="tabPadding">
           <div className="d-flex align-center justify-between mb-20">
             <div className="fs-20 fw-600">Gallery</div>
-            <div className="addCircle cursor-pointer" onClick={()=>toggleModal()}>
+            <div
+              className="addCircle cursor-pointer"
+              onClick={() => toggleModal()}
+            >
               <img src={addCircle} alt="" />
             </div>
           </div>
@@ -170,18 +182,14 @@ const Profile = () => {
           <div className="divider2"></div>
           <label className="uploadDrag text-center" for="file">
             <input type="file" id="file" className="d-none" />
-                <div>
-                    <div className="fs-14 mb-16">
-                    Drag images here
-                    </div>
-                    <div className="fs-14 grey mb-16">
-                    or
-                    </div>
-                    <div className="btn gap-8 px16 fw-500">
-                        <img src={uploadImage} alt="" />
-                        Choose from gallery
-                    </div>
-                </div>
+            <div>
+              <div className="fs-14 mb-16">Drag images here</div>
+              <div className="fs-14 grey mb-16">or</div>
+              <div className="btn gap-8 px16 fw-500">
+                <img src={uploadImage} alt="" />
+                Choose from gallery
+              </div>
+            </div>
           </label>
         </div>
       </Modal>

@@ -37,12 +37,21 @@ const MerchantLogin = () => {
 
   const handlePhoneChange = (value, data) => {
     const dialCode = `${data?.dialCode}`;
-    let number = value.replace(dialCode, "").trim(); // Remove country code from phone number
-
-    setCountry(data.countryCode); // Update country dynamically
-    setCountryCode(dialCode);
+    let number = value.replace(dialCode, "").trim(); // Remove country code
+  
+    if (!number) {
+      // If the number is empty, reset country code
+      setCountry("");
+      setCountryCode("");
+      return
+    } else {
+      setCountry(data.countryCode);
+      setCountryCode(dialCode);
+    }
+    
     setPhone(number);
   };
+    
 
   const handleFormSubmit = (values) => {
     setLoginValue(values);
@@ -134,7 +143,7 @@ const MerchantLogin = () => {
                             value={countryCode + phone} // Show full value but keep them separate in state
                             onChange={handlePhoneChange}
                             disableCountryGuess={false} // Allow auto-detection of typed country code
-                            disableDropdown={false} // Allow manual input and dropdown selection
+                            // disableDropdown={false} // Allow manual input and dropdown selection
                             placeholder="Enter phone number"
                             className="phoneInput"
                           />
