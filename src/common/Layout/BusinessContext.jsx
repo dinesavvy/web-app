@@ -4,22 +4,24 @@
 
 // const BusinessContext = createContext();
 
-// export const BusinessProvider = ({ children }) => {
-//   const [selectedBusiness, setSelectedBusiness] = useState(() => {
-//     return JSON.parse(localStorage.getItem("selectedBusiness")) || null;
-//   });
+export const BusinessProvider = ({ children }) => {
+  const [selectedBusiness, setSelectedBusiness] = useState(() => {
+    return JSON.parse(localStorage.getItem("selectedBusiness")) || {};
+  });
 
-//   const dispatch = useDispatch()
 
-//   //  useEffect(() => {
-//   //     let payload = {
-//   //       page: 1,
-//   //       limit: 10,
-//   //     };
-//   //     dispatch(businessListHandler(payload));
-//   //   }, []);
+  const dispatch = useDispatch()
 
-//   const businessListSelector = useSelector((state) => state?.businessList);
+//    useEffect(() => {
+//       let payload = {
+//         page: 1,
+//         limit: 10,
+//       };
+//       dispatch(businessListHandler(payload));
+//     }, []);
+
+  const businessListSelector = useSelector((state) => state?.businessList);
+  
 
 //   useEffect(() => {
 //     // Check if it's the first time the user is loading (no selectedBusiness in localStorage)

@@ -10,6 +10,4 @@ const rootElement = document.getElementById("root");
 const root = createRoot(rootElement);
 
 // Render the app
-root.render(
-    <MerchantApp />
-);
+root.render(<MerchantApp />);

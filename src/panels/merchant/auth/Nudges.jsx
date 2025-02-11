@@ -22,6 +22,7 @@ import {
 } from "../../../redux/action/businessAction/businessNudgeDetails";
 import { useBusiness } from "../../../common/Layout/BusinessContext";
 import AccessDeniedModal from "../accessDeniedModal/accessDeniedModal";
+import { useNavigate } from "react-router-dom";
 
 const Nudges = () => {
   const [tempState, setTempState] = useState([]);
@@ -29,6 +30,7 @@ const Nudges = () => {
   const [isPaymentSidebar, setIsPaymentSidebar] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("active"); // Default active tab is 'active'
+  const navigate = useNavigate();
 
   const togglePaymentSidebar = (item) => {
     setIsPaymentSidebar((prevState) => !prevState);
@@ -119,11 +121,16 @@ const Nudges = () => {
   }, [businessNudgeDetailsSelector]);
 
   const [isChecked, setIsChecked] = useState(false);
-  
+
+
   const createNudge = () => {
-    if (tempState?.roleTitle!== "Owner"&& tempState?.roleData?.permissions?.sendNudges !== 2) {
-      console.log("test")
+    if (
+      tempState?.roleTitle !== "Owner" &&
+      tempState?.roleData?.permissions?.sendNudges !== 2
+    ) {
       setIsChecked(true);
+    } else {
+      navigate("/merchant/create-nudge");
     }
   };
 
