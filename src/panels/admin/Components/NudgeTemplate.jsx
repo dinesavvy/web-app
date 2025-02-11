@@ -15,14 +15,13 @@ import { fileUploadHandler } from "../../../redux/action/fileUpload";
 const NudgeTemplate = () => {
   const dispatch = useDispatch();
   const { state } = useLocation();
-
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [nudgesCards, setNudgesCard] = useState(null);
+  const [uploadedImage, setUploadedImage] = useState(nudgesCards?.imageUrl[0]);
   const getNudgesTemplateSelector = useSelector(
     (state) => state?.getNudgesTemplate
   );
   const fileuploadSelector = useSelector((state) => state?.fileupload);
-
 
   useEffect(() => {
     if(state?.locationId?.nudgePrev){
@@ -71,7 +70,6 @@ const NudgeTemplate = () => {
   const handleSubmit = (values) => {
     console.log("Form values:", values);
   };
-  const [uploadedImage, setUploadedImage] = useState(nudgesCards?.imageUrl[0]);
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     const imageUrl = URL.createObjectURL(file);

@@ -66,7 +66,8 @@ const Header = ({ handleTrigger }) => {
     "/admin/nudges/template": "Nudge Templates",
     "/merchant/hierarchy":"Profile Hierarchy",
     "/merchant/profile":"Profile",
-    "/merchant/create-nudge":"Nudges"
+    "/merchant/create-nudge":"Nudges",
+    "/admin/merchant/edit-member": `Merchants - ${getRestaurantName}`,
   };
 
   return (

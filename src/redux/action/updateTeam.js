@@ -40,7 +40,7 @@ export const updateTeamHandler = (data) => async (dispatch) => {
     const response = await updateTeamAPI(data);
     dispatch(updateTeamAction.updateTeamSuccess(response));
   } catch (e) {
-    dispatch(updateTeamAction.updateTeamFailure(e));
+    dispatch(updateTeamAction.updateTeamFailure(e.response.data.message));
   }
 };
 export default updateTeamSlice.reducer;

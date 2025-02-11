@@ -11,6 +11,7 @@ const NudgeDetail = ({
   toggleSidebar,
   nudgeDetailsMainSelector,
   activeTab,
+  nudgeId
 }) => {
   return (
     <>
@@ -35,10 +36,10 @@ const NudgeDetail = ({
                 <div className="initialName">
                   {nudgeDetailsMainSelector?.data?.data?.title.slice(0, 2)}
                 </div>
-                {/* <div className="text-end">
+                <div className="text-end">
                   <div className="fs-14 mb-4">Nudge ID</div>
-                  <div className="fs-14 fw-600">#123456</div>
-                </div> */}
+                  <div className="fs-14 fw-600">{nudgeId+1}</div>
+                </div>
               </div>
               <div className="fs-18 fw-600 mb-2">
                 {nudgeDetailsMainSelector?.data?.data?.title}

@@ -17,6 +17,8 @@ import noImageFound from "../../../assets/images/noImageFound.png";
 const Nudges = () => {
   const [pagination, setPagination] = useState({ page: 1, limit: 9 });
   const [activeTab, setActiveTab] = useState(true);
+  const [nudgeId, setNudgeId] = useState("");
+
   const merchantsListSelector = useSelector((state) => state?.merchantsList);
   const nudgesListSelector = useSelector((state) => state?.nudgesList);
 
@@ -84,7 +86,8 @@ const Nudges = () => {
     fetchMerchants();
   }, [searchString, page]);
 
-  const toggleSidebar = (item) => {
+  const toggleSidebar = (item, index) => {
+    setNudgeId(index);
     setIsSidebarOpen((prevState) => !prevState);
     let payload = {
       nudgeId: item?._id,
@@ -168,18 +171,28 @@ const Nudges = () => {
               )}
             </div>
             {merchantsListSelector?.data?.data?.records?.length > 0 && (
-            <div className="d-flex align-center justify-between flexPagination mt-20">
-              <div className="fs-16">
-                Showing {pagination.page} to {pagination.limit} of{" "}
-                {merchantsListSelector?.data?.data?.recordsCount} Restaurants
+              <div className="d-flex align-center justify-between flexPagination mt-20">
+                <div className="fs-16">
+                  {/* Showing {pagination.page} to {pagination.limit} of{" "}
+                  {merchantsListSelector?.data?.data?.recordsCount} Restaurants */}
+                  {(() => {
+                    const start = (pagination.page - 1) * pagination.limit + 1;
+                    const end = Math.min(
+                      start +
+                        merchantsListSelector?.data?.data?.records?.length -
+                        1,
+                      merchantsListSelector?.data?.data?.recordsCount
+                    );
+                    return `Showing ${start} to ${end} of ${merchantsListSelector?.data?.data?.recordsCount} Restaurants`;
+                  })()}
+                </div>
+                <Pagination
+                  current={pagination.page}
+                  pageSize={pagination.limit}
+                  total={merchantsListSelector?.data?.data?.recordsCount}
+                  onChange={handlePaginationChange}
+                />
               </div>
-              <Pagination
-                current={pagination.page}
-                pageSize={pagination.limit}
-                total={merchantsListSelector?.data?.data?.recordsCount}
-                onChange={handlePaginationChange}
-              />
-            </div>
             )}
           </div>
         </div>
@@ -189,12 +202,13 @@ const Nudges = () => {
             <div className="card">
               <div className="d-flex justify-between align-center gap-20 mb-20 flexmd">
                 <div className="fs-24 fw-600">
-                  {selectedValue?.businessName}
+                  {selectedValue?.businessName.charAt(0).toUpperCase() +
+                    selectedValue?.businessName.slice(1)}
                 </div>
-                {/* <div className="btn btnSecondary p16 gap-8">
-              <img src={addCredits} alt="addCredits" />
-              Create a Nudge
-            </div> */}
+                <div className="btn btnSecondary p16 gap-8">
+                  <img src={addCredits} alt="addCredits" />
+                  Create a Nudge
+                </div>
               </div>
               <div className="tabs-container tab3 tabing mb-20">
                 <div className="tabs">
@@ -285,13 +299,21 @@ const Nudges = () => {
                                   Accepted:
                                 </div>
                                 <div className="fs-14 fw-600 gc">
-                                  {item?.totalAcceptedFollowerList}/
-                                  {(
-                                    (item?.totalAcceptedFollowerList /
-                                      item?.recipientCount) *
-                                    100
-                                  ).toFixed(0)}
-                                  %
+                                  {/* {item?.totalAcceptedFollowerList >0 &&item?.totalAcceptedFollowerList >0 ? ( */}
+                                  {item?.totalAcceptedFollowerList > 0 ? (
+                                    <>
+                                      {item?.totalAcceptedFollowerList}/
+                                      {(
+                                        (item?.totalAcceptedFollowerList /
+                                          item?.recipientCount) *
+                                        100
+                                      ).toFixed(0)}
+                                      %
+                                    </>
+                                  ) : (
+                                    <>0</>
+                                  )}
+                                  {/* ):(<>0</>)} */}
                                 </div>
                               </div>
                               <div>
@@ -299,13 +321,19 @@ const Nudges = () => {
                                   Declined:
                                 </div>
                                 <div className="fs-14 fw-600 rc">
-                                  {item?.disLikeUserList}/
-                                  {(
-                                    (item?.disLikeUserList /
-                                      item?.recipientCount) *
-                                    100
-                                  ).toFixed(0)}
-                                  %
+                                  {item?.disLikeUserList > 0 ? (
+                                    <>
+                                      {item?.disLikeUserList}/
+                                      {(
+                                        (item?.disLikeUserList /
+                                          item?.recipientCount) *
+                                        100
+                                      ).toFixed(0)}
+                                      %
+                                    </>
+                                  ) : (
+                                    <>0</>
+                                  )}
                                 </div>
                               </div>
                               <div>
@@ -313,24 +341,30 @@ const Nudges = () => {
                                   No Response
                                 </div>
                                 <div className="fs-14 fw-600 greyColor">
-                                  {item?.recipientCount -
-                                    (item?.totalAcceptedFollowerList +
-                                      item?.disLikeUserList)}
-                                  /
-                                  {(
-                                    ((item?.recipientCount -
-                                      (item?.totalAcceptedFollowerList +
-                                        item?.disLikeUserList)) /
-                                      item?.recipientCount) *
-                                    100
-                                  ).toFixed(2)}
-                                  %
+                                  {item?.recipientCount > 0 ? (
+                                    <>
+                                      {item?.recipientCount -
+                                        (item?.totalAcceptedFollowerList +
+                                          item?.disLikeUserList)}
+                                      /
+                                      {(
+                                        ((item?.recipientCount -
+                                          (item?.totalAcceptedFollowerList +
+                                            item?.disLikeUserList)) /
+                                          item?.recipientCount) *
+                                        100
+                                      ).toFixed(2)}
+                                      %
+                                    </>
+                                  ) : (
+                                    <>0</>
+                                  )}
                                 </div>
                               </div>
                             </div>
                             <div
                               className="btn btnSecondary w-100"
-                              onClick={() => toggleSidebar(item)}
+                              onClick={() => toggleSidebar(item, index)}
                             >
                               View Details
                             </div>
@@ -346,9 +380,20 @@ const Nudges = () => {
               {nudgesListSelector?.data?.data?.records?.length > 0 && (
                 <div className="d-flex align-center justify-between flexPagination">
                   <div className="fs-16">
-                    Showing {pagination.page} to {pagination.limit} of{" "}
+                    {/* Showing {pagination.page} to {pagination.limit} of{" "}
                     {merchantsListSelector?.data?.data?.recordsCount}{" "}
-                    Restaurants
+                    Restaurants */}
+                    {(() => {
+                      const start =
+                        (pagination.page - 1) * pagination.limit + 1;
+                      const end = Math.min(
+                        start +
+                          merchantsListSelector?.data?.data?.records?.length -
+                          1,
+                        merchantsListSelector?.data?.data?.recordsCount
+                      );
+                      return `Showing ${start} to ${end} of ${merchantsListSelector?.data?.data?.recordsCount} Restaurants`;
+                    })()}
                   </div>
                   <Pagination
                     current={pagination.page}
@@ -367,6 +412,7 @@ const Nudges = () => {
         isOpen={isSidebarOpen}
         toggleSidebar={toggleSidebar}
         nudgeDetailsMainSelector={nudgeDetailsMainSelector}
+        nudgeId={nudgeId}
       />
       {/* )} */}
     </>

@@ -227,8 +227,16 @@ const MerchantList = () => {
           {merchantListSelector?.data?.data?.records?.length > 0 && (
             <div className="d-flex align-center justify-between flexPagination">
               <div className="fs-16">
-                Showing {pagination.page} to {pagination.limit} of{" "}
-                {merchantListSelector?.data?.data?.recordsCount} Restaurants
+                {(() => {
+                  const start = (pagination.page - 1) * pagination.limit + 1;
+                  const end = Math.min(
+                    start +
+                      merchantListSelector?.data?.data?.records?.length -
+                      1,
+                    merchantListSelector?.data?.data?.recordsCount
+                  );
+                  return `Showing ${start} to ${end} of ${merchantListSelector?.data?.data?.recordsCount} Restaurants`;
+                })()}
               </div>
               <Pagination
                 current={pagination.page}
