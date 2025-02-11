@@ -258,17 +258,6 @@ const Profile = () => {
               </div>
             </div>
           )}
-          <label className="uploadDrag text-center" for="file">
-            <input type="file" id="file" className="d-none" />
-            <div>
-              <div className="fs-14 mb-16">Drag images here</div>
-              <div className="fs-14 grey mb-16">or</div>
-              <div className="btn gap-8 px16 fw-500">
-                <img src={uploadImage} alt="" />
-                Choose from gallery
-              </div>
-            </div>
-          </label>
         </div>
       </Modal>
     </>
