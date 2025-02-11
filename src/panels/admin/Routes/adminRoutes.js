@@ -12,6 +12,7 @@ import TeamMember from "../Components/TeamMember";
 import EditMember from "../Components/EditMember";
 import EditBrands from "../Components/EditBrands";
 import AddPromotion from "../Components/AddPromotion";
+import MerchantGroupList from "../Components/MerchantGroupList";
 
 const adminRoutes = [
   {
@@ -29,6 +30,12 @@ const adminRoutes = [
     {
       path: "/admin/merchant/list",
       element: MerchantList,
+      isPrivate: false,
+      isLayout: true,
+    },
+    {
+      path: "/admin/group/list",
+      element: MerchantGroupList,
       isPrivate: false,
       isLayout: true,
     },

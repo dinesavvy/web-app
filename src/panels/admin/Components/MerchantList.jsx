@@ -12,12 +12,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { merchantsListHandler } from "../../../redux/action/merchantsList";
 import moment from "moment";
 import Loader from "../../../common/Loader/Loader";
+import GroupList from "./GroupList";
 
 const MerchantList = () => {
   const [pagination, setPagination] = useState({ page: 1, limit: 9 });
   const [searchString, setSearchString] = useState("");
   const [searchArea, setSearchArea] = useState([]);
   const [activeTab2, setActiveTab2] = useState("today");
+  const [activeTab, setActiveTab] = useState("groups");
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -68,12 +70,41 @@ const MerchantList = () => {
 
     fetchMerchants();
   }, [pagination, activeTab2, searchString, searchArea]);
-
+  const tabs = [
+    {
+      id: "1",
+      label: "merchant",
+    },
+    {
+      id: "2",
+      label: "groups",
+    }
+  ];
   return (
     <>
       {merchantListSelector?.isLoading && <Loader />}
+
       <div className="dashboard">
-        <div className="card">
+        <div className="tabs-container tab3 tabFull ">
+          <div className="tabs">
+            {tabs.map((tab) => (
+              <button
+                key={tab.id}
+                className={`tab-button ${
+                  activeTab === tab.label ? "active" : ""
+                }`}
+                onClick={() => {
+                  setActiveTab(tab.label);
+                }}
+              >
+                {tab.label}
+              </button>
+            ))}
+          </div>
+        </div>
+        {activeTab === "merchant"? (<>
+        
+        <div className="tabPadding">
           <div className="d-flex align-center justify-between mb-20 flexWraplg">
             <div className="fs-24 fw-600">Merchants</div>
             <div className="tabs-container tab2">
@@ -101,7 +132,7 @@ const MerchantList = () => {
               merchantListSelector?.data?.data?.records?.map((item, index) => {
                 return (
                   <>
-                    <div className="merchantCard" key={index}>
+                    <div className="merchantCard position-relative" key={index}>
                       <div className="topPadding">
                         <div className="merchantImage">
                           <img src={item?.logoUrl || noImageFound} alt="" />
@@ -113,6 +144,12 @@ const MerchantList = () => {
                               item?.businessName.slice(1)}
                         </div>
                       </div>
+                      <div className="custom-checkbox merchantCardCheckbox">
+                    <label className="checkLabel">
+                      <input type="checkbox" />
+                      <span className="checkmark"></span>
+                    </label>
+                  </div>
                       <div className="divider2 m-0"></div>
                       <div className="bottomPadding">
                         {parseInt(item?.performance) > 33 ? (
@@ -247,6 +284,7 @@ const MerchantList = () => {
             </div>
           )}
         </div>
+        </>):(<><GroupList  /></>)}
       </div>
     </>
   );

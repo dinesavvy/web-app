@@ -16,6 +16,24 @@ const Profile = () => {
   const [openIndex, setOpenIndex] = useState(null);
   const [openImage, setOpenImage] = useState(false);
   const [isModalOpen, setModalOpen] = useState(false);
+  const [uploadedImage, setUploadedImage] = useState(null);
+
+  const handleImageUpload = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const imageUrl = URL.createObjectURL(file);
+      setUploadedImage({
+        name: file.name,
+        url: imageUrl,
+        uploader: "John Cooper",
+        uploadDate: "1 month ago",
+      });
+    }
+  };
+
+  const handleDelete = () => {
+    setUploadedImage(null);
+  };
   const toggleAccordion = (index) => {
     setOpenIndex(index === openIndex ? null : index);
   };
@@ -174,23 +192,72 @@ const Profile = () => {
       >
         <div className="p20">
           <div className=" d-flex justify-between align-center">
-            <div className="fs-18 fw-700">Upload Photo</div>
+            <div className="fs-18 fw-700">
+              {!uploadedImage ? "Upload Photo" : "Image Details"}{" "}
+            </div>
             <div className="closeSidebar" onClick={() => setModalOpen(false)}>
               <img src={closeRightSidebar} alt="closeRightSidebar" />
             </div>
           </div>
           <div className="divider2"></div>
-          <label className="uploadDrag text-center" for="file">
-            <input type="file" id="file" className="d-none" />
-            <div>
-              <div className="fs-14 mb-16">Drag images here</div>
-              <div className="fs-14 grey mb-16">or</div>
-              <div className="btn gap-8 px16 fw-500">
-                <img src={uploadImage} alt="" />
-                Choose from gallery
+          {!uploadedImage ? (
+            <label className="uploadDrag text-center" htmlFor="file">
+              <input
+                type="file"
+                id="file"
+                className="d-none"
+                onChange={handleImageUpload}
+              />
+              <div>
+                <div className="fs-14 mb-16">Drag images here</div>
+                <div className="fs-14 grey mb-16">or</div>
+                <div className="btn gap-8 px16 fw-500">
+                  <img src="upload-icon.png" alt="" />
+                  Choose from gallery
+                </div>
+              </div>
+            </label>
+          ) : (
+            <div className="image-details">
+              <div className="image-preview mb-20">
+                <img
+                  src={uploadedImage.url}
+                  alt={uploadedImage.name}
+                  className="w-100 h-100"
+                />
+              </div>
+              <div className="details">
+                <div className="fs-20 fw-700 mb-20">{uploadedImage.name}</div>
+                <div>
+                  <div className="custom-checkbox">
+                    <label className="checkLabel">
+                      <input type="checkbox" />
+                      <span className="checkmark"></span>
+                      Mark as Special
+                    </label>
+                  </div>
+                </div>
+                <div className="divider2 my-16"></div>
+                <div className="d-flex gap-10 justify-end flexBtn">
+                  <div
+                    className="btnSecondary w-100 btn"
+                    onClick={handleDelete}
+                  >
+                    Cancel
+                  </div>
+                  <div
+                    className="w-100 btn"
+                    onClick={() => {
+                      setModalOpen(false);
+                      handleDelete();
+                    }}
+                  >
+                    Upload
+                  </div>
+                </div>
               </div>
             </div>
-          </label>
+          )}
         </div>
       </Modal>
     </>

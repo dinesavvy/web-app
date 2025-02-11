@@ -13,7 +13,6 @@ import { useBusiness } from "./BusinessContext";
 const Header = ({ handleTrigger }) => {
   const [isModalOpen, setModalOpen] = useState(false);
   const dispatch = useDispatch();
-
   // const { selectedBusiness, setSelectedBusiness } = useBusiness();
 
   const location = useLocation();
@@ -124,7 +123,7 @@ const Header = ({ handleTrigger }) => {
         items={items}
         // selectedItem={selectedItem}
         businessListSelector={businessListSelector}
-        selectedBusiness={selectedBusiness}
+        // selectedBusiness={selectedBusiness}
       />
       )} */}
     </>

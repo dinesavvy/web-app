@@ -497,7 +497,62 @@
   justify-content: center;
   min-height: 600px;
 }
-
+.emptyHeight2 {
+  height: calc(100vh - 265px);
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 600px;
+}
+.emptyHeight2 .modal-content{
+  border: 1px solid #CDE2FF
+}
+.groupCard{
+  border-radius: 30px;
+  border: 1px solid #ECEDF0;
+  overflow: hidden;
+}
+.groupImage{
+  background: #D9D9D9;
+  display: flex;
+  position: relative;
+  height: 110px;
+}
+.groupImage div{
+  height: 100px;
+  width: 50%;
+  position: absolute;
+  background-color: white;
+  box-shadow: -5px 10px 16px 0px #00000012;
+  border: 1px solid #F0F0F0;
+  border-radius: 20px 20px 0 0;
+}
+.groupImage div img{
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.groupImage div:first-child{
+  top: 10px;
+  left: 10px;
+}
+.groupImage div:nth-child(2){
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.groupImage div:last-child{
+  top: 10px;
+  right: 10px;
+}
+.groupCardBottom{
+  box-shadow: 0px -5px 15px 0px #00000012;
+  padding: 20px;
+  position: relative;
+  z-index: 1;
+  background-color: white;
+}
 .modal-content {
   max-width: 424px !important;
   padding: 30px !important;
@@ -651,11 +706,11 @@
 
 /* Sidebar.css */
 .rightSidebar {
-  width: 400px;
+  width: 500px;
   height: 100vh;
   position: fixed;
   top: 0;
-  right: -400px;
+  right: -500px;
   transition: right 0.3s ease;
   padding: 20px;
   box-sizing: border-box;
@@ -943,8 +998,18 @@ input[type="radio"]:checked+.custom-radio-button {
   padding: 4px 12px;
   border-radius: 4px;
   color: white;
+  width: fit-content;
 }
-
+.brandRed{
+  color: #F5453B;
+}
+.addSku{
+  border: 1px dashed #056DFF;
+  background: #056DFF1A;
+  height: 46px;
+  color: #005CDE;
+  border-radius: 10px;
+}
 .roi.green {
   background-color: #00D014;
 }
@@ -952,7 +1017,9 @@ input[type="radio"]:checked+.custom-radio-button {
 .roi.red {
   background-color: #BF0202;
 }
-
+.onlyArrowBtn{
+  min-width: 50px;
+}
 .roi.blue {
   background-color: #056DFF;
 }
@@ -1132,6 +1199,49 @@ input[type="radio"]:checked+.custom-radio-button {
   background: black !important;
   z-index: 1 !important;
 }
+.p32{
+  padding: 0 32px;
+  width: unset;
+}
+.dropdownItem{
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 12px;
+}
+.dropdownItem:not(:last-child){
+  border-bottom: 1px solid rgba(75, 87, 100, 0.2);
+}
+.dropdownMenu{
+  position: absolute;
+  /* padding: 20px; */
+  border-radius: 4px;
+  background-color: white;
+  white-space: nowrap;
+  right: -15px;
+  top: calc(100% + 12px);
+  box-shadow: 0px 0px 20px 0px #00000012;
+  width: 119px;
+}
+.h-fit{
+  height: fit-content;
+}
+
+.dropdownMenu::after{
+  content: "";
+  background-color: white;
+  border-radius: 3ppx;
+  height: 10px;
+  width: 10px;
+  position: absolute;
+  top: -4px;
+  right: 20px;
+  transform: rotate(45deg);
+  box-shadow: 0px 0px 20px 0px #00000012;
+
+}
 .brandItem + .react-tooltip .react-tooltip-arrow{
   top: 20px !important;
 }
@@ -1211,7 +1321,7 @@ input.addTitleInput::placeholder {
   color: #005CDE;
 }
 .addTitleInput:focus::placeholder{
-  /* color: #777; */
+  color: #777;
 }
 .lh1{
   line-height: 1;
@@ -1232,7 +1342,10 @@ input.addTitleInput::placeholder {
   border-bottom:1px solid #E3E3E8;
 }
 .p20{
-  padding: 20px;
+  padding: 20px !important;
+}
+.my-16{
+  margin: 16px 0;
 }
 .modal-item:not(:last-child){
   border-bottom:1px solid #E3E3E8;
@@ -1359,7 +1472,7 @@ input.addTitleInput::placeholder {
   background-color: rgba(0, 123, 255, 0.1);  /* Light blue highlight */
   border-color: #007bff; /* Highlighted border color */
 }
-.accordion-content .brandItem img{
+.accordion-content .brandItem img,.accordionContent .brandItem img{
   object-fit: contain;
 }
 .gap-1020{
@@ -1495,6 +1608,17 @@ input.addTitleInput::placeholder {
 }
 .react-tel-input .selected-flag:hover, .react-tel-input .selected-flag:focus{
   background-color: transparent !important;
+}
+.image-preview{
+  width: 100%;
+  height: 300px;
+  border-radius: 8px;
+  overflow: hidden;
+}
+.merchantCardCheckbox{
+  position: absolute;
+  right: 20px;
+  top: 20px;
 }
 @media (max-width: 1499.98px) {
   .merchantGrid {

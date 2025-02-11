@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { businessListHandler } from "../../redux/action/businessAction/businessListSlice";
 
 const BusinessContext = createContext();
-
 export const BusinessProvider = ({ children }) => {
   const [selectedBusiness, setSelectedBusiness] = useState(() => {
     return JSON.parse(localStorage.getItem("selectedBusiness")) || {};
@@ -12,13 +11,13 @@ export const BusinessProvider = ({ children }) => {
 
   const dispatch = useDispatch()
 
-//    useEffect(() => {
-//       let payload = {
-//         page: 1,
-//         limit: 10,
-//       };
-//       dispatch(businessListHandler(payload));
-//     }, []);
+   useEffect(() => {
+      let payload = {
+        page: 1,
+        limit: 10,
+      };
+      dispatch(businessListHandler(payload));
+    }, []);
 
   const businessListSelector = useSelector((state) => state?.businessList);
   
@@ -45,3 +44,4 @@ export const BusinessProvider = ({ children }) => {
 };
 
 export const useBusiness = () => useContext(BusinessContext);
+
