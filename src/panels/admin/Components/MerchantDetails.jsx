@@ -330,7 +330,7 @@ const MerchantDetails = () => {
                   <img
                     src={backButton}
                     alt=""
-                    className="cursor-pointer"
+                    className="cursor-pointer backButton"
                     onClick={() => navigate("/admin/merchant/list")}
                   />
                   <div>
@@ -1158,13 +1158,13 @@ const MerchantDetails = () => {
                   <img
                     src={backButton}
                     alt=""
-                    className="cursor-pointer"
+                    className="cursor-pointer backButton"
                     onClick={() => navigate("/admin/merchant/list")}
                   />
                   <div>
                     <div className="fs-24 fw-600 mb-4">Dine Savvy Account</div>
                     <Breadcrumb
-                      className="cursor-pointer"
+                      className="cursor-pointer "
                       separator={<img src={breadCrumbIcon} />}
                       items={[
                         {

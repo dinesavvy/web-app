@@ -34,6 +34,7 @@
   flex-direction: column;
   margin-left: auto;
   margin-right: auto;
+  margin-bottom: 15px;
 }
 
 .circleAbsolute {
@@ -315,6 +316,80 @@ iframe{
     opacity: 1;
     transform: translateY(0);
   }
+}
+@media (max-width: 1549.98px) {
+  .overviewCard{
+    padding: 12px;
+  }
+  .tab-button{
+    font-size: 14px;
+    line-height: 1;
+    padding: 6px;
+    border-radius: 6px;
+  }
+  .tabs{
+    gap: 10px;
+  }
+  .circleinfo{
+    width: 90px;
+    height: 90px;
+    margin-bottom: 10px;
+  }
+  .chartpadding{
+    padding: 15px 15px 0 15px;
+  }
+  .trend{
+    padding: 3px 13px;
+    font-size: 10px;
+    line-height: 14px;
+  }
+  .p12{
+    padding: 9px;
+  }
+  .tab-content {
+    height: calc(100% - 47px);
+  }
+  .card{
+    padding: 16px;
+  }
+  .hchartImage{
+    height: 45px;
+  }
+  .accordion-item{
+    padding: 16px;
+  }
+  .accordion-header img{
+    height: 38px;
+  }
+  .tag {
+    border-top: 12.5px solid #056DFF;
+    border-bottom: 12.5px solid #056DFF;
+    border-left: 12.5px solid transparent;
+    border-right: 12.5px solid #056DFF;
+    width: 50px;
+    right: -15px;
+    top: 5px;
+  }
+  .tagAbsolute{
+    font-size: 14px;
+  }
+  .ant-pagination-item, .ant-pagination-next, .ant-pagination-prev {
+      height: 30px !important;
+      width: 30px !important;
+      border-color: #F4F4F6 !important;
+  }
+  .tab2 .tab-button{
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+  .tab3 .tab-button {
+    padding: 5px 22px;
+    border-radius: 9px 9px 0 0;
+  }
+  .tabFull .tab-button{
+    padding: 12px 25px !important;
+  }
+  
 }
 @media (max-width:1199.98px) {
   .overviewGrid2{

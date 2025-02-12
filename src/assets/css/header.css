@@ -32,6 +32,25 @@ header{
     top: -7px;
 }
 
+@media (max-width:1549.98px) {
+    header{
+        padding: 18px 25px;
+        margin-bottom: 20px;
+    }
+    .burgerMenu{
+        height: 25px;
+    }
+    .burgerMenu img{
+        width: 25px;
+    }
+    .notification{
+        height: 25px;
+    }
+    .dashboard {
+        padding: 0 20px;
+        padding-bottom: 20px;
+    }
+}
 @media (max-width:575.98px) {
     header{
       padding: 16px;

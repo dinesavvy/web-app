@@ -666,6 +666,35 @@ height: 100%;
   }
 }
 
+@media (max-width: 1549.98px) {
+  .divider ,.divider2{
+    margin: 16px 0;
+  }
+  .btn{
+    height: 38px;
+    font-size: 13px;
+    line-height: 18px;
+  }
+  input, textarea{
+    padding: 8.5px 10px;
+    width: calc(100% - 23px);
+  }
+  .absoluteImage{
+    width: 16px;
+  }
+  .lineSearch::after {
+    height: 19px;
+    left: 39px;
+  }
+  .lineSearch input {
+    padding-left: 50px;
+    width: calc(100% - 63px);
+  }
+  .btnSecondary{
+    height: 36px;
+  }
+ 
+}
 @media (max-width: 1023.98px) {
   .mobileHide {
     display: none;

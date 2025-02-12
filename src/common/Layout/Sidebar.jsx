@@ -16,6 +16,10 @@ import brands from "../../assets/images/sidebar/brands.svg";
 import brandsFull from "../../assets/images/sidebar/brandsFull.svg";
 import setting from "../../assets/images/sidebar/setting.svg";
 import settingFull from "../../assets/images/sidebar/settingFull.svg";
+import suppliers from "../../assets/images/sidebar/suppliers.svg";
+import suppliersFull from "../../assets/images/sidebar/suppliersFull.svg";
+import distributor from "../../assets/images/sidebar/distributor.svg";
+import distributorFull from "../../assets/images/sidebar/distributorFull.svg";
 import profile from "../../assets/images/sidebar/profile.svg";
 import profileFull from "../../assets/images/sidebar/profileFull.svg";
 import hierarchy from "../../assets/images/sidebar/hierarchy.svg";
@@ -37,6 +41,20 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
       navigate: getLoggedInDetails
         ? "/merchant/dashboard"
         : "/admin/merchant/dashboard",
+    },
+    {
+      id: 2,
+      name: "Suppliers",
+      icon: suppliers,
+      iconFull: suppliersFull,
+      navigate: "/admin/suppliers",
+    },
+    {
+      id: 3,
+      name: "Distributors",
+      icon: distributor,
+      iconFull: distributorFull,
+      navigate: "/admin/distributors",
     },
     ...(getLoggedInDetails
       ? []
@@ -90,7 +108,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
             id: 7,
             name: "Promotions",
             icon: promotions,
-            // iconFull: promotionsFull,
+            iconFull: promotionsFull,
             disabled: true,
             tag: "19",
           },

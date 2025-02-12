@@ -76,3 +76,20 @@
 .gap-30{
     gap: 30px;
 }
+@media (max-width:1549.98px) {
+  .mb-10{
+      margin-bottom: 8px;
+  }
+  .mb-15 {
+      margin-bottom: 12px;
+  }
+  .mb-20 {
+      margin-bottom: 16px;
+  }
+  .mb-30 {
+      margin-bottom: 20px !important;
+  }
+  .gap-20 {
+      gap: 16px !important;
+  }
+}

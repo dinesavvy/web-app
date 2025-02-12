@@ -46,7 +46,7 @@ const TeamMember = ({ merchantDetailsSelector, activeTab3, setActiveTab3 }) => {
           <img
             src={backButton}
             alt="backButton"
-            className="cursor-pointer"
+            className="cursor-pointer backButton"
             onClick={() => navigate("/admin/merchant/list")}
           />
           <div>

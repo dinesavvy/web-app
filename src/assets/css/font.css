@@ -59,3 +59,37 @@
     font-size: 34px;
     line-height: 51px;
 }
+@media (max-width:1549.98px) {
+    .fs-14 {
+        font-size: 12px;
+        line-height: 18px;
+    }
+    .fs-16{
+        font-size: 14px;
+        line-height: 20px;
+    }
+    .fs-18{
+        font-size: 16px;
+        line-height: 24px;
+    }
+    .fs-20{
+        font-size: 18px;
+        line-height: 24px;
+    }
+    .fs-22{
+        font-size: 18px;
+        line-height: 24px;
+    }
+    .fs-24{
+        font-size: 20px;
+        line-height: 28px;
+    }
+    .fs-26 {
+        font-size: 22px;
+        line-height: 30px;
+    }
+    .fs-34 {
+        font-size: 28px;
+        line-height: 34px;
+    }
+}

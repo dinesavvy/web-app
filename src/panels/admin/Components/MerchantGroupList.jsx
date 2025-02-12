@@ -17,7 +17,7 @@ const MerchantGroupList = () => {
       <div className="tabPadding">
         <div className="mb-20 d-flex align-center justify-between gap-20">
           <div className="d-flex align-center gap-20 w-100">
-            <img src={backButton} alt="backButton" className="cursor-pointer" />
+            <img src={backButton} alt="backButton" className="cursor-pointer backButton" />
             <div>
               <div className="fs-24  mb-4">
                 <span className="fw-600"> Group Name</span>{" "}

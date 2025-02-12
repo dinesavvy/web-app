@@ -1620,6 +1620,142 @@ input.addTitleInput::placeholder {
   right: 20px;
   top: 20px;
 }
+.flexColumn{
+  flex-direction: column; 
+}
+.uploadImage{
+  border: 2px dashed #056DFF;
+  border-radius: 8px;
+  height: 145px;
+  width: calc(100% - 4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+}
+@media (max-width: 1549.98px) {
+  .overviewCard{
+    padding: 12px;
+  }
+  .tabPadding{
+    padding: 16px;
+  }
+  .dropdown-button{
+    font-size: 14px;
+    line-height: 18px;
+  }
+  .dropdown-button img{
+    width: 16px;
+  }
+  .dropdown-header{
+    padding: 10px 10px;
+  }
+  .topPadding {
+    padding: 16px 16px 0 16px;
+  }
+  .merchantImage {
+    height: 75px;
+    width: 130px;
+    margin: 0 auto 16px;
+  }
+  .checkLabel {
+    font-size: 12px;
+    line-height: 18px;
+    gap: 6px;
+  }
+  .custom-checkbox .checkmark {
+    min-height: 16px;
+    min-width: 16px;
+    border-radius: 3px;
+  }
+  .custom-checkbox .checkmark::after{
+    left: 4.5px;
+    top: 1px;
+    width: 3.5px;
+    height: 9px;
+  }
+  .merchantCardCheckbox {
+    right: 16px;
+    top: 16px;
+  }
+  .bottomPadding,.groupCardBottom{
+    padding: 16px;
+  }
+  .label {
+    font-size: 12px;
+    padding: 6px;
+    border-radius: 3px;
+  }
+  .grid2{
+    gap: 16px;
+  }
+  .count {
+    padding: 4px;
+    font-size: 12px;
+    line-height: 10px;
+    gap: 4px;
+    border-radius: 3px;
+  }
+  .merchantGrid{
+    gap: 16px;
+  }
+  .groupImage div{
+    height: 85px;
+  }
+  .groupImage{
+    height: 95px;
+  }
+  .btn img{
+    height: 20px;
+  }
+  .ant-modal{
+    width: 400px !important;
+  }
+  .ant-modal-content {
+    max-width: 400px !important;
+    padding: 16px !important;
+    border-radius: 20px !important;
+    position: relative;
+    overflow: hidden;
+  }
+  .ant-modal-content .fs-26{
+    font-size: 18px !important;
+    line-height: 24px;
+  }
+  .modal-content {
+    max-width: 350px !important;
+    padding: 20px !important;
+    border-radius: 20px !important;
+  }
+  .modalbg,.modalbg img{
+    /* width: 100%; */
+  }
+  .modalImage img{
+    height: 80px;
+    width: 80px;
+  }
+  .modalImage {
+    height: 80px;
+  }
+  .modalbg, .modalbg img {
+    /* width: 100%; */
+    height: 75px;
+  }
+  .backButton{
+    height: 30px;
+  }
+  .modalbg {
+    top: -14px;
+    left: -29px;
+  }
+  .addBtn {
+    padding: 0 25px;
+    height: 40px;
+  }
+  .merchantCard{
+    border-radius: 16px;
+  }
+}
 @media (max-width: 1499.98px) {
   .merchantGrid {
     grid-template-columns: repeat(2, 1fr);

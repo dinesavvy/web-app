@@ -18,7 +18,7 @@ const EditBrands = () => {
             <img
               src={backButton}
               alt="backButton"
-              className="cursor-pointer"
+              className="cursor-pointer backButton"
               onClick={() => navigate("/admin/brands")}
             />
             <div>

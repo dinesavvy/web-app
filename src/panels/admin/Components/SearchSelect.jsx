@@ -145,7 +145,7 @@ const SearchSelect = ({ onSearchChange, onSearchAreaChange }) => {
       </div>
 
       {/* Selected Items */}
-      <div className="selected-items mb-20">
+      <div className={`selected-items ${selectedItems.length? "mb-20":""}`}>
         {selectedItems.map((item, index) => (
           <div key={index} className="selected-item">
             {/* {item} */}

@@ -13,6 +13,8 @@ import EditMember from "../Components/EditMember";
 import EditBrands from "../Components/EditBrands";
 import AddPromotion from "../Components/AddPromotion";
 import MerchantGroupList from "../Components/MerchantGroupList";
+import Suppliers from "../Components/Suppliers/Suppliers";
+import Distributors from "../Components/Distributors/Distributors";
 
 const adminRoutes = [
   {
@@ -102,6 +104,18 @@ const adminRoutes = [
     {
       path: "/admin/brands",
       element: Brands,
+      isPrivate: false,
+      isLayout: true,
+    },
+    {
+      path: "/admin/suppliers",
+      element: Suppliers,
+      isPrivate: false,
+      isLayout: true,
+    },
+    {
+      path: "/admin/distributors",
+      element: Distributors,
       isPrivate: false,
       isLayout: true,
     },

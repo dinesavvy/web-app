@@ -106,7 +106,7 @@ const NudgeTemplateMerchant = () => {
               <img
                 src={backButton}
                 alt="backButton"
-                className="cursor-pointer"
+                className="cursor-pointer backButton"
                 onClick={()=>navigate("/merchant/nudges")}
               />
               <div>

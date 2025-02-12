@@ -138,7 +138,7 @@ const EditMember = () => {
                     <img
                       src={backButton}
                       alt="backButton"
-                      className="cursor-pointer"
+                      className="cursor-pointer backButton"
                     />
                     <div>
                       <div className="fs-24 fw-600 mb-4">
