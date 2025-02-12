@@ -277,18 +277,19 @@ const MerchantList = () => {
                           >
                             Team
                           </div> */}
-                          {/* <div className="btnSecondary btn">Nudges</div> */}
-                        </div>
-                      </div>
-                    </div>
-                  </>
-                );
-              })
-            ) : (
-              <div>No data found</div>
-            )}
-          </div>
-          {merchantListSelector?.data?.data?.records?.length > 0 && (
+                                {/* <div className="btnSecondary btn">Nudges</div> */}
+                              </div>
+                            </div>
+                          </div>
+                        </>
+                      );
+                    }
+                  )
+                ) : (
+                  <div>No data found</div>
+                )}
+              </div>
+              {merchantListSelector?.data?.data?.records?.length > 0 && (
             <div className="d-flex align-center justify-between flexPagination">
               <div className="fs-16">
                 {(() => {
@@ -302,20 +303,14 @@ const MerchantList = () => {
                   return `Showing ${start} to ${end} of ${merchantListSelector?.data?.data?.recordsCount} Restaurants`;
                 })()}
               </div>
-              {merchantListSelector?.data?.data?.records?.length > 0 && (
-                <div className="d-flex align-center justify-between flexPagination">
-                  <div className="fs-16">
-                    Showing {pagination.page} to {pagination.limit} of{" "}
-                    {merchantListSelector?.data?.data?.recordsCount} Restaurants
-                  </div>
-                  <Pagination
-                    current={pagination.page}
-                    pageSize={pagination.limit}
-                    total={merchantListSelector?.data?.data?.recordsCount}
-                    onChange={handlePaginationChange}
-                  />
-                </div>
-              )}
+              <Pagination
+                current={pagination.page}
+                pageSize={pagination.limit}
+                total={merchantListSelector?.data?.data?.recordsCount}
+                onChange={handlePaginationChange}
+              />
+            </div>
+          )}
             </div>
           </>
         ) : (
