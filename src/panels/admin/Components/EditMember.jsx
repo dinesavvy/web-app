@@ -6,11 +6,12 @@ import breadCrumbIcon from "../../../assets/images/breadCrumb.svg";
 import CustomSelect from "./CustomSelect";
 import datePicker from "../../../assets/images/datePicker.svg";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Field, Form, Formik } from "formik";
+import { ErrorMessage, Field, Form, Formik } from "formik";
 import moment from "moment";
 import { roleListHandler } from "../../../redux/action/roleList";
 import { useDispatch, useSelector } from "react-redux";
 import Loader from "../../../common/Loader/Loader";
+import * as Yup from "yup";
 import {
   updateTeamAction,
   updateTeamHandler,
@@ -22,9 +23,14 @@ import {
 import { useCommonMessage } from "../../../common/CommonMessage";
 
 const EditMember = () => {
+  const validationSchema = Yup.object().shape({
+    name: Yup.string().required("Name is required"),
+    phone_number: Yup.string().required("Phone number is required"),
+  });
+
   const dispatch = useDispatch();
   const { state } = useLocation();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const messageApi = useCommonMessage();
   const roleListSelector = useSelector((state) => state?.roleList);
   const resendInviteLinkSelector = useSelector(
@@ -67,12 +73,13 @@ const EditMember = () => {
   };
 
   useEffect(() => {
-    if (resendInviteLinkSelector?.data?.statusCode === 200)
+    if (resendInviteLinkSelector?.data?.statusCode === 200) {
       messageApi.open({
         type: "success",
         content: resendInviteLinkSelector?.data?.message,
       });
-    dispatch(resendInviteLinkAction.resendInviteReset());
+      dispatch(resendInviteLinkAction.resendInviteReset());
+    }
   }, [resendInviteLinkSelector]);
 
   useEffect(() => {
@@ -82,9 +89,14 @@ const EditMember = () => {
         content: updateTeamSelector?.data?.message,
       });
       dispatch(updateTeamAction.updateTeamReset());
-      navigate("/admin/merchant/details")
-      
-    }else if (updateTeamSelector?.data?.statusCode === 400){
+      navigate("/admin/merchant/details");
+    } else if (updateTeamSelector?.data?.statusCode === 400) {
+      messageApi.open({
+        type: "error",
+        content: updateTeamSelector?.message,
+      });
+      dispatch(updateTeamAction.updateTeamReset());
+    } else if (updateTeamSelector?.message) {
       messageApi.open({
         type: "error",
         content: updateTeamSelector?.message,
@@ -110,6 +122,7 @@ const EditMember = () => {
           permissions: {},
           role: state?.item?.roleData?.[0]?.roleName || "",
         }}
+        validationSchema={validationSchema}
         onSubmit={(values, formikBag) => {
           handleFormSubmit(values, formikBag);
         }}
@@ -121,7 +134,7 @@ const EditMember = () => {
           /* and other goodies */
         }) => {
           useEffect(() => {
-            if (values.role) {
+            if (values?.role) {
               const selectedRole = roleListSelector?.data?.data?.records?.find(
                 (role) => role.title === values.role
               );
@@ -149,6 +162,7 @@ const EditMember = () => {
                         items={[
                           {
                             title: "Team Members",
+                            onClick: () => navigate("/admin/merchant/details"),
                           },
                           {
                             title: "Details",
@@ -180,7 +194,7 @@ const EditMember = () => {
                   <div className="inputGrid gap-20">
                     <div>
                       <label htmlFor="name" className="grey mb-10 fs-16 fw-500">
-                        Name
+                        Name*
                       </label>
                       <Field
                         type="text"
@@ -188,13 +202,18 @@ const EditMember = () => {
                         placeholder="Enter your name"
                         id="name"
                       />
+                      <ErrorMessage
+                        name="name"
+                        component="div"
+                        className="mt-10 fw-500 fs-14 error"
+                      />
                     </div>
                     <div>
                       <label
                         htmlFor="number"
                         className="grey mb-10 fs-16 fw-500"
                       >
-                        Phone number
+                        Phone number*
                       </label>
                       <Field
                         type="text"
@@ -202,6 +221,11 @@ const EditMember = () => {
                         placeholder="Enter your phone number"
                         id="phone_number"
                         className="input"
+                      />
+                      <ErrorMessage
+                        name="phone_number"
+                        component="div"
+                        className="mt-10 fw-500 fs-14 error"
                       />
                     </div>
                     <div>
@@ -278,12 +302,14 @@ const EditMember = () => {
                           id="invitedDate"
                           className="input"
                         />
+                        {/* {state?.item?.status === "pending" && ( */}
                         <div
                           className="resendBtn fs-14"
                           onClick={resendInviteLink}
                         >
                           Resend
                         </div>
+                        {/* )} */}
                       </div>
                       {/* <div className="fixedDate input  position-relative">
                       Pending <div className="resendBtn fs-14" onClick={resendInviteLink}>Resend</div>
@@ -322,19 +348,6 @@ const EditMember = () => {
                         <div className="fixedDate input  position-relative">
                           Pending
                         </div>
-                        {/* <Space direction="vertical" className="noicon">
-                      <DatePicker
-                        placeholder="YYYY-MM-DD"
-                        format="YYYY-MM-DD"
-                        onChange={(date, dateString) => {
-                          setFieldValue("joinedDate", dateString);
-                        }}
-                        disabledDate={(current) => {
-                          return current && current < moment().startOf("day");
-                        }}
-                        allowClear={false}
-                      />
-                    </Space> */}
                       </div>
                     )}
                   </div>
@@ -379,7 +392,12 @@ const EditMember = () => {
                   </div>
                 )}
                 <div className="d-flex align-center justify-end gap-16">
-                  <div className="btn btnSecondary w-172" onClick={()=>navigate("/admin/merchant/details")}>Discard</div>
+                  <div
+                    className="btn btnSecondary w-172"
+                    onClick={() => navigate("/admin/merchant/details")}
+                  >
+                    Discard
+                  </div>
                   <button className="btn w-172" type="submit">
                     Save Changes
                   </button>

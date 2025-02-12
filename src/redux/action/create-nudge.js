@@ -40,7 +40,7 @@ export const createNudgeHandler = (data) => async (dispatch) => {
     const response = await createNudgeAPI(data);
     dispatch(createNudgeAction.createNudgeSuccess(response));
   } catch (e) {
-    dispatch(createNudgeAction.createNudgeFailure(e));
+    dispatch(createNudgeAction.createNudgeFailure(e?.response?.data?.message));
   }
 };
 export default createNudgeSlice.reducer;

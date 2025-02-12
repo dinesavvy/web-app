@@ -42,6 +42,7 @@ const MerchantDetails = () => {
   const [switchState, setSwitchState] = useState(false);
   const [viewDetail, setViewDetail] = useState(false);
   const [pagination, setPagination] = useState({ page: 1, limit: 9 });
+  const [nudgeId, setNudgeId] = useState("");
   const [searchString, setSearchString] = useState("");
   const [searchArea, setSearchArea] = useState([]);
   const [activeNudgeClass, setActiveNudgeClass] = useState("Received");
@@ -97,20 +98,19 @@ const MerchantDetails = () => {
   const handleCardClick = (cardType) => {
     setActiveNudgeClass(cardType);
   };
-
+  // active and inactive nudge list
   useEffect(() => {
     if (activeNudgeClass) {
       let payload = {
-        page: 1,
-        limit: 10,
+        page: pagination?.page,
+        limit: pagination?.limit,
         userId: followerDetailsSelector?.data?.data?.userId,
         nudgeType: activeNudgeClass, // "Received", "Accepted", "Denied", "NoAnswer", "Redeemed",
         isActive: activeNudgeClass === "Received" ? activeTab : undefined,
       };
-
       dispatch(listByUserIdHandler(payload));
     }
-  }, [activeNudgeClass, followerDetailsSelector, activeTab]);
+  }, [activeNudgeClass, followerDetailsSelector, activeTab,pagination]);
 
   // For Nudge Details Data
   const nudgeDetailsMainSelector = useSelector(
@@ -130,7 +130,8 @@ const MerchantDetails = () => {
     };
   }, [isSidebarOpen]);
 
-  const toggleSidebar = (item) => {
+  const toggleSidebar = (item, index) => {
+    setNudgeId(index);
     setIsSidebarOpen((prevState) => !prevState);
     if (!isSidebarOpen) {
       let payload = {
@@ -139,7 +140,7 @@ const MerchantDetails = () => {
       dispatch(nudgesDetailsHandler(payload));
     }
   };
-  
+
   const handleCheckboxChange = (index, isChecked, item) => {
     setCheckedItems((prev) => ({
       ...prev,
@@ -1288,6 +1289,7 @@ const MerchantDetails = () => {
                               },
                               {
                                 title: "Followers",
+                                onClick: () => setViewDetail(false),
                               },
                               {
                                 title: "Follower Details",
@@ -1402,7 +1404,9 @@ const MerchantDetails = () => {
                         </div>
                         <div className="fs-22 fw-500">
                           {followerDetailsSelector?.data?.data?.nudge
-                            ?.totalNudge > 0
+                            ?.totalNudge > 0 &&
+                          followerDetailsSelector?.data?.data?.nudge
+                            ?.acceptNudge
                             ? `${
                                 followerDetailsSelector?.data?.data?.nudge
                                   ?.acceptNudge || 0
@@ -1433,7 +1437,9 @@ const MerchantDetails = () => {
                         </div>
                         <div className="fs-22 fw-500">
                           {followerDetailsSelector?.data?.data?.nudge
-                            ?.totalNudge > 0
+                            ?.totalNudge &&
+                          followerDetailsSelector?.data?.data?.nudge
+                            ?.declinedNudge > 0
                             ? `${
                                 followerDetailsSelector?.data?.data?.nudge
                                   ?.declinedNudge || 0
@@ -1464,7 +1470,9 @@ const MerchantDetails = () => {
                         </div>
                         <div className="fs-22 fw-500">
                           {followerDetailsSelector?.data?.data?.nudge
-                            ?.totalNudge > 0
+                            ?.totalNudge > 0 &&
+                          followerDetailsSelector?.data?.data?.nudge
+                            ?.acceptNudge
                             ? `${
                                 followerDetailsSelector?.data?.data?.nudge
                                   ?.totalNudge -
@@ -1548,9 +1556,34 @@ const MerchantDetails = () => {
                           }
                         )
                       ) : (
-                        <div className="fs-16 fw-500 grey">No Data Found</div>
+                        <div className="noDataFound">No Data Found</div>
                       )}
                     </div>
+
+                    {listByUserIdSelector?.data?.data?.records?.length > 0 && (
+                  <div className="d-flex align-center justify-between flexPagination">
+                    <div className="fs-16">
+                      {/* Showing {pagination?.page} to {pagination?.limit} of{" "}
+                      {listByUserIdSelector?.data?.data?.recordsCount} Nudges */}
+                      {(() => {
+                  const start = (pagination.page - 1) * pagination.limit + 1;
+                  const end = Math.min(
+                    start +
+                    listByUserIdSelector?.data?.data?.records?.length -
+                      1,
+                      listByUserIdSelector?.data?.data?.recordsCount
+                  );
+                  return `Showing ${start} to ${end} of ${listByUserIdSelector?.data?.data?.recordsCount} Nudges`;
+                })()}
+                    </div>
+                    <Pagination
+                      current={pagination?.page}
+                      pageSize={pagination?.limit}
+                      total={listByUserIdSelector?.data?.data?.recordsCount}
+                      onChange={handlePaginationChange}
+                    />
+                  </div>
+                )}
                   </div>
                   <div className="tabPadding mb-30">
                     <div className="fs-20 fw-700 mb-10">Sharing</div>
@@ -1842,19 +1875,29 @@ const MerchantDetails = () => {
                       )}
                     </div>
                     {followerListSelector?.data?.data?.records?.length > 0 && (
-                    <div className="d-flex align-center justify-between flexPagination">
-                      <div className="fs-16">
-                        Showing {pagination.page} to {pagination.limit} of{" "}
-                        {followerListSelector?.data?.data?.recordsCount}{" "}
-                        Followers
+                      <div className="d-flex align-center justify-between flexPagination">
+                        <div className="fs-16">
+                          {/* Showing {pagination.page} to {pagination.limit} of{" "}
+                          {followerListSelector?.data?.data?.recordsCount}{" "}
+                          Followers */}
+                          {(() => {
+                  const start = (pagination.page - 1) * pagination.limit + 1;
+                  const end = Math.min(
+                    start +
+                    followerListSelector?.data?.data?.records?.length -
+                      1,
+                      followerListSelector?.data?.data?.recordsCount
+                  );
+                  return `Showing ${start} to ${end} of ${followerListSelector?.data?.data?.recordsCount} Followers`;
+                })()}
+                        </div>
+                        <Pagination
+                          current={pagination.page}
+                          pageSize={pagination.limit}
+                          total={followerListSelector?.data?.data?.recordsCount}
+                          onChange={handlePaginationChange}
+                        />
                       </div>
-                      <Pagination
-                        current={pagination.page}
-                        pageSize={pagination.limit}
-                        total={followerListSelector?.data?.data?.recordsCount}
-                        onChange={handlePaginationChange}
-                      />
-                    </div>
                     )}
                   </div>
                   {isAnyCheckboxChecked && !state?.statePrev?.selectedItems && (
@@ -1931,7 +1974,7 @@ const MerchantDetails = () => {
                     />
                   </div>
                 </div>
-                <div className="divider2"></div>
+                {/* <div className="divider2"></div> */}
                 <div className="divider2"></div>
                 <div className="d-flex align-center justify-between mb-15">
                   <div>
@@ -2058,128 +2101,156 @@ const MerchantDetails = () => {
                 </div>
                 <div className="merchantGrid">
                   {nudgesListSelector?.data?.data?.records?.length > 0 ? (
-                    nudgesListSelector.data.data.records.map((item, index) => (
-                      <div className="merchantCard" key={index}>
-                        <div className="position-relative">
-                          <img
-                            className="w-100 merchantImg"
-                            src={item?.photoURL}
-                            alt="Merchant"
-                          />
-                          <div className="freeAbsolute">
-                            <div className="fs-16 fw-700 mb-2">
-                              {item?.title}
-                            </div>
-                            <div className="fs-14">
-                              {item?.locationDetails?.address?.addressLine1 +
-                                " " +
-                                item?.locationDetails?.address?.addressLine2 +
-                                " " +
-                                item?.locationDetails?.address
-                                  ?.administrativeDistrictLevel1 +
-                                " " +
-                                item?.locationDetails?.address?.country +
-                                " " +
-                                item?.locationDetails?.address?.postalCode}
+                    nudgesListSelector?.data?.data?.records?.map(
+                      (item, index) => (
+                        <div className="merchantCard" key={index}>
+                          <div className="position-relative">
+                            <img
+                              className="w-100 merchantImg"
+                              src={item?.photoURL}
+                              alt="Merchant"
+                            />
+                            <div className="freeAbsolute">
+                              <div className="fs-16 fw-700 mb-2">
+                                {item?.title}
+                              </div>
+                              <div className="fs-14">
+                                {item?.locationDetails?.address?.addressLine1 +
+                                  " " +
+                                  item?.locationDetails?.address?.addressLine2 +
+                                  " " +
+                                  item?.locationDetails?.address
+                                    ?.administrativeDistrictLevel1 +
+                                  " " +
+                                  item?.locationDetails?.address?.country +
+                                  " " +
+                                  item?.locationDetails?.address?.postalCode}
+                              </div>
                             </div>
                           </div>
-                        </div>
-                        <div className="bottomPadding">
-                          <div className="lightBlack fs-14 mb-20">
-                            {/* Get 20% off on all large pizzas today! Limited time
+                          <div className="bottomPadding">
+                            <div className="lightBlack fs-14 mb-20">
+                              {/* Get 20% off on all large pizzas today! Limited time
                             offer. */}
-                            {item?.message}
-                          </div>
-                          <div className="d-flex justify-between align-center gap-20 mb-8">
-                            <div className="fs-14 lightBlack">Sent date</div>
-                            <div className="fs-14 fw-500">
-                              {moment(item?.createdAt).format("DD, MMMM YYYY")}
+                              {item?.message}
                             </div>
-                          </div>
-                          <div className="d-flex justify-between align-center gap-20 mb-8">
-                            <div className="fs-14 lightBlack">
-                              Expiration date
-                            </div>
-                            <div className="fs-14 fw-500">
-                              {moment(item?.deactivateAt).format(
-                                "DD, MMMM YYYY"
-                              )}
-                            </div>
-                          </div>
-                          <div className="divider2"></div>
-                          <div className="grid2 mb-20">
-                            <div>
-                              <div className="fs-14 mb-4 lightBlack">
-                                Recipients:
-                              </div>
-                              <div className="fs-14 fw-600">
-                                {/* {item?.recipientCount} */}
-                                {item?.recipientCount}
+                            <div className="d-flex justify-between align-center gap-20 mb-8">
+                              <div className="fs-14 lightBlack">Sent date</div>
+                              <div className="fs-14 fw-500">
+                                {moment(item?.createdAt).format(
+                                  "DD, MMMM YYYY"
+                                )}
                               </div>
                             </div>
-                            <div>
-                              <div className="fs-14 mb-4 lightBlack">
-                                Accepted:
+                            <div className="d-flex justify-between align-center gap-20 mb-8">
+                              <div className="fs-14 lightBlack">
+                                Expiration date
                               </div>
-                              <div className="fs-14 fw-600 gc">
-                                {item?.totalAcceptedFollowerList}/
-                                {(
-                                  (item?.totalAcceptedFollowerList /
-                                    item?.recipientCount) *
-                                  100
-                                ).toFixed(0)}
-                                %
-                              </div>
-                              {/* <div className="fs-14 fw-600 gc">{150}/{(150/200)*100}%</div> */}
-                            </div>
-                            <div>
-                              <div className="fs-14 mb-4 lightBlack">
-                                Declined:
-                              </div>
-                              {/* <div className="fs-14 fw-600 rc">{30}/{(30/200)*100}%</div> */}
-                              <div className="fs-14 fw-600 rc">
-                                {item?.disLikeUserList}/
-                                {(
-                                  (item?.disLikeUserList /
-                                    item?.recipientCount) *
-                                  100
-                                ).toFixed(0)}
-                                %
+                              <div className="fs-14 fw-500">
+                                {moment(item?.deactivateAt).format(
+                                  "DD, MMMM YYYY"
+                                )}
                               </div>
                             </div>
-                            <div>
-                              <div className="fs-14 mb-4 lightBlack">
-                                No Response
+                            <div className="divider2"></div>
+                            <div className="grid2 mb-20">
+                              <div>
+                                <div className="fs-14 mb-4 lightBlack">
+                                  Recipients:
+                                </div>
+                                <div className="fs-14 fw-600">
+                                  {/* {item?.recipientCount} */}
+                                  {item?.recipientCount}
+                                </div>
                               </div>
-                              <div className="fs-14 fw-600 greyColor">
-                                {item?.recipientCount -
-                                  (item?.totalAcceptedFollowerList +
-                                    item?.disLikeUserList)}
-                                /
-                                {(
-                                  ((item?.recipientCount -
+                              <div>
+                                <div className="fs-14 mb-4 lightBlack">
+                                  Accepted:
+                                </div>
+                                <div className="fs-14 fw-600 gc">
+                                  {item?.totalAcceptedFollowerList}/
+                                  {(
+                                    (item?.totalAcceptedFollowerList /
+                                      item?.recipientCount) *
+                                    100
+                                  ).toFixed(0)}
+                                  %
+                                </div>
+                                {/* <div className="fs-14 fw-600 gc">{150}/{(150/200)*100}%</div> */}
+                              </div>
+                              <div>
+                                <div className="fs-14 mb-4 lightBlack">
+                                  Declined:
+                                </div>
+                                {/* <div className="fs-14 fw-600 rc">{30}/{(30/200)*100}%</div> */}
+                                <div className="fs-14 fw-600 rc">
+                                  {item?.disLikeUserList}/
+                                  {(
+                                    (item?.disLikeUserList /
+                                      item?.recipientCount) *
+                                    100
+                                  ).toFixed(0)}
+                                  %
+                                </div>
+                              </div>
+                              <div>
+                                <div className="fs-14 mb-4 lightBlack">
+                                  No Response
+                                </div>
+                                <div className="fs-14 fw-600 greyColor">
+                                  {item?.recipientCount -
                                     (item?.totalAcceptedFollowerList +
-                                      item?.disLikeUserList)) /
-                                    item?.recipientCount) *
-                                  100
-                                ).toFixed(2)}
-                                %
+                                      item?.disLikeUserList)}
+                                  /
+                                  {(
+                                    ((item?.recipientCount -
+                                      (item?.totalAcceptedFollowerList +
+                                        item?.disLikeUserList)) /
+                                      item?.recipientCount) *
+                                    100
+                                  ).toFixed(2)}
+                                  %
+                                </div>
                               </div>
                             </div>
-                          </div>
-                          <div
-                            className="btn btnSecondary w-100"
-                            onClick={() => toggleSidebar(item)}
-                          >
-                            View Details
+                            <div
+                              className="btn btnSecondary w-100"
+                              onClick={() => toggleSidebar(item, index)}
+                            >
+                              View Details
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    ))
+                      )
+                    )
                   ) : (
                     <div className="noDataFound">No Data Found</div>
                   )}
                 </div>
+                {nudgesListSelector?.data?.data?.records?.length > 0 && (
+                  <div className="d-flex align-center justify-between flexPagination">
+                    <div className="fs-16">
+                      {/* Showing {pagination?.page} to {pagination?.limit} of{" "}
+                      {nudgesListSelector?.data?.data?.recordsCount} Nudges */}
+                      {(() => {
+                  const start = (pagination.page - 1) * pagination.limit + 1;
+                  const end = Math.min(
+                    start +
+                    nudgesListSelector?.data?.data?.records?.length -
+                      1,
+                      nudgesListSelector?.data?.data?.recordsCount
+                  );
+                  return `Showing ${start} to ${end} of ${nudgesListSelector?.data?.data?.recordsCount} Nudges`;
+                })()}
+                    </div>
+                    <Pagination
+                      current={pagination?.page}
+                      pageSize={pagination?.limit}
+                      total={nudgesListSelector?.data?.data?.recordsCount}
+                      onChange={handlePaginationChange}
+                    />
+                  </div>
+                )}
               </div>
               {/* {isSidebarOpen && ( */}
               <NudgeDetail
@@ -2187,6 +2258,7 @@ const MerchantDetails = () => {
                 toggleSidebar={toggleSidebar}
                 nudgeDetailsMainSelector={nudgeDetailsMainSelector}
                 activeTab={activeTab}
+                nudgeId={nudgeId}
               />
               {/* )} */}
             </>

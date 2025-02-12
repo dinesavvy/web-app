@@ -33,7 +33,7 @@ const MerchantLogin = () => {
 
   const [phone, setPhone] = useState("");
   const [countryCode, setCountryCode] = useState("+91");
-  const [country, setCountry] = useState(""); // Stores the country code like "pk", "us"
+  const [country, setCountry] = useState("in"); // Stores the country code like "pk", "us"
 
   const handlePhoneChange = (value, data) => {
     const dialCode = `${data?.dialCode}`;
@@ -139,11 +139,10 @@ const MerchantLogin = () => {
                             className="absoluteImage"
                           /> */}
                           <PhoneInput
-                            country={country || undefined} // Set country dynamically when user types a code
+                            country={country} // Set country dynamically when user types a code
                             value={countryCode + phone} // Show full value but keep them separate in state
                             onChange={handlePhoneChange}
                             disableCountryGuess={false} // Allow auto-detection of typed country code
-                            // disableDropdown={false} // Allow manual input and dropdown selection
                             placeholder="Enter phone number"
                             className="phoneInput"
                           />
