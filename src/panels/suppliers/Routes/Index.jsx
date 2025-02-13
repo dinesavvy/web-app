@@ -1,19 +1,18 @@
 import React from "react";
 import { useEffect, useState } from "react";
 import { Route, Routes } from "react-router-dom";
-import merchantRoutes from "./merchantRoutes";
 import PrivateRoute from "./PrivateRoute";
 import Sidebar from "../../../common/Layout/Sidebar";
 import Header from "../../../common/Layout/Header";
 import { CommonMessageProvider } from "../../../common/CommonMessage";
+import supplierRoutes from "./supplierRoutes";
 
 const routeMap = {
-  merchant: merchantRoutes,
+  supplier: supplierRoutes,
 };
 
-
-const AppRoutesSupplier = () => {
-  const routes = routeMap["merchant"] || [];
+const AppRoutes = () => {
+  const routes = routeMap["supplier"] || [];
   const [isOpen, setIsOpen] = useState(false);
 
   const handleTrigger = () => setIsOpen(!isOpen);
@@ -24,6 +23,7 @@ const AppRoutesSupplier = () => {
       document.body.classList.remove("overflowHidden");
     }
 
+    // Cleanup to avoid lingering effects if the component unmounts
     return () => {
       document.body.classList.remove("overflowHidden");
     };
@@ -67,4 +67,4 @@ const AppRoutesSupplier = () => {
   );
 };
 
-export default AppRoutesSupplier;
+export default AppRoutes;

@@ -1,6 +1,7 @@
 import axios from "axios";
 
-let API_URL="https://api-stage.dinesavvy.com/api/v1";
+let API_URL="https://api-stage.dinesavvy.com/v2/api/v1";
+// https://api-stage.dinesavvy.com/v2/api/v1
 
 // if(import.meta.env.VITE_DEV_MODE === 'DEV')
 // {

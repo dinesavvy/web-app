@@ -1,19 +1,18 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
-import React from "react";
+import React,{useEffect} from "react";
 import { ErrorMessage, Field, Form, Formik } from "formik";
-import "../../assets/css/Login.css";
-import login from "../../assets/images/login.jpg";
-import logo from "../../assets/images/logo.svg";
-import emailInput from "../../assets/images/emailInput.svg";
-import passwordInput from "../../assets/images/passwordInput.svg";
+import "../../../../assets/css/Login.css";
+import login from "../../../../assets/images/login.jpg";
+import logo from "../../../../assets/images/logo.svg";
+import emailInput from "../../../../assets/images/emailInput.svg";
+import passwordInput from "../../../../assets/images/passwordInput.svg";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { useCommonMessage } from "../CommonMessage";
-import { loginHandler, loginSliceAction } from "../../redux/action/loginSlice";
-import { useEffect } from "react";
+import { loginHandler, loginSliceAction } from "../../../../redux/action/loginSlice";
+import Loader from "../../../../common/Loader/Loader";
+import { useCommonMessage } from "../../../../common/CommonMessage";
 import { validationSchema } from "./loginValidation";
-import Loader from "../Loader/Loader";
 
 const Login = () => {
   const messageApi = useCommonMessage();

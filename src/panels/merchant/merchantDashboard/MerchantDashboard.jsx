@@ -225,8 +225,6 @@ const MerchantDashboard = () => {
           </div>
         </>
       )}
-      {/* ) : ( */}
-      {/* )} */}
     </>
   );
 };

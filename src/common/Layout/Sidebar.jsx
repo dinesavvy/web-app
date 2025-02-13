@@ -42,20 +42,38 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
         ? "/merchant/dashboard"
         : "/admin/merchant/dashboard",
     },
-    {
-      id: 2,
-      name: "Suppliers",
-      icon: suppliers,
-      iconFull: suppliersFull,
-      navigate: "/admin/suppliers",
-    },
-    {
-      id: 3,
-      name: "Distributors",
-      icon: distributor,
-      iconFull: distributorFull,
-      navigate: "/admin/distributors",
-    },
+    // {
+    //   id: 2,
+    //   name: "Suppliers",
+    //   icon: suppliers,
+    //   iconFull: suppliersFull,
+    //   navigate: "/admin/suppliers",
+    // },
+    // {
+    //   id: 3,
+    //   name: "Distributors",
+    //   icon: distributor,
+    //   iconFull: distributorFull,
+    //   navigate: "/admin/distributors",
+    // },
+    ...(getLoggedInDetails
+      ? []
+      : [
+          {
+            id: 2,
+            name: "Suppliers",
+            icon: suppliers,
+            iconFull: suppliersFull,
+            navigate: "/admin/suppliers",
+          },
+          {
+            id: 3,
+            name: "Distributors",
+            icon: distributor,
+            iconFull: distributorFull,
+            navigate: "/admin/distributors",
+          },
+        ]),
     ...(getLoggedInDetails
       ? []
       : [
