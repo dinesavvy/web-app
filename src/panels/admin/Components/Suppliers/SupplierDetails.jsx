@@ -4,6 +4,7 @@ import uploadsupllierImage from "../../../../assets/images/uploadsupllierImage.s
 import { useDispatch, useSelector } from "react-redux";
 import Loader from "../../../../common/Loader/Loader";
 import { useCommonMessage } from "../../../../common/CommonMessage";
+import { Form, Formik } from "formik";
 
 const SupplierDetails = ({ isOpen, toggleDetails }) => {
   const [imagePreview, setImagePreview] = useState(null);
@@ -15,7 +16,7 @@ const SupplierDetails = ({ isOpen, toggleDetails }) => {
 
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
-  
+
     if (file) {
       // Validate file type
       const allowedTypes = ["image/jpeg", "image/png", "image/jpg"];
@@ -26,7 +27,7 @@ const SupplierDetails = ({ isOpen, toggleDetails }) => {
         });
         return;
       }
-  
+
       // Validate file size (5MB)
       const maxSize = 5 * 1024 * 1024; // 5MB
       if (file.size > maxSize) {
@@ -36,7 +37,7 @@ const SupplierDetails = ({ isOpen, toggleDetails }) => {
         });
         return;
       }
-  
+
       const reader = new FileReader();
       reader.onloadend = () => {
         setImagePreview(reader.result);
@@ -44,7 +45,7 @@ const SupplierDetails = ({ isOpen, toggleDetails }) => {
       reader.readAsDataURL(file);
     }
   };
-  
+
   return (
     <>
       {createSuplierSelector?.isLoading && <Loader />}
@@ -61,70 +62,91 @@ const SupplierDetails = ({ isOpen, toggleDetails }) => {
         <div className="overflowCart2 overflowCart">
           <div className="fs-14 mb-10 fw-500">Supplier logo</div>
 
-          {imagePreview ? (
-            <div className="brandImagePromo mb-10">
-              <img src={imagePreview} alt="Uploaded Preview" />
-            </div>
-          ) : (
-            <>
-              <label className="uploadImage cursor-pointer mb-10">
-                <input
-                  type="file"
-                  className="d-none"
-                  onChange={handleImageUpload}
-                />
-                <div className="text-center">
-                  <img
-                    src={uploadsupllierImage}
-                    alt="Upload Preview"
-                    className="mb-20 uploadsupllierImage"
-                  />
-                  <div className="fs-14">
-                    Drag & drop files or{" "}
-                    <u className="fw-700 pc">Choose File</u>
+          <Formik
+            initialValues={{
+              supplierName: "",
+              supplierContactNumber: "",
+              supplierPosition: "",
+              supplierEmail: "",
+              supplierContactEmail: "",
+            }}
+            // validationSchema={validationSchema}
+            onSubmit={(values, formikBag) => {
+              handleFormSubmit(values, formikBag);
+            }}
+          >
+            {({
+              isSubmitting,
+              /* and other goodies */
+            }) => (
+              <Form>
+                {imagePreview ? (
+                  <div className="brandImagePromo mb-10">
+                    <img src={imagePreview} alt="Uploaded Preview" />
+                  </div>
+                ) : (
+                  <>
+                    <label className="uploadImage cursor-pointer mb-10">
+                      <input
+                        type="file"
+                        className="d-none"
+                        onChange={handleImageUpload}
+                      />
+                      <div className="text-center">
+                        <img
+                          src={uploadsupllierImage}
+                          alt="Upload Preview"
+                          className="mb-20 uploadsupllierImage"
+                        />
+                        <div className="fs-14">
+                          Drag & drop files or{" "}
+                          <u className="fw-700 pc">Choose File</u>
+                        </div>
+                      </div>
+                    </label>
+
+                    <div className="d-flex align-center justify-between fs-12">
+                      <div>Supported formats: JPEG, PNG</div>
+                      <div>Maximum Size: 5MB</div>
+                    </div>
+                  </>
+                )}
+                <div className="divider2"></div>
+                <div className="mb-40">
+                  <div className="mb-20">
+                    <label htmlFor="" className="fs-14 fw-500 mb-10">
+                      Supplier name*
+                    </label>
+                    <input type="text" placeholder="Enter name" />
+                  </div>
+                  <div className="mb-20">
+                    <label htmlFor="" className="fs-14 fw-500 mb-10">
+                      Contact name*
+                    </label>
+                    <input type="text" placeholder="Enter name" />
+                  </div>
+                  <div className="mb-20">
+                    <label htmlFor="" className="fs-14 fw-500 mb-10">
+                      Contact position*
+                    </label>
+                    <input type="text" placeholder="Enter position" />
+                  </div>
+                  <div className="mb-20">
+                    <label htmlFor="" className="fs-14 fw-500 mb-10">
+                      Contact email*
+                    </label>
+                    <input type="text" placeholder="Enter email   " />
+                  </div>
+                  <div className="mb-20">
+                    <label htmlFor="" className="fs-14 fw-500 mb-10">
+                      Contact*
+                    </label>
+                    <input type="number" placeholder="Enter phone number" />
                   </div>
                 </div>
-              </label>
-
-              <div className="d-flex align-center justify-between fs-12">
-                <div>Supported formats: JPEG, PNG</div>
-                <div>Maximum Size: 5MB</div>
-              </div>
-            </>
-          )}
-          <div className="divider2"></div>
-          <div className="mb-40">
-            <div className="mb-20">
-              <label htmlFor="" className="fs-14 fw-500 mb-10">
-                Supplier name
-              </label>
-              <input type="text" placeholder="Enter name" />
-            </div>
-            <div className="mb-20">
-              <label htmlFor="" className="fs-14 fw-500 mb-10">
-                Contact name
-              </label>
-              <input type="text" placeholder="Enter name" />
-            </div>
-            <div className="mb-20">
-              <label htmlFor="" className="fs-14 fw-500 mb-10">
-                Contact position
-              </label>
-              <input type="text" placeholder="Enter position" />
-            </div>
-            <div className="mb-20">
-              <label htmlFor="" className="fs-14 fw-500 mb-10">
-                Contact email
-              </label>
-              <input type="text" placeholder="Enter email   " />
-            </div>
-            <div className="mb-20">
-              <label htmlFor="" className="fs-14 fw-500 mb-10">
-                Contact
-              </label>
-              <input type="number" placeholder="Enter phone number" />
-            </div>
-          </div>
+              </Form>
+            )}
+          </Formik>
           <div className="btn" onClick={toggleDetails}>
             Add Supplier
           </div>
