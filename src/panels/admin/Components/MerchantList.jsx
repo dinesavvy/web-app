@@ -290,27 +290,28 @@ const MerchantList = () => {
                 )}
               </div>
               {merchantListSelector?.data?.data?.records?.length > 0 && (
-            <div className="d-flex align-center justify-between flexPagination">
-              <div className="fs-16">
-                {(() => {
-                  const start = (pagination.page - 1) * pagination.limit + 1;
-                  const end = Math.min(
-                    start +
-                      merchantListSelector?.data?.data?.records?.length -
-                      1,
-                    merchantListSelector?.data?.data?.recordsCount
-                  );
-                  return `Showing ${start} to ${end} of ${merchantListSelector?.data?.data?.recordsCount} Restaurants`;
-                })()}
-              </div>
-              <Pagination
-                current={pagination.page}
-                pageSize={pagination.limit}
-                total={merchantListSelector?.data?.data?.recordsCount}
-                onChange={handlePaginationChange}
-              />
-            </div>
-          )}
+                <div className="d-flex align-center justify-between flexPagination">
+                  <div className="fs-16">
+                    {(() => {
+                      const start =
+                        (pagination.page - 1) * pagination.limit + 1;
+                      const end = Math.min(
+                        start +
+                          merchantListSelector?.data?.data?.records?.length -
+                          1,
+                        merchantListSelector?.data?.data?.recordsCount
+                      );
+                      return `Showing ${start} to ${end} of ${merchantListSelector?.data?.data?.recordsCount} Restaurants`;
+                    })()}
+                  </div>
+                  <Pagination
+                    current={pagination.page}
+                    pageSize={pagination.limit}
+                    total={merchantListSelector?.data?.data?.recordsCount}
+                    onChange={handlePaginationChange}
+                  />
+                </div>
+              )}
             </div>
           </>
         ) : (

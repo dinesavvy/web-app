@@ -20,6 +20,9 @@ import removeTeamMemberSlice from "../action/removeTeamMember";
 import roleListActionSlice from "../action/roleList";
 import updateTeamSlice from "../action/updateTeam";
 import resendInviteLinkSlice from "../action/resendInviteLink";
+import brandListSlice from "../action/brandListSlice";
+import getSupplierSlice from "../action/getSuppliersSlice";
+import createSuplierSlice from "../action/createSupplier";
 
 const store = configureStore({
   reducer: {
@@ -45,6 +48,9 @@ const store = configureStore({
     roleList: roleListActionSlice,
     updateTeam: updateTeamSlice,
     resendInviteLink: resendInviteLinkSlice,
+    brandList: brandListSlice,
+    getSupplierList: getSupplierSlice,
+    createSuplier: createSuplierSlice,
   },
 });
 
