@@ -11,11 +11,21 @@ import SupplierDetails from "./SupplierDetails";
 import { useDispatch, useSelector } from "react-redux";
 import Loader from "../../../../common/Loader/Loader";
 import { getSuppliersHandler } from "../../../../redux/action/getSuppliersSlice";
+import editMember from "../../../../assets/images/editMember.svg";
+import deleteMember from "../../../../assets/images/deleteMember.svg";
+import CommonModal from "../CommonModal";
+import deleteModal from "../../../../assets/images/deleteModal.svg";
 
 const Suppliers = () => {
+  const [modal2Open, setModal2Open] = useState(false);
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
   const [pagination, setPagination] = useState({ page: 1, limit: 9 });
+  const [removeSupplier, setRemoveSupplier] = useState({});
+  const removeSupplierSelector = useSelector((state) => state?.removeSupplier);
+  const [selectedSupplier, setSelectedSupplier] = useState(null);
 
+  const createSuplierSelector = useSelector((state) => state?.createSuplier);
+  const updateSupplierSelector = useSelector((state) => state?.updateSupplier);
   const dispatch = useDispatch();
   const getSuppliersListSelector = useSelector(
     (state) => state?.getSupplierList
@@ -48,7 +58,12 @@ const Suppliers = () => {
       limit: pagination?.limit,
     };
     dispatch(getSuppliersHandler(payload));
-  }, [pagination]);
+  }, [
+    pagination,
+    createSuplierSelector,
+    removeSupplierSelector,
+    updateSupplierSelector,
+  ]);
 
   return (
     <>
@@ -59,7 +74,10 @@ const Suppliers = () => {
             <div className="fs-24 fw-600">Suppliers</div>
             <div
               className="btn gap-8 addBtn"
-              onClick={() => setIsDetailsOpen(true)}
+              onClick={() => {
+                setIsDetailsOpen(true);
+                setSelectedSupplier(null);
+              }}
             >
               Add Suppliers
               <img src={addBtn} alt="addBtn" />
@@ -115,6 +133,27 @@ const Suppliers = () => {
                               <img src={phoneCard} alt="Phone" />
                               {item?.contactPhoneNumber}
                             </div>
+                            <div className="d-flex align-center gap-10">
+                              <div
+                                className="btn btnSecondary w-100 gap-8"
+                                onClick={() => {
+                                  setIsDetailsOpen(true);
+                                  setSelectedSupplier(item);
+                                }}
+                              >
+                                <img src={editMember} alt="" />
+                                Edit
+                              </div>
+                              <div
+                                className="deleteBtn btn"
+                                onClick={() => {
+                                  setModal2Open(true);
+                                  setRemoveSupplier(item);
+                                }}
+                              >
+                                <img src={deleteMember} alt="" />
+                              </div>
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -152,7 +191,22 @@ const Suppliers = () => {
           )}
         </div>
       </div>
-      <SupplierDetails isOpen={isDetailsOpen} toggleDetails={toggleDetails} />
+      {isDetailsOpen && (
+        <SupplierDetails
+          isOpen={isDetailsOpen}
+          toggleDetails={toggleDetails}
+          setIsDetailsOpen={setIsDetailsOpen}
+          selectedSupplier={selectedSupplier}
+        />
+      )}
+      {modal2Open && (
+        <CommonModal
+          modal2Open={modal2Open}
+          setModal2Open={setModal2Open}
+          modalImage={deleteModal}
+          removeSupplier={removeSupplier}
+        />
+      )}
     </>
   );
 };

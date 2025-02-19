@@ -23,6 +23,12 @@ import resendInviteLinkSlice from "../action/resendInviteLink";
 import brandListSlice from "../action/brandListSlice";
 import getSupplierSlice from "../action/getSuppliersSlice";
 import createSuplierSlice from "../action/createSupplier";
+import distributorsListSlice from "../action/distributorsList";
+import createDistributorSlice from "../action/createDistributor";
+import removeSupplierSlice from "../action/removeSupplier";
+import updateSupplierSlice from "../action/updateSupplier";
+import removeDistributorSlice from "../action/removeDistributor";
+import updateDistributorSlice from "../action/updateDistributor";
 
 const store = configureStore({
   reducer: {
@@ -51,6 +57,12 @@ const store = configureStore({
     brandList: brandListSlice,
     getSupplierList: getSupplierSlice,
     createSuplier: createSuplierSlice,
+    distributorsList: distributorsListSlice,
+    createDistributor: createDistributorSlice,
+    removeSupplier: removeSupplierSlice,
+    updateSupplier: updateSupplierSlice,
+    removeDistributor: removeDistributorSlice,
+    updateDistributor: updateDistributorSlice,
   },
 });
 

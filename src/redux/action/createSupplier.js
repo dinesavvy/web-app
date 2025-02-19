@@ -40,6 +40,7 @@ export const createSuplierHandler = (data) => async (dispatch) => {
     const response = await createSupplierAPI(data);
     dispatch(createSupplierAction.createSuplierSuccess(response));
   } catch (e) {
+    console.log(e,"eeee")
     dispatch(
       createSupplierAction.createSuplierFailure(e?.response?.data?.message)
     );
