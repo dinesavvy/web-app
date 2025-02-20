@@ -656,7 +656,7 @@ height: 100%;
 }
 
 
-@media (max-height: 700px) {
+@media (max-height: 600px) {
   .loginside {
     align-items: start;
   }

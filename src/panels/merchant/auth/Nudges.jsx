@@ -186,7 +186,7 @@ const Nudges = () => {
               </div>
               <div className="d-flex align-center justify-between mb-15">
                 <div>
-                  <span className="fw-16">Nudges Goal: </span>
+                  <span className="fs-16">Nudges Goal: </span>
                   <span className="fw-700 fs-20">15</span>
                 </div>
                 <div>

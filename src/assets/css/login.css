@@ -47,3 +47,8 @@
     border: 2px solid #056DFF;
 
 }
+@media (max-width: 1549.98px) {
+    .logo{
+        height: 70px;
+    }
+}

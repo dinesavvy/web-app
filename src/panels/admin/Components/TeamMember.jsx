@@ -137,7 +137,7 @@ const TeamMember = ({ merchantDetailsSelector, activeTab3, setActiveTab3 }) => {
               )}
             </>
           ) : (
-            <div>No data found</div>
+            <div className="noDataFound">No data found</div>
           )}
         </div>
         {merchantTeamsSelector?.data?.data?.records?.length > 0 && (

@@ -15,7 +15,7 @@ const MerchantBusinessProfile = ({ merchantDetailsSelector }) => {
           <img
             src={backButton}
             alt=""
-            className="cursor-pointer"
+            className="cursor-pointer backButton"
             onClick={() => navigate("/admin/merchant/list")}
           />
           <div>

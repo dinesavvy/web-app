@@ -320,7 +320,7 @@ const FollowerDetail = () => {
                 );
               })
             ) : (
-              <div className="fs-16 fw-500 grey">No Data Found</div>
+              <div className="fs-16 fw-500 grey ">No Data Found</div>
             )}
           </div>
           {/* <div className="grid2 gap-20">

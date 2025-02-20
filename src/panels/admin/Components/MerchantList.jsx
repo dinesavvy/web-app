@@ -286,7 +286,7 @@ const MerchantList = () => {
                     }
                   )
                 ) : (
-                  <div>No data found</div>
+                  <div className="noDataFound">No data found</div>
                 )}
               </div>
               {merchantListSelector?.data?.data?.records?.length > 0 && (

@@ -1669,7 +1669,7 @@ input.addTitleInput::placeholder {
     border-radius: 3px;
   }
   .custom-checkbox .checkmark::after{
-    left: 4.5px;
+    left: 5.5px;
     top: 1px;
     width: 3.5px;
     height: 9px;
@@ -1755,6 +1755,90 @@ input.addTitleInput::placeholder {
   .merchantCard{
     border-radius: 16px;
   }
+  .ant-breadcrumb-link{
+    font-size: 12px !important;
+  }
+  .grid3{
+    gap: 16px;
+  }
+  .inputGrid{
+    gap: 25px;
+  }
+  .tabing .tab-button{
+    padding: 8px 60px !important;
+  }
+  .addNudge{
+    height: 36px;
+    font-size: 14px;
+    width: 78px;
+    border-radius: 6px;
+  }
+  .floatAdd {
+    bottom: 30px;
+    padding: 6px;
+    border-radius: 14px;
+    gap: 8px;
+  }
+  .h-24 {
+    height: 20px;
+  }
+  .floatAdd .btn {
+    gap: 8px;
+    width: 250px;
+    border-radius: 8px;
+  }
+  .cardFollow {
+    border: 1px solid #E3E3E8;
+    border-radius: 16px;
+    padding: 16px;
+  }
+  .initialName {
+    font-size: 16px;
+    line-height: 27px;
+    border-radius: 8px;
+    min-height: 40px;
+    min-width: 40px;
+  }
+  body{
+    font-size: 16px;
+  }
+  .flexTag div {
+    background-color: #EBF3FF;
+    border-radius: 20px;
+    padding: 5px 10px;
+    font-size: 14px;
+  }
+  .flexTag {
+    height: 68px;
+  }
+  .freeAbsolute{
+    left: 15px;
+    bottom: 20px;
+  }
+  .merchantImg {
+    height: 140px;
+  }
+  .range,.rangePercentage{
+    height: 9px;
+  }
+  .weekNudge {
+    background-color: #ECF4FF;
+    border-radius: 10px;
+    padding: 7px 13px;
+    gap: 10px;
+  }
+  .secondarysecond{
+    height: unset;
+  }
+  .rightSidebar{
+    width: 400px;
+  }
+  .uploadImage{
+    height: 110px;
+  }
+  .uploadsupllierImage{
+    height: 20px;
+  }
 }
 @media (max-width: 1499.98px) {
   .merchantGrid {
@@ -1774,9 +1858,11 @@ input.addTitleInput::placeholder {
   .grid4 {
     grid-template-columns: repeat(2, 1fr);
   }
-
   .twoSpace {
     grid-column: span 1;
+  }
+  .react-tooltip{
+    display: none !important;
   }
 }
 

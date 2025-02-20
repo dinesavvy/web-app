@@ -375,7 +375,7 @@ const MerchantDetails = () => {
                           placeholder="Garden Grove Café & Bistro"
                         />
                       ) : (
-                        <div className="">
+                        <div className="fs-18">
                           {merchantDetailsSelector?.data?.data?.businessName}
                         </div>
                       )}
@@ -391,7 +391,7 @@ const MerchantDetails = () => {
                           placeholder="Restaurant"
                         />
                       ) : (
-                        <div className="">Restaurant</div>
+                        <div className="fs-18">Restaurant</div>
                       )}
                     </div>
                     <div className="twoSpace">
@@ -405,7 +405,7 @@ const MerchantDetails = () => {
                           placeholder="Whether you're joining us for a casual lunch, a special dinner, or a weekend brunch, our elegant yet relaxed atmosphere is perfect for any occasion."
                         />
                       ) : (
-                        <div className="">
+                        <div className="fs-18">
                           {merchantDetailsSelector?.data?.data?.description ||
                             "N/A"}
                         </div>
@@ -455,7 +455,7 @@ const MerchantDetails = () => {
                           placeholder="+91 123 456 7890"
                         />
                       ) : (
-                        <a className="anchor" href="tel:+911234567890">
+                        <a className="anchor fs-18" href="tel:+911234567890">
                           + {merchantDetailsSelector?.data?.data?.phoneNumber}
                         </a>
                       )}
@@ -479,7 +479,7 @@ const MerchantDetails = () => {
                             Email
                           </label>
                           <a
-                            className="anchor"
+                            className="anchor fs-18"
                             href={
                               merchantDetailsSelector?.data?.data?.ownerDetails
                                 ?.email
@@ -508,7 +508,7 @@ const MerchantDetails = () => {
                         />
                       ) : (
                         <a
-                          className="anchor"
+                          className="anchor fs-18"
                           href={merchantDetailsSelector?.data?.data?.websiteUrl}
                           target="_blank"
                         >
@@ -634,7 +634,7 @@ const MerchantDetails = () => {
                         >
                           Business location
                         </label>
-                        <div className="mb-20">
+                        <div className="mb-20 fs-18">
                           {[
                             merchantDetailsSelector?.data?.data?.address
                               ?.addressLine1,
@@ -730,7 +730,7 @@ const MerchantDetails = () => {
                                 <div className="grey fs-16">
                                   {item?.dayOfWeek}
                                 </div>
-                                <div>
+                                <div className="fs-16">
                                   {item?.startLocalTime +
                                     " to " +
                                     item?.endLocalTime}
@@ -1194,18 +1194,18 @@ const MerchantDetails = () => {
                     {merchantDetailsSelector?.data?.data?.businessName}
                   </div>
                   <div className="divider2"></div>
-                  <div className="d-flex justify-between align-center gap-10 fw-500 mb-16 flexsm">
+                  <div className="d-flex justify-between align-center gap-10 fw-500 mb-16 flexsm fs-18">
                     <div className="grey">Member Since</div>
                     <div>{moment(state?.createdAt).format("MMM D, YYYY")}</div>
                   </div>
-                  <div className="d-flex justify-between align-center gap-10 fw-500 mb-16 flexsm">
+                  <div className="d-flex justify-between align-center gap-10 fw-500 mb-16 flexsm fs-18">
                     <div className="grey">Restaurant owner</div>
                     <div>
                       {merchantDetailsSelector.data.data.ownerDetails
                         ?.displayName || "N/A"}
                     </div>
                   </div>
-                  <div className="d-flex justify-between align-center gap-10 fw-500 flexsm">
+                  <div className="d-flex justify-between align-center gap-10 fw-500 flexsm fs-18">
                     <div className="grey">Nudge credits</div>
                     <div>{state?.nudge?.nudgeCredit} Remaining</div>
                   </div>
@@ -1269,7 +1269,7 @@ const MerchantDetails = () => {
                     <div className="d-flex align-center justify-between gap-20 mb-30 flexrightsm">
                       <div className="d-flex align-center gap-20 w-100">
                         <img
-                          className="cursor-pointer"
+                          className="cursor-pointer backButton"
                           src={backButton}
                           alt={
                             followerDetailsSelector?.data?.data?.userInfo
@@ -1659,7 +1659,7 @@ const MerchantDetails = () => {
                           (item, index) => <div key={index}>{item}</div>
                         )
                       ) : (
-                        <div>No data found</div>
+                        <div className=" text-center fs-18">No data found</div>
                       )}
                     </div>
                   </div>
@@ -1756,7 +1756,7 @@ const MerchantDetails = () => {
                         <img
                           src={backButton}
                           alt=""
-                          className="cursor-pointer"
+                          className="cursor-pointer backButton"
                           onClick={() => navigate("/admin/merchant/list")}
                         />
                         <div>
@@ -1871,7 +1871,7 @@ const MerchantDetails = () => {
                           )
                         )
                       ) : (
-                        <div>No data found</div>
+                        <div className="noDataFound">No data found</div>
                       )}
                     </div>
                     {followerListSelector?.data?.data?.records?.length > 0 && (
@@ -1954,7 +1954,7 @@ const MerchantDetails = () => {
                   <img
                     src={backButton}
                     alt=""
-                    className="cursor-pointer"
+                    className="cursor-pointer backButton"
                     onClick={() => navigate("/admin/merchant/list")}
                   />
                   <div>
@@ -1978,7 +1978,7 @@ const MerchantDetails = () => {
                 <div className="divider2"></div>
                 <div className="d-flex align-center justify-between mb-15">
                   <div>
-                    <span className="fw-16">Nudges Goal: </span>
+                    <span className="fs-16">Nudges Goal: </span>
                     <span className="fw-700 fs-20">15</span>
                   </div>
                   <div>
@@ -2099,7 +2099,7 @@ const MerchantDetails = () => {
                     </button>
                   </div>
                 </div>
-                <div className="merchantGrid">
+                <div className="merchantGrid mb-20">
                   {nudgesListSelector?.data?.data?.records?.length > 0 ? (
                     nudgesListSelector?.data?.data?.records?.map(
                       (item, index) => (

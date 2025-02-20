@@ -81,10 +81,14 @@
         line-height: 24px;
     }
     .fs-24{
-        font-size: 20px;
-        line-height: 28px;
+        font-size: 19px;
+        line-height: 24px;
     }
     .fs-26 {
+        font-size: 22px;
+        line-height: 28px;
+    }
+    .fs-28 {
         font-size: 22px;
         line-height: 30px;
     }

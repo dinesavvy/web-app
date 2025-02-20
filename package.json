@@ -7,7 +7,7 @@
     "build:merchant": "webpack --config config/webpack.merchant.js --mode production",
     "build:supplier": "webpack --config config/webpack.supplier.js",
     "build:distributor": "webpack --config config/webpack.distributor.js",
-    "start:admin": "webpack serve --config config/webpack.admin.js --mode development",
+    "start:admin": "webpack serve --config config/webpack.admin.js --mode development --host 0.0.0.0 --allowed-hosts all",
     "start:merchant": "webpack serve --config config/webpack.merchant.js --mode development",
     "start:supplier": "webpack serve --config config/webpack.supplier.js",
     "start:distributor": "webpack serve --config config/webpack.distributor.js"

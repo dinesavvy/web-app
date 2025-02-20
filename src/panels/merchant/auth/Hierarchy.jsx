@@ -209,7 +209,7 @@ const Hierarchy = () => {
                 )}
               </>
             ) : (
-              <div>No data found</div>
+              <div className="noDataFound">No data found</div>
             )}
           </div>
           <div className="divider2"></div>
