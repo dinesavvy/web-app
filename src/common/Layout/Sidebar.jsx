@@ -121,8 +121,8 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
             name: "Brands",
             icon: brands,
             iconFull: brandsFull,
-            disabled: true,
-            // navigate: "/admin/brands",
+            disabled: false,
+            navigate: "/admin/brands",
           },
           {
             id: 9,

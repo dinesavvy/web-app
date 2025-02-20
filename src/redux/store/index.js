@@ -29,6 +29,8 @@ import removeSupplierSlice from "../action/removeSupplier";
 import updateSupplierSlice from "../action/updateSupplier";
 import removeDistributorSlice from "../action/removeDistributor";
 import updateDistributorSlice from "../action/updateDistributor";
+import createBrandSlice from "../action/createBrandSlice";
+import deleteBrandSlice from "../action/deleteBrand";
 
 const store = configureStore({
   reducer: {
@@ -63,6 +65,8 @@ const store = configureStore({
     updateSupplier: updateSupplierSlice,
     removeDistributor: removeDistributorSlice,
     updateDistributor: updateDistributorSlice,
+    createBrand: createBrandSlice,
+    deleteBrand: deleteBrandSlice,
   },
 });
 

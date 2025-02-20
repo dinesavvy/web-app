@@ -94,25 +94,25 @@ const Header = ({ handleTrigger }) => {
           </div>
         </div> */}
           {/* {getMerchantBusinessSelector!==null && ( */}
-          {/* {businessListSelector?.data?.data?.records?.length > 0 && localStorage.getItem("merchantLogin")===true &&selectedBusiness !==undefined &&  ( */}
-            {/* <div
+          {/* {businessListSelector?.data?.data?.records?.length > 0 && localStorage.getItem("merchantLogin")===true &&selectedBusiness !==undefined &&  ( */} 
+             {/* <div
               className="d-flex selectCommon cursor-pointer align-center gap-6 "
               onClick={toggleModal}
             >
-              <div className="fs-16">
+              <div className="fs-16"> */}
                 <>
-                   {selectedBusiness?.businessName
+                   {/* {selectedBusiness?.businessName
                     ? selectedBusiness?.businessName
                     : businessListSelector?.data?.data?.records?.[0]
-                        ?.businessName} 
+                        ?.businessName}  */}
                 </>
-              </div>
-              <div className="h16">
+              {/* </div> */}
+              {/* <div className="h16">
                 <img src={arrowRight} alt="arrowRight" />
-              </div>
-            </div> */}
+              </div> */}
+            {/* </div>  */}
+            {/* )}  */}
            {/* )}  */}
-          {/* )} */}
           {/* Modal Component */}
 
           <div className="notification">

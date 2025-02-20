@@ -27,6 +27,7 @@ import { useNavigate } from "react-router-dom";
 const Nudges = () => {
   const [tempState, setTempState] = useState([]);
   const [modal2Open, setModal2Open] = useState(false);
+  const [isChecked, setIsChecked] = useState(false);
   const [isPaymentSidebar, setIsPaymentSidebar] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("active"); // Default active tab is 'active'
@@ -120,7 +121,6 @@ const Nudges = () => {
     }
   }, [businessNudgeDetailsSelector]);
 
-  const [isChecked, setIsChecked] = useState(false);
 
 
   const createNudge = () => {
@@ -364,11 +364,12 @@ const Nudges = () => {
                   Inactive Nudges
                 </button>
                 <button
-                  // className={`tab-button ${
-                  //   activeTab === "reverse" ? "active" : ""
-                  // }`}
-                  className="tab-button disabled"
-                  // onClick={() => handleTabClick("reverse")}
+                  className={`tab-button ${
+                    activeTab === "reverse" ? "active" : ""
+                  }`}
+                  // className="tab-button disabled"
+                  // className="tab-button"
+                  onClick={() => handleTabClick("reverse")}
                 >
                   Reverse Nudges
                 </button>
