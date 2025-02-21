@@ -270,18 +270,18 @@ const SupplierDetails = ({
                   </div>
                   <div className="mb-20">
                     <label htmlFor="" className="fs-14 fw-500 mb-10">
-                      Contact position*
+                      Contact position
                     </label>
                     <Field
                       type="text"
                       placeholder="Enter name"
                       name="supplierPosition"
                     />
-                    <ErrorMessage
+                    {/* <ErrorMessage
                       name="supplierPosition"
                       component="div"
                       className="mt-10 fw-500 fs-14 error"
-                    />
+                    /> */}
                   </div>
                   <div className="mb-20">
                     <label htmlFor="" className="fs-14 fw-500 mb-10">

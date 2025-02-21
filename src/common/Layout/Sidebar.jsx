@@ -113,8 +113,9 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
             name: "Promotions",
             icon: promotions,
             iconFull: promotionsFull,
-            disabled: true,
+            disabled: false,
             tag: "19",
+            navigate: "/admin/promotions",
           },
           {
             id: 8,
@@ -124,13 +125,13 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
             disabled: false,
             navigate: "/admin/brands",
           },
-          {
-            id: 9,
-            name: "Settings",
-            icon: setting,
-            iconFull: settingFull,
-            disabled: true,
-          },
+          // {
+          //   id: 9,
+          //   name: "Settings",
+          //   icon: setting,
+          //   iconFull: settingFull,
+          //   disabled: true,
+          // },
         ]),
   ];
 

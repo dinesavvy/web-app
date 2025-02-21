@@ -6,7 +6,7 @@ export const supplierValidation = Yup.object().shape({
   supplierContactName: Yup.string().required(
     "Supplier contact name is required"
   ),
-  supplierPosition: Yup.string().required("Supplier position is required"),
+  // supplierPosition: Yup.string().required("Supplier position is required"),
   supplierEmail: Yup.string()
       .email("Please enter a valid email address")
       .required("Supplier email is required"),
