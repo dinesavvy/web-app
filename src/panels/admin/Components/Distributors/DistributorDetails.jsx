@@ -299,11 +299,11 @@ const DistributorDetails = ({
                       placeholder="Enter name"
                       name="distributorPosition"
                     />
-                    <ErrorMessage
+                    {/* <ErrorMessage
                       name="distributorPosition"
                       component="div"
                       className="mt-10 fw-500 fs-14 error"
-                    />
+                    /> */}
                   </div>
                   <div className="mb-20">
                     <label htmlFor="" className="fs-14 fw-500 mb-10">
