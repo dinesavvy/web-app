@@ -288,7 +288,7 @@ const DistributorDetails = ({
 
                     <div className="d-flex align-center justify-between fs-12">
                       <div>Supported formats: JPEG, PNG</div>
-                      <div>Maximum Size: 5MB</div>
+                      {/* <div>Maximum Size: 5MB</div> */}
                     </div>
                   </>
                 )}
@@ -329,7 +329,7 @@ const DistributorDetails = ({
                   </div>
                   <div className="mb-20">
                     <label htmlFor="" className="fs-14 fw-500 mb-10">
-                      Contact position*
+                      Contact position
                     </label>
                     {/* <input type="text" placeholder="Enter position" /> */}
                     <Field

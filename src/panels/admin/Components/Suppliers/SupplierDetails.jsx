@@ -269,7 +269,7 @@ const SupplierDetails = ({
 
                     <div className="d-flex align-center justify-between fs-12">
                       <div>Supported formats: JPEG, PNG</div>
-                      <div>Maximum Size: 5MB</div>
+                      {/* <div>Maximum Size: 5MB</div> */}
                     </div>
                   </>
                 )}
