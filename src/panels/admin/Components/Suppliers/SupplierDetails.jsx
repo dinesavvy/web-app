@@ -66,6 +66,7 @@ const SupplierDetails = ({
   };
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
+    console.log(file)
     setFileObject(file);
     if (file) {
       // Validate file type
