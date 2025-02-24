@@ -26,9 +26,10 @@ const DistributorDetails = ({
 }) => {
   const [imagePreview, setImagePreview] = useState(null);
   const [countryCode, setCountryCode] = useState(
-    distributorItems?.contactPhoneNumber ? "" : "+91"
+    distributorItems?.contactPhoneNumber ? "" : "91"
   );
-  const [country, setCountry] = useState("in");
+
+  const [country, setCountry] = useState("");
   const [phone, setPhone] = useState(
     distributorItems?.contactPhoneNumber
       ? distributorItems?.contactPhoneNumber
@@ -83,27 +84,34 @@ const DistributorDetails = ({
   };
 
   const handlePhoneChange = (value, data) => {
-    const dialCode = `${data?.dialCode}`;
-    let number = value.replace(dialCode, "").trim();
+    if (value === "") {
+      setCountryCode(""); // Reset to India when input is cleared
+      setPhone("");
+      return;
+    }
 
-    if (!number) {
+    let newCountryCode = data.dialCode;
+    let newPhone = value.replace(newCountryCode, "").trim();
+
+    if (!newPhone) {
       // If the number is empty, reset country code
       setCountry("");
       setCountryCode("");
       return;
     } else {
-      setCountry(data.countryCode);
-      setCountryCode(dialCode);
+      setCountry(newCountryCode);
+      setCountryCode(newCountryCode);
     }
 
-    setPhone(number);
+    setCountryCode(newCountryCode);
+    setPhone(newPhone);
   };
 
   const handleFormSubmit = (values) => {
-    console.log(values,"values")
-    if(!phone) {
-      alert("dd")
-      return
+    console.log(values, "values");
+    if (!phone) {
+      alert("dd");
+      return;
     }
     if (!distributorItems) {
       let payload = {
@@ -118,7 +126,7 @@ const DistributorDetails = ({
       };
 
       dispatch(createDistributorHandler(payload));
-      console.log(payload,"payload")
+      console.log(payload, "payload");
     } else if (distributorItems) {
       let payload = {
         distributorName: values?.distributorName.trim(),
@@ -129,7 +137,7 @@ const DistributorDetails = ({
         logoUrl:
           distributorItems?.logoUrl ||
           fileuploadSelector?.data?.data?.map((item) => item?.src).join(""),
-          distributorId:distributorItems?._id
+        distributorId: distributorItems?._id,
       };
       dispatch(updateDistributorHandler(payload));
       // console.log(payload,"payload")
@@ -193,6 +201,8 @@ const DistributorDetails = ({
         {({
           isSubmitting,
           resetForm,
+          setFieldValue,
+          setFieldTouched,
           /* and other goodies */
         }) => (
           <Form>
@@ -327,13 +337,26 @@ const DistributorDetails = ({
                     </label>
                     {/* <input type="number" placeholder="Enter phone number" /> */}
                     <PhoneInput
-                      country={country} // Set country dynamically when user types a code
-                      value={countryCode + phone} // Show full value but keep them separate in state
-                      onChange={handlePhoneChange}
+                      country={countryCode || undefined} // Set country dynamically when user types a code
+                      value={`${countryCode}${phone}`} // Show full value but keep them separate in state
+                      onChange={(e, f) => {
+                        handlePhoneChange(e, f);
+                        setFieldValue("distributorContactNumber", e);
+                        setFieldTouched("distributorContactNumber", true);
+                      }}
                       disableCountryGuess={false} // Allow auto-detection of typed country code
                       placeholder="Enter phone number"
                       className="phoneInput"
                       name="distributorContactNumber"
+                      enableAreaCodes={true} // Helps with regional codes
+                      isValid={(inputNumber, country, countries) => {
+                        return inputNumber.length >= country.format.length; // Basic validation
+                      }}
+                    />
+                    <ErrorMessage
+                      name="distributorContactNumber"
+                      component="div"
+                      className="mt-10 fw-500 fs-14 error"
                     />
                   </div>
                 </div>

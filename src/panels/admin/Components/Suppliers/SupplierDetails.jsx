@@ -15,7 +15,10 @@ import { fileUploadHandler } from "../../../../redux/action/fileUpload";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import { supplierValidation } from "./supplierValidation";
-import { updateSupplierAction, updateSupplierHandler } from "../../../../redux/action/updateSupplier";
+import {
+  updateSupplierAction,
+  updateSupplierHandler,
+} from "../../../../redux/action/updateSupplier";
 
 const SupplierDetails = ({
   isOpen,
@@ -24,9 +27,9 @@ const SupplierDetails = ({
   selectedSupplier,
 }) => {
   const [countryCode, setCountryCode] = useState(
-    selectedSupplier?.contactPhoneNumber ? "" : "+91"
+    selectedSupplier?.contactPhoneNumber ? "" : "91"
   );
-  const [country, setCountry] = useState("in");
+  const [country, setCountry] = useState("");
   const fileuploadSelector = useSelector((state) => state?.fileupload);
   const [imagePreview, setImagePreview] = useState(null);
   const [phone, setPhone] = useState(
@@ -36,25 +39,31 @@ const SupplierDetails = ({
   const dispatch = useDispatch();
   const messageApi = useCommonMessage();
   const createSuplierSelector = useSelector((state) => state?.createSuplier);
-  const updateSupplierSelector = useSelector((state)=>state?.updateSupplier)
+  const updateSupplierSelector = useSelector((state) => state?.updateSupplier);
 
   const handlePhoneChange = (value, data) => {
-    const dialCode = `${data?.dialCode}`;
-    let number = value.replace(dialCode, "").trim();
+    if (value === "") {
+      setCountryCode(""); // Reset to India when input is cleared
+      setPhone("");
+      return;
+    }
 
-    if (!number) {
+    let newCountryCode = data.dialCode;
+    let newPhone = value.replace(newCountryCode, "").trim();
+
+    if (!newPhone) {
       // If the number is empty, reset country code
       setCountry("");
       setCountryCode("");
       return;
     } else {
-      setCountry(data.countryCode);
-      setCountryCode(dialCode);
+      setCountry(newCountryCode);
+      setCountryCode(newCountryCode);
     }
 
-    setPhone(number);
+    setCountryCode(newCountryCode);
+    setPhone(newPhone);
   };
-
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
 
@@ -135,7 +144,6 @@ const SupplierDetails = ({
     }
   }, [createSuplierSelector]);
 
-
   useEffect(() => {
     if (updateSupplierSelector?.message) {
       messageApi.open({
@@ -155,7 +163,8 @@ const SupplierDetails = ({
 
   return (
     <>
-      {(createSuplierSelector?.isLoading || updateSupplierSelector?.isLoading) && <Loader />}
+      {(createSuplierSelector?.isLoading ||
+        updateSupplierSelector?.isLoading) && <Loader />}
       {isOpen && <div className="overlay2" onClick={toggleDetails}></div>}
 
       <Formik
@@ -303,13 +312,26 @@ const SupplierDetails = ({
                       Contact*
                     </label>
                     <PhoneInput
-                      country={country} // Set country dynamically when user types a code
-                      value={countryCode + phone} // Show full value but keep them separate in state
-                      onChange={handlePhoneChange}
+                      country={countryCode || undefined} // Set country dynamically when user types a code
+                      value={`${countryCode}${phone}`} // Show full value but keep them separate in state
+                      onChange={(e, f) => {
+                        handlePhoneChange(e, f);
+                        setFieldValue("distributorContactNumber", e);
+                        setFieldTouched("distributorContactNumber", true);
+                      }}
                       disableCountryGuess={false} // Allow auto-detection of typed country code
                       placeholder="Enter phone number"
                       className="phoneInput"
                       name="supplierContactNumber"
+                      enableAreaCodes={true} // Helps with regional codes
+                      isValid={(inputNumber, country, countries) => {
+                        return inputNumber.length >= country.format.length; // Basic validation
+                      }}
+                    />
+                    <ErrorMessage
+                      name="supplierContactNumber"
+                      component="div"
+                      className="mt-10 fw-500 fs-14 error"
                     />
                   </div>
                 </div>
