@@ -4,7 +4,11 @@ import loactionIcon from "../../../../assets/images/loactionIcon.svg";
 import Loader from "../../../../common/Loader/Loader";
 import moment from "moment";
 import { useDispatch, useSelector } from "react-redux";
-import { addCreditHandler } from "../../../../redux/action/addCreditsSlice";
+import {
+  addCreditAction,
+  addCreditHandler,
+} from "../../../../redux/action/addCreditsSlice";
+import { useCommonMessage } from "../../../../common/CommonMessage";
 
 const AddNudgeCredit = ({
   isOpen,
@@ -16,15 +20,15 @@ const AddNudgeCredit = ({
   setAddNudgeCredit,
   numberOfCredits,
   setNumberOfCredits,
-  merchantDetailsSelector
+  merchantDetailsSelector,
+  addCreditSelector,
+  nudgeAnalyticSelector,
 }) => {
-
-  const addCreditSelector = useSelector((state)=>state?.addCredit)
-  console.log(addCreditSelector,"addCreditSelector")
+  const messageApi = useCommonMessage();
 
   const dispatch = useDispatch();
 
-  const merchantId = localStorage.getItem("merchantId")
+  const merchantId = localStorage.getItem("merchantId");
 
   const addCreditFn = () => {
     let payload = {
@@ -34,9 +38,29 @@ const AddNudgeCredit = ({
       locationId: merchantId,
       businessId: merchantDetailsSelector?.data?.data?.businessId,
     };
-    dispatch(addCreditHandler(payload))
+    dispatch(addCreditHandler(payload));
     // console.log(payload,"payload")
   };
+
+  useEffect(() => {
+    if (addCreditSelector?.data?.statusCode === 200) {
+      messageApi.open({
+        type: "success",
+        content: addCreditSelector?.data?.message,
+      });
+      dispatch(addCreditAction.addCreditReset());
+      setAddNudgeCredit(false);
+      setNumberOfCredits("");
+    }
+  }, [addCreditSelector]);
+
+  const nudgeCreditBalance =
+    nudgeAnalyticSelector?.data?.data?.nudgeCredit -
+    (nudgeAnalyticSelector?.data?.data?.followerAddedToday +
+      nudgeAnalyticSelector?.data?.data?.promotionNudgeCreditAddedToday);
+
+  const totalNudgeCredit =
+    (nudgeCreditBalance === 0 ? "" : nudgeCreditBalance) + numberOfCredits;
 
   return (
     <>
@@ -73,27 +97,34 @@ const AddNudgeCredit = ({
                 <div className="credit-summary">
                   <div className="credit-row">
                     <span>Nudge Credit Balance</span>
-                    <span className="credit-value">44</span>
+                    <span className="credit-value">
+                      {nudgeAnalyticSelector?.data?.data?.nudgeCredit -
+                        (nudgeAnalyticSelector?.data?.data?.followerAddedToday +
+                          nudgeAnalyticSelector?.data?.data
+                            ?.promotionNudgeCreditAddedToday)}
+                    </span>
                   </div>
                   <div className="credit-row">
                     <span>Nudge Credit you’re adding</span>
-                    <span className="credit-value positive">+250</span>
+                    <span className="credit-value positive">
+                      {numberOfCredits}
+                    </span>
                   </div>
                   <div className="credit-row total">
                     <span>Total Nudge Credit</span>
-                    <span className="credit-value">294</span>
+                    <span className="credit-value">{totalNudgeCredit}</span>
                   </div>
                 </div>
-                <div className="credit-details">
+                {/* <div className="credit-details">
                   <div className="credit-row">
                     <span>Nudge Credit you’re adding</span>
-                    <span className="credit-value">250</span>
+                    <span className="credit-value">{numberOfCredits}</span>
                   </div>
                   <div className="credit-row">
                     <span>1 Nudge credit cost</span>
                     <span className="credit-value">$1</span>
                   </div>
-                </div>
+                </div> */}
                 <button className="add-credit-btn" onClick={addCreditFn}>
                   Add Credit
                 </button>

@@ -51,6 +51,7 @@ const MerchantDetails = () => {
   const [numberOfCredits, setNumberOfCredits] = useState("");
   console.log(numberOfCredits,"numberOfCredits")
 
+  const addCreditSelector = useSelector((state)=>state?.addCredit)
   const listByUserIdSelector = useSelector((state) => state?.listByUserId);
   const followerListSelector = useSelector((state) => state?.followeList);
   const nudgesListSelector = useSelector((state) => state?.nudgesList);
@@ -264,11 +265,21 @@ const MerchantDetails = () => {
     setSelectedItems(updatedSelectedItems);
   };
 
+
+  const handleCreditClick = (value) => {
+    setNumberOfCredits(value.toString());
+  };
+
+  const nudgeGoal = nudgeAnalyticSelector?.data?.data?.nudgeGoal || 0;
+const nudgeSent = nudgeAnalyticSelector?.data?.data?.nudgeSent || 0;
+const percentage = nudgeGoal > 0 ? (nudgeSent / nudgeGoal) * 100 : 0;
+
+
   return (
     <>
       {merchantDetailsSelector?.isLoading ||
       followerDetailsSelector?.isLoading ||
-      nudgeAnalyticSelector?.isLoading ? (
+      nudgeAnalyticSelector?.isLoading || addCreditSelector?.isLoading ? (
         <Loader />
       ) : (
         <div className="dashboard">
@@ -1663,11 +1674,11 @@ const MerchantDetails = () => {
                 <div className="range mb-15">
                   <div
                     className="rangePercentage"
-                    style={{ width: "50%" }}
+                    style={{ width: percentage }}
                   ></div>
                 </div>
                 <div className="fs-14 fw-500 grey mb-20">
-                  You are just 50% behind to achieve Goal
+                  You are just {percentage}% behind to achieve Goal
                 </div>
                 <div className="weekNudge pc mb-20">
                   <div className="fs-18 fw-600">Nudges Expected This Week</div>
@@ -1723,29 +1734,30 @@ const MerchantDetails = () => {
                   <div className="mb-16">
                     <input
                       type="text"
+                      value={numberOfCredits}
                       placeholder="Enter number of credits"
                       onChange={(e) => setNumberOfCredits(e.target.value)}
                     />
                   </div>
                   <div className="d-flex justify-between align-center gap-20">
                     <div className="d-flex align-center gap-16 flex-wrap">
-                      <div className="addNudge">
+                      <div className="addNudge" onClick={() => handleCreditClick(250)}>
                         <img src={addnudge} alt="addnudge" />
                         250
                       </div>
-                      <div className="addNudge">
+                      <div className="addNudge" onClick={() => handleCreditClick(500)}>
                         <img src={addnudge} alt="addnudge" />
                         500
                       </div>
-                      <div className="addNudge">
+                      <div className="addNudge" onClick={() => handleCreditClick(1000)}>
                         <img src={addnudge} alt="addnudge" />
                         1000
                       </div>
-                      <div className="addNudge">
+                      <div className="addNudge" onClick={() => handleCreditClick(2500)}>
                         <img src={addnudge} alt="addnudge" />
                         2500
                       </div>
-                      <div className="addNudge">
+                      <div className="addNudge" onClick={() => handleCreditClick(50000)}>
                         <img src={addnudge} alt="addnudge" />
                         50000
                       </div>
@@ -1975,6 +1987,8 @@ const MerchantDetails = () => {
         setNumberOfCredits= {setNumberOfCredits}
         numberOfCredits={numberOfCredits}
         merchantDetailsSelector={merchantDetailsSelector}
+        addCreditSelector={addCreditSelector}
+        nudgeAnalyticSelector={nudgeAnalyticSelector}
       />
     </>
   );

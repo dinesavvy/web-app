@@ -15,7 +15,10 @@ import { fileUploadHandler } from "../../../../redux/action/fileUpload";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import { supplierValidation } from "./supplierValidation";
-import { updateSupplierAction, updateSupplierHandler } from "../../../../redux/action/updateSupplier";
+import {
+  updateSupplierAction,
+  updateSupplierHandler,
+} from "../../../../redux/action/updateSupplier";
 
 const SupplierDetails = ({
   isOpen,
@@ -27,6 +30,7 @@ const SupplierDetails = ({
     selectedSupplier?.contactPhoneNumber ? "" : "+91"
   );
   const [country, setCountry] = useState("in");
+  const [fileObject, setFileObject] = useState();
   const fileuploadSelector = useSelector((state) => state?.fileupload);
   const [imagePreview, setImagePreview] = useState(null);
   const [phone, setPhone] = useState(
@@ -36,7 +40,7 @@ const SupplierDetails = ({
   const dispatch = useDispatch();
   const messageApi = useCommonMessage();
   const createSuplierSelector = useSelector((state) => state?.createSuplier);
-  const updateSupplierSelector = useSelector((state)=>state?.updateSupplier)
+  const updateSupplierSelector = useSelector((state) => state?.updateSupplier);
 
   const handlePhoneChange = (value, data) => {
     const dialCode = `${data?.dialCode}`;
@@ -57,7 +61,7 @@ const SupplierDetails = ({
 
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
-
+    setFileObject(file);
     if (file) {
       // Validate file type
       const allowedTypes = ["image/jpeg", "image/png", "image/jpg"];
@@ -90,6 +94,33 @@ const SupplierDetails = ({
       reader.readAsDataURL(file);
     }
   };
+
+  useEffect(() => {
+    const uploadFile = async () => {
+      if (fileuploadSelector?.data?.statusCode === 200) {
+        console.log("inn");
+        try {
+          const response = await fetch(
+            fileuploadSelector?.data?.data?.[0]?.url,
+            {
+              method: "PUT",
+              body: fileObject,
+            }
+          );
+
+          if (response.ok) {
+            console.log("File uploaded successfully");
+          } else {
+            console.error("Failed to upload file", response.status);
+          }
+        } catch (error) {
+          console.error("Error uploading file", error);
+        }
+      }
+    };
+
+    uploadFile();
+  }, [fileuploadSelector]);
 
   const handleFormSubmit = (values) => {
     if (!selectedSupplier) {
@@ -135,7 +166,6 @@ const SupplierDetails = ({
     }
   }, [createSuplierSelector]);
 
-
   useEffect(() => {
     if (updateSupplierSelector?.message) {
       messageApi.open({
@@ -155,7 +185,9 @@ const SupplierDetails = ({
 
   return (
     <>
-      {(createSuplierSelector?.isLoading || updateSupplierSelector?.isLoading) && <Loader />}
+      {(createSuplierSelector?.isLoading ||
+        updateSupplierSelector?.isLoading ||
+        fileuploadSelector?.isLoading) && <Loader />}
       {isOpen && <div className="overlay2" onClick={toggleDetails}></div>}
 
       <Formik
