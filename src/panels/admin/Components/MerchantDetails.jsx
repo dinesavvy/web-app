@@ -4,7 +4,7 @@ import backButton from "../../../assets/images/backButton.svg";
 import breadCrumbIcon from "../../../assets/images/breadCrumb.svg";
 import resturantIcon from "../../../assets/images/resturantIcon.svg";
 import nudgeIcon from "../../../assets/images/nudgeIcon.svg";
-import olive from "../../../assets/images/olive.png";
+// import olive from "../../../assets/images/olive.png";
 import addTime from "../../../assets/images/addTime.svg";
 import createAdd from "../../../assets/images/createAdd.svg";
 import deleteList from "../../../assets/images/deleteList.svg";
@@ -49,9 +49,8 @@ const MerchantDetails = () => {
   const [selectedItems, setSelectedItems] = useState([]);
   const [addNudgeCredit, setAddNudgeCredit] = useState(false);
   const [numberOfCredits, setNumberOfCredits] = useState("");
-  console.log(numberOfCredits,"numberOfCredits")
 
-  const addCreditSelector = useSelector((state)=>state?.addCredit)
+  const addCreditSelector = useSelector((state) => state?.addCredit);
   const listByUserIdSelector = useSelector((state) => state?.listByUserId);
   const followerListSelector = useSelector((state) => state?.followeList);
   const nudgesListSelector = useSelector((state) => state?.nudgesList);
@@ -59,11 +58,15 @@ const MerchantDetails = () => {
     (state) => state?.merchantDetails
   );
 
+   // For Nudge Details Data
+   const nudgeDetailsMainSelector = useSelector(
+    (state) => state?.nudgeDetailsMain
+  );
   const followerDetailsSelector = useSelector(
     (state) => state?.followerDetails
   );
   const nudgeAnalyticSelector = useSelector((state) => state?.nudgeAnalytic);
-  console.log(merchantDetailsSelector, "merchantDetailsSelector");
+console.log(addCreditSelector,"addCreditSelector")
 
   const dispatch = useDispatch();
 
@@ -116,11 +119,6 @@ const MerchantDetails = () => {
       dispatch(listByUserIdHandler(payload));
     }
   }, [activeNudgeClass, followerDetailsSelector, activeTab, pagination]);
-
-  // For Nudge Details Data
-  const nudgeDetailsMainSelector = useSelector(
-    (state) => state?.nudgeDetailsMain
-  );
 
   useEffect(() => {
     if (isSidebarOpen) {
@@ -239,7 +237,7 @@ const MerchantDetails = () => {
       };
       dispatch(nudgeAnalyticHandler(payload));
     }
-  }, [activeTab3]);
+  }, [activeTab3,addCreditSelector]);
 
   const viewDetails = (item) => {
     if (item?._id) {
@@ -265,21 +263,20 @@ const MerchantDetails = () => {
     setSelectedItems(updatedSelectedItems);
   };
 
-
   const handleCreditClick = (value) => {
     setNumberOfCredits(value.toString());
   };
 
   const nudgeGoal = nudgeAnalyticSelector?.data?.data?.nudgeGoal || 0;
-const nudgeSent = nudgeAnalyticSelector?.data?.data?.nudgeSent || 0;
-const percentage = nudgeGoal > 0 ? (nudgeSent / nudgeGoal) * 100 : 0;
-
+  const nudgeSent = nudgeAnalyticSelector?.data?.data?.nudgeSent || 0;
+  const percentage = nudgeGoal > 0 ? (nudgeSent / nudgeGoal) * 100 : 0;
 
   return (
     <>
       {merchantDetailsSelector?.isLoading ||
       followerDetailsSelector?.isLoading ||
-      nudgeAnalyticSelector?.isLoading || addCreditSelector?.isLoading ? (
+      nudgeAnalyticSelector?.isLoading ||
+      addCreditSelector?.isLoading ? (
         <Loader />
       ) : (
         <div className="dashboard">
@@ -1614,7 +1611,6 @@ const percentage = nudgeGoal > 0 ? (nudgeSent / nudgeGoal) * 100 : 0;
                           })
                         }
                       >
-                        {/* <img src={createAdd} alt="image" /> */}
                         <div>Continue</div>
                       </div>
                       <div
@@ -1729,7 +1725,12 @@ const percentage = nudgeGoal > 0 ? (nudgeSent / nudgeGoal) * 100 : 0;
                     <div className="fs-16 grey fw-500">
                       Nudge credits added today
                     </div>
-                    <div className="gc fs-20 fw-700">+14</div>
+                    <div className="gc fs-20 fw-700">
+                      {
+                        nudgeAnalyticSelector?.data?.data
+                          ?.totalNudgeCreditAddedToday
+                      }
+                    </div>
                   </div>
                   <div className="mb-16">
                     <input
@@ -1737,34 +1738,50 @@ const percentage = nudgeGoal > 0 ? (nudgeSent / nudgeGoal) * 100 : 0;
                       value={numberOfCredits}
                       placeholder="Enter number of credits"
                       onChange={(e) => setNumberOfCredits(e.target.value)}
+                      disabled
                     />
                   </div>
                   <div className="d-flex justify-between align-center gap-20">
                     <div className="d-flex align-center gap-16 flex-wrap">
-                      <div className="addNudge" onClick={() => handleCreditClick(250)}>
+                      <div
+                        className="addNudge"
+                        onClick={() => handleCreditClick(250)}
+                      >
                         <img src={addnudge} alt="addnudge" />
                         250
                       </div>
-                      <div className="addNudge" onClick={() => handleCreditClick(500)}>
+                      <div
+                        className="addNudge"
+                        onClick={() => handleCreditClick(500)}
+                      >
                         <img src={addnudge} alt="addnudge" />
                         500
                       </div>
-                      <div className="addNudge" onClick={() => handleCreditClick(1000)}>
+                      <div
+                        className="addNudge"
+                        onClick={() => handleCreditClick(1000)}
+                      >
                         <img src={addnudge} alt="addnudge" />
                         1000
                       </div>
-                      <div className="addNudge" onClick={() => handleCreditClick(2500)}>
+                      <div
+                        className="addNudge"
+                        onClick={() => handleCreditClick(2500)}
+                      >
                         <img src={addnudge} alt="addnudge" />
                         2500
                       </div>
-                      <div className="addNudge" onClick={() => handleCreditClick(50000)}>
+                      <div
+                        className="addNudge"
+                        onClick={() => handleCreditClick(50000)}
+                      >
                         <img src={addnudge} alt="addnudge" />
                         50000
                       </div>
                     </div>
                     <div
                       className={
-                        numberOfCredits?.length >0
+                        numberOfCredits?.length > 0
                           ? "btn btnSecondary p16 gap-8"
                           : "btn btnSecondary p16 gap-8 disabled"
                       }
@@ -1984,7 +2001,7 @@ const percentage = nudgeGoal > 0 ? (nudgeSent / nudgeGoal) * 100 : 0;
       <AddNudgeCredit
         setAddNudgeCredit={setAddNudgeCredit}
         addNudgeCredit={addNudgeCredit}
-        setNumberOfCredits= {setNumberOfCredits}
+        setNumberOfCredits={setNumberOfCredits}
         numberOfCredits={numberOfCredits}
         merchantDetailsSelector={merchantDetailsSelector}
         addCreditSelector={addCreditSelector}

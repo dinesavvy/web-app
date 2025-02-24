@@ -59,9 +59,9 @@ const AddNudgeCredit = ({
     (nudgeAnalyticSelector?.data?.data?.followerAddedToday +
       nudgeAnalyticSelector?.data?.data?.promotionNudgeCreditAddedToday);
 
-  const totalNudgeCredit =
-    (nudgeCreditBalance === 0 ? "" : nudgeCreditBalance) + numberOfCredits;
-
+      const totalNudgeCredit = 
+      (nudgeCreditBalance === 0 ? 0 : Number(nudgeCreditBalance)) + Number(numberOfCredits);
+    
   return (
     <>
       {/* Overlay */}

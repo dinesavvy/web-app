@@ -23,6 +23,7 @@ import {
 import { useBusiness } from "../../../common/Layout/BusinessContext";
 import AccessDeniedModal from "../accessDeniedModal/accessDeniedModal";
 import { useNavigate } from "react-router-dom";
+import { businessNudgeAnalyticHandler, getNudgeAnalyticHandler } from "../../../redux/action/businessAction/businessNudgeAnalytic";
 
 const Nudges = () => {
   const [tempState, setTempState] = useState([]);
@@ -66,6 +67,13 @@ const Nudges = () => {
       }
     }
   }, [businessListSelector, selectedBusiness]);
+
+
+const nudgeAnalyticSelector = useSelector((state)=>state?.businessNudgeAnalytic)
+
+  useEffect(()=>{
+dispatch(businessNudgeAnalyticHandler())
+  },[])
 
   const toggleSidebar = (item) => {
     let payload = {
@@ -134,6 +142,12 @@ const Nudges = () => {
     }
   };
 
+  const nudgeGoal = nudgeAnalyticSelector?.data?.data?.nudgeGoal || 0;
+const nudgeSent = nudgeAnalyticSelector?.data?.data?.nudgeSent || 0;
+const percentage = nudgeGoal > 0 ? (nudgeSent / nudgeGoal) * 100 : 0;
+
+
+
   return (
     <>
       {(businessNudgesListSelector?.isLoading ||
@@ -187,18 +201,18 @@ const Nudges = () => {
               <div className="d-flex align-center justify-between mb-15">
                 <div>
                   <span className="fw-16">Nudges Goal: </span>
-                  <span className="fw-700 fs-20">15</span>
+                  <span className="fw-700 fs-20">{nudgeAnalyticSelector?.data?.data?.nudgeGoal}</span>
                 </div>
                 <div>
                   <span className="fs-14">Sent </span>
-                  <span className="fs-18 gc fw-700">10</span>
+                  <span className="fs-18 gc fw-700">{nudgeAnalyticSelector?.data?.data?.nudgeSent}</span>
                 </div>
               </div>
               <div className="range mb-15">
-                <div className="rangePercentage" style={{ width: "50%" }}></div>
+                <div className="rangePercentage" style={{ width: percentage }}></div>
               </div>
               <div className="fs-14 fw-500 grey mb-20">
-                You are just 50% behind to achieve Goal
+                You are just {percentage}% behind to achieve Goal
               </div>
               {/* <div className="weekNudge pc mb-20">
             <div className="fs-18 fw-600">Nudges Expected This Week</div>
@@ -207,7 +221,7 @@ const Nudges = () => {
               <div className="card mb-20">
                 <div className="fs-20 fw-700 d-flex gap-20 align-center justify-between">
                   <div>Nudge Credits</div>
-                  <div>44</div>
+                  <div>{nudgeAnalyticSelector?.data?.data?.nudgeCredit}</div>
                 </div>
                 <div className="divider2"></div>
                 <div className="d-flex justify-between align-center gap-20 mb-6">
@@ -216,13 +230,13 @@ const Nudges = () => {
                 </div>
                 <div className="d-flex justify-between align-center gap-20 mb-6">
                   <div className="fs-16 grey fw-500">Followers added today</div>
-                  <div className="gc fs-20 fw-700">+7</div>
+                  <div className="gc fs-20 fw-700">{nudgeAnalyticSelector?.data?.data?.followerAddedToday}</div>
                 </div>
                 <div className="d-flex justify-between align-center gap-20">
                   <div className="fs-16 grey fw-500">
                     Promotional credits added today
                   </div>
-                  <div className="gc fs-20 fw-700">+7</div>
+                  <div className="gc fs-20 fw-700">{nudgeAnalyticSelector?.data?.data?.promotionNudgeCreditAddedToday}</div>
                 </div>
                 <div className="divider2"></div>
                 <div className="d-flex justify-between align-center gap-20 mb-20">
