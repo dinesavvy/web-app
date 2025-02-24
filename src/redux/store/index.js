@@ -31,6 +31,8 @@ import removeDistributorSlice from "../action/removeDistributor";
 import updateDistributorSlice from "../action/updateDistributor";
 import createBrandSlice from "../action/createBrandSlice";
 import deleteBrandSlice from "../action/deleteBrand";
+import addCreditSlice from "../action/addCreditsSlice";
+import nudgeAnalyticSlice from "../action/nudgeAnalytic";
 
 const store = configureStore({
   reducer: {
@@ -67,6 +69,8 @@ const store = configureStore({
     updateDistributor: updateDistributorSlice,
     createBrand: createBrandSlice,
     deleteBrand: deleteBrandSlice,
+    addCredit: addCreditSlice,
+    nudgeAnalytic: nudgeAnalyticSlice,
   },
 });
 

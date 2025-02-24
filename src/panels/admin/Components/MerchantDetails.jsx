@@ -11,21 +11,15 @@ import deleteList from "../../../assets/images/deleteList.svg";
 import addnudge from "../../../assets/images/addnudge.svg";
 import addCredits from "../../../assets/images/addCredits.svg";
 import noImageFound from "../../../assets/images/noImageFound.png";
-import map from "../../../assets/images/map.jpg";
-import restaurantCard from "../../../assets/images/restaurantCard.png";
 import dish from "../../../assets/images/dish.png";
-import chart from "../../../assets/images/chart.jpg";
 import { Breadcrumb, Pagination, TimePicker } from "antd";
 import SearchSelect from "../Components/SearchSelect";
 import CustomSelect from "../Components/CustomSelect";
 import CustomSwitch from "../Components/CustomSwitch";
-import CommonToast from "../../../common/toast/CommonToast";
 import { useLocation, useNavigate } from "react-router-dom";
 import { merchantDetailsHandler } from "../../../redux/action/merchantDetails";
 import { useDispatch, useSelector } from "react-redux";
 import Loader from "../../../common/Loader/Loader";
-// import GoogleMapReact from "google-map-react";
-// import { FaMapMarkerAlt } from "react-icons/fa";
 import { nudgesDetailsHandler } from "../../../redux/action/nudgeDetails";
 import moment from "moment";
 import { followersListHandler } from "../../../redux/action/followersList";
@@ -34,6 +28,9 @@ import NudgeDetail from "./NudgeDetail";
 import { followerDetailsHandler } from "../../../redux/action/followersDetails";
 import { listByUserIdHandler } from "../../../redux/action/listByUserId";
 import TeamMember from "./TeamMember";
+import { nudgeAnalyticHandler } from "../../../redux/action/nudgeAnalytic";
+import { tabs3 } from "./merchant/merchantCommon";
+import AddNudgeCredit from "./merchant/AddCreditDrawer";
 
 const MerchantDetails = () => {
   const { state } = useLocation();
@@ -50,12 +47,29 @@ const MerchantDetails = () => {
   const [checkedItems, setCheckedItems] = useState({});
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [selectedItems, setSelectedItems] = useState([]);
+  const [addNudgeCredit, setAddNudgeCredit] = useState(false);
+  const [numberOfCredits, setNumberOfCredits] = useState("");
+  console.log(numberOfCredits,"numberOfCredits")
 
+  const addCreditSelector = useSelector((state)=>state?.addCredit)
   const listByUserIdSelector = useSelector((state) => state?.listByUserId);
   const followerListSelector = useSelector((state) => state?.followeList);
   const nudgesListSelector = useSelector((state) => state?.nudgesList);
+  const merchantDetailsSelector = useSelector(
+    (state) => state?.merchantDetails
+  );
+
+  const followerDetailsSelector = useSelector(
+    (state) => state?.followerDetails
+  );
+  const nudgeAnalyticSelector = useSelector((state) => state?.nudgeAnalytic);
+  console.log(merchantDetailsSelector, "merchantDetailsSelector");
 
   const dispatch = useDispatch();
+
+  const addCreditsFuntion = () => {
+    setAddNudgeCredit(true);
+  };
 
   useEffect(() => {
     if (
@@ -67,7 +81,6 @@ const MerchantDetails = () => {
       const updatedCheckedItems = {};
 
       followerListSelector?.data?.data?.records?.forEach((item, index) => {
-        // Mark as checked if the item is in selectedItems
         const isSelected =
           Array.isArray(state?.statePrev?.selectedItems) &&
           state?.statePrev?.selectedItems?.some(
@@ -79,17 +92,9 @@ const MerchantDetails = () => {
       setCheckedItems(updatedCheckedItems);
       setSelectedItems(
         state?.statePrev?.selectedItems || state?.statePrev?.selectedItems || []
-      ); // Ensure selectedItems is an array
+      );
     }
   }, [state?.statePrev?.selectedItems, followerListSelector]);
-
-  const merchantDetailsSelector = useSelector(
-    (state) => state?.merchantDetails
-  );
-
-  const followerDetailsSelector = useSelector(
-    (state) => state?.followerDetails
-  );
 
   const handleTabClick = (tab) => {
     setActiveTab(tab);
@@ -110,7 +115,7 @@ const MerchantDetails = () => {
       };
       dispatch(listByUserIdHandler(payload));
     }
-  }, [activeNudgeClass, followerDetailsSelector, activeTab,pagination]);
+  }, [activeNudgeClass, followerDetailsSelector, activeTab, pagination]);
 
   // For Nudge Details Data
   const nudgeDetailsMainSelector = useSelector(
@@ -123,8 +128,6 @@ const MerchantDetails = () => {
     } else {
       document.body.classList.remove("overflow-Hidden");
     }
-
-    // Cleanup on component unmount
     return () => {
       document.body.classList.remove("overflow-Hidden");
     };
@@ -148,14 +151,12 @@ const MerchantDetails = () => {
     }));
 
     if (isChecked) {
-      // Add the item to the selectedItems array if not already present
       setSelectedItems((prev) =>
         prev.some((selectedItem) => selectedItem?._id === item?._id)
           ? prev
           : [...prev, item]
       );
     } else {
-      // Remove the item from the selectedItems array
       setSelectedItems((prev) =>
         prev.filter((selectedItem) => selectedItem?._id !== item?._id)
       );
@@ -166,50 +167,9 @@ const MerchantDetails = () => {
     (checked) => checked
   );
 
-  const tabs3 = [
-    {
-      id: "1",
-      label: "Google Business Profile",
-    },
-    {
-      id: "2",
-      label: "Dine Savvy Account",
-    },
-    {
-      id: "3",
-      label: "Followers",
-    },
-    {
-      id: "5",
-      label: "Team Members",
-    },
-    {
-      id: "4",
-      label: "Nudges Details",
-    },
-  ];
   const handleToggle = (state) => {
     setSwitchState(state);
   };
-  // const images = [
-  //   businessPhoto,
-  //   restaurantCard,
-  //   restaurantCard,
-  //   businessPhoto,
-  //   restaurantCard,
-  //   businessPhoto,
-  //   restaurantCard,
-  // ];
-  // const images2 = [
-  //   restaurantCard,
-  //   businessPhoto,
-  //   restaurantCard,
-  //   businessPhoto,
-  //   restaurantCard,
-  //   businessPhoto,
-  //   restaurantCard,
-  // ];
-
   useEffect(() => {
     if (localStorage.getItem("merchantId")) {
       let payload = {
@@ -271,6 +231,16 @@ const MerchantDetails = () => {
     }
   }, [pagination, searchString, activeTab3, activeTab]);
 
+  // Get Nudge Analytic
+  useEffect(() => {
+    if (activeTab3 === "4") {
+      let payload = {
+        locationId: localStorage.getItem("merchantId"),
+      };
+      dispatch(nudgeAnalyticHandler(payload));
+    }
+  }, [activeTab3]);
+
   const viewDetails = (item) => {
     if (item?._id) {
       let payload = {
@@ -282,7 +252,6 @@ const MerchantDetails = () => {
   };
 
   const handleDelete = () => {
-    // Remove from checkedItems
     const updatedCheckedItems = { ...checkedItems };
     Object.keys(checkedItems).forEach((key) => {
       if (checkedItems[key]) {
@@ -290,24 +259,33 @@ const MerchantDetails = () => {
       }
     });
     setCheckedItems(updatedCheckedItems);
-
-    // Remove from selectedItems
     const updatedSelectedItems = selectedItems.filter(
       (item, index) => !checkedItems[index]
     );
     setSelectedItems(updatedSelectedItems);
   };
 
+
+  const handleCreditClick = (value) => {
+    setNumberOfCredits(value.toString());
+  };
+
+  const nudgeGoal = nudgeAnalyticSelector?.data?.data?.nudgeGoal || 0;
+const nudgeSent = nudgeAnalyticSelector?.data?.data?.nudgeSent || 0;
+const percentage = nudgeGoal > 0 ? (nudgeSent / nudgeGoal) * 100 : 0;
+
+
   return (
     <>
       {merchantDetailsSelector?.isLoading ||
-      followerDetailsSelector?.isLoading ? (
+      followerDetailsSelector?.isLoading ||
+      nudgeAnalyticSelector?.isLoading || addCreditSelector?.isLoading ? (
         <Loader />
       ) : (
         <div className="dashboard">
           <div className="tabs-container tab3 tabFull">
             <div className="tabs">
-              {tabs3.map((tab) => (
+              {tabs3?.map((tab) => (
                 <button
                   key={tab.id}
                   className={`tab-button ${
@@ -354,14 +332,6 @@ const MerchantDetails = () => {
                 <div className="card mb-30">
                   <div className="d-flex align-center justify-between gap-20 mb-20">
                     <div className="fs-20 fw-700">About your business</div>
-                    {/* {!editInput && (
-                    <div
-                      className="editBtn cursor-pointer"
-                      onClick={() => setEditInput(true)}
-                    >
-                      <img src={editBtn} alt="" />
-                    </div>
-                  )} */}
                   </div>
                   <div className="inputGrid">
                     <div>
@@ -434,14 +404,6 @@ const MerchantDetails = () => {
                     <div className="fs-20 fw-700">
                       Primary Contact information
                     </div>
-                    {/* {!editInput && (
-                    <div
-                      className="editBtn cursor-pointer"
-                      onClick={() => setEditInput(true)}
-                    >
-                      <img src={editBtn} alt="" />
-                    </div>
-                  )} */}
                   </div>
                   <div className="inputGrid grid3">
                     <div>
@@ -462,13 +424,6 @@ const MerchantDetails = () => {
                     </div>
 
                     <div>
-                      {/* {editInput === true ? (
-                        <input
-                          type="email"
-                          className="input"
-                          placeholder="Email"
-                        />
-                        ) : ( */}
                       {merchantDetailsSelector?.data?.data?.ownerDetails
                         ?.email && (
                         <>
@@ -537,14 +492,6 @@ const MerchantDetails = () => {
                 <div className="card mb-30">
                   <div className="d-flex align-center justify-between gap-20 mb-20">
                     <div className="fs-20 fw-700">Location and areas</div>
-                    {/* {!editInput && (
-                    <div
-                      className="editBtn cursor-pointer"
-                      onClick={() => setEditInput(true)}
-                    >
-                      <img src={editBtn} alt="" />
-                    </div>
-                  )} */}
                   </div>
                   <div>
                     {editInput === true ? (
@@ -647,7 +594,7 @@ const MerchantDetails = () => {
                             merchantDetailsSelector?.data?.data?.address
                               ?.postalCode,
                           ]
-                            .filter(Boolean) // Filters out null, undefined, or empty values
+                            .filter(Boolean)
                             .join(", ")}
                         </div>
                       </>
@@ -673,51 +620,9 @@ const MerchantDetails = () => {
                 <div className="card">
                   <div className="d-flex align-center justify-between gap-20 mb-20 flexmd">
                     <div className="fs-20 fw-700">Hours of operation</div>
-                    {/* {!editInput && (
-                    <div
-                      className="editBtn cursor-pointer"
-                      onClick={() => setEditInput(true)}
-                    >
-                      <img src={editBtn} alt="" />
-                    </div>
-                  )} */}
                   </div>
                   {!editInput && (
                     <div>
-                      {/* <div className="d-flex align-center justify-between">
-                      <div className="grey fs-16">Sunday</div>
-                      <div>Closed</div>
-                    </div> */}
-                      {/* <div className="divider2"></div>
-                    <div className="d-flex align-center justify-between">
-                      <div className="grey fs-16">Monday</div>
-                      <div>9:00 AM To 11:30</div>
-                    </div>
-                    <div className="divider2"></div>
-                    <div className="d-flex align-center justify-between">
-                      <div className="grey fs-16">Tuesday</div>
-                      <div>9:00 AM To 11:30</div>
-                    </div>
-                    <div className="divider2"></div>
-                    <div className="d-flex align-center justify-between">
-                      <div className="grey fs-16">Wednesday</div>
-                      <div>9:00 AM To 11:30</div>
-                    </div>
-                    <div className="divider2"></div>
-                    <div className="d-flex align-center justify-between">
-                      <div className="grey fs-16">Thurday</div>
-                      <div>9:00 AM To 11:30</div>
-                    </div>
-                    <div className="divider2"></div>
-                    <div className="d-flex align-center justify-between">
-                      <div className="grey fs-16">Friday</div>
-                      <div>9:00 AM To 11:30</div>
-                    </div>
-                    <div className="divider2"></div>
-                    <div className="d-flex align-center justify-between">
-                      <div className="grey fs-16">Saturday</div>
-                      <div>9:00 AM To 11:30</div>
-                    </div> */}
                       {merchantDetailsSelector?.data?.data?.businessHours?.periods?.map(
                         (item, index) => {
                           return (
@@ -1069,88 +974,6 @@ const MerchantDetails = () => {
                   )}
                 </div>
               </div>
-              {/* <div className="tabPadding mb-30">
-              <div className="card mb-30">
-                <div className="d-flex align-center justify-between gap-20 mb-20">
-                  <div className="fs-20 fw-700">Primary Business Photo</div>
-                  <div
-                    className="sc fs-16 fw-700 cursor-pointer wordno"
-                    onClick={() => setOpenImage(true)}
-                  >
-                    {" "}
-                    View All
-                  </div>
-                </div>
-                <ImageGallery
-                  images={images}
-                  openImage={openImage}
-                  setOpenImage={setOpenImage}
-                />
-              </div>
-              <div className="card">
-                <div className="d-flex align-center justify-between gap-20 mb-20">
-                  <div className="fs-20 fw-700">Secondary Business Photo</div>
-                  <div
-                    className="sc fs-16 fw-700 cursor-pointer"
-                    onClick={() => setOpenImage(true)}
-                  >
-                    {" "}
-                    View All
-                  </div>
-                </div>
-                <ImageGallery
-                  images={images2}
-                  openImage={openImage}
-                  setOpenImage={setOpenImage}
-                />
-              </div>
-            </div> */}
-              {/* <div className="card">
-              <div className="fs-20 fw-700 mb-20">Reviews</div>
-              <div className="reviewCard mb-20">
-                <div className="d-flex gap-10 align-center justify-between mb-20 flexWrapsm">
-                  <div className="d-flex gap-10 align-center fs-20 fw-500">
-                    <img src={review} className="reviewImge" alt="" />
-                    Jane Cooprer
-                  </div>
-                  <div className="reviewTag fs-14">
-                    <div>Dine in</div>
-                    <div>Lunch</div>
-                    <div>$10 - $100</div>
-                  </div>
-                </div>
-                <div className="mb-20">
-                  I recently had a fantastic experience dining in for brunch at
-                  Restaurant . The atmosphere was warm and welcoming, and the
-                  staff was extremely friendly and attentive. The food was
-                  delicious and of high quality, with a wide variety of options
-                  to choose from.....More
-                </div>
-                <ImageGallery images={images} />
-              </div>
-              <div className="reviewCard mb-20">
-                <div className="d-flex gap-10 align-center justify-between mb-20 flexWrapsm">
-                  <div className="d-flex gap-10 align-center fs-20 fw-500">
-                    <img src={review} className="reviewImge" alt="" />
-                    Jane Cooprer
-                  </div>
-                  <div className="reviewTag fs-14">
-                    <div>Dine in</div>
-                    <div>Lunch</div>
-                    <div>$10 - $100</div>
-                  </div>
-                </div>
-                <div className="mb-20">
-                  I recently had a fantastic experience dining in for brunch at
-                  Restaurant . The atmosphere was warm and welcoming, and the
-                  staff was extremely friendly and attentive. The food was
-                  delicious and of high quality, with a wide variety of options
-                  to choose from.....More
-                </div>
-                <ImageGallery images={images2} />
-              </div>
-              <div className="viewMoreBtn">View More</div>
-            </div> */}
             </>
           ) : activeTab3 === "2" ? (
             <>
@@ -1209,54 +1032,6 @@ const MerchantDetails = () => {
                     <div className="grey">Nudge credits</div>
                     <div>{state?.nudge?.nudgeCredit} Remaining</div>
                   </div>
-                  {/* <div className="divider2"></div>
-                <div className="fw-600 mb-10">Payment history</div>
-                <div className="overflow">
-                  <table className="w-100 fs-14 text-center stripped">
-                    <thead>
-                      <tr>
-                        <th style={{ minWidth: "150px", width: "50%" }}>
-                          Date
-                        </th>
-                        <th style={{ minWidth: "150px", width: "50%" }}>
-                          Amount
-                        </th>
-                        <th style={{ minWidth: "100px", width: "20%" }}>
-                          sdds
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>Oct 10, 2024</td>
-                        <td>$200</td>
-                        <td>
-                          <div className="downloadIcon cursor-pointer">
-                            <img src={downloadIcon} alt="" />
-                          </div>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>Sep 15, 2024</td>
-                        <td>$150</td>
-                        <td>
-                          <div className="downloadIcon cursor-pointer">
-                            <img src={downloadIcon} alt="" />
-                          </div>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>Aug 05, 2024</td>
-                        <td>$100</td>
-                        <td>
-                          <div className="downloadIcon cursor-pointer">
-                            <img src={downloadIcon} alt="" />
-                          </div>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div> */}
                 </div>
               </div>
             </>
@@ -1561,29 +1336,29 @@ const MerchantDetails = () => {
                     </div>
 
                     {listByUserIdSelector?.data?.data?.records?.length > 0 && (
-                  <div className="d-flex align-center justify-between flexPagination">
-                    <div className="fs-16">
-                      {/* Showing {pagination?.page} to {pagination?.limit} of{" "}
-                      {listByUserIdSelector?.data?.data?.recordsCount} Nudges */}
-                      {(() => {
-                  const start = (pagination.page - 1) * pagination.limit + 1;
-                  const end = Math.min(
-                    start +
-                    listByUserIdSelector?.data?.data?.records?.length -
-                      1,
-                      listByUserIdSelector?.data?.data?.recordsCount
-                  );
-                  return `Showing ${start} to ${end} of ${listByUserIdSelector?.data?.data?.recordsCount} Nudges`;
-                })()}
-                    </div>
-                    <Pagination
-                      current={pagination?.page}
-                      pageSize={pagination?.limit}
-                      total={listByUserIdSelector?.data?.data?.recordsCount}
-                      onChange={handlePaginationChange}
-                    />
-                  </div>
-                )}
+                      <div className="d-flex align-center justify-between flexPagination">
+                        <div className="fs-16">
+                          {(() => {
+                            const start =
+                              (pagination.page - 1) * pagination.limit + 1;
+                            const end = Math.min(
+                              start +
+                                listByUserIdSelector?.data?.data?.records
+                                  ?.length -
+                                1,
+                              listByUserIdSelector?.data?.data?.recordsCount
+                            );
+                            return `Showing ${start} to ${end} of ${listByUserIdSelector?.data?.data?.recordsCount} Nudges`;
+                          })()}
+                        </div>
+                        <Pagination
+                          current={pagination?.page}
+                          pageSize={pagination?.limit}
+                          total={listByUserIdSelector?.data?.data?.recordsCount}
+                          onChange={handlePaginationChange}
+                        />
+                      </div>
+                    )}
                   </div>
                   <div className="tabPadding mb-30">
                     <div className="fs-20 fw-700 mb-10">Sharing</div>
@@ -1610,30 +1385,11 @@ const MerchantDetails = () => {
                   </div>
                   <div className="tabPadding mb-30">
                     <div className="fs-20 fw-700 mb-20">Merchants</div>
-                    <div className="flexTag2">
-                      {/* <div>Garden Grove Café & Bistro</div>
-                      <div>The Rolling Pin Bakery</div>
-                      <div>Firefly Lounge & Bar</div>
-                      <div>Golden Harvest Farmhouse</div>
-                      <div>Sage & Stone Fine</div>
-                      <div>Pine & Cedar Grille House</div>
-                      <div>Blue Horizon Coastal Grill</div>
-                      <div>Sweet Basil Wine Bar</div>
-                      <div>Red Oak Smokehouse BBQ</div>
-                      <div>See more</div> */}
-                      No data found
-                    </div>
+                    <div className="flexTag2">No data found</div>
                   </div>
                   <div className="tabPadding mb-30">
                     <div className="fs-20 fw-700 mb-20">Items favorited</div>
                     <div className="flexTagFull">
-                      {/* <div>French dip</div>
-                      <div>Cioppino</div>
-                      <div>Avocado toast</div>
-                      <div>Mac and Cheese Pizza</div>
-                      <div>Burrito</div>
-                      <div>Mission burrito</div> */}
-
                       {followerDetailsSelector?.data?.data
                         ?.customerPreferenceData?.filterData?.length > 0 ? (
                         followerDetailsSelector.data.data.customerPreferenceData?.filterData?.map(
@@ -1647,11 +1403,6 @@ const MerchantDetails = () => {
                   <div className="tabPadding mb-30">
                     <div className="fs-20 fw-700 mb-20">Preferences</div>
                     <div className="flexTagFull">
-                      {/* <div>Casual Dining</div>
-                      <div>Weight Watchers</div>
-                      <div>Drinks</div>
-                      <div>Steak, Bar</div>
-                      <div>Wine</div> */}
                       {followerDetailsSelector?.data?.data
                         ?.customerPreferenceData?.personalPreference?.length >
                       0 ? (
@@ -1667,87 +1418,20 @@ const MerchantDetails = () => {
                     <div className="fs-20 fw-700 mb-20">
                       Dine Savvy Application Usage
                     </div>
-                    {/* <div className="d-flex gap-30 flexWrap">
-                      <div className="card w-100">
-                        <div>
-                          <img src={chart} className="w-100" alt="" />
-                        </div>
-                        <div className="divider2"></div>
-                        <div className="fw-600 text-center">
-                          User opens Dine Savvy
-                        </div>
-                      </div>
-                      <div className="card w-100">
-                        <div>
-                          <img src={chart} className="w-100" alt="" />
-                        </div>
-                        <div className="divider2"></div>
-                        <div className="fw-600 text-center">
-                          User spends in Dine Savvy
-                        </div>
-                      </div>
-                    </div> */}
                     No data found
                   </div>
                   <div className="tabPadding mb-30">
-                    {/* <div className="fs-20 fw-700 mb-20">Locations</div>
-                    <div className="divider2"></div>
-                    <div className="fw-500 text-center mb-20">Weekly</div>
-                    <div className="w-100 mh400 ">
-                      <img src={map} className="w-100 h-100" alt="" />
-                    </div> */}
                     <div className="fs-20 fw-700 mb-20">Locations</div>
                     No data found
-                    {/* <div className="divider2"></div>
-                    <div className="overflow">
-                      <table className="w-100 fs-14 text-start">
-                        <thead>
-                          <tr>
-                            <th style={{ minWidth: "200px" }}>Date/Day</th>
-                            <th style={{ minWidth: "200px" }}>Time</th>
-                            <th style={{ minWidth: "400px", width: "60%" }}>
-                              Location
-                            </th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr>
-                            <td>Sunday</td>
-                            <td>12:23 pm</td>
-                            <td>8502 Preston Rd. Inglewood, Maine 98380</td>
-                          </tr>
-                          <tr>
-                            <td></td>
-                            <td>12:23 pm</td>
-                            <td>8502 Preston Rd. Inglewood, Maine 98380</td>
-                          </tr>
-                          <tr>
-                            <td></td>
-                            <td>12:23 pm</td>
-                            <td>8502 Preston Rd. Inglewood, Maine 98380</td>
-                          </tr>
-                          <tr>
-                            <td>Monday</td>
-                            <td>12:23 pm</td>
-                            <td>8502 Preston Rd. Inglewood, Maine 98380</td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div> */}
                   </div>
                   <div className="tabPadding mb-30">
                     <div className="fs-20 fw-700 mb-20">
                       Most common time used
                     </div>
-                    <div className="flexTagFull">
-                      {/* <div>12:00 to 01:00 PM</div>
-                      <div>06:00 to 07:30 PM</div> */}
-                      No data found
-                    </div>
+                    <div className="flexTagFull">No data found</div>
                   </div>
                 </>
               ) : (
-                // <FollowerDetail />
                 <>
                   {followerListSelector?.isLoading && <Loader />}
                   <div className="tabPadding">
@@ -1816,7 +1500,6 @@ const MerchantDetails = () => {
                                   <label className="checkLabel">
                                     <input
                                       type="checkbox"
-                                      // checked={checkedItems[index] || false}
                                       checked={checkedItems[index] || false}
                                       onChange={(e) =>
                                         handleCheckboxChange(
@@ -1877,19 +1560,18 @@ const MerchantDetails = () => {
                     {followerListSelector?.data?.data?.records?.length > 0 && (
                       <div className="d-flex align-center justify-between flexPagination">
                         <div className="fs-16">
-                          {/* Showing {pagination.page} to {pagination.limit} of{" "}
-                          {followerListSelector?.data?.data?.recordsCount}{" "}
-                          Followers */}
                           {(() => {
-                  const start = (pagination.page - 1) * pagination.limit + 1;
-                  const end = Math.min(
-                    start +
-                    followerListSelector?.data?.data?.records?.length -
-                      1,
-                      followerListSelector?.data?.data?.recordsCount
-                  );
-                  return `Showing ${start} to ${end} of ${followerListSelector?.data?.data?.recordsCount} Followers`;
-                })()}
+                            const start =
+                              (pagination.page - 1) * pagination.limit + 1;
+                            const end = Math.min(
+                              start +
+                                followerListSelector?.data?.data?.records
+                                  ?.length -
+                                1,
+                              followerListSelector?.data?.data?.recordsCount
+                            );
+                            return `Showing ${start} to ${end} of ${followerListSelector?.data?.data?.recordsCount} Followers`;
+                          })()}
                         </div>
                         <Pagination
                           current={pagination.page}
@@ -1974,53 +1656,73 @@ const MerchantDetails = () => {
                     />
                   </div>
                 </div>
-                {/* <div className="divider2"></div> */}
                 <div className="divider2"></div>
                 <div className="d-flex align-center justify-between mb-15">
                   <div>
                     <span className="fw-16">Nudges Goal: </span>
-                    <span className="fw-700 fs-20">15</span>
+                    <span className="fw-700 fs-20">
+                      {nudgeAnalyticSelector?.data?.data?.nudgeGoal}
+                    </span>
                   </div>
                   <div>
                     <span className="fs-14">Sent </span>
-                    <span className="fs-18 gc fw-700">10</span>
+                    <span className="fs-18 gc fw-700">
+                      {nudgeAnalyticSelector?.data?.data?.nudgeSent}
+                    </span>
                   </div>
                 </div>
                 <div className="range mb-15">
                   <div
                     className="rangePercentage"
-                    style={{ width: "50%" }}
+                    style={{ width: percentage }}
                   ></div>
                 </div>
                 <div className="fs-14 fw-500 grey mb-20">
-                  You are just 50% behind to achieve Goal
+                  You are just {percentage}% behind to achieve Goal
                 </div>
                 <div className="weekNudge pc mb-20">
                   <div className="fs-18 fw-600">Nudges Expected This Week</div>
-                  <div className="fw-700 fs-20">124</div>
+                  <div className="fw-700 fs-20">
+                    {
+                      nudgeAnalyticSelector?.data?.data
+                        ?.remainingThisWeekNudgeSentCount
+                    }
+                  </div>
                 </div>
                 <div className="card">
                   <div className="fs-20 fw-700 d-flex gap-20 align-center justify-between">
                     <div>Nudge Credits</div>
-                    <div>44</div>
+                    <div>{nudgeAnalyticSelector?.data?.data?.nudgeCredit}</div>
                   </div>
                   <div className="divider2"></div>
 
                   <div className="d-flex justify-between align-center gap-20 mb-6">
                     <div className="fs-16 grey fw-500">Previous balance</div>
-                    <div className="fs-20 fw-700">30</div>
+                    <div className="fs-20 fw-700">
+                      {nudgeAnalyticSelector?.data?.data?.nudgeCredit -
+                        (nudgeAnalyticSelector?.data?.data?.followerAddedToday +
+                          nudgeAnalyticSelector?.data?.data
+                            ?.promotionNudgeCreditAddedToday)}
+                    </div>
                   </div>
                   <div className="d-flex justify-between align-center gap-20 mb-6">
                     <div className="fs-16 grey fw-500">
                       Followers added today
                     </div>
-                    <div className="gc fs-20 fw-700">+7</div>
+                    <div className="gc fs-20 fw-700">
+                      {nudgeAnalyticSelector?.data?.data?.followerAddedToday}
+                    </div>
                   </div>
                   <div className="d-flex justify-between align-center gap-20">
                     <div className="fs-16 grey fw-500">
                       Promotional credits added today
                     </div>
-                    <div className="gc fs-20 fw-700">+7</div>
+                    <div className="gc fs-20 fw-700">
+                      {
+                        nudgeAnalyticSelector?.data?.data
+                          ?.promotionNudgeCreditAddedToday
+                      }
+                    </div>
                   </div>
                   <div className="divider2"></div>
                   <div className="d-flex justify-between align-center gap-20 mb-20">
@@ -2030,32 +1732,46 @@ const MerchantDetails = () => {
                     <div className="gc fs-20 fw-700">+14</div>
                   </div>
                   <div className="mb-16">
-                    <input type="text" placeholder="Enter number of credits" />
+                    <input
+                      type="text"
+                      value={numberOfCredits}
+                      placeholder="Enter number of credits"
+                      onChange={(e) => setNumberOfCredits(e.target.value)}
+                    />
                   </div>
                   <div className="d-flex justify-between align-center gap-20">
                     <div className="d-flex align-center gap-16 flex-wrap">
-                      <div className="addNudge">
+                      <div className="addNudge" onClick={() => handleCreditClick(250)}>
                         <img src={addnudge} alt="addnudge" />
                         250
                       </div>
-                      <div className="addNudge">
+                      <div className="addNudge" onClick={() => handleCreditClick(500)}>
                         <img src={addnudge} alt="addnudge" />
                         500
                       </div>
-                      <div className="addNudge">
+                      <div className="addNudge" onClick={() => handleCreditClick(1000)}>
                         <img src={addnudge} alt="addnudge" />
                         1000
                       </div>
-                      <div className="addNudge">
+                      <div className="addNudge" onClick={() => handleCreditClick(2500)}>
                         <img src={addnudge} alt="addnudge" />
                         2500
                       </div>
-                      <div className="addNudge">
+                      <div className="addNudge" onClick={() => handleCreditClick(50000)}>
                         <img src={addnudge} alt="addnudge" />
                         50000
                       </div>
                     </div>
-                    <div className="btn btnSecondary p16 gap-8">
+                    <div
+                      className={
+                        numberOfCredits?.length >0
+                          ? "btn btnSecondary p16 gap-8"
+                          : "btn btnSecondary p16 gap-8 disabled"
+                      }
+                      onClick={() => {
+                        numberOfCredits ? addCreditsFuntion(true) : null;
+                      }}
+                    >
                       <img src={addCredits} alt="addCredits" />
                       Add Credits
                     </div>
@@ -2130,8 +1846,6 @@ const MerchantDetails = () => {
                           </div>
                           <div className="bottomPadding">
                             <div className="lightBlack fs-14 mb-20">
-                              {/* Get 20% off on all large pizzas today! Limited time
-                            offer. */}
                               {item?.message}
                             </div>
                             <div className="d-flex justify-between align-center gap-20 mb-8">
@@ -2159,7 +1873,6 @@ const MerchantDetails = () => {
                                   Recipients:
                                 </div>
                                 <div className="fs-14 fw-600">
-                                  {/* {item?.recipientCount} */}
                                   {item?.recipientCount}
                                 </div>
                               </div>
@@ -2176,13 +1889,11 @@ const MerchantDetails = () => {
                                   ).toFixed(0)}
                                   %
                                 </div>
-                                {/* <div className="fs-14 fw-600 gc">{150}/{(150/200)*100}%</div> */}
                               </div>
                               <div>
                                 <div className="fs-14 mb-4 lightBlack">
                                   Declined:
                                 </div>
-                                {/* <div className="fs-14 fw-600 rc">{30}/{(30/200)*100}%</div> */}
                                 <div className="fs-14 fw-600 rc">
                                   {item?.disLikeUserList}/
                                   {(
@@ -2230,18 +1941,17 @@ const MerchantDetails = () => {
                 {nudgesListSelector?.data?.data?.records?.length > 0 && (
                   <div className="d-flex align-center justify-between flexPagination">
                     <div className="fs-16">
-                      {/* Showing {pagination?.page} to {pagination?.limit} of{" "}
-                      {nudgesListSelector?.data?.data?.recordsCount} Nudges */}
                       {(() => {
-                  const start = (pagination.page - 1) * pagination.limit + 1;
-                  const end = Math.min(
-                    start +
-                    nudgesListSelector?.data?.data?.records?.length -
-                      1,
-                      nudgesListSelector?.data?.data?.recordsCount
-                  );
-                  return `Showing ${start} to ${end} of ${nudgesListSelector?.data?.data?.recordsCount} Nudges`;
-                })()}
+                        const start =
+                          (pagination.page - 1) * pagination.limit + 1;
+                        const end = Math.min(
+                          start +
+                            nudgesListSelector?.data?.data?.records?.length -
+                            1,
+                          nudgesListSelector?.data?.data?.recordsCount
+                        );
+                        return `Showing ${start} to ${end} of ${nudgesListSelector?.data?.data?.recordsCount} Nudges`;
+                      })()}
                     </div>
                     <Pagination
                       current={pagination?.page}
@@ -2252,7 +1962,6 @@ const MerchantDetails = () => {
                   </div>
                 )}
               </div>
-              {/* {isSidebarOpen && ( */}
               <NudgeDetail
                 isOpen={isSidebarOpen}
                 toggleSidebar={toggleSidebar}
@@ -2260,7 +1969,6 @@ const MerchantDetails = () => {
                 activeTab={activeTab}
                 nudgeId={nudgeId}
               />
-              {/* )} */}
             </>
           ) : activeTab3 === "5" ? (
             <>
@@ -2273,6 +1981,15 @@ const MerchantDetails = () => {
           ) : null}
         </div>
       )}
+      <AddNudgeCredit
+        setAddNudgeCredit={setAddNudgeCredit}
+        addNudgeCredit={addNudgeCredit}
+        setNumberOfCredits= {setNumberOfCredits}
+        numberOfCredits={numberOfCredits}
+        merchantDetailsSelector={merchantDetailsSelector}
+        addCreditSelector={addCreditSelector}
+        nudgeAnalyticSelector={nudgeAnalyticSelector}
+      />
     </>
   );
 };

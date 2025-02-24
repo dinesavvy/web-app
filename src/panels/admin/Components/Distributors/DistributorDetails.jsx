@@ -30,11 +30,14 @@ const DistributorDetails = ({
   );
 
   const [country, setCountry] = useState("");
+  const [fileObject, setFileObject] = useState();
+
   const [phone, setPhone] = useState(
     distributorItems?.contactPhoneNumber
       ? distributorItems?.contactPhoneNumber
       : ""
   );
+  const messageApi = useCommonMessage();
   const dispatch = useDispatch();
   const fileuploadSelector = useSelector((state) => state?.fileupload);
   const createDistributorSelector = useSelector(
@@ -45,10 +48,9 @@ const DistributorDetails = ({
     (state) => state?.updateDistributor
   );
 
-  const messageApi = useCommonMessage();
-  console.log(fileuploadSelector, "fileuploadSelector");
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
+    setFileObject(file);
 
     if (file) {
       // Validate file type
@@ -82,6 +84,32 @@ const DistributorDetails = ({
       reader.readAsDataURL(file);
     }
   };
+
+  useEffect(() => {
+    const uploadFile = async () => {
+      if (fileuploadSelector?.data?.statusCode === 200) {
+        try {
+          const response = await fetch(
+            fileuploadSelector?.data?.data?.[0]?.url,
+            {
+              method: "PUT",
+              body: fileObject,
+            }
+          );
+
+          if (response.ok) {
+            console.log("File uploaded successfully");
+          } else {
+            console.error("Failed to upload file", response.status);
+          }
+        } catch (error) {
+          console.error("Error uploading file", error);
+        }
+      }
+    };
+
+    uploadFile();
+  }, [fileuploadSelector]);
 
   const handlePhoneChange = (value, data) => {
     if (value === "") {
@@ -309,11 +337,11 @@ const DistributorDetails = ({
                       placeholder="Enter name"
                       name="distributorPosition"
                     />
-                    <ErrorMessage
+                    {/* <ErrorMessage
                       name="distributorPosition"
                       component="div"
                       className="mt-10 fw-500 fs-14 error"
-                    />
+                    /> */}
                   </div>
                   <div className="mb-20">
                     <label htmlFor="" className="fs-14 fw-500 mb-10">

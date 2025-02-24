@@ -66,7 +66,7 @@ const SupplierDetails = ({
   };
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
-
+    setFileObject(file);
     if (file) {
       // Validate file type
       const allowedTypes = ["image/jpeg", "image/png", "image/jpg"];
@@ -99,6 +99,33 @@ const SupplierDetails = ({
       reader.readAsDataURL(file);
     }
   };
+
+  useEffect(() => {
+    const uploadFile = async () => {
+      if (fileuploadSelector?.data?.statusCode === 200) {
+        console.log("inn");
+        try {
+          const response = await fetch(
+            fileuploadSelector?.data?.data?.[0]?.url,
+            {
+              method: "PUT",
+              body: fileObject,
+            }
+          );
+
+          if (response.ok) {
+            console.log("File uploaded successfully");
+          } else {
+            console.error("Failed to upload file", response.status);
+          }
+        } catch (error) {
+          console.error("Error uploading file", error);
+        }
+      }
+    };
+
+    uploadFile();
+  }, [fileuploadSelector]);
 
   const handleFormSubmit = (values) => {
     if (!selectedSupplier) {
@@ -164,7 +191,8 @@ const SupplierDetails = ({
   return (
     <>
       {(createSuplierSelector?.isLoading ||
-        updateSupplierSelector?.isLoading) && <Loader />}
+        updateSupplierSelector?.isLoading ||
+        fileuploadSelector?.isLoading) && <Loader />}
       {isOpen && <div className="overlay2" onClick={toggleDetails}></div>}
 
       <Formik
