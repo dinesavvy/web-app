@@ -50,7 +50,6 @@ const Header = ({ handleTrigger }) => {
   // Handle Selection
   const handleSelect = (item) => {
     // setSelectedBusiness(item);
-    console.log("in")
     window.location.reload("/merchant/dashboard")
     setModalOpen(false);
   };
