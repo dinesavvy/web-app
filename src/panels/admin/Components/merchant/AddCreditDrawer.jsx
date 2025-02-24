@@ -39,7 +39,6 @@ const AddNudgeCredit = ({
       businessId: merchantDetailsSelector?.data?.data?.businessId,
     };
     dispatch(addCreditHandler(payload));
-    // console.log(payload,"payload")
   };
 
   useEffect(() => {
