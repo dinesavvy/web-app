@@ -60,6 +60,10 @@
     line-height: 51px;
 }
 @media (max-width:1549.98px) {
+    .fs-12 {
+        font-size: 10px;
+        line-height: 12px;
+    }
     .fs-14 {
         font-size: 12px;
         line-height: 18px;

@@ -1633,9 +1633,27 @@ input.addTitleInput::placeholder {
   justify-content: center;
 
 }
+.tabs-container  + .tabPadding{
+  border-radius: 0 0 16px 16px;
+}
 @media (max-width: 1549.98px) {
+  .radioImage {
+    height: 50px;
+    padding: 8px;
+  }
+  .custom-label {
+    border-radius: 6px;
+    height: 119px;
+    width: 203px;
+  }
+  .oneLine{
+    width: 190px;
+  }
   .overviewCard{
     padding: 12px;
+  }
+  .nudgeGrid{
+    height: 258px;
   }
   .tabPadding{
     padding: 16px;
@@ -1727,9 +1745,9 @@ input.addTitleInput::placeholder {
     padding: 20px !important;
     border-radius: 20px !important;
   }
-  .modalbg,.modalbg img{
-    /* width: 100%; */
-  }
+  /* .modalbg,.modalbg img{
+    width: 100%;
+  } */
   .modalImage img{
     height: 80px;
     width: 80px;
@@ -1831,13 +1849,18 @@ input.addTitleInput::placeholder {
     height: unset;
   }
   .rightSidebar{
-    width: 400px;
+    width: 350px;
+    padding: 16px;
   }
   .uploadImage{
     height: 110px;
   }
   .uploadsupllierImage{
     height: 20px;
+  }
+  .mx-450 {
+    max-width: 350px;
+    width: 100%;
   }
 }
 @media (max-width: 1499.98px) {
