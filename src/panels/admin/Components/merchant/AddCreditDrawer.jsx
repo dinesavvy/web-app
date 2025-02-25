@@ -10,7 +10,7 @@ import {
 } from "../../../../redux/action/addCreditsSlice";
 import { useCommonMessage } from "../../../../common/CommonMessage";
 
-const AddNudgeCredit = ({
+const AddNudgeCreditDrawer = ({
   isOpen,
   toggleSidebar,
   nudgeDetailsMainSelector,
@@ -23,6 +23,7 @@ const AddNudgeCredit = ({
   merchantDetailsSelector,
   addCreditSelector,
   nudgeAnalyticSelector,
+  activeNudge
 }) => {
   const messageApi = useCommonMessage();
 
@@ -32,8 +33,8 @@ const AddNudgeCredit = ({
 
   const addCreditFn = () => {
     let payload = {
-      nudgeCredit: numberOfCredits,
-      nudgeAmount: numberOfCredits,
+      nudgeCredit: activeNudge,
+      nudgeAmount: activeNudge,
       currency: "INR",
       locationId: merchantId,
       businessId: merchantDetailsSelector?.data?.data?.businessId,
@@ -59,7 +60,7 @@ const AddNudgeCredit = ({
       nudgeAnalyticSelector?.data?.data?.promotionNudgeCreditAddedToday);
 
       const totalNudgeCredit = 
-      (nudgeCreditBalance === 0 ? 0 : Number(nudgeCreditBalance)) + Number(numberOfCredits);
+      (nudgeCreditBalance === 0 ? 0 : Number(nudgeCreditBalance)) + Number(activeNudge);
     
   return (
     <>
@@ -106,7 +107,8 @@ const AddNudgeCredit = ({
                   <div className="credit-row">
                     <span>Nudge Credit you’re adding</span>
                     <span className="credit-value positive">
-                      {numberOfCredits}
+                      {/* {numberOfCredits} */}
+                      {activeNudge}
                     </span>
                   </div>
                   <div className="credit-row total">
@@ -136,4 +138,4 @@ const AddNudgeCredit = ({
   );
 };
 
-export default AddNudgeCredit;
+export default AddNudgeCreditDrawer;
