@@ -1,8 +1,6 @@
 import React, { useEffect } from "react";
 import closeRightSidebar from "../../../assets/images/closeRightSidebar.svg";
 import loactionIcon from "../../../assets/images/loactionIcon.svg";
-import arrowRight from "../../../assets/images/arrowRight.svg";
-// import restaurantCard from "../../../assets/images/restaurantCard.png";
 import Loader from "../../../common/Loader/Loader";
 import moment from "moment";
 

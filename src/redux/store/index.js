@@ -20,6 +20,19 @@ import removeTeamMemberSlice from "../action/removeTeamMember";
 import roleListActionSlice from "../action/roleList";
 import updateTeamSlice from "../action/updateTeam";
 import resendInviteLinkSlice from "../action/resendInviteLink";
+import brandListSlice from "../action/brandListSlice";
+import getSupplierSlice from "../action/getSuppliersSlice";
+import createSuplierSlice from "../action/createSupplier";
+import distributorsListSlice from "../action/distributorsList";
+import createDistributorSlice from "../action/createDistributor";
+import removeSupplierSlice from "../action/removeSupplier";
+import updateSupplierSlice from "../action/updateSupplier";
+import removeDistributorSlice from "../action/removeDistributor";
+import updateDistributorSlice from "../action/updateDistributor";
+import createBrandSlice from "../action/createBrandSlice";
+import deleteBrandSlice from "../action/deleteBrand";
+import addCreditSlice from "../action/addCreditsSlice";
+import nudgeAnalyticSlice from "../action/nudgeAnalytic";
 
 const store = configureStore({
   reducer: {
@@ -45,6 +58,19 @@ const store = configureStore({
     roleList: roleListActionSlice,
     updateTeam: updateTeamSlice,
     resendInviteLink: resendInviteLinkSlice,
+    brandList: brandListSlice,
+    getSupplierList: getSupplierSlice,
+    createSuplier: createSuplierSlice,
+    distributorsList: distributorsListSlice,
+    createDistributor: createDistributorSlice,
+    removeSupplier: removeSupplierSlice,
+    updateSupplier: updateSupplierSlice,
+    removeDistributor: removeDistributorSlice,
+    updateDistributor: updateDistributorSlice,
+    createBrand: createBrandSlice,
+    deleteBrand: deleteBrandSlice,
+    addCredit: addCreditSlice,
+    nudgeAnalytic: nudgeAnalyticSlice,
   },
 });
 

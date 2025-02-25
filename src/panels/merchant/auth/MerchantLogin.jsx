@@ -127,17 +127,6 @@ const MerchantLogin = () => {
                           Phone number*
                         </label>
                         <div className="">
-                          {/* <Field
-                            type="text"
-                            name="phoneNumber"
-                            placeholder="Enter your phone number"
-                            id="phone"
-                          />
-                          <img
-                            src={phoneInput}
-                            alt=""
-                            className="absoluteImage"
-                          /> */}
                           <PhoneInput
                             country={country} // Set country dynamically when user types a code
                             value={countryCode + phone} // Show full value but keep them separate in state
@@ -147,20 +136,12 @@ const MerchantLogin = () => {
                             className="phoneInput"
                           />
                         </div>
-                        {/* <ErrorMessage
-                          name="phoneNumber"
-                          component="div"
-                          className="mt-10 fw-500 fs-14 error"
-                        /> */}
                       </div>
                       <button
                         className={
                           phone?.length > 0 ? "btn w-100" : "btn w-100 disabled"
                         }
                         type="submit"
-                        // disabled={isSubmitting}
-                        // onClick={()=>navigate('/requested-code')}
-                        // onClick={()=>}
                       >
                         Request Code
                       </button>

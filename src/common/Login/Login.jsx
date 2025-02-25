@@ -14,8 +14,6 @@ import { loginHandler, loginSliceAction } from "../../redux/action/loginSlice";
 import { useEffect } from "react";
 import { validationSchema } from "./loginValidation";
 import Loader from "../Loader/Loader";
-import PhoneInput from 'react-phone-input-2'
-import 'react-phone-input-2/lib/style.css'
 
 const Login = () => {
   const messageApi = useCommonMessage();

@@ -14,6 +14,15 @@ import {
   removeTeamMemberBusinessHandler,
 } from "../../../redux/action/businessAction/removeTeamMember";
 import { businessTeamListHandler } from "../../../redux/action/businessAction/businessTeamList";
+import { useLocation } from "react-router-dom";
+import {
+  removeSupplierAction,
+  removeSupplierHandler,
+} from "../../../redux/action/removeSupplier";
+import {
+  removeDistributorAction,
+  removeDistributorHandler,
+} from "../../../redux/action/removeDistributor";
 
 const CommonModal = ({
   modal2Open,
@@ -22,13 +31,23 @@ const CommonModal = ({
   removeTeamMember,
   merchantApp,
   selectTeam,
+  removeSupplier,
+  removeDistributor,
 }) => {
   const messageApi = useCommonMessage();
   const getMerchantId = localStorage.getItem("merchantId");
   const dispatch = useDispatch();
 
+  const location = useLocation();
+
+  let getLocationDetails = location?.pathname;
+
   const removeTeamMemberSelector = useSelector(
     (state) => state?.removeTeamMember
+  );
+
+  const removeDistributorSelector = useSelector(
+    (state) => state?.removeDistributor
   );
 
   const removeTeamMemberBusinessSelector = useSelector(
@@ -36,19 +55,28 @@ const CommonModal = ({
   );
 
 
+  const removeSupplierSelector = useSelector((state) => state?.removeSupplier);
+
   const deleteTeam = () => {
-    if (!merchantApp) {
-      let payload = {
-        teamMappingId: removeTeamMember?._id,
-      };
-      dispatch(removeTeamMemberHandler(payload));
-    } else if (merchantApp) {
-      let payload = {
-        teamMappingId: removeTeamMember?._id,
-      };
-      dispatch(removeTeamMemberBusinessHandler(payload));
+    if (merchantApp) {
+      dispatch(removeSupplierHandler({ teamMappingId: removeTeamMember?._id }));
+      return;
+    }
+  
+    if (getLocationDetails !== "/admin/suppliers" && removeTeamMember?._id) {
+      dispatch(removeTeamMemberHandler({ teamMappingId: removeTeamMember._id }));
+    }
+  
+    if (removeSupplier?._id) {
+      dispatch(removeSupplierHandler({ supplierId: removeSupplier._id }));
+    }
+  
+    if (removeDistributor?._id) {
+      console.log("innn");
+      dispatch(removeDistributorHandler({ distributorId: removeDistributor._id }));
     }
   };
+  
 
   useEffect(() => {
     if (!merchantApp) {
@@ -65,6 +93,20 @@ const CommonModal = ({
           };
           dispatch(merchantTeamsHandler(payload));
         }
+      } else if (removeSupplierSelector?.data?.statusCode === 200) {
+        messageApi.open({
+          type: "success",
+          content: removeSupplierSelector?.data?.message,
+        });
+        setModal2Open(false);
+        dispatch(removeSupplierAction.removeSupplierReset());
+      } else if (removeDistributorSelector?.data?.statusCode === 200) {
+        messageApi.open({
+          type: "success",
+          content: removeDistributorSelector?.data?.message,
+        });
+        setModal2Open(false);
+        dispatch(removeDistributorAction.removeDistributorReset());
       }
     } else if (merchantApp) {
       if (removeTeamMemberBusinessSelector?.data?.statusCode === 200) {
@@ -79,11 +121,19 @@ const CommonModal = ({
         dispatch(businessTeamListHandler());
       }
     }
-  }, [removeTeamMemberSelector,removeTeamMemberBusinessSelector, merchantApp]);
+  }, [
+    removeTeamMemberSelector,
+    removeTeamMemberBusinessSelector,
+    merchantApp,
+    removeSupplierSelector,
+    removeDistributorSelector,
+  ]);
 
   return (
     <>
-      {removeTeamMemberSelector?.isLoading && <Loader />}
+      {(removeTeamMemberSelector?.isLoading ||
+        removeSupplierSelector?.isLoading ||
+        removeDistributorSelector?.isLoading) && <Loader />}
       <Modal
         centered
         open={modal2Open}
@@ -99,11 +149,24 @@ const CommonModal = ({
           <img src={modalImage} alt="" />
         </div>
         <div className="text-center mb-30">
-          <div className="fs-26 fw-700 mb-15">Delete Team Member</div>
+          <div className="fs-26 fw-700 mb-15">
+            {getLocationDetails === "/admin/suppliers"
+              ? "Delete Team Supplier"
+              : "Delete Team Member"}
+          </div>
           <div className="fs-18">
             Are you sure you want to remove{" "}
-            <span className="fw-600">{removeTeamMember?.displayName}</span> from
-            the team?
+            <span className="fw-600">
+              {removeTeamMember?.displayName ||
+                removeSupplier?.supplierName ||
+                removeDistributor?.distributorName}
+            </span>{" "}
+            from the{" "}
+            {getLocationDetails === "/admin/suppliers"
+              ? "supplier?"
+              : getLocationDetails === "/admin/distributors"
+              ? "distributor?"
+              : "team?"}
           </div>
         </div>
         <div className="div d-flex align-center gap-16">

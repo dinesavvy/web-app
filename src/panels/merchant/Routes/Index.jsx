@@ -12,8 +12,7 @@ const routeMap = {
 };
 
 
-
-const AppRoutesMerchant = () => {
+const AppRoutesSupplier = () => {
   const routes = routeMap["merchant"] || [];
   const [isOpen, setIsOpen] = useState(false);
 
@@ -68,4 +67,4 @@ const AppRoutesMerchant = () => {
   );
 };
 
-export default AppRoutesMerchant;
+export default AppRoutesSupplier;

@@ -42,20 +42,24 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
         ? "/merchant/dashboard"
         : "/admin/merchant/dashboard",
     },
-    {
-      id: 2,
-      name: "Suppliers",
-      icon: suppliers,
-      iconFull: suppliersFull,
-      navigate: "/admin/suppliers",
-    },
-    {
-      id: 3,
-      name: "Distributors",
-      icon: distributor,
-      iconFull: distributorFull,
-      navigate: "/admin/distributors",
-    },
+    ...(getLoggedInDetails
+      ? []
+      : [
+          {
+            id: 2,
+            name: "Suppliers",
+            icon: suppliers,
+            iconFull: suppliersFull,
+            navigate: "/admin/suppliers",
+          },
+          {
+            id: 3,
+            name: "Distributors",
+            icon: distributor,
+            iconFull: distributorFull,
+            navigate: "/admin/distributors",
+          },
+        ]),
     ...(getLoggedInDetails
       ? []
       : [
@@ -109,23 +113,25 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
             name: "Promotions",
             icon: promotions,
             iconFull: promotionsFull,
-            disabled: true,
+            disabled: false,
             tag: "19",
+            navigate: "/admin/promotions",
           },
           {
             id: 8,
             name: "Brands",
             icon: brands,
             iconFull: brandsFull,
-            disabled: true,
+            disabled: false,
+            navigate: "/admin/brands",
           },
-          {
-            id: 9,
-            name: "Settings",
-            icon: setting,
-            iconFull: settingFull,
-            disabled: true,
-          },
+          // {
+          //   id: 9,
+          //   name: "Settings",
+          //   icon: setting,
+          //   iconFull: settingFull,
+          //   disabled: true,
+          // },
         ]),
   ];
 

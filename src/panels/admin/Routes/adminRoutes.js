@@ -7,7 +7,7 @@ import MerchantDetails from "../Components/MerchantDetails";
 import NudgeTemplate from "../Components/NudgeTemplate";
 import FollowerDetail from "../Components/FollowerDetails";
 import Promotions from "../Components/Promotions";
-import Brands from "../Components/Brands";
+import Brands from "../Components/Brands/Brands";
 import TeamMember from "../Components/TeamMember";
 import EditMember from "../Components/EditMember";
 import EditBrands from "../Components/EditBrands";
@@ -15,6 +15,7 @@ import AddPromotion from "../Components/AddPromotion";
 import MerchantGroupList from "../Components/MerchantGroupList";
 import Suppliers from "../Components/Suppliers/Suppliers";
 import Distributors from "../Components/Distributors/Distributors";
+import AddBrands from "../Components/Brands/AddBrands";
 
 const adminRoutes = [
   {
@@ -68,6 +69,12 @@ const adminRoutes = [
     {
       path: "/admin/brands/edit",
       element: EditBrands,
+      isPrivate: false,
+      isLayout: true,
+    },
+    {
+      path: "/admin/brands/add",
+      element: AddBrands,
       isPrivate: false,
       isLayout: true,
     },
