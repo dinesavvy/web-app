@@ -136,7 +136,6 @@ const DistributorDetails = ({
   };
 
   const handleFormSubmit = (values) => {
-    console.log(values, "values");
     if (!phone) {
       alert("dd");
       return;
@@ -154,7 +153,6 @@ const DistributorDetails = ({
       };
 
       dispatch(createDistributorHandler(payload));
-      console.log(payload, "payload");
     } else if (distributorItems) {
       let payload = {
         distributorName: values?.distributorName.trim(),
@@ -168,7 +166,6 @@ const DistributorDetails = ({
         distributorId: distributorItems?._id,
       };
       dispatch(updateDistributorHandler(payload));
-      // console.log(payload,"payload")
     }
   };
 

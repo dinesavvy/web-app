@@ -1,5 +1,5 @@
 import Http from "../http";
 
-export const loginAPI = (data) => {
+export const loginDistributorAPI = (data) => {
   return Http.post("distributor/session/login", data);
 };

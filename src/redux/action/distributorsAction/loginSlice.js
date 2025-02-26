@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { loginAPI } from "../../../services/distributorsService/login";
+import { loginDistributorAPI } from "../../../services/distributorsService/login";
 
 const data = {
   isLoading: false,
@@ -8,24 +8,24 @@ const data = {
   data: null,
 };
 
-const loginDetailsSlice = createSlice({
-  name: "loginSliceDetails",
+const loginDistributorSlice = createSlice({
+  name: "loginDistributor",
   initialState: data,
   reducers: {
-    loginDetailsSliceInfo(state) {
+    loginDistributorInfo(state) {
       state.isLoading = true;
     },
-    loginDetailsSliceSuccess(state, action) {
+    loginDistributorSuccess(state, action) {
       state.isLoading = false;
       state.data = action.payload;
       state.message = "";
     },
-    loginDetailsSliceFailure(state, action) {
+    loginDistributorFailure(state, action) {
       state.isLoading = false;
       state.message = action.payload;
       state.data = null;
     },
-    loginDetailsSliceReset(state) {
+    loginDistributorReset(state) {
       state.isLoading = false;
       state.message = "";
       state.data = null;
@@ -34,16 +34,17 @@ const loginDetailsSlice = createSlice({
   },
 });
 
-export const loginHandler = (data) => async (dispatch) => {
+export const loginDistributorHandler = (data) => async (dispatch) => {
   try {
-    dispatch(loginSliceAction.loginDetailsSliceInfo());
-    const response = await loginAPI(data);
-    dispatch(loginSliceAction.loginDetailsSliceSuccess(response));
+    dispatch(loginDistributorAction.loginDistributorInfo());
+    const response = await loginDistributorAPI(data);
+    dispatch(loginDistributorAction.loginDistributorSuccess(response));
     localStorage.setItem("token", response?.data?.deviceData?.deviceToken);
     localStorage.setItem("distributorId", response?.data?._id);
+    localStorage.setItem("distributorLogin",true)
   } catch (e) {
-    dispatch(loginSliceAction.loginDetailsSliceFailure(e));
+    dispatch(loginDistributorAction.loginDistributorFailure(e));
   }
 };
-export default loginDetailsSlice.reducer;
-export const loginSliceAction = loginDetailsSlice.actions;
+export default loginDistributorSlice.reducer;
+export const loginDistributorAction = loginDistributorSlice.actions;

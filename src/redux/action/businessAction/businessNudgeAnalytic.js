@@ -16,7 +16,6 @@ const businessNudgeAnalyticSlice = createSlice({
       state.isLoading = true;
     },
     nudgeAnalyticSuccess(state, action) {
-        console.log(action,"actionaction")
       state.isLoading = false;
       state.data = action.payload;
       state.message = "";

@@ -258,7 +258,6 @@ const Nudges = () => {
                     }
                   </div>
                 </div>
-                {console.log(nudgeAnalyticSelector, "nudgeAnalyticSelector")}
                 <div className="divider2"></div>
                 <div className="d-flex justify-between align-center gap-20 mb-20">
                   <div className="fs-16 grey fw-500">Nudge credits needed</div>

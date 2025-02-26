@@ -17,7 +17,6 @@ import { loginHandler,loginSliceAction } from "../../../../redux/action/supplier
 const Login = () => {
   const messageApi = useCommonMessage();
   const loginSelector = useSelector((state) => state?.loginSliceDetails);
-  console.log(loginSelector,"loginSelector")
   const navigate = useNavigate();
   const dispatch = useDispatch();
 

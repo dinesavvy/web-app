@@ -3,15 +3,18 @@ import addBtn from "../../../../assets/images/addBtn.svg";
 import coke from "../../../../assets/images/coke.svg";
 import editMember from "../../../../assets/images/editMember.svg";
 import onlyArrowBtn from "../../../../assets/images/onlyArrowBtn.svg";
-import SearchSelect from "../SearchSelect";
 import { useNavigate } from "react-router-dom";
 import { Pagination } from "antd";
-import BrandDetails from "../BrandDetails";
 import { useDispatch, useSelector } from "react-redux";
 import { brandListsHandler } from "../../../../redux/action/brandListSlice";
 import Loader from "../../../../common/Loader/Loader";
 import { useCommonMessage } from "../../../../common/CommonMessage";
 import { deleteBrandsAction } from "../../../../redux/action/deleteBrand";
+import SearchSelect from "../../../admin/Components/SearchSelect";
+import "../../../../assets/css/merchant.css";
+import { supplierBrandListHandler } from "../../../../redux/action/supplierActions/supplierBrandList";
+import BrandDetails from "./BrandDetails";
+
 
 const Brands = () => {
   const messageApi = useCommonMessage();
@@ -21,8 +24,8 @@ const Brands = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const getBrandListSelector = useSelector((state) => state?.brandList);
-  const deleteBrandSelector = useSelector((state)=>state?.deleteBrand)
+  const getBrandListSelector = useSelector((state) => state?.supplierBrandList);
+  const deleteBrandSelector = useSelector((state)=>state?.removeSupplier)
 
   const handlePaginationChange = (page, pageSize) => {
     setPagination({ page, limit: pageSize });
@@ -46,7 +49,7 @@ const Brands = () => {
       page: pagination?.page,
       limit: pagination?.limit,
     };
-    dispatch(brandListsHandler(payload));
+    dispatch(supplierBrandListHandler(payload));
   }, [pagination,deleteBrandSelector]);
 
   const toggleDetails = (item) => {
@@ -76,7 +79,7 @@ const Brands = () => {
             <div className="fs-24 fw-600">Brands</div>
             <div
               className="btn gap-8 addBtn"
-              onClick={() => navigate("/admin/brands/add")}
+              onClick={() => navigate("/supplier/addBrand")}
             >
               Add Brand
               <img src={addBtn} alt="addBtn" />

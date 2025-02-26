@@ -104,7 +104,6 @@ const SupplierDetails = ({
   useEffect(() => {
     const uploadFile = async () => {
       if (fileuploadSelector?.data?.statusCode === 200) {
-        console.log("inn");
         try {
           const response = await fetch(
             fileuploadSelector?.data?.data?.[0]?.url,

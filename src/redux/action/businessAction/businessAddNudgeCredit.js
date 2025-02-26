@@ -21,7 +21,6 @@ const businessAddNudgeCreditSlice = createSlice({
       state.message = "";
     },
     businessAddNudgCreditFailure(state, action) {
-        console.log(action,"action")
       state.isLoading = false;
       state.message = action.payload.response?.data?.message;
       state.data = null;

@@ -67,7 +67,6 @@ const MerchantDetails = () => {
     (state) => state?.followerDetails
   );
   const nudgeAnalyticSelector = useSelector((state) => state?.nudgeAnalytic);
-  console.log(addCreditSelector, "addCreditSelector");
 
   const dispatch = useDispatch();
 

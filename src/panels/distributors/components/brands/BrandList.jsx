@@ -3,17 +3,19 @@ import addBtn from "../../../../assets/images/addBtn.svg";
 import coke from "../../../../assets/images/coke.svg";
 import editMember from "../../../../assets/images/editMember.svg";
 import onlyArrowBtn from "../../../../assets/images/onlyArrowBtn.svg";
-import SearchSelect from "../SearchSelect";
 import { useNavigate } from "react-router-dom";
 import { Pagination } from "antd";
-import BrandDetails from "../BrandDetails";
 import { useDispatch, useSelector } from "react-redux";
-import { brandListsHandler } from "../../../../redux/action/brandListSlice";
 import Loader from "../../../../common/Loader/Loader";
 import { useCommonMessage } from "../../../../common/CommonMessage";
-import { deleteBrandsAction } from "../../../../redux/action/deleteBrand";
+import SearchSelect from "../../../admin/Components/SearchSelect";
+import "../../../../assets/css/merchant.css";
+import BrandDetails from "./BrandDetails";
+import { brandListDistributorHandler, brandLlistDistributorHandler } from "../../../../redux/action/distributorsAction/brandListDistributor";
+import { deleteDistributorBrandAction } from "../../../../redux/action/distributorsAction/deleteDistributorBrand";
 
-const Brands = () => {
+
+const BrandsListDistributor = () => {
   const messageApi = useCommonMessage();
   const [pagination, setPagination] = useState({ page: 1, limit: 9 });
   const [brandDetails, setBrandDetails] = useState({});
@@ -21,8 +23,8 @@ const Brands = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const getBrandListSelector = useSelector((state) => state?.brandList);
-  const deleteBrandSelector = useSelector((state)=>state?.deleteBrand)
+  const getBrandListSelector = useSelector((state) => state?.brandListDistributor);
+  const deleteBrandSelector = useSelector((state)=>state?.deleteDistributorBrand)
 
   const handlePaginationChange = (page, pageSize) => {
     setPagination({ page, limit: pageSize });
@@ -46,7 +48,7 @@ const Brands = () => {
       page: pagination?.page,
       limit: pagination?.limit,
     };
-    dispatch(brandListsHandler(payload));
+    dispatch(brandListDistributorHandler(payload));
   }, [pagination,deleteBrandSelector]);
 
   const toggleDetails = (item) => {
@@ -62,7 +64,7 @@ const Brands = () => {
         content: deleteBrandSelector?.data?.message,
       });
       setIsDetailsOpen(false)
-      dispatch(deleteBrandsAction.deleteBrandReset())
+      dispatch(deleteDistributorBrandAction.deleteDistributorBrandReset())
     }
   }, [deleteBrandSelector])
   
@@ -76,7 +78,7 @@ const Brands = () => {
             <div className="fs-24 fw-600">Brands</div>
             <div
               className="btn gap-8 addBtn"
-              onClick={() => navigate("/admin/brands/add")}
+              onClick={() => navigate("/distributors/add-distributor-brands")}
             >
               Add Brand
               <img src={addBtn} alt="addBtn" />
@@ -129,10 +131,6 @@ const Brands = () => {
               <div className="noDataFound">No data available</div>
             )}
           </div>
-          {/* <div className="d-flex align-center justify-between flexPagination">
-            <div className="fs-16">Showing 1 to 5 of 10 Restaurants</div>
-            <Pagination defaultCurrent={1} total={50} />
-          </div> */}
           {getBrandListSelector?.data?.data?.records?.length > 0 && (
             <div className="d-flex align-center justify-between flexPagination">
               <div className="fs-16">
@@ -166,4 +164,4 @@ const Brands = () => {
   );
 };
 
-export default Brands;
+export default BrandsListDistributor;

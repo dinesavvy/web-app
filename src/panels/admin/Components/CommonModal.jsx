@@ -72,7 +72,6 @@ const CommonModal = ({
     }
   
     if (removeDistributor?._id) {
-      console.log("innn");
       dispatch(removeDistributorHandler({ distributorId: removeDistributor._id }));
     }
   };

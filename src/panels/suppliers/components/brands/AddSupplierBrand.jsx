@@ -8,31 +8,30 @@ import addMerchantIcon from "../../../../assets/images/addMerchantIcon.svg";
 import { Breadcrumb, Select } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { fileUploadHandler } from "../../../../redux/action/fileUpload";
-import Loader from "../../../../common/Loader/Loader";
 import { ErrorMessage, Field, FieldArray, Form, Formik } from "formik";
-import {
-  createBrandAction,
-  createBrandHandler,
-} from "../../../../redux/action/createBrandSlice";
-import { brandValidationSchema } from "./brandValidation";
+// import {
+//   createBrandAction,
+//   createBrandHandler,
+// } from "../../../../redux/action/createBrandSlice";
+import { supplierBrandValidation } from "./suppplierBrandValidaton";
 import { useCommonMessage } from "../../../../common/CommonMessage";
+import Loader from "../../../../common/Loader/Loader";
+import { addSupplierBrandHandler,addSupplierBrandAction } from "../../../../redux/action/supplierActions/addSupplierBrand";
+import { fileUploadSupplierHandler } from "../../../../redux/action/supplierActions/fileUploadSupplier";
 
-const AddBrands = () => {
+const AddBrandSupplier = () => {
   const messageApi = useCommonMessage();
-  const [selectedUnit, setSelectedUnit] = useState("");
-  const fileuploadSelector = useSelector((state) => state?.fileupload);
+  // const [selectedUnit, setSelectedUnit] = useState("");
+  const [fileObject, setFileObject] = useState();
+  const fileuploadSelector = useSelector((state) => state?.fileUploadSupplier);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [uploadedImage, setUploadedImage] = useState();
 
-  const createBrandSelector = useSelector((state) => state?.createBrand);
+  const createBrandSelector = useSelector((state) => state?.addSupplierBrand);
 
   const fileInputRef = useRef(null);
-
-  const handleChange = (value) => {
-    setSelectedUnit(value);
-  };
 
   const handleButtonClick = () => {
     if (fileInputRef.current) {
@@ -42,18 +41,46 @@ const AddBrands = () => {
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
+    setFileObject(file);
     const imageUrl = URL.createObjectURL(file);
     setUploadedImage(imageUrl);
     if (file) {
-      // Automatically trigger file upload after selection
       let payload = {
         fileList: [{ fileName: file?.name }],
       };
-      dispatch(fileUploadHandler(payload));
+      dispatch(fileUploadSupplierHandler(payload));
     }
   };
 
+
+  useEffect(() => {
+      const uploadFile = async () => {
+        if (fileuploadSelector?.data?.statusCode === 200) {
+          try {
+            const response = await fetch(
+              fileuploadSelector?.data?.data?.[0]?.url,
+              {
+                method: "PUT",
+                body: fileObject,
+              }
+            );
+  
+            if (response.ok) {
+              console.log("File uploaded successfully");
+            } else {
+              console.error("Failed to upload file", response.status);
+            }
+          } catch (error) {
+            console.error("Error uploading file", error);
+          }
+        }
+      };
+  
+      uploadFile();
+    }, [fileuploadSelector]);
+
   const handleFormSubmit = (values) => {
+    // Map the form values to the desired payload structure
     const brandItemArray = values?.SKUs?.map((item) => ({
       mSRP: item?.msrp,
       unit: item?.unit,
@@ -66,7 +93,8 @@ const AddBrands = () => {
       brandName: values?.brandName,
       brandItem: brandItemArray, // Set the array here
     };
-    dispatch(createBrandHandler(payload));
+
+    dispatch(addSupplierBrandHandler(payload));
   };
 
   useEffect(() => {
@@ -75,8 +103,8 @@ const AddBrands = () => {
         type: "success",
         content: createBrandSelector?.data?.message,
       });
-      navigate("/admin/brands");
-      dispatch(createBrandAction.createBrandReset());
+      navigate("/supplier/brands");
+      dispatch(addSupplierBrandAction.addSupplierBrandReset());
     }
   }, [createBrandSelector]);
 
@@ -97,7 +125,7 @@ const AddBrands = () => {
             },
           ],
         }}
-        validationSchema={brandValidationSchema}
+        validationSchema={supplierBrandValidation}
         onSubmit={(values, formikBag) => {
           handleFormSubmit(values, formikBag);
         }}
@@ -111,7 +139,7 @@ const AddBrands = () => {
                     src={backButton}
                     alt="backButton"
                     className="cursor-pointer backButton"
-                    onClick={() => navigate("/admin/brands")}
+                    onClick={() => navigate("/supplier/brands")}
                   />
                   <div>
                     <div className="fs-24 fw-600 mb-4">Add Brand</div>
@@ -121,7 +149,7 @@ const AddBrands = () => {
                       items={[
                         {
                           title: "Brands",
-                          onClick: () => navigate("/admin/brands"),
+                          onClick: () => navigate("/supplier/brands"),
                         },
                         {
                           title: "Add Brand",
@@ -311,4 +339,4 @@ const AddBrands = () => {
   );
 };
 
-export default AddBrands;
+export default AddBrandSupplier;

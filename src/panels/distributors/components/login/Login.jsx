@@ -10,8 +10,8 @@ import passwordInput from "../../../../assets/images/passwordInput.svg";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  loginHandler,
-  loginSliceAction,
+  loginDistributorAction,
+  loginDistributorHandler,
 } from "../../../../redux/action/distributorsAction/loginSlice";
 import Loader from "../../../../common/Loader/Loader";
 import { useCommonMessage } from "../../../../common/CommonMessage";
@@ -19,7 +19,7 @@ import { validationSchema } from "./loginValidation";
 
 const Login = () => {
   const messageApi = useCommonMessage();
-  const loginSelector = useSelector((state) => state?.loginSliceDetails);
+  const loginSelector = useSelector((state) => state?.loginDistributor);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -28,7 +28,7 @@ const Login = () => {
       email: values?.email,
       password: values?.password,
     };
-    dispatch(loginHandler(payload));
+    dispatch(loginDistributorHandler(payload));
   };
 
   useEffect(() => {
@@ -38,13 +38,13 @@ const Login = () => {
         content: loginSelector?.data?.message,
       });
       navigate("/distributors/dashboard");
-      dispatch(loginSliceAction.loginDetailsSliceReset());
+      dispatch(loginDistributorAction.loginDistributorReset());
     } else if (loginSelector?.message?.status === 400) {
       messageApi.open({
         type: "error",
         content: loginSelector?.message?.message,
       });
-      dispatch(loginSliceAction.loginDetailsSliceReset());
+      dispatch(loginDistributorAction.loginDistributorReset());
     }
   }, [loginSelector]);
 
