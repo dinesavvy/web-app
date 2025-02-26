@@ -91,7 +91,7 @@ const FollowerDetails = ({ isOpen, toggleSidebar, followerDetails }) => {
                   <div key={`${index}-${subIndex}`}>{item1}</div>
                 ))
               ) : (
-                <div key={index}>No data available</div>
+                <div key={index}className="noDataFound">No data available</div>
               );
             })}
           </div>

@@ -67,7 +67,7 @@ const BrandDetails = ({ isOpen, toggleDetails, brandDetails }) => {
               })}
             </>
           ) : (
-            <div>No data available</div>
+            <div className="noDataFound">No data available</div>
           )}
 
           {/* <div className="grid2 mb-20">

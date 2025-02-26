@@ -127,7 +127,7 @@ const Brands = () => {
                 )}
               </>
             ) : (
-              <div>No data available</div>
+              <div className="noDataFound">No data available</div>
             )}
           </div>
           {/* <div className="d-flex align-center justify-between flexPagination">

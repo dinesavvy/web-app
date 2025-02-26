@@ -19,7 +19,8 @@ import removeTeamMemberSlice from "../action/businessAction/removeTeamMember";
 import businessRoleUpdateSlice from "../action/businessAction/businessRoleUpdate";
 import updateTeamBusinessSlice from "../action/businessAction/updateTeamBusiness";
 import businessResendInviteLinkSlice from "../action/businessAction/businessResendInviteLink";
-import nudgeAnalyticSlice from "../action/businessAction/businessNudgeAnalytic"
+import nudgeAnalyticSlice from "../action/businessAction/businessNudgeAnalytic";
+import businessAddNudgeCreditSlice from "../action/businessAction/businessAddNudgeCredit";
 
 const store = configureStore({
   reducer: {
@@ -43,7 +44,8 @@ const store = configureStore({
     businessRoleUpdate: businessRoleUpdateSlice,
     updateTeamBusiness: updateTeamBusinessSlice,
     businessResendInviteLink: businessResendInviteLinkSlice,
-    businessNudgeAnalytic:nudgeAnalyticSlice
+    businessNudgeAnalytic: nudgeAnalyticSlice,
+    businessAddNudgeCredit: businessAddNudgeCreditSlice,
   },
 });
 

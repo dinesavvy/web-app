@@ -1,12 +1,51 @@
-import React from "react";
+import React, { useEffect } from "react";
 import closeRightSidebar from "../../../assets/images/closeRightSidebar.svg";
 import google from "../../../assets/images/google.svg";
 import apple from "../../../assets/images/apple.svg";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  businessAddNudgeCreditAction,
+  businessAddNudgeCreditHandler,
+} from "../../../redux/action/businessAction/businessAddNudgeCredit";
+import { useCommonMessage } from "../../../common/CommonMessage";
 
 const PaymentSidebar = ({
   isPaymentSidebar,
   togglePaymentSidebar,
+  activeNudge,
 }) => {
+  const dispatch = useDispatch();
+  const messageApi = useCommonMessage();
+
+  const businessAddNudgeCreditSelector = useSelector(
+    (state) => state?.businessAddNudgeCredit
+  );
+  console.log(businessAddNudgeCreditSelector, "businessAddNudgeCreditSelector");
+  const nudgePaymentGooglePay = () => {
+    let payload = {
+      nudgeCredit: activeNudge,
+      nudgeAmount: activeNudge,
+      currency: "INR",
+    };
+    dispatch(businessAddNudgeCreditHandler(payload));
+  };
+
+  useEffect(() => {
+    if (businessAddNudgeCreditSelector?.data?.statusCode === 200) {
+      messageApi.open({
+        type: "success",
+        content: businessAddNudgeCreditSelector?.data?.message,
+      });
+      dispatch(businessAddNudgeCreditAction.businessAddNudgCreditReset());
+    } else if (businessAddNudgeCreditSelector?.message) {
+      messageApi.open({
+        type: "error",
+        content: businessAddNudgeCreditSelector?.message,
+      });
+      dispatch(businessAddNudgeCreditAction.businessAddNudgCreditReset());
+    }
+  }, [businessAddNudgeCreditSelector]);
+
   return (
     <>
       {isPaymentSidebar && (
@@ -21,12 +60,12 @@ const PaymentSidebar = ({
             <img src={closeRightSidebar} alt="closeRightSidebar" />
           </div>
         </div>
-        <div className="divider2"></div>
+        {/* <div className="divider2"></div> */}
         <div className="overflowSidebar">
-           <div className="divider2"></div>
+          <div className="divider2"></div>
           <div className="d-flex justify-between align-center gap-20 mb-20">
             <div className="fs-14  ">Nudge Credit you’re adding</div>
-            <div className="fs-18 fw-600">10</div>
+            <div className="fs-18 fw-600">{activeNudge}</div>
           </div>
           <div className="d-flex justify-between align-center gap-20">
             <div className="fs-14  ">1 Nudge credit cost</div>
@@ -36,16 +75,22 @@ const PaymentSidebar = ({
 
           <div className="d-flex justify-between align-center gap-20 mb-20">
             <div className="fs-14  ">Total</div>
-            <div className="fs-18 fw-600">$590</div>
+            <div className="fs-18 fw-600">${activeNudge}</div>
           </div>
-          <div className="d-flex align-center gap-10 mb-20">
-            <div className="btn btnSecondary gap-10 w-100">
+          <button className="add-credit-btn" onClick={nudgePaymentGooglePay}>
+            Checkout
+          </button>
+          {/* <div className="d-flex align-center gap-10 mb-20">
+            <div
+              className="btn btnSecondary gap-10 w-100"
+              onClick={nudgePaymentGooglePay}
+            >
               <img src={google} alt="" /> Pay
             </div>
             <div className="btn btnSecondary gap-10 w-100">
               <img src={apple} alt="" /> Pay
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
     </>
