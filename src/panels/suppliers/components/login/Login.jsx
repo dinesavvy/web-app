@@ -9,14 +9,15 @@ import emailInput from "../../../../assets/images/emailInput.svg";
 import passwordInput from "../../../../assets/images/passwordInput.svg";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { loginHandler, loginSliceAction } from "../../../../redux/action/loginSlice";
 import Loader from "../../../../common/Loader/Loader";
 import { useCommonMessage } from "../../../../common/CommonMessage";
 import { validationSchema } from "./loginValidation";
+import { loginHandler,loginSliceAction } from "../../../../redux/action/supplierActions/loginSlice";
 
 const Login = () => {
   const messageApi = useCommonMessage();
   const loginSelector = useSelector((state) => state?.loginSliceDetails);
+  console.log(loginSelector,"loginSelector")
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -34,7 +35,7 @@ const Login = () => {
         type: "success",
         content: loginSelector?.data?.message,
       });
-      navigate("/admin/merchant/dashboard");
+      navigate("/supplier/dashboard");
       dispatch(loginSliceAction.loginDetailsSliceReset());
     } else if (loginSelector?.message?.status===400) {
       messageApi.open({
