@@ -1,11 +1,18 @@
-import DistributorLogin from "../components/login/Login"
+import DistributorLogin from "../components/login/Login";
+import DistributorDashboard from "./../components/distributorDashboard/DistributorDashboard";
 
 const supplierRoutes = [
   {
-    path: "/login",
+    path: "/",
     element: DistributorLogin,
     isPrivate: false,
     isLayout: false,
+  },
+  {
+    path: "/distributors/dashboard",
+    element: DistributorDashboard,
+    isPrivate: false,
+    isLayout: true,
   },
 ];
 
