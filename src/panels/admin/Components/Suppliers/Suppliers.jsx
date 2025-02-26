@@ -162,7 +162,7 @@ const Suppliers = () => {
                 )}
               </>
             ) : (
-              <div>No data found</div>
+              <div className="noDataFound">No data found</div>
             )}
           </div>
 
