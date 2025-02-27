@@ -122,9 +122,9 @@ const Brands = () => {
                           <div className="d-flex align-center gap-10">
                             <div
                               className="btn btnSecondary w-100 gap-8"
-                              onClick={() => navigate("/admin/add-promotions")}
+                              // onClick={() => navigate("/admin/add-promotions")}
                             >
-                              <img src={editMember} alt="" />
+                              {/* <img src={editMember} alt="" /> */}
                               Promote
                             </div>
                             <div

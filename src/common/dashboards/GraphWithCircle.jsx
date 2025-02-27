@@ -36,15 +36,15 @@ const GraphWithCircle = ({
           </div>
         </div>
       </div>
-      {/* <AreaChartStatic
+      <AreaChartStatic
         labels={["M", "T", "W", "T", "F", "S"]}
         datas={[65, 59, 80, 81, 56, 55, 40]}
         topColor={"rgba(2, 124, 255, 0.5)"}
         bottomColor={"rgba(215, 210, 226, 0.2)"}
         borderColor={"rgba(0, 123, 255, 1)"}
         className={"w-100 mxh"}
-      /> */}
-      <img src={chartImage} alt="" className="w-100" />
+      />
+      {/* <img src={chartImage} alt="" className="w-100 mxh" /> */}
     </div>
   );
 };

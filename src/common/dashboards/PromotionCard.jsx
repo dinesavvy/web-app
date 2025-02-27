@@ -23,8 +23,8 @@ const PromotionCard = ({
       </div>
       <div className="divider2"></div>
       <div className="mb-20">
-        <img src={chartImage} className="w-100" alt={`${title} chart`} />
-        {/* {middleComponent} */}
+        {/* <img src={chartImage} className="w-100" alt={`${title} chart`} /> */}
+        {middleComponent}
       </div>
 
       <div className="btn" onClick={onButtonClick}>

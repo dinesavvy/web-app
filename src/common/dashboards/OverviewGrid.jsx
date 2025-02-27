@@ -23,27 +23,49 @@ MerchantCard.propTypes = {
 
 // eslint-disable-next-line no-unused-vars
 const OverviewGrid = ({ analyticsDetailsSelector }) => {
-  const merchantData = [
-    { 
-        count: 256, 
-        trend:  "10%",
-        value: "Merchants" 
-    },
-    { 
-        count: 256, 
-        trend: "10%",
-        value: "Suppliers" 
-    },
-    { 
-        count: 256, 
-        trend: "10%",
-        value: "Brands" 
-    },
-    { 
-        count: 256, 
-        trend: "10%",
-        value: "Distributors" 
-    },
+//   const merchantData = [
+//     { 
+//         count: 256, 
+//         trend:  "10%",
+//         value: "Merchants" 
+//     },
+//     { 
+//         count: 256, 
+//         trend: "10%",
+//         value: "Suppliers" 
+//     },
+//     { 
+//         count: 256, 
+//         trend: "10%",
+//         value: "Brands" 
+//     },
+//     { 
+//         count: 256, 
+//         trend: "10%",
+//         value: "Distributors" 
+//     },
+// ];
+const merchantData = [
+  { 
+      count: analyticsDetailsSelector?.data?.data?.merchantCount?analyticsDetailsSelector?.data?.data?.merchantCount:0, 
+      trend: `${analyticsDetailsSelector?.data?.data?.trendMerchantCount.toFixed(2)}%`?`${analyticsDetailsSelector?.data?.data?.trendMerchantCount.toFixed(2)}%`:"10%",
+      value: "Merchants" 
+  },
+  { 
+      count: analyticsDetailsSelector?.data?.data?.supplierCount?analyticsDetailsSelector?.data?.data?.supplierCount:0, 
+      trend: `${analyticsDetailsSelector?.data?.data?.trendSupplierCount.toFixed(2)}%`?`${analyticsDetailsSelector?.data?.data?.trendSupplierCount.toFixed(2)}%`:"10%",
+      value: "Suppliers" 
+  },
+  { 
+      count: analyticsDetailsSelector?.data?.data?.brandCount?analyticsDetailsSelector?.data?.data?.brandCount:0, 
+      trend: `${analyticsDetailsSelector?.data?.data?.trendBrandCount.toFixed(2)}%`?`${analyticsDetailsSelector?.data?.data?.trendBrandCount.toFixed(2)}%`:"10%",
+      value: "Brands" 
+  },
+  { 
+      count: analyticsDetailsSelector?.data?.data?.distributorCount?analyticsDetailsSelector?.data?.data?.distributorCount:0, 
+      trend: `${analyticsDetailsSelector?.data?.data?.trendDistributorCount.toFixed(2)}%`?`${analyticsDetailsSelector?.data?.data?.trendDistributorCount.toFixed(2)}%`:"10%",
+      value: "Distributors" 
+  },
 ];
 
 
