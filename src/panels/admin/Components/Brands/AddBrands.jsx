@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import backButton from "../../../../assets/images/backButton.svg";
 import breadCrumbIcon from "../../../../assets/images/breadCrumb.svg";
 import coke from "../../../../assets/images/coke.svg";
@@ -16,11 +16,16 @@ import {
 } from "../../../../redux/action/createBrandSlice";
 import { brandValidationSchema } from "./brandValidation";
 import { useCommonMessage } from "../../../../common/CommonMessage";
+import noImageFound from "../../../../assets/images/noImageFound.png"
+
 
 const AddBrands = () => {
   const messageApi = useCommonMessage();
   const [selectedUnit, setSelectedUnit] = useState("");
   const fileuploadSelector = useSelector((state) => state?.fileupload);
+
+  const { state } = useLocation();
+  console.log(state, "state");
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -76,6 +81,12 @@ const AddBrands = () => {
         content: createBrandSelector?.data?.message,
       });
       navigate("/admin/brands");
+      dispatch(createBrandAction.createBrandReset());
+    } else if (createBrandSelector?.message?.data?.statusCode === 400) {
+      messageApi.open({
+        type: "error",
+        content: createBrandSelector?.message?.data?.message,
+      });
       dispatch(createBrandAction.createBrandReset());
     }
   }, [createBrandSelector]);
@@ -133,7 +144,7 @@ const AddBrands = () => {
                 <div className="divider2 m30"></div>
                 <div className="d-flex align-end gap-16 mb-30 flexWrapsm">
                   <div className="changeBrandImage">
-                    <img src={uploadedImage || coke} alt="coke" />
+                    <img src={uploadedImage || noImageFound} alt="coke" />
                   </div>
                   <div className="btn w240" onClick={handleButtonClick}>
                     Change Photo
@@ -176,7 +187,7 @@ const AddBrands = () => {
                           <div className="inputGrid gap-20">
                             <div className="w-100 d-flex flexDirection h-100 justify-between">
                               <label className="grey mb-10 fs-16 fw-500">
-                                MSRP (Manufacturer’s Suggested Retail Price)
+                                MSRP (Manufacturer’s Suggested Retail Price)*
                               </label>
                               <Field
                                 type="text"
@@ -194,7 +205,7 @@ const AddBrands = () => {
 
                             <div className="w-160 d-flex flexDirection h-100 justify-between">
                               <label className="grey mb-10 fs-16 fw-500">
-                                Unit
+                                Unit*
                               </label>
                               <Field name={`SKUs[${index}].unit`}>
                                 {({ field, form }) => (
@@ -223,7 +234,7 @@ const AddBrands = () => {
 
                             <div className="w-100 d-flex flexDirection h-100 justify-between">
                               <label className="grey mb-10 fs-16 fw-500">
-                                SKUs
+                                SKUs*
                               </label>
                               <Field
                                 type="text"
@@ -241,7 +252,7 @@ const AddBrands = () => {
 
                             <div className="">
                               <label className="grey mb-10 fs-16 fw-500">
-                                Description
+                                Description*
                               </label>
                               <Field
                                 type="text"

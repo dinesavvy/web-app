@@ -75,7 +75,7 @@ const BrandDetails = ({ isOpen, toggleDetails, brandDetails }) => {
           <div className="d-flex align-center gap-10">
             <div
               className="btn btnSecondary w-100 gap-8"
-              onClick={() => navigate("/admin/brands/edit")}
+              onClick={() => navigate("/supplier/edit-brand")}
             >
               <img src={editMember} alt="" />
               Edit

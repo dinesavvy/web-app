@@ -11,11 +11,14 @@ import { useCommonMessage } from "../../../../common/CommonMessage";
 import SearchSelect from "../../../admin/Components/SearchSelect";
 import "../../../../assets/css/merchant.css";
 import BrandDetails from "./BrandDetails";
-import { brandListDistributorHandler, brandLlistDistributorHandler } from "../../../../redux/action/distributorsAction/brandListDistributor";
+import {
+  brandListDistributorHandler,
+  brandLlistDistributorHandler,
+} from "../../../../redux/action/distributorsAction/brandListDistributor";
 import { deleteDistributorBrandAction } from "../../../../redux/action/distributorsAction/deleteDistributorBrand";
 
-
 const BrandsListDistributor = () => {
+  const [searchString, setSearchString] = useState("");
   const messageApi = useCommonMessage();
   const [pagination, setPagination] = useState({ page: 1, limit: 9 });
   const [brandDetails, setBrandDetails] = useState({});
@@ -23,11 +26,24 @@ const BrandsListDistributor = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const getBrandListSelector = useSelector((state) => state?.brandListDistributor);
-  const deleteBrandSelector = useSelector((state)=>state?.deleteDistributorBrand)
+  const getBrandListSelector = useSelector(
+    (state) => state?.brandListDistributor
+  );
+  const deleteBrandSelector = useSelector(
+    (state) => state?.deleteDistributorBrand
+  );
 
   const handlePaginationChange = (page, pageSize) => {
     setPagination({ page, limit: pageSize });
+  };
+
+  const handleSearchChange = (value) => {
+    setSearchString(value);
+    setPagination((prev) => ({ ...prev, page: 1 })); // Reset to the first page on search
+  };
+
+  const handleSearchAreaChange = (selectedAreas) => {
+    setSearchArea(selectedAreas);
   };
 
   useEffect(() => {
@@ -49,29 +65,29 @@ const BrandsListDistributor = () => {
       limit: pagination?.limit,
     };
     dispatch(brandListDistributorHandler(payload));
-  }, [pagination,deleteBrandSelector]);
+  }, [pagination, deleteBrandSelector]);
 
   const toggleDetails = (item) => {
     setBrandDetails(item);
     setIsDetailsOpen((prevState) => !prevState);
   };
 
-
   useEffect(() => {
-    if(deleteBrandSelector?.data?.statusCode ===200){
+    if (deleteBrandSelector?.data?.statusCode === 200) {
       messageApi.open({
         type: "success",
         content: deleteBrandSelector?.data?.message,
       });
-      setIsDetailsOpen(false)
-      dispatch(deleteDistributorBrandAction.deleteDistributorBrandReset())
+      setIsDetailsOpen(false);
+      dispatch(deleteDistributorBrandAction.deleteDistributorBrandReset());
     }
-  }, [deleteBrandSelector])
-  
+  }, [deleteBrandSelector]);
 
   return (
     <>
-      {(getBrandListSelector?.isLoading || deleteBrandSelector?.isLoading) && <Loader />}
+      {(getBrandListSelector?.isLoading || deleteBrandSelector?.isLoading) && (
+        <Loader />
+      )}
       <div className="dashboard">
         <div className="tabPadding">
           <div className="d-flex justify-between align-center mb-20">
@@ -84,7 +100,10 @@ const BrandsListDistributor = () => {
               <img src={addBtn} alt="addBtn" />
             </div>
           </div>
-          <SearchSelect />
+          <SearchSelect
+            onSearchChange={handleSearchChange}
+            onSearchAreaChange={handleSearchAreaChange}
+          />
           <div className="merchantGrid mb-20">
             {getBrandListSelector?.data?.data?.records?.length > 0 ? (
               <>

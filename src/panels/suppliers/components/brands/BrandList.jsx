@@ -15,20 +15,29 @@ import "../../../../assets/css/merchant.css";
 import { supplierBrandListHandler } from "../../../../redux/action/supplierActions/supplierBrandList";
 import BrandDetails from "./BrandDetails";
 
-
 const Brands = () => {
   const messageApi = useCommonMessage();
   const [pagination, setPagination] = useState({ page: 1, limit: 9 });
+  const [searchString, setSearchString] = useState("");
   const [brandDetails, setBrandDetails] = useState({});
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const getBrandListSelector = useSelector((state) => state?.supplierBrandList);
-  const deleteBrandSelector = useSelector((state)=>state?.removeSupplier)
+  const deleteBrandSelector = useSelector((state) => state?.removeSupplier);
 
   const handlePaginationChange = (page, pageSize) => {
     setPagination({ page, limit: pageSize });
+  };
+
+  const handleSearchChange = (value) => {
+    setSearchString(value);
+    setPagination((prev) => ({ ...prev, page: 1 })); // Reset to the first page on search
+  };
+
+  const handleSearchAreaChange = (selectedAreas) => {
+    setSearchArea(selectedAreas);
   };
 
   useEffect(() => {
@@ -50,29 +59,29 @@ const Brands = () => {
       limit: pagination?.limit,
     };
     dispatch(supplierBrandListHandler(payload));
-  }, [pagination,deleteBrandSelector]);
+  }, [pagination, deleteBrandSelector]);
 
   const toggleDetails = (item) => {
     setBrandDetails(item);
     setIsDetailsOpen((prevState) => !prevState);
   };
 
-
   useEffect(() => {
-    if(deleteBrandSelector?.data?.statusCode ===200){
+    if (deleteBrandSelector?.data?.statusCode === 200) {
       messageApi.open({
         type: "success",
         content: deleteBrandSelector?.data?.message,
       });
-      setIsDetailsOpen(false)
-      dispatch(deleteBrandsAction.deleteBrandReset())
+      setIsDetailsOpen(false);
+      dispatch(deleteBrandsAction.deleteBrandReset());
     }
-  }, [deleteBrandSelector])
-  
+  }, [deleteBrandSelector]);
 
   return (
     <>
-      {(getBrandListSelector?.isLoading || deleteBrandSelector?.isLoading) && <Loader />}
+      {(getBrandListSelector?.isLoading || deleteBrandSelector?.isLoading) && (
+        <Loader />
+      )}
       <div className="dashboard">
         <div className="tabPadding">
           <div className="d-flex justify-between align-center mb-20">
@@ -85,7 +94,10 @@ const Brands = () => {
               <img src={addBtn} alt="addBtn" />
             </div>
           </div>
-          <SearchSelect />
+          <SearchSelect
+            onSearchChange={handleSearchChange}
+            onSearchAreaChange={handleSearchAreaChange}
+          />
           <div className="merchantGrid mb-20">
             {getBrandListSelector?.data?.data?.records?.length > 0 ? (
               <>
@@ -132,10 +144,6 @@ const Brands = () => {
               <div className="noDataFound">No data available</div>
             )}
           </div>
-          {/* <div className="d-flex align-center justify-between flexPagination">
-            <div className="fs-16">Showing 1 to 5 of 10 Restaurants</div>
-            <Pagination defaultCurrent={1} total={50} />
-          </div> */}
           {getBrandListSelector?.data?.data?.records?.length > 0 && (
             <div className="d-flex align-center justify-between flexPagination">
               <div className="fs-16">

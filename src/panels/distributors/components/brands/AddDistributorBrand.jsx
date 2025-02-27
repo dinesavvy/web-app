@@ -2,12 +2,11 @@ import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import backButton from "../../../../assets/images/backButton.svg";
 import breadCrumbIcon from "../../../../assets/images/breadCrumb.svg";
-import coke from "../../../../assets/images/coke.svg";
+// import coke from "../../../../assets/images/coke.svg";
 import deleteBrands from "../../../../assets/images/deleteBrands.svg";
 import addMerchantIcon from "../../../../assets/images/addMerchantIcon.svg";
 import { Breadcrumb, Select } from "antd";
 import { useDispatch, useSelector } from "react-redux";
-import { fileUploadHandler } from "../../../../redux/action/fileUpload";
 import { ErrorMessage, Field, FieldArray, Form, Formik } from "formik";
 import { supplierBrandValidation } from "./suppplierBrandValidaton";
 import { useCommonMessage } from "../../../../common/CommonMessage";
@@ -15,6 +14,7 @@ import Loader from "../../../../common/Loader/Loader";
 import { addSupplierBrandAction } from "../../../../redux/action/supplierActions/addSupplierBrand";
 import { createDistributorBrandHandler } from "../../../../redux/action/distributorsAction/createDistributorBrand";
 import { fileUploadDistributorHandler } from "../../../../redux/action/distributorsAction/fileUploadDistributor";
+import noImageFound from "../../../../assets/images/noImageFound.png"
 
 const AddDistributorBrand = () => {
   const messageApi = useCommonMessage();
@@ -76,7 +76,6 @@ const AddDistributorBrand = () => {
     }, [fileuploadSelector]);
 
   const handleFormSubmit = (values) => {
-    console.log(values, "values");
     // Map the form values to the desired payload structure
     const brandItemArray = values?.SKUs?.map((item) => ({
       mSRP: item?.msrp,
@@ -158,7 +157,7 @@ const AddDistributorBrand = () => {
                 <div className="divider2 m30"></div>
                 <div className="d-flex align-end gap-16 mb-30 flexWrapsm">
                   <div className="changeBrandImage">
-                    <img src={uploadedImage || coke} alt="coke" />
+                    <img src={uploadedImage || noImageFound} alt="coke" />
                   </div>
                   <div className="btn w240" onClick={handleButtonClick}>
                     Change Photo
@@ -201,7 +200,7 @@ const AddDistributorBrand = () => {
                           <div className="inputGrid gap-20">
                             <div className="w-100 d-flex flexDirection h-100 justify-between">
                               <label className="grey mb-10 fs-16 fw-500">
-                                MSRP (Manufacturer’s Suggested Retail Price)
+                                MSRP (Manufacturer’s Suggested Retail Price)*
                               </label>
                               <Field
                                 type="text"

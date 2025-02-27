@@ -1,5 +1,6 @@
 import AddBrandSupplier from "../components/brands/AddSupplierBrand";
 import Brands from "../components/brands/BrandList";
+import EditBrandsSupplier from "../components/brands/EditBrand";
 import SuppliersLogin from "../components/login/Login"
 import SupplierDashboard from "../components/supplierDashboard/SupplierDashboard";
 
@@ -25,6 +26,12 @@ const supplierRoutes = [
   {
     path: "/supplier/addBrand",
     element: AddBrandSupplier,
+    isPrivate: false,
+    isLayout: true,
+  },
+  {
+    path: "/supplier/edit-brand",
+    element: EditBrandsSupplier,
     isPrivate: false,
     isLayout: true,
   },

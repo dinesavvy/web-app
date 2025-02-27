@@ -41,7 +41,7 @@ export const createBrandHandler = (data) => async (dispatch) => {
     dispatch(createBrandAction.createBrandSuccess(response));
   } catch (e) {
     dispatch(
-      createBrandAction.createBrandFailure(e?.response?.data?.message)
+      createBrandAction.createBrandFailure(e?.response)
     );
   }
 };

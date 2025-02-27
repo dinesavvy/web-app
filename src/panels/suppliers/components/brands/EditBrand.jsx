@@ -1,14 +1,14 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import backButton from "../../../assets/images/backButton.svg";
-import breadCrumbIcon from "../../../assets/images/breadCrumb.svg";
-import coke from "../../../assets/images/coke.svg";
-import deleteBrands from "../../../assets/images/deleteBrands.svg";
-import addMerchantIcon from "../../../assets/images/addMerchantIcon.svg";
+import backButton from "../../../../assets/images/backButton.svg";
+import breadCrumbIcon from "../../../../assets/images/breadCrumb.svg";
+import coke from "../../../../assets/images/coke.svg";
+import deleteBrands from "../../../../assets/images/deleteBrands.svg";
+import addMerchantIcon from "../../../../assets/images/addMerchantIcon.svg";
 import { Breadcrumb } from "antd";
-import CustomSelect from "./CustomSelect";
+import CustomSelect from "../../../admin/Components/CustomSelect";
 
-const EditBrands = () => {
+const EditBrandsSupplier = () => {
   const navigate = useNavigate();
   return (
     <>
@@ -110,4 +110,4 @@ const EditBrands = () => {
   );
 };
 
-export default EditBrands;
+export default EditBrandsSupplier;

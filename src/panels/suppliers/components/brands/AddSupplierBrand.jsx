@@ -2,33 +2,29 @@ import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import backButton from "../../../../assets/images/backButton.svg";
 import breadCrumbIcon from "../../../../assets/images/breadCrumb.svg";
-import coke from "../../../../assets/images/coke.svg";
+// import coke from "../../../../assets/images/coke.svg";
 import deleteBrands from "../../../../assets/images/deleteBrands.svg";
 import addMerchantIcon from "../../../../assets/images/addMerchantIcon.svg";
 import { Breadcrumb, Select } from "antd";
 import { useDispatch, useSelector } from "react-redux";
-import { fileUploadHandler } from "../../../../redux/action/fileUpload";
 import { ErrorMessage, Field, FieldArray, Form, Formik } from "formik";
-// import {
-//   createBrandAction,
-//   createBrandHandler,
-// } from "../../../../redux/action/createBrandSlice";
 import { supplierBrandValidation } from "./suppplierBrandValidaton";
 import { useCommonMessage } from "../../../../common/CommonMessage";
 import Loader from "../../../../common/Loader/Loader";
 import { addSupplierBrandHandler,addSupplierBrandAction } from "../../../../redux/action/supplierActions/addSupplierBrand";
 import { fileUploadSupplierHandler } from "../../../../redux/action/supplierActions/fileUploadSupplier";
+import noImageFound from "../../../../assets/images/noImageFound.png"
+
 
 const AddBrandSupplier = () => {
   const messageApi = useCommonMessage();
-  // const [selectedUnit, setSelectedUnit] = useState("");
   const [fileObject, setFileObject] = useState();
-  const fileuploadSelector = useSelector((state) => state?.fileUploadSupplier);
-
+  const [uploadedImage, setUploadedImage] = useState();
+  
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [uploadedImage, setUploadedImage] = useState();
-
+  
+  const fileuploadSelector = useSelector((state) => state?.fileUploadSupplier);
   const createBrandSelector = useSelector((state) => state?.addSupplierBrand);
 
   const fileInputRef = useRef(null);
@@ -161,7 +157,7 @@ const AddBrandSupplier = () => {
                 <div className="divider2 m30"></div>
                 <div className="d-flex align-end gap-16 mb-30 flexWrapsm">
                   <div className="changeBrandImage">
-                    <img src={uploadedImage || coke} alt="coke" />
+                    <img src={uploadedImage || noImageFound} alt="coke" />
                   </div>
                   <div className="btn w240" onClick={handleButtonClick}>
                     Change Photo
@@ -204,7 +200,7 @@ const AddBrandSupplier = () => {
                           <div className="inputGrid gap-20">
                             <div className="w-100 d-flex flexDirection h-100 justify-between">
                               <label className="grey mb-10 fs-16 fw-500">
-                                MSRP (Manufacturer’s Suggested Retail Price)
+                                MSRP (Manufacturer’s Suggested Retail Price)*
                               </label>
                               <Field
                                 type="text"

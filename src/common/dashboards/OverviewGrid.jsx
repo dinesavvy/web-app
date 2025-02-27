@@ -25,23 +25,23 @@ MerchantCard.propTypes = {
 const OverviewGrid = ({ analyticsDetailsSelector }) => {
   const merchantData = [
     { 
-        count: analyticsDetailsSelector?.data?.data?.merchantCount, 
-        trend: `${analyticsDetailsSelector?.data?.data?.trendMerchantCount.toFixed(2)}%`,
+        count: 256, 
+        trend:  "10%",
         value: "Merchants" 
     },
     { 
-        count: analyticsDetailsSelector?.data?.data?.supplierCount, 
-        trend: `${analyticsDetailsSelector?.data?.data?.trendSupplierCount.toFixed(2)}%`,
+        count: 256, 
+        trend: "10%",
         value: "Suppliers" 
     },
     { 
-        count: analyticsDetailsSelector?.data?.data?.brandCount, 
-        trend: `${analyticsDetailsSelector?.data?.data?.trendBrandCount.toFixed(2)}%`,
+        count: 256, 
+        trend: "10%",
         value: "Brands" 
     },
     { 
-        count: analyticsDetailsSelector?.data?.data?.distributorCount, 
-        trend: `${analyticsDetailsSelector?.data?.data?.trendDistributorCount.toFixed(2)}%`,
+        count: 256, 
+        trend: "10%",
         value: "Distributors" 
     },
 ];
