@@ -91,10 +91,12 @@ const MerchantList = () => {
               <button
                 key={tab.id}
                 className={`tab-button ${
-                  activeTab === tab.label ? "active" : ""
+                  activeTab === tab.label ? "active" : "disabled"
                 }`}
                 onClick={() => {
-                  setActiveTab(tab.label);
+                  if(activeTab === tab.label){
+                    setActiveTab("");
+                  }
                 }}
               >
                 {tab.label}
@@ -113,7 +115,7 @@ const MerchantList = () => {
                       <button
                         key={tab.id}
                         className={`tab-button ${
-                          activeTab2 === tab.value ? "active" : ""
+                          activeTab2  === tab.value ? "active" : ""
                         }`}
                         onClick={() => setActiveTab2(tab.value)}
                       >

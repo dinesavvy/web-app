@@ -343,7 +343,7 @@ const NudgeTemplate = () => {
                     </div>
                     <div className="d-flex justify-end">
                       <button
-                        className="btn w164 "
+                        className="btn w164"
                         onClick={
                           values?.quantity &&
                           values?.title &&

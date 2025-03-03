@@ -16,28 +16,22 @@ import {
 } from "../../../../redux/action/createBrandSlice";
 import { brandValidationSchema } from "./brandValidation";
 import { useCommonMessage } from "../../../../common/CommonMessage";
-import noImageFound from "../../../../assets/images/noImageFound.png"
-
+import noImageFound from "../../../../assets/images/noImageFound.png";
+import { updateBrandHandler } from "../../../../redux/action/updateBrand";
 
 const AddBrands = () => {
+  const [uploadedImage, setUploadedImage] = useState();
   const messageApi = useCommonMessage();
-  const [selectedUnit, setSelectedUnit] = useState("");
   const fileuploadSelector = useSelector((state) => state?.fileupload);
 
   const { state } = useLocation();
-  console.log(state, "state");
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [uploadedImage, setUploadedImage] = useState();
 
   const createBrandSelector = useSelector((state) => state?.createBrand);
 
   const fileInputRef = useRef(null);
-
-  const handleChange = (value) => {
-    setSelectedUnit(value);
-  };
 
   const handleButtonClick = () => {
     if (fileInputRef.current) {
@@ -59,19 +53,28 @@ const AddBrands = () => {
   };
 
   const handleFormSubmit = (values) => {
+    console.log(values,"values")
     const brandItemArray = values?.SKUs?.map((item) => ({
       mSRP: item?.msrp,
       unit: item?.unit,
       sku: item?.sku,
       description: item?.description,
+    // quantity:item?.quantity
     }));
 
     let payload = {
-      imageUrl: [fileuploadSelector?.data?.data?.[0]?.src],
+      imageUrl: fileuploadSelector?.data?.data?.[0]?.src
+        ? [fileuploadSelector?.data?.data?.[0]?.src]
+        : [],
       brandName: values?.brandName,
       brandItem: brandItemArray, // Set the array here
     };
-    dispatch(createBrandHandler(payload));
+    if (!state?.brandDetails) {
+      dispatch(createBrandHandler(payload));
+    } else if (state?.brandDetails) {
+      console.log(payload, "payload");
+      dispatch(updateBrandHandler(payload));
+    }
   };
 
   useEffect(() => {
@@ -97,16 +100,25 @@ const AddBrands = () => {
         <Loader />
       )}
       <Formik
+        enableReinitialize
         initialValues={{
-          brandName: "",
-          SKUs: [
-            {
-              msrp: "",
-              unit: "",
-              sku: "",
-              description: "",
-            },
-          ],
+          brandName: state?.brandDetails?.brandName || "",
+          SKUs: state?.brandDetails?.brandItem?.length
+            ? state?.brandDetails?.brandItem.map((item) => ({
+                msrp: item?.mSRP || "",
+                unit: item?.unit || "",
+                sku: item?.sku || "",
+                description: item?.description || "",
+              }))
+            : [
+                {
+                  msrp: "",
+                  unit: "",
+                  sku: "",
+                  description: "",
+                  quantity:""
+                },
+              ],
         }}
         validationSchema={brandValidationSchema}
         onSubmit={(values, formikBag) => {
@@ -125,7 +137,9 @@ const AddBrands = () => {
                     onClick={() => navigate("/admin/brands")}
                   />
                   <div>
-                    <div className="fs-24 fw-600 mb-4">Add Brand</div>
+                    <div className="fs-24 fw-600 mb-4">
+                      {state?.brandDetails ? "Edit brand" : "Add Brand"}
+                    </div>
                     <Breadcrumb
                       className="cursor-pointer"
                       separator={<img src={breadCrumbIcon} />}
@@ -263,6 +277,23 @@ const AddBrands = () => {
                               />
                               <ErrorMessage
                                 name={`SKUs[${index}].description`}
+                                component="div"
+                                className="mt-10 fw-500 fs-14 error"
+                              />
+                            </div>
+                            <div className="">
+                              <label className="grey mb-10 fs-16 fw-500">
+                              Quantity*
+                              </label>
+                              <Field
+                                type="text"
+                                className="input"
+                                placeholder="Red Bull - 8.4 oz energy drink (12-pack)"
+                                name={`SKUs[${index}].quantity`}
+                                autoComplete="off"
+                              />
+                              <ErrorMessage
+                                name={`SKUs[${index}].quantity`}
                                 component="div"
                                 className="mt-10 fw-500 fs-14 error"
                               />

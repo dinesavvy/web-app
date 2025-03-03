@@ -58,7 +58,7 @@ const Brands = () => {
       // searchString:searchString,
     };
     dispatch(brandListsHandler(payload));
-  }, [pagination,deleteBrandSelector]);
+  }, [pagination, deleteBrandSelector]);
 
   const toggleDetails = (item) => {
     setBrandDetails(item);
