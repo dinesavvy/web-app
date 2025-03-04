@@ -20,9 +20,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { analyticsDetailsHandler } from "../../../redux/action/analyticsDetails";
 import Loader from "../../../common/Loader/Loader";
 import { merchantPerfomanceAnalyticsListHandler } from "../../../redux/action/merchantPerfomanceAnalyticsList";
-import {
-  merchantPerformanceAnalyticsDetailsHandler,
-} from "../../../redux/action/merchantPerformanceAnalyticsDetails";
+import { merchantPerformanceAnalyticsDetailsHandler } from "../../../redux/action/merchantPerformanceAnalyticsDetails";
 import BarChartProtion from "../../../common/charts/BarChartPromotion";
 import ChartComponent from "./Chart/Chart";
 
@@ -232,23 +230,45 @@ const AdminDashboard = () => {
   //   },
   // ];
 
-
   const tabs = [
     {
       id: "1",
       label: "1D",
-      content: <GraphWithCircle title="Habitual Followers" value="8,000" trend={10} merchantsCount={256} chartImage={<ChartComponent />} />,
-
+      content: (
+        <GraphWithCircle
+          title="Habitual Followers"
+          value="8,000"
+          trend={10}
+          merchantsCount={256}
+          // chartImage={<ChartComponent />}
+        />
+      ),
     },
     {
       id: "2",
       label: "1W",
-      content: <GraphWithCircle title="Habitual Followers" value="8,000" trend={10} merchantsCount={256} chartImage={<ChartComponent />} />,
+      content: (
+        <GraphWithCircle
+          title="Habitual Followers"
+          value="8,000"
+          trend={10}
+          merchantsCount={256}
+          // chartImage={<ChartComponent />}
+        />
+      ),
     },
     {
       id: "3",
       label: "3M",
-      content: <GraphWithCircle title="Habitual Followers" value="8,000" trend={10} merchantsCount={256} chartImage={<ChartComponent />} />,
+      content: (
+        <GraphWithCircle
+          title="Habitual Followers"
+          value="8,000"
+          trend={10}
+          merchantsCount={256}
+          // chartImage={<ChartComponent />}
+        />
+      ),
     },
   ];
 
@@ -287,8 +307,6 @@ const AdminDashboard = () => {
     };
     dispatch(merchantPerfomanceAnalyticsListHandler(payload));
   }, [activeTab2, activeTab3]);
-
-
 
   // useEffect(() => {
   //   if (merchantPerformanceAnalyticsDetailsSelector?.data?.statusCode === 200) {
@@ -347,7 +365,10 @@ const AdminDashboard = () => {
         <div className="d-grid chartGrid gap-20">
           <PromotionCard
             title="Promotions"
-            count={analyticsDetailsSelector?.data?.data?.targetPromotionsCount + analyticsDetailsSelector?.data?.data?.promotionsCount}
+            count={
+              analyticsDetailsSelector?.data?.data?.targetPromotionsCount +
+              analyticsDetailsSelector?.data?.data?.promotionsCount
+            }
             chartPromotionImage={chartPromotion}
             // analyticsDetailsSelector ={analyticsDetailsSelector}
             // onButtonClick={() => navigate("/admin/promotions")}
@@ -355,7 +376,10 @@ const AdminDashboard = () => {
             middleComponent={
               <BarChartProtion
                 labels={["Target Promotion", "Promotions"]}
-                datas={[analyticsDetailsSelector?.data?.data?.targetPromotionsCount, analyticsDetailsSelector?.data?.data?.promotionsCount]}
+                datas={[
+                  analyticsDetailsSelector?.data?.data?.targetPromotionsCount,
+                  analyticsDetailsSelector?.data?.data?.promotionsCount,
+                ]}
                 className="w-100"
                 barThickness={100}
                 borderSkipped={false}
@@ -368,14 +392,20 @@ const AdminDashboard = () => {
           />
           <PromotionCard
             title="Nudges"
-            count={analyticsDetailsSelector?.data?.data?.targetNudgeCount + analyticsDetailsSelector?.data?.data?.nudgeCount}
+            count={
+              analyticsDetailsSelector?.data?.data?.targetNudgeCount +
+              analyticsDetailsSelector?.data?.data?.nudgeCount
+            }
             chartPromotionImage={chartnudge}
             buttonText="See Nudges"
             onButtonClick={() => navigate("/admin/nudges")}
             middleComponent={
               <BarChart1
                 labels={["Target Nudges", "Nudges"]}
-                datas={[analyticsDetailsSelector?.data?.data?.targetNudgeCount,analyticsDetailsSelector?.data?.data?.nudgeCount]}
+                datas={[
+                  analyticsDetailsSelector?.data?.data?.targetNudgeCount,
+                  analyticsDetailsSelector?.data?.data?.nudgeCount,
+                ]}
                 className="w-100"
                 barThickness={80}
                 borderSkipped={false}
@@ -389,14 +419,20 @@ const AdminDashboard = () => {
           />{" "}
           <PromotionCard
             title="Followers"
-            count={analyticsDetailsSelector?.data?.data?.targetFollowerCount + analyticsDetailsSelector?.data?.data?.followerCount}
+            count={
+              analyticsDetailsSelector?.data?.data?.targetFollowerCount +
+              analyticsDetailsSelector?.data?.data?.followerCount
+            }
             chartPromotionImage={chartfollower}
             buttonText="See Followers"
             onButtonClick={() => navigate("/admin/merchant/followers")}
             middleComponent={
               <BarChart2
                 labels={["Target Followers", "Followers"]}
-                datas={[analyticsDetailsSelector?.data?.data?.targetFollowerCount, analyticsDetailsSelector?.data?.data?.followerCount]}
+                datas={[
+                  analyticsDetailsSelector?.data?.data?.targetFollowerCount,
+                  analyticsDetailsSelector?.data?.data?.followerCount,
+                ]}
                 className="w-100"
                 barThickness={80}
                 borderSkipped={false}
