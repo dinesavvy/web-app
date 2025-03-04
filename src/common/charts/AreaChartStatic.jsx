@@ -34,8 +34,6 @@ const AreaChartStatic = ({
   datas1,
   merchantPerformanceAnalyticsDetailsSelector
 }) => {
-
-
   // Sample data
   const data = {
     labels: labels,
@@ -74,7 +72,14 @@ const AreaChartStatic = ({
         display: false,
       },
       tooltip: {
-        enabled: true, // Disable tooltips
+        enabled: true,
+        mode: "nearest", // Ensure tooltips appear for the closest point
+        intersect: false, // Show tooltip even when hovering near the line
+        callbacks: {
+          label: (tooltipItem) => {
+            return ` ${tooltipItem.dataset?.label}`; // Ensure proper tooltip text
+          },
+        },
       },
     },
     scales: {
@@ -102,5 +107,6 @@ AreaChartStatic.propTypes = {
   topColor: PropTypes.any,
   bottomColor: PropTypes.any,
   borderColor: PropTypes.any,
+  tooltip:PropTypes.any
 };
 export default AreaChartStatic;

@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import circleAbsolute2 from "../../assets/images/circleAbsolute2.gif";
+import { useNavigate } from "react-router-dom";
 
 const MerchantCard = ({ count, trend,value }) => {
   return (
@@ -23,6 +24,7 @@ MerchantCard.propTypes = {
 
 // eslint-disable-next-line no-unused-vars
 const OverviewGrid = ({ analyticsDetailsSelector }) => {
+  const navigate = useNavigate()
 //   const merchantData = [
 //     { 
 //         count: 256, 
@@ -69,10 +71,23 @@ const merchantData = [
 ];
 
 
+const routes = {
+  Merchants: "/admin/merchant/list",
+  Suppliers: "/admin/suppliers",
+  Brands: "/admin/brands",
+  Distributors: "/admin/distributors",
+};
+
+const handleClick = (item) => {
+  const path = routes[item?.value];
+  if (path) navigate(path);
+};
+
+
   return (
     <div className="card d-grid gap-20 overviewGrid2">
       {merchantData.map((data, index) => (
-        <div key={index + 1}>
+        <div key={index + 1} onClick={() => handleClick(data)} className="cursor-pointer">
           <MerchantCard key={index} count={data.count} trend={data.trend} value = {data?.value}/>
         </div>
       ))}

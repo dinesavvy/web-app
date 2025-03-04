@@ -655,6 +655,18 @@ height: 100%;
   color: #66728E;
 }
 
+.ant-modal .selecModalFollowerList {
+  width: 900px !important;
+}
+
+/* .noDataFound {
+  grid-column: span 3 !important;
+  text-align: center !important;
+  height: 300px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+} */
 
 @media (max-height: 600px) {
   .loginside {

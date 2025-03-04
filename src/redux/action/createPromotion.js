@@ -41,7 +41,7 @@ export const createPromotionHandler = (data) => async (dispatch) => {
     dispatch(createPromotionAction.createPromotionSuccess(response));
   } catch (e) {
     dispatch(
-      createPromotionAction.createPromotionFailure(e?.response?.data?.message)
+      createPromotionAction.createPromotionFailure(e)
     );
   }
 };

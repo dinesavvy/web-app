@@ -230,7 +230,7 @@ const Followers = () => {
                               ?.length > 0 ? (
                               item.customerPreferencesData.personalPreference.map(
                                 (preference, index) => (
-                                  <div key={index}>{preference}</div>
+                                  <div key={index}>{preference.charAt(0).toUpperCase() + preference.slice(1)}</div>
                                 )
                               )
                             ) : (
@@ -331,7 +331,7 @@ const Followers = () => {
                             ?.length > 0 ? (
                             item.customerPreferencesData.personalPreference.map(
                               (preference, index) => (
-                                <div key={index}>{preference}</div>
+                                <div key={index}>{preference.charAt(0).toUpperCase() + preference.slice(1)}</div>
                               )
                             )
                           ) : (

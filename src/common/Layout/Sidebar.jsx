@@ -138,7 +138,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                 },
                 {
                   id: 11,
-                  name: "Hierarchy",
+                  name: "Team",
                   icon: hierarchy,
                   iconFull: hierarchyFull,
                   navigate: "/merchant/hierarchy",

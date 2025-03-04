@@ -5,8 +5,9 @@ import coke from "../../../assets/images/coke.svg";
 import olive from "../../../assets/images/olive.png";
 import restaurantCard from "../../../assets/images/restaurantCard.png";
 import PromotionCart from "./PromotionCart";
+import moment from "moment";
 
-const PromotionDetails = ({ isOpen, toggleDetails }) => {
+const PromotionDetails = ({ isOpen, toggleDetails,promotionalDetailsData }) => {
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [openIndex, setOpenIndex] = useState(null);
   const [addFund, setAddFund] = useState(false);
@@ -77,11 +78,11 @@ const PromotionDetails = ({ isOpen, toggleDetails }) => {
             </div>
             <div>
               <div className="fs-14 mb-4">Start Date</div>
-              <div className="fs-14 fw-600">08/20/2024</div>
+              <div className="fs-14 fw-600">{moment(promotionalDetailsData?.createdAt).format("YYYY-MM-DD")}</div>
             </div>
             <div>
               <div className="fs-14 mb-4">End Date</div>
-              <div className="fs-14 fw-600">08/30/2024</div>
+              <div className="fs-14 fw-600">{moment(promotionalDetailsData?.endDate).format("YYYY-MM-DD")}</div>
             </div>
             <div>
               <div className="fs-14 mb-4">Total Quantity</div>
@@ -89,7 +90,7 @@ const PromotionDetails = ({ isOpen, toggleDetails }) => {
             </div>
             <div>
               <div className="fs-14 mb-4">Total Promotional Funds</div>
-              <div className="fs-14 fw-600">$140</div>
+              <div className="fs-14 fw-600">$140</div>  
             </div>
           </div>
           <div className="divider2"></div>

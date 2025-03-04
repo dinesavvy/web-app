@@ -24,6 +24,7 @@ import {
   merchantPerformanceAnalyticsDetailsHandler,
 } from "../../../redux/action/merchantPerformanceAnalyticsDetails";
 import BarChartProtion from "../../../common/charts/BarChartPromotion";
+import ChartComponent from "./Chart/Chart";
 
 const AdminDashboard = () => {
   const [communicateItem, setCommunicateItem] = useState();
@@ -163,73 +164,94 @@ const AdminDashboard = () => {
     );
   };
 
+  // const tabs = [
+  //   {
+  //     id: "1",
+  //     label: "1D",
+  //     content: (
+  //       <GraphWithCircle
+  //         title="Habitual Followers"
+  //         value="8,000"
+  //         trend={10}
+  //         merchantsCount={256}
+  //         chartImage={<ChartComponent />}
+  //       />
+  //     ),
+  //   },
+  //   {
+  //     id: "2",
+  //     label: "1W",
+  //     content: (
+  //       <GraphWithCircle
+  //         title="Habitual Followers"
+  //         value="8,000"
+  //         trend={10}
+  //         merchantsCount={256}
+  //         chartImage={<ChartComponent />}
+  //       />
+  //     ),
+  //   },
+  //   {
+  //     id: "3",
+  //     label: "3M",
+  //     content: (
+  //       <GraphWithCircle
+  //         title="Habitual Followers"
+  //         value="8,000"
+  //         trend={10}
+  //         merchantsCount={256}
+  //         chartImage={<ChartComponent />}
+  //       />
+  //     ),
+  //   },
+  //   {
+  //     id: "4",
+  //     label: "4M",
+  //     content: (
+  //       <GraphWithCircle
+  //         title="Habitual Followers"
+  //         value="8,000"
+  //         trend={10}
+  //         merchantsCount={256}
+  //         chartImage={<ChartComponent />}
+  //       />
+  //     ),
+  //   },
+  //   {
+  //     id: "5",
+  //     label: "5M",
+  //     content: (
+  //       <GraphWithCircle
+  //         title="Habitual Followers"
+  //         value="8,000"
+  //         trend={10}
+  //         merchantsCount={256}
+  //         chartImage={<ChartComponent />}
+  //       />
+  //     ),
+  //   },
+  // ];
+
+
   const tabs = [
     {
       id: "1",
       label: "1D",
-      content: (
-        <GraphWithCircle
-          title="Habitual Followers"
-          value="8,000"
-          trend={10}
-          merchantsCount={256}
-          chartImage={chart}
-        />
-      ),
+      content: <GraphWithCircle title="Habitual Followers" value="8,000" trend={10} merchantsCount={256} chartImage={<ChartComponent />} />,
+
     },
     {
       id: "2",
       label: "1W",
-      content: (
-        <GraphWithCircle
-          title="Habitual Followers"
-          value="8,000"
-          trend={10}
-          merchantsCount={256}
-          chartImage={chart}
-        />
-      ),
+      content: <GraphWithCircle title="Habitual Followers" value="8,000" trend={10} merchantsCount={256} chartImage={<ChartComponent />} />,
     },
     {
       id: "3",
       label: "3M",
-      content: (
-        <GraphWithCircle
-          title="Habitual Followers"
-          value="8,000"
-          trend={10}
-          merchantsCount={256}
-          chartImage={chart}
-        />
-      ),
-    },
-    {
-      id: "4",
-      label: "4M",
-      content: (
-        <GraphWithCircle
-          title="Habitual Followers"
-          value="8,000"
-          trend={10}
-          merchantsCount={256}
-          chartImage={chart}
-        />
-      ),
-    },
-    {
-      id: "5",
-      label: "5M",
-      content: (
-        <GraphWithCircle
-          title="Habitual Followers"
-          value="8,000"
-          trend={10}
-          merchantsCount={256}
-          chartImage={chart}
-        />
-      ),
+      content: <GraphWithCircle title="Habitual Followers" value="8,000" trend={10} merchantsCount={256} chartImage={<ChartComponent />} />,
     },
   ];
+
   const tabs2 = [
     {
       value: "today",
@@ -328,7 +350,7 @@ const AdminDashboard = () => {
             count={analyticsDetailsSelector?.data?.data?.targetPromotionsCount + analyticsDetailsSelector?.data?.data?.promotionsCount}
             chartPromotionImage={chartPromotion}
             // analyticsDetailsSelector ={analyticsDetailsSelector}
-            onButtonClick={() => navigate("/admin/promotions")}
+            // onButtonClick={() => navigate("/admin/promotions")}
             buttonText="See promotions"
             middleComponent={
               <BarChartProtion

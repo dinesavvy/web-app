@@ -55,6 +55,7 @@ const Promotions = () => {
       document.body.classList.remove("overflow-Hidden");
     };
   }, [isDetailsOpen]);
+
   const toggleDetails = () => {
     setIsDetailsOpen((prevState) => !prevState);
   };
@@ -68,6 +69,9 @@ const Promotions = () => {
     };
     dispatch(adminPromotionListHandler(payload));
   }, [pagination]);
+
+
+  const [promotionalDetailsData,setPromotionalDetailsData] = useState()
 
 
 
@@ -163,7 +167,7 @@ const Promotions = () => {
                         </div>
                         <div
                           className="btn btnSecondary"
-                          onClick={toggleDetails}
+                          onClick={()=>{toggleDetails();setPromotionalDetailsData(item)}}
                         >
                           View Details
                         </div>
@@ -307,7 +311,7 @@ const Promotions = () => {
           )}
         </div>
       </div>
-      <PromotionDetails isOpen={isDetailsOpen} toggleDetails={toggleDetails} />
+      <PromotionDetails isOpen={isDetailsOpen} toggleDetails={toggleDetails} promotionalDetailsData={promotionalDetailsData}/>
     </>
   );
 };

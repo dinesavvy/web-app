@@ -11,11 +11,18 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import { fileUploadHandler } from "../../../redux/action/fileUpload";
+import closeRightSidebar from "../../../assets/images/closeRightSidebar.svg";
+import rightactive from "../../../assets/images/rightactive.svg";
+import { Modal } from "antd";
+import FollowersModal from "./FollowersModal/FollowersModal";
 
 const NudgeTemplate = () => {
+  const [selectedItems, setSelectedItems] = useState([]);
   const dispatch = useDispatch();
   const { state } = useLocation();
+  const [archive, setArchive] = useState("");
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const [selectMerchantList, setSelectMerchantList] = useState(false);
   const [nudgesCards, setNudgesCard] = useState(null);
   const [uploadedImage, setUploadedImage] = useState(nudgesCards?.imageUrl[0]);
   const getNudgesTemplateSelector = useSelector(
@@ -24,11 +31,10 @@ const NudgeTemplate = () => {
   const fileuploadSelector = useSelector((state) => state?.fileupload);
 
   useEffect(() => {
-    if(state?.locationId?.nudgePrev){
-      setNudgesCard(state?.locationId?.nudgePrev)
+    if (state?.locationId?.nudgePrev) {
+      setNudgesCard(state?.locationId?.nudgePrev);
     }
-  }, [state])
-  
+  }, [state]);
 
   const navigate = useNavigate();
 
@@ -135,9 +141,7 @@ const NudgeTemplate = () => {
             enableReinitialize
             initialValues={{
               title:
-                nudgesCards?.title ||
-                state?.locationId?.nudgePrev?.title ||
-                "",
+                nudgesCards?.title || state?.locationId?.nudgePrev?.title || "",
               description:
                 nudgesCards?.description ||
                 state?.locationId?.nudgePrev?.description ||
@@ -258,11 +262,15 @@ const NudgeTemplate = () => {
                       </div>
                     </div>
                     <div
-                      className="tabPadding mb-20"
+                      className="tabPadding mb-20 cursor-pointer"
                       onClick={() => {
-                        navigate("/admin/merchant/details", {
-                          state: { statePrev: state, nudgePrev: nudgesCards }
-                        });
+                        if (!state?.dineSavvyNudge) {
+                          navigate("/admin/merchant/details", {
+                            state: { statePrev: state, nudgePrev: nudgesCards },
+                          });
+                        } else if (state?.dineSavvyNudge) {
+                          setSelectMerchantList(true);
+                        }
                       }}
                     >
                       <div className="d-flex justify-between align-center gap-20 w-100">
@@ -271,28 +279,7 @@ const NudgeTemplate = () => {
                             Select your audience
                           </div>
                           <div className="fs-16 darkBlack">
-                            {/* By default all your followers will be sent this
-                              Nudge. */}
-                            {/* {state?.selectedItems?.length > 0 ||
-                            state?.locationId?.state?.selectedItems?.length >
-                              0 ? (
-                              <div className="flexTagFull">
-                                {(
-                                  state?.locationId?.state?.selectedItems ||
-                                  state?.selectedItems
-                                )?.map((item, index) => (
-                                  <div key={index}>
-                                    {item?.userInfo?.displayName}
-                                  </div>
-                                ))}
-                              </div>
-                            ) : (
-                              <div>
-                                By default all your followers will be sent this
-                                Nudge.
-                              </div>
-                            )} */}
-                            {state?.selectedItems?.length > 0 ? (
+                            {/* {state?.selectedItems?.length > 0 ? (
                               <div className="flexTagFull">
                                 {state?.selectedItems?.map((item, index) => (
                                   <div key={index}>
@@ -305,7 +292,21 @@ const NudgeTemplate = () => {
                                 By default all your followers will be sent this
                                 Nudge.
                               </div>
-                            )}
+                            )} */}
+                            {(state?.selectedItems?.length > 0 || selectedItems?.length > 0) ? (
+  <div className="flexTagFull">
+    {(selectedItems || []).concat(state?.selectedItems || []).map((item, index) => (
+      <div key={index}>
+        {item?.userInfo?.displayName}
+      </div>
+    ))}
+  </div>
+) : (
+  <div>
+    By default all your followers will be sent this Nudge.
+  </div>
+)}
+
                           </div>
                         </div>
                         <div>
@@ -371,6 +372,7 @@ const NudgeTemplate = () => {
                       state={state}
                       fileuploadSelector={fileuploadSelector}
                       setIsCartOpen={setIsCartOpen}
+                      selectedItems = {selectedItems}
                     />
                   </>
                 )}
@@ -378,6 +380,26 @@ const NudgeTemplate = () => {
             )}
           </Formik>
         </div>
+        <Modal
+          centered
+          visible={selectMerchantList} // Control the visibility of the modal  // Handle close
+          footer={null} // Hide the footer (buttons)
+          closable={false}
+          className="selecModalFollowerList"
+        >
+          <div className="">
+            <div className="topPadding d-flex justify-between align-center">
+              <div className="fs-26 fw-700">Followers</div>
+              <div className="closeSidebar" onClick={() => {setSelectMerchantList(false);setArchive("")}}>
+                <img src={closeRightSidebar} alt="closeRightSidebar" />
+              </div>
+            </div>
+            {/* List of items */}
+            {/* <div className="padding30"> */}
+              <FollowersModal archive = {archive} setArchive = {setArchive} selectMerchantList = {selectMerchantList} setSelectMerchantList = {setSelectMerchantList} setSelectedItems = {setSelectedItems} selectedItems= {selectedItems}/>
+            {/* </div> */}
+          </div>
+        </Modal>
       </>
     </>
   );

@@ -22,9 +22,14 @@ import { merchantsListHandler } from "../../../redux/action/merchantsList";
 import olive from "../../../assets/images/olive.png";
 import moment from "moment";
 import { ErrorMessage, Field, Form, Formik } from "formik";
-import { createPromotionAction, createPromotionHandler } from "../../../redux/action/createPromotion";
+import {
+  createPromotionAction,
+  createPromotionHandler,
+} from "../../../redux/action/createPromotion";
+import { useCommonMessage } from "../../../common/CommonMessage";
 
 const AddPromotion = () => {
+  const messageApi = useCommonMessage();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [searchString, setSearchString] = useState("");
@@ -62,8 +67,6 @@ const AddPromotion = () => {
   const createPromotionSelector = useSelector(
     (state) => state?.createPromotion
   );
-
-  console.log(createPromotionSelector,"createPromotionSelector")
 
   const handleCheckboxChange = (itemId) => {
     setSelectedMerchants((prevSelected) =>
@@ -155,15 +158,23 @@ const AddPromotion = () => {
 
   const [brands, setBrands] = useState([{}]);
 
-  useEffect(()=>{
-if(createPromotionSelector?.data?.statusCode ===200){
-  messageApi.open({
-    type: "success",
-    content: createPromotionSelector?.data?.message,
-  });
-  dispatch(createPromotionAction.createPromotionReset());
-}
-  },[createPromotionSelector])
+  useEffect(() => {
+    if (createPromotionSelector?.data?.statusCode === 200) {
+      messageApi.open({
+        type: "success",
+        content: createPromotionSelector?.data?.message,
+      });
+      dispatch(createPromotionAction.createPromotionReset());
+    } else if (
+      createPromotionSelector?.message?.response?.data?.statusCode === 400
+    ) {
+    messageApi.open({
+        type: "error",
+        content: createPromotionSelector?.message?.response?.data?.message,
+      });
+      dispatch(createPromotionAction.createPromotionReset());
+    }
+  }, [createPromotionSelector]);
 
   useEffect(() => {
     let payload = {
@@ -718,18 +729,23 @@ if(createPromotionSelector?.data?.statusCode ===200){
                     merchants: droppedMerchants?.map(() => ({
                       // quantity: droppedBrand?.brandItem?.map((item)=>item?.mSRP)||"",
                       quantity:
-                        (droppedBrand?.selectedBrands?.brandItem?.map((item) => item?.mSRP) *
+                        (droppedBrand?.selectedBrands?.brandItem?.map(
+                          (item) => item?.mSRP
+                        ) *
                           100) /
-                          droppedBrand?.selectedBrands?.brandItem?.map((item) => item?.mSRP) ||
-                        "",
+                          droppedBrand?.selectedBrands?.brandItem?.map(
+                            (item) => item?.mSRP
+                          ) || "",
                       promotionalFunds:
-                        droppedBrand?.selectedBrands?.brandItem?.map((item) => item?.mSRP) *
-                          100 || "",
+                        droppedBrand?.selectedBrands?.brandItem?.map(
+                          (item) => item?.mSRP
+                        ) * 100 || "",
                       msrp: "",
                       priceForReimbursement: "",
                       foundAmount:
-                        droppedBrand?.selectedBrands?.brandItem?.map((item) => item?.mSRP) *
-                          100 || "",
+                        droppedBrand?.selectedBrands?.brandItem?.map(
+                          (item) => item?.mSRP
+                        ) * 100 || "",
                     })),
                   }}
                   // validationSchema={validationSchema}

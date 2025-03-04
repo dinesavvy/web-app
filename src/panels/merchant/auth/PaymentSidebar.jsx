@@ -8,6 +8,15 @@ import {
   businessAddNudgeCreditHandler,
 } from "../../../redux/action/businessAction/businessAddNudgeCredit";
 import { useCommonMessage } from "../../../common/CommonMessage";
+import {loadStripe} from '@stripe/stripe-js';
+import {
+  PaymentElement,
+  Elements,
+  useStripe,
+  useElements,
+} from '@stripe/react-stripe-js';
+
+const stripePromise = loadStripe("pk_test_6pRNASCoBOKtIshFeQd4XMUh");
 
 const PaymentSidebar = ({
   isPaymentSidebar,
@@ -20,6 +29,7 @@ const PaymentSidebar = ({
   const businessAddNudgeCreditSelector = useSelector(
     (state) => state?.businessAddNudgeCredit
   );
+  console.log(businessAddNudgeCreditSelector,"businessAddNudgeCreditSelector")
   const nudgePaymentGooglePay = () => {
     let payload = {
       nudgeCredit: activeNudge,
@@ -35,6 +45,25 @@ const PaymentSidebar = ({
         type: "success",
         content: businessAddNudgeCreditSelector?.data?.message,
       });
+      const processPayment = async () => {
+        const clientSecret = businessAddNudgeCreditSelector?.data?.data?.clientSecret
+        const stripe = await stripePromise;
+  
+        if (!stripe || !clientSecret) return;
+  
+        const { error } = await stripe.confirmPayment({
+          clientSecret,
+          confirmParams: {
+            return_url: "https://www.google.com/", // Redirect URL after payment
+          },
+        });
+  
+        if (error) {
+          console.error("Payment error:", error.message);
+        }
+      };
+  
+      processPayment();
       dispatch(businessAddNudgeCreditAction.businessAddNudgCreditReset());
     } else if (businessAddNudgeCreditSelector?.message) {
       messageApi.open({
@@ -44,6 +73,9 @@ const PaymentSidebar = ({
       dispatch(businessAddNudgeCreditAction.businessAddNudgCreditReset());
     }
   }, [businessAddNudgeCreditSelector]);
+
+
+
 
   return (
     <>
