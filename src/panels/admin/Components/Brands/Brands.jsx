@@ -106,7 +106,7 @@ const Brands = () => {
                       <div className="merchantCard" key={index}>
                         <div className="p-20">
                           <div className="text-center promotionImage">
-                            <img src={coke} alt="" className="h-100" />
+                            <img src={item?.imageUrl[0]} alt="" className="h-100" />
                           </div>
                         </div>
                         <div className="divider m-0"></div>

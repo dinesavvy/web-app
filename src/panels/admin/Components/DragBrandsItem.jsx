@@ -32,10 +32,10 @@ const DragBrandsItem = ({
         className="brandItem"
         // data-tooltip-id={`brand-tooltip-${id}`}
       >
-        <img src={pepsi} alt={`Brand ${id}`} />
-        {/* <img src={item?.imageUrl?.[0]} alt={`Brand ${id}`} /> */}
+        {/* <img src={pepsi} alt={`Brand ${id}`} /> */}
+        <img src={selectedBrands?.imageUrl?.[0]} alt={`Brand ${id}`} />
       </div>
-      <p>{item?.brandName}</p>
+      <p>{selectedBrands?.brandName}</p>
       {/* <Tooltip id={`brand-tooltip-${id}`} place="right-start">
         <div className="fs-12">
           <div className="color80 mb-4">Brand</div>

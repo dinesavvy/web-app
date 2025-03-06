@@ -21,6 +21,8 @@ import { updateBrandHandler } from "../../../../redux/action/updateBrand";
 
 const AddBrands = () => {
   const [uploadedImage, setUploadedImage] = useState();
+  const [imagePreview, setImagePreview] = useState(null);
+  const [fileObject, setFileObject] = useState();
   const messageApi = useCommonMessage();
   const fileuploadSelector = useSelector((state) => state?.fileupload);
 
@@ -39,33 +41,94 @@ const AddBrands = () => {
     }
   };
 
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    const imageUrl = URL.createObjectURL(file);
-    setUploadedImage(imageUrl);
+  // const handleFileChange = (e) => {
+  //   const file = e.target.files[0];
+  //   const imageUrl = URL.createObjectURL(file);
+  //   setUploadedImage(imageUrl);
+  //   if (file) {
+  //     // Automatically trigger file upload after selection
+  //     let payload = {
+  //       fileList: [{ fileName: file?.name }],
+  //     };
+  //     dispatch(fileUploadHandler(payload));
+  //   }
+  // };
+
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    setFileObject(file);
+
     if (file) {
-      // Automatically trigger file upload after selection
+      // Validate file type
+      const allowedTypes = ["image/jpeg", "image/png", "image/jpg"];
+      if (!allowedTypes.includes(file.type)) {
+        messageApi.open({
+          type: "error",
+          content: "Only JPG, JPEG, and PNG formats are allowed",
+        });
+        return;
+      }
+
+      // Validate file size (5MB)
+      const maxSize = 5 * 1024 * 1024; // 5MB
+      if (file.size > maxSize) {
+        messageApi.open({
+          type: "error",
+          content: "File size must not exceed 5MB.",
+        });
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result);
+      };
       let payload = {
         fileList: [{ fileName: file?.name }],
       };
       dispatch(fileUploadHandler(payload));
+      reader.readAsDataURL(file);
     }
   };
 
+  useEffect(() => {
+    const uploadFile = async () => {
+      if (fileuploadSelector?.data?.statusCode === 200) {
+        try {
+          const response = await fetch(
+            fileuploadSelector?.data?.data?.[0]?.url,
+            {
+              method: "PUT",
+              body: fileObject,
+            }
+          );
+
+          if (response.ok) {
+            console.log("File uploaded successfully");
+          } else {
+            console.error("Failed to upload file", response.status);
+          }
+        } catch (error) {
+          console.error("Error uploading file", error);
+        }
+      }
+    };
+
+    uploadFile();
+  }, [fileuploadSelector]);
+
   const handleFormSubmit = (values) => {
-    console.log(values,"values")
     const brandItemArray = values?.SKUs?.map((item) => ({
       mSRP: item?.msrp,
       unit: item?.unit,
       sku: item?.sku,
       description: item?.description,
-    // quantity:item?.quantity
+      quantity: item?.quantity,
     }));
 
     let payload = {
-      imageUrl: fileuploadSelector?.data?.data?.[0]?.src
-        ? [fileuploadSelector?.data?.data?.[0]?.src]
-        : [],
+      imageUrl: fileuploadSelector?.data?.data
+        ?.map((item) => item?.src),
       brandName: values?.brandName,
       brandItem: brandItemArray, // Set the array here
     };
@@ -116,7 +179,7 @@ const AddBrands = () => {
                   unit: "",
                   sku: "",
                   description: "",
-                  quantity:""
+                  quantity: "",
                 },
               ],
         }}
@@ -158,7 +221,7 @@ const AddBrands = () => {
                 <div className="divider2 m30"></div>
                 <div className="d-flex align-end gap-16 mb-30 flexWrapsm">
                   <div className="changeBrandImage">
-                    <img src={uploadedImage || noImageFound} alt="coke" />
+                    <img src={imagePreview || noImageFound} alt="coke" />
                   </div>
                   <div className="btn w240" onClick={handleButtonClick}>
                     Change Photo
@@ -283,7 +346,7 @@ const AddBrands = () => {
                             </div>
                             <div className="">
                               <label className="grey mb-10 fs-16 fw-500">
-                              Quantity*
+                                Quantity*
                               </label>
                               <Field
                                 type="text"

@@ -388,12 +388,12 @@ const NudgeTemplate = () => {
           className="selecModalFollowerList"
         >
           <div className="">
-            <div className="topPadding d-flex justify-between align-center">
+            {/* <div className="topPadding d-flex justify-between align-center">
               <div className="fs-26 fw-700">Followers</div>
               <div className="closeSidebar" onClick={() => {setSelectMerchantList(false);setArchive("")}}>
                 <img src={closeRightSidebar} alt="closeRightSidebar" />
               </div>
-            </div>
+            </div> */}
             {/* List of items */}
             {/* <div className="padding30"> */}
               <FollowersModal archive = {archive} setArchive = {setArchive} selectMerchantList = {selectMerchantList} setSelectMerchantList = {setSelectMerchantList} setSelectedItems = {setSelectedItems} selectedItems= {selectedItems}/>

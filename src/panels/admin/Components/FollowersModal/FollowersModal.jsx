@@ -12,17 +12,25 @@ import moment from "moment";
 import createAdd from "../../../../assets/images/createAdd.svg";
 import deleteList from "../../../../assets/images/deleteList.svg";
 import { useNavigate } from "react-router-dom";
+import closeRightSidebar from "../../../../assets/images/closeRightSidebar.svg";
 
 import {
   followerArchiveAction,
   followerArchiveHandler,
 } from "../../../../redux/action/followerArchive";
 
-const FollowersModal = ({ archive, setArchive,selectMerchantList,setSelectMerchantList,selectedItems,setSelectedItems }) => {
+const FollowersModal = ({
+  archive,
+  setArchive,
+  selectMerchantList,
+  setSelectMerchantList,
+  selectedItems,
+  setSelectedItems,
+}) => {
+  console.log(archive, "archive");
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  
   const [searchString, setSearchString] = useState("");
   const [pagination, setPagination] = useState({ page: 1, limit: 9 });
   const [checkedItems, setCheckedItems] = useState({});
@@ -117,12 +125,32 @@ const FollowersModal = ({ archive, setArchive,selectMerchantList,setSelectMercha
 
     fetchMerchants();
     // }
-  }, [pagination, searchString, searchArea, archive]);
+  }, [pagination, searchString, searchArea, archive, followerArchiveSelector]);
 
   return (
     <>
       {(followerListSelector?.isLoading ||
         followerArchiveSelector?.isLoading) && <Loader />}
+      <div className="d-flex justify-between align-center mb-20">
+        <div className="fs-24 fw-600">Followers</div>
+        <div
+          className="btnSecondary btn  secondarysecond"
+          onClick={() => setArchive(!archive)}
+        >
+          {archive ? "Back to list" : "Show archive"}
+        </div>
+      </div>
+      <div className="topPadding d-flex justify-between align-center">
+        <div
+          className="closeSidebar"
+          onClick={() => {
+            setSelectMerchantList(false);
+            setArchive("");
+          }}
+        >
+          <img src={closeRightSidebar} alt="closeRightSidebar" />
+        </div>
+      </div>
       {archive ? (
         <>
           <div className="merchantGrid mb-30">
@@ -145,6 +173,9 @@ const FollowersModal = ({ archive, setArchive,selectMerchantList,setSelectMercha
                                     .charAt(0)
                                     .toUpperCase() +
                                     item.userInfo.displayName.slice(1)}
+                                <div className="fs-14 fw-300 o5 ">
+                                  {item?.userInfo?.email}
+                                </div>
                               </div>
                               <div className="fs-14 fw-300 o5">
                                 {moment(item?.createdAt).format("MMMM,YYYY")}
@@ -195,12 +226,12 @@ const FollowersModal = ({ archive, setArchive,selectMerchantList,setSelectMercha
                           >
                             Add to List
                           </div>
-                          <div
+                          {/* <div
                             className="btnSecondary w-100 btn"
                             onClick={() => navigateToFollowerDetails(item)}
                           >
                             View Details
-                          </div>
+                          </div> */}
                         </div>
                       </div>
                     );
@@ -214,15 +245,6 @@ const FollowersModal = ({ archive, setArchive,selectMerchantList,setSelectMercha
         </>
       ) : (
         <div className="tabPadding">
-          <div className="d-flex justify-between align-center mb-20">
-            {/* <div className="fs-24 fw-600">Followers</div> */}
-            <div
-              className="btnSecondary btn  secondarysecond"
-              onClick={() => setArchive(!archive)}
-            >
-              {archive ? "Back to list" : "Show archive"}
-            </div>
-          </div>
           <div className="d-flex align-center justify-between gap-20 mb-30 flexrightsm">
             <div className="d-flex align-center gap-20 w-100">
               <img
@@ -235,7 +257,7 @@ const FollowersModal = ({ archive, setArchive,selectMerchantList,setSelectMercha
               />
               <div>
                 {/* <div className="fs-24 fw-600 mb-4">Followers</div> */}
-                <Breadcrumb
+                {/* <Breadcrumb
                   className="cursor-pointer"
                   separator={<img src={breadCrumbIcon} />}
                   items={[
@@ -247,7 +269,7 @@ const FollowersModal = ({ archive, setArchive,selectMerchantList,setSelectMercha
                       title: "Followers",
                     },
                   ]}
-                />
+                /> */}
               </div>
             </div>
             <div className="text-end">
@@ -275,6 +297,9 @@ const FollowersModal = ({ archive, setArchive,selectMerchantList,setSelectMercha
                           {item?.userInfo?.displayName &&
                             item.userInfo.displayName.charAt(0).toUpperCase() +
                               item.userInfo.displayName.slice(1)}
+                          <div className="fs-14 fw-300 o5 ">
+                            {item?.userInfo?.email}
+                          </div>
                         </div>
                         <div className="fs-14 fw-300 o5">
                           {moment(item?.createdAt).format("MMMM, YYYY")}
@@ -375,7 +400,7 @@ const FollowersModal = ({ archive, setArchive,selectMerchantList,setSelectMercha
                 //   })
                 // }
 
-                onClick = {()=>setSelectMerchantList(false)}
+                onClick={() => setSelectMerchantList(false)}
               >
                 <img src={createAdd} alt="image" />
                 <div>Create nudge</div>

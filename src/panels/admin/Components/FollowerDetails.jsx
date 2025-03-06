@@ -22,6 +22,7 @@ const FollowerDetail = () => {
   const followerDetailsSelector = useSelector(
     (state) => state?.followerDetails
   );
+  console.log(followerDetailsSelector,"followerDetailsSelector")
   const listByUserIdSelector = useSelector((state) => state?.listByUserId);
 
   const handleTabClick = (tab) => {
@@ -117,6 +118,14 @@ const FollowerDetail = () => {
               </label>
               <div className="fs-20">
                 {followerDetailsSelector?.data?.data?.totalFollowingCount}
+              </div>
+            </div>
+            <div>
+              <label htmlFor="name" className="grey mb-10 fs-16 fw-500">
+                Email address
+              </label>
+              <div className="fs-20">
+                {followerDetailsSelector?.data?.data?.userInfo?.email}
               </div>
             </div>
           </div>

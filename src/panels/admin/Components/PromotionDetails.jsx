@@ -6,15 +6,31 @@ import olive from "../../../assets/images/olive.png";
 import restaurantCard from "../../../assets/images/restaurantCard.png";
 import PromotionCart from "./PromotionCart";
 import moment from "moment";
+import { promotionDetailsHandler } from "../../../redux/action/promotionDetails";
+import { useDispatch, useSelector } from "react-redux";
+import Loader from "../../../common/Loader/Loader";
 
-const PromotionDetails = ({ isOpen, toggleDetails,promotionalDetailsData }) => {
+const PromotionDetails = ({
+  isOpen,
+  toggleDetails,
+  promotionalDetailsData,
+}) => {
+  console.log(promotionalDetailsData, "promotionalDetailsData");
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [openIndex, setOpenIndex] = useState(null);
   const [addFund, setAddFund] = useState(false);
 
+  const promotionDetailsSelector = useSelector(
+    (state) => state?.promotionDetails
+  );
+  console.log(promotionDetailsSelector, "promotionDetailsSelector");
+
+  const dispatch = useDispatch();
+
   const toggleAccordion = (index) => {
     setOpenIndex(index === openIndex ? null : index);
   };
+
   const items = [
     {
       title: "Burger King",
@@ -29,6 +45,7 @@ const PromotionDetails = ({ isOpen, toggleDetails,promotionalDetailsData }) => {
       content: "Content for section 3 goes here.",
     },
   ];
+
   useEffect(() => {
     if (isCartOpen) {
       document.body.classList.add("overflow-Hidden");
@@ -41,11 +58,23 @@ const PromotionDetails = ({ isOpen, toggleDetails,promotionalDetailsData }) => {
       document.body.classList.remove("overflow-Hidden");
     };
   }, [isCartOpen]);
+
   const toggleCart = () => {
     setIsCartOpen((prevState) => !prevState);
   };
+
+  useEffect(() => {
+    if (promotionalDetailsData) {
+      let payload = {
+        promotionId: promotionalDetailsData?._id,
+      };
+      dispatch(promotionDetailsHandler(payload));
+    }
+  }, [promotionalDetailsData]);
+
   return (
     <>
+      {promotionDetailsSelector?.isLoading && <Loader />}
       {isOpen && <div className="overlay2" onClick={toggleDetails}></div>}
 
       <div className={`rightSidebar rightSidebar2 ${isOpen ? "open" : ""}`}>
@@ -57,14 +86,28 @@ const PromotionDetails = ({ isOpen, toggleDetails,promotionalDetailsData }) => {
         </div>
         <div className="divider2"></div>
         <div className="overflowCart2 overflowCart">
-          <div className="fs-18 fw-700 pc">Promotion Title</div>
+          <div className="fs-18 fw-700 pc">
+            {promotionDetailsSelector?.data?.data?.promotionTitle}
+          </div>
           <div className="divider2"></div>
           <div className="brandImagePromo mb-10">
-            <img src={coke} alt="" />
+            <img src={promotionDetailsSelector?.data?.data?.brandDetails?.imageUrl[0]||coke} alt="" />
           </div>
           <div className="d-flex justify-between align-center gap-10">
-            <div className="fs-16 fw-700">Coca Cola</div>
-            <div className="fs-16 fw-600 roi red">Redeemed: 4.9%</div>
+            <div className="fs-16 fw-700">
+              {promotionDetailsSelector?.data?.data?.brandDetails?.brandName}
+            </div>
+            {/* <div className="fs-16 fw-600 roi red">Redeemed: {promotionDetailsSelector?.data?.data?.redemptionPercentage}%</div> */}
+            <div
+              className={
+                promotionDetailsSelector?.data?.data?.redemptionPercentage > 50
+                  ? "fs-16 fw-600 roi green"
+                  : "fs-16 fw-600 roi blue"
+              }
+            >
+              Redeemed:{" "}
+              {promotionDetailsSelector?.data?.data?.redemptionPercentage}%
+            </div>
           </div>
           <div className="divider2"></div>
           <div className="grid2 mb-20">
@@ -78,19 +121,27 @@ const PromotionDetails = ({ isOpen, toggleDetails,promotionalDetailsData }) => {
             </div>
             <div>
               <div className="fs-14 mb-4">Start Date</div>
-              <div className="fs-14 fw-600">{moment(promotionalDetailsData?.createdAt).format("YYYY-MM-DD")}</div>
+              <div className="fs-14 fw-600">
+                {moment(promotionDetailsSelector?.data?.data?.startDate).format(
+                  "YYYY-MM-DD"
+                )}
+              </div>
             </div>
             <div>
               <div className="fs-14 mb-4">End Date</div>
-              <div className="fs-14 fw-600">{moment(promotionalDetailsData?.endDate).format("YYYY-MM-DD")}</div>
+              <div className="fs-14 fw-600">
+                {moment(promotionDetailsSelector?.data?.data?.endDate).format(
+                  "YYYY-MM-DD"
+                )}
+              </div>
             </div>
             <div>
               <div className="fs-14 mb-4">Total Quantity</div>
-              <div className="fs-14 fw-600">1,000</div>
+              <div className="fs-14 fw-600">{promotionDetailsSelector?.data?.data?.merchant?.quantity}</div>
             </div>
             <div>
-              <div className="fs-14 mb-4">Total Promotional Funds</div>
-              <div className="fs-14 fw-600">$140</div>  
+              <div className="fs-14 mb-4">Promotional Credits</div>
+              <div className="fs-14 fw-600">${promotionDetailsSelector?.data?.data?.merchant?.promotionFund}</div>
             </div>
           </div>
           <div className="divider2"></div>
@@ -203,9 +254,7 @@ const PromotionDetails = ({ isOpen, toggleDetails,promotionalDetailsData }) => {
               </>
             ))}
           </div>
-          <div className="deleteBtnfull btn">
-          End Promotion
-          </div>
+          <div className="deleteBtnfull btn">End Promotion</div>
         </div>
       </div>
       <PromotionCart isOpen={isCartOpen} toggleCart={toggleCart} />

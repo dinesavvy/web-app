@@ -157,6 +157,7 @@ const Followers = () => {
                 <>
                   {followerListSelector?.data?.data?.records?.map(
                     (item, index) => {
+                      
                       return (
                         <div className="cardFollow" key={index}>
                           <div className="d-flex justify-between gap-12">
@@ -172,6 +173,7 @@ const Followers = () => {
                                       .charAt(0)
                                       .toUpperCase() +
                                       item.userInfo.displayName.slice(1)}
+                                      <div className="fs-14 fw-300 o5 ">{item?.userInfo?.email}</div>
                                 </div>
                                 <div className="fs-14 fw-300 o5">
                                   {moment(item?.createdAt).format("MMMM,YYYY")}
@@ -268,6 +270,7 @@ const Followers = () => {
               {followerListSelector?.data?.data?.records?.length > 0 ? (
                 followerListSelector?.data?.data?.records?.map(
                   (item, index) => {
+                    console.log(item,"item")
                     return (
                       <div className="cardFollow" key={index}>
                         <div className="d-flex justify-between gap-12">
@@ -284,6 +287,7 @@ const Followers = () => {
                                     .charAt(0)
                                     .toUpperCase() +
                                     item.userInfo.displayName.slice(1)}
+                              <div className="fs-14 fw-300 o5 ">{item?.userInfo?.email}</div>
                               </div>
                               <div className="fs-14 fw-300 o5">
                                 {moment(item?.createdAt).format("MMMM,YYYY")}

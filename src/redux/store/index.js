@@ -36,6 +36,7 @@ import nudgeAnalyticSlice from "../action/nudgeAnalytic";
 import updateBrandSlice from "../action/updateBrand";
 import adminPromotionSlice from "../action/adminPromotion";
 import createPromotionSlice from "../action/createPromotion";
+import promotionDetailsSlice from "../action/promotionDetails";
 
 const store = configureStore({
   reducer: {
@@ -77,6 +78,7 @@ const store = configureStore({
     updateBrand: updateBrandSlice,
     adminPromotion: adminPromotionSlice,
     createPromotion: createPromotionSlice,
+    promotionDetails: promotionDetailsSlice,
   },
 });
 

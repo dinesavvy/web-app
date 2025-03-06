@@ -98,6 +98,7 @@ const Nudges = () => {
   };
 
   const handleChange = (value) => {
+    localStorage.setItem("merchantId",value?._id)
     setSelectedValue(value);
   };
 

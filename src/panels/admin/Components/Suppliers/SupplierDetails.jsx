@@ -19,6 +19,8 @@ import {
   updateSupplierAction,
   updateSupplierHandler,
 } from "../../../../redux/action/updateSupplier";
+import axios from "axios";
+import { getGeoInfo } from "../../../../services/geoLocation";
 
 const SupplierDetails = ({
   isOpen,
@@ -26,15 +28,16 @@ const SupplierDetails = ({
   setIsDetailsOpen,
   selectedSupplier,
 }) => {
-  const [countryCode, setCountryCode] = useState(
-    selectedSupplier?.contactPhoneNumber ? "" : "91"
-  );
+  const [countryCode, setCountryCode] = useState("91");
+  const [loading, setLoading] = useState(true);
+
   const [country, setCountry] = useState("");
   const fileuploadSelector = useSelector((state) => state?.fileupload);
   const [imagePreview, setImagePreview] = useState(null);
   const [phone, setPhone] = useState(
     selectedSupplier?.contactPhoneNumber || ""
   );
+  const [fileObject, setFileObject] = useState();
 
   const dispatch = useDispatch();
   const messageApi = useCommonMessage();
@@ -43,7 +46,7 @@ const SupplierDetails = ({
 
   const handlePhoneChange = (value, data) => {
     if (value === "") {
-      setCountryCode(""); // Reset to India when input is cleared
+      // setCountryCode(""); // Reset to India when input is cleared
       setPhone("");
       return;
     }
@@ -54,7 +57,7 @@ const SupplierDetails = ({
     if (!newPhone) {
       // If the number is empty, reset country code
       setCountry("");
-      setCountryCode("");
+      // setCountryCode("");
       return;
     } else {
       setCountry(newCountryCode);
@@ -112,11 +115,11 @@ const SupplierDetails = ({
             }
           );
 
-          if (response.ok) {
-            console.log("File uploaded successfully");
-          } else {
-            console.error("Failed to upload file", response.status);
-          }
+          // if (response.ok) {
+          //   console.log("File uploaded successfully");
+          // } else {
+          //   console.error("Failed to upload file", response.status);
+          // }
         } catch (error) {
           console.error("Error uploading file", error);
         }
@@ -125,6 +128,20 @@ const SupplierDetails = ({
 
     uploadFile();
   }, [fileuploadSelector]);
+
+  // Fetch Geo location
+  useEffect(() => {
+    const fetchGeoInfo = async () => {
+      setLoading(true);
+      const data = await getGeoInfo();
+      if (data) {
+        setCountryCode(data?.country_calling_code);
+      }
+      setLoading(false);
+    };
+
+    fetchGeoInfo();
+  }, []);
 
   const handleFormSubmit = (values) => {
     if (!selectedSupplier) {
@@ -191,7 +208,7 @@ const SupplierDetails = ({
     <>
       {(createSuplierSelector?.isLoading ||
         updateSupplierSelector?.isLoading ||
-        fileuploadSelector?.isLoading) && <Loader />}
+        fileuploadSelector?.isLoading||loading) && <Loader />}
       {isOpen && <div className="overlay2" onClick={toggleDetails}></div>}
 
       <Formik
@@ -211,6 +228,8 @@ const SupplierDetails = ({
         {({
           isSubmitting,
           resetForm,
+          setFieldValue,
+          setFieldTouched
           /* and other goodies */
         }) => (
           <Form>
@@ -339,7 +358,7 @@ const SupplierDetails = ({
                       Contact*
                     </label>
                     <PhoneInput
-                      country={countryCode || undefined} // Set country dynamically when user types a code
+                      // country={countryCode || undefined} // Set country dynamically when user types a code
                       value={`${countryCode}${phone}`} // Show full value but keep them separate in state
                       onChange={(e, f) => {
                         handlePhoneChange(e, f);

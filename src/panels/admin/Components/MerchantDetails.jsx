@@ -1114,6 +1114,14 @@ const MerchantDetails = () => {
                           }
                         </div>
                       </div>
+                      <div>
+              <label htmlFor="name" className="grey mb-10 fs-16 fw-500">
+                Email address
+              </label>
+              <div className="fs-20">
+                {followerDetailsSelector?.data?.data?.userInfo?.email}
+              </div>
+            </div>
                     </div>
                   </div>
                   <div className="tabPadding mb-30">
@@ -1486,6 +1494,7 @@ const MerchantDetails = () => {
                                           .charAt(0)
                                           .toUpperCase() +
                                           item.userInfo.displayName.slice(1)}
+                                          <div className="fs-14 fw-300 o5 ">{item?.userInfo?.email}</div>
                                     </div>
                                     <div className="fs-14 fw-300 o5">
                                       {moment(item?.createdAt).format(

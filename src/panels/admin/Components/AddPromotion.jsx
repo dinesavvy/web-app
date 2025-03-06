@@ -29,41 +29,26 @@ import {
 import { useCommonMessage } from "../../../common/CommonMessage";
 
 const AddPromotion = () => {
-  const messageApi = useCommonMessage();
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const [promotionTitle,setPromotionTitle] = useState("")
+  const [promotionTitleError,setPromotionTitleError] = useState("")
   const [searchString, setSearchString] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
-
-  // const [mercahnts, setMercahnts] = useState([
-  //   { id: 1, name: coke },
-  //   { id: 2, name: pepsi },
-  //   { id: 3, name: coke },
-  //   { id: 4, name: pepsi },
-  //   { id: 5, name: coke },
-  //   { id: 6, name: pepsi },
-  //   { id: 7, name: coke },
-  //   { id: 8, name: pepsi },
-  //   { id: 9, name: coke },
-  //   { id: 10, name: pepsi },
-  //   { id: 11, name: coke },
-  //   { id: 12, name: pepsi },
-  //   { id: 13, name: coke },
-  //   { id: 14, name: pepsi },
-  //   { id: 15, name: coke },
-  //   { id: 16, name: pepsi },
-  // ]);
-
   const [mercahnts, setMercahnts] = useState([]);
   const [droppedMerchants, setDroppedMerchants] = useState([]);
   const [selectedMerchants, setSelectedMerchants] = useState([]);
   const [dragging, setDragging] = useState(false);
+  const [droppedBrand, setDroppedBrand] = useState(null);
+  const [draggingItem, setDraggingItem] = useState(null);
+  const [brands, setBrands] = useState([{}]);
+
+  console.log(droppedMerchants,"droppedMerchants  ")
+  const messageApi = useCommonMessage();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const brandListSelector = useSelector((state) => state?.brandList);
-
   const merchantsListSelector = useSelector((state) => state?.merchantsList);
-
   const createPromotionSelector = useSelector(
     (state) => state?.createPromotion
   );
@@ -96,67 +81,15 @@ const AddPromotion = () => {
       (item) => draggedIds.includes(item?._id)
     );
 
-    // Remove dropped items from the available list
     setMercahnts((prevMercahnts) =>
       prevMercahnts.filter((item) => !draggedIds.includes(item?._id))
     );
 
-    // Add the dragged items to the drop zone
     setDroppedMerchants((prevDropped) => [...prevDropped, ...draggedItems]);
 
-    // Clear selected items
     setSelectedMerchants([]);
   };
 
-  // const handleAddToDropZone = (item) => {
-  //   // Add the clicked item to the dropped merchants array
-  //   setDroppedMerchants((prevDropped) => [...prevDropped, item]);
-
-  //   // Remove the item from the available list
-  //   setMercahnts((prevMercahnts) =>
-  //     prevMercahnts.filter((mercahnt) => mercahnt._id !== item._id)
-  //   );
-  // };
-  // Brands
-
-  // const [brands, setBrands] = useState([
-  //   {
-  //     id: 1,
-  //     name: coke,
-  //     info: {
-  //       name: "Coca-Cola Beverages",
-  //       price: "$24.99 per case",
-  //       description: "Case of 24 bottles (12 oz each)",
-  //       sku: "COC-24x12-001",
-  //     },
-  //   },
-  //   {
-  //     id: 2,
-  //     name: pepsi,
-  //     info: {
-  //       name: "Pepsi Beverages",
-  //       price: "$19.99 per case",
-  //       description: "Case of 24 bottles (12 oz each)",
-  //       sku: "PEP-24x12-001",
-  //     },
-  //   },
-  //   { id: 3, name: coke },
-  //   { id: 4, name: pepsi },
-  //   { id: 5, name: coke },
-  //   { id: 6, name: pepsi },
-  //   { id: 7, name: coke },
-  //   { id: 8, name: pepsi },
-  //   { id: 9, name: coke },
-  //   { id: 10, name: pepsi },
-  //   { id: 11, name: coke },
-  //   { id: 12, name: pepsi },
-  //   { id: 13, name: coke },
-  //   { id: 14, name: pepsi },
-  //   { id: 15, name: coke },
-  //   { id: 16, name: pepsi },
-  // ]);
-
-  const [brands, setBrands] = useState([{}]);
 
   useEffect(() => {
     if (createPromotionSelector?.data?.statusCode === 200) {
@@ -200,10 +133,7 @@ const AddPromotion = () => {
     fetchMerchants();
   }, [searchString]);
 
-  const [droppedBrand, setDroppedBrand] = useState(null);
-  const [draggingItem, setDraggingItem] = useState(null);
 
-  console.log(droppedBrand, "droppedBrand");
   const handleBrandDrop = (draggedItem) => {
     if (!droppedBrand) {
       // setBrands((prevBrands) => prevBrands.filter((i) => i?._id !== item?.id));
@@ -254,11 +184,13 @@ const AddPromotion = () => {
 
   const handleSubmit = (values) => {
     let payload = {
+      promotionTitle:promotionTitle,
       brandId: droppedBrand?.id,
       startDate: startDate ? moment(startDate).valueOf() : null,
       endDate: endDate ? moment(values.endDate).valueOf() : null,
       merchants: values?.merchants?.map((item, index) => {
         return {
+          merchantId:droppedMerchants?.map((item)=>item?._id).join(""),
           quantity: item?.quantity,
           promotionFund: item?.promotionalFunds,
           mSRP: item?.msrp,
@@ -267,9 +199,13 @@ const AddPromotion = () => {
         };
       }),
     };
-
-    dispatch(createPromotionHandler(payload));
-    // console.log(payload, "payload");
+if(!promotionTitle){
+  setPromotionTitleError("Promotion title is required")
+  return
+}else {
+  dispatch(createPromotionHandler(payload));
+}
+    console.log(payload, "payload");
   };
 
   return (
@@ -311,31 +247,6 @@ const AddPromotion = () => {
                 </div>
                 <div className="paddingb20">
                   <div className="selectGrid3">
-                    {/* {brands.map((item) => (
-                      <>
-                        <div
-                          key={item.id}
-                          onClick={() => handleBrandClick(item)}
-                          style={{
-                            cursor:
-                              draggingItem || droppedBrand
-                                ? "not-allowed"
-                                : "pointer",
-                          }}
-                        >
-                          <DragBrandsItem
-                            id={item.id}
-                            name={item.name}
-                            info={item.info}
-                            onDragEnd={handleDragEndMerchant}
-                            type="brand"
-                            onDragStart={() => handleDragStart(item)}
-                            disabled={!!draggingItem || !!droppedBrand}
-                          />
-                        </div>
-                      </>
-                    ))} */}
-
                     {brandListSelector?.data?.data?.records?.length > 0 ? (
                       <>
                         {brandListSelector?.data?.data?.records?.map(
@@ -403,35 +314,6 @@ const AddPromotion = () => {
 
                 <div className="paddingb20">
                   <div className="selectMerchant">
-                    {/* {mercahnts.map((item) => (
-                      <div
-                        key={item.id}
-                        className="cursor-pointer position-relative"
-                        // Add item to drop zone on click
-                      >
-                        <div className="custom-checkbox">
-                          <label className="checkLabel">
-                            <input
-                              type="checkbox"
-                              checked={selectedMerchants.includes(item.id)}
-                              onChange={() => handleCheckboxChange(item.id)}
-                            />
-                            <span className="checkmark"></span>
-                          </label>
-                        </div>
-                        <div onClick={() => handleAddToDropZone(item)}>
-                          <DragMerchantItem
-                            type="merchant"
-                            id={item.id}
-                            name={item.name}
-                            selectedMerchants={selectedMerchants} // Pass selected items
-                            onDragStart={() => handleDragStartMerchant(item)}
-                          />
-                        </div>
-                        <div className="divider2"></div>
-                        <CustomDragLayer merchants={mercahnts} />
-                      </div>
-                    ))} */}
                     {merchantsListSelector?.data?.data?.records?.length > 0 ? (
                       <>
                         {merchantsListSelector?.data?.data?.records?.map(
@@ -441,7 +323,6 @@ const AddPromotion = () => {
                                 <div
                                   key={index}
                                   className="cursor-pointer position-relative"
-                                  // Add item to drop zone on click
                                 >
                                   <div className="custom-checkbox">
                                     <label className="checkLabel">
@@ -488,7 +369,6 @@ const AddPromotion = () => {
             </div>
 
             {/* Drop Area */}
-            {/* {droppedMerchants?.length>0 && ()} */}
             <div className="w-100 positionSticky">
               <div className="tabPadding mb-20">
                 <input
@@ -497,8 +377,11 @@ const AddPromotion = () => {
                   id="addTitleInput"
                   className="addTitleInput"
                   placeholder="Add promotion title here"
+                  autoComplete="off"
+                  onChange={(e)=>setPromotionTitle(e.target.value)}
                 />
               </div>
+                {promotionTitleError && <div className="error">{promotionTitleError}</div>}
               <div className="tabPadding mb-20">
                 <div className="fs-18 fw-700">Add Brand</div>
                 <div className="divider2"></div>
@@ -514,9 +397,7 @@ const AddPromotion = () => {
                   )}
                   {droppedBrand && (
                     <div key={droppedBrand?.id} className="brandItem">
-                      {/* <img src={droppedBrand.name} alt={droppedBrand.name} /> */}
-                      <img src={pepsi} alt={droppedBrand?.name} />
-
+                      <img src={droppedBrand?.selectedBrands?.imageUrl?.[0] || pepsi} alt={droppedBrand?.name} />
                       <div onClick={handleRemoveBrand} className="closeIcon">
                         <img src={closeIcon} alt="Remove" />
                       </div>
@@ -608,121 +489,6 @@ const AddPromotion = () => {
 
               {/* Merchant Component */}
               <div className="accordion-container">
-                {/* {droppedMerchants?.length > 0 && (
-                  <>
-                    {droppedMerchants?.map(
-                      (itemDropperMerchant, indexDroppedMerchant) => {
-                        return (
-                          <>
-                            <div
-                              className="accordionItem accordion-item"
-                              key={indexDroppedMerchant}
-                            >
-                              <div className={`accordionHeader fs-18 fw-700`}>
-                                <div>
-                                  {itemDropperMerchant?.name
-                                    ? itemDropperMerchant.name
-                                        .charAt(0)
-                                        .toUpperCase() +
-                                      itemDropperMerchant.name.slice(1)
-                                    : ""}
-                                </div>
-                              </div>
-                              <div className="accordion-content accordionContent">
-                                <div className="d-flex gap-20">
-                                  <div className="brandItem mx167">
-                                    <img src={coke} alt="" />
-                                  </div>
-                                  <div className="fs-14">
-                                    <div className="d-flex gap-4 mb-10">
-                                      <div className="w-80">Nudges:</div>
-                                      <div className="fw-700">{itemDropperMerchant?.nudge?.sentNudgeCount}</div>
-                                    </div>
-                                    <div className="d-flex gap-4 mb-10">
-                                      <div className="w-80">Promotion:</div>
-                                      <div className="fw-700">10</div>
-                                    </div>
-                                    <div className="d-flex gap-4 ">
-                                      <div className="w-80">Location:</div>
-                                      <div className="fw-700">
-                                        123 Maple St, Springfield, IL
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-                                <div className="divider2"></div>
-                                <div className="grid2 gap-1020">
-                                  <div>
-                                    <label
-                                      htmlFor=""
-                                      className="fs-14 fw-500 mb-10"
-                                    >
-                                      Quantity/Nudge Credits
-                                    </label>
-                                    <input
-                                      type="text"
-                                      placeholder="Enter Quantity"
-                                    />
-                                  </div>
-                                  <div>
-                                    <label
-                                      htmlFor=""
-                                      className="fs-14 fw-500 mb-10"
-                                    >
-                                      Promotional Funds
-                                    </label>
-                                    <input
-                                      type="text"
-                                      placeholder="Enter Amount"
-                                    />
-                                  </div>
-                                  <div>
-                                    <label
-                                      htmlFor=""
-                                      className="fs-14 fw-500 mb-10"
-                                    >
-                                      MSRP
-                                    </label>
-                                    <input
-                                      type="text"
-                                      placeholder="Enter Price"
-                                    />
-                                  </div>
-                                  <div>
-                                    <label
-                                      htmlFor=""
-                                      className="fs-14 fw-500 mb-10"
-                                    >
-                                      Price for Reimbursement
-                                    </label>
-                                    <input
-                                      type="text"
-                                      placeholder="Enter Price"
-                                    />
-                                  </div>
-                                  <div>
-                                    <label
-                                      htmlFor=""
-                                      className="fs-14 fw-500 mb-10"
-                                    >
-                                      Fund Amount
-                                    </label>
-                                    <input
-                                      type="text"
-                                      placeholder="$1000"
-                                      disabled
-                                    />
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </>
-                        );
-                      }
-                    )}
-                  </>
-                )} */}
-
                 <Formik
                   enableReinitialize
                   initialValues={{
