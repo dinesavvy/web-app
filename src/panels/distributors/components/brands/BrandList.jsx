@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from "react";
 import addBtn from "../../../../assets/images/addBtn.svg";
-import coke from "../../../../assets/images/coke.svg";
-import editMember from "../../../../assets/images/editMember.svg";
 import onlyArrowBtn from "../../../../assets/images/onlyArrowBtn.svg";
 import { useNavigate } from "react-router-dom";
 import { Pagination } from "antd";
@@ -11,6 +9,8 @@ import { useCommonMessage } from "../../../../common/CommonMessage";
 import SearchSelect from "../../../admin/Components/SearchSelect";
 import "../../../../assets/css/merchant.css";
 import BrandDetails from "./BrandDetails";
+import noImageFound from "../../../../assets/images/noImageFound.png";
+
 import {
   brandListDistributorHandler,
   brandLlistDistributorHandler,
@@ -18,7 +18,6 @@ import {
 import { deleteDistributorBrandAction } from "../../../../redux/action/distributorsAction/deleteDistributorBrand";
 
 const BrandsListDistributor = () => {
-  const [searchString, setSearchString] = useState("");
   const messageApi = useCommonMessage();
   const [pagination, setPagination] = useState({ page: 1, limit: 9 });
   const [brandDetails, setBrandDetails] = useState({});
@@ -38,7 +37,6 @@ const BrandsListDistributor = () => {
   };
 
   const handleSearchChange = (value) => {
-    setSearchString(value);
     setPagination((prev) => ({ ...prev, page: 1 })); // Reset to the first page on search
   };
 
@@ -113,13 +111,20 @@ const BrandsListDistributor = () => {
                       <div className="merchantCard" key={index}>
                         <div className="p-20">
                           <div className="text-center promotionImage">
-                            <img src={coke} alt="" className="h-100" />
+                            <img
+                              src={item?.imageUrl?.[0] || noImageFound}
+                              alt=""
+                              className="h-100"
+                            />
                           </div>
                         </div>
                         <div className="divider m-0"></div>
                         <div className="bottomPadding">
                           <div className="fs-16 fw-700 mb-20">
-                            {item?.brandName}
+                            {item?.brandName
+                              ? item?.brandName.charAt(0).toUpperCase() +
+                                item?.brandName.slice(1)
+                              : ""}
                           </div>
 
                           <div className="fs-16 fw-600 roi green mb-20">

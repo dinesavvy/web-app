@@ -29,7 +29,6 @@ const PaymentSidebar = ({
   const businessAddNudgeCreditSelector = useSelector(
     (state) => state?.businessAddNudgeCredit
   );
-  console.log(businessAddNudgeCreditSelector,"businessAddNudgeCreditSelector")
   const nudgePaymentGooglePay = () => {
     let payload = {
       nudgeCredit: activeNudge,

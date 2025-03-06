@@ -270,7 +270,6 @@ const Followers = () => {
               {followerListSelector?.data?.data?.records?.length > 0 ? (
                 followerListSelector?.data?.data?.records?.map(
                   (item, index) => {
-                    console.log(item,"item")
                     return (
                       <div className="cardFollow" key={index}>
                         <div className="d-flex justify-between gap-12">

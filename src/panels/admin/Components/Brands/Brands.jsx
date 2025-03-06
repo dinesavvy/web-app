@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from "react";
 import addBtn from "../../../../assets/images/addBtn.svg";
-import coke from "../../../../assets/images/coke.svg";
-import editMember from "../../../../assets/images/editMember.svg";
 import onlyArrowBtn from "../../../../assets/images/onlyArrowBtn.svg";
 import SearchSelect from "../SearchSelect";
 import { useNavigate } from "react-router-dom";
@@ -12,6 +10,8 @@ import { brandListsHandler } from "../../../../redux/action/brandListSlice";
 import Loader from "../../../../common/Loader/Loader";
 import { useCommonMessage } from "../../../../common/CommonMessage";
 import { deleteBrandsAction } from "../../../../redux/action/deleteBrand";
+import noImageFound from "../../../../assets/images/noImageFound.png";
+
 
 const Brands = () => {
   const messageApi = useCommonMessage();
@@ -55,7 +55,7 @@ const Brands = () => {
     let payload = {
       page: pagination?.page,
       limit: pagination?.limit,
-      // searchString:searchString,
+      searchString:searchString,
     };
     dispatch(brandListsHandler(payload));
   }, [pagination, deleteBrandSelector]);
@@ -106,7 +106,7 @@ const Brands = () => {
                       <div className="merchantCard" key={index}>
                         <div className="p-20">
                           <div className="text-center promotionImage">
-                            <img src={item?.imageUrl[0]} alt="" className="h-100" />
+                            <img src={item?.imageUrl?.[0] || noImageFound} alt="" className="h-100" />
                           </div>
                         </div>
                         <div className="divider m-0"></div>

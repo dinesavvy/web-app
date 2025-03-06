@@ -1,3 +1,4 @@
+import AddBrandsDemo from "../components/brands/AddBrandsDemo";
 import AddBrandSupplier from "../components/brands/AddSupplierBrand";
 import Brands from "../components/brands/BrandList";
 import EditBrandsSupplier from "../components/brands/EditBrand";
@@ -25,7 +26,7 @@ const supplierRoutes = [
   },
   {
     path: "/supplier/addBrand",
-    element: AddBrandSupplier,
+    element: AddBrandsDemo,
     isPrivate: false,
     isLayout: true,
   },

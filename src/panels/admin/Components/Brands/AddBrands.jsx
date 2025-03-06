@@ -17,10 +17,12 @@ import {
 import { brandValidationSchema } from "./brandValidation";
 import { useCommonMessage } from "../../../../common/CommonMessage";
 import noImageFound from "../../../../assets/images/noImageFound.png";
-import { updateBrandHandler } from "../../../../redux/action/updateBrand";
+import {
+  updateBrandAction,
+  updateBrandHandler,
+} from "../../../../redux/action/updateBrand";
 
 const AddBrands = () => {
-  const [uploadedImage, setUploadedImage] = useState();
   const [imagePreview, setImagePreview] = useState(null);
   const [fileObject, setFileObject] = useState();
   const messageApi = useCommonMessage();
@@ -32,7 +34,7 @@ const AddBrands = () => {
   const navigate = useNavigate();
 
   const createBrandSelector = useSelector((state) => state?.createBrand);
-
+  const updateBrandSelector = useSelector((state) => state?.updateBrand);
   const fileInputRef = useRef(null);
 
   const handleButtonClick = () => {
@@ -40,19 +42,6 @@ const AddBrands = () => {
       fileInputRef.current.click();
     }
   };
-
-  // const handleFileChange = (e) => {
-  //   const file = e.target.files[0];
-  //   const imageUrl = URL.createObjectURL(file);
-  //   setUploadedImage(imageUrl);
-  //   if (file) {
-  //     // Automatically trigger file upload after selection
-  //     let payload = {
-  //       fileList: [{ fileName: file?.name }],
-  //     };
-  //     dispatch(fileUploadHandler(payload));
-  //   }
-  // };
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
@@ -102,12 +91,6 @@ const AddBrands = () => {
               body: fileObject,
             }
           );
-
-          if (response.ok) {
-            console.log("File uploaded successfully");
-          } else {
-            console.error("Failed to upload file", response.status);
-          }
         } catch (error) {
           console.error("Error uploading file", error);
         }
@@ -127,15 +110,13 @@ const AddBrands = () => {
     }));
 
     let payload = {
-      imageUrl: fileuploadSelector?.data?.data
-        ?.map((item) => item?.src),
+      imageUrl: fileuploadSelector?.data?.data?.map((item) => item?.src),
       brandName: values?.brandName,
       brandItem: brandItemArray, // Set the array here
     };
     if (!state?.brandDetails) {
       dispatch(createBrandHandler(payload));
     } else if (state?.brandDetails) {
-      console.log(payload, "payload");
       dispatch(updateBrandHandler(payload));
     }
   };
@@ -157,11 +138,28 @@ const AddBrands = () => {
     }
   }, [createBrandSelector]);
 
+  useEffect(() => {
+    if (updateBrandSelector?.data?.statusCode === 200) {
+      messageApi.open({
+        type: "success",
+        content: updateBrandSelector?.data?.message,
+      });
+      navigate("/admin/brands");
+      dispatch(updateBrandAction.updateBrandReset());
+    } else if (updateBrandSelector?.message?.data?.statusCode === 400) {
+      messageApi.open({
+        type: "error",
+        content: updateBrandSelector?.message?.data?.message,
+      });
+      dispatch(updateBrandAction.updateBrandReset());
+    }
+  }, [updateBrandSelector]);
+
   return (
     <>
-      {(fileuploadSelector?.isLoading || createBrandSelector?.isLoading) && (
-        <Loader />
-      )}
+      {(fileuploadSelector?.isLoading ||
+        createBrandSelector?.isLoading ||
+        updateBrandSelector?.isLoading) && <Loader />}
       <Formik
         enableReinitialize
         initialValues={{
@@ -172,6 +170,7 @@ const AddBrands = () => {
                 unit: item?.unit || "",
                 sku: item?.sku || "",
                 description: item?.description || "",
+                quantity: item?.quantity || "",
               }))
             : [
                 {
@@ -221,7 +220,14 @@ const AddBrands = () => {
                 <div className="divider2 m30"></div>
                 <div className="d-flex align-end gap-16 mb-30 flexWrapsm">
                   <div className="changeBrandImage">
-                    <img src={imagePreview || noImageFound} alt="coke" />
+                    <img
+                      src={
+                        imagePreview ||
+                        state?.brandDetails?.imageUrl?.[0] ||
+                        noImageFound
+                      }
+                      alt="coke"
+                    />
                   </div>
                   <div className="btn w240" onClick={handleButtonClick}>
                     Change Photo

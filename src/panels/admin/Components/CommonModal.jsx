@@ -54,7 +54,6 @@ const CommonModal = ({
     (state) => state?.removeTeamMemberBusiness
   );
 
-
   const removeSupplierSelector = useSelector((state) => state?.removeSupplier);
 
   const deleteTeam = () => {
@@ -62,20 +61,23 @@ const CommonModal = ({
       dispatch(removeSupplierHandler({ teamMappingId: removeTeamMember?._id }));
       return;
     }
-  
+
     if (getLocationDetails !== "/admin/suppliers" && removeTeamMember?._id) {
-      dispatch(removeTeamMemberHandler({ teamMappingId: removeTeamMember._id }));
+      dispatch(
+        removeTeamMemberHandler({ teamMappingId: removeTeamMember._id })
+      );
     }
-  
+
     if (removeSupplier?._id) {
       dispatch(removeSupplierHandler({ supplierId: removeSupplier._id }));
     }
-  
+
     if (removeDistributor?._id) {
-      dispatch(removeDistributorHandler({ distributorId: removeDistributor._id }));
+      dispatch(
+        removeDistributorHandler({ distributorId: removeDistributor._id })
+      );
     }
   };
-  
 
   useEffect(() => {
     if (!merchantApp) {
@@ -150,15 +152,22 @@ const CommonModal = ({
         <div className="text-center mb-30">
           <div className="fs-26 fw-700 mb-15">
             {getLocationDetails === "/admin/suppliers"
-              ? "Delete Team Supplier"
+              ? "Delete Supplier"
+              : getLocationDetails === "/admin/distributors"
+              ? "Delete Distributor"
               : "Delete Team Member"}
           </div>
           <div className="fs-18">
             Are you sure you want to remove{" "}
             <span className="fw-600">
-              {removeTeamMember?.displayName ||
-                removeSupplier?.supplierName ||
-                removeDistributor?.distributorName}
+              {(() => {
+                const name =
+                  removeTeamMember?.displayName ||
+                  removeSupplier?.supplierName ||
+                  removeDistributor?.distributorName ||
+                  "";
+                return name.charAt(0).toUpperCase() + name.slice(1);
+              })()}
             </span>{" "}
             from the{" "}
             {getLocationDetails === "/admin/suppliers"

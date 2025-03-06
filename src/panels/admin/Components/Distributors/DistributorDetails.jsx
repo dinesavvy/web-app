@@ -28,7 +28,6 @@ const DistributorDetails = ({
   const [imagePreview, setImagePreview] = useState(null);
   const [countryCode, setCountryCode] = useState("91");
   const [loading, setLoading] = useState(true);
-console.log(countryCode,"countryCode")
   const [country, setCountry] = useState("");
   const [fileObject, setFileObject] = useState();
 
@@ -110,12 +109,6 @@ console.log(countryCode,"countryCode")
               body: fileObject,
             }
           );
-
-          if (response.ok) {
-            console.log("File uploaded successfully");
-          } else {
-            console.error("Failed to upload file", response.status);
-          }
         } catch (error) {
           console.error("Error uploading file", error);
         }

@@ -1,12 +1,9 @@
 import React, { useEffect, useState } from "react";
 import addBtn from "../../../../assets/images/addBtn.svg";
-import coke from "../../../../assets/images/coke.svg";
-import editMember from "../../../../assets/images/editMember.svg";
 import onlyArrowBtn from "../../../../assets/images/onlyArrowBtn.svg";
 import { useNavigate } from "react-router-dom";
 import { Pagination } from "antd";
 import { useDispatch, useSelector } from "react-redux";
-import { brandListsHandler } from "../../../../redux/action/brandListSlice";
 import Loader from "../../../../common/Loader/Loader";
 import { useCommonMessage } from "../../../../common/CommonMessage";
 import { deleteBrandsAction } from "../../../../redux/action/deleteBrand";
@@ -14,11 +11,11 @@ import SearchSelect from "../../../admin/Components/SearchSelect";
 import "../../../../assets/css/merchant.css";
 import { supplierBrandListHandler } from "../../../../redux/action/supplierActions/supplierBrandList";
 import BrandDetails from "./BrandDetails";
+import noImageFound from "../../../../assets/images/noImageFound.png";
 
 const Brands = () => {
   const messageApi = useCommonMessage();
   const [pagination, setPagination] = useState({ page: 1, limit: 9 });
-  const [searchString, setSearchString] = useState("");
   const [brandDetails, setBrandDetails] = useState({});
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
   const navigate = useNavigate();
@@ -32,7 +29,6 @@ const Brands = () => {
   };
 
   const handleSearchChange = (value) => {
-    setSearchString(value);
     setPagination((prev) => ({ ...prev, page: 1 })); // Reset to the first page on search
   };
 
@@ -107,13 +103,20 @@ const Brands = () => {
                       <div className="merchantCard" key={index}>
                         <div className="p-20">
                           <div className="text-center promotionImage">
-                            <img src={coke} alt="" className="h-100" />
+                            <img
+                              src={item?.imageUrl?.[0] || noImageFound}
+                              alt=""
+                              className="h-100"
+                            />
                           </div>
                         </div>
                         <div className="divider m-0"></div>
                         <div className="bottomPadding">
                           <div className="fs-16 fw-700 mb-20">
-                            {item?.brandName}
+                            {item?.brandName
+                              ? item?.brandName.charAt(0).toUpperCase() +
+                                item?.brandName.slice(1)
+                              : ""}
                           </div>
 
                           <div className="fs-16 fw-600 roi green mb-20">

@@ -27,7 +27,6 @@ const FollowersModal = ({
   selectedItems,
   setSelectedItems,
 }) => {
-  console.log(archive, "archive");
   const navigate = useNavigate();
   const dispatch = useDispatch();
 

@@ -9,6 +9,8 @@ import { adminPromotionListHandler } from "../../../redux/action/adminPromotion"
 import { useDispatch, useSelector } from "react-redux";
 import Loader from "../../../common/Loader/Loader";
 import moment from "moment";
+import noImageFound from "../../../assets/images/noImageFound.png";
+
 
 const Promotions = () => {
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
@@ -108,12 +110,12 @@ const Promotions = () => {
               >
                 Single Promotion
               </div>
-              <div
+              {/* <div
                 className="gap-8 btnSecondary p32 btn z1"
                 onClick={() => navigate("/admin/add-promotions")}
               >
                 Group Promotion
-              </div>
+              </div> */}
             </div>
           </div>
           <div className="tabs-container tab3 tabing mb-20">
@@ -155,7 +157,7 @@ const Promotions = () => {
                         )}
                         <div className="text-center promotionImage mb-28">
                           <img
-                            src={item?.brandDetails?.imageUrl?.[0] || coke}
+                            src={item?.brandDetails?.imageUrl?.[0] || noImageFound}
                             alt=""
                             className="h-100"
                           />

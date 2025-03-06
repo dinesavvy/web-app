@@ -22,6 +22,8 @@ import { merchantsListHandler } from "../../../redux/action/merchantsList";
 import olive from "../../../assets/images/olive.png";
 import moment from "moment";
 import { ErrorMessage, Field, Form, Formik } from "formik";
+import noImageFound from "../../../assets/images/noImageFound.png";
+
 import {
   createPromotionAction,
   createPromotionHandler,
@@ -29,11 +31,14 @@ import {
 import { useCommonMessage } from "../../../common/CommonMessage";
 
 const AddPromotion = () => {
-  const [promotionTitle,setPromotionTitle] = useState("")
-  const [promotionTitleError,setPromotionTitleError] = useState("")
+  const [promotionTitle, setPromotionTitle] = useState("");
+  // const [promotionTitleError, setPromotionTitleError] = useState("");
   const [searchString, setSearchString] = useState("");
+  const [searchStringMerchant, setSearchStringMerchant] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
+  const [errors, setErrors] = useState({ fromDate: "", toDate: "",promotionTitle:"" });
+
   const [mercahnts, setMercahnts] = useState([]);
   const [droppedMerchants, setDroppedMerchants] = useState([]);
   const [selectedMerchants, setSelectedMerchants] = useState([]);
@@ -42,7 +47,6 @@ const AddPromotion = () => {
   const [draggingItem, setDraggingItem] = useState(null);
   const [brands, setBrands] = useState([{}]);
 
-  console.log(droppedMerchants,"droppedMerchants  ")
   const messageApi = useCommonMessage();
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -52,6 +56,23 @@ const AddPromotion = () => {
   const createPromotionSelector = useSelector(
     (state) => state?.createPromotion
   );
+
+  const validateDates = () => {
+    let newErrors = { fromDate: "", toDate: "",promotionTitle:""};
+
+    if (!startDate) {
+      newErrors.fromDate = "From date is required";
+    }
+    if (!endDate) {
+      newErrors.toDate = "To date is required";
+    }
+
+    if (!promotionTitle) {
+      newErrors.promotionTitle = "Promotion title is required";
+    }
+    setErrors(newErrors);
+    return Object.values(newErrors).every((err) => err === "");
+  };
 
   const handleCheckboxChange = (itemId) => {
     setSelectedMerchants((prevSelected) =>
@@ -90,7 +111,6 @@ const AddPromotion = () => {
     setSelectedMerchants([]);
   };
 
-
   useEffect(() => {
     if (createPromotionSelector?.data?.statusCode === 200) {
       messageApi.open({
@@ -101,7 +121,7 @@ const AddPromotion = () => {
     } else if (
       createPromotionSelector?.message?.response?.data?.statusCode === 400
     ) {
-    messageApi.open({
+      messageApi.open({
         type: "error",
         content: createPromotionSelector?.message?.response?.data?.message,
       });
@@ -113,7 +133,7 @@ const AddPromotion = () => {
     let payload = {
       page: 1,
       limit: 10,
-      // searchString:searchString,
+      searchString: searchString,
     };
     dispatch(brandListsHandler(payload));
   }, [searchString]);
@@ -124,19 +144,17 @@ const AddPromotion = () => {
         page: 1,
         limit: 10,
         timeFrame: "today",
-        searchString,
+        searchString:searchStringMerchant,
         searchArea: [],
       };
       dispatch(merchantsListHandler(payload));
     };
 
     fetchMerchants();
-  }, [searchString]);
-
+  }, [searchStringMerchant]);
 
   const handleBrandDrop = (draggedItem) => {
     if (!droppedBrand) {
-      // setBrands((prevBrands) => prevBrands.filter((i) => i?._id !== item?.id));
       setDroppedBrand(draggedItem);
       setDraggingItem(null);
     }
@@ -163,49 +181,32 @@ const AddPromotion = () => {
     }
   };
 
-  // const handleToggle = (index) => {
-  //   setOpenIndex(openIndex === index ? null : index); // Toggle open/close
-  // };
-
-  // const accordionItems = [
-  //   {
-  //     title: "Accordion 1",
-  //     content: "This is the content for accordion 1.",
-  //   },
-  //   {
-  //     title: "Accordion 2",
-  //     content: "This is the content for accordion 2.",
-  //   },
-  //   {
-  //     title: "Accordion 3",
-  //     content: "This is the content for accordion 3.",
-  //   },
-  // ];
-
   const handleSubmit = (values) => {
-    let payload = {
-      promotionTitle:promotionTitle,
-      brandId: droppedBrand?.id,
-      startDate: startDate ? moment(startDate).valueOf() : null,
-      endDate: endDate ? moment(values.endDate).valueOf() : null,
-      merchants: values?.merchants?.map((item, index) => {
-        return {
-          merchantId:droppedMerchants?.map((item)=>item?._id).join(""),
-          quantity: item?.quantity,
-          promotionFund: item?.promotionalFunds,
-          mSRP: item?.msrp,
-          retailPrice: item?.priceForReimbursement,
-          fundAmount: 500,
-        };
-      }),
-    };
-if(!promotionTitle){
-  setPromotionTitleError("Promotion title is required")
-  return
-}else {
-  dispatch(createPromotionHandler(payload));
-}
-    console.log(payload, "payload");
+    if(validateDates()){
+      let payload = {
+        promotionTitle: promotionTitle,
+        brandId: droppedBrand?.id,
+        startDate: startDate ? moment(startDate).valueOf() : null,
+        endDate: endDate ? moment(values.endDate).valueOf() : null,
+        merchants: values?.merchants?.map((item, index) => {
+          return {
+            merchantId: droppedMerchants?.map((item) => item?._id).join(""),
+            quantity: item?.quantity,
+            promotionFund: item?.promotionalFunds,
+            mSRP: item?.msrp,
+            retailPrice: item?.priceForReimbursement,
+            fundAmount: 500,
+          };
+        }),
+      };
+      // if (!promotionTitle) {
+      //   setPromotionTitleError("Promotion title is required");
+      //   return;
+      // } else {
+      //   dispatch(createPromotionHandler(payload));
+      // }
+      dispatch(createPromotionHandler(payload));
+    }
   };
 
   return (
@@ -291,7 +292,11 @@ if(!promotionTitle){
                     <div className="fs-18 fw-700">Merchants</div>
                     <div className="d-flex  align-center gap-16">
                       <div className="lineSearch w-100">
-                        <input type="text" placeholder="Search Merchants" />
+                        <input
+                          type="text"
+                          placeholder="Search Merchants"
+                          onChange={(e) => setSearchStringMerchant(e.target.value)}
+                        />
                         <img
                           src={searchIcon}
                           alt=""
@@ -378,10 +383,10 @@ if(!promotionTitle){
                   className="addTitleInput"
                   placeholder="Add promotion title here"
                   autoComplete="off"
-                  onChange={(e)=>setPromotionTitle(e.target.value)}
+                  onChange={(e) => {setPromotionTitle(e.target.value);setErrors((prev) => ({ ...prev, promotionTitle: "" }));}}
                 />
               </div>
-                {promotionTitleError && <div className="error">{promotionTitleError}</div>}
+              {errors.promotionTitle && <p className="mt-10 fw-500 fs-14 error">{errors.promotionTitle}</p>}
               <div className="tabPadding mb-20">
                 <div className="fs-18 fw-700">Add Brand</div>
                 <div className="divider2"></div>
@@ -397,7 +402,12 @@ if(!promotionTitle){
                   )}
                   {droppedBrand && (
                     <div key={droppedBrand?.id} className="brandItem">
-                      <img src={droppedBrand?.selectedBrands?.imageUrl?.[0] || pepsi} alt={droppedBrand?.name} />
+                      <img
+                        src={
+                          droppedBrand?.selectedBrands?.imageUrl?.[0] || pepsi
+                        }
+                        alt={droppedBrand?.name}
+                      />
                       <div onClick={handleRemoveBrand} className="closeIcon">
                         <img src={closeIcon} alt="Remove" />
                       </div>
@@ -418,11 +428,11 @@ if(!promotionTitle){
                         }
                       />
                     )}
-
                     {droppedMerchants?.map((item) => (
                       <div key={item?._id} className="brandItem">
                         {/* <img src={item.name} alt={item.name} /> */}
-                        <img src={olive} alt={item.name} />
+                        {/* <img src={item?.logoUrl||noImageFound} alt={item.name} /> */}
+                        <img src={noImageFound} alt={item.name} />
                         <div
                           onClick={() =>
                             handleRemoveDroppedMerchants(item?._id)
@@ -450,6 +460,7 @@ if(!promotionTitle){
                         format="YYYY-MM-DD"
                         onChange={(date, dateString) => {
                           setStartDate(dateString);
+                          setErrors((prev) => ({ ...prev, fromDate: "" }));
                         }}
                         disabledDate={(current) => {
                           return current && current < moment().startOf("day");
@@ -461,6 +472,8 @@ if(!promotionTitle){
                         className="datePickerImg"
                       />
                     </div>
+                    {errors.fromDate && <p className="mt-10 fw-500 fs-14 error">{errors.fromDate}</p>}
+
                   </div>
                   <div className="w-100">
                     <label htmlFor="" className="fs-14 fw-500 mb-10">
@@ -472,6 +485,7 @@ if(!promotionTitle){
                         format="YYYY-MM-DD"
                         onChange={(date, dateString) => {
                           setEndDate(dateString);
+                          setErrors((prev) => ({ ...prev, toDate: "" }));
                         }}
                         disabledDate={(current) => {
                           return current && current < moment().startOf("day");
@@ -483,6 +497,7 @@ if(!promotionTitle){
                         className="datePickerImg"
                       />
                     </div>
+                    {errors.toDate && <p className="mt-10 fw-500 fs-14 error">{errors.toDate}</p>}
                   </div>
                 </div>
               </div>
@@ -540,7 +555,7 @@ if(!promotionTitle){
                                 <div className="accordion-content accordionContent">
                                   <div className="d-flex gap-20">
                                     <div className="brandItem mx167">
-                                      <img src={olive} alt="" />
+                                      <img src={noImageFound} alt="" />
                                     </div>
                                     <div className="fs-14">
                                       <div className="d-flex gap-4 mb-10">
@@ -629,12 +644,15 @@ if(!promotionTitle){
                                         type="text"
                                         name={`merchants.${indexDroppedMerchant}.msrp`}
                                         placeholder="Enter Price"
+                                        autoComplete="off"
+                                        onChange = {()=>setErrors((prev) => ({ ...prev, fromDate: "" }))}
                                       />
                                       <ErrorMessage
                                         name={`merchants.${indexDroppedMerchant}.msrp`}
                                         component="div"
                                         className="error"
                                       />
+                                      {/* {errors.msrp && <p className="mt-10 fw-500 fs-14 error">{errors.msrp}</p>} */}
                                     </div>
 
                                     <div>
@@ -648,6 +666,7 @@ if(!promotionTitle){
                                         type="text"
                                         name={`merchants.${indexDroppedMerchant}.priceForReimbursement`}
                                         placeholder="Enter Price"
+                                        autoComplete="off"
                                       />
                                       <ErrorMessage
                                         name={`merchants.${indexDroppedMerchant}.priceForReimbursement`}

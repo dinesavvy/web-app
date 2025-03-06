@@ -6,17 +6,18 @@ import deleteMember from "../../../../assets/images/deleteMember.svg";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { deleteDistributorBrandHandler } from "../../../../redux/action/distributorsAction/deleteDistributorBrand";
+import noImageFound from "../../../../assets/images/noImageFound.png";
 
 const BrandDetails = ({ isOpen, toggleDetails, brandDetails }) => {
   const navigate = useNavigate();
-  const dispatch  = useDispatch()
+  const dispatch = useDispatch();
 
-  const deleteBrand = () =>{
+  const deleteBrand = () => {
     let payload = {
-      brandId:brandDetails?._id
-    }
-    dispatch(deleteDistributorBrandHandler(payload))
-  }
+      brandId: brandDetails?._id,
+    };
+    dispatch(deleteDistributorBrandHandler(payload));
+  };
 
   return (
     <>
@@ -32,10 +33,15 @@ const BrandDetails = ({ isOpen, toggleDetails, brandDetails }) => {
         <div className="divider2"></div>
         <div className="overflowCart2 overflowCart">
           <div className="brandImagePromo mb-20">
-            <img src={coke} alt="" />
+            <img src={brandDetails?.imageUrl?.[0] || noImageFound} alt="" />
           </div>
           <div className="d-flex justify-between align-center gap-10">
-            <div className="fs-16 fw-700">{brandDetails?.brandName}</div>
+            <div className="fs-16 fw-700">
+              {brandDetails?.brandName
+                ? brandDetails?.brandName.charAt(0).toUpperCase() +
+                  brandDetails?.brandName.slice(1)
+                : ""}
+            </div>
             <div className="fs-16 fw-600 roi green">Performance: 52%</div>
           </div>
           <div className="divider2"></div>
@@ -47,7 +53,9 @@ const BrandDetails = ({ isOpen, toggleDetails, brandDetails }) => {
                     <div className="grid2 mb-20">
                       <div>
                         <div className="lightBlack fs-14 mb-4">MSRP</div>
-                        <div className="fs-14 fw-600">${item?.mSRP} per case</div>
+                        <div className="fs-14 fw-600">
+                          ${item?.mSRP} per case
+                        </div>
                       </div>
                       <div>
                         <div className="lightBlack fs-14 mb-4">SKUs</div>
@@ -70,11 +78,10 @@ const BrandDetails = ({ isOpen, toggleDetails, brandDetails }) => {
             <div className="noDataFound">No data available</div>
           )}
 
-          {/* <div className="divider2"></div> */}
           <div className="d-flex align-center gap-10">
             <div
               className="btn btnSecondary w-100 gap-8"
-              onClick={() => navigate("/admin/brands/edit")}
+              onClick={() => navigate("/distributors/add-distributor-brands",{state:{brandDetails:brandDetails}})}
             >
               <img src={editMember} alt="" />
               Edit

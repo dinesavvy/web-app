@@ -1,6 +1,7 @@
 import React from "react";
 import { useDrag } from "react-dnd";
-import olive from "../../../assets/images/olive.png";
+import noImageFound from "../../../assets/images/noImageFound.png";
+
 
 const DragMerchantItem = ({ id, name, selectedMerchants, onClick, item }) => {
   const [{ isDragging }, drag] = useDrag({
@@ -29,7 +30,7 @@ const DragMerchantItem = ({ id, name, selectedMerchants, onClick, item }) => {
       <div className="brandItem mx167">
         <img
           // src={name?.imageUrl?.[0]}
-          src={olive}
+          src={noImageFound}
           alt={`Brand ${id}`}
           onDragStart={handleDragStart}
           draggable="true"

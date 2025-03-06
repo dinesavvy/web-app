@@ -60,12 +60,6 @@ const AddBrandSupplier = () => {
                 body: fileObject,
               }
             );
-  
-            if (response.ok) {
-              console.log("File uploaded successfully");
-            } else {
-              console.error("Failed to upload file", response.status);
-            }
           } catch (error) {
             console.error("Error uploading file", error);
           }
@@ -118,6 +112,7 @@ const AddBrandSupplier = () => {
               unit: "",
               sku: "",
               description: "",
+              quantity:""
             },
           ],
         }}

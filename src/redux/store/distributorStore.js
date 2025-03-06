@@ -4,6 +4,7 @@ import brandListDistributorSlice from "../action/distributorsAction/brandListDis
 import deleteDistributorBrandSlice from "../action/distributorsAction/deleteDistributorBrand";
 import createDistributorBrandSlice from "../action/distributorsAction/createDistributorBrand";
 import fileUploadDistributorSlice from "../action/distributorsAction/fileUploadDistributor";
+import updateDistributorBrandSlice from "../action/distributorsAction/updateDistributorBrand";
 
 const store = configureStore({
   reducer: {
@@ -12,6 +13,7 @@ const store = configureStore({
     deleteDistributorBrand: deleteDistributorBrandSlice,
     createDistributorBrand: createDistributorBrandSlice,
     fileUploadDistributor: fileUploadDistributorSlice,
+    updateDistributorBrand: updateDistributorBrandSlice,
   },
 });
 

@@ -15,6 +15,7 @@ import editMember from "../../../../assets/images/editMember.svg";
 import deleteMember from "../../../../assets/images/deleteMember.svg";
 import CommonModal from "../CommonModal";
 import deleteModal from "../../../../assets/images/deleteModal.svg";
+import SearchSelect from "../SearchSelect";
 
 const Suppliers = () => {
   const [modal2Open, setModal2Open] = useState(false);
@@ -23,6 +24,8 @@ const Suppliers = () => {
   const [removeSupplier, setRemoveSupplier] = useState({});
   const removeSupplierSelector = useSelector((state) => state?.removeSupplier);
   const [selectedSupplier, setSelectedSupplier] = useState(null);
+  const [searchString, setSearchString] = useState("");
+  const [searchArea, setSearchArea] = useState([]);
 
   const createSuplierSelector = useSelector((state) => state?.createSuplier);
   const updateSupplierSelector = useSelector((state) => state?.updateSupplier);
@@ -33,6 +36,15 @@ const Suppliers = () => {
 
   const handlePaginationChange = (page, pageSize) => {
     setPagination({ page, limit: pageSize });
+  };
+
+  const handleSearchChange = (value) => {
+    setSearchString(value);
+    setPagination((prev) => ({ ...prev, page: 1 })); // Reset to the first page on search
+  };
+
+  const handleSearchAreaChange = (selectedAreas) => {
+    setSearchArea(selectedAreas);
   };
 
   useEffect(() => {
@@ -56,6 +68,7 @@ const Suppliers = () => {
     let payload = {
       page: pagination?.page,
       limit: pagination?.limit,
+      searchString,
     };
     dispatch(getSuppliersHandler(payload));
   }, [
@@ -63,6 +76,7 @@ const Suppliers = () => {
     createSuplierSelector,
     removeSupplierSelector,
     updateSupplierSelector,
+    searchString,
   ]);
 
   return (
@@ -84,12 +98,16 @@ const Suppliers = () => {
             </div>
           </div>
           <div className="lineSearch w-100 mb-20">
-            <input
+            {/* <input
               type="text"
               placeholder="Search Suppliers"
               autoComplete="off"
-            />
-            <img src={searchIcon} alt="" className="absoluteImage" />
+            /> */}
+            {/* <img src={searchIcon} alt="" className="absoluteImage" /> */}
+            <SearchSelect
+                onSearchChange={handleSearchChange}
+                onSearchAreaChange={handleSearchAreaChange}
+              />
           </div>
           <div className="merchantGrid">
             {getSuppliersListSelector?.data?.data?.records?.length > 0 ? (
@@ -109,9 +127,10 @@ const Suppliers = () => {
                             />
                           </div>
                           <div className="fs-16 fw-700 mb-10">
-                            {/* Garden Grove Café & Bistro */}
-                            {item?.supplierName}
-                          </div>
+  {item?.supplierName
+    ? item.supplierName.charAt(0).toUpperCase() + item.supplierName.slice(1)
+    : ""}
+</div>
                         </div>
                         <div className="divider2 m-0"></div>
                         <div className="bottomPadding">

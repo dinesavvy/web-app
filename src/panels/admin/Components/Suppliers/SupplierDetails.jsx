@@ -115,11 +115,6 @@ const SupplierDetails = ({
             }
           );
 
-          // if (response.ok) {
-          //   console.log("File uploaded successfully");
-          // } else {
-          //   console.error("Failed to upload file", response.status);
-          // }
         } catch (error) {
           console.error("Error uploading file", error);
         }

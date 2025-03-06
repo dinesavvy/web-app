@@ -15,7 +15,6 @@ const PromotionDetails = ({
   toggleDetails,
   promotionalDetailsData,
 }) => {
-  console.log(promotionalDetailsData, "promotionalDetailsData");
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [openIndex, setOpenIndex] = useState(null);
   const [addFund, setAddFund] = useState(false);
@@ -23,7 +22,6 @@ const PromotionDetails = ({
   const promotionDetailsSelector = useSelector(
     (state) => state?.promotionDetails
   );
-  console.log(promotionDetailsSelector, "promotionDetailsSelector");
 
   const dispatch = useDispatch();
 

@@ -6,6 +6,8 @@ import deleteMember from "../../../assets/images/deleteMember.svg";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteBrandHandler } from "../../../redux/action/deleteBrand";
+import noImageFound from "../../../assets/images/noImageFound.png";
+
 
 const BrandDetails = ({ isOpen, toggleDetails, brandDetails }) => {
   const navigate = useNavigate();
@@ -32,7 +34,7 @@ const BrandDetails = ({ isOpen, toggleDetails, brandDetails }) => {
         <div className="divider2"></div>
         <div className="overflowCart2 overflowCart">
           <div className="brandImagePromo mb-20">
-            <img src={coke} alt="" />
+            <img src={brandDetails?.imageUrl?.[0]|| noImageFound} alt="" />
           </div>
           <div className="d-flex justify-between align-center gap-10">
             <div className="fs-16 fw-700">{brandDetails?.brandName}</div>

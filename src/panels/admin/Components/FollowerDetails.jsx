@@ -22,7 +22,6 @@ const FollowerDetail = () => {
   const followerDetailsSelector = useSelector(
     (state) => state?.followerDetails
   );
-  console.log(followerDetailsSelector,"followerDetailsSelector")
   const listByUserIdSelector = useSelector((state) => state?.listByUserId);
 
   const handleTabClick = (tab) => {

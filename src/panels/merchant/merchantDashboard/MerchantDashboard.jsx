@@ -24,7 +24,6 @@ import AccessDeniedModal from "../accessDeniedModal/accessDeniedModal";
 
 const MerchantDashboard = () => {
   const [tempState, setTempState] = useState([]);
-  console.log(tempState,"tempState")
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
