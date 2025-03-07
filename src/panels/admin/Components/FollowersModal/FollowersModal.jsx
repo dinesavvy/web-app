@@ -139,7 +139,7 @@ const FollowersModal = ({
           {archive ? "Back to list" : "Show archive"}
         </div>
       </div>
-      <div className="topPadding d-flex justify-between align-center">
+      {/* <div className="topPadding d-flex justify-between align-center">
         <div
           className="closeSidebar"
           onClick={() => {
@@ -149,7 +149,7 @@ const FollowersModal = ({
         >
           <img src={closeRightSidebar} alt="closeRightSidebar" />
         </div>
-      </div>
+      </div> */}
       {archive ? (
         <>
           <div className="merchantGrid mb-30">
@@ -172,9 +172,9 @@ const FollowersModal = ({
                                     .charAt(0)
                                     .toUpperCase() +
                                     item.userInfo.displayName.slice(1)}
-                                <div className="fs-14 fw-300 o5 ">
+                                {/* <div className="fs-14 fw-300 o5 ">
                                   {item?.userInfo?.email}
-                                </div>
+                                </div> */}
                               </div>
                               <div className="fs-14 fw-300 o5">
                                 {moment(item?.createdAt).format("MMMM,YYYY")}
@@ -244,7 +244,7 @@ const FollowersModal = ({
         </>
       ) : (
         <div className="tabPadding">
-          <div className="d-flex align-center justify-between gap-20 mb-30 flexrightsm">
+          {/* <div className="d-flex align-center justify-between gap-20 mb-30 flexrightsm">
             <div className="d-flex align-center gap-20 w-100">
               <img
                 src={backButton}
@@ -255,8 +255,8 @@ const FollowersModal = ({
                 }}
               />
               <div>
-                {/* <div className="fs-24 fw-600 mb-4">Followers</div> */}
-                {/* <Breadcrumb
+                <div className="fs-24 fw-600 mb-4">Followers</div>
+                <Breadcrumb
                   className="cursor-pointer"
                   separator={<img src={breadCrumbIcon} />}
                   items={[
@@ -268,16 +268,16 @@ const FollowersModal = ({
                       title: "Followers",
                     },
                   ]}
-                /> */}
+                />
               </div>
             </div>
             <div className="text-end">
-              {/* <div className="fs-14">Followers</div> */}
+              <div className="fs-14">Followers</div>
               <div className="fs-26 sc fw-700">
                 {followerListSelector?.data?.data?.records?.length}
               </div>
             </div>
-          </div>
+          </div> */}
           <SearchSelect
             onSearchChange={handleSearchChange}
             onSearchAreaChange={handleSearchAreaChange}
@@ -296,9 +296,9 @@ const FollowersModal = ({
                           {item?.userInfo?.displayName &&
                             item.userInfo.displayName.charAt(0).toUpperCase() +
                               item.userInfo.displayName.slice(1)}
-                          <div className="fs-14 fw-300 o5 ">
+                          {/* <div className="fs-14 fw-300 o5 ">
                             {item?.userInfo?.email}
-                          </div>
+                          </div> */}
                         </div>
                         <div className="fs-14 fw-300 o5">
                           {moment(item?.createdAt).format("MMMM, YYYY")}

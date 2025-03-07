@@ -1262,12 +1262,19 @@ input[type="radio"]:checked+.custom-radio-button {
 }
 
 .ant-modal.selecModalFollowerList {
-  width: 1100px !important;
+  width: 1080px !important;
 }
 .selecModalFollowerList .ant-modal-content {
-max-width: 1100px !important;
+max-width: 1080px !important;
+padding: 20px !important;
+margin: 20px 0;
 }
-
+.selecModalFollowerList .lineSearch input{
+  width: 100% !important;
+}
+.selecModalFollowerList .tabPadding{
+  padding: 0;
+}
 
 .arrowUp,
 .arrow {
@@ -1763,6 +1770,12 @@ input.addTitleInput::placeholder {
   }
   .tabPadding{
     padding: 16px;
+  }
+  .selecModalFollowerList{
+    width: 800px !important;
+  }
+  .selecModalFollowerList .ant-modal-content{
+    max-width: 800px !important;
   }
   .dropdown-button{
     font-size: 14px;

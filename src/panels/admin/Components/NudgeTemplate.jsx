@@ -386,6 +386,8 @@ const NudgeTemplate = () => {
           footer={null} // Hide the footer (buttons)
           closable={false}
           className="selecModalFollowerList"
+          onOk={() => setSelectMerchantList(false)}
+          onCancel={() => setSelectMerchantList(false)}
         >
           <div className="">
             {/* <div className="topPadding d-flex justify-between align-center">

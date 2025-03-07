@@ -38,7 +38,7 @@ body {
 }
 
 * {
-
+  /* box-sizing: border-box; */
   font-family: "Poppins", sans-serif !important;
 }
 
@@ -661,7 +661,7 @@ height: 100%;
 }
 
 .ant-modal .selecModalFollowerList {
-  width: 900px !important;
+  width: 1080px !important;
 }
 
 /* .noDataFound {
