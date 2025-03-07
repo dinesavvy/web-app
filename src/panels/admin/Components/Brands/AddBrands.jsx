@@ -7,7 +7,10 @@ import deleteBrands from "../../../../assets/images/deleteBrands.svg";
 import addMerchantIcon from "../../../../assets/images/addMerchantIcon.svg";
 import { Breadcrumb, Select } from "antd";
 import { useDispatch, useSelector } from "react-redux";
-import { fileUploadAction, fileUploadHandler } from "../../../../redux/action/fileUpload";
+import {
+  fileUploadAction,
+  fileUploadHandler,
+} from "../../../../redux/action/fileUpload";
 import Loader from "../../../../common/Loader/Loader";
 import { ErrorMessage, Field, FieldArray, Form, Formik } from "formik";
 import {
@@ -27,7 +30,7 @@ const AddBrands = () => {
   const [fileObject, setFileObject] = useState();
   const messageApi = useCommonMessage();
   const fileuploadSelector = useSelector((state) => state?.fileupload);
-  console.log(fileuploadSelector,"fileuploadSelector")
+  console.log(fileuploadSelector, "fileuploadSelector");
 
   const { state } = useLocation();
 
@@ -95,14 +98,14 @@ const AddBrands = () => {
         } catch (error) {
           console.error("Error uploading file", error);
         }
-        dispatch(fileUploadAction.fileuploadReset())
+        dispatch(fileUploadAction.fileuploadReset());
       }
     };
 
     uploadFile();
   }, [fileuploadSelector]);
 
-  console.log(state,"state")
+  console.log(state, "state");
 
   const handleFormSubmit = (values) => {
     const brandItemArray = values?.SKUs?.map((item) => ({
@@ -114,7 +117,9 @@ const AddBrands = () => {
     }));
 
     let payload = {
-      imageUrl: fileuploadSelector?.data?.data?.map((item) => item?.src)||[state?.brandDetails?.imageUrl?.[0]],
+      imageUrl: fileuploadSelector?.data?.data?.map((item) => item?.src) || [
+        state?.brandDetails?.imageUrl?.[0],
+      ],
       brandName: values?.brandName,
       brandItem: brandItemArray, // Set the array here
     };
@@ -179,7 +184,7 @@ const AddBrands = () => {
               }))
             : [
                 {
-                  msrp: "",
+                  msrp: "$" + "",
                   unit: "",
                   sku: "",
                   description: "",
@@ -284,7 +289,30 @@ const AddBrands = () => {
                                 placeholder="$22.99"
                                 name={`SKUs[${index}].msrp`}
                                 autoComplete="off"
+                                onKeyDown={(e) => {
+                                  const isNumber = /^\d$/.test(e.key);
+                                  const isNavigationKey = [
+                                    "Backspace",
+                                    "Delete",
+                                    "ArrowLeft",
+                                    "ArrowRight",
+                                    "Tab",
+                                  ].includes(e.key);
+                                  const isDecimalPoint =
+                                    e.key === "." &&
+                                    !e.target.value.includes("."); // Allow only one decimal point
+
+                                  if (
+                                    !isNumber &&
+                                    !isNavigationKey &&
+                                    !isDecimalPoint
+                                  ) {
+                                    e.preventDefault();
+                                  }
+                                  
+                                }}
                               />
+
                               <ErrorMessage
                                 name={`SKUs[${index}].msrp`}
                                 component="div"
@@ -300,7 +328,7 @@ const AddBrands = () => {
                                 {({ field, form }) => (
                                   <Select
                                     className="custom-select"
-                                    placeholder="Select Unit"
+                                    // placeholder="Select Unit"
                                     value={field.value}
                                     onChange={(value) =>
                                       form.setFieldValue(
@@ -363,14 +391,20 @@ const AddBrands = () => {
                               <Field
                                 type="text"
                                 className="input"
-                                placeholder="Red Bull - 8.4 oz energy drink (12-pack)"
+                                placeholder="Quantity"
                                 name={`SKUs[${index}].quantity`}
                                 autoComplete="off"
                                 maxLength={5}
                                 onKeyDown={(e) => {
                                   if (
                                     !/^\d$/.test(e.key) && // Allow numbers
-                                    !["Backspace", "Delete", "ArrowLeft", "ArrowRight", "Tab"].includes(e.key) // Allow navigation keys
+                                    ![
+                                      "Backspace",
+                                      "Delete",
+                                      "ArrowLeft",
+                                      "ArrowRight",
+                                      "Tab",
+                                    ].includes(e.key) // Allow navigation keys
                                   ) {
                                     e.preventDefault();
                                   }

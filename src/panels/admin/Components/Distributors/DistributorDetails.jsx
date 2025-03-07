@@ -6,7 +6,7 @@ import PhoneInput from "react-phone-input-2";
 import { distributorValidation } from "./distributorValidation";
 import { useDispatch, useSelector } from "react-redux";
 import { useCommonMessage } from "../../../../common/CommonMessage";
-import { fileUploadHandler } from "../../../../redux/action/fileUpload";
+import { fileUploadAction, fileUploadHandler } from "../../../../redux/action/fileUpload";
 import {
   createDistributorAction,
   createDistributorHandler,
@@ -109,6 +109,7 @@ const DistributorDetails = ({
               body: fileObject,
             }
           );
+          
         } catch (error) {
           console.error("Error uploading file", error);
         }
@@ -189,6 +190,7 @@ const DistributorDetails = ({
         content: createDistributorSelector?.data?.message,
       });
       setIsDetailsOpen(false);
+      dispatch(fileUploadAction.fileuploadReset())
       dispatch(createDistributorAction.createDistributorReset());
     }
   }, [createDistributorSelector]);
@@ -206,6 +208,7 @@ const DistributorDetails = ({
         content: updateDistributorSelector?.data?.message,
       });
       setIsDetailsOpen(false);
+      dispatch(fileUploadAction.fileuploadReset())
       dispatch(updateDistributorAction.updateDistributorReset());
     }
   }, [updateDistributorSelector]);
@@ -307,7 +310,7 @@ const DistributorDetails = ({
                       type="text"
                       placeholder="Enter name"
                       name="distributorName"
-                      autoComplete="off"
+                      autocomplete="off"
                     />
                     <ErrorMessage
                       name="distributorName"
@@ -324,6 +327,7 @@ const DistributorDetails = ({
                       type="text"
                       placeholder="Enter name"
                       name="distributorContactName"
+                      autocomplete="off"
                     />
                     <ErrorMessage
                       name="distributorContactName"
@@ -338,8 +342,9 @@ const DistributorDetails = ({
                     {/* <input type="text" placeholder="Enter position" /> */}
                     <Field
                       type="text"
-                      placeholder="Enter name"
+                      placeholder="Enter position"
                       name="distributorPosition"
+                      autocomplete="off"
                     />
                     {/* <ErrorMessage
                       name="distributorPosition"

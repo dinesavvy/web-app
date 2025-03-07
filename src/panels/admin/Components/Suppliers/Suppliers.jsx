@@ -138,7 +138,10 @@ const Suppliers = () => {
                           <div className="d-flex flexColumn gap-10">
                             <div className="d-flex align-center gap-12 fs-14">
                               <img src={userCard} className="h30" alt="User" />
-                              {item?.contactName}
+                              {item?.contactName
+                              ? item.contactName.charAt(0).toUpperCase() +
+                                item.contactName.slice(1)
+                              : ""}
                             </div>
                             <div className="d-flex align-center gap-12 fs-14">
                               <img
@@ -146,8 +149,10 @@ const Suppliers = () => {
                                 className="h30"
                                 alt="Inventory"
                               />
-                              {/* 217 555-0113 */}
-                              {item?.contactPosition}
+                              {item?.contactPosition
+                              ? item.contactPosition.charAt(0).toUpperCase() +
+                                item.contactPosition.slice(1)
+                              : ""}
                             </div>
                             <div className="d-flex align-center gap-12 fs-14">
                               <img
@@ -163,7 +168,7 @@ const Suppliers = () => {
                                 className="h30"
                                 alt="Phone"
                               />
-                              {item?.contactPhoneNumber}
+                              +{item?.contactPhoneNumber}
                             </div>
                             <div className="d-flex align-center gap-10">
                               <div
