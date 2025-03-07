@@ -25,8 +25,6 @@ const PromotionDetails = ({
     (state) => state?.promotionDetails
   );
 
-  console.log(promotionDetailsSelector, "promotionDetailsSelector");
-
   const dispatch = useDispatch();
 
   const toggleAccordion = (index) => {

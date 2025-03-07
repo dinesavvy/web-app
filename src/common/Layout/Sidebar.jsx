@@ -65,7 +65,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
             icon: promotions,
             iconFull: promotionsFull,
             disabled: false,
-            tag: "19",
+            // tag: "19",
             navigate: getSupplierDetails
               ? "/supplier/promotion"
               : "/distributors/promotion",
@@ -153,7 +153,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                   icon: promotions,
                   iconFull: promotionsFull,
                   disabled: false,
-                  tag: "19",
+                  // tag: "19",
                   navigate: "/admin/promotions",
                 },
                 {

@@ -5,13 +5,13 @@ import searchIcon from "../../../assets/images/searchIcon.svg";
 import addPlusIcon from "../../../assets/images/addPlusIcon.svg";
 import datePicker from "../../../assets/images/datePicker.svg";
 import closeIcon from "../../../assets/images/closeIcon.svg";
-import arrow from "../../../assets/images/arrow-up.svg";
+// import arrow from "../../../assets/images/arrow-up.svg";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import DragMerchantItem from "./DragMerchantItem";
 import DropMerchantZone from "./DropMerchantZone";
 import { DatePicker, TimePicker } from "antd";
-import DropBrandsZone from "./DropBrandsZone";
+// import DropBrandsZone from "./DropBrandsZone";
 import DragBrandsItem from "./DragBrandsItem";
 import CustomDragLayer from "./CustomDragLayer";
 import { useDispatch, useSelector } from "react-redux";
@@ -23,6 +23,7 @@ import olive from "../../../assets/images/olive.png";
 import moment from "moment";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import noImageFound from "../../../assets/images/noImageFound.png";
+import DropBrandsBrandsZone  from "../Components/DropBrandsZone"
 
 import {
   createPromotionAction,
@@ -37,7 +38,11 @@ const AddPromotion = () => {
   const [searchStringMerchant, setSearchStringMerchant] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
-  const [errors, setErrors] = useState({ fromDate: "", toDate: "",promotionTitle:"" });
+  const [errors, setErrors] = useState({
+    fromDate: "",
+    toDate: "",
+    promotionTitle: "",
+  });
 
   const [mercahnts, setMercahnts] = useState([]);
   const [droppedMerchants, setDroppedMerchants] = useState([]);
@@ -58,7 +63,7 @@ const AddPromotion = () => {
   );
 
   const validateDates = () => {
-    let newErrors = { fromDate: "", toDate: "",promotionTitle:""};
+    let newErrors = { fromDate: "", toDate: "", promotionTitle: "" };
 
     if (!startDate) {
       newErrors.fromDate = "From date is required";
@@ -117,6 +122,7 @@ const AddPromotion = () => {
         type: "success",
         content: createPromotionSelector?.data?.message,
       });
+      navigate("/admin/promotions")
       dispatch(createPromotionAction.createPromotionReset());
     } else if (
       createPromotionSelector?.message?.response?.data?.statusCode === 400
@@ -144,7 +150,7 @@ const AddPromotion = () => {
         page: 1,
         limit: 10,
         timeFrame: "today",
-        searchString:searchStringMerchant,
+        searchString: searchStringMerchant,
         searchArea: [],
       };
       dispatch(merchantsListHandler(payload));
@@ -182,7 +188,7 @@ const AddPromotion = () => {
   };
 
   const handleSubmit = (values) => {
-    if(validateDates()){
+    if (validateDates()) {
       let payload = {
         promotionTitle: promotionTitle,
         brandId: droppedBrand?.id,
@@ -192,10 +198,10 @@ const AddPromotion = () => {
           return {
             merchantId: droppedMerchants?.map((item) => item?._id).join(""),
             quantity: item?.quantity,
-            promotionFund: item?.promotionalFunds,
+            promotionFund: item?.promotionalFunds.join(""),
             mSRP: item?.msrp,
             retailPrice: item?.priceForReimbursement,
-            fundAmount: 500,
+            fundAmount: item?.foundAmount?.join(" "),
           };
         }),
       };
@@ -256,7 +262,7 @@ const AddPromotion = () => {
                               <>
                                 <div
                                   key={index}
-                                  onClick={() => handleBrandClick(item)}
+                                  // onClick={() => handleBrandClick(item)}
                                   style={{
                                     cursor:
                                       draggingItem || droppedBrand
@@ -295,7 +301,9 @@ const AddPromotion = () => {
                         <input
                           type="text"
                           placeholder="Search Merchants"
-                          onChange={(e) => setSearchStringMerchant(e.target.value)}
+                          onChange={(e) =>
+                            setSearchStringMerchant(e.target.value)
+                          }
                         />
                         <img
                           src={searchIcon}
@@ -354,7 +362,7 @@ const AddPromotion = () => {
                                       onDragStart={() =>
                                         handleDragStartMerchant(item)
                                       }
-                                      item={item}
+                                      items={item}
                                     />
                                   </div>
                                   <div className="divider2"></div>
@@ -383,16 +391,23 @@ const AddPromotion = () => {
                   className="addTitleInput"
                   placeholder="Add promotion title here"
                   autoComplete="off"
-                  onChange={(e) => {setPromotionTitle(e.target.value);setErrors((prev) => ({ ...prev, promotionTitle: "" }));}}
+                  onChange={(e) => {
+                    setPromotionTitle(e.target.value);
+                    setErrors((prev) => ({ ...prev, promotionTitle: "" }));
+                  }}
                 />
               </div>
-              {errors.promotionTitle && <p className="mt-10 fw-500 fs-14 error">{errors.promotionTitle}</p>}
+              {errors?.promotionTitle && (
+                <p className="mt-10 fw-500 fs-14 error">
+                  {errors.promotionTitle}
+                </p>
+              )}
               <div className="tabPadding mb-20">
                 <div className="fs-18 fw-700">Add Brand</div>
                 <div className="divider2"></div>
                 <div className="selectGrid3">
                   {!droppedBrand && (
-                    <DropBrandsZone
+                    <DropBrandsBrandsZone
                       allowedType="brand"
                       // onDropBrand={handleBrandDrop}
                       onDropBrand={(draggedItem) =>
@@ -472,8 +487,11 @@ const AddPromotion = () => {
                         className="datePickerImg"
                       />
                     </div>
-                    {errors.fromDate && <p className="mt-10 fw-500 fs-14 error">{errors.fromDate}</p>}
-
+                    {errors.fromDate && (
+                      <p className="mt-10 fw-500 fs-14 error">
+                        {errors.fromDate}
+                      </p>
+                    )}
                   </div>
                   <div className="w-100">
                     <label htmlFor="" className="fs-14 fw-500 mb-10">
@@ -497,33 +515,44 @@ const AddPromotion = () => {
                         className="datePickerImg"
                       />
                     </div>
-                    {errors.toDate && <p className="mt-10 fw-500 fs-14 error">{errors.toDate}</p>}
+                    {errors.toDate && (
+                      <p className="mt-10 fw-500 fs-14 error">
+                        {errors.toDate}
+                      </p>
+                    )}
                   </div>
                 </div>
               </div>
-              
+
               {/* Merchant Component */}
               <div className="accordion-container">
                 <Formik
                   enableReinitialize
                   initialValues={{
                     merchants: droppedMerchants?.map(() => ({
-                      quantity:
-                        droppedBrand?.selectedBrands?.brandItem?.map(
-                          (item) => item?.mSRP *item?.quantity
-                        )/ (droppedBrand?.selectedBrands?.brandItem?.map(
-                            (item) => item?.mSRP
-                          )),
+                      quantity: (
+                        droppedBrand?.selectedBrands?.brandItem?.reduce(
+                          (sum, item) =>
+                            sum + (item?.mSRP * item?.quantity || 0),
+                          0
+                        ) /
+                          droppedBrand?.selectedBrands?.brandItem?.reduce(
+                            (sum, item) => sum + (item?.mSRP || 0),
+                            0
+                          ) || 0
+                      ).toFixed(2),
+
                       promotionalFunds:
-                        droppedBrand?.selectedBrands?.brandItem?.map(
-                          (item) => item?.mSRP *item?.quantity
+                        droppedBrand?.selectedBrands?.brandItem?.map((item) =>
+                          (item?.mSRP * item?.quantity)?.toFixed(2)
                         ) || "",
+
                       msrp: "",
                       priceForReimbursement: "",
                       foundAmount:
-                        droppedBrand?.selectedBrands?.brandItem?.map(
-                          (item) => item?.mSRP*item?.quantity
-                        )  || "",
+                        droppedBrand?.selectedBrands?.brandItem?.map((item) =>
+                          (item?.mSRP * item?.quantity)?.toFixed(2)
+                        ) || "",
                     })),
                   }}
                   // validationSchema={validationSchema}
@@ -552,7 +581,7 @@ const AddPromotion = () => {
                                 <div className="accordion-content accordionContent">
                                   <div className="d-flex gap-20">
                                     <div className="brandItem mx167">
-                                      <img src={noImageFound} alt="" />
+                                      <img src={itemDropperMerchant?.logoUrl|| noImageFound} alt={itemDropperMerchant?.name} />
                                     </div>
                                     <div className="fs-14">
                                       <div className="d-flex gap-4 mb-10">
@@ -623,11 +652,11 @@ const AddPromotion = () => {
                                         placeholder="Enter Amount"
                                         disabled
                                       />
-                                      <ErrorMessage
+                                      {/* <ErrorMessage
                                         name={`merchants.${indexDroppedMerchant}.promotionalFunds`}
                                         component="div"
                                         className="error"
-                                      />
+                                      /> */}
                                     </div>
 
                                     <div>
@@ -642,7 +671,7 @@ const AddPromotion = () => {
                                         name={`merchants.${indexDroppedMerchant}.msrp`}
                                         placeholder="Enter Price"
                                         autoComplete="off"
-                                        onChange = {()=>setErrors((prev) => ({ ...prev, fromDate: "" }))}
+                                        // onChange = {()=>setErrors((prev) => ({ ...prev, msrp: "" }))}
                                       />
                                       {/* {errors.msrp && <p className="mt-10 fw-500 fs-14 error">{errors.msrp}</p>} */}
                                     </div>

@@ -198,10 +198,10 @@ const AddSupplierPromotion = () => {
           return {
             merchantId: droppedMerchants?.map((item) => item?._id).join(""),
             quantity: item?.quantity,
-            promotionFund: item?.promotionalFunds,
+            promotionFund: item?.promotionalFunds.join(""),
             mSRP: item?.msrp,
             retailPrice: item?.priceForReimbursement,
-            fundAmount: item?.fundAmount,
+            fundAmount: item?.fundAmount?.join(" "),
           };
         }),
       };
@@ -212,7 +212,6 @@ const AddSupplierPromotion = () => {
       //   dispatch(createPromotionHandler(payload));
       // }
       dispatch(addSupplierPromotionHandler(payload));
-      // console.log(payload,"payload")
     }
   };
 
@@ -263,7 +262,7 @@ const AddSupplierPromotion = () => {
                               <>
                                 <div
                                   key={index}
-                                  onClick={() => handleBrandClick(item)}
+                                  // onClick={() => handleBrandClick(item)}
                                   style={{
                                     cursor:
                                       draggingItem || droppedBrand
@@ -357,13 +356,13 @@ const AddSupplierPromotion = () => {
                                   >
                                     <DragMerchantItem
                                       type="merchant"
-                                      id={item.id}
-                                      name={item.logoUrl}
+                                      id={item?.id}
+                                      name={item?.logoUrl}
                                       selectedMerchants={selectedMerchants} // Pass selected items
                                       onDragStart={() =>
                                         handleDragStartMerchant(item)
                                       }
-                                      item={item}
+                                      items={item}
                                     />
                                   </div>
                                   <div className="divider2"></div>
@@ -398,9 +397,9 @@ const AddSupplierPromotion = () => {
                   }}
                 />
               </div>
-              {errors.promotionTitle && (
+              {errors?.promotionTitle && (
                 <p className="mt-10 fw-500 fs-14 error">
-                  {errors.promotionTitle}
+                  {errors?.promotionTitle}
                 </p>
               )}
               <div className="tabPadding mb-20">
@@ -576,7 +575,7 @@ const AddSupplierPromotion = () => {
                                 <div className="accordion-content accordionContent">
                                   <div className="d-flex gap-20">
                                     <div className="brandItem mx167">
-                                      <img src={noImageFound} alt="" />
+                                      <img src={itemDropperMerchant?.logoUrl||noImageFound} alt={itemDropperMerchant?.name} />
                                     </div>
                                     <div className="fs-14">
                                       <div className="d-flex gap-4 mb-10">

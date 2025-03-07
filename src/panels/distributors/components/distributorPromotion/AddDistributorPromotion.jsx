@@ -196,7 +196,6 @@ const AddDistributorPromotion = () => {
   };
 
   const handleSubmit = (values) => {
-    console.log(values, "values");
     if (validateDates()) {
       let payload = {
         promotionTitle: promotionTitle,
@@ -207,10 +206,10 @@ const AddDistributorPromotion = () => {
           return {
             merchantId: droppedMerchants?.map((item) => item?._id).join(""),
             quantity: item?.quantity,
-            promotionFund: item?.promotionalFunds,
+            promotionFund: item?.promotionalFunds.join(""),
             mSRP: item?.msrp,
             retailPrice: item?.priceForReimbursement,
-            fundAmount: item?.fundAmount,
+            fundAmount: item?.fundAmount?.join(" "),
           };
         }),
       };
@@ -221,7 +220,6 @@ const AddDistributorPromotion = () => {
       //   dispatch(createPromotionHandler(payload));
       // }
       dispatch(createDistributorPromotionHandler(payload));
-      console.log(payload, "payload");
     }
   };
 
@@ -272,7 +270,7 @@ const AddDistributorPromotion = () => {
                               <>
                                 <div
                                   key={index}
-                                  onClick={() => handleBrandClick(item)}
+                                  // onClick={() => handleBrandClick(item)}
                                   style={{
                                     cursor:
                                       draggingItem || droppedBrand
@@ -372,7 +370,7 @@ const AddDistributorPromotion = () => {
                                       onDragStart={() =>
                                         handleDragStartMerchant(item)
                                       }
-                                      item={item}
+                                      items={item}
                                     />
                                   </div>
                                   <div className="divider2"></div>
@@ -456,8 +454,8 @@ const AddDistributorPromotion = () => {
                     {droppedMerchants?.map((item) => (
                       <div key={item?._id} className="brandItem">
                         {/* <img src={item.name} alt={item.name} /> */}
-                        {/* <img src={item?.logoUrl||noImageFound} alt={item.name} /> */}
-                        <img src={noImageFound} alt={item.name} />
+                        <img src={item?.logoUrl||noImageFound} alt={item.businessName} />
+                        {/* <img src={noImageFound} alt={item.name} /> */}
                         <div
                           onClick={() =>
                             handleRemoveDroppedMerchants(item?._id)
@@ -539,22 +537,44 @@ const AddDistributorPromotion = () => {
                   enableReinitialize
                   initialValues={{
                     merchants: droppedMerchants?.map(() => ({
-                      quantity:
-                        droppedBrand?.selectedBrands?.brandItem?.map(
-                          (item) => item?.mSRP *item?.quantity
-                        )/ (droppedBrand?.selectedBrands?.brandItem?.map(
-                            (item) => item?.mSRP
-                          )),
+                      // quantity:
+                      //   droppedBrand?.selectedBrands?.brandItem?.map(
+                      //     (item) => item?.mSRP *item?.quantity
+                      //   )/ (droppedBrand?.selectedBrands?.brandItem?.map(
+                      //       (item) => item?.mSRP
+                      //     )),
+                      quantity: (
+                        droppedBrand?.selectedBrands?.brandItem?.reduce(
+                          (sum, item) =>
+                            sum + (item?.mSRP * item?.quantity || 0),
+                          0
+                        ) /
+                          droppedBrand?.selectedBrands?.brandItem?.reduce(
+                            (sum, item) => sum + (item?.mSRP || 0),
+                            0
+                          ) || 0
+                      ).toFixed(2),
+
+                      // promotionalFunds:
+                      // droppedBrand?.selectedBrands?.brandItem?.map(
+                      //   (item) => item?.mSRP *item?.quantity
+                      // ) || "",
+
                       promotionalFunds:
-                      droppedBrand?.selectedBrands?.brandItem?.map(
-                        (item) => item?.mSRP *item?.quantity
+                      droppedBrand?.selectedBrands?.brandItem?.map((item) =>
+                        (item?.mSRP * item?.quantity)?.toFixed(2)
                       ) || "",
+
                       msrp: "",
                       priceForReimbursement: "",
+                      // fundAmount:
+                      // droppedBrand?.selectedBrands?.brandItem?.map(
+                      //   (item) => item?.mSRP*item?.quantity
+                      // )  || "",
                       fundAmount:
-                      droppedBrand?.selectedBrands?.brandItem?.map(
-                        (item) => item?.mSRP*item?.quantity
-                      )  || "",
+                        droppedBrand?.selectedBrands?.brandItem?.map((item) =>
+                          (item?.mSRP * item?.quantity)?.toFixed(2)
+                        ) || "",
                     })),
                   }}
                   // validationSchema={validationSchema}
@@ -583,7 +603,7 @@ const AddDistributorPromotion = () => {
                                 <div className="accordion-content accordionContent">
                                   <div className="d-flex gap-20">
                                     <div className="brandItem mx167">
-                                      <img src={noImageFound} alt="" />
+                                      <img src={itemDropperMerchant?.logoUrl || noImageFound} alt={itemDropperMerchant?.name} />
                                     </div>
                                     <div className="fs-14">
                                       <div className="d-flex gap-4 mb-10">

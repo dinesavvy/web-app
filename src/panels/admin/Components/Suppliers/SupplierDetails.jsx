@@ -35,7 +35,6 @@ const SupplierDetails = ({
 
   const [country, setCountry] = useState("");
   const fileuploadSelector = useSelector((state) => state?.fileupload);
-  console.log(fileuploadSelector, "fileuploadSelector");
   const [imagePreview, setImagePreview] = useState(null);
   const [phone, setPhone] = useState(
     selectedSupplier?.contactPhoneNumber || ""
@@ -234,7 +233,6 @@ const SupplierDetails = ({
         updateSupplierSelector?.isLoading ||
         fileuploadSelector?.isLoading ||
         loading) && <Loader />}
-        {console.log(selectedSupplier,"selectedSupplier")}
       {isOpen && <div className="overlay2" onClick={toggleDetails}></div>}
       <Formik
         enableReinitialize

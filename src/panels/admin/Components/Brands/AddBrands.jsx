@@ -30,7 +30,6 @@ const AddBrands = () => {
   const [fileObject, setFileObject] = useState();
   const messageApi = useCommonMessage();
   const fileuploadSelector = useSelector((state) => state?.fileupload);
-  console.log(fileuploadSelector, "fileuploadSelector");
 
   const { state } = useLocation();
 
@@ -134,7 +133,6 @@ const AddBrands = () => {
   
     if (!state?.brandDetails) {
       dispatch(createBrandHandler(payload));
-      console.log(payload, "payload");
     } else {
       payload.brandId = state?.brandDetails?._id;
       dispatch(updateBrandHandler(payload));
@@ -448,15 +446,15 @@ const AddBrands = () => {
                       );
                     })}
                     <div
-                      className="addSku d-flex align-center justify-center gap-12 fs-16 fw-500"
-                      onClick={() =>
-                        push({
-                          msrp: "",
-                          unit: "",
-                          sku: "",
-                          description: "",
-                        })
-                      }
+                      className="addSku d-flex align-center justify-center gap-12 fs-16 fw-500 disabled"
+                      // onClick={() =>
+                      //   push({
+                      //     msrp: "",
+                      //     unit: "",
+                      //     sku: "",
+                      //     description: "",
+                      //   })
+                      // }
                     >
                       <img src={addMerchantIcon} alt="" />
                       Add Another SKUs

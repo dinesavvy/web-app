@@ -177,12 +177,12 @@ const DistributorPromotionList = () => {
                         </div>
                         <div className="divider m-0"></div>
                         <div className="bottomPadding">
-                          <div>
+                          <div className="mb-16">
                             <div className="fs-14 mb-4">Promotion title</div>
                             <div className="fs-14 fw-600">
                               {item?.promotionTitle
-                                ? item.promotionTitle.charAt(0).toUpperCase() +
-                                  item.promotionTitle.slice(1)
+                                ? item?.promotionTitle.charAt(0).toUpperCase() +
+                                  item?.promotionTitle.slice(1)
                                 : ""}
                             </div>
                           </div>
@@ -259,7 +259,6 @@ const DistributorPromotionList = () => {
           )}
         </div>
       </div>
-      {console.log(isDetailsOpen,"isDetailsOpen")}
       <DistributorPromotionDetails
         isOpen={isDetailsOpen}
         toggleDetails={toggleDetails}

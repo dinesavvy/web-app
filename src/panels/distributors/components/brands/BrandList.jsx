@@ -98,7 +98,6 @@ const BrandsListDistributor = () => {
               <>
                 {getBrandListSelector?.data?.data?.records?.map(
                   (item, index) => {
-                    console.log(item,"item")
                     return (
                       <div className="merchantCard" key={index}>
                         <div className="p-20">

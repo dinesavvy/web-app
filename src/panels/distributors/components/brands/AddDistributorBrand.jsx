@@ -291,15 +291,15 @@ const AddDistributorBrand = () => {
                       );
                     })}
                     <div
-                      className="addSku d-flex align-center justify-center gap-12 fs-16 fw-500"
-                      onClick={() =>
-                        push({
-                          msrp: "",
-                          unit: "",
-                          sku: "",
-                          description: "",
-                        })
-                      }
+                      className="addSku d-flex align-center justify-center gap-12 fs-16 fw-500 disabled"
+                      // onClick={() =>
+                      //   push({
+                      //     msrp: "",
+                      //     unit: "",
+                      //     sku: "",
+                      //     description: "",
+                      //   })
+                      // }
                     >
                       <img src={addMerchantIcon} alt="" />
                       Add Another SKUs

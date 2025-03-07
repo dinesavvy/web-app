@@ -32,7 +32,6 @@ const AdminDashboard = () => {
   const [activeTab3, setActiveTab3] = useState("1");
   const [openIndex, setOpenIndex] = useState(); // Initially, the first item is open
 
-  console.log("openIndex",openIndex)
   const merchantPerformanceAnalyticsListSelector = useSelector(
     (state) => state?.merchantPerformanceAnalyticsList
   );

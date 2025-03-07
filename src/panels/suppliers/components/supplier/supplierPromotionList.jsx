@@ -26,7 +26,6 @@ const SupplierPromotionList = () => {
   const supplierPromotionList = useSelector(
     (state) => state?.supplierPromotionList
   );
-  console.log(supplierPromotionList, "supplierPromotionList");
 
   const handleSearchChange = (value) => {
     setSearchString(value);
@@ -177,7 +176,7 @@ const SupplierPromotionList = () => {
                         </div>
                         <div className="divider m-0"></div>
                         <div className="bottomPadding">
-                          <div>
+                          <div className="mb-16">
                             <div className="fs-14 mb-4">Promotion title</div>
                             <div className="fs-14 fw-600">
                               {item?.promotionTitle
@@ -190,7 +189,12 @@ const SupplierPromotionList = () => {
                             <div>
                               <div className="fs-14 mb-4">Brand / Product</div>
                               <div className="fs-14 fw-600">
-                                Chocolate Cake{" "}
+                              {item?.brandDetails?.brandName
+                                ? item.brandDetails.brandName
+                                    .charAt(0)
+                                    .toUpperCase() +
+                                  item.brandDetails.brandName.slice(1)
+                                : ""}{" "}
                               </div>
                             </div>
                             <div>

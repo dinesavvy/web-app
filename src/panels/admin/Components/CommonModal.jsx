@@ -85,7 +85,6 @@ const CommonModal = ({
   const deleteDistributorBrand = useSelector(
     (state) => state?.deleteDistributorBrand
   );
-  console.log(deleteDistributorBrand, "deleteDistributorBrand");
 
   const deleteTeam = () => {
     if (merchantApp) {

@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
-import addBtn from "../../../assets/images/addBtn.svg";
-import coke from "../../../assets/images/coke.svg";
+// import addBtn from "../../../assets/images/addBtn.svg";
+// import coke from "../../../assets/images/coke.svg";
 import SearchSelect from "./SearchSelect";
 import { Pagination } from "antd";
 import PromotionDetails from "./PromotionDetails";
@@ -195,7 +195,7 @@ const Promotions = () => {
                         <div className="grid2 mb-20">
                           <div>
                             <div className="fs-14 mb-4">Brand / Product</div>
-                            <div className="fs-14 fw-600">Chocolate Cake </div>
+                            <div className="fs-14 fw-600">{item?.brandDetails?.brandName} </div>
                           </div>
                           <div>
                             <div className="fs-14 mb-4">Expiration Date</div>
