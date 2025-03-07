@@ -5,13 +5,11 @@ import { ErrorMessage, Field, Form, Formik } from "formik";
 import "../../../assets/css/Login.css";
 import login from "../../../assets/images/login.jpg";
 import logo from "../../../assets/images/logo.svg";
-// import passwordInput from "../../../assets/images/passwordInput.svg";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useCommonMessage } from "../../../common/CommonMessage";
 import "react-phone-number-input/style.css";
 import { useEffect } from "react";
-// import { validationSchema } from "./merchantLoginValidation";
 import Loader from "../../../common/Loader/Loader";
 import RequestedCode from "./RequestedCode";
 import {
@@ -32,8 +30,8 @@ const MerchantLogin = () => {
   const dispatch = useDispatch();
 
   const [phone, setPhone] = useState("");
-  const [countryCode, setCountryCode] = useState("+91");
-  const [country, setCountry] = useState("in"); // Stores the country code like "pk", "us"
+  const [countryCode, setCountryCode] = useState("+1");
+  const [country, setCountry] = useState("us"); 
 
   const handlePhoneChange = (value, data) => {
     const dialCode = `${data?.dialCode}`;

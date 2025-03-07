@@ -662,7 +662,7 @@
   justify-content: center;
   align-items: center;
   gap: 4px;
-  width: 88px;
+  width: 120px;
   height: 40px;
   border: 1px dashed #056DFF;
   border-radius: 8px;
@@ -1259,6 +1259,13 @@ input[type="radio"]:checked+.custom-radio-button {
   width: 30px;
   height: 30px;
 
+}
+
+.ant-modal.selecModalFollowerList {
+  width: 1100px !important;
+}
+.selecModalFollowerList .ant-modal-content {
+max-width: 1100px !important;
 }
 
 
@@ -1888,7 +1895,7 @@ input.addTitleInput::placeholder {
   .addNudge{
     height: 36px;
     font-size: 14px;
-    width: 78px;
+    width: 90px;
     border-radius: 6px;
   }
   .floatAdd {

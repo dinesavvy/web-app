@@ -119,6 +119,14 @@ const FollowerDetail = () => {
                 {followerDetailsSelector?.data?.data?.totalFollowingCount}
               </div>
             </div>
+            <div>
+              <label htmlFor="name" className="grey mb-10 fs-16 fw-500">
+                Email address
+              </label>
+              <div className="fs-20">
+                {followerDetailsSelector?.data?.data?.userInfo?.email}
+              </div>
+            </div>
           </div>
         </div>
         <div className="tabPadding mb-30">

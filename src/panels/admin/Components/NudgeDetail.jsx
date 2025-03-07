@@ -160,7 +160,7 @@ const NudgeDetail = ({
                 </>
               )} */}
               {/* Nudge Detail */}
-              <div className="fs-18 fw-600 mb-16">Redeemtion History</div>
+              <div className="fs-18 fw-600 mb-16 ">Redeemtion History</div>
               <div className="historyFlex">
                 <div className="d-flex align-center gap-8">
                   <div className="initialName fs-16">dr</div>

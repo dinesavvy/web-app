@@ -23,10 +23,14 @@ import {
 import { useBusiness } from "../../../common/Layout/BusinessContext";
 import AccessDeniedModal from "../accessDeniedModal/accessDeniedModal";
 import { useNavigate } from "react-router-dom";
-import { businessNudgeAnalyticHandler, getNudgeAnalyticHandler } from "../../../redux/action/businessAction/businessNudgeAnalytic";
+import {
+  businessNudgeAnalyticHandler,
+  getNudgeAnalyticHandler,
+} from "../../../redux/action/businessAction/businessNudgeAnalytic";
 
 const Nudges = () => {
   const [tempState, setTempState] = useState([]);
+  const [activeNudge, setActiveNudge] = useState(5);
   const [modal2Open, setModal2Open] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
   const [isPaymentSidebar, setIsPaymentSidebar] = useState(false);
@@ -34,6 +38,10 @@ const Nudges = () => {
   const [activeTab, setActiveTab] = useState("active"); // Default active tab is 'active'
   const navigate = useNavigate();
 
+  const nudges = [5, 10, 15, 20, 25,100];
+  const businessAddNudgeCreditSelector = useSelector(
+    (state) => state?.businessAddNudgeCredit
+  );
   const togglePaymentSidebar = (item) => {
     setIsPaymentSidebar((prevState) => !prevState);
   };
@@ -68,12 +76,13 @@ const Nudges = () => {
     }
   }, [businessListSelector, selectedBusiness]);
 
+  const nudgeAnalyticSelector = useSelector(
+    (state) => state?.businessNudgeAnalytic
+  );
 
-const nudgeAnalyticSelector = useSelector((state)=>state?.businessNudgeAnalytic)
-
-  useEffect(()=>{
-dispatch(businessNudgeAnalyticHandler())
-  },[])
+  useEffect(() => {
+    dispatch(businessNudgeAnalyticHandler());
+  }, []);
 
   const toggleSidebar = (item) => {
     let payload = {
@@ -129,8 +138,6 @@ dispatch(businessNudgeAnalyticHandler())
     }
   }, [businessNudgeDetailsSelector]);
 
-
-
   const createNudge = () => {
     if (
       tempState?.roleTitle !== "Owner" &&
@@ -143,15 +150,14 @@ dispatch(businessNudgeAnalyticHandler())
   };
 
   const nudgeGoal = nudgeAnalyticSelector?.data?.data?.nudgeGoal || 0;
-const nudgeSent = nudgeAnalyticSelector?.data?.data?.nudgeSent || 0;
-const percentage = nudgeGoal > 0 ? (nudgeSent / nudgeGoal) * 100 : 0;
-
-
+  const nudgeSent = nudgeAnalyticSelector?.data?.data?.nudgeSent || 0;
+  const percentage = nudgeGoal > 0 ? (nudgeSent / nudgeGoal) * 100 : 0;
 
   return (
     <>
       {(businessNudgesListSelector?.isLoading ||
-        businessNudgeDetailsSelector?.isLoading) && <Loader />}
+        businessNudgeDetailsSelector?.isLoading ||
+        businessAddNudgeCreditSelector?.isLoading) && <Loader />}
       {/* <div className="emptyHeight">
         <div className="modal-content">
           <div className="ant-modal-body">
@@ -201,15 +207,22 @@ const percentage = nudgeGoal > 0 ? (nudgeSent / nudgeGoal) * 100 : 0;
               <div className="d-flex align-center justify-between mb-15">
                 <div>
                   <span className="fw-16">Nudges Goal: </span>
-                  <span className="fw-700 fs-20">{nudgeAnalyticSelector?.data?.data?.nudgeGoal}</span>
+                  <span className="fw-700 fs-20">
+                    {nudgeAnalyticSelector?.data?.data?.nudgeGoal}
+                  </span>
                 </div>
                 <div>
                   <span className="fs-14">Sent </span>
-                  <span className="fs-18 gc fw-700">{nudgeAnalyticSelector?.data?.data?.nudgeSent}</span>
+                  <span className="fs-18 gc fw-700">
+                    {nudgeAnalyticSelector?.data?.data?.nudgeSent}
+                  </span>
                 </div>
               </div>
               <div className="range mb-15">
-                <div className="rangePercentage" style={{ width: percentage }}></div>
+                <div
+                  className="rangePercentage"
+                  style={{ width: percentage }}
+                ></div>
               </div>
               <div className="fs-14 fw-500 grey mb-20">
                 You are just {percentage}% behind to achieve Goal
@@ -230,13 +243,20 @@ const percentage = nudgeGoal > 0 ? (nudgeSent / nudgeGoal) * 100 : 0;
                 </div>
                 <div className="d-flex justify-between align-center gap-20 mb-6">
                   <div className="fs-16 grey fw-500">Followers added today</div>
-                  <div className="gc fs-20 fw-700">{nudgeAnalyticSelector?.data?.data?.followerAddedToday}</div>
+                  <div className="gc fs-20 fw-700">
+                    {nudgeAnalyticSelector?.data?.data?.followerAddedToday}
+                  </div>
                 </div>
                 <div className="d-flex justify-between align-center gap-20">
                   <div className="fs-16 grey fw-500">
                     Promotional credits added today
                   </div>
-                  <div className="gc fs-20 fw-700">{nudgeAnalyticSelector?.data?.data?.promotionNudgeCreditAddedToday}</div>
+                  <div className="gc fs-20 fw-700">
+                    {
+                      nudgeAnalyticSelector?.data?.data
+                        ?.promotionNudgeCreditAddedToday
+                    }
+                  </div>
                 </div>
                 <div className="divider2"></div>
                 <div className="d-flex justify-between align-center gap-20 mb-20">
@@ -248,11 +268,17 @@ const percentage = nudgeGoal > 0 ? (nudgeSent / nudgeGoal) * 100 : 0;
             </div> */}
                 <div className="d-flex justify-between align-center gap-20 ">
                   <div className="d-flex align-center gap-16 flex-wrap">
-                    <div className="addNudge2 active">5 Nudges</div>
-                    <div className="addNudge2">10 Nudges</div>
-                    <div className="addNudge2">15 Nudges</div>
-                    <div className="addNudge2">20 Nudges</div>
-                    <div className="addNudge2">25 Nudges</div>
+                    {nudges?.map((nudge) => (
+                      <div
+                        key={nudge}
+                        className={`addNudge2 ${
+                          activeNudge === nudge ? "active" : ""
+                        }`}
+                        onClick={() => setActiveNudge(nudge)}
+                      >
+                        {nudge} Nudges
+                      </div>
+                    ))}
                   </div>
                   <div
                     className="btn btnSecondary p16 gap-8"
@@ -263,8 +289,8 @@ const percentage = nudgeGoal > 0 ? (nudgeSent / nudgeGoal) * 100 : 0;
                   </div>
                 </div>
               </div>
-              <div className="card mb-20">
-                <div className="fs-20 fw-700 d-flex gap-20 align-center justify-between">
+              {/* <div className="card mb-20"> */}
+              {/* <div className="fs-20 fw-700 d-flex gap-20 align-center justify-between">
                   <div>Promotional Credits</div>
                   <div>$44</div>
                 </div>
@@ -284,18 +310,18 @@ const percentage = nudgeGoal > 0 ? (nudgeSent / nudgeGoal) * 100 : 0;
                     Promotional credits added today
                   </div>
                   <div className="gc fs-20 fw-700">$7</div>
-                </div>
-                {/* <div className="divider2"></div>
+                </div> */}
+              {/* <div className="divider2"></div>
             <div className="d-flex justify-between align-center gap-20 mb-20">
               <div className="fs-16 grey fw-500">
                 Promotional credits needed
               </div>
               <div className="gc fs-20 fw-700">$7</div>
             </div> */}
-                {/* <div className="mb-16">
+              {/* <div className="mb-16">
               <input type="text" placeholder="Enter number of credits" />
             </div> */}
-                {/* <div className="d-flex justify-between align-center gap-20 ">
+              {/* <div className="d-flex justify-between align-center gap-20 ">
               <div className="d-flex align-center gap-16 flex-wrap">
                 <div className="addNudge2 active">5 Nudges</div>
                 <div className="addNudge2">10 Nudges</div>
@@ -308,7 +334,7 @@ const percentage = nudgeGoal > 0 ? (nudgeSent / nudgeGoal) * 100 : 0;
                 Add Promotional Credits
               </div>
             </div> */}
-              </div>
+              {/* </div> */}
               <div className="fs-20 fw-700 mb-10">Top Nudge</div>
               <div className="d-flex gap-20 ">
                 <div className="cardNudge w-100">
@@ -453,7 +479,7 @@ const percentage = nudgeGoal > 0 ? (nudgeSent / nudgeGoal) * 100 : 0;
                     );
                   })
                 ) : (
-                  <div>No data available</div>
+                  <div className="noDataFound">No data available</div>
                 )}
 
                 {/* <div className="merchantCard position-relative">
@@ -552,6 +578,8 @@ const percentage = nudgeGoal > 0 ? (nudgeSent / nudgeGoal) * 100 : 0;
           <PaymentSidebar
             isPaymentSidebar={isPaymentSidebar}
             togglePaymentSidebar={togglePaymentSidebar}
+            activeNudge={activeNudge}
+            businessAddNudgeCreditSelector={businessAddNudgeCreditSelector}
           />
         </>
       )}

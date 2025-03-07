@@ -21,6 +21,7 @@ const NudgeCart = ({
   state,
   fileuploadSelector,
   setIsCartOpen,
+  selectedItems
 }) => {
   const createNudgeSelector = useSelector((state) => state?.createNudge);
   const messageApi = useCommonMessage();
@@ -34,6 +35,8 @@ const NudgeCart = ({
       message: values?.description,
       isPublic: false,
       followerList: state?.selectedItems?.map(
+        (item) => item?.userInfo?.customerId
+      ) || selectedItems?.map(
         (item) => item?.userInfo?.customerId
       ),
       photoURL:

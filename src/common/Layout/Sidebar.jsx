@@ -14,8 +14,8 @@ import promotions from "../../assets/images/sidebar/promotions.svg";
 import promotionsFull from "../../assets/images/sidebar/promotionsFull.svg";
 import brands from "../../assets/images/sidebar/brands.svg";
 import brandsFull from "../../assets/images/sidebar/brandsFull.svg";
-import setting from "../../assets/images/sidebar/setting.svg";
-import settingFull from "../../assets/images/sidebar/settingFull.svg";
+// import setting from "../../assets/images/sidebar/setting.svg";
+// import settingFull from "../../assets/images/sidebar/settingFull.svg";
 import suppliers from "../../assets/images/sidebar/suppliers.svg";
 import suppliersFull from "../../assets/images/sidebar/suppliersFull.svg";
 import distributor from "../../assets/images/sidebar/distributor.svg";
@@ -29,93 +29,23 @@ import { Tooltip } from "react-tooltip";
 import { useNavigate } from "react-router-dom";
 
 const Sidebar = ({ isOpen, setIsOpen }) => {
-  const getLoggedInDetails = localStorage.getItem("merchantLogin");
-
   const navigate = useNavigate();
-  const links = [
-    {
-      id: 1,
-      name: "Dashboard",
-      icon: dashboard,
-      iconFull: dashboardFull,
-      navigate: getLoggedInDetails
-        ? "/merchant/dashboard"
-        : "/admin/merchant/dashboard",
-    },
-    ...(getLoggedInDetails
-      ? []
-      : [
-          {
-            id: 2,
-            name: "Suppliers",
-            icon: suppliers,
-            iconFull: suppliersFull,
-            navigate: "/admin/suppliers",
-          },
-          {
-            id: 3,
-            name: "Distributors",
-            icon: distributor,
-            iconFull: distributorFull,
-            navigate: "/admin/distributors",
-          },
-        ]),
-    ...(getLoggedInDetails
-      ? []
-      : [
-          {
-            id: 4,
-            name: "Merchants",
-            icon: merchant,
-            iconFull: merchantFull,
-            navigate: "/admin/merchant/list",
-            disabled: "",
-          },
-        ]),
-    {
-      id: 5,
-      name: "Followers",
-      icon: consumers,
-      iconFull: consumersFull,
-      navigate: getLoggedInDetails
-        ? "/merchant/followers"
-        : "/admin/merchant/followers",
-      disabled: "",
-    },
-    {
-      id: 6,
-      name: "Nudges",
-      icon: nudge,
-      iconFull: nudgeFull,
-      navigate: getLoggedInDetails ? "/merchant/nudges" : "/admin/nudges",
-      disabled: "",
-    },
-    ...(getLoggedInDetails
+  const getLoggedInDetails = localStorage.getItem("merchantLogin");
+  const getSupplierDetails = localStorage.getItem("supplierLogin");
+  const getDistributorLoginDetails = localStorage.getItem("distributorLogin");
+
+  const links =
+    getSupplierDetails || getDistributorLoginDetails
       ? [
           {
-            id: 10,
-            name: "Profile",
-            icon: profile,
-            iconFull: profileFull,
-            navigate: "/merchant/profile",
-          },
-          {
-            id: 11,
-            name: "Hierarchy",
-            icon: hierarchy,
-            iconFull: hierarchyFull,
-            navigate: "/merchant/hierarchy",
-          },
-        ]
-      : [
-          {
             id: 7,
-            name: "Promotions",
-            icon: promotions,
-            iconFull: promotionsFull,
+            name: "Dashboard",
+            icon: dashboard,
+            iconFull: dashboardFull,
             disabled: false,
-            tag: "19",
-            navigate: "/admin/promotions",
+            navigate: getSupplierDetails
+              ? "/supplier/dashboard"
+              : "/distributors/dashboard",
           },
           {
             id: 8,
@@ -123,17 +53,117 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
             icon: brands,
             iconFull: brandsFull,
             disabled: false,
-            navigate: "/admin/brands",
+            navigate: getSupplierDetails
+              ? "/supplier/brands"
+              : "/distributors/brands",
           },
-          // {
-          //   id: 9,
-          //   name: "Settings",
-          //   icon: setting,
-          //   iconFull: settingFull,
-          //   disabled: true,
-          // },
-        ]),
-  ];
+          {
+            id: 7,
+            name: "Promotions",
+            icon: promotions,
+            iconFull: promotionsFull,
+            disabled: false,
+            tag: "19",
+            navigate: getSupplierDetails
+              ? "/supplier/promotion"
+              : "/distributors/promotions",
+          },
+        ]
+      : [
+          {
+            id: 1,
+            name: "Dashboard",
+            icon: dashboard,
+            iconFull: dashboardFull,
+            navigate: getLoggedInDetails
+              ? "/merchant/dashboard"
+              : "/admin/merchant/dashboard",
+          },
+          ...(getLoggedInDetails
+            ? []
+            : [
+                {
+                  id: 2,
+                  name: "Suppliers",
+                  icon: suppliers,
+                  iconFull: suppliersFull,
+                  navigate: "/admin/suppliers",
+                },
+                {
+                  id: 3,
+                  name: "Distributors",
+                  icon: distributor,
+                  iconFull: distributorFull,
+                  navigate: "/admin/distributors",
+                },
+              ]),
+          ...(getLoggedInDetails
+            ? []
+            : [
+                {
+                  id: 4,
+                  name: "Merchants",
+                  icon: merchant,
+                  iconFull: merchantFull,
+                  navigate: "/admin/merchant/list",
+                  disabled: "",
+                },
+              ]),
+          {
+            id: 5,
+            name: "Followers",
+            icon: consumers,
+            iconFull: consumersFull,
+            navigate: getLoggedInDetails
+              ? "/merchant/followers"
+              : "/admin/merchant/followers",
+            disabled: "",
+          },
+          {
+            id: 6,
+            name: "Nudges",
+            icon: nudge,
+            iconFull: nudgeFull,
+            navigate: getLoggedInDetails ? "/merchant/nudges" : "/admin/nudges",
+            disabled: "",
+          },
+          ...(getLoggedInDetails
+            ? [
+                {
+                  id: 10,
+                  name: "Profile",
+                  icon: profile,
+                  iconFull: profileFull,
+                  navigate: "/merchant/profile",
+                },
+                {
+                  id: 11,
+                  name: "Team",
+                  icon: hierarchy,
+                  iconFull: hierarchyFull,
+                  navigate: "/merchant/hierarchy",
+                },
+              ]
+            : [
+                {
+                  id: 7,
+                  name: "Promotions",
+                  icon: promotions,
+                  iconFull: promotionsFull,
+                  disabled: false,
+                  tag: "19",
+                  navigate: "/admin/promotions",
+                },
+                {
+                  id: 8,
+                  name: "Brands",
+                  icon: brands,
+                  iconFull: brandsFull,
+                  disabled: false,
+                  navigate: "/admin/brands",
+                },
+              ]),
+        ];
 
   const onNavigate = (path) => {
     const width = window.innerWidth;

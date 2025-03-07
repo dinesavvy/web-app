@@ -8,7 +8,7 @@ import SelectModal from "../../panels/merchant/auth/SelectModal";
 import { useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { businessListHandler } from "../../redux/action/businessAction/businessListSlice";
-// import { useBusiness } from "./BusinessContext";
+import { useBusiness } from "./BusinessContext";
 
 const Header = ({ handleTrigger }) => {
   const [isModalOpen, setModalOpen] = useState(false);

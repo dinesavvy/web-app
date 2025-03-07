@@ -17,6 +17,7 @@ import {
   updateDistributorAction,
   updateDistributorHandler,
 } from "../../../../redux/action/updateDistributor";
+import { getGeoInfo } from "../../../../services/geoLocation";
 
 const DistributorDetails = ({
   isOpen,
@@ -25,10 +26,8 @@ const DistributorDetails = ({
   distributorItems,
 }) => {
   const [imagePreview, setImagePreview] = useState(null);
-  const [countryCode, setCountryCode] = useState(
-    distributorItems?.contactPhoneNumber ? "" : "91"
-  );
-
+  const [countryCode, setCountryCode] = useState("91");
+  const [loading, setLoading] = useState(true);
   const [country, setCountry] = useState("");
   const [fileObject, setFileObject] = useState();
 
@@ -85,6 +84,20 @@ const DistributorDetails = ({
     }
   };
 
+  // Fetch Geo location
+    useEffect(() => {
+      const fetchGeoInfo = async () => {
+        setLoading(true);
+        const data = await getGeoInfo();
+        if (data) {
+          setCountryCode(data?.country_calling_code);
+        }
+        setLoading(false);
+      };
+  
+      fetchGeoInfo();
+    }, []);
+
   useEffect(() => {
     const uploadFile = async () => {
       if (fileuploadSelector?.data?.statusCode === 200) {
@@ -96,12 +109,6 @@ const DistributorDetails = ({
               body: fileObject,
             }
           );
-
-          if (response.ok) {
-            console.log("File uploaded successfully");
-          } else {
-            console.error("Failed to upload file", response.status);
-          }
         } catch (error) {
           console.error("Error uploading file", error);
         }
@@ -113,7 +120,7 @@ const DistributorDetails = ({
 
   const handlePhoneChange = (value, data) => {
     if (value === "") {
-      setCountryCode(""); // Reset to India when input is cleared
+      // setCountryCode(""); // Reset to India when input is cleared
       setPhone("");
       return;
     }
@@ -124,7 +131,7 @@ const DistributorDetails = ({
     if (!newPhone) {
       // If the number is empty, reset country code
       setCountry("");
-      setCountryCode("");
+      // setCountryCode("");
       return;
     } else {
       setCountry(newCountryCode);
@@ -136,7 +143,6 @@ const DistributorDetails = ({
   };
 
   const handleFormSubmit = (values) => {
-    console.log(values, "values");
     if (!phone) {
       alert("dd");
       return;
@@ -154,7 +160,6 @@ const DistributorDetails = ({
       };
 
       dispatch(createDistributorHandler(payload));
-      console.log(payload, "payload");
     } else if (distributorItems) {
       let payload = {
         distributorName: values?.distributorName.trim(),
@@ -168,7 +173,6 @@ const DistributorDetails = ({
         distributorId: distributorItems?._id,
       };
       dispatch(updateDistributorHandler(payload));
-      // console.log(payload,"payload")
     }
   };
 
@@ -209,7 +213,7 @@ const DistributorDetails = ({
   return (
     <>
       {(createDistributorSelector?.isLoading ||
-        updateDistributorSelector?.isLoading) && <Loader />}
+        updateDistributorSelector?.isLoading||loading) && <Loader />}
       {isOpen && <div className="overlay2" onClick={toggleDetails}></div>}
 
       <Formik
@@ -365,7 +369,7 @@ const DistributorDetails = ({
                     </label>
                     {/* <input type="number" placeholder="Enter phone number" /> */}
                     <PhoneInput
-                      country={countryCode || undefined} // Set country dynamically when user types a code
+                      // country={countryCode || undefined} // Set country dynamically when user types a code
                       value={`${countryCode}${phone}`} // Show full value but keep them separate in state
                       onChange={(e, f) => {
                         handlePhoneChange(e, f);

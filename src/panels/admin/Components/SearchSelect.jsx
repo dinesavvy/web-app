@@ -89,25 +89,18 @@ const SearchSelect = ({ onSearchChange, onSearchAreaChange }) => {
         {/* {location.pathname !== "/admin/merchant/followers" && ( */}
         <div className="dropdown-container" ref={dropdownRef}>
           {/* Dropdown */}
+          {(location?.pathname === "/admin/merchant/list" ||location?.pathname === "/admin/merchant/details") && (
           <div className="dropdown-header" onClick={toggleDropdown}>
             <button className="dropdown-button">
               <img src={filterIcon} alt="" />
               Filter
             </button>
           </div>
+          )}
           {isDropdownOpen && (
             <div className="dropdown-list">
-              {/* <div className="lineSearch w-100">
-                <input
-                  type="text"
-                  name="text"
-                  placeholder="Filter by..."
-                  id="text"
-                />
-                <img src={searchIcon} alt="" className="absoluteImage" />
-              </div> */}
               {(location?.pathname === "/admin/merchant/followers" ||
-                location?.pathname === "/admin/merchant/details") &&
+                location?.pathname === "/admin/merchant/details" ) &&
                 followerListFilter.map((option, index) => (
                   <div key={index} className="dropdown-item custom-checkbox">
                     <label className="checkLabel">

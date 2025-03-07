@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from "react";
 import addBtn from "../../../../assets/images/addBtn.svg";
-import coke from "../../../../assets/images/coke.svg";
-import editMember from "../../../../assets/images/editMember.svg";
 import onlyArrowBtn from "../../../../assets/images/onlyArrowBtn.svg";
 import SearchSelect from "../SearchSelect";
 import { useNavigate } from "react-router-dom";
@@ -12,9 +10,12 @@ import { brandListsHandler } from "../../../../redux/action/brandListSlice";
 import Loader from "../../../../common/Loader/Loader";
 import { useCommonMessage } from "../../../../common/CommonMessage";
 import { deleteBrandsAction } from "../../../../redux/action/deleteBrand";
+import noImageFound from "../../../../assets/images/noImageFound.png";
+
 
 const Brands = () => {
   const messageApi = useCommonMessage();
+  const [searchString, setSearchString] = useState("");
   const [pagination, setPagination] = useState({ page: 1, limit: 9 });
   const [brandDetails, setBrandDetails] = useState({});
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
@@ -22,11 +23,19 @@ const Brands = () => {
   const dispatch = useDispatch();
 
   const getBrandListSelector = useSelector((state) => state?.brandList);
-  const deleteBrandSelector = useSelector((state)=>state?.deleteBrand)
-  console.log(deleteBrandSelector, "deleteBrandSelector");
+  const deleteBrandSelector = useSelector((state) => state?.deleteBrand);
 
   const handlePaginationChange = (page, pageSize) => {
     setPagination({ page, limit: pageSize });
+  };
+
+  const handleSearchChange = (value) => {
+    setSearchString(value);
+    setPagination((prev) => ({ ...prev, page: 1 })); // Reset to the first page on search
+  };
+
+  const handleSearchAreaChange = (selectedAreas) => {
+    setSearchArea(selectedAreas);
   };
 
   useEffect(() => {
@@ -46,31 +55,32 @@ const Brands = () => {
     let payload = {
       page: pagination?.page,
       limit: pagination?.limit,
+      searchString:searchString,
     };
     dispatch(brandListsHandler(payload));
-  }, [pagination,deleteBrandSelector]);
+  }, [pagination, deleteBrandSelector]);
 
   const toggleDetails = (item) => {
     setBrandDetails(item);
     setIsDetailsOpen((prevState) => !prevState);
   };
 
-
   useEffect(() => {
-    if(deleteBrandSelector?.data?.statusCode ===200){
+    if (deleteBrandSelector?.data?.statusCode === 200) {
       messageApi.open({
         type: "success",
         content: deleteBrandSelector?.data?.message,
       });
-      setIsDetailsOpen(false)
-      dispatch(deleteBrandsAction.deleteBrandReset())
+      setIsDetailsOpen(false);
+      dispatch(deleteBrandsAction.deleteBrandReset());
     }
-  }, [deleteBrandSelector])
-  
+  }, [deleteBrandSelector]);
 
   return (
     <>
-      {(getBrandListSelector?.isLoading || deleteBrandSelector?.isLoading) && <Loader />}
+      {(getBrandListSelector?.isLoading || deleteBrandSelector?.isLoading) && (
+        <Loader />
+      )}
       <div className="dashboard">
         <div className="tabPadding">
           <div className="d-flex justify-between align-center mb-20">
@@ -83,7 +93,10 @@ const Brands = () => {
               <img src={addBtn} alt="addBtn" />
             </div>
           </div>
-          <SearchSelect />
+          <SearchSelect
+            onSearchChange={handleSearchChange}
+            onSearchAreaChange={handleSearchAreaChange}
+          />
           <div className="merchantGrid mb-20">
             {getBrandListSelector?.data?.data?.records?.length > 0 ? (
               <>
@@ -93,7 +106,7 @@ const Brands = () => {
                       <div className="merchantCard" key={index}>
                         <div className="p-20">
                           <div className="text-center promotionImage">
-                            <img src={coke} alt="" className="h-100" />
+                            <img src={item?.imageUrl?.[0] || noImageFound} alt="" className="h-100" />
                           </div>
                         </div>
                         <div className="divider m-0"></div>
@@ -110,7 +123,7 @@ const Brands = () => {
                               className="btn btnSecondary w-100 gap-8"
                               onClick={() => navigate("/admin/add-promotions")}
                             >
-                              <img src={editMember} alt="" />
+                              {/* <img src={editMember} alt="" /> */}
                               Promote
                             </div>
                             <div
@@ -127,13 +140,9 @@ const Brands = () => {
                 )}
               </>
             ) : (
-              <div>No data available</div>
+              <div className="noDataFound">No data available</div>
             )}
           </div>
-          {/* <div className="d-flex align-center justify-between flexPagination">
-            <div className="fs-16">Showing 1 to 5 of 10 Restaurants</div>
-            <Pagination defaultCurrent={1} total={50} />
-          </div> */}
           {getBrandListSelector?.data?.data?.records?.length > 0 && (
             <div className="d-flex align-center justify-between flexPagination">
               <div className="fs-16">

@@ -38,7 +38,6 @@ export const distributorsListHandler = (data) => async (dispatch) => {
   try {
     dispatch(distributorsAction.distributorsInfo());
     const response = await distributorsListAPI(data);
-    console.log(response,"response")
     dispatch(distributorsAction.distributorsSuccess(response));
   } catch (e) {
     dispatch(

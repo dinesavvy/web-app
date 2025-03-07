@@ -5,16 +5,40 @@ import SearchSelect from "./SearchSelect";
 import { Pagination } from "antd";
 import PromotionDetails from "./PromotionDetails";
 import { useNavigate } from "react-router-dom";
+import { adminPromotionListHandler } from "../../../redux/action/adminPromotion";
+import { useDispatch, useSelector } from "react-redux";
+import Loader from "../../../common/Loader/Loader";
+import moment from "moment";
+import noImageFound from "../../../assets/images/noImageFound.png";
+
 
 const Promotions = () => {
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
+  const [pagination, setPagination] = useState({ page: 1, limit: 9 });
+  const [searchString, setSearchString] = useState("");
+  const [activeTab, setActiveTab] = useState("active");
   const [isOpen, setIsOpen] = useState(false);
-  const toggleDropdown = () => {
-    setIsOpen((prev) => !prev);
-  };
+  const [promotionalDetailsData, setPromotionalDetailsData] = useState();
+  
+  const dispatch = useDispatch();
   const selectRef = useRef(null);
-  const navigate = useNavigate()
-  // Handle clicks outside of the component
+  const navigate = useNavigate();
+
+  const adminPromotionList = useSelector((state) => state?.adminPromotion);
+
+  const handleSearchChange = (value) => {
+    setSearchString(value);
+    setPagination((prev) => ({ ...prev, page: 1 })); // Reset to the first page on search
+  };
+
+  const handleSearchAreaChange = (selectedAreas) => {
+    setSearchArea(selectedAreas);
+  };
+
+  const handlePaginationChange = (page, pageSize) => {
+    setPagination({ page, limit: pageSize });
+  };
+
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (selectRef.current && !selectRef.current.contains(event.target)) {
@@ -27,6 +51,7 @@ const Promotions = () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+  
   useEffect(() => {
     if (isDetailsOpen) {
       document.body.classList.add("overflow-Hidden");
@@ -39,11 +64,24 @@ const Promotions = () => {
       document.body.classList.remove("overflow-Hidden");
     };
   }, [isDetailsOpen]);
+
   const toggleDetails = () => {
     setIsDetailsOpen((prevState) => !prevState);
   };
+
+  useEffect(() => {
+    let payload = {
+      page: pagination?.page,
+      limit: pagination?.limit,
+      searchString: searchString,
+      isActive :activeTab==="active"?false:true
+    };
+    dispatch(adminPromotionListHandler(payload));
+  }, [pagination, searchString,activeTab]);
+
   return (
     <>
+      {adminPromotionList?.isLoading && <Loader />}
       <div className="dashboard">
         <div className="tabPadding">
           <div className="d-flex justify-between align-center mb-20 gap-10 flexsm">
@@ -65,27 +103,133 @@ const Promotions = () => {
                 </>
               )}
             </div> */}
-            <div
-              className="position-relative d-flex align-center gap-10 "
-            >
-              <div className="gap-8 btnSecondary p32 btn z1" onClick={()=>navigate("/admin/add-promotions")}>
-              Single Promotion
+            <div className="position-relative d-flex align-center gap-10">
+              <div
+                className="gap-8 btnSecondary p32 btn z1"
+                onClick={() => navigate("/admin/add-promotions")}
+              >
+                Single Promotion
               </div>
-              <div className="gap-8 btnSecondary p32 btn z1" onClick={()=>navigate("/admin/add-promotions")}>
-              Group Promotion
-              </div>
-           
+              {/* <div
+                className="gap-8 btnSecondary p32 btn z1"
+                onClick={() => navigate("/admin/add-promotions")}
+              >
+                Group Promotion
+              </div> */}
             </div>
           </div>
           <div className="tabs-container tab3 tabing mb-20">
             <div className="tabs">
-              <button className="tab-button active">Active</button>
-              <button className="tab-button ">Inactive</button>
+              <button
+                className={`tab-button ${
+                  activeTab === "active" ? "active" : ""
+                }`}
+                onClick={() => setActiveTab("active")}
+              >
+                Active
+              </button>
+              <button
+                className={`tab-button ${
+                  activeTab === "Inactive" ? "active" : ""
+                }`}
+                onClick={() => setActiveTab("Inactive")}
+              >
+                Inactive
+              </button>
             </div>
           </div>
-          <SearchSelect />
+          <SearchSelect
+            onSearchChange={handleSearchChange}
+            onSearchAreaChange={handleSearchAreaChange}
+          />
+
           <div className="merchantGrid mb-20">
-            <div className="merchantCard position-relative">
+            {adminPromotionList?.data?.data?.records?.length > 0 ? (
+              <>
+                {adminPromotionList?.data?.data?.records?.map((item, index) => {
+                  return (
+                    <div className="merchantCard position-relative" key={index}>
+                      <div className="p-10">
+                        {item?.redemptionPercentage > 50 && (
+                          <div className="nailedIt active fs-14">
+                            You Nailed it!
+                          </div>
+                        )}
+                        <div className="text-center promotionImage mb-28">
+                          <img
+                            src={item?.brandDetails?.imageUrl?.[0] || noImageFound}
+                            alt=""
+                            className="h-100"
+                          />
+                        </div>
+                        <div className="d-flex justify-between align-center gap-10">
+                          <div className="fs-16 fw-700">
+                            {item?.brandDetails?.brandName}
+                          </div>
+                          <div
+                            className={
+                              item?.redemptionPercentage > 50
+                                ? "fs-16 fw-600 roi green"
+                                : "fs-16 fw-600 roi blue"
+                            }
+                          >
+                            Redeemed: {item?.redemptionPercentage}%
+                          </div>
+                        </div>
+                      </div>
+                      <div className="divider m-0"></div>
+                      <div className="bottomPadding">
+                        <div>
+                          <div className="fs-14 mb-4">Promotion title</div>
+                          <div className="fs-14 fw-600">
+                            {item?.promotionTitle}{" "}
+                          </div>
+                        </div>
+                        <div className="grid2 mb-20">
+                          <div>
+                            <div className="fs-14 mb-4">Brand / Product</div>
+                            <div className="fs-14 fw-600">Chocolate Cake </div>
+                          </div>
+                          <div>
+                            <div className="fs-14 mb-4">Expiration Date</div>
+                            <div className="fs-14 fw-600">
+                              {moment(item?.endDate).format("YYYY-MM-DD")}
+                            </div>
+                          </div>
+                          <div>
+                            <div className="fs-14 mb-4">
+                              Promotional Credits
+                            </div>
+                            <div className="fs-14 fw-600">
+                              ${item?.merchant?.promotionFund}
+                            </div>
+                          </div>
+                          <div>
+                            <div className="fs-14 mb-4">Qty/ Nudge Credits</div>
+                            <div className="fs-14 fw-600">
+                              {item?.merchant?.quantity}
+                            </div>
+                          </div>
+                        </div>
+                        <div
+                          className="btn btnSecondary"
+                          onClick={() => {
+                            toggleDetails();
+                            setPromotionalDetailsData(item);
+                          }}
+                        >
+                          View Details
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </>
+            ) : (
+              <div className="noDataFound">No data available</div>
+            )}
+
+            {/* <div className="merchantCard position-relative">
               <div className="p-10">
                 <div className="nailedIt active fs-14">You Nailed it!</div>
                 <div className="text-center promotionImage mb-28">
@@ -120,8 +264,8 @@ const Promotions = () => {
                   View Details
                 </div>
               </div>
-            </div>
-            <div className="merchantCard position-relative">
+            </div> */}
+            {/* <div className="merchantCard position-relative">
               <div className="p-10">
                 <div className="nailedIt active fs-14">You Nailed it!</div>
                 <div className="text-center promotionImage mb-28">
@@ -156,8 +300,8 @@ const Promotions = () => {
                   View Details
                 </div>
               </div>
-            </div>
-            <div className="merchantCard position-relative">
+            </div> */}
+            {/* <div className="merchantCard position-relative">
               <div className="p-10">
                 <div className="nailedIt active fs-14">You Nailed it!</div>
                 <div className="text-center promotionImage mb-28">
@@ -192,15 +336,35 @@ const Promotions = () => {
                   View Details
                 </div>
               </div>
+            </div> */}
+          </div>
+          {adminPromotionList?.data?.data?.records?.length > 0 && (
+            <div className="d-flex align-center justify-between flexPagination">
+              <div className="fs-16">
+                {(() => {
+                  const start = (pagination.page - 1) * pagination.limit + 1;
+                  const end = Math.min(
+                    start + adminPromotionList?.data?.data?.records?.length - 1,
+                    adminPromotionList?.data?.data?.recordsCount
+                  );
+                  return `Showing ${start} to ${end} of ${adminPromotionList?.data?.data?.recordsCount} Suppliers`;
+                })()}
+              </div>
+              <Pagination
+                current={pagination?.page}
+                pageSize={pagination?.limit}
+                total={adminPromotionList?.data?.data?.recordsCount}
+                onChange={handlePaginationChange}
+              />
             </div>
-          </div>
-          <div className="d-flex align-center justify-between flexPagination">
-            <div className="fs-16">Showing 1 to 5 of 10 Restaurants</div>
-            <Pagination defaultCurrent={1} total={50} />
-          </div>
+          )}
         </div>
       </div>
-      <PromotionDetails isOpen={isDetailsOpen} toggleDetails={toggleDetails} />
+      <PromotionDetails
+        isOpen={isDetailsOpen}
+        toggleDetails={toggleDetails}
+        promotionalDetailsData={promotionalDetailsData}
+      />
     </>
   );
 };

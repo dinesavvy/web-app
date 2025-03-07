@@ -57,7 +57,7 @@ const EditBrands = () => {
             <div className="d-flex gap-10">
               <div className="w-100 d-flex flexDirection h-100 justify-between">
                 <label htmlFor="name" className="grey mb-10 fs-16 fw-500">
-                  MSRP (Manufacturer’s Suggested Retail Price)
+                  MSRP (Manufacturer’s Suggested Retail Price)*
                 </label>
                 <input type="text" className="input" placeholder="$22.99" />
               </div>

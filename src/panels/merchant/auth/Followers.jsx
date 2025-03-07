@@ -301,7 +301,7 @@ const Followers = () => {
                               <div key={`${index}-${subIndex}`}>{item1}</div>
                             ))
                           ) : (
-                            <div key={index}>No data available</div>
+                            <div key={index}className="noDataFound">No data available</div>
                           );
                         })}
                       </div>
@@ -315,7 +315,7 @@ const Followers = () => {
                   );
                 })
               ) : (
-                <div className="no-data">No Data Found</div>
+                <div className="noDataFound">No Data Found</div>
               )}
             </div>
             {filteredFollowers?.length > 0 && (

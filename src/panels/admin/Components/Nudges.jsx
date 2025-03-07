@@ -13,8 +13,10 @@ import { Pagination } from "antd";
 import moment from "moment";
 import { nudgesDetailsHandler } from "../../../redux/action/nudgeDetails";
 import noImageFound from "../../../assets/images/noImageFound.png";
+import { useNavigate } from "react-router-dom";
 
 const Nudges = () => {
+  const navigate = useNavigate()
   const [pagination, setPagination] = useState({ page: 1, limit: 9 });
   const [activeTab, setActiveTab] = useState(true);
   const [nudgeId, setNudgeId] = useState("");
@@ -96,6 +98,7 @@ const Nudges = () => {
   };
 
   const handleChange = (value) => {
+    localStorage.setItem("merchantId",value?._id)
     setSelectedValue(value);
   };
 
@@ -205,7 +208,7 @@ const Nudges = () => {
                   {selectedValue?.businessName.charAt(0).toUpperCase() +
                     selectedValue?.businessName.slice(1)}
                 </div>
-                <div className="btn btnSecondary p16 gap-8">
+                <div className="btn btnSecondary p16 gap-8" onClick={()=>navigate("/admin/nudges/template",{state:{dineSavvyNudge:true}})}>
                   <img src={addCredits} alt="addCredits" />
                   Create a Nudge
                 </div>

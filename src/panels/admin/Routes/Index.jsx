@@ -5,8 +5,6 @@ import adminRoutes from "./adminRoutes";
 import PrivateRoute from "./PrivateRoute";
 import Sidebar from "../../../common/Layout/Sidebar";
 import Header from "../../../common/Layout/Header";
-// import supplierRoutes from "./supplierRoutes";
-// import merchantRoutes from "./merchantRoutes";
 import { CommonMessageProvider } from "../../../common/CommonMessage";
 
 const routeMap = {

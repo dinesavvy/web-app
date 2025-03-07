@@ -130,14 +130,16 @@ const MerchantDashboard = () => {
     (item) => item.value
   );
 
+
+
   return (
     <>
       {businessDashBoardSelector?.isLoading && <Loader />}
       {/*********************** Empty Content ************************/}
       {/* {(getSelectedBusiness !== null && getSelectedBusiness?.roleTitle !== "Owner" && 
       getSelectedBusiness?.roleData?.permissions?.viewAnalytics !== 2|| businessListSelector?.data?.data?.records?.length===0) ? ( */}
-      {tempState?.roleTitle !== "Owner" &&
-      tempState?.roleData?.permissions?.viewAnalytics !== 2 ? (
+      {(tempState?.length>0 && tempState?.roleTitle !== "Owner" &&
+      tempState?.roleData?.permissions?.viewAnalytics !== 2)? (
         <AccessDeniedModal />
       ) : (
         <>

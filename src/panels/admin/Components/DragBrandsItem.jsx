@@ -1,10 +1,17 @@
 import React from "react";
 import { useDrag } from "react-dnd";
 import coke from "../../../assets/images/coke.svg";
-import pepsi from "../../../assets/images/pepsi.svg";
 import { Tooltip } from "react-tooltip";
+import pepsi from "../../../assets/images/pepsi.svg";
 
-const DragBrandsItem = ({ id, name, selectedBrands = [], onClick, info }) => {
+const DragBrandsItem = ({
+  id,
+  name,
+  selectedBrands = [],
+  onClick,
+  info,
+  item,
+}) => {
   const [{ isDragging }, drag] = useDrag({
     type: "brand",
     item: { id, name, selectedBrands }, // Correctly pass the item data
@@ -23,12 +30,13 @@ const DragBrandsItem = ({ id, name, selectedBrands = [], onClick, info }) => {
           cursor: "move",
         }}
         className="brandItem"
-        data-tooltip-id={`brand-tooltip-${id}`}
+        // data-tooltip-id={`brand-tooltip-${id}`}
       >
-        {/* <img src={name} alt={`Brand ${id}`} /> */}
-        <img src={name} alt={`Brand ${id}`} />
+        {/* <img src={pepsi} alt={`Brand ${id}`} /> */}
+        <img src={selectedBrands?.imageUrl?.[0]} alt={`Brand ${id}`} />
       </div>
-      <Tooltip id={`brand-tooltip-${id}`} place="right-start">
+      {/* <p>{selectedBrands?.brandName}</p> */}
+      {/* <Tooltip id={`brand-tooltip-${id}`} place="right-start">
         <div className="fs-12">
           <div className="color80 mb-4">Brand</div>
           <div className="fw-600 mb-16">{info?.name}</div>
@@ -39,7 +47,7 @@ const DragBrandsItem = ({ id, name, selectedBrands = [], onClick, info }) => {
           <div className="color80 mb-4">SKU</div>
           <div className="fw-600">{info?.sku}</div>
         </div>
-      </Tooltip>
+      </Tooltip> */}
     </>
   );
 };

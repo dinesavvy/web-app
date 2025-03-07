@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+import chartImage from "../../assets/images/defaultChart.jpg"
 
 const PromotionCard = ({
   title = "Promotions",
