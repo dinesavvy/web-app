@@ -163,7 +163,7 @@ const Promotions = () => {
                           />
                         </div>
                         <div className="d-flex justify-between align-center gap-10">
-                          <div className="fs-16 fw-700">
+                          <div className="fs-16 fw-700 trunc1">
                             {item?.brandDetails?.brandName}
                           </div>
                           <div
@@ -179,7 +179,7 @@ const Promotions = () => {
                       </div>
                       <div className="divider m-0"></div>
                       <div className="bottomPadding">
-                        <div>
+                        <div className="mb-16">
                           <div className="fs-14 mb-4">Promotion title</div>
                           <div className="fs-14 fw-600">
                             {item?.promotionTitle}{" "}

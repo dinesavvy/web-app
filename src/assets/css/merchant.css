@@ -101,10 +101,13 @@
 
 .merchantGrid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 20px;
 }
+.selecModalFollowerList .merchantGrid{
+  grid-template-columns: repeat(3, 1fr);
 
+}
 .merchantCard {
   border: 1px solid #E3E3E8;
   background-color: white;
@@ -448,7 +451,7 @@
 }
 
 .noDataFound {
-  grid-column: span 3;
+  grid-column: span 4;
   text-align: center;
   height: 300px;
   display: flex;
@@ -993,12 +996,18 @@ input[type="radio"]:checked+.custom-radio-button {
 .nailedIt.active {
   opacity: 1;
 }
-
+.trunc1{
+  width: calc(100% - 130px);
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap
+}
 .roi {
   padding: 4px 12px;
   border-radius: 4px;
   color: white;
   width: fit-content;
+  white-space: nowrap;
 }
 .brandRed{
   color: #F5453B;
@@ -1167,6 +1176,8 @@ input[type="radio"]:checked+.custom-radio-button {
 .marginminus{
   margin-bottom: -21px;
   margin-top: 20px;
+  position: relative;
+  z-index: 1;
 }
 .addPlus {
   height: unset;
@@ -1200,6 +1211,7 @@ input[type="radio"]:checked+.custom-radio-button {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 20px;
+  word-break: break-all;
 }
 .nudgeGrid3 {
   display: grid;
@@ -1223,15 +1235,19 @@ input[type="radio"]:checked+.custom-radio-button {
   cursor: grab;
   position: relative;
   overflow: hidden;
+  height: 57px;
 }
 
 .brandItem img {
   max-width: 100%;
   max-height: 100%;
   width: 100%;
-  height: 100%;
-  object-fit: none;
+  /* height: 100%; */
+  object-fit: contain;
 }
+/* .h310 .brandItem img {
+  object-fit: none;
+} */
 .positionSticky{
   height: calc(100vh - 142px);
   overflow-y: auto;
@@ -1268,9 +1284,6 @@ input[type="radio"]:checked+.custom-radio-button {
 max-width: 1080px !important;
 padding: 20px !important;
 margin: 20px 0;
-}
-.selecModalFollowerList .lineSearch input{
-  width: 100% !important;
 }
 .selecModalFollowerList .tabPadding{
   padding: 0;
@@ -2055,6 +2068,9 @@ input.addTitleInput::placeholder {
     padding-left: 58px;
     width: calc(100% - 72px) !important;
   }
+  .ant-modal.selecModalFollowerList {
+    width: 800px !important;
+  }
   .absoluteTemplateText{
     font-size: 14px;
     text-align: center;
@@ -2075,10 +2091,13 @@ input.addTitleInput::placeholder {
   .p32{
     padding: 0 20px;
   }
+  .customTime{
+    width: 100% !important;
+  }
 }
 @media (max-width: 1499.98px) {
   .merchantGrid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(3, 1fr);
   }
 }
 
@@ -2117,6 +2136,12 @@ input.addTitleInput::placeholder {
   .twoSpace {
     grid-column: span 2;
   }
+  .ant-modal.selecModalFollowerList {
+    width: 600px !important;
+  }
+  .selecModalFollowerList .merchantGrid{
+    grid-template-columns: repeat(2,1fr);
+  }
 }
 
 @media (max-width: 767.98px) {
@@ -2145,7 +2170,7 @@ input.addTitleInput::placeholder {
   }
 
   .merchantGrid {
-    grid-template-columns: repeat(1, 1fr);
+    grid-template-columns: repeat(2, 1fr);
   }
 
   .ant-pagination-item,
@@ -2198,6 +2223,12 @@ input.addTitleInput::placeholder {
   }
   .inputGrid{
     gap: 16px;
+  }
+  .ant-modal.selecModalFollowerList {
+    width: 350px !important;
+  }
+  .selecModalFollowerList .merchantGrid{
+    grid-template-columns: repeat(1,1fr);
   }
 }
 
@@ -2255,7 +2286,9 @@ input.addTitleInput::placeholder {
   }.m30 {
     margin: 16px 0 !important;
   }
-
+  .merchantGrid {
+    grid-template-columns: repeat(1, 1fr);
+  }
   .reflectImage,
   .w240 {
     width: 100%;

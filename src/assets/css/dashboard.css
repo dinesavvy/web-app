@@ -234,6 +234,7 @@
   padding: 8px 32px;
   border-radius: 12px 12px 0 0;
   white-space: nowrap;
+  /* background-color: white; */
 }
 
 .accordion-item:not(:last-child) {
@@ -382,6 +383,7 @@ iframe{
     border-radius: 4px;
     padding: 8px;
     max-height: 48px;
+    height: 48px;
   }
   .selectMerchant .brandItem {
     max-height: 70px;
@@ -402,6 +404,9 @@ iframe{
   }
   .arrowUp, .arrow{
     height: 20px;
+  }
+  .marginminus {
+    margin-bottom: -17px;
   }
   .accordion-header img{
     height: 38px;

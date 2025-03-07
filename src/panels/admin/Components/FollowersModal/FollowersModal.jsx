@@ -172,9 +172,9 @@ const FollowersModal = ({
                                     .charAt(0)
                                     .toUpperCase() +
                                     item.userInfo.displayName.slice(1)}
-                                {/* <div className="fs-14 fw-300 o5 ">
-                                  {item?.userInfo?.email}
-                                </div> */}
+                                <div className="fs-14 fw-300 o5 ">
+                                {item?.userInfo?.email.length > 0 ? item?.userInfo?.email : "-"}
+                                </div>
                               </div>
                               <div className="fs-14 fw-300 o5">
                                 {moment(item?.createdAt).format("MMMM,YYYY")}
@@ -296,10 +296,10 @@ const FollowersModal = ({
                           {item?.userInfo?.displayName &&
                             item.userInfo.displayName.charAt(0).toUpperCase() +
                               item.userInfo.displayName.slice(1)}
-                          {/* <div className="fs-14 fw-300 o5 ">
-                            {item?.userInfo?.email}
-                          </div> */}
                         </div>
+                          <div className="fs-14 fw-300 o5 ">
+                          {item?.userInfo?.email.length > 0 ? item?.userInfo?.email : "-"}
+                          </div>
                         <div className="fs-14 fw-300 o5">
                           {moment(item?.createdAt).format("MMMM, YYYY")}
                         </div>
