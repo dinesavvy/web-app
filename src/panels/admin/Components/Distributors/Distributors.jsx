@@ -124,21 +124,21 @@ const Distributors = () => {
                           <div className="bottomPadding">
                             <div className="d-flex flexColumn gap-10">
                               <div className="d-flex align-center gap-12 fs-14">
-                                <img src={userCard} alt="" />
+                                <img src={userCard} alt=""  className="h30"/>
                                 {item?.contactName}
                               </div>
                               <div className="d-flex align-center gap-12 fs-14">
-                                <img src={inveCard} alt="" />
+                                <img src={inveCard} alt=""  className="h30"/>
                                 {/* 217 555-0113 */}
                                 {item?.contactPhoneNumber}
                               </div>
                               <div className="d-flex align-center gap-12 fs-14">
-                                <img src={emailCard} alt="" />
+                                <img src={emailCard} alt=""  className="h30"/>
                                 {/* grothoff@icloud.com */}
                                 {item?.contactEmail}
                               </div>
                               <div className="d-flex align-center gap-12 fs-14">
-                                <img src={phoneCard} alt="" />
+                                <img src={phoneCard} alt=""  className="h30"/>
                                 {/* 217 555-0113 */}
                                 {item?.contactPhoneNumber}
                               </div>

@@ -117,20 +117,20 @@ const Suppliers = () => {
                         <div className="bottomPadding">
                           <div className="d-flex flexColumn gap-10">
                             <div className="d-flex align-center gap-12 fs-14">
-                              <img src={userCard} alt="User" />
+                              <img src={userCard} className="h30" alt="User" />
                               {item?.contactName}
                             </div>
                             <div className="d-flex align-center gap-12 fs-14">
-                              <img src={inveCard} alt="Inventory" />
+                              <img src={inveCard} className="h30" alt="Inventory" />
                               {/* 217 555-0113 */}
                               {item?.contactPosition}
                             </div>
                             <div className="d-flex align-center gap-12 fs-14">
-                              <img src={emailCard} alt="Email" />
+                              <img src={emailCard} className="h30" alt="Email" />
                               {item?.contactEmail}
                             </div>
                             <div className="d-flex align-center gap-12 fs-14">
-                              <img src={phoneCard} alt="Phone" />
+                              <img src={phoneCard} className="h30" alt="Phone" />
                               {item?.contactPhoneNumber}
                             </div>
                             <div className="d-flex align-center gap-10">

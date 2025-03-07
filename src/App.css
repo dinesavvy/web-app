@@ -122,6 +122,15 @@ textarea {
   background-color: #F3F4F5;
   border-radius: 12px;
 }
+.custom-select .ant-select-selector {
+  font-size: 14px !important;
+  line-height: 21px !important;
+  padding: 12.5px 13px !important;
+  border: 1.5px solid transparent !important;
+  width: calc(100% - 29px)  !important;
+  background-color: #F3F4F5 !important;
+  border-radius: 12px !important;
+}
 
 input:focus,
 textarea:focus {
@@ -425,10 +434,6 @@ input::-webkit-inner-spin-button {
 .my228{
   max-height: 228px;
 }
-/* Firefox */
-input[type=number] {
-  -moz-appearance: textfield;
-}
 .custom-select {
   width: 100%;
   position: relative;
@@ -670,14 +675,18 @@ height: 100%;
   .divider ,.divider2{
     margin: 16px 0;
   }
+  .rightSidebar .fs-20{
+    font-size: 16px;
+  }
   .btn{
     height: 38px;
     font-size: 13px;
     line-height: 18px;
   }
-  input, textarea{
+  input, textarea,.input{
     padding: 8.5px 10px;
-    width: calc(100% - 23px);
+    width: calc(100% - 23px) !important;
+    border-radius: 8px;
   }
   .absoluteImage{
     width: 16px;
@@ -688,12 +697,18 @@ height: 100%;
   }
   .lineSearch input {
     padding-left: 50px;
-    width: calc(100% - 63px);
+    width: calc(100% - 63px) !important;
   }
   .btnSecondary{
     height: 36px;
   }
- 
+  .rightSidebar .fs-20{
+    font-size: 16px;
+  }
+  .rightSidebar .fs-18{
+    font-size: 14px;
+  }
+  
 }
 @media (max-width: 1023.98px) {
   .mobileHide {
@@ -716,6 +731,7 @@ height: 100%;
 @media (max-width: 575.98px) {
   .flexsm{
     flex-direction: column;
+    align-items: flex-start;
   }
   .flexrightsm{
     flex-direction: column;

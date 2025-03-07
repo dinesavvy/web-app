@@ -98,6 +98,12 @@
   .mb-60 {
     margin-bottom: 30px;
   }
+  .gap-8 {
+    gap: 6px;
+  }
+  .gap-10 {
+    gap: 8px;
+  }
   .gap-16 {
     gap: 12px;
   }

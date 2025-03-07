@@ -830,8 +830,8 @@
   width: fit-content;
 }
 .historyFlex .initialName {
-  height: 42px;
-  width: 42px;
+  min-height: 42px;
+  min-width: 42px;
   border-radius: 50%;
   font-size: 16px;
 }
@@ -1039,9 +1039,20 @@ input[type="radio"]:checked+.custom-radio-button {
 .changeBrandImage img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
 }
-
+.ant-select-selection-item{
+  /* height: 48px; */
+}
+.custom-select{
+  height: 48px !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+.custom-select .ant-select-selection-search{
+  display: flex !important;
+  align-items: center;
+}
 .flexDirection {
   flex-direction: column;
 }
@@ -1705,20 +1716,40 @@ input.addTitleInput::placeholder {
   border-radius: 0 0 16px 16px;
 }
 @media (max-width: 1549.98px) {
+  .image80 {
+    height: 60px;
+    min-width: 60px;
+    border-radius: 6px;
+  }
+  .react-tel-input.phoneInput .form-control,.react-tel-input .flag-dropdown {
+    padding: 8.5px 10px !important;
+  }
+  .deleteBtn{
+    min-width: 40px;
+  }
   .radioImage {
     height: 50px;
     padding: 8px;
+  }
+  .templateGrid{
+    gap: 6px;
   }
   .custom-label {
     border-radius: 6px;
     height: 119px;
     width: 203px;
   }
+  .templateImage{
+    border-radius: 12px;
+  }
   .oneLine{
     width: 190px;
   }
   .overviewCard{
     padding: 12px;
+  }
+  .backButton {
+    height: 25px;
   }
   .nudgeGrid{
     height: 258px;
@@ -1832,7 +1863,8 @@ input.addTitleInput::placeholder {
   }
   .modalbg {
     top: -14px;
-    left: -29px;
+   left: 50%;
+   transform: translateX(-50%);
   }
   .addBtn {
     padding: 0 25px;
@@ -1930,6 +1962,99 @@ input.addTitleInput::placeholder {
     max-width: 350px;
     width: 100%;
   }
+  .brandImagePromo {
+    height: 70px;
+  }
+  .roi {
+    padding: 2px 10px;
+  }
+  .roi.fs-16{
+    font-size: 12px;
+  }
+  .positionSticky {
+    height: calc(100vh - 100px);
+  }
+  .input{
+    padding: 8.5px 10px;
+  } 
+  .datePickerImg {
+    right: 10px;
+    top: 50%;
+    height: 18px;
+    width: 18px;
+  }
+  .h30{
+    height: 24px;
+  }
+  
+  .onlyArrowBtn {
+    min-width: 40px !important;
+  }
+  .onlyArrowBtn img{
+    height: 18px;
+    width: 18px;
+  }
+  .promotionImage {
+    height: 70px;
+  }
+  .dropdown-list {
+    top: 48px;
+    border-radius: 6px;
+    max-height: 150px;
+    width: 250px;
+    padding: 12px;
+  }
+  .historyFlex {
+    gap: 14px;
+    margin-bottom: 12px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #E3E3E8;
+    cursor: pointer;
+  }
+  .historyFlex .initialName {
+    min-height: 35px;
+    min-width: 35px;
+    border-radius: 50%;
+    font-size: 12px;
+  }
+  .grid5{
+    gap: 16px;
+  }
+  .tagNumber {
+    padding: 0px 6px !important;
+    border-radius: 40px !important ;
+    height: 18px !important;
+    font-size: 10px;
+  }
+  .line::after {
+    height: 20px;
+    width: 1px;
+    left: 45px;
+  }
+  .line input {
+    padding-left: 58px;
+    width: calc(100% - 72px) !important;
+  }
+  .absoluteTemplateText{
+    font-size: 14px;
+    text-align: center;
+  }
+  .reflectImage{
+    height: 150px;
+    width: 300px;
+  }
+  .m30 {
+    margin: 20px 0 !important;
+  }
+  .w240 {
+    width: 200px;
+  }
+  .custom-radio-button img{
+     width:  30px;
+  }
+  .p32{
+    padding: 0 20px;
+  }
 }
 @media (max-width: 1499.98px) {
   .merchantGrid {
@@ -1954,6 +2079,9 @@ input.addTitleInput::placeholder {
   }
   .react-tooltip{
     display: none !important;
+  }
+  .changeBrandImage{
+   height: 100px;
   }
 }
 
@@ -1994,7 +2122,6 @@ input.addTitleInput::placeholder {
   .flexWrapsm {
     flex-direction: column;
     align-items: start;
-    gap: 20px;
   }
 
   .merchantGrid {
@@ -2013,7 +2140,7 @@ input.addTitleInput::placeholder {
   .flexPagination {
     flex-direction: column;
     gap: 10px;
-    align-items: flex-start;
+    align-items: flex-end;
   }
 
   .bottomPadding {
@@ -2027,9 +2154,30 @@ input.addTitleInput::placeholder {
   .ant-pagination-item {
     margin-inline-end: 4px !important
   }
-
+  .grid5{
+    gap: 12px;
+    grid-template-columns: repeat(3,1fr);
+  }
   .topPadding {
     padding: 16px 16px 0 16px;
+  }
+  .absoluteTemplateText{
+    bottom: 20px;
+    width: 80%;
+  }
+  .reflectImage{
+    height: 120px;
+    width: 300px;
+  }
+  .divider, .divider2{
+    margin: 12px 0;
+  }
+  .fs-20 {
+    font-size: 16px;
+    line-height: 20px;
+  }
+  .inputGrid{
+    gap: 16px;
   }
 }
 
@@ -2069,14 +2217,23 @@ input.addTitleInput::placeholder {
     width: 100%;
     right: -100%;
   }
-
-  .btn {
-    font-size: 14px;
+  .addBtn {
+    padding: 0 16px;
+    height: 32px;
   }
-
+  .btn {
+    font-size: 12px;
+    height: 32px;
+    border-radius: 8px;
+  }
+  .grid5{
+    grid-template-columns: repeat(2,1fr);
+  }
   .flexBtn {
     flex-direction: column;
     align-items: end;
+  }.m30 {
+    margin: 16px 0 !important;
   }
 
   .reflectImage,
@@ -2085,11 +2242,25 @@ input.addTitleInput::placeholder {
   }
 
   .changeBrandImage {
-    width: calc(100% - 40px);
+    width: calc(100% - 32px);
   }
-
+  .changeBrandImage {
+    height: 70px;
+    padding: 16px;
+    background-color: #F3F3F4;
+    border-radius: 22px;
+  }
   .fs-18 {
     font-size: 14px;
     line-height: 20px;
+  }
+  .btnSecondary {
+    height: 32px;
+  }
+  .secondarysecond{
+    height: unset;
+  }
+  .btn img {
+    height: 16px;
   }
 }

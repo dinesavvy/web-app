@@ -160,11 +160,11 @@
   transform: translateY(-20px);
 }
 
-.chartborder {
-  /* background-color: #FFFFFF;
+/* .chartborder {
+  background-color: #FFFFFF;
   border: 1px solid #E3E3E8;
-  border-radius: 8px; */
-}
+  border-radius: 8px;
+} */
 
 .chartpadding {
   padding: 20px 20px 0 20px;
@@ -257,6 +257,8 @@
 
 .accordion-header img {
   height: 45px;
+  min-width: 68px;
+  object-fit: contain;
 }
 
 .accordion-header {
@@ -357,6 +359,49 @@ iframe{
   }
   .accordion-item{
     padding: 16px;
+    margin-bottom: 16px;
+    border-radius: 12px;
+  }
+  .padding20 {
+    padding: 16px;
+    border-radius: 8px 8px 0 0;
+  }
+  .paddingb20 {
+    padding: 16px;
+    border-radius: 0 0 8px 8px;
+    max-height: 280px;
+  }
+  .addThing img {
+    height: 20px;
+    width: 20px;
+  }
+  .selectGrid3{
+    gap: 16px;
+  }
+  .brandItem {
+    border-radius: 4px;
+    padding: 8px;
+    max-height: 48px;
+  }
+  .selectMerchant .brandItem {
+    max-height: 70px;
+  }
+  .addThing{
+    padding: 14px;
+  }
+  .overflowCart2 {
+    height: calc(100vh - 94px);
+  }
+  .addPlus {
+    padding: 8px 9px;
+    gap: 3px;
+  }
+  .addTitleInput {
+    font-size: 16px;
+    line-height: 20px;
+  }
+  .arrowUp, .arrow{
+    height: 20px;
   }
   .accordion-header img{
     height: 38px;
@@ -388,6 +433,10 @@ iframe{
   }
   .tabFull .tab-button{
     padding: 12px 25px !important;
+  }
+  .dashboard {
+    padding: 0 20px;
+    padding-bottom: 20px;
   }
   
 }
@@ -465,10 +514,22 @@ iframe{
     min-height: 400px;
   }
   .fs-24 {
-    font-size: 18px;
+    font-size: 16px;
     line-height: 24px;
   }
   header{
     padding: 16px;
+  }
+  .fs-16 {
+    font-size: 13px;
+    line-height: 18px;
+  }
+  .fs-14 {
+    font-size: 11px;
+    line-height: 18px;
+  }
+  .dashboard {
+    padding: 0 16px;
+    padding-bottom: 16px;
   }
 }

@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import closeRightSidebar from "../../../assets/images/closeRightSidebar.svg";
 import loactionIcon from "../../../assets/images/loactionIcon.svg";
+import arrowRight from "../../../assets/images/arrowRight.svg";
 import Loader from "../../../common/Loader/Loader";
 import moment from "moment";
 
@@ -162,16 +163,16 @@ const NudgeDetail = ({
               <div className="fs-18 fw-600 mb-16">Redeemtion History</div>
               <div className="historyFlex">
                 <div className="d-flex align-center gap-8">
-                  {/* <div className="initialName fs-16">dr</div>
+                  <div className="initialName fs-16">dr</div>
                   <div>
                     <div className="fs-14 lightBlack">John Cooper</div>
                     <div className="fs-14 fw-500">December 19, 2024</div>
-                  </div> */}
-                  No data available
+                  </div>
+                  {/* No data available */}
                 </div>
-                {/* <div>
+                <div>
                   <img src={arrowRight} alt="arrowRight" />
-                </div> */}
+                </div>
               </div>
               {/* <div className="pc fs-16 fw-700 cursor-pointer text-center">
                 Show More

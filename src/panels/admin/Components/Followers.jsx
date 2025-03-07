@@ -208,7 +208,7 @@ const Followers = () => {
                     </div> */}
                           <div className="d-flex justify-between align-center gap-12 fs-14 mt-10">
                             <div className="d-flex align-center gap-12">
-                              <img src={resturantIcon} alt="" />
+                              <img src={resturantIcon} alt="" className="h30" />
                               Restaurants following:
                             </div>
                             <div className="fw-500">
@@ -218,7 +218,7 @@ const Followers = () => {
 
                           <div className="d-flex justify-between align-center gap-12 fs-14 mt-10">
                             <div className="d-flex align-center gap-12">
-                              <img src={nudgeIcon} alt="" />
+                              <img src={nudgeIcon} alt="" className="h30" />
                               Nudges shared
                             </div>
                             <div className="fw-500">{item?.nudgeCount}</div>
@@ -310,7 +310,7 @@ const Followers = () => {
                         {/* )} */}
                         <div className="d-flex justify-between align-center gap-12 fs-14 mt-10">
                           <div className="d-flex align-center gap-12">
-                            <img src={resturantIcon} alt="" />
+                            <img src={resturantIcon} className="h30" alt="" />
                             Restaurants following:
                           </div>
                           <div className="fw-500">
@@ -319,7 +319,7 @@ const Followers = () => {
                         </div>
                         <div className="d-flex justify-between align-center gap-12 fs-14 mt-10">
                           <div className="d-flex align-center gap-12">
-                            <img src={nudgeIcon} alt="" />
+                            <img src={nudgeIcon} className="h30" alt="" />
                             Nudges shared
                           </div>
                           <div className="fw-500">{item?.nudgeCount}</div>
