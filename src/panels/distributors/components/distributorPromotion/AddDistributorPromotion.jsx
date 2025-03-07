@@ -1,44 +1,54 @@
 import React, { useEffect, useState } from "react";
-import coke from "../../../assets/images/coke.svg";
-import pepsi from "../../../assets/images/pepsi.svg";
-import searchIcon from "../../../assets/images/searchIcon.svg";
-import addPlusIcon from "../../../assets/images/addPlusIcon.svg";
-import datePicker from "../../../assets/images/datePicker.svg";
-import closeIcon from "../../../assets/images/closeIcon.svg";
-import arrow from "../../../assets/images/arrow-up.svg";
+import pepsi from "../../../../assets/images/pepsi.svg";
+import searchIcon from "../../../../assets/images/searchIcon.svg";
+import addPlusIcon from "../../../../assets/images/addPlusIcon.svg";
+import datePicker from "../../../../assets/images/datePicker.svg";
+import closeIcon from "../../../../assets/images/closeIcon.svg";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
-import DragMerchantItem from "./DragMerchantItem";
-import DropMerchantZone from "./DropMerchantZone";
 import { DatePicker, TimePicker } from "antd";
-import DropBrandsZone from "./DropBrandsZone";
-import DragBrandsItem from "./DragBrandsItem";
-import CustomDragLayer from "./CustomDragLayer";
 import { useDispatch, useSelector } from "react-redux";
-import { brandListsHandler } from "../../../redux/action/brandListSlice";
-import Loader from "../../../common/Loader/Loader";
 import { useNavigate } from "react-router-dom";
-import { merchantsListHandler } from "../../../redux/action/merchantsList";
-import olive from "../../../assets/images/olive.png";
+// import { merchantsListHandler } from "../../../../redux/action/merchantsList";
+import DragMerchantItem from "../../../admin/Components/DragMerchantItem";
 import moment from "moment";
 import { ErrorMessage, Field, Form, Formik } from "formik";
-import noImageFound from "../../../assets/images/noImageFound.png";
+import noImageFound from "../../../../assets/images/noImageFound.png";
+// import {
+//   createPromotionAction,
+//   createPromotionHandler,
+// } from "../../../../redux/action/createPromotion";
 
 import {
-  createPromotionAction,
-  createPromotionHandler,
-} from "../../../redux/action/createPromotion";
-import { useCommonMessage } from "../../../common/CommonMessage";
+  createDistributorPromotionHandler,
+  createDistributorPromotionAction,
+} from "../../../../redux/action/distributorsAction/createDistributorPromotion";
+import { useCommonMessage } from "../../../../common/CommonMessage";
+import DropBrandsZone from "../../../admin/Components/DropBrandsZone";
+import DragBrandsItem from "../../../admin/Components/DragBrandsItem";
+import DropMerchantZone from "../../../admin/Components/DropMerchantZone";
+import Loader from "../../../../common/Loader/Loader";
+import CustomDragLayer from "../../../admin/Components/CustomDragLayer";
+import { supplierBrandListHandler } from "../../../../redux/action/supplierActions/supplierBrandList";
+import { supplierMerchantListHandler } from "../../../../redux/action/supplierActions/supplierMerchantList";
+import {
+  addSupplierPromotionAction,
+  addSupplierPromotionHandler,
+} from "../../../../redux/action/supplierActions/addSupplierPromotion";
+import { brandListDistributorHandler } from "../../../../redux/action/distributorsAction/brandListDistributor";
+import { distributorMerchantListHandler } from "../../../../redux/action/distributorsAction/distributorMerchantList";
 
-const AddPromotion = () => {
+const AddDistributorPromotion = () => {
   const [promotionTitle, setPromotionTitle] = useState("");
-  // const [promotionTitleError, setPromotionTitleError] = useState("");
   const [searchString, setSearchString] = useState("");
   const [searchStringMerchant, setSearchStringMerchant] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
-  const [errors, setErrors] = useState({ fromDate: "", toDate: "",promotionTitle:"" });
-
+  const [errors, setErrors] = useState({
+    fromDate: "",
+    toDate: "",
+    promotionTitle: "",
+  });
   const [mercahnts, setMercahnts] = useState([]);
   const [droppedMerchants, setDroppedMerchants] = useState([]);
   const [selectedMerchants, setSelectedMerchants] = useState([]);
@@ -51,14 +61,16 @@ const AddPromotion = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const brandListSelector = useSelector((state) => state?.brandList);
-  const merchantsListSelector = useSelector((state) => state?.merchantsList);
+  const brandListSelector = useSelector((state) => state?.brandListDistributor);
+  const merchantsListSelector = useSelector(
+    (state) => state?.distributorMerchantList
+  );
   const createPromotionSelector = useSelector(
-    (state) => state?.createPromotion
+    (state) => state?.createDistributorPromotion
   );
 
   const validateDates = () => {
-    let newErrors = { fromDate: "", toDate: "",promotionTitle:""};
+    let newErrors = { fromDate: "", toDate: "", promotionTitle: "" };
 
     if (!startDate) {
       newErrors.fromDate = "From date is required";
@@ -107,7 +119,6 @@ const AddPromotion = () => {
     );
 
     setDroppedMerchants((prevDropped) => [...prevDropped, ...draggedItems]);
-
     setSelectedMerchants([]);
   };
 
@@ -117,7 +128,10 @@ const AddPromotion = () => {
         type: "success",
         content: createPromotionSelector?.data?.message,
       });
-      dispatch(createPromotionAction.createPromotionReset());
+      navigate("/distributors/promotion");
+      dispatch(
+        createDistributorPromotionAction.createDistributorPromotionReset()
+      );
     } else if (
       createPromotionSelector?.message?.response?.data?.statusCode === 400
     ) {
@@ -125,7 +139,7 @@ const AddPromotion = () => {
         type: "error",
         content: createPromotionSelector?.message?.response?.data?.message,
       });
-      dispatch(createPromotionAction.createPromotionReset());
+      dispatch(addSupplierPromotionAction.createDistributorPromotionReset());
     }
   }, [createPromotionSelector]);
 
@@ -135,7 +149,7 @@ const AddPromotion = () => {
       limit: 10,
       searchString: searchString,
     };
-    dispatch(brandListsHandler(payload));
+    dispatch(brandListDistributorHandler(payload));
   }, [searchString]);
 
   useEffect(() => {
@@ -144,10 +158,10 @@ const AddPromotion = () => {
         page: 1,
         limit: 10,
         timeFrame: "today",
-        searchString:searchStringMerchant,
+        searchString: searchStringMerchant,
         searchArea: [],
       };
-      dispatch(merchantsListHandler(payload));
+      dispatch(distributorMerchantListHandler(payload));
     };
 
     fetchMerchants();
@@ -182,7 +196,8 @@ const AddPromotion = () => {
   };
 
   const handleSubmit = (values) => {
-    if(validateDates()){
+    console.log(values, "values");
+    if (validateDates()) {
       let payload = {
         promotionTitle: promotionTitle,
         brandId: droppedBrand?.id,
@@ -195,7 +210,7 @@ const AddPromotion = () => {
             promotionFund: item?.promotionalFunds,
             mSRP: item?.msrp,
             retailPrice: item?.priceForReimbursement,
-            fundAmount: 500,
+            fundAmount: item?.fundAmount,
           };
         }),
       };
@@ -205,7 +220,8 @@ const AddPromotion = () => {
       // } else {
       //   dispatch(createPromotionHandler(payload));
       // }
-      dispatch(createPromotionHandler(payload));
+      dispatch(createDistributorPromotionHandler(payload));
+      console.log(payload, "payload");
     }
   };
 
@@ -295,7 +311,9 @@ const AddPromotion = () => {
                         <input
                           type="text"
                           placeholder="Search Merchants"
-                          onChange={(e) => setSearchStringMerchant(e.target.value)}
+                          onChange={(e) =>
+                            setSearchStringMerchant(e.target.value)
+                          }
                         />
                         <img
                           src={searchIcon}
@@ -383,10 +401,17 @@ const AddPromotion = () => {
                   className="addTitleInput"
                   placeholder="Add promotion title here"
                   autoComplete="off"
-                  onChange={(e) => {setPromotionTitle(e.target.value);setErrors((prev) => ({ ...prev, promotionTitle: "" }));}}
+                  onChange={(e) => {
+                    setPromotionTitle(e.target.value);
+                    setErrors((prev) => ({ ...prev, promotionTitle: "" }));
+                  }}
                 />
               </div>
-              {errors.promotionTitle && <p className="mt-10 fw-500 fs-14 error">{errors.promotionTitle}</p>}
+              {errors.promotionTitle && (
+                <p className="mt-10 fw-500 fs-14 error">
+                  {errors.promotionTitle}
+                </p>
+              )}
               <div className="tabPadding mb-20">
                 <div className="fs-18 fw-700">Add Brand</div>
                 <div className="divider2"></div>
@@ -472,8 +497,11 @@ const AddPromotion = () => {
                         className="datePickerImg"
                       />
                     </div>
-                    {errors.fromDate && <p className="mt-10 fw-500 fs-14 error">{errors.fromDate}</p>}
-
+                    {errors.fromDate && (
+                      <p className="mt-10 fw-500 fs-14 error">
+                        {errors.fromDate}
+                      </p>
+                    )}
                   </div>
                   <div className="w-100">
                     <label htmlFor="" className="fs-14 fw-500 mb-10">
@@ -497,11 +525,15 @@ const AddPromotion = () => {
                         className="datePickerImg"
                       />
                     </div>
-                    {errors.toDate && <p className="mt-10 fw-500 fs-14 error">{errors.toDate}</p>}
+                    {errors.toDate && (
+                      <p className="mt-10 fw-500 fs-14 error">
+                        {errors.toDate}
+                      </p>
+                    )}
                   </div>
                 </div>
               </div>
-              
+
               {/* Merchant Component */}
               <div className="accordion-container">
                 <Formik
@@ -510,28 +542,23 @@ const AddPromotion = () => {
                     merchants: droppedMerchants?.map(() => ({
                       // quantity: droppedBrand?.brandItem?.map((item)=>item?.mSRP)||"",
                       quantity:
-                        // (droppedBrand?.selectedBrands?.brandItem?.map(
-                        //   (item) => item?.mSRP
-                        // ) *
-                        //   100) /
-                        //   droppedBrand?.selectedBrands?.brandItem?.map(
-                        //     (item) => item?.mSRP
-                        //   ) || "",
-                        droppedBrand?.selectedBrands?.brandItem?.map(
-                          (item) => item?.mSRP *item?.quantity
-                        )/ (droppedBrand?.selectedBrands?.brandItem?.map(
+                        (droppedBrand?.selectedBrands?.brandItem?.map(
+                          (item) => item?.mSRP
+                        ) *
+                          100) /
+                          droppedBrand?.selectedBrands?.brandItem?.map(
                             (item) => item?.mSRP
-                          )),
+                          ) || "",
                       promotionalFunds:
                         droppedBrand?.selectedBrands?.brandItem?.map(
-                          (item) => item?.mSRP *item?.quantity
-                        ) || "",
+                          (item) => item?.mSRP
+                        ) * 100 || "",
                       msrp: "",
                       priceForReimbursement: "",
-                      foundAmount:
+                      fundAmount:
                         droppedBrand?.selectedBrands?.brandItem?.map(
-                          (item) => item?.mSRP*item?.quantity
-                        )  || "",
+                          (item) => item?.mSRP
+                        ) * 100 || "",
                     })),
                   }}
                   // validationSchema={validationSchema}
@@ -650,7 +677,12 @@ const AddPromotion = () => {
                                         name={`merchants.${indexDroppedMerchant}.msrp`}
                                         placeholder="Enter Price"
                                         autoComplete="off"
-                                        onChange = {()=>setErrors((prev) => ({ ...prev, fromDate: "" }))}
+                                        // onChange = {()=>setErrors((prev) => ({ ...prev, msrp: "" }))}
+                                      />
+                                      <ErrorMessage
+                                        name={`merchants.${indexDroppedMerchant}.msrp`}
+                                        component="div"
+                                        className="error"
                                       />
                                       {/* {errors.msrp && <p className="mt-10 fw-500 fs-14 error">{errors.msrp}</p>} */}
                                     </div>
@@ -687,12 +719,12 @@ const AddPromotion = () => {
 
                                       <Field
                                         type="text"
-                                        name={`merchants.${indexDroppedMerchant}.foundAmount`}
+                                        name={`merchants.${indexDroppedMerchant}.fundAmount`}
                                         placeholder="Enter Price"
                                         disabled
                                       />
                                       <ErrorMessage
-                                        name={`merchants.${indexDroppedMerchant}.foundAmount`}
+                                        name={`merchants.${indexDroppedMerchant}.fundAmount`}
                                         component="div"
                                         className="error"
                                       />
@@ -798,4 +830,4 @@ const AddPromotion = () => {
   );
 };
 
-export default AddPromotion;
+export default AddDistributorPromotion;

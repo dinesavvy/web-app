@@ -2,12 +2,12 @@ import React, { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import backButton from "../../../../assets/images/backButton.svg";
 import breadCrumbIcon from "../../../../assets/images/breadCrumb.svg";
-import coke from "../../../../assets/images/coke.svg";
+// import coke from "../../../../assets/images/coke.svg";
 import deleteBrands from "../../../../assets/images/deleteBrands.svg";
 import addMerchantIcon from "../../../../assets/images/addMerchantIcon.svg";
 import { Breadcrumb, Select } from "antd";
 import { useDispatch, useSelector } from "react-redux";
-import { fileUploadHandler } from "../../../../redux/action/fileUpload";
+import { fileUploadAction, fileUploadHandler } from "../../../../redux/action/fileUpload";
 import Loader from "../../../../common/Loader/Loader";
 import { ErrorMessage, Field, FieldArray, Form, Formik } from "formik";
 import {
@@ -27,6 +27,7 @@ const AddBrands = () => {
   const [fileObject, setFileObject] = useState();
   const messageApi = useCommonMessage();
   const fileuploadSelector = useSelector((state) => state?.fileupload);
+  console.log(fileuploadSelector,"fileuploadSelector")
 
   const { state } = useLocation();
 
@@ -94,11 +95,14 @@ const AddBrands = () => {
         } catch (error) {
           console.error("Error uploading file", error);
         }
+        dispatch(fileUploadAction.fileuploadReset())
       }
     };
 
     uploadFile();
   }, [fileuploadSelector]);
+
+  console.log(state,"state")
 
   const handleFormSubmit = (values) => {
     const brandItemArray = values?.SKUs?.map((item) => ({
@@ -110,13 +114,14 @@ const AddBrands = () => {
     }));
 
     let payload = {
-      imageUrl: fileuploadSelector?.data?.data?.map((item) => item?.src),
+      imageUrl: fileuploadSelector?.data?.data?.map((item) => item?.src)||[state?.brandDetails?.imageUrl?.[0]],
       brandName: values?.brandName,
       brandItem: brandItemArray, // Set the array here
     };
     if (!state?.brandDetails) {
       dispatch(createBrandHandler(payload));
     } else if (state?.brandDetails) {
+      payload.brandId = state?.brandDetails?._id;
       dispatch(updateBrandHandler(payload));
     }
   };
@@ -252,6 +257,7 @@ const AddBrands = () => {
                       placeholder="Brand Name"
                       name="brandName"
                       autoComplete="off"
+                      maxLength={50}
                     />
                     <ErrorMessage
                       name="brandName"
@@ -360,6 +366,15 @@ const AddBrands = () => {
                                 placeholder="Red Bull - 8.4 oz energy drink (12-pack)"
                                 name={`SKUs[${index}].quantity`}
                                 autoComplete="off"
+                                maxLength={5}
+                                onKeyDown={(e) => {
+                                  if (
+                                    !/^\d$/.test(e.key) && // Allow numbers
+                                    !["Backspace", "Delete", "ArrowLeft", "ArrowRight", "Tab"].includes(e.key) // Allow navigation keys
+                                  ) {
+                                    e.preventDefault();
+                                  }
+                                }}
                               />
                               <ErrorMessage
                                 name={`SKUs[${index}].quantity`}

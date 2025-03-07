@@ -62,7 +62,9 @@ const Header = ({ handleTrigger }) => {
     "/admin/nudges": "Nudges",
     "/admin/suppliers": "Suppliers",
     "/admin/distributors": "Distributors",
-    "/admin/merchant/details": `Merchants - ${getRestaurantName}`,
+    "/admin/merchant/details": `Merchants - ${getRestaurantName
+  ? getRestaurantName.charAt(0).toUpperCase() + getRestaurantName.slice(1)
+  : ""}`,
     "/admin/followerList/followerDetails": "Followers",
     "/merchant/dashboard": "Merchant Dashboard",
     "/merchant/followers": "Followers",
@@ -72,6 +74,10 @@ const Header = ({ handleTrigger }) => {
     "/merchant/profile":"Profile",
     "/merchant/create-nudge":"Nudges",
     "/admin/merchant/edit-member": `Merchants - ${getRestaurantName}`,
+    "/admin/promotions":"Promotions",
+    "/admin/brands":"Brands",
+    "/admin/add-promotions":"Create single promotions",
+    "/admin/brands/add":"Brands"
   };
 
   return (

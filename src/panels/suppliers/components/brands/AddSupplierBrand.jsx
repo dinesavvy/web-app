@@ -263,6 +263,7 @@ const AddSupplierBrand = () => {
                       placeholder="Brand Name"
                       name="brandName"
                       autoComplete="off"
+                      maxLength={50}
                     />
                     <ErrorMessage
                       name="brandName"
@@ -371,6 +372,15 @@ const AddSupplierBrand = () => {
                                 placeholder="Red Bull - 8.4 oz energy drink (12-pack)"
                                 name={`SKUs[${index}].quantity`}
                                 autoComplete="off"
+                                maxLength={5}
+                                onKeyDown={(e) => {
+                                  if (
+                                    !/^\d$/.test(e.key) && // Allow numbers
+                                    !["Backspace", "Delete", "ArrowLeft", "ArrowRight", "Tab"].includes(e.key) // Allow navigation keys
+                                  ) {
+                                    e.preventDefault();
+                                  }
+                                }}
                               />
                               <ErrorMessage
                                 name={`SKUs[${index}].quantity`}

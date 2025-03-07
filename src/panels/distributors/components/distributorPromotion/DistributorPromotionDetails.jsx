@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from "react";
 import closeRightSidebar from "../../../../assets/images/closeRightSidebar.svg";
 import arrowUp from "../../../../assets/images/arrow-up.svg";
-import coke from "../../../../assets/images/coke.svg";
 import olive from "../../../../assets/images/olive.png";
 // import PromotionCart from "./PromotionCart";
 import moment from "moment";
 import { promotionDetailsHandler } from "../../../../redux/action/promotionDetails";
 import { useDispatch, useSelector } from "react-redux";
 import Loader from "../../../../common/Loader/Loader";
-import { supplierPromotionDetailsHandler } from "../../../../redux/action/supplierActions/supplierPromotionDetails";
+import { distributorPromotionDetailsHandler } from "../../../../redux/action/distributorsAction/distributorPromotionDetails";
 import noImageFound from "../../../../assets/images/noImageFound.png";
 
-const SupplierPromotionDetails = ({
+
+const DistributorPromotionDetails = ({
   isOpen,
   toggleDetails,
   promotionalDetailsData,
@@ -21,8 +21,9 @@ const SupplierPromotionDetails = ({
   const [addFund, setAddFund] = useState(false);
 
   const promotionDetailsSelector = useSelector(
-    (state) => state?.supplierPromotionDetails
+    (state) => state?.distributorPromotionDetails
   );
+  console.log(promotionDetailsSelector,"promotionDetailsSelector")
 
   const dispatch = useDispatch();
 
@@ -67,7 +68,7 @@ const SupplierPromotionDetails = ({
       let payload = {
         promotionId: promotionalDetailsData?._id,
       };
-      dispatch(supplierPromotionDetailsHandler(payload));
+      dispatch(distributorPromotionDetailsHandler(payload));
     }
   }, [promotionalDetailsData]);
 
@@ -285,4 +286,4 @@ const SupplierPromotionDetails = ({
   );
 };
 
-export default SupplierPromotionDetails;
+export default DistributorPromotionDetails;

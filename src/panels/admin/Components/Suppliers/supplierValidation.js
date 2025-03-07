@@ -10,5 +10,5 @@ export const supplierValidation = Yup.object().shape({
   supplierEmail: Yup.string()
     .email("Please enter a valid email address")
     .required("Supplier email is required"),
-  // supplierContactNumber: Yup.string().required("Phone number is required"),
+  supplierContactNumber: Yup.string().required("Phone number is required"),
 });

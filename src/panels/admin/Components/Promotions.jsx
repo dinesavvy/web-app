@@ -11,7 +11,6 @@ import Loader from "../../../common/Loader/Loader";
 import moment from "moment";
 import noImageFound from "../../../assets/images/noImageFound.png";
 
-
 const Promotions = () => {
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
   const [pagination, setPagination] = useState({ page: 1, limit: 9 });
@@ -19,7 +18,7 @@ const Promotions = () => {
   const [activeTab, setActiveTab] = useState("active");
   const [isOpen, setIsOpen] = useState(false);
   const [promotionalDetailsData, setPromotionalDetailsData] = useState();
-  
+
   const dispatch = useDispatch();
   const selectRef = useRef(null);
   const navigate = useNavigate();
@@ -51,7 +50,7 @@ const Promotions = () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
-  
+
   useEffect(() => {
     if (isDetailsOpen) {
       document.body.classList.add("overflow-Hidden");
@@ -74,10 +73,10 @@ const Promotions = () => {
       page: pagination?.page,
       limit: pagination?.limit,
       searchString: searchString,
-      isActive :activeTab==="active"?false:true
+      isActive: activeTab === "active" ? false : true,
     };
     dispatch(adminPromotionListHandler(payload));
-  }, [pagination, searchString,activeTab]);
+  }, [pagination, searchString, activeTab]);
 
   return (
     <>
@@ -157,15 +156,23 @@ const Promotions = () => {
                         )}
                         <div className="text-center promotionImage mb-28">
                           <img
-                            src={item?.brandDetails?.imageUrl?.[0] || noImageFound}
+                            src={
+                              item?.brandDetails?.imageUrl?.[0] || noImageFound
+                            }
                             alt=""
                             className="h-100"
                           />
                         </div>
                         <div className="d-flex justify-between align-center gap-10">
                           <div className="fs-16 fw-700 trunc1">
-                            {item?.brandDetails?.brandName}
+                            {item?.brandDetails?.brandName
+                              ? item.brandDetails.brandName
+                                  .charAt(0)
+                                  .toUpperCase() +
+                                item.brandDetails.brandName.slice(1)
+                              : ""}
                           </div>
+
                           <div
                             className={
                               item?.redemptionPercentage > 50

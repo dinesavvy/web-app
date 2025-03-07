@@ -5,6 +5,10 @@ import deleteDistributorBrandSlice from "../action/distributorsAction/deleteDist
 import createDistributorBrandSlice from "../action/distributorsAction/createDistributorBrand";
 import fileUploadDistributorSlice from "../action/distributorsAction/fileUploadDistributor";
 import updateDistributorBrandSlice from "../action/distributorsAction/updateDistributorBrand";
+import distributorPromotionListSlice from "../action/distributorsAction/distributorPromotionList";
+import distributorMerchantListSlice from "../action/distributorsAction/distributorMerchantList";
+import createDistributorPromotionSlice from "../action/distributorsAction/createDistributorPromotion";
+import distributorPromotionDetailsSlice from "../action/distributorsAction/distributorPromotionDetails";
 
 const store = configureStore({
   reducer: {
@@ -14,6 +18,10 @@ const store = configureStore({
     createDistributorBrand: createDistributorBrandSlice,
     fileUploadDistributor: fileUploadDistributorSlice,
     updateDistributorBrand: updateDistributorBrandSlice,
+    distributorPromotionList: distributorPromotionListSlice,
+    distributorMerchantList: distributorMerchantListSlice,
+    createDistributorPromotion: createDistributorPromotionSlice,
+    distributorPromotionDetails: distributorPromotionDetailsSlice,
   },
 });
 
