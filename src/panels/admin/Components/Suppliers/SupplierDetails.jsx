@@ -297,6 +297,7 @@ const SupplierDetails = ({
                       type="text"
                       placeholder="Enter name"
                       name="supplierName"
+                      autocomplete="off"
                     />
                     <ErrorMessage
                       name="supplierName"
@@ -312,6 +313,7 @@ const SupplierDetails = ({
                       type="text"
                       placeholder="Enter name"
                       name="supplierContactName"
+                      autocomplete="off"
                     />
                     <ErrorMessage
                       name="supplierContactName"
@@ -327,6 +329,7 @@ const SupplierDetails = ({
                       type="text"
                       placeholder="Enter name"
                       name="supplierPosition"
+                      autocomplete="off"
                     />
                     {/* <ErrorMessage
                       name="supplierPosition"

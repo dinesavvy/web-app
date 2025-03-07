@@ -68,6 +68,19 @@ const SearchSelect = ({ onSearchChange, onSearchAreaChange }) => {
     };
   }, []);
 
+  const placeholders = {
+    "/admin/merchant/followers":
+      "Search by preferences, what they love or nudges",
+    "/admin/merchant/details":
+      "Search by preferences, what they love or nudges",
+    "/admin/suppliers": "Search Suppliers",
+    "/admin/distributors": "Search Distributors",
+    "/admin/brands": "Search Brands",
+    "/admin/promotions": "Search Promotions",
+  };
+
+  const placeholder = placeholders[location.pathname] || "Search Merchants";
+
   return (
     <>
       <div className="d-flex align-center justify-between gap-10 mb-20 ">
@@ -76,71 +89,66 @@ const SearchSelect = ({ onSearchChange, onSearchAreaChange }) => {
             type="text"
             value={searchInput}
             onChange={handleSearchInputChange}
-            placeholder={
-              location.pathname === "/admin/merchant/followers" ||
-              location.pathname === "/admin/merchant/details"
-                ? "Search by preferences, what they love or nudges"
-                : "Search Merchants"
-            }
+            placeholder={placeholder}
             autoComplete="off"
           />
           <img src={searchIcon} alt="" className="absoluteImage" />
         </div>
         {/* {location.pathname !== "/admin/merchant/followers" && ( */}
-          {(location?.pathname === "/admin/merchant/list" ||location?.pathname === "/admin/merchant/details") && (
-        <div className="dropdown-container" ref={dropdownRef}>
-          {/* Dropdown */}
-          <div className="dropdown-header" onClick={toggleDropdown}>
-            <button className="dropdown-button">
-              <img src={filterIcon} alt="" />
-              Filter
-            </button>
-          </div>
-       
-          {isDropdownOpen && (
-            <div className="dropdown-list">
-              {(location?.pathname === "/admin/merchant/followers" ||
-                location?.pathname === "/admin/merchant/details" ) &&
-                followerListFilter.map((option, index) => (
-                  <div key={index} className="dropdown-item custom-checkbox">
-                    <label className="checkLabel">
-                      <input
-                        type="checkbox"
-                        checked={selectedItems.includes(option)}
-                        onChange={() => handleSelect(option)}
-                      />
-                      <span className="checkmark"></span>
-                      {/* {option} */}
-                      {option.charAt(0).toUpperCase() + option.slice(1)}
-                    </label>
-                  </div>
-                ))}
-
-              {location?.pathname === "/admin/merchant/list" &&
-                options.map((option, index) => (
-                  <div key={index} className="dropdown-item custom-checkbox">
-                    <label className="checkLabel">
-                      <input
-                        type="checkbox"
-                        checked={selectedItems.includes(option)}
-                        onChange={() => handleSelect(option)}
-                      />
-                      <span className="checkmark"></span>
-                      {/* {option} */}
-                      {option.charAt(0).toUpperCase() + option.slice(1)}
-                    </label>
-                  </div>
-                ))}
+        {(location?.pathname === "/admin/merchant/list" ||
+          location?.pathname === "/admin/merchant/details") && (
+          <div className="dropdown-container" ref={dropdownRef}>
+            {/* Dropdown */}
+            <div className="dropdown-header" onClick={toggleDropdown}>
+              <button className="dropdown-button">
+                <img src={filterIcon} alt="" />
+                Filter
+              </button>
             </div>
-          )}
-          
-        </div>
-           )}
+
+            {isDropdownOpen && (
+              <div className="dropdown-list">
+                {(location?.pathname === "/admin/merchant/followers" ||
+                  location?.pathname === "/admin/merchant/details") &&
+                  followerListFilter.map((option, index) => (
+                    <div key={index} className="dropdown-item custom-checkbox">
+                      <label className="checkLabel">
+                        <input
+                          type="checkbox"
+                          checked={selectedItems.includes(option)}
+                          onChange={() => handleSelect(option)}
+                        />
+                        <span className="checkmark"></span>
+                        {/* {option} */}
+                        {option.charAt(0).toUpperCase() + option.slice(1)}
+                      </label>
+                    </div>
+                  ))}
+
+                {location?.pathname === "/admin/merchant/list" &&
+                  options.map((option, index) => (
+                    <div key={index} className="dropdown-item custom-checkbox">
+                      <label className="checkLabel">
+                        <input
+                          type="checkbox"
+                          checked={selectedItems.includes(option)}
+                          onChange={() => handleSelect(option)}
+                        />
+                        <span className="checkmark"></span>
+                        {/* {option} */}
+                        {option.charAt(0).toUpperCase() + option.slice(1)}
+                      </label>
+                    </div>
+                  ))}
+              </div>
+            )}
+          </div>
+        )}
         {/* )} */}
       </div>
 
       {/* Selected Items */}
-      <div className={`selected-items ${selectedItems.length? "mb-20":""}`}>
+      <div className={`selected-items ${selectedItems.length ? "mb-20" : ""}`}>
         {selectedItems.map((item, index) => (
           <div key={index} className="selected-item">
             {/* {item} */}

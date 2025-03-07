@@ -7,7 +7,7 @@ import deleteBrands from "../../../../assets/images/deleteBrands.svg";
 import addMerchantIcon from "../../../../assets/images/addMerchantIcon.svg";
 import { Breadcrumb, Select } from "antd";
 import { useDispatch, useSelector } from "react-redux";
-import { fileUploadHandler } from "../../../../redux/action/fileUpload";
+import { fileUploadAction, fileUploadHandler } from "../../../../redux/action/fileUpload";
 import Loader from "../../../../common/Loader/Loader";
 import { ErrorMessage, Field, FieldArray, Form, Formik } from "formik";
 import {
@@ -27,6 +27,7 @@ const AddBrands = () => {
   const [fileObject, setFileObject] = useState();
   const messageApi = useCommonMessage();
   const fileuploadSelector = useSelector((state) => state?.fileupload);
+  console.log(fileuploadSelector,"fileuploadSelector")
 
   const { state } = useLocation();
 
@@ -94,11 +95,14 @@ const AddBrands = () => {
         } catch (error) {
           console.error("Error uploading file", error);
         }
+        dispatch(fileUploadAction.fileuploadReset())
       }
     };
 
     uploadFile();
   }, [fileuploadSelector]);
+
+  console.log(state,"state")
 
   const handleFormSubmit = (values) => {
     const brandItemArray = values?.SKUs?.map((item) => ({
@@ -110,13 +114,14 @@ const AddBrands = () => {
     }));
 
     let payload = {
-      imageUrl: fileuploadSelector?.data?.data?.map((item) => item?.src),
+      imageUrl: fileuploadSelector?.data?.data?.map((item) => item?.src)||[state?.brandDetails?.imageUrl?.[0]],
       brandName: values?.brandName,
       brandItem: brandItemArray, // Set the array here
     };
     if (!state?.brandDetails) {
       dispatch(createBrandHandler(payload));
     } else if (state?.brandDetails) {
+      payload.brandId = state?.brandDetails?._id;
       dispatch(updateBrandHandler(payload));
     }
   };
