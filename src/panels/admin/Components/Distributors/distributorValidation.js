@@ -14,6 +14,6 @@ export const distributorValidation = Yup.object().shape({
   distributorEmail: Yup.string()
     .matches(emailRegex, "Please enter a valid email address")
     .required("Distributor email is required"),
-  // distributorContactNumber: Yup.string().required("Phone number is required"),
+  distributorContactNumber: Yup.string().required("Phone number is required"),
   // .matches(/^\d{6,}$/, "Phone number must be at least 6 digits"), // Minimum 6 digits
 });

@@ -1,29 +1,28 @@
-import React, { useEffect, useState } from "react";
+import React, {  useState } from "react";
 import closeRightSidebar from "../../../assets/images/closeRightSidebar.svg";
-import coke from "../../../assets/images/coke.svg";
 import editMember from "../../../assets/images/editMember.svg";
 import deleteMember from "../../../assets/images/deleteMember.svg";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteBrandHandler } from "../../../redux/action/deleteBrand";
+import { deleteBrandHandler, deleteBrandsAction } from "../../../redux/action/deleteBrand";
 import noImageFound from "../../../assets/images/noImageFound.png";
+import CommonModal from "./CommonModal";
 
-
-const BrandDetails = ({ isOpen, toggleDetails, brandDetails }) => {
+const BrandDetails = ({ isOpen, toggleDetails, brandDetails,setIsDetailsOpen }) => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const [deleteModal, setDeleteModal] = useState(false);
 
   const deleteBrand = () => {
-    let payload = {
-      brandId: brandDetails?._id,
-    };
-    dispatch(deleteBrandHandler(payload));
+    setDeleteModal(true);
+    // let payload = {
+    //   brandId: brandDetails?._id,
+    // };
+    // dispatch(deleteBrandHandler(payload));
   };
 
   return (
     <>
       {isOpen && <div className="overlay2" onClick={toggleDetails}></div>}
-
       <div className={`rightSidebar rightSidebar2 ${isOpen ? "open" : ""}`}>
         <div className="d-flex justify-between align-center">
           <div className="fs-20 fw-600">Brand Details</div>
@@ -34,14 +33,15 @@ const BrandDetails = ({ isOpen, toggleDetails, brandDetails }) => {
         <div className="divider2"></div>
         <div className="overflowCart2 overflowCart">
           <div className="brandImagePromo mb-20">
-            <img src={brandDetails?.imageUrl?.[0]|| noImageFound} alt="" />
+            <img src={brandDetails?.imageUrl?.[0] || noImageFound} alt="" />
           </div>
           <div className="d-flex justify-between align-center gap-10">
-          <div className="fs-16 fw-700">
-  {brandDetails?.brandName
-    ? brandDetails.brandName.charAt(0).toUpperCase() + brandDetails.brandName.slice(1)
-    : ""}
-</div>
+            <div className="fs-16 fw-700">
+              {brandDetails?.brandName
+                ? brandDetails.brandName.charAt(0).toUpperCase() +
+                  brandDetails.brandName.slice(1)
+                : ""}
+            </div>
 
             <div className="fs-16 fw-600 roi green">Performance: 52%</div>
           </div>
@@ -132,6 +132,15 @@ const BrandDetails = ({ isOpen, toggleDetails, brandDetails }) => {
           </div>
         </div>
       </div>
+
+      {deleteModal && (
+        <CommonModal
+        deleteModal={deleteModal}
+          setDeleteModal={setDeleteModal}
+          brandDetails={brandDetails}
+          setIsDetailsOpen={setIsDetailsOpen}
+        />
+      )}
     </>
   );
 };

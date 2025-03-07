@@ -98,16 +98,26 @@ const AddBrands = () => {
         } catch (error) {
           console.error("Error uploading file", error);
         }
-        dispatch(fileUploadAction.fileuploadReset());
       }
     };
 
     uploadFile();
   }, [fileuploadSelector]);
 
-  console.log(state, "state");
 
   const handleFormSubmit = (values) => {
+    let logoUrl =
+      fileuploadSelector?.data?.data?.map((item) => item?.src).filter(Boolean) || 
+      (state?.brandDetails?.imageUrl?.[0] ? [state?.brandDetails?.imageUrl?.[0]] : []);
+  
+    if (logoUrl?.length === 0) {
+      messageApi.open({
+        type: "error",
+        content: "Please upload a logo",
+      });
+      return;
+    }
+  
     const brandItemArray = values?.SKUs?.map((item) => ({
       mSRP: item?.msrp,
       unit: item?.unit,
@@ -115,21 +125,22 @@ const AddBrands = () => {
       description: item?.description,
       quantity: item?.quantity,
     }));
-
+  
     let payload = {
-      imageUrl: fileuploadSelector?.data?.data?.map((item) => item?.src) || [
-        state?.brandDetails?.imageUrl?.[0],
-      ],
+      imageUrl: logoUrl,
       brandName: values?.brandName,
-      brandItem: brandItemArray, // Set the array here
+      brandItem: brandItemArray,
     };
+  
     if (!state?.brandDetails) {
       dispatch(createBrandHandler(payload));
-    } else if (state?.brandDetails) {
+      console.log(payload, "payload");
+    } else {
       payload.brandId = state?.brandDetails?._id;
       dispatch(updateBrandHandler(payload));
     }
   };
+  
 
   useEffect(() => {
     if (createBrandSelector?.data?.statusCode === 200) {
@@ -139,6 +150,7 @@ const AddBrands = () => {
       });
       navigate("/admin/brands");
       dispatch(createBrandAction.createBrandReset());
+      dispatch(fileUploadAction.fileuploadReset());
     } else if (createBrandSelector?.message?.data?.statusCode === 400) {
       messageApi.open({
         type: "error",
@@ -156,12 +168,14 @@ const AddBrands = () => {
       });
       navigate("/admin/brands");
       dispatch(updateBrandAction.updateBrandReset());
+      dispatch(fileUploadAction.fileuploadReset());
     } else if (updateBrandSelector?.message?.data?.statusCode === 400) {
       messageApi.open({
         type: "error",
         content: updateBrandSelector?.message?.data?.message,
       });
       dispatch(updateBrandAction.updateBrandReset());
+      dispatch(fileUploadAction.fileuploadReset());
     }
   }, [updateBrandSelector]);
 
@@ -184,7 +198,7 @@ const AddBrands = () => {
               }))
             : [
                 {
-                  msrp: "$" + "",
+                  msrp: "",
                   unit: "",
                   sku: "",
                   description: "",

@@ -6,7 +6,10 @@ import PhoneInput from "react-phone-input-2";
 import { distributorValidation } from "./distributorValidation";
 import { useDispatch, useSelector } from "react-redux";
 import { useCommonMessage } from "../../../../common/CommonMessage";
-import { fileUploadAction, fileUploadHandler } from "../../../../redux/action/fileUpload";
+import {
+  fileUploadAction,
+  fileUploadHandler,
+} from "../../../../redux/action/fileUpload";
 import {
   createDistributorAction,
   createDistributorHandler,
@@ -24,6 +27,7 @@ const DistributorDetails = ({
   toggleDetails,
   setIsDetailsOpen,
   distributorItems,
+  setDistributorItems,
 }) => {
   const [imagePreview, setImagePreview] = useState(null);
   const [countryCode, setCountryCode] = useState("91");
@@ -85,18 +89,18 @@ const DistributorDetails = ({
   };
 
   // Fetch Geo location
-    useEffect(() => {
-      const fetchGeoInfo = async () => {
-        setLoading(true);
-        const data = await getGeoInfo();
-        if (data) {
-          setCountryCode(data?.country_calling_code);
-        }
-        setLoading(false);
-      };
-  
-      fetchGeoInfo();
-    }, []);
+  useEffect(() => {
+    const fetchGeoInfo = async () => {
+      setLoading(true);
+      const data = await getGeoInfo();
+      if (data) {
+        setCountryCode(data?.country_calling_code);
+      }
+      setLoading(false);
+    };
+
+    fetchGeoInfo();
+  }, []);
 
   useEffect(() => {
     const uploadFile = async () => {
@@ -109,7 +113,6 @@ const DistributorDetails = ({
               body: fileObject,
             }
           );
-          
         } catch (error) {
           console.error("Error uploading file", error);
         }
@@ -119,42 +122,50 @@ const DistributorDetails = ({
     uploadFile();
   }, [fileuploadSelector]);
 
-  const handlePhoneChange = (value, data) => {
-    if (value === "") {
-      // setCountryCode(""); // Reset to India when input is cleared
-      setPhone("");
-      return;
-    }
 
-    let newCountryCode = data.dialCode;
-    let newPhone = value.replace(newCountryCode, "").trim();
+  // const handlePhoneChange = (value, data) => {
+  //   if (value === "") {
+  //     // setCountryCode(""); // Reset to India when input is cleared
+  //     setPhone("");
+  //     return;
+  //   }
 
-    if (!newPhone) {
-      // If the number is empty, reset country code
-      setCountry("");
-      // setCountryCode("");
-      return;
-    } else {
-      setCountry(newCountryCode);
-      setCountryCode(newCountryCode);
-    }
+  //   let newCountryCode = data.dialCode;
+  //   let newPhone = value.replace(newCountryCode, "").trim();
 
-    setCountryCode(newCountryCode);
-    setPhone(newPhone);
-  };
+  //   if (!newPhone) {
+  //     // If the number is empty, reset country code
+  //     setCountry("");
+  //     // setCountryCode("");
+  //     return;
+  //   } else {
+  //     setCountry(newCountryCode);
+  //     setCountryCode(newCountryCode);
+  //   }
+
+  //   setCountryCode(newCountryCode);
+  //   setPhone(newPhone);
+  // };
 
   const handleFormSubmit = (values) => {
-    if (!phone) {
-      alert("dd");
-      return;
-    }
     if (!distributorItems) {
+      let logoUrl = fileuploadSelector?.data?.data
+        ?.map((item) => item?.src)
+        .join("");
+
+      if (!logoUrl) {
+        messageApi.open({
+          type: "error",
+          content: "Please upload a logo",
+        });
+        return;
+      }
       let payload = {
         distributorName: values?.distributorName.trim(),
         contactName: values?.distributorContactName,
         contactPosition: values?.distributorPosition,
         contactEmail: values?.distributorEmail,
-        contactPhoneNumber: "+" + countryCode + phone,
+        contactPhoneNumber: values?.distributorContactNumber,
         logoUrl: fileuploadSelector?.data?.data
           ?.map((item) => item?.src)
           .join(""),
@@ -162,12 +173,20 @@ const DistributorDetails = ({
 
       dispatch(createDistributorHandler(payload));
     } else if (distributorItems) {
+      let logoUrl = distributorItems?.logoUrl;
+      if (!logoUrl) {
+        messageApi.open({
+          type: "error",
+          content: "Please upload a logo",
+        });
+        return;
+      }
       let payload = {
         distributorName: values?.distributorName.trim(),
         contactName: values?.distributorContactName,
         contactPosition: values?.distributorPosition,
         contactEmail: values?.distributorEmail,
-        contactPhoneNumber: "+" + countryCode + phone,
+        contactPhoneNumber: values?.distributorContactNumber,
         logoUrl:
           distributorItems?.logoUrl ||
           fileuploadSelector?.data?.data?.map((item) => item?.src).join(""),
@@ -190,7 +209,7 @@ const DistributorDetails = ({
         content: createDistributorSelector?.data?.message,
       });
       setIsDetailsOpen(false);
-      dispatch(fileUploadAction.fileuploadReset())
+      dispatch(fileUploadAction.fileuploadReset());
       dispatch(createDistributorAction.createDistributorReset());
     }
   }, [createDistributorSelector]);
@@ -208,7 +227,7 @@ const DistributorDetails = ({
         content: updateDistributorSelector?.data?.message,
       });
       setIsDetailsOpen(false);
-      dispatch(fileUploadAction.fileuploadReset())
+      dispatch(fileUploadAction.fileuploadReset());
       dispatch(updateDistributorAction.updateDistributorReset());
     }
   }, [updateDistributorSelector]);
@@ -216,7 +235,8 @@ const DistributorDetails = ({
   return (
     <>
       {(createDistributorSelector?.isLoading ||
-        updateDistributorSelector?.isLoading||loading) && <Loader />}
+        updateDistributorSelector?.isLoading ||
+        loading) && <Loader />}
       {isOpen && <div className="overlay2" onClick={toggleDetails}></div>}
 
       <Formik
@@ -238,6 +258,7 @@ const DistributorDetails = ({
           resetForm,
           setFieldValue,
           setFieldTouched,
+          values,
           /* and other goodies */
         }) => (
           <Form>
@@ -262,12 +283,17 @@ const DistributorDetails = ({
               <div className="divider2"></div>
               <div className="overflowCart2 overflowCart">
                 <div className="fs-14 mb-10 fw-500">Distributors logo</div>
-                {imagePreview ||distributorItems ? (
+                {imagePreview || distributorItems ? (
                   <div className="brandImagePromo mb-10">
-                    <img src={imagePreview|| distributorItems?.logoUrl} alt="Uploaded Preview" />
+                    <img
+                      src={imagePreview || distributorItems?.logoUrl}
+                      alt="Uploaded Preview"
+                    />
                     <div
                       className="closeIcon"
-                      onClick={() => setImagePreview(null)}
+                      onClick={() => {
+                        setImagePreview(null);
+                      }}
                     >
                       <img src={closeIcon} alt="Remove" />
                     </div>
@@ -375,11 +401,18 @@ const DistributorDetails = ({
                     {/* <input type="number" placeholder="Enter phone number" /> */}
                     <PhoneInput
                       // country={countryCode || undefined} // Set country dynamically when user types a code
-                      value={`${countryCode}${phone}`} // Show full value but keep them separate in state
-                      onChange={(e, f) => {
-                        handlePhoneChange(e, f);
-                        setFieldValue("distributorContactNumber", e);
-                        setFieldTouched("distributorContactNumber", true);
+                      // value={`${countryCode}${phone}`} // Show full value but keep them separate in state
+                      // onChange={(e, f) => {
+                      //   handlePhoneChange(e, f);
+                      //   setFieldValue("distributorContactNumber", e);
+                      //   setFieldTouched("distributorContactNumber", true);
+                      // }}
+                      value={
+                        values?.distributorContactNumber ||
+                        `${countryCode}${phone}`
+                      }
+                      onChange={(value) => {
+                        setFieldValue("distributorContactNumber", value);
                       }}
                       disableCountryGuess={false} // Allow auto-detection of typed country code
                       placeholder="Enter phone number"

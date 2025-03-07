@@ -508,15 +508,7 @@ const AddPromotion = () => {
                   enableReinitialize
                   initialValues={{
                     merchants: droppedMerchants?.map(() => ({
-                      // quantity: droppedBrand?.brandItem?.map((item)=>item?.mSRP)||"",
                       quantity:
-                        // (droppedBrand?.selectedBrands?.brandItem?.map(
-                        //   (item) => item?.mSRP
-                        // ) *
-                        //   100) /
-                        //   droppedBrand?.selectedBrands?.brandItem?.map(
-                        //     (item) => item?.mSRP
-                        //   ) || "",
                         droppedBrand?.selectedBrands?.brandItem?.map(
                           (item) => item?.mSRP *item?.quantity
                         )/ (droppedBrand?.selectedBrands?.brandItem?.map(

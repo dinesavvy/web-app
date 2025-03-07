@@ -1,6 +1,6 @@
 import Http from "../http";
 
-export const removeSupplierAPI  = (data) => {
+export const remvoeBrandSupplierAPI  = (data) => {
   return Http.post("supplier/brand/remove",data);
 };
 

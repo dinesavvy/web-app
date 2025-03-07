@@ -5,18 +5,22 @@ import deleteMember from "../../../../assets/images/deleteMember.svg";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { deleteBrandHandler } from "../../../../redux/action/deleteBrand";
-import { removeSupplierHandler } from "../../../../redux/action/supplierActions/removeSupplier";
+// import { removeSupplierHandler } from "../../../../redux/action/supplierActions/removeSupplier";
 import noImageFound from "../../../../assets/images/noImageFound.png";
+import CommonModal from "../../../admin/Components/CommonModal";
 
-const BrandDetails = ({ isOpen, toggleDetails, brandDetails }) => {
+const BrandDetails = ({ isOpen, toggleDetails, brandDetails,setIsDetailsOpen }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  const [deleteModal, setDeleteModal] = useState(false);
+
   const deleteBrand = () => {
-    let payload = {
-      brandId: brandDetails?._id,
-    };
-    dispatch(removeSupplierHandler(payload));
+    // let payload = {
+    //   brandId: brandDetails?._id,
+    // };
+    // dispatch(removeSupplierHandler(payload));
+    setDeleteModal(true);
   };
 
   return (
@@ -55,7 +59,7 @@ const BrandDetails = ({ isOpen, toggleDetails, brandDetails }) => {
                       <div>
                         <div className="lightBlack fs-14 mb-4">MSRP</div>
                         <div className="fs-14 fw-600">
-                          ${item?.mSRP} per case
+                          {item?.mSRP} per case
                         </div>
                       </div>
                       <div>
@@ -98,6 +102,15 @@ const BrandDetails = ({ isOpen, toggleDetails, brandDetails }) => {
           </div>
         </div>
       </div>
+
+      {deleteModal && (
+        <CommonModal
+          deleteModal={deleteModal}
+          setDeleteModal={setDeleteModal}
+          brandDetails={brandDetails}
+          setIsDetailsOpen={setIsDetailsOpen}
+        />
+      )}
     </>
   );
 };

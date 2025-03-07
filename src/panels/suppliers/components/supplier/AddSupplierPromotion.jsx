@@ -10,7 +10,7 @@ import { DatePicker, TimePicker } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 // import { merchantsListHandler } from "../../../../redux/action/merchantsList";
-import DragMerchantItem from "../../../admin/Components/DragMerchantItem"
+import DragMerchantItem from "../../../admin/Components/DragMerchantItem";
 import moment from "moment";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import noImageFound from "../../../../assets/images/noImageFound.png";
@@ -20,13 +20,16 @@ import {
 } from "../../../../redux/action/createPromotion";
 import { useCommonMessage } from "../../../../common/CommonMessage";
 import DropBrandsZone from "../../../admin/Components/DropBrandsZone";
-import DragBrandsItem from "../../../admin/Components/DragBrandsItem"
+import DragBrandsItem from "../../../admin/Components/DragBrandsItem";
 import DropMerchantZone from "../../../admin/Components/DropMerchantZone";
 import Loader from "../../../../common/Loader/Loader";
 import CustomDragLayer from "../../../admin/Components/CustomDragLayer";
 import { supplierBrandListHandler } from "../../../../redux/action/supplierActions/supplierBrandList";
 import { supplierMerchantListHandler } from "../../../../redux/action/supplierActions/supplierMerchantList";
-import { addSupplierPromotionAction, addSupplierPromotionHandler } from "../../../../redux/action/supplierActions/addSupplierPromotion";
+import {
+  addSupplierPromotionAction,
+  addSupplierPromotionHandler,
+} from "../../../../redux/action/supplierActions/addSupplierPromotion";
 
 const AddSupplierPromotion = () => {
   const [promotionTitle, setPromotionTitle] = useState("");
@@ -34,7 +37,11 @@ const AddSupplierPromotion = () => {
   const [searchStringMerchant, setSearchStringMerchant] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
-  const [errors, setErrors] = useState({ fromDate: "", toDate: "",promotionTitle:"" });
+  const [errors, setErrors] = useState({
+    fromDate: "",
+    toDate: "",
+    promotionTitle: "",
+  });
   const [mercahnts, setMercahnts] = useState([]);
   const [droppedMerchants, setDroppedMerchants] = useState([]);
   const [selectedMerchants, setSelectedMerchants] = useState([]);
@@ -48,13 +55,15 @@ const AddSupplierPromotion = () => {
   const dispatch = useDispatch();
 
   const brandListSelector = useSelector((state) => state?.supplierBrandList);
-  const merchantsListSelector = useSelector((state) => state?.supplierMerchantList);
+  const merchantsListSelector = useSelector(
+    (state) => state?.supplierMerchantList
+  );
   const createPromotionSelector = useSelector(
     (state) => state?.addSupplierPromotion
   );
 
   const validateDates = () => {
-    let newErrors = { fromDate: "", toDate: "",promotionTitle:""};
+    let newErrors = { fromDate: "", toDate: "", promotionTitle: "" };
 
     if (!startDate) {
       newErrors.fromDate = "From date is required";
@@ -113,7 +122,7 @@ const AddSupplierPromotion = () => {
         type: "success",
         content: createPromotionSelector?.data?.message,
       });
-      navigate("/supplier/promotion")
+      navigate("/supplier/promotion");
       dispatch(addSupplierPromotionAction.addSupplierPromotionReset());
     } else if (
       createPromotionSelector?.message?.response?.data?.statusCode === 400
@@ -127,13 +136,13 @@ const AddSupplierPromotion = () => {
   }, [createPromotionSelector]);
 
   useEffect(() => {
-      let payload = {
-        page: 1,
-        limit: 10,
-        searchString: searchString,
-      };
-      dispatch(supplierBrandListHandler(payload));
-    }, [searchString]);
+    let payload = {
+      page: 1,
+      limit: 10,
+      searchString: searchString,
+    };
+    dispatch(supplierBrandListHandler(payload));
+  }, [searchString]);
 
   useEffect(() => {
     const fetchMerchants = () => {
@@ -141,7 +150,7 @@ const AddSupplierPromotion = () => {
         page: 1,
         limit: 10,
         timeFrame: "today",
-        searchString:searchStringMerchant,
+        searchString: searchStringMerchant,
         searchArea: [],
       };
       dispatch(supplierMerchantListHandler(payload));
@@ -179,8 +188,7 @@ const AddSupplierPromotion = () => {
   };
 
   const handleSubmit = (values) => {
-    console.log(values,"values")
-    if(validateDates()){
+    if (validateDates()) {
       let payload = {
         promotionTitle: promotionTitle,
         brandId: droppedBrand?.id,
@@ -294,7 +302,9 @@ const AddSupplierPromotion = () => {
                         <input
                           type="text"
                           placeholder="Search Merchants"
-                          onChange={(e) => setSearchStringMerchant(e.target.value)}
+                          onChange={(e) =>
+                            setSearchStringMerchant(e.target.value)
+                          }
                         />
                         <img
                           src={searchIcon}
@@ -382,10 +392,17 @@ const AddSupplierPromotion = () => {
                   className="addTitleInput"
                   placeholder="Add promotion title here"
                   autoComplete="off"
-                  onChange={(e) => {setPromotionTitle(e.target.value);setErrors((prev) => ({ ...prev, promotionTitle: "" }));}}
+                  onChange={(e) => {
+                    setPromotionTitle(e.target.value);
+                    setErrors((prev) => ({ ...prev, promotionTitle: "" }));
+                  }}
                 />
               </div>
-              {errors.promotionTitle && <p className="mt-10 fw-500 fs-14 error">{errors.promotionTitle}</p>}
+              {errors.promotionTitle && (
+                <p className="mt-10 fw-500 fs-14 error">
+                  {errors.promotionTitle}
+                </p>
+              )}
               <div className="tabPadding mb-20">
                 <div className="fs-18 fw-700">Add Brand</div>
                 <div className="divider2"></div>
@@ -471,8 +488,11 @@ const AddSupplierPromotion = () => {
                         className="datePickerImg"
                       />
                     </div>
-                    {errors.fromDate && <p className="mt-10 fw-500 fs-14 error">{errors.fromDate}</p>}
-
+                    {errors.fromDate && (
+                      <p className="mt-10 fw-500 fs-14 error">
+                        {errors.fromDate}
+                      </p>
+                    )}
                   </div>
                   <div className="w-100">
                     <label htmlFor="" className="fs-14 fw-500 mb-10">
@@ -496,7 +516,11 @@ const AddSupplierPromotion = () => {
                         className="datePickerImg"
                       />
                     </div>
-                    {errors.toDate && <p className="mt-10 fw-500 fs-14 error">{errors.toDate}</p>}
+                    {errors.toDate && (
+                      <p className="mt-10 fw-500 fs-14 error">
+                        {errors.toDate}
+                      </p>
+                    )}
                   </div>
                 </div>
               </div>
@@ -507,25 +531,23 @@ const AddSupplierPromotion = () => {
                   enableReinitialize
                   initialValues={{
                     merchants: droppedMerchants?.map(() => ({
-                      // quantity: droppedBrand?.brandItem?.map((item)=>item?.mSRP)||"",
                       quantity:
-                        (droppedBrand?.selectedBrands?.brandItem?.map(
-                          (item) => item?.mSRP
-                        ) *
-                          100) /
-                          droppedBrand?.selectedBrands?.brandItem?.map(
-                            (item) => item?.mSRP
-                          ) || "",
-                      promotionalFunds:
+                        droppedBrand?.selectedBrands?.brandItem?.map(
+                          (item) => item?.mSRP * item?.quantity
+                        ) /
                         droppedBrand?.selectedBrands?.brandItem?.map(
                           (item) => item?.mSRP
-                        ) * 100 || "",
+                        ),
+                      promotionalFunds:
+                        droppedBrand?.selectedBrands?.brandItem?.map(
+                          (item) => item?.mSRP * item?.quantity
+                        ) || "",
                       msrp: "",
                       priceForReimbursement: "",
                       fundAmount:
-                        droppedBrand?.selectedBrands?.brandItem?.map(
-                          (item) => item?.mSRP
-                        ) * 100 || "",
+                      droppedBrand?.selectedBrands?.brandItem?.map(
+                        (item) => item?.mSRP * item?.quantity
+                      ) || "",
                     })),
                   }}
                   // validationSchema={validationSchema}

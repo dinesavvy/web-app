@@ -10,7 +10,6 @@ import SearchSelect from "../../../admin/Components/SearchSelect";
 import "../../../../assets/css/merchant.css";
 import BrandDetails from "./BrandDetails";
 import noImageFound from "../../../../assets/images/noImageFound.png";
-
 import {
   brandListDistributorHandler,
   brandLlistDistributorHandler,
@@ -20,6 +19,7 @@ import { deleteDistributorBrandAction } from "../../../../redux/action/distribut
 const BrandsListDistributor = () => {
   const messageApi = useCommonMessage();
   const [pagination, setPagination] = useState({ page: 1, limit: 9 });
+  const [searchString, setSearchString] = useState("");
   const [brandDetails, setBrandDetails] = useState({});
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
   const navigate = useNavigate();
@@ -28,7 +28,7 @@ const BrandsListDistributor = () => {
   const getBrandListSelector = useSelector(
     (state) => state?.brandListDistributor
   );
-  const deleteBrandSelector = useSelector(
+  const deleteDistributorBrand = useSelector(
     (state) => state?.deleteDistributorBrand
   );
 
@@ -37,7 +37,8 @@ const BrandsListDistributor = () => {
   };
 
   const handleSearchChange = (value) => {
-    setPagination((prev) => ({ ...prev, page: 1 })); // Reset to the first page on search
+    setSearchString(value);
+    setPagination((prev) => ({ ...prev, page: 1 })); 
   };
 
   const handleSearchAreaChange = (selectedAreas) => {
@@ -61,29 +62,19 @@ const BrandsListDistributor = () => {
     let payload = {
       page: pagination?.page,
       limit: pagination?.limit,
+      searchString:searchString,
     };
     dispatch(brandListDistributorHandler(payload));
-  }, [pagination, deleteBrandSelector]);
+  }, [pagination, deleteDistributorBrand]);
 
   const toggleDetails = (item) => {
     setBrandDetails(item);
     setIsDetailsOpen((prevState) => !prevState);
   };
 
-  useEffect(() => {
-    if (deleteBrandSelector?.data?.statusCode === 200) {
-      messageApi.open({
-        type: "success",
-        content: deleteBrandSelector?.data?.message,
-      });
-      setIsDetailsOpen(false);
-      dispatch(deleteDistributorBrandAction.deleteDistributorBrandReset());
-    }
-  }, [deleteBrandSelector]);
-
   return (
     <>
-      {(getBrandListSelector?.isLoading || deleteBrandSelector?.isLoading) && (
+      {(getBrandListSelector?.isLoading || deleteDistributorBrand?.isLoading) && (
         <Loader />
       )}
       <div className="dashboard">
@@ -107,6 +98,7 @@ const BrandsListDistributor = () => {
               <>
                 {getBrandListSelector?.data?.data?.records?.map(
                   (item, index) => {
+                    console.log(item,"item")
                     return (
                       <div className="merchantCard" key={index}>
                         <div className="p-20">
@@ -133,7 +125,7 @@ const BrandsListDistributor = () => {
                           <div className="d-flex align-center gap-10">
                             <div
                               className="btn btnSecondary w-100 gap-8"
-                              // onClick={() => navigate("/admin/add-promotions")}
+                              onClick={() => navigate("/distributors/promotion")}
                             >
                               {/* <img src={editMember} alt="" /> */}
                               Promote
@@ -183,6 +175,7 @@ const BrandsListDistributor = () => {
         isOpen={isDetailsOpen}
         toggleDetails={toggleDetails}
         brandDetails={brandDetails}
+        setIsDetailsOpen={setIsDetailsOpen}
       />
     </>
   );

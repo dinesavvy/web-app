@@ -20,10 +20,18 @@ import {
   updateBrandAction,
   updateBrandHandler,
 } from "../../../../redux/action/updateBrand";
-import { addSupplierBrandHandler,addSupplierBrandAction } from "../../../../redux/action/supplierActions/addSupplierBrand";
-import { updateSupplierBrandAction, updateSupplierBrandHandler } from "../../../../redux/action/supplierActions/updateSupplierBrand";
-import { fileUploadSupplierHandler } from "../../../../redux/action/supplierActions/fileUploadSupplier";
-
+import {
+  addSupplierBrandHandler,
+  addSupplierBrandAction,
+} from "../../../../redux/action/supplierActions/addSupplierBrand";
+import {
+  updateSupplierBrandAction,
+  updateSupplierBrandHandler,
+} from "../../../../redux/action/supplierActions/updateSupplierBrand";
+import {
+  fileUploadSupplierAction,
+  fileUploadSupplierHandler,
+} from "../../../../redux/action/supplierActions/fileUploadSupplier";
 
 const AddSupplierBrand = () => {
   const [imagePreview, setImagePreview] = useState(null);
@@ -32,14 +40,15 @@ const AddSupplierBrand = () => {
   const fileuploadSelector = useSelector((state) => state?.fileUploadSupplier);
 
   const { state } = useLocation();
-  console.log(state,"state")
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const createBrandSelector = useSelector((state) => state?.addSupplierBrand);
-  
-  const updateBrandSelector = useSelector((state) => state?.updateSupplierBrand);
+
+  const updateBrandSelector = useSelector(
+    (state) => state?.updateSupplierBrand
+  );
 
   const fileInputRef = useRef(null);
 
@@ -107,10 +116,18 @@ const AddSupplierBrand = () => {
   }, [fileuploadSelector]);
 
   const handleFormSubmit = (values) => {
-    if (!imagePreview && !state?.brandDetails?.imageUrl?.[0]) {
+    let logoUrl =
+      fileuploadSelector?.data?.data
+        ?.map((item) => item?.src)
+        .filter(Boolean) ||
+      (state?.brandDetails?.imageUrl?.[0]
+        ? [state?.brandDetails?.imageUrl?.[0]]
+        : []);
+
+    if (logoUrl?.length === 0) {
       messageApi.open({
         type: "error",
-        content: "Supplier brand image is required!",
+        content: "Please upload a logo",
       });
       return;
     }
@@ -124,16 +141,15 @@ const AddSupplierBrand = () => {
     }));
 
     let payload = {
-      imageUrl: fileuploadSelector?.data?.data?.map((item) => item?.src)||state?.brandDetails?.imageUrl?.[0],
+      imageUrl: logoUrl,
       brandName: values?.brandName,
       brandItem: brandItemArray, // Set the array here
     };
     if (!state?.brandDetails) {
       dispatch(addSupplierBrandHandler(payload));
     } else if (state?.brandDetails) {
-      payload.brandId = state?.brandDetails?._id; 
-      // dispatch(updateSupplierBrandHandler(payload));
-      console.log(payload,"payload")
+      payload.brandId = state?.brandDetails?._id;
+      dispatch(updateSupplierBrandHandler(payload));
     }
   };
 
@@ -145,9 +161,16 @@ const AddSupplierBrand = () => {
       });
       navigate("/supplier/brands");
       dispatch(addSupplierBrandAction.addSupplierBrandReset());
+      dispatch(fileUploadSupplierAction.fileuploadReset());
+    } else if (createBrandSelector?.message?.data?.statusCode === 400) {
+      messageApi.open({
+        type: "error",
+        content: createBrandSelector?.message?.data?.message,
+      });
+      dispatch(createBrandAction.createBrandReset());
+      dispatch(fileUploadSupplierAction.fileuploadReset());
     }
   }, [createBrandSelector]);
-  
 
   useEffect(() => {
     if (updateBrandSelector?.data?.statusCode === 200) {
@@ -157,11 +180,13 @@ const AddSupplierBrand = () => {
       });
       navigate("/supplier/brands");
       dispatch(updateSupplierBrandAction.updateSupplierBrandReset());
+      dispatch(fileUploadSupplierAction.fileuploadReset());
     } else if (updateBrandSelector?.message?.data?.statusCode === 400) {
       messageApi.open({
         type: "error",
         content: updateBrandSelector?.message?.data?.message,
       });
+      dispatch(fileUploadSupplierAction.fileuploadReset());
       dispatch(updateSupplierBrandAction.updateSupplierBrandReset());
     }
   }, [updateBrandSelector]);
@@ -219,10 +244,12 @@ const AddSupplierBrand = () => {
                       items={[
                         {
                           title: "Brands",
-                          onClick: () => navigate("/admin/brands"),
+                          onClick: () => navigate("/supplier/brands"),
                         },
                         {
-                          title: state?.brandDetails?"Edit Brand":"Add Brand",
+                          title: state?.brandDetails
+                            ? "Edit Brand"
+                            : "Add Brand",
                         },
                       ]}
                     />
@@ -369,14 +396,20 @@ const AddSupplierBrand = () => {
                               <Field
                                 type="text"
                                 className="input"
-                                placeholder="Red Bull - 8.4 oz energy drink (12-pack)"
+                                placeholder="Quantity"
                                 name={`SKUs[${index}].quantity`}
                                 autoComplete="off"
                                 maxLength={5}
                                 onKeyDown={(e) => {
                                   if (
                                     !/^\d$/.test(e.key) && // Allow numbers
-                                    !["Backspace", "Delete", "ArrowLeft", "ArrowRight", "Tab"].includes(e.key) // Allow navigation keys
+                                    ![
+                                      "Backspace",
+                                      "Delete",
+                                      "ArrowLeft",
+                                      "ArrowRight",
+                                      "Tab",
+                                    ].includes(e.key) // Allow navigation keys
                                   ) {
                                     e.preventDefault();
                                   }

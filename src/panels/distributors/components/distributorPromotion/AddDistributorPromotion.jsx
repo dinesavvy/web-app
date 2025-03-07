@@ -533,32 +533,28 @@ const AddDistributorPromotion = () => {
                   </div>
                 </div>
               </div>
-
               {/* Merchant Component */}
               <div className="accordion-container">
                 <Formik
                   enableReinitialize
                   initialValues={{
                     merchants: droppedMerchants?.map(() => ({
-                      // quantity: droppedBrand?.brandItem?.map((item)=>item?.mSRP)||"",
                       quantity:
-                        (droppedBrand?.selectedBrands?.brandItem?.map(
-                          (item) => item?.mSRP
-                        ) *
-                          100) /
-                          droppedBrand?.selectedBrands?.brandItem?.map(
-                            (item) => item?.mSRP
-                          ) || "",
-                      promotionalFunds:
                         droppedBrand?.selectedBrands?.brandItem?.map(
-                          (item) => item?.mSRP
-                        ) * 100 || "",
+                          (item) => item?.mSRP *item?.quantity
+                        )/ (droppedBrand?.selectedBrands?.brandItem?.map(
+                            (item) => item?.mSRP
+                          )),
+                      promotionalFunds:
+                      droppedBrand?.selectedBrands?.brandItem?.map(
+                        (item) => item?.mSRP *item?.quantity
+                      ) || "",
                       msrp: "",
                       priceForReimbursement: "",
                       fundAmount:
-                        droppedBrand?.selectedBrands?.brandItem?.map(
-                          (item) => item?.mSRP
-                        ) * 100 || "",
+                      droppedBrand?.selectedBrands?.brandItem?.map(
+                        (item) => item?.mSRP*item?.quantity
+                      )  || "",
                     })),
                   }}
                   // validationSchema={validationSchema}

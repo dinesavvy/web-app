@@ -65,16 +65,16 @@ const Brands = () => {
     setIsDetailsOpen((prevState) => !prevState);
   };
 
-  useEffect(() => {
-    if (deleteBrandSelector?.data?.statusCode === 200) {
-      messageApi.open({
-        type: "success",
-        content: deleteBrandSelector?.data?.message,
-      });
-      setIsDetailsOpen(false);
-      dispatch(deleteBrandsAction.deleteBrandReset());
-    }
-  }, [deleteBrandSelector]);
+  // useEffect(() => {
+  //   if (deleteBrandSelector?.data?.statusCode === 200) {
+  //     messageApi.open({
+  //       type: "success",
+  //       content: deleteBrandSelector?.data?.message,
+  //     });
+  //     setIsDetailsOpen(false);
+  //     dispatch(deleteBrandsAction.deleteBrandReset());
+  //   }
+  // }, [deleteBrandSelector]);
 
   return (
     <>
@@ -174,6 +174,7 @@ const Brands = () => {
         isOpen={isDetailsOpen}
         toggleDetails={toggleDetails}
         brandDetails={brandDetails}
+        setIsDetailsOpen={setIsDetailsOpen}
       />
     </>
   );

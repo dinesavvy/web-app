@@ -9,39 +9,57 @@ import { useDispatch, useSelector } from "react-redux";
 import { fileUploadHandler } from "../../../../redux/action/fileUpload";
 import Loader from "../../../../common/Loader/Loader";
 import { ErrorMessage, Field, FieldArray, Form, Formik } from "formik";
-import {
-  createBrandAction,
-  createBrandHandler,
-} from "../../../../redux/action/createBrandSlice";
+// import {
+//   createBrandAction,
+//   createBrandHandler,
+// } from "../../../../redux/action/createBrandSlice";
 import { brandValidationSchema } from "./brandValidation";
 import { useCommonMessage } from "../../../../common/CommonMessage";
 import noImageFound from "../../../../assets/images/noImageFound.png";
+import { createDistributorAction } from "../../../../redux/action/distributorsAction/createDistributorBrand";
 import {
   updateBrandAction,
   updateBrandHandler,
 } from "../../../../redux/action/updateBrand";
-import { addSupplierBrandHandler,addSupplierBrandAction } from "../../../../redux/action/supplierActions/addSupplierBrand";
-import { updateSupplierBrandAction, updateSupplierBrandHandler } from "../../../../redux/action/supplierActions/updateSupplierBrand";
+import {
+  addSupplierBrandHandler,
+  addSupplierBrandAction,
+} from "../../../../redux/action/supplierActions/addSupplierBrand";
+import {
+  updateSupplierBrandAction,
+  updateSupplierBrandHandler,
+} from "../../../../redux/action/supplierActions/updateSupplierBrand";
 import { fileUploadSupplierHandler } from "../../../../redux/action/supplierActions/fileUploadSupplier";
-import { updateDistributorAction, updateDistributorBrandHandler } from "../../../../redux/action/distributorsAction/updateDistributorBrand";
+import {
+  updateDistributorAction,
+  updateDistributorBrandHandler,
+} from "../../../../redux/action/distributorsAction/updateDistributorBrand";
 import { createDistributorBrandHandler } from "../../../../redux/action/distributorsAction/createDistributorBrand";
-import { fileUploadDistributorHandler } from "../../../../redux/action/distributorsAction/fileUploadDistributor";
-
+import {
+  fileUploadDistributorAction,
+  fileUploadDistributorHandler,
+} from "../../../../redux/action/distributorsAction/fileUploadDistributor";
 
 const AddBrandsDistributor = () => {
   const [imagePreview, setImagePreview] = useState(null);
   const [fileObject, setFileObject] = useState();
   const messageApi = useCommonMessage();
-  const fileuploadSelector = useSelector((state) => state?.fileUploadDistributor);
+  const fileuploadSelector = useSelector(
+    (state) => state?.fileUploadDistributor
+  );
 
   const { state } = useLocation();
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const createBrandSelector = useSelector((state) => state?.createDistributorBrand);
-  
-  const updateBrandSelector = useSelector((state) => state?.updateDistributorBrand);
+  const createBrandSelector = useSelector(
+    (state) => state?.createDistributorBrand
+  );
+
+  const updateBrandSelector = useSelector(
+    (state) => state?.updateDistributorBrand
+  );
 
   const fileInputRef = useRef(null);
 
@@ -102,6 +120,7 @@ const AddBrandsDistributor = () => {
         } catch (error) {
           console.error("Error uploading file", error);
         }
+        // dispatch(fileUploadDistributorAction.fileuploadDistributorReset())
       }
     };
 
@@ -109,6 +128,17 @@ const AddBrandsDistributor = () => {
   }, [fileuploadSelector]);
 
   const handleFormSubmit = (values) => {
+    let logoUrl =
+      fileuploadSelector?.data?.data?.map((item) => item?.src).filter(Boolean) || 
+      (state?.brandDetails?.imageUrl?.[0] ? [state?.brandDetails?.imageUrl?.[0]] : []);
+  
+    if (logoUrl?.length === 0) {
+      messageApi.open({
+        type: "error",
+        content: "Please upload a logo",
+      });
+      return;
+    }
     const brandItemArray = values?.SKUs?.map((item) => ({
       mSRP: item?.msrp,
       unit: item?.unit,
@@ -118,14 +148,14 @@ const AddBrandsDistributor = () => {
     }));
 
     let payload = {
-      imageUrl: fileuploadSelector?.data?.data?.map((item) => item?.src),
+      imageUrl: logoUrl,
       brandName: values?.brandName,
       brandItem: brandItemArray, // Set the array here
     };
     if (!state?.brandDetails) {
       dispatch(createDistributorBrandHandler(payload));
     } else if (state?.brandDetails) {
-      payload.brandId = state?.brandDetails?._id; 
+      payload.brandId = state?.brandDetails?._id;
       dispatch(updateDistributorBrandHandler(payload));
     }
   };
@@ -137,10 +167,17 @@ const AddBrandsDistributor = () => {
         content: createBrandSelector?.data?.message,
       });
       navigate("/distributors/brands");
-      dispatch(addSupplierBrandAction.addSupplierBrandReset());
+      dispatch(createDistributorAction.createDistributorBrandReset());
+      dispatch(fileUploadDistributorAction.fileuploadDistributorReset());
+    } else if (createBrandSelector?.message?.response?.data?.statusCode === 400) {
+      messageApi.open({
+        type: "error",
+        content: createBrandSelector?.message?.response?.data?.message,
+      });
+      dispatch(fileUploadDistributorAction.fileuploadDistributorReset())
+      dispatch(createDistributorAction.createDistributorBrandReset());
     }
   }, [createBrandSelector]);
-  
 
   useEffect(() => {
     if (updateBrandSelector?.data?.statusCode === 200) {
@@ -150,11 +187,13 @@ const AddBrandsDistributor = () => {
       });
       navigate("/distributors/brands");
       dispatch(updateDistributorAction.updateDistributorBrandReset());
+      dispatch(fileUploadDistributorAction.fileuploadDistributorReset());
     } else if (updateBrandSelector?.message?.data?.statusCode === 400) {
       messageApi.open({
         type: "error",
         content: updateBrandSelector?.message?.data?.message,
       });
+      dispatch(fileUploadDistributorAction.fileuploadDistributorReset());
       dispatch(updateDistributorAction.updateDistributorBrandReset());
     }
   }, [updateBrandSelector]);
@@ -200,7 +239,7 @@ const AddBrandsDistributor = () => {
                     src={backButton}
                     alt="backButton"
                     className="cursor-pointer backButton"
-                    onClick={() => navigate("/admin/brands")}
+                    onClick={() => navigate("/distributors/brands")}
                   />
                   <div>
                     <div className="fs-24 fw-600 mb-4">
@@ -212,7 +251,7 @@ const AddBrandsDistributor = () => {
                       items={[
                         {
                           title: "Brands",
-                          onClick: () => navigate("/admin/brands"),
+                          onClick: () => navigate("/distributors/brands"),
                         },
                         {
                           title: "Add Brand",
@@ -361,14 +400,20 @@ const AddBrandsDistributor = () => {
                               <Field
                                 type="text"
                                 className="input"
-                                placeholder="Red Bull - 8.4 oz energy drink (12-pack)"
+                                placeholder="Quantity"
                                 name={`SKUs[${index}].quantity`}
                                 autoComplete="off"
                                 maxLength={5}
                                 onKeyDown={(e) => {
                                   if (
                                     !/^\d$/.test(e.key) && // Allow numbers
-                                    !["Backspace", "Delete", "ArrowLeft", "ArrowRight", "Tab"].includes(e.key) // Allow navigation keys
+                                    ![
+                                      "Backspace",
+                                      "Delete",
+                                      "ArrowLeft",
+                                      "ArrowRight",
+                                      "Tab",
+                                    ].includes(e.key) // Allow navigation keys
                                   ) {
                                     e.preventDefault();
                                   }

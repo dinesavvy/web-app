@@ -77,7 +77,16 @@ const Header = ({ handleTrigger }) => {
     "/admin/promotions":"Promotions",
     "/admin/brands":"Brands",
     "/admin/add-promotions":"Create single promotions",
-    "/admin/brands/add":"Brands"
+    "/admin/brands/add":"Brands",
+    "/supplier/brands":"Brands",
+    "/supplier/addBrand":"Brands",
+    "/supplier/add-promotions":"Create single promotions",
+    "/supplier/promotion":"Promotions",
+    "/distributors/add-distributor-brands":"Create single promotions",
+    "/distributors/brands":"Brands",
+    "/distributors/promotion":"Promotions",
+    "/distributors/add-promotions":"Create single promotions",
+    "/distributors/dashboard":"Dashoard"
   };
 
   return (

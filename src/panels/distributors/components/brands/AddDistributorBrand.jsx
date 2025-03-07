@@ -12,7 +12,7 @@ import { useCommonMessage } from "../../../../common/CommonMessage";
 import Loader from "../../../../common/Loader/Loader";
 import { addSupplierBrandAction } from "../../../../redux/action/supplierActions/addSupplierBrand";
 import { createDistributorBrandHandler } from "../../../../redux/action/distributorsAction/createDistributorBrand";
-import { fileUploadDistributorHandler } from "../../../../redux/action/distributorsAction/fileUploadDistributor";
+import { fileUploadDistributorAction, fileUploadDistributorHandler } from "../../../../redux/action/distributorsAction/fileUploadDistributor";
 import noImageFound from "../../../../assets/images/noImageFound.png"
 
 const AddDistributorBrand = () => {

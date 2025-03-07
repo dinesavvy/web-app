@@ -153,7 +153,6 @@ const SupplierDetails = ({
         .join("");
 
       if (!logoUrl) {
-        // message.error("Please upload a logo.");
         messageApi.open({
           type: "error",
           content: "Please upload a logo",
@@ -198,6 +197,7 @@ const SupplierDetails = ({
         type: "error",
         content: createSuplierSelector?.message,
       });
+      dispatch(fileUploadAction.fileuploadReset())
       dispatch(createSupplierAction.createSuplierReset());
     } else if (createSuplierSelector?.data?.statusCode === 200) {
       messageApi.open({
@@ -216,6 +216,7 @@ const SupplierDetails = ({
         type: "error",
         content: updateSupplierSelector?.message,
       });
+      dispatch(fileUploadAction.fileuploadReset());
       dispatch(updateSupplierAction.updateSupplierReset());
     } else if (updateSupplierSelector?.data?.statusCode === 200) {
       messageApi.open({

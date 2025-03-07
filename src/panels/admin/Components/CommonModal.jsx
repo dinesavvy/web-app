@@ -24,6 +24,16 @@ import {
   removeDistributorHandler,
 } from "../../../redux/action/removeDistributor";
 import logoutModal from "../../../assets/images/logoutModal.svg";
+import deleteModalSVG from "../../../assets/images/deleteModal.svg";
+import {
+  deleteBrandHandler,
+  deleteBrandsAction,
+} from "../../../redux/action/deleteBrand";
+import {
+  removeBrandSupplierAction,
+  removeBrandSupplierHandler,
+} from "../../../redux/action/supplierActions/removeBrandSupplier";
+import { deleteDistributorBrandAction, deleteDistributorBrandHandler } from "../../../redux/action/distributorsAction/deleteDistributorBrand";
 
 const CommonModal = ({
   modal2Open,
@@ -35,6 +45,11 @@ const CommonModal = ({
   removeSupplier,
   removeDistributor,
   showLogoutModal,
+  deleteBrandModal,
+  deleteModal,
+  setDeleteModal,
+  brandDetails,
+  setIsDetailsOpen,
 }) => {
   const messageApi = useCommonMessage();
   const getMerchantId = localStorage.getItem("merchantId");
@@ -42,7 +57,12 @@ const CommonModal = ({
   const navigate = useNavigate();
   const location = useLocation();
 
+  const getSupplierLogin = localStorage.getItem("supplierLogin");
+  const getAdminLogin = localStorage.getItem("adminLogin");
+  const getDistriutorLogin = localStorage.getItem("distributorLogin");
+
   let getLocationDetails = location?.pathname;
+  const getBrandListSelector = useSelector((state) => state?.supplierBrandList);
 
   const removeTeamMemberSelector = useSelector(
     (state) => state?.removeTeamMember
@@ -57,6 +77,15 @@ const CommonModal = ({
   );
 
   const removeSupplierSelector = useSelector((state) => state?.removeSupplier);
+  const deleteBrandSelector = useSelector((state) => state?.deleteBrand);
+  const removeBrandSupplier = useSelector(
+    (state) => state?.removeBrandSupplier
+  );
+
+  const deleteDistributorBrand = useSelector(
+    (state) => state?.deleteDistributorBrand
+  );
+  console.log(deleteDistributorBrand, "deleteDistributorBrand");
 
   const deleteTeam = () => {
     if (merchantApp) {
@@ -78,6 +107,26 @@ const CommonModal = ({
       dispatch(
         removeDistributorHandler({ distributorId: removeDistributor._id })
       );
+    }
+
+    if (deleteModal && getAdminLogin) {
+      let payload = {
+        brandId: brandDetails?._id,
+      };
+      dispatch(deleteBrandHandler(payload));
+    }
+    if (deleteModal && getSupplierLogin) {
+      let payload = {
+        brandId: brandDetails?._id,
+      };
+      dispatch(removeBrandSupplierHandler(payload));
+    }
+
+    if (deleteModal && getDistriutorLogin) {
+      let payload = {
+        brandId: brandDetails?._id,
+      };
+      dispatch(deleteDistributorBrandHandler(payload));
     }
   };
 
@@ -138,24 +187,87 @@ const CommonModal = ({
     removeDistributorSelector,
   ]);
 
+  // Admin Remove Brand useEffect
+  useEffect(() => {
+    if (deleteBrandSelector?.data?.statusCode === 200) {
+      messageApi.open({
+        type: "success",
+        content: deleteBrandSelector?.data?.message,
+      });
+      dispatch(deleteBrandsAction.deleteBrandReset());
+      setDeleteModal(false);
+      setIsDetailsOpen(false);
+    }
+  }, [deleteBrandSelector]);
+
+  // Supplier Remove Brand useEffect
+  useEffect(() => {
+    if (removeBrandSupplier?.data?.statusCode === 200) {
+      messageApi.open({
+        type: "success",
+        content: removeBrandSupplier?.data?.message,
+      });
+      dispatch(removeBrandSupplierAction.removeBrandSupplierReset());
+      setDeleteModal(false);
+      setIsDetailsOpen(false);
+    }
+  }, [removeBrandSupplier]);
+
+  // Distributor Remove brand useEffect
+  useEffect(() => {
+    if (deleteDistributorBrand?.data?.statusCode === 200) {
+      messageApi.open({
+        type: "success",
+        content: deleteDistributorBrand?.data?.message,
+      });
+      dispatch(deleteDistributorBrandAction.deleteDistributorBrandReset());
+      setDeleteModal(false);
+      setIsDetailsOpen(false);
+    }
+  }, [deleteDistributorBrand]);
+
   return (
     <>
       {(removeTeamMemberSelector?.isLoading ||
         removeSupplierSelector?.isLoading ||
-        removeDistributorSelector?.isLoading) && <Loader />}
+        removeDistributorSelector?.isLoading ||
+        removeBrandSupplier?.isLoading ||
+        deleteDistributorBrand?.isLoading) && <Loader />}
       <Modal
         centered
-        open={modal2Open}
-        onOk={() => setModal2Open(false)}
-        onCancel={() => setModal2Open(false)}
-        closable={false} // Removes the close button in the header
+        open={modal2Open || deleteModal}
+        onOk={() => {
+          if (deleteModal) {
+            setDeleteModal(false);
+          } else {
+            setModal2Open(false);
+          }
+        }}
+        onCancel={() => {
+          if (deleteModal) {
+            setDeleteModal(false);
+          } else {
+            setModal2Open(false);
+          }
+        }}
+        closable={false}
         footer={null}
       >
         <div className="modalbg">
           <img src={modalbg} alt="" />
         </div>
+
         <div className="modalImage mb-30">
-          <img src={!showLogoutModal ? modalImage : logoutModal} alt="" />
+          <img
+            src={
+              deleteModal
+                ? deleteModalSVG
+                : !showLogoutModal
+                ? modalImage
+                : logoutModal
+            }
+            alt=""
+          />
         </div>
 
         {!showLogoutModal ? (
@@ -165,28 +277,46 @@ const CommonModal = ({
                 ? "Delete Supplier"
                 : getLocationDetails === "/admin/distributors"
                 ? "Delete Distributor"
+                : getLocationDetails === "/admin/brands" ||
+                  getLocationDetails === "/supplier/brands" ||
+                  getLocationDetails === "/distributors/brands"
+                ? "Remove Brands"
                 : "Delete Team Member"}
             </div>
 
-            <div className="fs-18">
-              Are you sure you want to remove{" "}
-              <span className="fw-600">
-                {(() => {
-                  const name =
-                    removeTeamMember?.displayName ||
-                    removeSupplier?.supplierName ||
-                    removeDistributor?.distributorName ||
-                    "";
-                  return name.charAt(0).toUpperCase() + name.slice(1);
-                })()}
-              </span>{" "}
-              from the{" "}
-              {getLocationDetails === "/admin/suppliers"
-                ? "supplier?"
-                : getLocationDetails === "/admin/distributors"
-                ? "distributor?"
-                : "team?"}
-            </div>
+            {deleteModal && (
+              <div className="fs-18">
+                Are you sure you want to remove{" "}
+                <span className="fw-600">
+                  {brandDetails?.brandName
+                    ? brandDetails?.brandName.charAt(0).toUpperCase() +
+                      brandDetails?.brandName.slice(1)
+                    : ""}
+                  ?
+                </span>{" "}
+              </div>
+            )}
+            {!deleteModal && (
+              <div className="fs-18">
+                Are you sure you want to remove{" "}
+                <span className="fw-600">
+                  {(() => {
+                    const name =
+                      removeTeamMember?.displayName ||
+                      removeSupplier?.supplierName ||
+                      removeDistributor?.distributorName ||
+                      "";
+                    return name.charAt(0).toUpperCase() + name.slice(1);
+                  })()}
+                </span>{" "}
+                from the{" "}
+                {getLocationDetails === "/admin/suppliers"
+                  ? "supplier?"
+                  : getLocationDetails === "/admin/distributors"
+                  ? "distributor?"
+                  : "team?"}
+              </div>
+            )}
           </div>
         ) : (
           <div className="text-center mb-30">
@@ -200,7 +330,16 @@ const CommonModal = ({
 
         {!showLogoutModal ? (
           <div className="div d-flex align-center gap-16">
-            <div className="btn w-100" onClick={() => setModal2Open(false)}>
+            <div
+              className="btn w-100"
+              onClick={() => {
+                if (deleteModal) {
+                  setDeleteModal(false);
+                } else {
+                  setModal2Open(false);
+                }
+              }}
+            >
               Cancel
             </div>
             <div className="btn btnSecondary w-100" onClick={deleteTeam}>
@@ -214,7 +353,13 @@ const CommonModal = ({
             </div>
             <div
               className="btn btnSecondary w-100"
-              onClick={() => setModal2Open(false)}
+              onClick={() => {
+                if (deleteModal) {
+                  setDeleteModal(false);
+                } else {
+                  setModal2Open(false);
+                }
+              }}
             >
               Cancel
             </div>

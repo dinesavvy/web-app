@@ -1,22 +1,28 @@
-import React, { useEffect, useState } from "react";
+import React, {  useState } from "react";
 import closeRightSidebar from "../../../../assets/images/closeRightSidebar.svg";
-import coke from "../../../../assets/images/coke.svg";
 import editMember from "../../../../assets/images/editMember.svg";
 import deleteMember from "../../../../assets/images/deleteMember.svg";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
 import { deleteDistributorBrandHandler } from "../../../../redux/action/distributorsAction/deleteDistributorBrand";
 import noImageFound from "../../../../assets/images/noImageFound.png";
+import CommonModal from "../../../admin/Components/CommonModal";
 
-const BrandDetails = ({ isOpen, toggleDetails, brandDetails }) => {
+const BrandDetails = ({
+  isOpen,
+  toggleDetails,
+  brandDetails,
+  setIsDetailsOpen,
+}) => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+
+  const [deleteModal, setDeleteModal] = useState(false);
 
   const deleteBrand = () => {
-    let payload = {
-      brandId: brandDetails?._id,
-    };
-    dispatch(deleteDistributorBrandHandler(payload));
+    setDeleteModal(true);
+    // let payload = {
+    //   brandId: brandDetails?._id,
+    // };
+    // dispatch(deleteDistributorBrandHandler(payload));
   };
 
   return (
@@ -63,10 +69,7 @@ const BrandDetails = ({ isOpen, toggleDetails, brandDetails }) => {
                       </div>
                       <div className="twoSpace">
                         <div className="lightBlack fs-14 mb-4">Description</div>
-                        <div className="fs-14 fw-600">
-                          {/* Coca Cola - Classic 12 oz cans (12-pack) */}
-                          {item?.description}
-                        </div>
+                        <div className="fs-14 fw-600">{item?.description}</div>
                       </div>
                     </div>
                     <div className="divider2"></div>
@@ -81,7 +84,11 @@ const BrandDetails = ({ isOpen, toggleDetails, brandDetails }) => {
           <div className="d-flex align-center gap-10">
             <div
               className="btn btnSecondary w-100 gap-8"
-              onClick={() => navigate("/distributors/add-distributor-brands",{state:{brandDetails:brandDetails}})}
+              onClick={() =>
+                navigate("/distributors/add-distributor-brands", {
+                  state: { brandDetails: brandDetails },
+                })
+              }
             >
               <img src={editMember} alt="" />
               Edit
@@ -92,6 +99,15 @@ const BrandDetails = ({ isOpen, toggleDetails, brandDetails }) => {
           </div>
         </div>
       </div>
+
+      {deleteModal && (
+        <CommonModal
+          deleteModal={deleteModal}
+          setDeleteModal={setDeleteModal}
+          brandDetails={brandDetails}
+          setIsDetailsOpen={setIsDetailsOpen}
+        />
+      )}
     </>
   );
 };

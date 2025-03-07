@@ -18,17 +18,22 @@ const Brands = () => {
   const [pagination, setPagination] = useState({ page: 1, limit: 9 });
   const [brandDetails, setBrandDetails] = useState({});
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
+  const [searchString, setSearchString] = useState("");
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const getBrandListSelector = useSelector((state) => state?.supplierBrandList);
   const deleteBrandSelector = useSelector((state) => state?.removeSupplier);
+  const removeBrandSupplier = useSelector(
+      (state) => state?.removeBrandSupplier
+    );
 
   const handlePaginationChange = (page, pageSize) => {
     setPagination({ page, limit: pageSize });
   };
 
   const handleSearchChange = (value) => {
+    setSearchString(value);
     setPagination((prev) => ({ ...prev, page: 1 })); // Reset to the first page on search
   };
 
@@ -53,25 +58,16 @@ const Brands = () => {
     let payload = {
       page: pagination?.page,
       limit: pagination?.limit,
+      searchString:searchString,
     };
     dispatch(supplierBrandListHandler(payload));
-  }, [pagination, deleteBrandSelector]);
+  }, [pagination,removeBrandSupplier]);
 
   const toggleDetails = (item) => {
     setBrandDetails(item);
     setIsDetailsOpen((prevState) => !prevState);
   };
 
-  useEffect(() => {
-    if (deleteBrandSelector?.data?.statusCode === 200) {
-      messageApi.open({
-        type: "success",
-        content: deleteBrandSelector?.data?.message,
-      });
-      setIsDetailsOpen(false);
-      dispatch(deleteBrandsAction.deleteBrandReset());
-    }
-  }, [deleteBrandSelector]);
 
   return (
     <>
@@ -125,7 +121,7 @@ const Brands = () => {
                           <div className="d-flex align-center gap-10">
                             <div
                               className="btn btnSecondary w-100 gap-8"
-                              // onClick={() => navigate("/admin/add-promotions")}
+                              onClick={() => navigate("/supplier/promotion")}
                             >
                               {/* <img src={editMember} alt="" /> */}
                               Promote
@@ -175,6 +171,7 @@ const Brands = () => {
         isOpen={isDetailsOpen}
         toggleDetails={toggleDetails}
         brandDetails={brandDetails}
+        setIsDetailsOpen={setIsDetailsOpen}
       />
     </>
   );

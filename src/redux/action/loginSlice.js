@@ -41,6 +41,7 @@ export const loginHandler = (data) => async (dispatch) => {
     dispatch(loginSliceAction.loginDetailsSliceSuccess(response));
     localStorage.setItem("token", response?.data?.deviceData?.deviceToken)
     localStorage.setItem("adminId", response?.data?._id)
+    localStorage.setItem("adminLogin", true)
   } catch (e) {
     dispatch(loginSliceAction.loginDetailsSliceFailure(e));
   }

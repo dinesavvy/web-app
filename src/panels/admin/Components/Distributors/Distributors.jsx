@@ -149,23 +149,30 @@ const Distributors = () => {
                           <div className="bottomPadding">
                             <div className="d-flex flexColumn gap-10">
                               <div className="d-flex align-center gap-12 fs-14">
-                                <img src={userCard} alt=""  className="h30"/>
-                                {item?.contactName}
+                                <img src={userCard} alt="" className="h30" />
+                                {item?.contactName
+                                  ? item?.contactName.charAt(0).toUpperCase() +
+                                    item?.contactName.slice(1)
+                                  : ""}
                               </div>
                               <div className="d-flex align-center gap-12 fs-14">
-                                <img src={inveCard} alt=""  className="h30"/>
+                                <img src={inveCard} alt="" className="h30" />
                                 {/* 217 555-0113 */}
-                                {item?.contactPhoneNumber}
+                                {item?.contactPosition
+                                  ? item?.contactPosition
+                                      .charAt(0)
+                                      .toUpperCase() +
+                                    item?.contactPosition.slice(1)
+                                  : ""}
                               </div>
                               <div className="d-flex align-center gap-12 fs-14">
-                                <img src={emailCard} alt=""  className="h30"/>
+                                <img src={emailCard} alt="" className="h30" />
                                 {/* grothoff@icloud.com */}
                                 {item?.contactEmail}
                               </div>
                               <div className="d-flex align-center gap-12 fs-14">
-                                <img src={phoneCard} alt=""  className="h30"/>
-                                {/* 217 555-0113 */}
-                                {item?.contactPhoneNumber}
+                                <img src={phoneCard} alt="" className="h30" />
+                                {/* 217 555-0113 */}+{item?.contactPhoneNumber}
                               </div>
                               <div className="d-flex align-center gap-10">
                                 <div
@@ -236,6 +243,7 @@ const Distributors = () => {
           toggleDetails={toggleDetails}
           setIsDetailsOpen={setIsDetailsOpen}
           distributorItems={distributorItems}
+          setDistributorItems={setDistributorItems}
         />
       )}
 
