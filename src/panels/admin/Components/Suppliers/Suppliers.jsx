@@ -105,9 +105,9 @@ const Suppliers = () => {
             /> */}
             {/* <img src={searchIcon} alt="" className="absoluteImage" /> */}
             <SearchSelect
-                onSearchChange={handleSearchChange}
-                onSearchAreaChange={handleSearchAreaChange}
-              />
+              onSearchChange={handleSearchChange}
+              onSearchAreaChange={handleSearchAreaChange}
+            />
           </div>
           <div className="merchantGrid">
             {getSuppliersListSelector?.data?.data?.records?.length > 0 ? (
@@ -127,10 +127,11 @@ const Suppliers = () => {
                             />
                           </div>
                           <div className="fs-16 fw-700 mb-10">
-  {item?.supplierName
-    ? item.supplierName.charAt(0).toUpperCase() + item.supplierName.slice(1)
-    : ""}
-</div>
+                            {item?.supplierName
+                              ? item.supplierName.charAt(0).toUpperCase() +
+                                item.supplierName.slice(1)
+                              : ""}
+                          </div>
                         </div>
                         <div className="divider2 m-0"></div>
                         <div className="bottomPadding">
@@ -140,16 +141,28 @@ const Suppliers = () => {
                               {item?.contactName}
                             </div>
                             <div className="d-flex align-center gap-12 fs-14">
-                              <img src={inveCard} className="h30" alt="Inventory" />
+                              <img
+                                src={inveCard}
+                                className="h30"
+                                alt="Inventory"
+                              />
                               {/* 217 555-0113 */}
                               {item?.contactPosition}
                             </div>
                             <div className="d-flex align-center gap-12 fs-14">
-                              <img src={emailCard} className="h30" alt="Email" />
+                              <img
+                                src={emailCard}
+                                className="h30"
+                                alt="Email"
+                              />
                               {item?.contactEmail}
                             </div>
                             <div className="d-flex align-center gap-12 fs-14">
-                              <img src={phoneCard} className="h30" alt="Phone" />
+                              <img
+                                src={phoneCard}
+                                className="h30"
+                                alt="Phone"
+                              />
                               {item?.contactPhoneNumber}
                             </div>
                             <div className="d-flex align-center gap-10">
