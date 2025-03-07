@@ -11,7 +11,10 @@ import {
   createSuplierHandler,
   createSupplierAction,
 } from "../../../../redux/action/createSupplier";
-import { fileUploadHandler } from "../../../../redux/action/fileUpload";
+import {
+  fileUploadAction,
+  fileUploadHandler,
+} from "../../../../redux/action/fileUpload";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import { supplierValidation } from "./supplierValidation";
@@ -19,7 +22,6 @@ import {
   updateSupplierAction,
   updateSupplierHandler,
 } from "../../../../redux/action/updateSupplier";
-import axios from "axios";
 import { getGeoInfo } from "../../../../services/geoLocation";
 
 const SupplierDetails = ({
@@ -33,6 +35,7 @@ const SupplierDetails = ({
 
   const [country, setCountry] = useState("");
   const fileuploadSelector = useSelector((state) => state?.fileupload);
+  console.log(fileuploadSelector, "fileuploadSelector");
   const [imagePreview, setImagePreview] = useState(null);
   const [phone, setPhone] = useState(
     selectedSupplier?.contactPhoneNumber || ""
@@ -44,29 +47,34 @@ const SupplierDetails = ({
   const createSuplierSelector = useSelector((state) => state?.createSuplier);
   const updateSupplierSelector = useSelector((state) => state?.updateSupplier);
 
-  const handlePhoneChange = (value, data) => {
-    if (value === "") {
-      // setCountryCode(""); // Reset to India when input is cleared
-      setPhone("");
-      return;
-    }
+  // const handlePhoneChange = (value, data) => {
+  //   if (value === "") {
+  //     // setCountryCode(""); // Reset to India when input is cleared
+  //     setPhone("");
+  //     return;
+  //   }
 
-    let newCountryCode = data.dialCode;
-    let newPhone = value.replace(newCountryCode, "").trim();
+  //   let newCountryCode = data.dialCode;
+  //   let newPhone = value.replace(newCountryCode, "").trim();
 
-    if (!newPhone) {
-      // If the number is empty, reset country code
-      setCountry("");
-      // setCountryCode("");
-      return;
-    } else {
-      setCountry(newCountryCode);
-      setCountryCode(newCountryCode);
-    }
+  //   if (!newPhone) {
+  //     // If the number is empty, reset country code
+  //     setCountry("");
+  //     // setCountryCode("");
+  //     return;
+  //   } else {
+  //     setCountry(newCountryCode);
+  //     setCountryCode(newCountryCode);
+  //   }
 
-    setCountryCode(newCountryCode);
-    setPhone(newPhone);
-  };
+  //   setCountryCode(newCountryCode);
+  //   setPhone(newPhone);
+  // };
+  // const handlePhoneChange = (value, country) => {
+  //   setPhone(value.replace(country.dialCode, "")); // Store only the number
+  //   setCountryCode(`+${country.dialCode}`); // Update country code
+  // };
+
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
     setFileObject(file);
@@ -114,10 +122,10 @@ const SupplierDetails = ({
               body: fileObject,
             }
           );
-
         } catch (error) {
           console.error("Error uploading file", error);
         }
+        // dispatch(fileUploadAction.fileuploadReset())
       }
     };
 
@@ -140,25 +148,44 @@ const SupplierDetails = ({
 
   const handleFormSubmit = (values) => {
     if (!selectedSupplier) {
+      let logoUrl = fileuploadSelector?.data?.data
+        ?.map((item) => item?.src)
+        .join("");
+
+      if (!logoUrl) {
+        // message.error("Please upload a logo.");
+        messageApi.open({
+          type: "error",
+          content: "Please upload a logo",
+        });
+        return;
+      }
+
       let payload = {
         supplierName: values?.supplierName,
         contactName: values?.supplierContactName,
         contactPosition: values?.supplierPosition,
         contactEmail: values?.supplierEmail,
-        contactPhoneNumber: "+" + countryCode + phone,
-        logoUrl: fileuploadSelector?.data?.data
-          ?.map((item) => item?.src)
-          .join(""),
+        contactPhoneNumber: values?.supplierContactNumber,
+        logoUrl,
       };
       dispatch(createSuplierHandler(payload));
     } else if (selectedSupplier) {
+      let logoUrl = selectedSupplier?.logoUrl;
+      if (!logoUrl) {
+        messageApi.open({
+          type: "error",
+          content: "Please upload a logo",
+        });
+        return;
+      }
       let payload = {
         supplierName: values?.supplierName,
         contactName: values?.supplierContactName,
         contactPosition: values?.supplierPosition,
         contactEmail: values?.supplierEmail,
-        contactPhoneNumber: "+" + countryCode + phone,
-        logoUrl: selectedSupplier?.logoUrl,
+        contactPhoneNumber: values?.supplierContactNumber,
+        logoUrl,
         supplierId: selectedSupplier?._id,
       };
       dispatch(updateSupplierHandler(payload));
@@ -179,6 +206,7 @@ const SupplierDetails = ({
       });
       setIsDetailsOpen(false);
       dispatch(createSupplierAction.createSuplierReset());
+      dispatch(fileUploadAction.fileuploadReset());
     }
   }, [createSuplierSelector]);
 
@@ -203,14 +231,19 @@ const SupplierDetails = ({
     <>
       {(createSuplierSelector?.isLoading ||
         updateSupplierSelector?.isLoading ||
-        fileuploadSelector?.isLoading||loading) && <Loader />}
+        fileuploadSelector?.isLoading ||
+        loading) && <Loader />}
+        {console.log(selectedSupplier,"selectedSupplier")}
       {isOpen && <div className="overlay2" onClick={toggleDetails}></div>}
-
       <Formik
         enableReinitialize
         initialValues={{
           supplierName: selectedSupplier?.supplierName || "",
-          supplierContactNumber: selectedSupplier?.contactPhoneNumber || "",
+
+          supplierContactNumber: selectedSupplier?.contactPhoneNumber||"",
+            // ? selectedSupplier?.contactPhoneNumber
+            // : `${countryCode}${phone}`,
+
           supplierPosition: selectedSupplier?.contactPosition || "",
           supplierEmail: selectedSupplier?.contactEmail || "",
           supplierContactName: selectedSupplier?.contactName || "",
@@ -224,7 +257,8 @@ const SupplierDetails = ({
           isSubmitting,
           resetForm,
           setFieldValue,
-          setFieldTouched
+          setFieldTouched,
+          values,
           /* and other goodies */
         }) => (
           <Form>
@@ -235,7 +269,6 @@ const SupplierDetails = ({
                 <div className="fs-20 fw-600">
                   {selectedSupplier ? "Edit Supplier" : "Add Supplier"}
                 </div>
-                {console.log(selectedSupplier,"selectedSupplier")}
                 <div
                   className="closeSidebar"
                   onClick={() => {
@@ -250,9 +283,12 @@ const SupplierDetails = ({
               <div className="divider2"></div>
               <div className="overflowCart2 overflowCart">
                 <div className="fs-14 mb-10 fw-500">Supplier logo</div>
-                {imagePreview ||selectedSupplier ? (
+                {imagePreview || selectedSupplier ? (
                   <div className="brandImagePromo mb-10">
-                    <img src={imagePreview||selectedSupplier?.logoUrl} alt="Uploaded Preview" />
+                    <img
+                      src={imagePreview || selectedSupplier?.logoUrl}
+                      alt="Uploaded Preview"
+                    />
                     <div
                       className="closeIcon"
                       onClick={() => setImagePreview(null)}
@@ -345,6 +381,7 @@ const SupplierDetails = ({
                       type="text"
                       placeholder="Enter email"
                       name="supplierEmail"
+                      autocomplete="off"
                     />
                     <ErrorMessage
                       name="supplierEmail"
@@ -357,20 +394,19 @@ const SupplierDetails = ({
                       Contact*
                     </label>
                     <PhoneInput
-                      // country={countryCode || undefined} // Set country dynamically when user types a code
-                      value={`${countryCode}${phone}`} // Show full value but keep them separate in state
-                      onChange={(e, f) => {
-                        handlePhoneChange(e, f);
-                        setFieldValue("distributorContactNumber", e);
-                        setFieldTouched("distributorContactNumber", true);
+                      // country={countryCode || undefined}
+                      // value={`${countryCode}${phone}`}
+                      value={values?.supplierContactNumber || `${countryCode}${phone}`}
+                      onChange={(value) => {
+                        setFieldValue("supplierContactNumber", value);
                       }}
-                      disableCountryGuess={false} // Allow auto-detection of typed country code
+                      disableCountryGuess={false} 
                       placeholder="Enter phone number"
                       className="phoneInput"
                       name="supplierContactNumber"
-                      enableAreaCodes={true} // Helps with regional codes
+                      enableAreaCodes={true} 
                       isValid={(inputNumber, country, countries) => {
-                        return inputNumber.length >= country.format.length; // Basic validation
+                        return inputNumber.length >= country.format.length; 
                       }}
                     />
                     <ErrorMessage
