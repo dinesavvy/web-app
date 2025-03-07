@@ -163,9 +163,12 @@ const Promotions = () => {
                           />
                         </div>
                         <div className="d-flex justify-between align-center gap-10">
-                          <div className="fs-16 fw-700">
-                            {item?.brandDetails?.brandName}
-                          </div>
+                        <div className="fs-16 fw-700">
+  {item?.brandDetails?.brandName
+    ? item.brandDetails.brandName.charAt(0).toUpperCase() + item.brandDetails.brandName.slice(1)
+    : ""}
+</div>
+
                           <div
                             className={
                               item?.redemptionPercentage > 50

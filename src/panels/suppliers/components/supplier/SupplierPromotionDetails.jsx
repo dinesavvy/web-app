@@ -277,7 +277,7 @@ const SupplierPromotionDetails = ({
               </>
             ))}
           </div>
-          <div className="deleteBtnfull btn">End Promotion</div>
+          <div className="deleteBtnfull btn disabled">End Promotion</div>
         </div>
       </div>
       {/* <PromotionCart isOpen={isCartOpen} toggleCart={toggleCart} /> */}

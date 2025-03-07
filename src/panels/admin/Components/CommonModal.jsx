@@ -14,7 +14,7 @@ import {
   removeTeamMemberBusinessHandler,
 } from "../../../redux/action/businessAction/removeTeamMember";
 import { businessTeamListHandler } from "../../../redux/action/businessAction/businessTeamList";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import {
   removeSupplierAction,
   removeSupplierHandler,
@@ -23,6 +23,7 @@ import {
   removeDistributorAction,
   removeDistributorHandler,
 } from "../../../redux/action/removeDistributor";
+import logoutModal from "../../../assets/images/logoutModal.svg";
 
 const CommonModal = ({
   modal2Open,
@@ -33,11 +34,12 @@ const CommonModal = ({
   selectTeam,
   removeSupplier,
   removeDistributor,
+  showLogoutModal,
 }) => {
   const messageApi = useCommonMessage();
   const getMerchantId = localStorage.getItem("merchantId");
   const dispatch = useDispatch();
-
+  const navigate = useNavigate();
   const location = useLocation();
 
   let getLocationDetails = location?.pathname;
@@ -77,6 +79,12 @@ const CommonModal = ({
         removeDistributorHandler({ distributorId: removeDistributor._id })
       );
     }
+  };
+
+  const logout = () => {
+    navigate("/");
+    localStorage.clear();
+    setModal2Open(false);
   };
 
   useEffect(() => {
@@ -147,44 +155,71 @@ const CommonModal = ({
           <img src={modalbg} alt="" />
         </div>
         <div className="modalImage mb-30">
-          <img src={modalImage} alt="" />
+          <img src={!showLogoutModal ? modalImage : logoutModal} alt="" />
         </div>
-        <div className="text-center mb-30">
-          <div className="fs-26 fw-700 mb-15">
-            {getLocationDetails === "/admin/suppliers"
-              ? "Delete Supplier"
-              : getLocationDetails === "/admin/distributors"
-              ? "Delete Distributor"
-              : "Delete Team Member"}
+
+        {!showLogoutModal ? (
+          <div className="text-center mb-30">
+            <div className="fs-26 fw-700 mb-15">
+              {getLocationDetails === "/admin/suppliers"
+                ? "Delete Supplier"
+                : getLocationDetails === "/admin/distributors"
+                ? "Delete Distributor"
+                : "Delete Team Member"}
+            </div>
+
+            <div className="fs-18">
+              Are you sure you want to remove{" "}
+              <span className="fw-600">
+                {(() => {
+                  const name =
+                    removeTeamMember?.displayName ||
+                    removeSupplier?.supplierName ||
+                    removeDistributor?.distributorName ||
+                    "";
+                  return name.charAt(0).toUpperCase() + name.slice(1);
+                })()}
+              </span>{" "}
+              from the{" "}
+              {getLocationDetails === "/admin/suppliers"
+                ? "supplier?"
+                : getLocationDetails === "/admin/distributors"
+                ? "distributor?"
+                : "team?"}
+            </div>
           </div>
-          <div className="fs-18">
-            Are you sure you want to remove{" "}
-            <span className="fw-600">
-              {(() => {
-                const name =
-                  removeTeamMember?.displayName ||
-                  removeSupplier?.supplierName ||
-                  removeDistributor?.distributorName ||
-                  "";
-                return name.charAt(0).toUpperCase() + name.slice(1);
-              })()}
-            </span>{" "}
-            from the{" "}
-            {getLocationDetails === "/admin/suppliers"
-              ? "supplier?"
-              : getLocationDetails === "/admin/distributors"
-              ? "distributor?"
-              : "team?"}
+        ) : (
+          <div className="text-center mb-30">
+            <div className="fs-26 fw-700 mb-15">
+              Are you sure you want to Logout?
+            </div>
+
+            <div className="fs-18">This will log you out of the account </div>
           </div>
-        </div>
-        <div className="div d-flex align-center gap-16">
-          <div className="btn w-100" onClick={() => setModal2Open(false)}>
-            Cancel
+        )}
+
+        {!showLogoutModal ? (
+          <div className="div d-flex align-center gap-16">
+            <div className="btn w-100" onClick={() => setModal2Open(false)}>
+              Cancel
+            </div>
+            <div className="btn btnSecondary w-100" onClick={deleteTeam}>
+              Delete
+            </div>
           </div>
-          <div className="btn btnSecondary w-100" onClick={deleteTeam}>
-            Delete
+        ) : (
+          <div className="div d-flex align-center gap-16">
+            <div className="btn w-100" onClick={logout}>
+              Yes
+            </div>
+            <div
+              className="btn btnSecondary w-100"
+              onClick={() => setModal2Open(false)}
+            >
+              Cancel
+            </div>
           </div>
-        </div>
+        )}
       </Modal>
     </>
   );

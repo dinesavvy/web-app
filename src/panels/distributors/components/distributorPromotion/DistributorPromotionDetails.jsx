@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from "react";
-import closeRightSidebar from "../../../assets/images/closeRightSidebar.svg";
-import arrowUp from "../../../assets/images/arrow-up.svg";
-import coke from "../../../assets/images/coke.svg";
-import olive from "../../../assets/images/olive.png";
-import restaurantCard from "../../../assets/images/restaurantCard.png";
-import PromotionCart from "./PromotionCart";
+import closeRightSidebar from "../../../../assets/images/closeRightSidebar.svg";
+import arrowUp from "../../../../assets/images/arrow-up.svg";
+import olive from "../../../../assets/images/olive.png";
+// import PromotionCart from "./PromotionCart";
 import moment from "moment";
-import { promotionDetailsHandler } from "../../../redux/action/promotionDetails";
+import { promotionDetailsHandler } from "../../../../redux/action/promotionDetails";
 import { useDispatch, useSelector } from "react-redux";
-import Loader from "../../../common/Loader/Loader";
+import Loader from "../../../../common/Loader/Loader";
+import { distributorPromotionDetailsHandler } from "../../../../redux/action/distributorsAction/distributorPromotionDetails";
+import noImageFound from "../../../../assets/images/noImageFound.png";
 
-const PromotionDetails = ({
+
+const DistributorPromotionDetails = ({
   isOpen,
   toggleDetails,
   promotionalDetailsData,
@@ -20,8 +21,9 @@ const PromotionDetails = ({
   const [addFund, setAddFund] = useState(false);
 
   const promotionDetailsSelector = useSelector(
-    (state) => state?.promotionDetails
+    (state) => state?.distributorPromotionDetails
   );
+  console.log(promotionDetailsSelector,"promotionDetailsSelector")
 
   const dispatch = useDispatch();
 
@@ -66,7 +68,7 @@ const PromotionDetails = ({
       let payload = {
         promotionId: promotionalDetailsData?._id,
       };
-      dispatch(promotionDetailsHandler(payload));
+      dispatch(distributorPromotionDetailsHandler(payload));
     }
   }, [promotionalDetailsData]);
 
@@ -85,16 +87,36 @@ const PromotionDetails = ({
         <div className="divider2"></div>
         <div className="overflowCart2 overflowCart">
           <div className="fs-18 fw-700 pc">
-            {promotionDetailsSelector?.data?.data?.promotionTitle}
+            {promotionDetailsSelector?.data?.data?.promotionTitle
+              ? promotionDetailsSelector.data.data.promotionTitle
+                  .charAt(0)
+                  .toUpperCase() +
+                promotionDetailsSelector.data.data.promotionTitle.slice(1)
+              : ""}
           </div>
+
           <div className="divider2"></div>
           <div className="brandImagePromo mb-10">
-            <img src={promotionDetailsSelector?.data?.data?.brandDetails?.imageUrl[0]||coke} alt="" />
+            <img
+              src={
+                promotionDetailsSelector?.data?.data?.brandDetails
+                  ?.imageUrl[0] || noImageFound
+              }
+              alt=""
+            />
           </div>
           <div className="d-flex justify-between align-center gap-10">
             <div className="fs-16 fw-700">
-              {promotionDetailsSelector?.data?.data?.brandDetails?.brandName}
+              {promotionDetailsSelector?.data?.data?.brandDetails?.brandName
+                ? promotionDetailsSelector.data.data.brandDetails.brandName
+                    .charAt(0)
+                    .toUpperCase() +
+                  promotionDetailsSelector.data.data.brandDetails.brandName.slice(
+                    1
+                  )
+                : ""}
             </div>
+
             {/* <div className="fs-16 fw-600 roi red">Redeemed: {promotionDetailsSelector?.data?.data?.redemptionPercentage}%</div> */}
             <div
               className={
@@ -135,11 +157,15 @@ const PromotionDetails = ({
             </div>
             <div>
               <div className="fs-14 mb-4">Total Quantity</div>
-              <div className="fs-14 fw-600">{promotionDetailsSelector?.data?.data?.merchant?.quantity}</div>
+              <div className="fs-14 fw-600">
+                {promotionDetailsSelector?.data?.data?.merchant?.quantity}
+              </div>
             </div>
             <div>
               <div className="fs-14 mb-4">Promotional Credits</div>
-              <div className="fs-14 fw-600">${promotionDetailsSelector?.data?.data?.merchant?.promotionFund}</div>
+              <div className="fs-14 fw-600">
+                ${promotionDetailsSelector?.data?.data?.merchant?.promotionFund}
+              </div>
             </div>
           </div>
           <div className="divider2"></div>
@@ -255,9 +281,9 @@ const PromotionDetails = ({
           <div className="deleteBtnfull btn disabled">End Promotion</div>
         </div>
       </div>
-      <PromotionCart isOpen={isCartOpen} toggleCart={toggleCart} />
+      {/* <PromotionCart isOpen={isCartOpen} toggleCart={toggleCart} /> */}
     </>
   );
 };
 
-export default PromotionDetails;
+export default DistributorPromotionDetails;

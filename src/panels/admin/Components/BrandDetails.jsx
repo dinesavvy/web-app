@@ -37,7 +37,12 @@ const BrandDetails = ({ isOpen, toggleDetails, brandDetails }) => {
             <img src={brandDetails?.imageUrl?.[0]|| noImageFound} alt="" />
           </div>
           <div className="d-flex justify-between align-center gap-10">
-            <div className="fs-16 fw-700">{brandDetails?.brandName}</div>
+          <div className="fs-16 fw-700">
+  {brandDetails?.brandName
+    ? brandDetails.brandName.charAt(0).toUpperCase() + brandDetails.brandName.slice(1)
+    : ""}
+</div>
+
             <div className="fs-16 fw-600 roi green">Performance: 52%</div>
           </div>
           <div className="divider2"></div>

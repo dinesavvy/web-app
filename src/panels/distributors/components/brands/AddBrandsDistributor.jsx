@@ -35,7 +35,6 @@ const AddBrandsDistributor = () => {
   const fileuploadSelector = useSelector((state) => state?.fileUploadDistributor);
 
   const { state } = useLocation();
-  console.log(state,"state")
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -365,6 +364,15 @@ const AddBrandsDistributor = () => {
                                 placeholder="Red Bull - 8.4 oz energy drink (12-pack)"
                                 name={`SKUs[${index}].quantity`}
                                 autoComplete="off"
+                                maxLength={5}
+                                onKeyDown={(e) => {
+                                  if (
+                                    !/^\d$/.test(e.key) && // Allow numbers
+                                    !["Backspace", "Delete", "ArrowLeft", "ArrowRight", "Tab"].includes(e.key) // Allow navigation keys
+                                  ) {
+                                    e.preventDefault();
+                                  }
+                                }}
                               />
                               <ErrorMessage
                                 name={`SKUs[${index}].quantity`}

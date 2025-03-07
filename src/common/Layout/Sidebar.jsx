@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import "../../assets/css/sidebar.css";
 import logo from "../../assets/images/logo.svg";
 import logout from "../../assets/images/sidebar/logout.svg";
@@ -27,8 +27,10 @@ import hierarchyFull from "../../assets/images/sidebar/hierarchyFull.svg";
 import "react-tooltip/dist/react-tooltip.css";
 import { Tooltip } from "react-tooltip";
 import { useNavigate } from "react-router-dom";
+import CommonModal from "../../panels/admin/Components/CommonModal";
 
 const Sidebar = ({ isOpen, setIsOpen }) => {
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
   const navigate = useNavigate();
   const getLoggedInDetails = localStorage.getItem("merchantLogin");
   const getSupplierDetails = localStorage.getItem("supplierLogin");
@@ -66,7 +68,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
             tag: "19",
             navigate: getSupplierDetails
               ? "/supplier/promotion"
-              : "/distributors/promotions",
+              : "/distributors/promotion",
           },
         ]
       : [
@@ -230,8 +232,9 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
           data-tooltip-id={isOpen ? "sidebar-tooltip" : undefined}
           data-tooltip-content={isOpen ? "Logout" : undefined}
           onClick={() => {
-            navigate("/");
-            localStorage.clear();
+            // navigate("/");
+            // localStorage.clear();
+            setShowLogoutModal(true);
           }}
         >
           <img src={logout} alt="Logout" />
@@ -239,6 +242,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
         </div>
         <Tooltip id="sidebar-tooltip" place="right" />
       </div>
+      {showLogoutModal && <CommonModal modal2Open={showLogoutModal} showLogoutModal = {showLogoutModal} setModal2Open = {setShowLogoutModal}/>}
     </>
   );
 };

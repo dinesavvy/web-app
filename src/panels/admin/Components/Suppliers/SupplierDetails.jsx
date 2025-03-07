@@ -235,6 +235,7 @@ const SupplierDetails = ({
                 <div className="fs-20 fw-600">
                   {selectedSupplier ? "Edit Supplier" : "Add Supplier"}
                 </div>
+                {console.log(selectedSupplier,"selectedSupplier")}
                 <div
                   className="closeSidebar"
                   onClick={() => {
@@ -249,9 +250,9 @@ const SupplierDetails = ({
               <div className="divider2"></div>
               <div className="overflowCart2 overflowCart">
                 <div className="fs-14 mb-10 fw-500">Supplier logo</div>
-                {imagePreview ? (
+                {imagePreview ||selectedSupplier ? (
                   <div className="brandImagePromo mb-10">
-                    <img src={imagePreview} alt="Uploaded Preview" />
+                    <img src={imagePreview||selectedSupplier?.logoUrl} alt="Uploaded Preview" />
                     <div
                       className="closeIcon"
                       onClick={() => setImagePreview(null)}

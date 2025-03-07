@@ -174,6 +174,7 @@ const AddDistributorBrand = () => {
                       placeholder="Brand Name"
                       name="brandName"
                       autoComplete="off"
+                      maxLength={50}
                     />
                     <ErrorMessage
                       name="brandName"

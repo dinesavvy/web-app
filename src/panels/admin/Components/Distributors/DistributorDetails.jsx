@@ -259,9 +259,9 @@ const DistributorDetails = ({
               <div className="divider2"></div>
               <div className="overflowCart2 overflowCart">
                 <div className="fs-14 mb-10 fw-500">Distributors logo</div>
-                {imagePreview ? (
+                {imagePreview ||distributorItems ? (
                   <div className="brandImagePromo mb-10">
-                    <img src={imagePreview} alt="Uploaded Preview" />
+                    <img src={imagePreview|| distributorItems?.logoUrl} alt="Uploaded Preview" />
                     <div
                       className="closeIcon"
                       onClick={() => setImagePreview(null)}

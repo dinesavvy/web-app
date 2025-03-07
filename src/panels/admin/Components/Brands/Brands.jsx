@@ -111,9 +111,12 @@ const Brands = () => {
                         </div>
                         <div className="divider m-0"></div>
                         <div className="bottomPadding">
-                          <div className="fs-16 fw-700 mb-20">
-                            {item?.brandName}
-                          </div>
+                        <div className="fs-16 fw-700 mb-20">
+  {item?.brandName
+    ? item.brandName.charAt(0).toUpperCase() + item.brandName.slice(1).toLowerCase()
+    : ""}
+</div>
+
 
                           <div className="fs-16 fw-600 roi green mb-20">
                             Performance: 52%

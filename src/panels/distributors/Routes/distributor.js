@@ -1,6 +1,8 @@
 import AddBrandsDistributor from "../components/brands/AddBrandsDistributor";
 import AddDistributorBrand from "../components/brands/AddDistributorBrand";
 import BrandsListDistributor from "../components/brands/BrandList";
+import AddDistributorPromotion from "../components/distributorPromotion/AddDistributorPromotion";
+import DistributorPromotionList from "../components/distributorPromotion/distributorPromotionList";
 import DistributorLogin from "../components/login/Login";
 import DistributorDashboard from "./../components/distributorDashboard/DistributorDashboard";
 
@@ -31,8 +33,14 @@ const supplierRoutes = [
     isLayout: true,
   },
   {
-    path: "/distributors/promotions",
-    // element: DistributorDashboard,
+    path: "/distributors/promotion",
+    element: DistributorPromotionList,
+    isPrivate: false,
+    isLayout: true,
+  },
+  {
+    path: "/distributors/add-promotions",
+    element: AddDistributorPromotion,
     isPrivate: false,
     isLayout: true,
   },
