@@ -64,9 +64,9 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
             iconFull: promotionsFull,
             disabled: false,
             tag: "19",
-            // navigate: getSupplierDetails
-            //   ? "/supplier/promotion"
-            //   : "/distributors/promotions",
+            navigate: getSupplierDetails
+              ? "/supplier/promotion"
+              : "/distributors/promotions",
           },
         ]
       : [
