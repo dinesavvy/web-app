@@ -87,16 +87,16 @@ const SearchSelect = ({ onSearchChange, onSearchAreaChange }) => {
           <img src={searchIcon} alt="" className="absoluteImage" />
         </div>
         {/* {location.pathname !== "/admin/merchant/followers" && ( */}
+          {(location?.pathname === "/admin/merchant/list" ||location?.pathname === "/admin/merchant/details") && (
         <div className="dropdown-container" ref={dropdownRef}>
           {/* Dropdown */}
-          {(location?.pathname === "/admin/merchant/list" ||location?.pathname === "/admin/merchant/details") && (
           <div className="dropdown-header" onClick={toggleDropdown}>
             <button className="dropdown-button">
               <img src={filterIcon} alt="" />
               Filter
             </button>
           </div>
-          )}
+       
           {isDropdownOpen && (
             <div className="dropdown-list">
               {(location?.pathname === "/admin/merchant/followers" ||
@@ -133,7 +133,9 @@ const SearchSelect = ({ onSearchChange, onSearchAreaChange }) => {
                 ))}
             </div>
           )}
+          
         </div>
+           )}
         {/* )} */}
       </div>
 
