@@ -12,16 +12,23 @@ import { useCommonMessage } from "../../../../common/CommonMessage";
 import Loader from "../../../../common/Loader/Loader";
 import { addSupplierBrandAction } from "../../../../redux/action/supplierActions/addSupplierBrand";
 import { createDistributorBrandHandler } from "../../../../redux/action/distributorsAction/createDistributorBrand";
-import { fileUploadDistributorAction, fileUploadDistributorHandler } from "../../../../redux/action/distributorsAction/fileUploadDistributor";
-import noImageFound from "../../../../assets/images/noImageFound.png"
+import {
+  fileUploadDistributorAction,
+  fileUploadDistributorHandler,
+} from "../../../../redux/action/distributorsAction/fileUploadDistributor";
+import noImageFound from "../../../../assets/images/noImageFound.png";
 
 const AddDistributorBrand = () => {
   const messageApi = useCommonMessage();
   const [fileObject, setFileObject] = useState();
   const [uploadedImage, setUploadedImage] = useState();
-  const fileuploadSelector = useSelector((state) => state?.fileUploadDistributor);
-  const createBrandSelector = useSelector((state) => state?.createDistributorBrand);
-  
+  const fileuploadSelector = useSelector(
+    (state) => state?.fileUploadDistributor
+  );
+  const createBrandSelector = useSelector(
+    (state) => state?.createDistributorBrand
+  );
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -47,26 +54,25 @@ const AddDistributorBrand = () => {
     }
   };
 
-
   useEffect(() => {
-      const uploadFile = async () => {
-        if (fileuploadSelector?.data?.statusCode === 200) {
-          try {
-            const response = await fetch(
-              fileuploadSelector?.data?.data?.[0]?.url,
-              {
-                method: "PUT",
-                body: fileObject,
-              }
-            );
-          } catch (error) {
-            console.error("Error uploading file", error);
-          }
+    const uploadFile = async () => {
+      if (fileuploadSelector?.data?.statusCode === 200) {
+        try {
+          const response = await fetch(
+            fileuploadSelector?.data?.data?.[0]?.url,
+            {
+              method: "PUT",
+              body: fileObject,
+            }
+          );
+        } catch (error) {
+          console.error("Error uploading file", error);
         }
-      };
-  
-      uploadFile();
-    }, [fileuploadSelector]);
+      }
+    };
+
+    uploadFile();
+  }, [fileuploadSelector]);
 
   const handleFormSubmit = (values) => {
     // Map the form values to the desired payload structure
@@ -201,6 +207,28 @@ const AddDistributorBrand = () => {
                                 placeholder="$22.99"
                                 name={`SKUs[${index}].msrp`}
                                 autoComplete="off"
+                                maxLength={5}
+                                onKeyDown={(e) => {
+                                  const isNumber = /^\d$/.test(e.key);
+                                  const isNavigationKey = [
+                                    "Backspace",
+                                    "Delete",
+                                    "ArrowLeft",
+                                    "ArrowRight",
+                                    "Tab",
+                                  ].includes(e.key);
+                                  const isDecimalPoint =
+                                    e.key === "." &&
+                                    !e.target.value.includes("."); // Allow only one decimal point
+
+                                  if (
+                                    !isNumber &&
+                                    !isNavigationKey &&
+                                    !isDecimalPoint
+                                  ) {
+                                    e.preventDefault();
+                                  }
+                                }}
                               />
                               <ErrorMessage
                                 name={`SKUs[${index}].msrp`}

@@ -24,21 +24,21 @@ import {
   updateBrandAction,
   updateBrandHandler,
 } from "../../../../redux/action/updateBrand";
+import { handleKeyPressSpace } from "../../../../common/commonFunctions/CommonFunctions";
 
 const AddBrands = () => {
   const [imagePreview, setImagePreview] = useState(null);
   const [fileObject, setFileObject] = useState();
+  
   const messageApi = useCommonMessage();
-  const fileuploadSelector = useSelector((state) => state?.fileupload);
-
   const { state } = useLocation();
-
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
+  const fileInputRef = useRef(null);
+  
+  const fileuploadSelector = useSelector((state) => state?.fileupload);
   const createBrandSelector = useSelector((state) => state?.createBrand);
   const updateBrandSelector = useSelector((state) => state?.updateBrand);
-  const fileInputRef = useRef(null);
 
   const handleButtonClick = () => {
     if (fileInputRef.current) {
@@ -49,9 +49,7 @@ const AddBrands = () => {
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     setFileObject(file);
-
     if (file) {
-      // Validate file type
       const allowedTypes = ["image/jpeg", "image/png", "image/jpg"];
       if (!allowedTypes.includes(file.type)) {
         messageApi.open({
@@ -60,7 +58,6 @@ const AddBrands = () => {
         });
         return;
       }
-
       // Validate file size (5MB)
       const maxSize = 5 * 1024 * 1024; // 5MB
       if (file.size > maxSize) {
@@ -99,12 +96,12 @@ const AddBrands = () => {
         }
       }
     };
-
     uploadFile();
   }, [fileuploadSelector]);
 
 
   const handleFormSubmit = (values) => {
+    console.log(values,"values")
     let logoUrl =
       fileuploadSelector?.data?.data?.map((item) => item?.src).filter(Boolean) || 
       (state?.brandDetails?.imageUrl?.[0] ? [state?.brandDetails?.imageUrl?.[0]] : []);
@@ -116,10 +113,9 @@ const AddBrands = () => {
       });
       return;
     }
-  
     const brandItemArray = values?.SKUs?.map((item) => ({
       mSRP: item?.msrp,
-      unit: item?.unit,
+      unit: item?.unit || "per_case",
       sku: item?.sku,
       description: item?.description,
       quantity: item?.quantity,
@@ -138,7 +134,6 @@ const AddBrands = () => {
       dispatch(updateBrandHandler(payload));
     }
   };
-  
 
   useEffect(() => {
     if (createBrandSelector?.data?.statusCode === 200) {
@@ -275,6 +270,7 @@ const AddBrands = () => {
                       name="brandName"
                       autoComplete="off"
                       maxLength={50}
+                      onKeyDown={handleKeyPressSpace}
                     />
                     <ErrorMessage
                       name="brandName"
@@ -301,6 +297,7 @@ const AddBrands = () => {
                                 placeholder="$22.99"
                                 name={`SKUs[${index}].msrp`}
                                 autoComplete="off"
+                                maxLength={5}
                                 onKeyDown={(e) => {
                                   const isNumber = /^\d$/.test(e.key);
                                   const isNavigationKey = [
@@ -321,8 +318,7 @@ const AddBrands = () => {
                                   ) {
                                     e.preventDefault();
                                   }
-                                  
-                                }}
+                                  }}
                               />
 
                               <ErrorMessage
@@ -340,8 +336,7 @@ const AddBrands = () => {
                                 {({ field, form }) => (
                                   <Select
                                     className="custom-select"
-                                    // placeholder="Select Unit"
-                                    value={field.value}
+                                    value={field.value|| "per_case"}
                                     onChange={(value) =>
                                       form.setFieldValue(
                                         `SKUs[${index}].unit`,
@@ -371,6 +366,7 @@ const AddBrands = () => {
                                 placeholder="PEPSI-24x12-005"
                                 name={`SKUs[${index}].sku`}
                                 autoComplete="off"
+                                onKeyDown={handleKeyPressSpace}
                               />
                               <ErrorMessage
                                 name={`SKUs[${index}].sku`}
@@ -378,7 +374,6 @@ const AddBrands = () => {
                                 className="mt-10 fw-500 fs-14 error"
                               />
                             </div>
-
                             <div className="">
                               <label className="grey mb-10 fs-16 fw-500">
                                 Description*
@@ -389,6 +384,7 @@ const AddBrands = () => {
                                 placeholder="Red Bull - 8.4 oz energy drink (12-pack)"
                                 name={`SKUs[${index}].description`}
                                 autoComplete="off"
+                                onKeyDown={handleKeyPressSpace}
                               />
                               <ErrorMessage
                                 name={`SKUs[${index}].description`}
@@ -409,14 +405,14 @@ const AddBrands = () => {
                                 maxLength={5}
                                 onKeyDown={(e) => {
                                   if (
-                                    !/^\d$/.test(e.key) && // Allow numbers
+                                    !/^\d$/.test(e.key) && 
                                     ![
                                       "Backspace",
                                       "Delete",
                                       "ArrowLeft",
                                       "ArrowRight",
                                       "Tab",
-                                    ].includes(e.key) // Allow navigation keys
+                                    ].includes(e.key) 
                                   ) {
                                     e.preventDefault();
                                   }

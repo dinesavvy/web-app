@@ -190,7 +190,7 @@ const SupplierPromotionList = () => {
                               <div className="fs-14 mb-4">Brand / Product</div>
                               <div className="fs-14 fw-600">
                               {item?.brandDetails?.brandName
-                                ? item.brandDetails.brandName
+                                ? item?.brandDetails?.brandName
                                     .charAt(0)
                                     .toUpperCase() +
                                   item.brandDetails.brandName.slice(1)

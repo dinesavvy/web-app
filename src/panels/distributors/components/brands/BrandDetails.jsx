@@ -3,7 +3,6 @@ import closeRightSidebar from "../../../../assets/images/closeRightSidebar.svg";
 import editMember from "../../../../assets/images/editMember.svg";
 import deleteMember from "../../../../assets/images/deleteMember.svg";
 import { useNavigate } from "react-router-dom";
-import { deleteDistributorBrandHandler } from "../../../../redux/action/distributorsAction/deleteDistributorBrand";
 import noImageFound from "../../../../assets/images/noImageFound.png";
 import CommonModal from "../../../admin/Components/CommonModal";
 
@@ -14,15 +13,10 @@ const BrandDetails = ({
   setIsDetailsOpen,
 }) => {
   const navigate = useNavigate();
-
   const [deleteModal, setDeleteModal] = useState(false);
 
   const deleteBrand = () => {
     setDeleteModal(true);
-    // let payload = {
-    //   brandId: brandDetails?._id,
-    // };
-    // dispatch(deleteDistributorBrandHandler(payload));
   };
 
   return (
@@ -80,7 +74,6 @@ const BrandDetails = ({
           ) : (
             <div className="noDataFound">No data available</div>
           )}
-
           <div className="d-flex align-center gap-10">
             <div
               className="btn btnSecondary w-100 gap-8"
@@ -99,7 +92,6 @@ const BrandDetails = ({
           </div>
         </div>
       </div>
-
       {deleteModal && (
         <CommonModal
           deleteModal={deleteModal}

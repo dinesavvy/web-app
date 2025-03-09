@@ -1,32 +1,22 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import closeRightSidebar from "../../../../assets/images/closeRightSidebar.svg";
 import editMember from "../../../../assets/images/editMember.svg";
 import deleteMember from "../../../../assets/images/deleteMember.svg";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { deleteBrandHandler } from "../../../../redux/action/deleteBrand";
-// import { removeSupplierHandler } from "../../../../redux/action/supplierActions/removeSupplier";
 import noImageFound from "../../../../assets/images/noImageFound.png";
 import CommonModal from "../../../admin/Components/CommonModal";
 
 const BrandDetails = ({ isOpen, toggleDetails, brandDetails,setIsDetailsOpen }) => {
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-
   const [deleteModal, setDeleteModal] = useState(false);
+  const navigate = useNavigate();
 
   const deleteBrand = () => {
-    // let payload = {
-    //   brandId: brandDetails?._id,
-    // };
-    // dispatch(removeSupplierHandler(payload));
     setDeleteModal(true);
   };
 
   return (
     <>
       {isOpen && <div className="overlay2" onClick={toggleDetails}></div>}
-
       <div className={`rightSidebar rightSidebar2 ${isOpen ? "open" : ""}`}>
         <div className="d-flex justify-between align-center">
           <div className="fs-20 fw-600">Brand Details</div>
@@ -82,8 +72,6 @@ const BrandDetails = ({ isOpen, toggleDetails, brandDetails,setIsDetailsOpen }) 
           ) : (
             <div className="noDataFound">No data available</div>
           )}
-
-          {/* <div className="divider2"></div> */}
           <div className="d-flex align-center gap-10">
             <div
               className="btn btnSecondary w-100 gap-8"
@@ -102,7 +90,6 @@ const BrandDetails = ({ isOpen, toggleDetails, brandDetails,setIsDetailsOpen }) 
           </div>
         </div>
       </div>
-
       {deleteModal && (
         <CommonModal
           deleteModal={deleteModal}

@@ -37,6 +37,7 @@ import {
 } from "../../../../redux/action/supplierActions/addSupplierPromotion";
 import { brandListDistributorHandler } from "../../../../redux/action/distributorsAction/brandListDistributor";
 import { distributorMerchantListHandler } from "../../../../redux/action/distributorsAction/distributorMerchantList";
+import { handleKeyPressSpace } from "../../../../common/commonFunctions/CommonFunctions";
 
 const AddDistributorPromotion = () => {
   const [promotionTitle, setPromotionTitle] = useState("");
@@ -399,6 +400,7 @@ const AddDistributorPromotion = () => {
                   className="addTitleInput"
                   placeholder="Add promotion title here"
                   autoComplete="off"
+                  onKeyDown={handleKeyPressSpace}
                   onChange={(e) => {
                     setPromotionTitle(e.target.value);
                     setErrors((prev) => ({ ...prev, promotionTitle: "" }));
@@ -454,7 +456,10 @@ const AddDistributorPromotion = () => {
                     {droppedMerchants?.map((item) => (
                       <div key={item?._id} className="brandItem">
                         {/* <img src={item.name} alt={item.name} /> */}
-                        <img src={item?.logoUrl||noImageFound} alt={item.businessName} />
+                        <img
+                          src={item?.logoUrl || noImageFound}
+                          alt={item.businessName}
+                        />
                         {/* <img src={noImageFound} alt={item.name} /> */}
                         <div
                           onClick={() =>
@@ -513,8 +518,15 @@ const AddDistributorPromotion = () => {
                           setEndDate(dateString);
                           setErrors((prev) => ({ ...prev, toDate: "" }));
                         }}
+                        // disabledDate={(current) => {
+                        //   return current && current < moment().startOf("day");
+                        // }}
                         disabledDate={(current) => {
-                          return current && current < moment().startOf("day");
+                          return (
+                            current &&
+                            (current < moment().startOf("day") ||
+                              current < moment(startDate, "YYYY-MM-DD"))
+                          );
                         }}
                       />
                       <img
@@ -561,9 +573,9 @@ const AddDistributorPromotion = () => {
                       // ) || "",
 
                       promotionalFunds:
-                      droppedBrand?.selectedBrands?.brandItem?.map((item) =>
-                        (item?.mSRP * item?.quantity)?.toFixed(2)
-                      ) || "",
+                        droppedBrand?.selectedBrands?.brandItem?.map((item) =>
+                          (item?.mSRP * item?.quantity)?.toFixed(2)
+                        ) || "",
 
                       msrp: "",
                       priceForReimbursement: "",
@@ -603,7 +615,13 @@ const AddDistributorPromotion = () => {
                                 <div className="accordion-content accordionContent">
                                   <div className="d-flex gap-20">
                                     <div className="brandItem mx167">
-                                      <img src={itemDropperMerchant?.logoUrl || noImageFound} alt={itemDropperMerchant?.name} />
+                                      <img
+                                        src={
+                                          itemDropperMerchant?.logoUrl ||
+                                          noImageFound
+                                        }
+                                        alt={itemDropperMerchant?.name}
+                                      />
                                     </div>
                                     <div className="fs-14">
                                       <div className="d-flex gap-4 mb-10">
@@ -693,6 +711,21 @@ const AddDistributorPromotion = () => {
                                         name={`merchants.${indexDroppedMerchant}.msrp`}
                                         placeholder="Enter Price"
                                         autoComplete="off"
+                                        maxLength={5}
+                                        onKeyDown={(e) => {
+                                          if (
+                                            !/^\d$/.test(e.key) && // Allow numbers
+                                            ![
+                                              "Backspace",
+                                              "Delete",
+                                              "ArrowLeft",
+                                              "ArrowRight",
+                                              "Tab",
+                                            ].includes(e.key) // Allow navigation keys
+                                          ) {
+                                            e.preventDefault();
+                                          }
+                                        }}
                                         // onChange = {()=>setErrors((prev) => ({ ...prev, msrp: "" }))}
                                       />
                                       <ErrorMessage
@@ -715,12 +748,27 @@ const AddDistributorPromotion = () => {
                                         name={`merchants.${indexDroppedMerchant}.priceForReimbursement`}
                                         placeholder="Enter Price"
                                         autoComplete="off"
+                                        maxLength={5}
+                                        onKeyDown={(e) => {
+                                          if (
+                                            !/^\d$/.test(e.key) && // Allow numbers
+                                            ![
+                                              "Backspace",
+                                              "Delete",
+                                              "ArrowLeft",
+                                              "ArrowRight",
+                                              "Tab",
+                                            ].includes(e.key) // Allow navigation keys
+                                          ) {
+                                            e.preventDefault();
+                                          }
+                                        }}
                                       />
-                                      <ErrorMessage
+                                      {/* <ErrorMessage
                                         name={`merchants.${indexDroppedMerchant}.priceForReimbursement`}
                                         component="div"
                                         className="error"
-                                      />
+                                      /> */}
                                     </div>
 
                                     <div>

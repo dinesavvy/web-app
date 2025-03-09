@@ -188,14 +188,27 @@ const Promotions = () => {
                       <div className="bottomPadding">
                         <div className="mb-16">
                           <div className="fs-14 mb-4">Promotion title</div>
-                          <div className="fs-14 fw-600">
+                          {/* <div className="fs-14 fw-600">
                             {item?.promotionTitle}{" "}
+                          </div> */}
+                          <div className="fs-14 fw-600">
+                            {item?.promotionTitle
+                              ? item?.promotionTitle.charAt(0).toUpperCase() +
+                                item?.promotionTitle.slice(1)
+                              : ""}
                           </div>
                         </div>
                         <div className="grid2 mb-20">
                           <div>
                             <div className="fs-14 mb-4">Brand / Product</div>
-                            <div className="fs-14 fw-600">{item?.brandDetails?.brandName} </div>
+                            <div className="fs-14 fw-600">
+                              {item?.brandDetails?.brandName
+                                ? item?.brandDetails?.brandName
+                                    .charAt(0)
+                                    .toUpperCase() +
+                                  item.brandDetails.brandName.slice(1)
+                                : ""}{" "}
+                            </div>
                           </div>
                           <div>
                             <div className="fs-14 mb-4">Expiration Date</div>

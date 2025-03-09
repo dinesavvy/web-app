@@ -30,6 +30,7 @@ import {
   addSupplierPromotionAction,
   addSupplierPromotionHandler,
 } from "../../../../redux/action/supplierActions/addSupplierPromotion";
+import { handleKeyPressSpace } from "../../../../common/commonFunctions/CommonFunctions";
 
 const AddSupplierPromotion = () => {
   const [promotionTitle, setPromotionTitle] = useState("");
@@ -391,6 +392,7 @@ const AddSupplierPromotion = () => {
                   className="addTitleInput"
                   placeholder="Add promotion title here"
                   autoComplete="off"
+                  onKeyDown={handleKeyPressSpace}
                   onChange={(e) => {
                     setPromotionTitle(e.target.value);
                     setErrors((prev) => ({ ...prev, promotionTitle: "" }));
@@ -447,7 +449,10 @@ const AddSupplierPromotion = () => {
                       <div key={item?._id} className="brandItem">
                         {/* <img src={item.name} alt={item.name} /> */}
                         {/* <img src={item?.logoUrl||noImageFound} alt={item.name} /> */}
-                        <img src={noImageFound} alt={item.name} />
+                        <img
+                          src={item?.logoUrl || noImageFound}
+                          alt={item.name}
+                        />
                         <div
                           onClick={() =>
                             handleRemoveDroppedMerchants(item?._id)
@@ -505,8 +510,15 @@ const AddSupplierPromotion = () => {
                           setEndDate(dateString);
                           setErrors((prev) => ({ ...prev, toDate: "" }));
                         }}
+                        // disabledDate={(current) => {
+                        //   return current && current < moment().startOf("day");
+                        // }}
                         disabledDate={(current) => {
-                          return current && current < moment().startOf("day");
+                          return (
+                            current &&
+                            (current < moment().startOf("day") ||
+                              current < moment(startDate, "YYYY-MM-DD"))
+                          );
                         }}
                       />
                       <img
@@ -544,9 +556,9 @@ const AddSupplierPromotion = () => {
                       msrp: "",
                       priceForReimbursement: "",
                       fundAmount:
-                      droppedBrand?.selectedBrands?.brandItem?.map(
-                        (item) => item?.mSRP * item?.quantity
-                      ) || "",
+                        droppedBrand?.selectedBrands?.brandItem?.map(
+                          (item) => item?.mSRP * item?.quantity
+                        ) || "",
                     })),
                   }}
                   // validationSchema={validationSchema}
@@ -575,7 +587,13 @@ const AddSupplierPromotion = () => {
                                 <div className="accordion-content accordionContent">
                                   <div className="d-flex gap-20">
                                     <div className="brandItem mx167">
-                                      <img src={itemDropperMerchant?.logoUrl||noImageFound} alt={itemDropperMerchant?.name} />
+                                      <img
+                                        src={
+                                          itemDropperMerchant?.logoUrl ||
+                                          noImageFound
+                                        }
+                                        alt={itemDropperMerchant?.name}
+                                      />
                                     </div>
                                     <div className="fs-14">
                                       <div className="d-flex gap-4 mb-10">
@@ -665,6 +683,21 @@ const AddSupplierPromotion = () => {
                                         name={`merchants.${indexDroppedMerchant}.msrp`}
                                         placeholder="Enter Price"
                                         autoComplete="off"
+                                        maxLength={5}
+                                        onKeyDown={(e) => {
+                                          if (
+                                            !/^\d$/.test(e.key) && // Allow numbers
+                                            ![
+                                              "Backspace",
+                                              "Delete",
+                                              "ArrowLeft",
+                                              "ArrowRight",
+                                              "Tab",
+                                            ].includes(e.key) // Allow navigation keys
+                                          ) {
+                                            e.preventDefault();
+                                          }
+                                        }}
                                         // onChange = {()=>setErrors((prev) => ({ ...prev, msrp: "" }))}
                                       />
                                       <ErrorMessage
@@ -687,12 +720,27 @@ const AddSupplierPromotion = () => {
                                         name={`merchants.${indexDroppedMerchant}.priceForReimbursement`}
                                         placeholder="Enter Price"
                                         autoComplete="off"
+                                        maxLength={5}
+                                        onKeyDown={(e) => {
+                                          if (
+                                            !/^\d$/.test(e.key) && // Allow numbers
+                                            ![
+                                              "Backspace",
+                                              "Delete",
+                                              "ArrowLeft",
+                                              "ArrowRight",
+                                              "Tab",
+                                            ].includes(e.key) // Allow navigation keys
+                                          ) {
+                                            e.preventDefault();
+                                          }
+                                        }}
                                       />
-                                      <ErrorMessage
+                                      {/* <ErrorMessage
                                         name={`merchants.${indexDroppedMerchant}.priceForReimbursement`}
                                         component="div"
                                         className="error"
-                                      />
+                                      /> */}
                                     </div>
 
                                     <div>

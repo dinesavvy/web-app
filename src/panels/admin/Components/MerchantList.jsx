@@ -153,12 +153,12 @@ const MerchantList = () => {
                                     item?.businessName.slice(1)}
                               </div>
                             </div>
-                            <div className="custom-checkbox merchantCardCheckbox">
+                            {/* <div className="custom-checkbox merchantCardCheckbox">
                               <label className="checkLabel">
                                 <input type="checkbox" />
                                 <span className="checkmark"></span>
                               </label>
-                            </div>
+                            </div> */}
                             <div className="divider2 m-0"></div>
                             <div className="bottomPadding">
                               {parseInt(item?.performance) > 33 ? (

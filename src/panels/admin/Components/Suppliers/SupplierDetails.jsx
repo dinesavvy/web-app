@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import closeRightSidebar from "../../../../assets/images/closeRightSidebar.svg";
 import uploadsupllierImage from "../../../../assets/images/uploadsupllierImage.svg";
 import closeIcon from "../../../../assets/images/closeIcon.svg";
@@ -23,17 +23,17 @@ import {
   updateSupplierHandler,
 } from "../../../../redux/action/updateSupplier";
 import { getGeoInfo } from "../../../../services/geoLocation";
+import { handleKeyPressSpace } from "../../../../common/commonFunctions/CommonFunctions";
 
 const SupplierDetails = ({
   isOpen,
   toggleDetails,
   setIsDetailsOpen,
   selectedSupplier,
+  setSelectedSupplier,
 }) => {
   const [countryCode, setCountryCode] = useState("91");
   const [loading, setLoading] = useState(true);
-
-  const [country, setCountry] = useState("");
   const fileuploadSelector = useSelector((state) => state?.fileupload);
   const [imagePreview, setImagePreview] = useState(null);
   const [phone, setPhone] = useState(
@@ -43,42 +43,14 @@ const SupplierDetails = ({
 
   const dispatch = useDispatch();
   const messageApi = useCommonMessage();
+  const hiddenFileInput = useRef(null);
   const createSuplierSelector = useSelector((state) => state?.createSuplier);
   const updateSupplierSelector = useSelector((state) => state?.updateSupplier);
-
-  // const handlePhoneChange = (value, data) => {
-  //   if (value === "") {
-  //     // setCountryCode(""); // Reset to India when input is cleared
-  //     setPhone("");
-  //     return;
-  //   }
-
-  //   let newCountryCode = data.dialCode;
-  //   let newPhone = value.replace(newCountryCode, "").trim();
-
-  //   if (!newPhone) {
-  //     // If the number is empty, reset country code
-  //     setCountry("");
-  //     // setCountryCode("");
-  //     return;
-  //   } else {
-  //     setCountry(newCountryCode);
-  //     setCountryCode(newCountryCode);
-  //   }
-
-  //   setCountryCode(newCountryCode);
-  //   setPhone(newPhone);
-  // };
-  // const handlePhoneChange = (value, country) => {
-  //   setPhone(value.replace(country.dialCode, "")); // Store only the number
-  //   setCountryCode(`+${country.dialCode}`); // Update country code
-  // };
 
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
     setFileObject(file);
     if (file) {
-      // Validate file type
       const allowedTypes = ["image/jpeg", "image/png", "image/jpg"];
       if (!allowedTypes.includes(file.type)) {
         messageApi.open({
@@ -87,8 +59,6 @@ const SupplierDetails = ({
         });
         return;
       }
-
-      // Validate file size (5MB)
       const maxSize = 5 * 1024 * 1024; // 5MB
       if (file.size > maxSize) {
         messageApi.open({
@@ -97,7 +67,6 @@ const SupplierDetails = ({
         });
         return;
       }
-
       const reader = new FileReader();
       reader.onloadend = () => {
         setImagePreview(reader.result);
@@ -113,6 +82,7 @@ const SupplierDetails = ({
   useEffect(() => {
     const uploadFile = async () => {
       if (fileuploadSelector?.data?.statusCode === 200) {
+        setLoading(true);
         try {
           const response = await fetch(
             fileuploadSelector?.data?.data?.[0]?.url,
@@ -123,11 +93,12 @@ const SupplierDetails = ({
           );
         } catch (error) {
           console.error("Error uploading file", error);
+          setLoading(false);
+        } finally {
+          setLoading(false);
         }
-        // dispatch(fileUploadAction.fileuploadReset())
       }
     };
-
     uploadFile();
   }, [fileuploadSelector]);
 
@@ -158,7 +129,6 @@ const SupplierDetails = ({
         });
         return;
       }
-
       let payload = {
         supplierName: values?.supplierName,
         contactName: values?.supplierContactName,
@@ -169,7 +139,9 @@ const SupplierDetails = ({
       };
       dispatch(createSuplierHandler(payload));
     } else if (selectedSupplier) {
-      let logoUrl = selectedSupplier?.logoUrl;
+      let logoUrl =
+        fileuploadSelector?.data?.data?.map((item) => item?.src).join("") ||
+        selectedSupplier?.logoUrl;
       if (!logoUrl) {
         messageApi.open({
           type: "error",
@@ -196,7 +168,7 @@ const SupplierDetails = ({
         type: "error",
         content: createSuplierSelector?.message,
       });
-      dispatch(fileUploadAction.fileuploadReset())
+      dispatch(fileUploadAction.fileuploadReset());
       dispatch(createSupplierAction.createSuplierReset());
     } else if (createSuplierSelector?.data?.statusCode === 200) {
       messageApi.open({
@@ -227,6 +199,12 @@ const SupplierDetails = ({
     }
   }, [updateSupplierSelector]);
 
+  const handleClick = () => {
+    if (hiddenFileInput.current) {
+      hiddenFileInput.current.click();
+    }
+  };
+
   return (
     <>
       {(createSuplierSelector?.isLoading ||
@@ -239,10 +217,9 @@ const SupplierDetails = ({
         initialValues={{
           supplierName: selectedSupplier?.supplierName || "",
 
-          supplierContactNumber: selectedSupplier?.contactPhoneNumber||"",
-            // ? selectedSupplier?.contactPhoneNumber
-            // : `${countryCode}${phone}`,
-
+          supplierContactNumber: selectedSupplier?.contactPhoneNumber || "",
+          // ? selectedSupplier?.contactPhoneNumber
+          // : `${countryCode}${phone}`,
           supplierPosition: selectedSupplier?.contactPosition || "",
           supplierEmail: selectedSupplier?.contactEmail || "",
           supplierContactName: selectedSupplier?.contactName || "",
@@ -258,7 +235,6 @@ const SupplierDetails = ({
           setFieldValue,
           setFieldTouched,
           values,
-          /* and other goodies */
         }) => (
           <Form>
             <div
@@ -274,6 +250,7 @@ const SupplierDetails = ({
                     toggleDetails();
                     resetForm({});
                     setImagePreview(null);
+                    setSelectedSupplier(null);
                   }}
                 >
                   <img src={closeRightSidebar} alt="closeRightSidebar" />
@@ -282,46 +259,42 @@ const SupplierDetails = ({
               <div className="divider2"></div>
               <div className="overflowCart2 overflowCart">
                 <div className="fs-14 mb-10 fw-500">Supplier logo</div>
-                {imagePreview || selectedSupplier ? (
-                  <div className="brandImagePromo mb-10">
-                    <img
-                      src={imagePreview || selectedSupplier?.logoUrl}
-                      alt="Uploaded Preview"
-                    />
-                    <div
-                      className="closeIcon"
-                      onClick={() => setImagePreview(null)}
-                    >
-                      <img src={closeIcon} alt="Remove" />
-                    </div>
-                  </div>
-                ) : (
-                  <>
-                    <label className="uploadImage cursor-pointer mb-10">
-                      <input
-                        type="file"
-                        className="d-none"
-                        onChange={handleImageUpload}
+                <div onClick={handleClick}>
+                  <input
+                    type="file"
+                    className="d-none"
+                    onChange={handleImageUpload}
+                    ref={hiddenFileInput}
+                  />
+                  {imagePreview || selectedSupplier ? (
+                    <div className="brandImagePromo mb-10">
+                      <img
+                        src={imagePreview || selectedSupplier?.logoUrl}
+                        alt="Uploaded Preview"
                       />
-                      <div className="text-center">
-                        <img
-                          src={uploadsupllierImage}
-                          alt="Upload Preview"
-                          className="mb-20 uploadsupllierImage"
-                        />
-                        <div className="fs-14">
-                          Drag & drop files or{" "}
-                          <u className="fw-700 pc">Choose File</u>
-                        </div>
-                      </div>
-                    </label>
-
-                    <div className="d-flex align-center justify-between fs-12">
-                      <div>Supported formats: JPEG, PNG</div>
-                      {/* <div>Maximum Size: 5MB</div> */}
                     </div>
-                  </>
-                )}
+                  ) : (
+                    <>
+                      <label className="uploadImage cursor-pointer mb-10">
+                        <div className="text-center">
+                          <img
+                            src={uploadsupllierImage}
+                            alt="Upload Preview"
+                            className="mb-20 uploadsupllierImage"
+                          />
+                          <div className="fs-14">
+                            Drag & drop files or{" "}
+                            <u className="fw-700 pc">Choose File</u>
+                          </div>
+                        </div>
+                      </label>
+                      <div className="d-flex align-center justify-between fs-12">
+                        <div>Supported formats: JPEG, PNG</div>
+                        <div>Maximum Size: 5MB</div>
+                      </div>
+                    </>
+                  )}
+                </div>
                 <div className="divider2"></div>
                 <div className="mb-40">
                   <div className="mb-20">
@@ -333,6 +306,7 @@ const SupplierDetails = ({
                       placeholder="Enter name"
                       name="supplierName"
                       autocomplete="off"
+                      onKeyDown={handleKeyPressSpace}
                     />
                     <ErrorMessage
                       name="supplierName"
@@ -349,6 +323,7 @@ const SupplierDetails = ({
                       placeholder="Enter name"
                       name="supplierContactName"
                       autocomplete="off"
+                      onKeyDown={handleKeyPressSpace}
                     />
                     <ErrorMessage
                       name="supplierContactName"
@@ -365,12 +340,8 @@ const SupplierDetails = ({
                       placeholder="Enter name"
                       name="supplierPosition"
                       autocomplete="off"
+                      onKeyDown={handleKeyPressSpace}
                     />
-                    {/* <ErrorMessage
-                      name="supplierPosition"
-                      component="div"
-                      className="mt-10 fw-500 fs-14 error"
-                    /> */}
                   </div>
                   <div className="mb-20">
                     <label htmlFor="" className="fs-14 fw-500 mb-10">
@@ -381,6 +352,7 @@ const SupplierDetails = ({
                       placeholder="Enter email"
                       name="supplierEmail"
                       autocomplete="off"
+                      onKeyDown={handleKeyPressSpace}
                     />
                     <ErrorMessage
                       name="supplierEmail"
@@ -390,22 +362,23 @@ const SupplierDetails = ({
                   </div>
                   <div className="mb-20">
                     <label htmlFor="" className="fs-14 fw-500 mb-10">
-                      Contact*
+                      Contact Phone number*
                     </label>
                     <PhoneInput
-                      // country={countryCode || undefined}
-                      // value={`${countryCode}${phone}`}
-                      value={values?.supplierContactNumber || `${countryCode}${phone}`}
+                      value={
+                        values?.supplierContactNumber ||
+                        `${countryCode}${phone}`
+                      }
                       onChange={(value) => {
                         setFieldValue("supplierContactNumber", value);
                       }}
-                      disableCountryGuess={false} 
+                      disableCountryGuess={false}
                       placeholder="Enter phone number"
                       className="phoneInput"
                       name="supplierContactNumber"
-                      enableAreaCodes={true} 
+                      enableAreaCodes={true}
                       isValid={(inputNumber, country, countries) => {
-                        return inputNumber.length >= country.format.length; 
+                        return inputNumber.length >= country.format.length;
                       }}
                     />
                     <ErrorMessage

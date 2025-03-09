@@ -10,7 +10,7 @@ const NudgeDetail = ({
   toggleSidebar,
   nudgeDetailsMainSelector,
   activeTab,
-  nudgeId
+  nudgeId,
 }) => {
   return (
     <>
@@ -37,7 +37,7 @@ const NudgeDetail = ({
                 </div>
                 <div className="text-end">
                   <div className="fs-14 mb-4">Nudge ID</div>
-                  <div className="fs-14 fw-600">{nudgeId+1}</div>
+                  <div className="fs-14 fw-600">{nudgeId + 1}</div>
                 </div>
               </div>
               <div className="fs-18 fw-600 mb-2">
@@ -106,36 +106,59 @@ const NudgeDetail = ({
                 <div>
                   <div className="fs-14 mb-4 lightBlack">Accepted:</div>
                   <div className="fs-14 fw-600 gc">
-                    {
-                      nudgeDetailsMainSelector?.data?.data
-                        ?.totalAcceptedFollowerList
-                    }
-                    /
-                    {(
-                      (nudgeDetailsMainSelector?.data?.data
-                        ?.totalAcceptedFollowerList /
-                        nudgeDetailsMainSelector?.data?.data?.recipientCount) *
-                      100
-                    ).toFixed(0)}
-                    %
+                    {nudgeDetailsMainSelector?.data?.data
+                      ?.totalAcceptedFollowerList > 0 ? (
+                      <>
+                        {
+                          nudgeDetailsMainSelector?.data?.data
+                            ?.totalAcceptedFollowerList
+                        }
+                        /
+                        {(
+                          (nudgeDetailsMainSelector?.data?.data
+                            ?.totalAcceptedFollowerList /
+                            nudgeDetailsMainSelector?.data?.data
+                              ?.recipientCount) *
+                          100
+                        ).toFixed(0)}%
+                      </>
+                    ) : (
+                      <>0</>
+                    )}
                   </div>
                 </div>
                 <div>
                   <div className="fs-14 mb-4 lightBlack">Declined:</div>
                   <div className="fs-14 fw-600 rc">
-                    {nudgeDetailsMainSelector?.data?.data?.disLikeUserList}/
+                    {/* {nudgeDetailsMainSelector?.data?.data?.disLikeUserList}/
                     {(
                       (nudgeDetailsMainSelector?.data?.data?.disLikeUserList /
                         nudgeDetailsMainSelector?.data?.data?.recipientCount) *
                       100
                     ).toFixed(0)}
-                    %
+                    % */}
+                    {nudgeDetailsMainSelector?.data?.data?.disLikeUserList >
+                    0 ? (
+                      <>
+                        {item?.disLikeUserList}/
+                        {(
+                          (nudgeDetailsMainSelector?.data?.data
+                            ?.disLikeUserList /
+                            nudgeDetailsMainSelector?.data?.data
+                              ?.recipientCount) *
+                          100
+                        ).toFixed(0)}%
+                        {/* % */}
+                      </>
+                    ) : (
+                      <>0</>
+                    )}
                   </div>
                 </div>
                 <div>
                   <div className="fs-14 mb-4 lightBlack">No Response</div>
                   <div className="fs-14 fw-600 greyColor">
-                    {nudgeDetailsMainSelector?.data?.data?.recipientCount -
+                    {/* {nudgeDetailsMainSelector?.data?.data?.recipientCount -
                       (nudgeDetailsMainSelector?.data?.data
                         ?.totalAcceptedFollowerList +
                         nudgeDetailsMainSelector?.data?.data?.disLikeUserList)}
@@ -149,7 +172,27 @@ const NudgeDetail = ({
                         nudgeDetailsMainSelector?.data?.data?.recipientCount) *
                       100
                     ).toFixed(2)}
-                    %
+                    % */}
+                    {nudgeDetailsMainSelector?.data?.data?.recipientCount > 0 ? (
+                                    <>
+                                      {nudgeDetailsMainSelector?.data?.data?.recipientCount -
+                      (nudgeDetailsMainSelector?.data?.data
+                        ?.totalAcceptedFollowerList +
+                        nudgeDetailsMainSelector?.data?.data?.disLikeUserList)}
+                    /
+                    {(
+                      ((nudgeDetailsMainSelector?.data?.data?.recipientCount -
+                        (nudgeDetailsMainSelector?.data?.data
+                          ?.totalAcceptedFollowerList +
+                          nudgeDetailsMainSelector?.data?.data
+                            ?.disLikeUserList)) /
+                        nudgeDetailsMainSelector?.data?.data?.recipientCount) *
+                      100
+                    ).toFixed(2)}%
+                                    </>
+                                  ) : (
+                                    <>0</>
+                                  )}
                   </div>
                 </div>
               </div>
@@ -161,19 +204,19 @@ const NudgeDetail = ({
               )} */}
               {/* Nudge Detail */}
               <div className="fs-18 fw-600 mb-16 ">Redeemtion History</div>
-              <div className="historyFlex">
+              {/* <div className="historyFlex">
                 <div className="d-flex align-center gap-8">
                   <div className="initialName fs-16">dr</div>
                   <div>
                     <div className="fs-14 lightBlack">John Cooper</div>
                     <div className="fs-14 fw-500">December 19, 2024</div>
                   </div>
-                  {/* No data available */}
                 </div>
                 <div>
                   <img src={arrowRight} alt="arrowRight" />
                 </div>
-              </div>
+              </div> */}
+              <div className="noDataFound">No data available</div>
               {/* <div className="pc fs-16 fw-700 cursor-pointer text-center">
                 Show More
               </div> */}

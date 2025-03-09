@@ -19,17 +19,18 @@ import { brandListsHandler } from "../../../redux/action/brandListSlice";
 import Loader from "../../../common/Loader/Loader";
 import { useNavigate } from "react-router-dom";
 import { merchantsListHandler } from "../../../redux/action/merchantsList";
-import olive from "../../../assets/images/olive.png";
+// import olive from "../../../assets/images/olive.png";
 import moment from "moment";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import noImageFound from "../../../assets/images/noImageFound.png";
-import DropBrandsBrandsZone  from "../Components/DropBrandsZone"
+import DropBrandsBrandsZone from "../Components/DropBrandsZone";
 
 import {
   createPromotionAction,
   createPromotionHandler,
 } from "../../../redux/action/createPromotion";
 import { useCommonMessage } from "../../../common/CommonMessage";
+import { handleKeyPressSpace } from "../../../common/commonFunctions/CommonFunctions";
 
 const AddPromotion = () => {
   const [promotionTitle, setPromotionTitle] = useState("");
@@ -42,6 +43,7 @@ const AddPromotion = () => {
     fromDate: "",
     toDate: "",
     promotionTitle: "",
+    msrp: "",
   });
 
   const [mercahnts, setMercahnts] = useState([]);
@@ -122,7 +124,7 @@ const AddPromotion = () => {
         type: "success",
         content: createPromotionSelector?.data?.message,
       });
-      navigate("/admin/promotions")
+      navigate("/admin/promotions");
       dispatch(createPromotionAction.createPromotionReset());
     } else if (
       createPromotionSelector?.message?.response?.data?.statusCode === 400
@@ -166,12 +168,12 @@ const AddPromotion = () => {
     }
   };
 
-  const handleBrandClick = (item) => {
-    if (!droppedBrand) {
-      setBrands((prevBrands) => prevBrands.filter((i) => i?._id !== item?._id));
-      setDroppedBrand(item);
-    }
-  };
+  // const handleBrandClick = (item) => {
+  //   if (!droppedBrand) {
+  //     setBrands((prevBrands) => prevBrands.filter((i) => i?._id !== item?._id));
+  //     setDroppedBrand(item);
+  //   }
+  // };
 
   const handleDragStart = (item) => {
     if (!droppedBrand) {
@@ -391,6 +393,8 @@ const AddPromotion = () => {
                   className="addTitleInput"
                   placeholder="Add promotion title here"
                   autoComplete="off"
+                  onKeyDown={handleKeyPressSpace}
+                  maxLength={50}
                   onChange={(e) => {
                     setPromotionTitle(e.target.value);
                     setErrors((prev) => ({ ...prev, promotionTitle: "" }));
@@ -447,7 +451,10 @@ const AddPromotion = () => {
                       <div key={item?._id} className="brandItem">
                         {/* <img src={item.name} alt={item.name} /> */}
                         {/* <img src={item?.logoUrl||noImageFound} alt={item.name} /> */}
-                        <img src={noImageFound} alt={item.name} />
+                        <img
+                          src={item?.logoUrl || noImageFound}
+                          alt={item.name}
+                        />
                         <div
                           onClick={() =>
                             handleRemoveDroppedMerchants(item?._id)
@@ -505,8 +512,11 @@ const AddPromotion = () => {
                           setEndDate(dateString);
                           setErrors((prev) => ({ ...prev, toDate: "" }));
                         }}
+                        // disabledDate={(current) => {
+                        //   return current && current < moment().startOf("day");
+                        // }}
                         disabledDate={(current) => {
-                          return current && current < moment().startOf("day");
+                          return current && (current < moment().startOf("day") || current < moment(startDate, "YYYY-MM-DD"));
                         }}
                       />
                       <img
@@ -581,7 +591,13 @@ const AddPromotion = () => {
                                 <div className="accordion-content accordionContent">
                                   <div className="d-flex gap-20">
                                     <div className="brandItem mx167">
-                                      <img src={itemDropperMerchant?.logoUrl|| noImageFound} alt={itemDropperMerchant?.name} />
+                                      <img
+                                        src={
+                                          itemDropperMerchant?.logoUrl ||
+                                          noImageFound
+                                        }
+                                        alt={itemDropperMerchant?.name}
+                                      />
                                     </div>
                                     <div className="fs-14">
                                       <div className="d-flex gap-4 mb-10">
@@ -671,9 +687,27 @@ const AddPromotion = () => {
                                         name={`merchants.${indexDroppedMerchant}.msrp`}
                                         placeholder="Enter Price"
                                         autoComplete="off"
-                                        // onChange = {()=>setErrors((prev) => ({ ...prev, msrp: "" }))}
+                                        maxLength={5}
+                                        onKeyDown={(e) => {
+                                          if (
+                                            !/^\d$/.test(e.key) && // Allow numbers
+                                            ![
+                                              "Backspace",
+                                              "Delete",
+                                              "ArrowLeft",
+                                              "ArrowRight",
+                                              "Tab",
+                                            ].includes(e.key) // Allow navigation keys
+                                          ) {
+                                            e.preventDefault();
+                                          }
+                                        }}
                                       />
-                                      {/* {errors.msrp && <p className="mt-10 fw-500 fs-14 error">{errors.msrp}</p>} */}
+                                      <ErrorMessage
+                                        name={`merchants.${indexDroppedMerchant}.msrp`}
+                                        component="div"
+                                        className="error"
+                                      />
                                     </div>
 
                                     <div>
@@ -688,12 +722,27 @@ const AddPromotion = () => {
                                         name={`merchants.${indexDroppedMerchant}.priceForReimbursement`}
                                         placeholder="Enter Price"
                                         autoComplete="off"
+                                        maxLength={5}
+                                        onKeyDown={(e) => {
+                                          if (
+                                            !/^\d$/.test(e.key) && // Allow numbers
+                                            ![
+                                              "Backspace",
+                                              "Delete",
+                                              "ArrowLeft",
+                                              "ArrowRight",
+                                              "Tab",
+                                            ].includes(e.key) // Allow navigation keys
+                                          ) {
+                                            e.preventDefault();
+                                          }
+                                        }}
                                       />
-                                      <ErrorMessage
+                                      {/* <ErrorMessage
                                         name={`merchants.${indexDroppedMerchant}.priceForReimbursement`}
                                         component="div"
                                         className="error"
-                                      />
+                                      /> */}
                                     </div>
 
                                     <div>
@@ -712,11 +761,11 @@ const AddPromotion = () => {
                                         placeholder="Enter Price"
                                         disabled
                                       />
-                                      <ErrorMessage
+                                      {/* <ErrorMessage
                                         name={`merchants.${indexDroppedMerchant}.foundAmount`}
                                         component="div"
                                         className="error"
-                                      />
+                                      /> */}
                                     </div>
                                   </div>
                                 </div>
@@ -724,7 +773,7 @@ const AddPromotion = () => {
                             );
                           }
                         )}
-                      {droppedMerchants?.length > 0 && (
+                      {droppedMerchants?.length > 0 && droppedBrand && (
                         <div className="d-flex justify-end">
                           <button type="submit" className="btn w164">
                             Submit

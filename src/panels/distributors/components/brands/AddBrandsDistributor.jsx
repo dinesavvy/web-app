@@ -39,29 +39,27 @@ import {
   fileUploadDistributorAction,
   fileUploadDistributorHandler,
 } from "../../../../redux/action/distributorsAction/fileUploadDistributor";
+import { handleKeyPressSpace } from "../../../../common/commonFunctions/CommonFunctions";
 
 const AddBrandsDistributor = () => {
   const [imagePreview, setImagePreview] = useState(null);
   const [fileObject, setFileObject] = useState();
+
   const messageApi = useCommonMessage();
+  const { state } = useLocation();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const fileInputRef = useRef(null);
+
   const fileuploadSelector = useSelector(
     (state) => state?.fileUploadDistributor
   );
-
-  const { state } = useLocation();
-
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-
   const createBrandSelector = useSelector(
     (state) => state?.createDistributorBrand
   );
-
   const updateBrandSelector = useSelector(
     (state) => state?.updateDistributorBrand
   );
-
-  const fileInputRef = useRef(null);
 
   const handleButtonClick = () => {
     if (fileInputRef.current) {
@@ -72,9 +70,7 @@ const AddBrandsDistributor = () => {
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     setFileObject(file);
-
     if (file) {
-      // Validate file type
       const allowedTypes = ["image/jpeg", "image/png", "image/jpg"];
       if (!allowedTypes.includes(file.type)) {
         messageApi.open({
@@ -83,8 +79,6 @@ const AddBrandsDistributor = () => {
         });
         return;
       }
-
-      // Validate file size (5MB)
       const maxSize = 5 * 1024 * 1024; // 5MB
       if (file.size > maxSize) {
         messageApi.open({
@@ -120,18 +114,20 @@ const AddBrandsDistributor = () => {
         } catch (error) {
           console.error("Error uploading file", error);
         }
-        // dispatch(fileUploadDistributorAction.fileuploadDistributorReset())
       }
     };
-
     uploadFile();
   }, [fileuploadSelector]);
 
   const handleFormSubmit = (values) => {
     let logoUrl =
-      fileuploadSelector?.data?.data?.map((item) => item?.src).filter(Boolean) || 
-      (state?.brandDetails?.imageUrl?.[0] ? [state?.brandDetails?.imageUrl?.[0]] : []);
-  
+      fileuploadSelector?.data?.data
+        ?.map((item) => item?.src)
+        .filter(Boolean) ||
+      (state?.brandDetails?.imageUrl?.[0]
+        ? [state?.brandDetails?.imageUrl?.[0]]
+        : []);
+
     if (logoUrl?.length === 0) {
       messageApi.open({
         type: "error",
@@ -141,7 +137,7 @@ const AddBrandsDistributor = () => {
     }
     const brandItemArray = values?.SKUs?.map((item) => ({
       mSRP: item?.msrp,
-      unit: item?.unit,
+      unit: item?.unit  || "per_case",
       sku: item?.sku,
       description: item?.description,
       quantity: item?.quantity,
@@ -169,12 +165,14 @@ const AddBrandsDistributor = () => {
       navigate("/distributors/brands");
       dispatch(createDistributorAction.createDistributorBrandReset());
       dispatch(fileUploadDistributorAction.fileuploadDistributorReset());
-    } else if (createBrandSelector?.message?.response?.data?.statusCode === 400) {
+    } else if (
+      createBrandSelector?.message?.response?.data?.statusCode === 400
+    ) {
       messageApi.open({
         type: "error",
         content: createBrandSelector?.message?.response?.data?.message,
       });
-      dispatch(fileUploadDistributorAction.fileuploadDistributorReset())
+      dispatch(fileUploadDistributorAction.fileuploadDistributorReset());
       dispatch(createDistributorAction.createDistributorBrandReset());
     }
   }, [createBrandSelector]);
@@ -295,6 +293,7 @@ const AddBrandsDistributor = () => {
                       placeholder="Brand Name"
                       name="brandName"
                       autoComplete="off"
+                      onKeyDown={handleKeyPressSpace}
                     />
                     <ErrorMessage
                       name="brandName"
@@ -338,7 +337,7 @@ const AddBrandsDistributor = () => {
                                   <Select
                                     className="custom-select"
                                     placeholder="Select Unit"
-                                    value={field.value}
+                                    value={field.value || "per_case"}
                                     onChange={(value) =>
                                       form.setFieldValue(
                                         `SKUs[${index}].unit`,
@@ -368,6 +367,7 @@ const AddBrandsDistributor = () => {
                                 placeholder="PEPSI-24x12-005"
                                 name={`SKUs[${index}].sku`}
                                 autoComplete="off"
+                                onKeyDown={handleKeyPressSpace}
                               />
                               <ErrorMessage
                                 name={`SKUs[${index}].sku`}
@@ -386,6 +386,7 @@ const AddBrandsDistributor = () => {
                                 placeholder="Red Bull - 8.4 oz energy drink (12-pack)"
                                 name={`SKUs[${index}].description`}
                                 autoComplete="off"
+                                onKeyDown={handleKeyPressSpace}
                               />
                               <ErrorMessage
                                 name={`SKUs[${index}].description`}

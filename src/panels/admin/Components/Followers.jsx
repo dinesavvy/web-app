@@ -1,18 +1,16 @@
 import React, { useEffect, useState } from "react";
-import emailCard from "../../../assets/images/emailCard.svg";
-import phoneCard from "../../../assets/images/phoneCard.svg";
+// import emailCard from "../../../assets/images/emailCard.svg";
+// import phoneCard from "../../../assets/images/phoneCard.svg";
 import archiveImage from "../../../assets/images/archive.svg";
 import rearchive from "../../../assets/images/rearchive.svg";
 import { Pagination } from "antd";
 import CommonToast from "../../../common/toast/CommonToast";
 import { useDispatch, useSelector } from "react-redux";
 import nudgeIcon from "../../../assets/images/nudgeIcon.svg";
-
 import { followersListHandler } from "../../../redux/action/followersList";
 import SearchSelect from "../Components/SearchSelect";
 import Loader from "../../../common/Loader/Loader";
 import resturantIcon from "../../../assets/images/resturantIcon.svg";
-
 import {
   followerArchiveAction,
   followerArchiveHandler,
@@ -48,7 +46,6 @@ const Followers = () => {
   useEffect(() => {
     const fetchMerchants = () => {
       const payload = {
-        // locationId: state?._id,
         page: pagination.page,
         limit: pagination.limit,
         status: archive ? "InActive" : "Active",
@@ -138,13 +135,6 @@ const Followers = () => {
           </div>
           <div className="mb-20">
             <div className="lineSearch w-100">
-              {/* <input
-                type="text"
-                name="text"
-                placeholder="Search for Consumer by Name"
-                id="text"
-              />
-              <img src={searchIcon} alt="" className="absoluteImage" /> */}
               <SearchSelect
                 onSearchChange={handleSearchChange}
                 onSearchAreaChange={handleSearchAreaChange}
@@ -157,7 +147,6 @@ const Followers = () => {
                 <>
                   {followerListSelector?.data?.data?.records?.map(
                     (item, index) => {
-                      
                       return (
                         <div className="cardFollow" key={index}>
                           <div className="d-flex justify-between gap-12">
@@ -174,7 +163,11 @@ const Followers = () => {
                                       .toUpperCase() +
                                       item.userInfo.displayName.slice(1)}
                                 </div>
-                                      <div className="fs-14 fw-300 o5 ">{item?.userInfo?.email.length > 0 ? item?.userInfo?.email : "-"}</div>
+                                <div className="fs-14 fw-300 o5 ">
+                                  {item?.userInfo?.email.length > 0
+                                    ? item?.userInfo?.email
+                                    : "-"}
+                                </div>
                                 <div className="fs-14 fw-300 o5">
                                   {moment(item?.createdAt).format("MMMM,YYYY")}
                                 </div>
@@ -232,7 +225,10 @@ const Followers = () => {
                               ?.length > 0 ? (
                               item.customerPreferencesData.personalPreference.map(
                                 (preference, index) => (
-                                  <div key={index}>{preference.charAt(0).toUpperCase() + preference.slice(1)}</div>
+                                  <div key={index}>
+                                    {preference.charAt(0).toUpperCase() +
+                                      preference.slice(1)}
+                                  </div>
                                 )
                               )
                             ) : (
@@ -262,7 +258,7 @@ const Followers = () => {
                   )}
                 </>
               ) : (
-                <div className="no-data-found">No data found</div>
+                <div className="noDataFound">No data found</div>
               )}
             </div>
           ) : (
@@ -287,7 +283,12 @@ const Followers = () => {
                                     .toUpperCase() +
                                     item.userInfo.displayName.slice(1)}
                               </div>
-                              <div className="fs-14 fw-300 o5 "> {item?.userInfo?.email.length > 0 ? item?.userInfo?.email : "-"}</div>
+                              <div className="fs-14 fw-300 o5 ">
+                                {" "}
+                                {item?.userInfo?.email.length > 0
+                                  ? item?.userInfo?.email
+                                  : "-"}
+                              </div>
                               <div className="fs-14 fw-300 o5">
                                 {moment(item?.createdAt).format("MMMM,YYYY")}
                               </div>
@@ -334,7 +335,10 @@ const Followers = () => {
                             ?.length > 0 ? (
                             item.customerPreferencesData.personalPreference.map(
                               (preference, index) => (
-                                <div key={index}>{preference.charAt(0).toUpperCase() + preference.slice(1)}</div>
+                                <div key={index}>
+                                  {preference.charAt(0).toUpperCase() +
+                                    preference.slice(1)}
+                                </div>
                               )
                             )
                           ) : (
@@ -361,7 +365,7 @@ const Followers = () => {
                   }
                 )
               ) : (
-                <div className="no-data-found">No data found</div>
+                <div className="noDataFound">No data found</div>
               )}
             </div>
           )}

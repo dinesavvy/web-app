@@ -34,7 +34,6 @@ import AddNudgeCreditDrawer from "./merchant/AddCreditDrawer";
 const MerchantDetails = () => {
   const { state } = useLocation();
   const [activeNudge, setActiveNudge] = useState(5);
-
   const [activeTab3, setActiveTab3] = useState("1");
   const [editInput, setEditInput] = useState(false);
   const [switchState, setSwitchState] = useState(false);
@@ -344,7 +343,14 @@ const MerchantDetails = () => {
                         />
                       ) : (
                         <div className="fs-18">
-                          {merchantDetailsSelector?.data?.data?.businessName}
+                          {merchantDetailsSelector?.data?.data?.businessName
+                            ? merchantDetailsSelector.data.data.businessName
+                                .charAt(0)
+                                .toUpperCase() +
+                              merchantDetailsSelector.data.data.businessName.slice(
+                                1
+                              )
+                            : "N/A"}
                         </div>
                       )}
                     </div>
@@ -1012,8 +1018,14 @@ const MerchantDetails = () => {
                     />
                   </div>
                   <div className="fs-22 fw-600">
-                    {merchantDetailsSelector?.data?.data?.businessName}
+                    {merchantDetailsSelector?.data?.data?.businessName
+                      ? merchantDetailsSelector.data.data.businessName
+                          .charAt(0)
+                          .toUpperCase() +
+                        merchantDetailsSelector.data.data.businessName.slice(1)
+                      : ""}
                   </div>
+
                   <div className="divider2"></div>
                   <div className="d-flex justify-between align-center gap-10 fw-500 mb-16 flexsm fs-18">
                     <div className="grey">Member Since</div>
@@ -1115,13 +1127,16 @@ const MerchantDetails = () => {
                         </div>
                       </div>
                       <div>
-              <label htmlFor="name" className="grey mb-10 fs-16 fw-500">
-                Email address
-              </label>
-              <div className="fs-20">
-                {followerDetailsSelector?.data?.data?.userInfo?.email}
-              </div>
-            </div>
+                        <label
+                          htmlFor="name"
+                          className="grey mb-10 fs-16 fw-500"
+                        >
+                          Email address
+                        </label>
+                        <div className="fs-20">
+                          {followerDetailsSelector?.data?.data?.userInfo?.email}
+                        </div>
+                      </div>
                     </div>
                   </div>
                   <div className="tabPadding mb-30">
@@ -1308,7 +1323,6 @@ const MerchantDetails = () => {
                         </div>
                       </div>
                     )}
-
                     <div className="grid2 gap-20">
                       {listByUserIdSelector?.data?.data?.records?.length > 0 ? (
                         listByUserIdSelector?.data?.data?.records?.map(
@@ -1495,7 +1509,12 @@ const MerchantDetails = () => {
                                           .toUpperCase() +
                                           item.userInfo.displayName.slice(1)}
                                     </div>
-                                          <div className="fs-14 fw-300 o5 "> {item?.userInfo?.email.length ? item?.userInfo?.email : "-"}</div>
+                                    <div className="fs-14 fw-300 o5 ">
+                                      {" "}
+                                      {item?.userInfo?.email.length
+                                        ? item?.userInfo?.email
+                                        : "-"}
+                                    </div>
                                     <div className="fs-14 fw-300 o5">
                                       {moment(item?.createdAt).format(
                                         "MMMM, YYYY"
@@ -1753,7 +1772,7 @@ const MerchantDetails = () => {
                     </div> */}
                   <div className="d-flex justify-between align-center gap-20">
                     <div className="d-flex align-center gap-16 flex-wrap">
-                      {[5, 10, 15, 20, 25]?.map((nudge,index) => (
+                      {[5, 10, 15, 20, 25]?.map((nudge, index) => (
                         <div
                           key={index}
                           className={`addNudge2 ${
@@ -1992,7 +2011,7 @@ const MerchantDetails = () => {
         merchantDetailsSelector={merchantDetailsSelector}
         addCreditSelector={addCreditSelector}
         nudgeAnalyticSelector={nudgeAnalyticSelector}
-        activeNudge = {activeNudge}
+        activeNudge={activeNudge}
       />
     </>
   );

@@ -1,23 +1,27 @@
-import React, {  useState } from "react";
+import React, { useState } from "react";
 import closeRightSidebar from "../../../assets/images/closeRightSidebar.svg";
 import editMember from "../../../assets/images/editMember.svg";
 import deleteMember from "../../../assets/images/deleteMember.svg";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteBrandHandler, deleteBrandsAction } from "../../../redux/action/deleteBrand";
+import {
+  deleteBrandHandler,
+  deleteBrandsAction,
+} from "../../../redux/action/deleteBrand";
 import noImageFound from "../../../assets/images/noImageFound.png";
 import CommonModal from "./CommonModal";
 
-const BrandDetails = ({ isOpen, toggleDetails, brandDetails,setIsDetailsOpen }) => {
+const BrandDetails = ({
+  isOpen,
+  toggleDetails,
+  brandDetails,
+  setIsDetailsOpen,
+}) => {
   const navigate = useNavigate();
   const [deleteModal, setDeleteModal] = useState(false);
 
   const deleteBrand = () => {
     setDeleteModal(true);
-    // let payload = {
-    //   brandId: brandDetails?._id,
-    // };
-    // dispatch(deleteBrandHandler(payload));
   };
 
   return (
@@ -78,45 +82,9 @@ const BrandDetails = ({ isOpen, toggleDetails, brandDetails,setIsDetailsOpen }) 
           ) : (
             <div className="noDataFound">No data available</div>
           )}
-
-          {/* <div className="grid2 mb-20">
-            <div>
-              <div className="lightBlack fs-14 mb-4">MSRP</div>
-              <div className="fs-14 fw-600">$19.99 per case</div>
-            </div>
-            <div>
-              <div className="lightBlack fs-14 mb-4">SKUs</div>
-              <div className="fs-14 fw-600">COKE-12x12-002</div>
-            </div>
-            <div className="twoSpace">
-              <div className="lightBlack fs-14 mb-4">Description</div>
-              <div className="fs-14 fw-600">
-                Coca Cola - Classic 12 oz cans (12-pack)
-              </div>
-            </div>
-          </div> */}
-          {/* <div className="divider2"></div> */}
-          {/* <div className="grid2 mb-20">
-            <div>
-              <div className="lightBlack fs-14 mb-4">MSRP</div>
-              <div className="fs-14 fw-600">$19.99 per case</div>
-            </div>
-            <div>
-              <div className="lightBlack fs-14 mb-4">SKUs</div>
-              <div className="fs-14 fw-600">COKE-12x12-002</div>
-            </div>
-            <div className="twoSpace">
-              <div className="lightBlack fs-14 mb-4">Description</div>
-              <div className="fs-14 fw-600">
-                Coca Cola - Classic 12 oz cans (12-pack)
-              </div>
-            </div>
-          </div> */}
-          {/* <div className="divider2"></div> */}
           <div className="d-flex align-center gap-10">
             <div
               className="btn btnSecondary w-100 gap-8"
-              // onClick={() => navigate("/admin/brands/edit")}
               onClick={() =>
                 navigate("/admin/brands/add", {
                   state: { brandDetails: brandDetails },
@@ -132,10 +100,9 @@ const BrandDetails = ({ isOpen, toggleDetails, brandDetails,setIsDetailsOpen }) 
           </div>
         </div>
       </div>
-
       {deleteModal && (
         <CommonModal
-        deleteModal={deleteModal}
+          deleteModal={deleteModal}
           setDeleteModal={setDeleteModal}
           brandDetails={brandDetails}
           setIsDetailsOpen={setIsDetailsOpen}

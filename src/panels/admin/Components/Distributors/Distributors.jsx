@@ -45,7 +45,7 @@ const Distributors = () => {
 
   const handleSearchChange = (value) => {
     setSearchString(value);
-    setPagination((prev) => ({ ...prev, page: 1 })); // Reset to the first page on search
+    setPagination((prev) => ({ ...prev, page: 1 })); 
   };
 
   const handleSearchAreaChange = (selectedAreas) => {
@@ -58,8 +58,6 @@ const Distributors = () => {
     } else {
       document.body.classList.remove("overflow-Hidden");
     }
-
-    // Cleanup on component unmount
     return () => {
       document.body.classList.remove("overflow-Hidden");
     };
@@ -97,19 +95,13 @@ const Distributors = () => {
             <div className="fs-24 fw-600">Distributors</div>
             <div
               className="btn gap-8 addBtn"
-              onClick={() => setIsDetailsOpen(true)}
+              onClick={() => {setIsDetailsOpen(true);setDistributorItems(null)}}
             >
               Add Distributors
               <img src={addBtn} alt="addBtn" />
             </div>
           </div>
           <div className="lineSearch w-100 mb-20">
-            {/* <input
-              type="text"
-              placeholder="Search Distributors"
-              autoComplete="off"
-            />
-            <img src={searchIcon} alt="" className="absoluteImage" /> */}
             <SearchSelect
               onSearchChange={handleSearchChange}
               onSearchAreaChange={handleSearchAreaChange}
@@ -127,9 +119,6 @@ const Distributors = () => {
                             <div className="merchantImage">
                               <img src={item?.logoUrl || noImageFound} alt="" />
                             </div>
-                            {/* <div className="fs-16 fw-700 mb-10">
-                              {item?.distributorName}
-                            </div> */}
                             <div className="fs-16 fw-700 mb-10">
                               {item?.distributorName
                                 ? item?.distributorName
@@ -157,7 +146,6 @@ const Distributors = () => {
                               </div>
                               <div className="d-flex align-center gap-12 fs-14">
                                 <img src={inveCard} alt="" className="h30" />
-                                {/* 217 555-0113 */}
                                 {item?.contactPosition
                                   ? item?.contactPosition
                                       .charAt(0)
@@ -167,12 +155,10 @@ const Distributors = () => {
                               </div>
                               <div className="d-flex align-center gap-12 fs-14">
                                 <img src={emailCard} alt="" className="h30" />
-                                {/* grothoff@icloud.com */}
                                 {item?.contactEmail}
                               </div>
                               <div className="d-flex align-center gap-12 fs-14">
                                 <img src={phoneCard} alt="" className="h30" />
-                                {/* 217 555-0113 */}+{item?.contactPhoneNumber}
                               </div>
                               <div className="d-flex align-center gap-10">
                                 <div
@@ -208,11 +194,6 @@ const Distributors = () => {
             )}
           </div>
           <div className="divider2"></div>
-
-          {/* <div className="d-flex align-center justify-between flexPagination">
-            <div className="fs-16">Showing 1 to 5 of 10 Distributors</div>
-            <Pagination defaultCurrent={1} total={50} />
-          </div> */}
           {getDistributorListSelector?.data?.data?.records?.length > 0 && (
             <div className="d-flex align-center justify-between flexPagination">
               <div className="fs-16">
@@ -246,7 +227,6 @@ const Distributors = () => {
           setDistributorItems={setDistributorItems}
         />
       )}
-
       {modal2Open && (
         <CommonModal
           modal2Open={modal2Open}

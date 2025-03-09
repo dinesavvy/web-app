@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import closeRightSidebar from "../../../../assets/images/closeRightSidebar.svg";
 import uploadsupllierImage from "../../../../assets/images/uploadsupllierImage.svg";
 import { ErrorMessage, Field, Form, Formik } from "formik";
@@ -14,13 +14,14 @@ import {
   createDistributorAction,
   createDistributorHandler,
 } from "../../../../redux/action/createDistributor";
-import closeIcon from "../../../../assets/images/closeIcon.svg";
+// import closeIcon from "../../../../assets/images/closeIcon.svg";
 import Loader from "../../../../common/Loader/Loader";
 import {
   updateDistributorAction,
   updateDistributorHandler,
 } from "../../../../redux/action/updateDistributor";
 import { getGeoInfo } from "../../../../services/geoLocation";
+import { handleKeyPressSpace } from "../../../../common/commonFunctions/CommonFunctions";
 
 const DistributorDetails = ({
   isOpen,
@@ -42,11 +43,12 @@ const DistributorDetails = ({
   );
   const messageApi = useCommonMessage();
   const dispatch = useDispatch();
+  const hiddenFileInput = useRef(null);
+
   const fileuploadSelector = useSelector((state) => state?.fileupload);
   const createDistributorSelector = useSelector(
     (state) => state?.createDistributor
   );
-
   const updateDistributorSelector = useSelector(
     (state) => state?.updateDistributor
   );
@@ -56,7 +58,6 @@ const DistributorDetails = ({
     setFileObject(file);
 
     if (file) {
-      // Validate file type
       const allowedTypes = ["image/jpeg", "image/png", "image/jpg"];
       if (!allowedTypes.includes(file.type)) {
         messageApi.open({
@@ -65,8 +66,6 @@ const DistributorDetails = ({
         });
         return;
       }
-
-      // Validate file size (5MB)
       const maxSize = 5 * 1024 * 1024; // 5MB
       if (file.size > maxSize) {
         messageApi.open({
@@ -105,6 +104,7 @@ const DistributorDetails = ({
   useEffect(() => {
     const uploadFile = async () => {
       if (fileuploadSelector?.data?.statusCode === 200) {
+        setLoading(true)
         try {
           const response = await fetch(
             fileuploadSelector?.data?.data?.[0]?.url,
@@ -115,6 +115,9 @@ const DistributorDetails = ({
           );
         } catch (error) {
           console.error("Error uploading file", error);
+          setLoading(false)
+        } finally{
+          setLoading(false)
         }
       }
     };
@@ -122,37 +125,11 @@ const DistributorDetails = ({
     uploadFile();
   }, [fileuploadSelector]);
 
-
-  // const handlePhoneChange = (value, data) => {
-  //   if (value === "") {
-  //     // setCountryCode(""); // Reset to India when input is cleared
-  //     setPhone("");
-  //     return;
-  //   }
-
-  //   let newCountryCode = data.dialCode;
-  //   let newPhone = value.replace(newCountryCode, "").trim();
-
-  //   if (!newPhone) {
-  //     // If the number is empty, reset country code
-  //     setCountry("");
-  //     // setCountryCode("");
-  //     return;
-  //   } else {
-  //     setCountry(newCountryCode);
-  //     setCountryCode(newCountryCode);
-  //   }
-
-  //   setCountryCode(newCountryCode);
-  //   setPhone(newPhone);
-  // };
-
   const handleFormSubmit = (values) => {
     if (!distributorItems) {
       let logoUrl = fileuploadSelector?.data?.data
         ?.map((item) => item?.src)
         .join("");
-
       if (!logoUrl) {
         messageApi.open({
           type: "error",
@@ -170,7 +147,6 @@ const DistributorDetails = ({
           ?.map((item) => item?.src)
           .join(""),
       };
-
       dispatch(createDistributorHandler(payload));
     } else if (distributorItems) {
       let logoUrl = distributorItems?.logoUrl;
@@ -188,8 +164,7 @@ const DistributorDetails = ({
         contactEmail: values?.distributorEmail,
         contactPhoneNumber: values?.distributorContactNumber,
         logoUrl:
-          distributorItems?.logoUrl ||
-          fileuploadSelector?.data?.data?.map((item) => item?.src).join(""),
+        fileuploadSelector?.data?.data?.map((item) => item?.src).join("")|| distributorItems?.logoUrl,
         distributorId: distributorItems?._id,
       };
       dispatch(updateDistributorHandler(payload));
@@ -232,6 +207,12 @@ const DistributorDetails = ({
     }
   }, [updateDistributorSelector]);
 
+  const handleClick = () => {
+    if (hiddenFileInput.current) {
+      hiddenFileInput.current.click();
+    }
+  };
+
   return (
     <>
       {(createDistributorSelector?.isLoading ||
@@ -254,12 +235,9 @@ const DistributorDetails = ({
         }}
       >
         {({
-          isSubmitting,
           resetForm,
           setFieldValue,
-          setFieldTouched,
           values,
-          /* and other goodies */
         }) => (
           <Form>
             <div
@@ -275,6 +253,7 @@ const DistributorDetails = ({
                     toggleDetails();
                     resetForm({});
                     setImagePreview(null);
+                    setDistributorItems(null)
                   }}
                 >
                   <img src={closeRightSidebar} alt="closeRightSidebar" />
@@ -283,60 +262,54 @@ const DistributorDetails = ({
               <div className="divider2"></div>
               <div className="overflowCart2 overflowCart">
                 <div className="fs-14 mb-10 fw-500">Distributors logo</div>
-                {imagePreview || distributorItems ? (
-                  <div className="brandImagePromo mb-10">
-                    <img
-                      src={imagePreview || distributorItems?.logoUrl}
-                      alt="Uploaded Preview"
-                    />
-                    <div
-                      className="closeIcon"
-                      onClick={() => {
-                        setImagePreview(null);
-                      }}
-                    >
-                      <img src={closeIcon} alt="Remove" />
-                    </div>
-                  </div>
-                ) : (
-                  <>
-                    <label className="uploadImage cursor-pointer mb-10">
-                      <input
-                        type="file"
-                        className="d-none"
-                        onChange={handleImageUpload}
+                <div onClick={handleClick}>
+                  <input
+                    type="file"
+                    className="d-none"
+                    onChange={handleImageUpload}
+                    ref={hiddenFileInput}
+                  />
+                  {imagePreview || distributorItems ? (
+                    <div className="brandImagePromo mb-10">
+                      <img
+                        src={imagePreview || distributorItems?.logoUrl}
+                        alt="Uploaded Preview"
                       />
-                      <div className="text-center">
-                        <img
-                          src={uploadsupllierImage}
-                          alt="Upload Preview"
-                          className="mb-20 uploadsupllierImage"
-                        />
-                        <div className="fs-14">
-                          Drag & drop files or{" "}
-                          <u className="fw-700 pc">Choose File</u>
-                        </div>
-                      </div>
-                    </label>
-
-                    <div className="d-flex align-center justify-between fs-12">
-                      <div>Supported formats: JPEG, PNG</div>
-                      {/* <div>Maximum Size: 5MB</div> */}
                     </div>
-                  </>
-                )}
+                  ) : (
+                    <>
+                      <label className="uploadImage cursor-pointer mb-10">
+                        <div className="text-center">
+                          <img
+                            src={uploadsupllierImage}
+                            alt="Upload Preview"
+                            className="mb-20 uploadsupllierImage"
+                          />
+                          <div className="fs-14">
+                            Drag & drop files or{" "}
+                            <u className="fw-700 pc">Choose File</u>
+                          </div>
+                        </div>
+                      </label>
+                      <div className="d-flex align-center justify-between fs-12">
+                        <div>Supported formats: JPEG, PNG</div>
+                        <div>Maximum Size: 5MB</div>
+                      </div>
+                    </>
+                  )}
+                </div>
                 <div className="divider2"></div>
                 <div className="mb-40">
                   <div className="mb-20">
                     <label htmlFor="" className="fs-14 fw-500 mb-10">
                       Distributors name*
                     </label>
-                    {/* <input type="text" placeholder="Enter name" /> */}
                     <Field
                       type="text"
                       placeholder="Enter name"
                       name="distributorName"
                       autocomplete="off"
+                      onKeyDown={handleKeyPressSpace}
                     />
                     <ErrorMessage
                       name="distributorName"
@@ -348,12 +321,12 @@ const DistributorDetails = ({
                     <label htmlFor="" className="fs-14 fw-500 mb-10">
                       Contact name*
                     </label>
-                    {/* <input type="text" placeholder="Enter name" /> */}
                     <Field
                       type="text"
                       placeholder="Enter name"
                       name="distributorContactName"
                       autocomplete="off"
+                      onKeyDown={handleKeyPressSpace}
                     />
                     <ErrorMessage
                       name="distributorContactName"
@@ -365,28 +338,24 @@ const DistributorDetails = ({
                     <label htmlFor="" className="fs-14 fw-500 mb-10">
                       Contact position
                     </label>
-                    {/* <input type="text" placeholder="Enter position" /> */}
                     <Field
                       type="text"
                       placeholder="Enter position"
                       name="distributorPosition"
                       autocomplete="off"
+                      onKeyDown={handleKeyPressSpace}
                     />
-                    {/* <ErrorMessage
-                      name="distributorPosition"
-                      component="div"
-                      className="mt-10 fw-500 fs-14 error"
-                    /> */}
                   </div>
                   <div className="mb-20">
                     <label htmlFor="" className="fs-14 fw-500 mb-10">
                       Contact email*
                     </label>
-                    {/* <input type="text" placeholder="Enter email   " /> */}
                     <Field
                       type="text"
                       placeholder="Enter name"
                       name="distributorEmail"
+                      onKeyDown={handleKeyPressSpace}
+                      autocomplete = "off"
                     />
                     <ErrorMessage
                       name="distributorEmail"
@@ -396,17 +365,9 @@ const DistributorDetails = ({
                   </div>
                   <div className="mb-20">
                     <label htmlFor="" className="fs-14 fw-500 mb-10">
-                      Contact*
+                      Contact Phone number*
                     </label>
-                    {/* <input type="number" placeholder="Enter phone number" /> */}
                     <PhoneInput
-                      // country={countryCode || undefined} // Set country dynamically when user types a code
-                      // value={`${countryCode}${phone}`} // Show full value but keep them separate in state
-                      // onChange={(e, f) => {
-                      //   handlePhoneChange(e, f);
-                      //   setFieldValue("distributorContactNumber", e);
-                      //   setFieldTouched("distributorContactNumber", true);
-                      // }}
                       value={
                         values?.distributorContactNumber ||
                         `${countryCode}${phone}`
@@ -414,13 +375,13 @@ const DistributorDetails = ({
                       onChange={(value) => {
                         setFieldValue("distributorContactNumber", value);
                       }}
-                      disableCountryGuess={false} // Allow auto-detection of typed country code
+                      disableCountryGuess={false} 
                       placeholder="Enter phone number"
                       className="phoneInput"
                       name="distributorContactNumber"
-                      enableAreaCodes={true} // Helps with regional codes
+                      enableAreaCodes={true} 
                       isValid={(inputNumber, country, countries) => {
-                        return inputNumber.length >= country.format.length; // Basic validation
+                        return inputNumber.length >= country.format.length; 
                       }}
                     />
                     <ErrorMessage

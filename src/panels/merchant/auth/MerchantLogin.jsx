@@ -18,8 +18,10 @@ import {
 } from "../../../redux/action/businessAction/businessSendOtp";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
+import { getGeoInfo } from "../../../services/geoLocation";
 
 const MerchantLogin = () => {
+  const [loading, setLoading] = useState(true);
   const messageApi = useCommonMessage();
   const businessSendOtpSelector = useSelector(
     (state) => state?.businessSendOtp
@@ -30,25 +32,35 @@ const MerchantLogin = () => {
   const dispatch = useDispatch();
 
   const [phone, setPhone] = useState("");
-  const [countryCode, setCountryCode] = useState("+1");
-  const [country, setCountry] = useState("us"); 
+  const [countryCode, setCountryCode] = useState("91");
 
   const handlePhoneChange = (value, data) => {
     const dialCode = `${data?.dialCode}`;
-    let number = value.replace(dialCode, "").trim(); // Remove country code
+    let number = value.replace(dialCode, "").trim(); 
   
     if (!number) {
-      // If the number is empty, reset country code
-      setCountry("");
       setCountryCode("");
       return
     } else {
-      setCountry(data.countryCode);
       setCountryCode(dialCode);
     }
     
     setPhone(number);
   };
+
+   // Fetch Geo location
+    useEffect(() => {
+      const fetchGeoInfo = async () => {
+        setLoading(true);
+        const data = await getGeoInfo();
+        if (data) {
+          setCountryCode(data?.country_calling_code);
+        }
+        setLoading(false);
+      };
+  
+      fetchGeoInfo();
+    }, []);
     
 
   const handleFormSubmit = (values) => {
@@ -91,7 +103,7 @@ const MerchantLogin = () => {
         />
       ) : (
         <>
-          {businessSendOtpSelector?.isLoading && <Loader />}
+          {(businessSendOtpSelector?.isLoading||loading) && <Loader />}
           <div className="loginFlex ">
             <div className="w-50 h-100 position-relative mobileHide fixLeft">
               <img src={login} alt="" className="w-100 h-100 object-cover" />
@@ -126,12 +138,13 @@ const MerchantLogin = () => {
                         </label>
                         <div className="">
                           <PhoneInput
-                            country={country} // Set country dynamically when user types a code
-                            value={countryCode + phone} // Show full value but keep them separate in state
+                            // country={country} // Set country dynamically when user types a code
+                            value={values?.phoneNumber || countryCode + phone} // Show full value but keep them separate in state
                             onChange={handlePhoneChange}
                             disableCountryGuess={false} // Allow auto-detection of typed country code
                             placeholder="Enter phone number"
                             className="phoneInput"
+                            name="phoneNumber"
                           />
                         </div>
                       </div>

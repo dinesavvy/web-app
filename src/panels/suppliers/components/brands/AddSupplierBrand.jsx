@@ -6,20 +6,11 @@ import deleteBrands from "../../../../assets/images/deleteBrands.svg";
 import addMerchantIcon from "../../../../assets/images/addMerchantIcon.svg";
 import { Breadcrumb, Select } from "antd";
 import { useDispatch, useSelector } from "react-redux";
-import { fileUploadHandler } from "../../../../redux/action/fileUpload";
 import Loader from "../../../../common/Loader/Loader";
 import { ErrorMessage, Field, FieldArray, Form, Formik } from "formik";
-import {
-  createBrandAction,
-  createBrandHandler,
-} from "../../../../redux/action/createBrandSlice";
 import { brandValidationSchema } from "./brandValidation";
 import { useCommonMessage } from "../../../../common/CommonMessage";
 import noImageFound from "../../../../assets/images/noImageFound.png";
-import {
-  updateBrandAction,
-  updateBrandHandler,
-} from "../../../../redux/action/updateBrand";
 import {
   addSupplierBrandHandler,
   addSupplierBrandAction,
@@ -32,25 +23,23 @@ import {
   fileUploadSupplierAction,
   fileUploadSupplierHandler,
 } from "../../../../redux/action/supplierActions/fileUploadSupplier";
+import { handleKeyPressSpace } from "../../../../common/commonFunctions/CommonFunctions";
 
 const AddSupplierBrand = () => {
   const [imagePreview, setImagePreview] = useState(null);
   const [fileObject, setFileObject] = useState();
+
   const messageApi = useCommonMessage();
-  const fileuploadSelector = useSelector((state) => state?.fileUploadSupplier);
-
   const { state } = useLocation();
-
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const fileInputRef = useRef(null);
 
+  const fileuploadSelector = useSelector((state) => state?.fileUploadSupplier);
   const createBrandSelector = useSelector((state) => state?.addSupplierBrand);
-
   const updateBrandSelector = useSelector(
     (state) => state?.updateSupplierBrand
   );
-
-  const fileInputRef = useRef(null);
 
   const handleButtonClick = () => {
     if (fileInputRef.current) {
@@ -61,9 +50,7 @@ const AddSupplierBrand = () => {
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     setFileObject(file);
-
     if (file) {
-      // Validate file type
       const allowedTypes = ["image/jpeg", "image/png", "image/jpg"];
       if (!allowedTypes.includes(file.type)) {
         messageApi.open({
@@ -72,8 +59,6 @@ const AddSupplierBrand = () => {
         });
         return;
       }
-
-      // Validate file size (5MB)
       const maxSize = 5 * 1024 * 1024; // 5MB
       if (file.size > maxSize) {
         messageApi.open({
@@ -82,7 +67,6 @@ const AddSupplierBrand = () => {
         });
         return;
       }
-
       const reader = new FileReader();
       reader.onloadend = () => {
         setImagePreview(reader.result);
@@ -111,7 +95,6 @@ const AddSupplierBrand = () => {
         }
       }
     };
-
     uploadFile();
   }, [fileuploadSelector]);
 
@@ -134,7 +117,7 @@ const AddSupplierBrand = () => {
 
     const brandItemArray = values?.SKUs?.map((item) => ({
       mSRP: item?.msrp,
-      unit: item?.unit,
+      unit: item?.unit || "per_case",
       sku: item?.sku,
       description: item?.description,
       quantity: item?.quantity,
@@ -143,7 +126,7 @@ const AddSupplierBrand = () => {
     let payload = {
       imageUrl: logoUrl,
       brandName: values?.brandName,
-      brandItem: brandItemArray, // Set the array here
+      brandItem: brandItemArray,
     };
     if (!state?.brandDetails) {
       dispatch(addSupplierBrandHandler(payload));
@@ -167,7 +150,7 @@ const AddSupplierBrand = () => {
         type: "error",
         content: createBrandSelector?.message?.data?.message,
       });
-      dispatch(createBrandAction.createBrandReset());
+      dispatch(addSupplierBrandAction.createBrandReset());
       dispatch(fileUploadSupplierAction.fileuploadReset());
     }
   }, [createBrandSelector]);
@@ -291,6 +274,7 @@ const AddSupplierBrand = () => {
                       name="brandName"
                       autoComplete="off"
                       maxLength={50}
+                      onKeyDown={handleKeyPressSpace}
                     />
                     <ErrorMessage
                       name="brandName"
@@ -317,6 +301,28 @@ const AddSupplierBrand = () => {
                                 placeholder="$22.99"
                                 name={`SKUs[${index}].msrp`}
                                 autoComplete="off"
+                                maxLength={5}
+                                onKeyDown={(e) => {
+                                  const isNumber = /^\d$/.test(e.key);
+                                  const isNavigationKey = [
+                                    "Backspace",
+                                    "Delete",
+                                    "ArrowLeft",
+                                    "ArrowRight",
+                                    "Tab",
+                                  ].includes(e.key);
+                                  const isDecimalPoint =
+                                    e.key === "." &&
+                                    !e.target.value.includes("."); // Allow only one decimal point
+
+                                  if (
+                                    !isNumber &&
+                                    !isNavigationKey &&
+                                    !isDecimalPoint
+                                  ) {
+                                    e.preventDefault();
+                                  }
+                                  }}
                               />
                               <ErrorMessage
                                 name={`SKUs[${index}].msrp`}
@@ -334,7 +340,7 @@ const AddSupplierBrand = () => {
                                   <Select
                                     className="custom-select"
                                     placeholder="Select Unit"
-                                    value={field.value}
+                                    value={field.value || "per_case"}
                                     onChange={(value) =>
                                       form.setFieldValue(
                                         `SKUs[${index}].unit`,
@@ -364,6 +370,7 @@ const AddSupplierBrand = () => {
                                 placeholder="PEPSI-24x12-005"
                                 name={`SKUs[${index}].sku`}
                                 autoComplete="off"
+                                onKeyDown={handleKeyPressSpace}
                               />
                               <ErrorMessage
                                 name={`SKUs[${index}].sku`}
@@ -382,6 +389,7 @@ const AddSupplierBrand = () => {
                                 placeholder="Red Bull - 8.4 oz energy drink (12-pack)"
                                 name={`SKUs[${index}].description`}
                                 autoComplete="off"
+                                onKeyDown={handleKeyPressSpace}
                               />
                               <ErrorMessage
                                 name={`SKUs[${index}].description`}

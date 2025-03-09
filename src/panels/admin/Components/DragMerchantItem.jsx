@@ -6,7 +6,7 @@ import noImageFound from "../../../assets/images/noImageFound.png";
 const DragMerchantItem = ({ id, name, selectedMerchants, onClick, items }) => {
   const [{ isDragging }, drag] = useDrag({
     type: "merchant",
-    item: { ids: selectedMerchants.length > 0 ? selectedMerchants : [id] }, // Include either selected items or just the dragged item
+    item: { ids: selectedMerchants.length > 0 ? selectedMerchants : [id] }, 
     collect: (monitor) => ({
       isDragging: monitor.isDragging(),
     }),
@@ -21,7 +21,7 @@ const DragMerchantItem = ({ id, name, selectedMerchants, onClick, items }) => {
     <div
       className="d-flex gap-20"
       ref={drag}
-      onClick={onClick} // Click handler is now inside DragMerchantItem
+      onClick={onClick} 
       style={{
         opacity: isDragging ? 0.5 : 1,
         cursor: "move",

@@ -22,7 +22,7 @@ const Header = ({ handleTrigger }) => {
   );
   const businessListSelector = useSelector((state) => state?.businessList);
 
-  const getMerchantLogin= localStorage.getItem("merchantLogin")
+  const getMerchantLogin = localStorage.getItem("merchantLogin");
 
   const items = [
     { name: "McDold's", address: "10 N Carpenter St, Chicago, IL - MapQuest" },
@@ -37,7 +37,7 @@ const Header = ({ handleTrigger }) => {
   };
 
   useEffect(() => {
-    if(getMerchantLogin){
+    if (getMerchantLogin) {
       let payload = {
         page: 1,
         limit: 10,
@@ -46,14 +46,12 @@ const Header = ({ handleTrigger }) => {
     }
   }, []);
 
- 
   // Handle Selection
   const handleSelect = (item) => {
     // setSelectedBusiness(item);
-    window.location.reload("/merchant/dashboard")
+    window.location.reload("/merchant/dashboard");
     setModalOpen(false);
   };
-
 
   const pageTitles = {
     "/admin/merchant/list": "Merchants",
@@ -62,31 +60,33 @@ const Header = ({ handleTrigger }) => {
     "/admin/nudges": "Nudges",
     "/admin/suppliers": "Suppliers",
     "/admin/distributors": "Distributors",
-    "/admin/merchant/details": `Merchants - ${getRestaurantName
-  ? getRestaurantName.charAt(0).toUpperCase() + getRestaurantName.slice(1)
-  : ""}`,
+    "/admin/merchant/details": `Merchants - ${
+      getRestaurantName
+        ? getRestaurantName.charAt(0).toUpperCase() + getRestaurantName.slice(1)
+        : ""
+    }`,
     "/admin/followerList/followerDetails": "Followers",
     "/merchant/dashboard": "Merchant Dashboard",
     "/merchant/followers": "Followers",
     "/merchant/nudges": "Nudges",
     "/admin/nudges/template": "Nudge Templates",
-    "/merchant/hierarchy":"Profile Hierarchy",
-    "/merchant/profile":"Profile",
-    "/merchant/create-nudge":"Nudges",
+    "/merchant/hierarchy": "Profile Hierarchy",
+    "/merchant/profile": "Profile",
+    "/merchant/create-nudge": "Nudges",
     "/admin/merchant/edit-member": `Merchants - ${getRestaurantName}`,
-    "/admin/promotions":"Promotions",
-    "/admin/brands":"Brands",
-    "/admin/add-promotions":"Create single promotions",
-    "/admin/brands/add":"Brands",
-    "/supplier/brands":"Brands",
-    "/supplier/addBrand":"Brands",
-    "/supplier/add-promotions":"Create single promotions",
-    "/supplier/promotion":"Promotions",
-    "/distributors/add-distributor-brands":"Create single promotions",
-    "/distributors/brands":"Brands",
-    "/distributors/promotion":"Promotions",
-    "/distributors/add-promotions":"Create single promotions",
-    "/distributors/dashboard":"Dashoard"
+    "/admin/promotions": "Promotions",
+    "/admin/brands": "Brands",
+    "/admin/add-promotions": "Create single promotions",
+    "/admin/brands/add": "Brands",
+    "/supplier/brands": "Brands",
+    "/supplier/addBrand": "Brands",
+    "/supplier/add-promotions": "Create single promotions",
+    "/supplier/promotion": "Promotions",
+    "/distributors/add-distributor-brands": "Create single promotions",
+    "/distributors/brands": "Brands",
+    "/distributors/promotion": "Promotions",
+    "/distributors/add-promotions": "Create single promotions",
+    "/distributors/dashboard": "Dashoard",
   };
 
   return (
@@ -109,9 +109,9 @@ const Header = ({ handleTrigger }) => {
           </div>
         </div> */}
           {/* {getMerchantBusinessSelector!==null && ( */}
-          {/* {businessListSelector?.data?.data?.records?.length > 0 && localStorage.getItem("merchantLogin")===true &&selectedBusiness !==undefined &&  ( */} 
+          {/* {businessListSelector?.data?.data?.records?.length > 0 && localStorage.getItem("merchantLogin")===true &&selectedBusiness !==undefined &&  ( */}
 
-             {/* <div
+          {/* <div
               className="d-flex selectCommon cursor-pointer align-center gap-6 "
               onClick={toggleModal}
             >
@@ -127,8 +127,8 @@ const Header = ({ handleTrigger }) => {
                 <img src={arrowRight} alt="arrowRight" />
               </div> 
             </div>  */}
-            {/* )}  */}
-           {/* )}  */}
+          {/* )}  */}
+          {/* )}  */}
           {/* Modal Component */}
 
           <div className="notification">
@@ -146,7 +146,7 @@ const Header = ({ handleTrigger }) => {
         businessListSelector={businessListSelector}
         // selectedBusiness={selectedBusiness}
       />
-        {/* )}   */}
+      {/* )}   */}
     </>
   );
 };

@@ -11,7 +11,6 @@ import { useDispatch, useSelector } from "react-redux";
 import Loader from "../../../common/Loader/Loader";
 import noImageFound from "../../../assets/images/noImageFound.png";
 
-
 const PromotionDetails = ({
   isOpen,
   toggleDetails,
@@ -87,7 +86,12 @@ const PromotionDetails = ({
         <div className="divider2"></div>
         <div className="overflowCart2 overflowCart">
           <div className="fs-18 fw-700 pc">
-            {promotionDetailsSelector?.data?.data?.promotionTitle}
+            {promotionDetailsSelector?.data?.data?.promotionTitle
+              ? promotionDetailsSelector?.data?.data?.promotionTitle
+                  .charAt(0)
+                  .toUpperCase() +
+                promotionDetailsSelector?.data?.data?.promotionTitle.slice(1)
+              : ""}
           </div>
           <div className="divider2"></div>
           <div className="brandImagePromo mb-10">
@@ -126,16 +130,23 @@ const PromotionDetails = ({
             <div>
               <div className="fs-14 mb-4">Brand / Product</div>
               <div className="fs-14 fw-600">
-  {promotionDetailsSelector?.data?.data?.brandDetails?.brandName
-    ? promotionDetailsSelector.data.data.brandDetails.brandName.charAt(0).toUpperCase() +
-      promotionDetailsSelector.data.data.brandDetails.brandName.slice(1)
-    : ""}
-</div>
-
+                {promotionDetailsSelector?.data?.data?.brandDetails?.brandName
+                  ? promotionDetailsSelector.data.data.brandDetails.brandName
+                      .charAt(0)
+                      .toUpperCase() +
+                    promotionDetailsSelector.data.data.brandDetails.brandName.slice(
+                      1
+                    )
+                  : ""}
+              </div>
             </div>
             <div>
               <div className="fs-14 mb-4">SKU</div>
-              <div className="fs-14 fw-600">{promotionDetailsSelector?.data?.data?.brandDetails?.brandItem?.map((item)=>item?.sku)}</div>
+              <div className="fs-14 fw-600">
+                {promotionDetailsSelector?.data?.data?.brandDetails?.brandItem?.map(
+                  (item) => item?.sku
+                )}
+              </div>
             </div>
             <div>
               <div className="fs-14 mb-4">Start Date</div>
@@ -206,7 +217,10 @@ const PromotionDetails = ({
                 >
                   <div className="imageAccorddian mb-20">
                     <img
-                      src={promotionDetailsSelector?.data?.data?.locationDetails?.logoUrl||noImageFound}
+                      src={
+                        promotionDetailsSelector?.data?.data?.locationDetails
+                          ?.logoUrl || noImageFound
+                      }
                       alt="olive"
                       className="h-100 object-cover"
                     />
@@ -214,31 +228,54 @@ const PromotionDetails = ({
                   <div className="grid2 mb-20">
                     <div>
                       <div className="fs-14 mb-4">Quantity/Nudge Cedit</div>
-                      <div className="fs-14 fw-600">{promotionDetailsSelector?.data?.data?.merchant?.quantity} </div>
+                      <div className="fs-14 fw-600">
+                        {
+                          promotionDetailsSelector?.data?.data?.merchant
+                            ?.quantity
+                        }{" "}
+                      </div>
                     </div>
                     <div>
                       <div className="fs-14 mb-4">MSRP</div>
-                      <div className="fs-14 fw-600">${promotionDetailsSelector?.data?.data?.merchant?.mSRP}</div>
+                      <div className="fs-14 fw-600">
+                        ${promotionDetailsSelector?.data?.data?.merchant?.mSRP}
+                      </div>
                     </div>
                     <div>
                       <div className="fs-14 mb-4">Price for Reimbursement</div>
-                      <div className="fs-14 fw-600">${promotionDetailsSelector?.data?.data?.merchant?.retailPrice}</div>
+                      <div className="fs-14 fw-600">
+                        $
+                        {
+                          promotionDetailsSelector?.data?.data?.merchant
+                            ?.retailPrice
+                        }
+                      </div>
                     </div>
                     <div>
                       <div className="fs-14 mb-4">Promotional Funds</div>
-                      <div className="fs-14 fw-600">${promotionDetailsSelector?.data?.data?.merchant?.promotionFund}</div>
+                      <div className="fs-14 fw-600">
+                        $
+                        {
+                          promotionDetailsSelector?.data?.data?.merchant
+                            ?.promotionFund
+                        }
+                      </div>
                     </div>
                   </div>
                   <div className="d-flex align-center justify-between mb-4">
                     <div className="fs-14">Redeemed</div>
-                    <div className="fs-14 fw-600">30/256</div>
+                    {/* <div className="fs-14 fw-600">30/256</div> */}
                   </div>
                   <div className="range h22 ">
                     <div
                       className="rangePercentage"
-                      style={{ width: "50%" }}
+                      // style={{ width: "50%" }}
+                      style={{
+                        width: `${promotionDetailsSelector?.data?.data?.redemptionPercentage || 0}%`,
+                      }}
                     ></div>
-                    <div className="percentageAbsolute fs-14 fw-500">50%</div>
+                    <div className="percentageAbsolute fs-14 fw-500">{promotionDetailsSelector?.data?.data
+                            ?.redemptionPercentage}%</div>
                   </div>
                   <div className="divider2"></div>
                   {addFund === true ? (

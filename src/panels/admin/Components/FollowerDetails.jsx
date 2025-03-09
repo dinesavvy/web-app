@@ -98,7 +98,13 @@ const FollowerDetail = () => {
                 Follower name
               </label>
               <div className="fs-20">
-                {followerDetailsSelector?.data?.data?.userInfo?.displayName}
+                {/* {followerDetailsSelector?.data?.data?.userInfo?.displayName} */}
+                {followerDetailsSelector?.data?.data?.userInfo?.displayName
+      ? followerDetailsSelector.data.data.userInfo.displayName
+          .charAt(0)
+          .toUpperCase() + 
+        followerDetailsSelector.data.data.userInfo.displayName.slice(1)
+      : ""}
               </div>
             </div>
             <div>
@@ -119,6 +125,7 @@ const FollowerDetail = () => {
                 {followerDetailsSelector?.data?.data?.totalFollowingCount}
               </div>
             </div>
+            {followerDetailsSelector?.data?.data?.userInfo?.email &&(
             <div>
               <label htmlFor="name" className="grey mb-10 fs-16 fw-500">
                 Email address
@@ -127,6 +134,7 @@ const FollowerDetail = () => {
                 {followerDetailsSelector?.data?.data?.userInfo?.email}
               </div>
             </div>
+            ) }
           </div>
         </div>
         <div className="tabPadding mb-30">

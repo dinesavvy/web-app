@@ -29,10 +29,11 @@ const Suppliers = () => {
 
   const createSuplierSelector = useSelector((state) => state?.createSuplier);
   const updateSupplierSelector = useSelector((state) => state?.updateSupplier);
-  const dispatch = useDispatch();
   const getSuppliersListSelector = useSelector(
     (state) => state?.getSupplierList
   );
+
+  const dispatch = useDispatch();
 
   const handlePaginationChange = (page, pageSize) => {
     setPagination({ page, limit: pageSize });
@@ -40,7 +41,7 @@ const Suppliers = () => {
 
   const handleSearchChange = (value) => {
     setSearchString(value);
-    setPagination((prev) => ({ ...prev, page: 1 })); // Reset to the first page on search
+    setPagination((prev) => ({ ...prev, page: 1 })); 
   };
 
   const handleSearchAreaChange = (selectedAreas) => {
@@ -53,8 +54,6 @@ const Suppliers = () => {
     } else {
       document.body.classList.remove("overflow-Hidden");
     }
-
-    // Cleanup on component unmount
     return () => {
       document.body.classList.remove("overflow-Hidden");
     };
@@ -98,12 +97,6 @@ const Suppliers = () => {
             </div>
           </div>
           <div className="lineSearch w-100 mb-20">
-            {/* <input
-              type="text"
-              placeholder="Search Suppliers"
-              autoComplete="off"
-            /> */}
-            {/* <img src={searchIcon} alt="" className="absoluteImage" /> */}
             <SearchSelect
               onSearchChange={handleSearchChange}
               onSearchAreaChange={handleSearchAreaChange}
@@ -202,7 +195,6 @@ const Suppliers = () => {
               <div className="noDataFound">No data found</div>
             )}
           </div>
-
           <div className="divider2"></div>
           {getSuppliersListSelector?.data?.data?.records?.length > 0 && (
             <div className="d-flex align-center justify-between flexPagination">
@@ -234,6 +226,7 @@ const Suppliers = () => {
           toggleDetails={toggleDetails}
           setIsDetailsOpen={setIsDetailsOpen}
           selectedSupplier={selectedSupplier}
+          setSelectedSupplier={setSelectedSupplier}
         />
       )}
       {modal2Open && (
