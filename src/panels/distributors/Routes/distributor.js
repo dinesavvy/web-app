@@ -5,6 +5,8 @@ import AddDistributorPromotion from "../components/distributorPromotion/AddDistr
 import DistributorPromotionList from "../components/distributorPromotion/distributorPromotionList";
 import DistributorLogin from "../components/login/Login";
 import DistributorDashboard from "./../components/distributorDashboard/DistributorDashboard";
+import NoPageFound from "../../../common/noPageFound/NoPageFound";
+
 
 const supplierRoutes = [
   {
@@ -44,6 +46,12 @@ const supplierRoutes = [
     isPrivate: false,
     isLayout: true,
   },
+  {
+    path: "/distributors/no-page-found",
+    element: NoPageFound,
+    isPrivate: false,
+  },
+  { path: '*', element: NoPageFound },
 ];
 
 export default supplierRoutes;

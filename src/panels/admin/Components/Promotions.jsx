@@ -73,7 +73,7 @@ const Promotions = () => {
       page: pagination?.page,
       limit: pagination?.limit,
       searchString: searchString,
-      isActive: activeTab === "active" ? false : true,
+      isActive: activeTab !== "active" ? false : true,
     };
     dispatch(adminPromotionListHandler(payload));
   }, [pagination, searchString, activeTab]);

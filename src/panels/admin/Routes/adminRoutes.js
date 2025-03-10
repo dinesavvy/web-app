@@ -16,6 +16,8 @@ import MerchantGroupList from "../Components/MerchantGroupList";
 import Suppliers from "../Components/Suppliers/Suppliers";
 import Distributors from "../Components/Distributors/Distributors";
 import AddBrands from "../Components/Brands/AddBrands";
+import NoPageFound from "../../../common/noPageFound/NoPageFound";
+
 
 const adminRoutes = [
   {
@@ -126,6 +128,12 @@ const adminRoutes = [
     isPrivate: false,
     isLayout: true,
   },
+  {
+    path: "/admin/no-page-found",
+    element: NoPageFound,
+    isPrivate: false,
+  },
+  { path: '*', element: NoPageFound },
 ];
 
 export default adminRoutes;

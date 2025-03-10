@@ -6,6 +6,7 @@ import SuppliersLogin from "../components/login/Login"
 import AddSupplierPromotion from "../components/supplier/AddSupplierPromotion";
 import SupplierPromotionList from "../components/supplier/supplierPromotionList";
 import SupplierDashboard from "../components/supplierDashboard/SupplierDashboard";
+import NoPageFound from "../../../common/noPageFound/NoPageFound";
 
 const supplierRoutes = [
   {
@@ -50,6 +51,12 @@ const supplierRoutes = [
     isPrivate: false,
     isLayout: true,
   },
+  {
+    path: "/supplier/no-page-found",
+    element: NoPageFound,
+    isPrivate: false,
+  },
+  { path: '*', element: NoPageFound },
 ];
 
 export default supplierRoutes;

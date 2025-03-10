@@ -59,8 +59,8 @@ const MerchantList = () => {
   useEffect(() => {
     const fetchMerchants = () => {
       const payload = {
-        page: pagination.page,
-        limit: pagination.limit,
+        page: pagination?.page,
+        limit: pagination?.limit,
         timeFrame: activeTab2,
         searchString,
         searchArea,
@@ -70,6 +70,7 @@ const MerchantList = () => {
 
     fetchMerchants();
   }, [pagination, activeTab2, searchString, searchArea]);
+
   const tabs = [
     {
       id: "1",
@@ -80,10 +81,10 @@ const MerchantList = () => {
       label: "groups",
     },
   ];
+  
   return (
     <>
       {merchantListSelector?.isLoading && <Loader />}
-
       <div className="dashboard">
         <div className="tabs-container tab3 tabFull ">
           <div className="tabs">
@@ -143,7 +144,7 @@ const MerchantList = () => {
                               <div className="merchantImage">
                                 <img
                                   src={item?.logoUrl || noImageFound}
-                                  alt=""
+                                  alt={item?.businessName}
                                 />
                               </div>
                               <div className="fs-16 fw-700 mb-10">

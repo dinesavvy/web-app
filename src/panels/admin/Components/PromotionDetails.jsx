@@ -100,7 +100,8 @@ const PromotionDetails = ({
                 promotionDetailsSelector?.data?.data?.brandDetails
                   ?.imageUrl[0] || coke
               }
-              alt=""
+              alt={promotionDetailsSelector?.data?.data?.promotionTitle}
+              
             />
           </div>
           <div className="d-flex justify-between align-center gap-10">

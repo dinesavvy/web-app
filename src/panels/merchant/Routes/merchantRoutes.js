@@ -7,6 +7,7 @@ import Nudges from "../auth/Nudges";
 import NudgeTemplateMerchant from "../auth/NudgeTemplateMerchant";
 import Profile from "../auth/Profile";
 import Hierarchy from "../auth/Hierarchy";
+import NoPageFound from "../../../common/noPageFound/NoPageFound";
 
 const merchantRoutes = [
   {
@@ -64,6 +65,12 @@ const merchantRoutes = [
     isPrivate: false,
     isLayout: true,
   },
+  {
+    path: "/admin/no-page-found",
+    element: NoPageFound,
+    isPrivate: false,
+  },
+  { path: '*', element: NoPageFound },
 ];
 
 export default merchantRoutes;

@@ -75,7 +75,7 @@ const DistributorPromotionList = () => {
       page: pagination?.page,
       limit: pagination?.limit,
       searchString: searchString,
-      isActive: activeTab === "active" ? false : true,
+      isActive: activeTab !== "active" ? false : true,
     };
     dispatch(distributorPromotionListHandler(payload));
   }, [pagination, searchString, activeTab]);

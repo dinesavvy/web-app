@@ -12,7 +12,6 @@ import { useCommonMessage } from "../../../../common/CommonMessage";
 import { deleteBrandsAction } from "../../../../redux/action/deleteBrand";
 import noImageFound from "../../../../assets/images/noImageFound.png";
 
-
 const Brands = () => {
   const messageApi = useCommonMessage();
   const [searchString, setSearchString] = useState("");
@@ -55,7 +54,7 @@ const Brands = () => {
     let payload = {
       page: pagination?.page,
       limit: pagination?.limit,
-      searchString:searchString,
+      searchString: searchString,
     };
     dispatch(brandListsHandler(payload));
   }, [pagination, deleteBrandSelector]);
@@ -106,20 +105,26 @@ const Brands = () => {
                       <div className="merchantCard" key={index}>
                         <div className="p-20">
                           <div className="text-center promotionImage">
-                            <img src={item?.imageUrl?.[0] || noImageFound} alt="" className="h-100" />
+                            <img
+                              src={item?.imageUrl?.[0] || noImageFound}
+                              alt=""
+                              className="h-100"
+                            />
                           </div>
                         </div>
                         <div className="divider m-0"></div>
                         <div className="bottomPadding">
-                        <div className="fs-16 fw-700 mb-20">
-  {item?.brandName
-    ? item.brandName.charAt(0).toUpperCase() + item.brandName.slice(1).toLowerCase()
-    : ""}
-</div>
+                          <div className="fs-16 fw-700 mb-20">
+                            {item?.brandName
+                              ? item.brandName.charAt(0).toUpperCase() +
+                                item.brandName.slice(1).toLowerCase()
+                              : ""}
+                          </div>
 
-
-                          <div className="fs-16 fw-600 roi green mb-20">
-                            Performance: 52%
+                          <div className={item?.performance > 50
+                              ? "fs-16 fw-600 roi green mb-20"
+                              : "fs-16 fw-600 roi blue mb-20"}>
+                            Performance: {item?.performance}%
                           </div>
                           <div className="d-flex align-center gap-10">
                             <div

@@ -1742,6 +1742,112 @@ input.addTitleInput::placeholder {
 .tabs-container  + .tabPadding{
   border-radius: 0 0 16px 16px;
 }
+/* No Page found */
+
+/* Full-page container */
+.not-found-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-color: #f8f9fc;
+  text-align: center;
+  position: relative;
+  background-image:url("../images/backgroundImage.png"); ;
+}
+/* 
+.not-found-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-color: #f8f9fc;
+  text-align: center;
+  position: relative;
+  background-image: url("/images/background.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+} */
+
+
+/* Large 404 text */
+.error-code {
+  font-size: 160px;
+  font-weight: bold;
+  color: #056DFF;
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+}
+
+/* Error message box */
+.error-box {
+  background: #FFFFFF33;
+
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  max-width: 450px;
+  position: relative;
+  z-index: 10;
+  backdrop-filter: blur(24px)
+}
+
+/* Title */
+.error-title {
+  font-size: 22px;
+  font-weight: bold;
+  color: #111;
+}
+
+/* Message */
+.error-message {
+  color: #666;
+  margin: 10px 0 20px;
+  font-size: 14px;
+}
+
+/* Back button */
+.back-button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 14px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.back-button:hover {
+  background-color: #0056b3;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .error-code {
+    font-size: 120px;
+    top: 35%;
+  }
+
+  .error-box {
+    width: 90%;
+    padding: 20px;
+  }
+
+  .error-title {
+    font-size: 18px;
+  }
+
+  .error-message {
+    font-size: 12px;
+  }
+}
+
+
+
 @media (max-width: 1549.98px) {
   .image80 {
     height: 60px;

@@ -118,8 +118,13 @@ const BrandsListDistributor = () => {
                               : ""}
                           </div>
 
-                          <div className="fs-16 fw-600 roi green mb-20">
+                          {/* <div className="fs-16 fw-600 roi green mb-20">
                             Performance: 52%
+                          </div> */}
+                          <div className={item?.performance > 50
+                              ? "fs-16 fw-600 roi green mb-20"
+                              : "fs-16 fw-600 roi blue mb-20"}>
+                            Performance: {item?.performance}%
                           </div>
                           <div className="d-flex align-center gap-10">
                             <div

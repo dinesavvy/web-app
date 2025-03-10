@@ -202,7 +202,7 @@ const AddDistributorPromotion = () => {
         promotionTitle: promotionTitle,
         brandId: droppedBrand?.id,
         startDate: startDate ? moment(startDate).valueOf() : null,
-        endDate: endDate ? moment(values.endDate).valueOf() : null,
+        endDate: endDate ? moment(endDate).valueOf() : null,
         merchants: values?.merchants?.map((item, index) => {
           return {
             merchantId: droppedMerchants?.map((item) => item?._id).join(""),
@@ -544,273 +544,276 @@ const AddDistributorPromotion = () => {
                 </div>
               </div>
               {/* Merchant Component */}
-              <div className="accordion-container">
-                <Formik
-                  enableReinitialize
-                  initialValues={{
-                    merchants: droppedMerchants?.map(() => ({
-                      // quantity:
-                      //   droppedBrand?.selectedBrands?.brandItem?.map(
-                      //     (item) => item?.mSRP *item?.quantity
-                      //   )/ (droppedBrand?.selectedBrands?.brandItem?.map(
-                      //       (item) => item?.mSRP
-                      //     )),
-                      quantity: (
-                        droppedBrand?.selectedBrands?.brandItem?.reduce(
-                          (sum, item) =>
-                            sum + (item?.mSRP * item?.quantity || 0),
-                          0
-                        ) /
+              {droppedMerchants?.length > 0 && droppedBrand && (
+                <div className="accordion-container">
+                  <Formik
+                    enableReinitialize
+                    initialValues={{
+                      merchants: droppedMerchants?.map(() => ({
+                        // quantity:
+                        //   droppedBrand?.selectedBrands?.brandItem?.map(
+                        //     (item) => item?.mSRP *item?.quantity
+                        //   )/ (droppedBrand?.selectedBrands?.brandItem?.map(
+                        //       (item) => item?.mSRP
+                        //     )),
+                        quantity: (
                           droppedBrand?.selectedBrands?.brandItem?.reduce(
-                            (sum, item) => sum + (item?.mSRP || 0),
+                            (sum, item) =>
+                              sum + (item?.mSRP * item?.quantity || 0),
                             0
-                          ) || 0
-                      ).toFixed(2),
+                          ) /
+                            droppedBrand?.selectedBrands?.brandItem?.reduce(
+                              (sum, item) => sum + (item?.mSRP || 0),
+                              0
+                            ) || 0
+                        ).toFixed(2),
 
-                      // promotionalFunds:
-                      // droppedBrand?.selectedBrands?.brandItem?.map(
-                      //   (item) => item?.mSRP *item?.quantity
-                      // ) || "",
+                        // promotionalFunds:
+                        // droppedBrand?.selectedBrands?.brandItem?.map(
+                        //   (item) => item?.mSRP *item?.quantity
+                        // ) || "",
 
-                      promotionalFunds:
-                        droppedBrand?.selectedBrands?.brandItem?.map((item) =>
-                          (item?.mSRP * item?.quantity)?.toFixed(2)
-                        ) || "",
+                        promotionalFunds:
+                          droppedBrand?.selectedBrands?.brandItem?.map((item) =>
+                            (item?.mSRP * item?.quantity)?.toFixed(2)
+                          ) || "",
 
-                      msrp: "",
-                      priceForReimbursement: "",
-                      // fundAmount:
-                      // droppedBrand?.selectedBrands?.brandItem?.map(
-                      //   (item) => item?.mSRP*item?.quantity
-                      // )  || "",
-                      fundAmount:
-                        droppedBrand?.selectedBrands?.brandItem?.map((item) =>
-                          (item?.mSRP * item?.quantity)?.toFixed(2)
-                        ) || "",
-                    })),
-                  }}
-                  // validationSchema={validationSchema}
-                  onSubmit={handleSubmit}
-                >
-                  {({ values }) => (
-                    <Form>
-                      {droppedMerchants?.length > 0 &&
-                        droppedMerchants.map(
-                          (itemDropperMerchant, indexDroppedMerchant) => {
-                            return (
-                              <div
-                                className="accordionItem accordion-item"
-                                key={indexDroppedMerchant}
-                              >
-                                <div className={`accordionHeader fs-18 fw-700`}>
-                                  <div>
-                                    {itemDropperMerchant?.name
-                                      ? itemDropperMerchant.name
-                                          .charAt(0)
-                                          .toUpperCase() +
-                                        itemDropperMerchant.name.slice(1)
-                                      : ""}
-                                  </div>
-                                </div>
-                                <div className="accordion-content accordionContent">
-                                  <div className="d-flex gap-20">
-                                    <div className="brandItem mx167">
-                                      <img
-                                        src={
-                                          itemDropperMerchant?.logoUrl ||
-                                          noImageFound
-                                        }
-                                        alt={itemDropperMerchant?.name}
-                                      />
-                                    </div>
-                                    <div className="fs-14">
-                                      <div className="d-flex gap-4 mb-10">
-                                        <div className="w-80">Nudges:</div>
-                                        <div className="fw-700">
-                                          {
-                                            itemDropperMerchant?.nudge
-                                              ?.sentNudgeCount
-                                          }
-                                        </div>
-                                      </div>
-                                      <div className="d-flex gap-4 mb-10">
-                                        <div className="w-80">Promotion:</div>
-                                        <div className="fw-700">10</div>
-                                      </div>
-                                      <div className="d-flex gap-4 ">
-                                        <div className="w-80">Location:</div>
-                                        <div className="fw-700">
-                                          {/* 123 Maple St, Springfield, IL */}
-                                          {[
-                                            itemDropperMerchant?.address
-                                              ?.addressLine1,
-                                            itemDropperMerchant?.address
-                                              ?.administrativeDistrictLevel1,
-                                            itemDropperMerchant?.address
-                                              ?.locality,
-                                            itemDropperMerchant?.address
-                                              ?.postalCode,
-                                          ]
-                                            .filter((part) => part) // Filter out undefined or empty values
-                                            .join(", ")}
-                                        </div>
-                                      </div>
+                        msrp: "",
+                        priceForReimbursement: "",
+                        // fundAmount:
+                        // droppedBrand?.selectedBrands?.brandItem?.map(
+                        //   (item) => item?.mSRP*item?.quantity
+                        // )  || "",
+                        fundAmount:
+                          droppedBrand?.selectedBrands?.brandItem?.map((item) =>
+                            (item?.mSRP * item?.quantity)?.toFixed(2)
+                          ) || "",
+                      })),
+                    }}
+                    // validationSchema={validationSchema}
+                    onSubmit={handleSubmit}
+                  >
+                    {({ values }) => (
+                      <Form>
+                        {droppedMerchants?.length > 0 &&
+                          droppedMerchants.map(
+                            (itemDropperMerchant, indexDroppedMerchant) => {
+                              return (
+                                <div
+                                  className="accordionItem accordion-item"
+                                  key={indexDroppedMerchant}
+                                >
+                                  <div
+                                    className={`accordionHeader fs-18 fw-700`}
+                                  >
+                                    <div>
+                                      {itemDropperMerchant?.name
+                                        ? itemDropperMerchant.name
+                                            .charAt(0)
+                                            .toUpperCase() +
+                                          itemDropperMerchant.name.slice(1)
+                                        : ""}
                                     </div>
                                   </div>
-                                  <div className="divider2"></div>
-                                  <div className="grid2 gap-1020">
-                                    <div>
-                                      <label
-                                        htmlFor={`merchants.${indexDroppedMerchant}.quantity`}
-                                        className="fs-14 fw-500 mb-10"
-                                      >
-                                        Quantity/Nudge Credits
-                                      </label>
-                                      <Field
-                                        type="text"
-                                        name={`merchants.${indexDroppedMerchant}.quantity`}
-                                        placeholder="Enter Quantity"
-                                        disabled
-                                      />
-                                      <ErrorMessage
-                                        name={`merchants.${indexDroppedMerchant}.quantity`}
-                                        component="div"
-                                        className="error"
-                                      />
-                                    </div>
-
-                                    <div>
-                                      <label
-                                        htmlFor={`merchants.${indexDroppedMerchant}.promotionalFunds`}
-                                        className="fs-14 fw-500 mb-10"
-                                      >
-                                        Promotional Funds
-                                      </label>
-                                      <Field
-                                        type="text"
-                                        name={`merchants.${indexDroppedMerchant}.promotionalFunds`}
-                                        placeholder="Enter Amount"
-                                        disabled
-                                      />
-                                      <ErrorMessage
-                                        name={`merchants.${indexDroppedMerchant}.promotionalFunds`}
-                                        component="div"
-                                        className="error"
-                                      />
-                                    </div>
-
-                                    <div>
-                                      <label
-                                        htmlFor={`merchants.${indexDroppedMerchant}.msrp`}
-                                        className="fs-14 fw-500 mb-10"
-                                      >
-                                        MSRP
-                                      </label>
-                                      <Field
-                                        type="text"
-                                        name={`merchants.${indexDroppedMerchant}.msrp`}
-                                        placeholder="Enter Price"
-                                        autoComplete="off"
-                                        maxLength={5}
-                                        onKeyDown={(e) => {
-                                          if (
-                                            !/^\d$/.test(e.key) && // Allow numbers
-                                            ![
-                                              "Backspace",
-                                              "Delete",
-                                              "ArrowLeft",
-                                              "ArrowRight",
-                                              "Tab",
-                                            ].includes(e.key) // Allow navigation keys
-                                          ) {
-                                            e.preventDefault();
+                                  <div className="accordion-content accordionContent">
+                                    <div className="d-flex gap-20">
+                                      <div className="brandItem mx167">
+                                        <img
+                                          src={
+                                            itemDropperMerchant?.logoUrl ||
+                                            noImageFound
                                           }
-                                        }}
-                                        // onChange = {()=>setErrors((prev) => ({ ...prev, msrp: "" }))}
-                                      />
-                                      <ErrorMessage
-                                        name={`merchants.${indexDroppedMerchant}.msrp`}
-                                        component="div"
-                                        className="error"
-                                      />
-                                      {/* {errors.msrp && <p className="mt-10 fw-500 fs-14 error">{errors.msrp}</p>} */}
+                                          alt={itemDropperMerchant?.name}
+                                        />
+                                      </div>
+                                      <div className="fs-14">
+                                        <div className="d-flex gap-4 mb-10">
+                                          <div className="w-80">Nudges:</div>
+                                          <div className="fw-700">
+                                            {
+                                              itemDropperMerchant?.nudge
+                                                ?.sentNudgeCount
+                                            }
+                                          </div>
+                                        </div>
+                                        <div className="d-flex gap-4 mb-10">
+                                          <div className="w-80">Promotion:</div>
+                                          <div className="fw-700">10</div>
+                                        </div>
+                                        <div className="d-flex gap-4 ">
+                                          <div className="w-80">Location:</div>
+                                          <div className="fw-700">
+                                            {/* 123 Maple St, Springfield, IL */}
+                                            {[
+                                              itemDropperMerchant?.address
+                                                ?.addressLine1,
+                                              itemDropperMerchant?.address
+                                                ?.administrativeDistrictLevel1,
+                                              itemDropperMerchant?.address
+                                                ?.locality,
+                                              itemDropperMerchant?.address
+                                                ?.postalCode,
+                                            ]
+                                              .filter((part) => part) // Filter out undefined or empty values
+                                              .join(", ")}
+                                          </div>
+                                        </div>
+                                      </div>
                                     </div>
+                                    <div className="divider2"></div>
+                                    <div className="grid2 gap-1020">
+                                      <div>
+                                        <label
+                                          htmlFor={`merchants.${indexDroppedMerchant}.quantity`}
+                                          className="fs-14 fw-500 mb-10"
+                                        >
+                                          Quantity/Nudge Credits
+                                        </label>
+                                        <Field
+                                          type="text"
+                                          name={`merchants.${indexDroppedMerchant}.quantity`}
+                                          placeholder="Enter Quantity"
+                                          disabled
+                                        />
+                                        <ErrorMessage
+                                          name={`merchants.${indexDroppedMerchant}.quantity`}
+                                          component="div"
+                                          className="error"
+                                        />
+                                      </div>
 
-                                    <div>
-                                      <label
-                                        htmlFor={`merchants.${indexDroppedMerchant}.priceForReimbursement`}
-                                        className="fs-14 fw-500 mb-10"
-                                      >
-                                        Price for Reimbursement
-                                      </label>
-                                      <Field
-                                        type="text"
-                                        name={`merchants.${indexDroppedMerchant}.priceForReimbursement`}
-                                        placeholder="Enter Price"
-                                        autoComplete="off"
-                                        maxLength={5}
-                                        onKeyDown={(e) => {
-                                          if (
-                                            !/^\d$/.test(e.key) && // Allow numbers
-                                            ![
-                                              "Backspace",
-                                              "Delete",
-                                              "ArrowLeft",
-                                              "ArrowRight",
-                                              "Tab",
-                                            ].includes(e.key) // Allow navigation keys
-                                          ) {
-                                            e.preventDefault();
-                                          }
-                                        }}
-                                      />
-                                      {/* <ErrorMessage
+                                      <div>
+                                        <label
+                                          htmlFor={`merchants.${indexDroppedMerchant}.promotionalFunds`}
+                                          className="fs-14 fw-500 mb-10"
+                                        >
+                                          Promotional Funds
+                                        </label>
+                                        <Field
+                                          type="text"
+                                          name={`merchants.${indexDroppedMerchant}.promotionalFunds`}
+                                          placeholder="Enter Amount"
+                                          disabled
+                                        />
+                                        <ErrorMessage
+                                          name={`merchants.${indexDroppedMerchant}.promotionalFunds`}
+                                          component="div"
+                                          className="error"
+                                        />
+                                      </div>
+
+                                      <div>
+                                        <label
+                                          htmlFor={`merchants.${indexDroppedMerchant}.msrp`}
+                                          className="fs-14 fw-500 mb-10"
+                                        >
+                                          MSRP
+                                        </label>
+                                        <Field
+                                          type="text"
+                                          name={`merchants.${indexDroppedMerchant}.msrp`}
+                                          placeholder="Enter Price"
+                                          autoComplete="off"
+                                          maxLength={5}
+                                          onKeyDown={(e) => {
+                                            if (
+                                              !/^\d$/.test(e.key) && // Allow numbers
+                                              ![
+                                                "Backspace",
+                                                "Delete",
+                                                "ArrowLeft",
+                                                "ArrowRight",
+                                                "Tab",
+                                              ].includes(e.key) // Allow navigation keys
+                                            ) {
+                                              e.preventDefault();
+                                            }
+                                          }}
+                                          // onChange = {()=>setErrors((prev) => ({ ...prev, msrp: "" }))}
+                                        />
+                                        <ErrorMessage
+                                          name={`merchants.${indexDroppedMerchant}.msrp`}
+                                          component="div"
+                                          className="error"
+                                        />
+                                        {/* {errors.msrp && <p className="mt-10 fw-500 fs-14 error">{errors.msrp}</p>} */}
+                                      </div>
+
+                                      <div>
+                                        <label
+                                          htmlFor={`merchants.${indexDroppedMerchant}.priceForReimbursement`}
+                                          className="fs-14 fw-500 mb-10"
+                                        >
+                                          Price for Reimbursement
+                                        </label>
+                                        <Field
+                                          type="text"
+                                          name={`merchants.${indexDroppedMerchant}.priceForReimbursement`}
+                                          placeholder="Enter Price"
+                                          autoComplete="off"
+                                          maxLength={5}
+                                          onKeyDown={(e) => {
+                                            if (
+                                              !/^\d$/.test(e.key) && // Allow numbers
+                                              ![
+                                                "Backspace",
+                                                "Delete",
+                                                "ArrowLeft",
+                                                "ArrowRight",
+                                                "Tab",
+                                              ].includes(e.key) // Allow navigation keys
+                                            ) {
+                                              e.preventDefault();
+                                            }
+                                          }}
+                                        />
+                                        {/* <ErrorMessage
                                         name={`merchants.${indexDroppedMerchant}.priceForReimbursement`}
                                         component="div"
                                         className="error"
                                       /> */}
-                                    </div>
+                                      </div>
 
-                                    <div>
-                                      <label className="fs-14 fw-500 mb-10">
-                                        Fund Amount
-                                      </label>
-                                      {/* <input
+                                      <div>
+                                        <label className="fs-14 fw-500 mb-10">
+                                          Fund Amount
+                                        </label>
+                                        {/* <input
                                         type="text"
                                         placeholder="$1000"
                                         disabled
                                       /> */}
 
-                                      <Field
-                                        type="text"
-                                        name={`merchants.${indexDroppedMerchant}.fundAmount`}
-                                        placeholder="Enter Price"
-                                        disabled
-                                      />
-                                      <ErrorMessage
-                                        name={`merchants.${indexDroppedMerchant}.fundAmount`}
-                                        component="div"
-                                        className="error"
-                                      />
+                                        <Field
+                                          type="text"
+                                          name={`merchants.${indexDroppedMerchant}.fundAmount`}
+                                          placeholder="Enter Price"
+                                          disabled
+                                        />
+                                        <ErrorMessage
+                                          name={`merchants.${indexDroppedMerchant}.fundAmount`}
+                                          component="div"
+                                          className="error"
+                                        />
+                                      </div>
                                     </div>
                                   </div>
                                 </div>
-                              </div>
-                            );
-                          }
-                        )}
-                      {droppedMerchants?.length > 0 && (
+                              );
+                            }
+                          )}
+                        {/* {droppedMerchants?.length > 0 && ( */}
                         <div className="d-flex justify-end">
                           <button type="submit" className="btn w164">
                             Submit
                           </button>
                         </div>
-                      )}
-                    </Form>
-                  )}
-                </Formik>
+                        {/* )} */}
+                      </Form>
+                    )}
+                  </Formik>
 
-                {/* {accordionItems.map((item, index) => (
+                  {/* {accordionItems.map((item, index) => (
                   <div className="accordionItem accordion-item" key={index}>
                     <div
                       className={`accordionHeader fs-18 fw-700 ${
@@ -885,7 +888,8 @@ const AddDistributorPromotion = () => {
                     )}
                   </div>
                 ))} */}
-              </div>
+                </div>
+              )}
             </div>
           </div>
         </DndProvider>

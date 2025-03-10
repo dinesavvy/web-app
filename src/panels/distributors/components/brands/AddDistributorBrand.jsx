@@ -259,11 +259,11 @@ const AddDistributorBrand = () => {
                                   </Select>
                                 )}
                               </Field>
-                              <ErrorMessage
+                              {/* <ErrorMessage
                                 name={`SKUs[${index}].unit`}
                                 component="div"
                                 className="mt-10 fw-500 fs-14 error"
-                              />
+                              /> */}
                             </div>
 
                             <div className="w-100 d-flex flexDirection h-100 justify-between">

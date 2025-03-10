@@ -8,7 +8,7 @@ export const supplierBrandValidation = Yup.object().shape({
       msrp: Yup.string()
         .required("MSRP is required"),
         // .matches(/^\$?\d+(\.\d{2})?$/, "Enter a valid price"),
-      unit: Yup.string().required("Unit is required"),
+      // unit: Yup.string().required("Unit is required"),
       sku: Yup.string().required("SKU is required"),
       description: Yup.string().required("Description is required"),
     })

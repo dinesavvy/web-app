@@ -195,7 +195,7 @@ const AddPromotion = () => {
         promotionTitle: promotionTitle,
         brandId: droppedBrand?.id,
         startDate: startDate ? moment(startDate).valueOf() : null,
-        endDate: endDate ? moment(values.endDate).valueOf() : null,
+        endDate: endDate ? moment(endDate).valueOf() : null,
         merchants: values?.merchants?.map((item, index) => {
           return {
             merchantId: droppedMerchants?.map((item) => item?._id).join(""),
@@ -214,6 +214,7 @@ const AddPromotion = () => {
       //   dispatch(createPromotionHandler(payload));
       // }
       dispatch(createPromotionHandler(payload));
+      // console.log(payload,"payload")
     }
   };
 
@@ -481,6 +482,7 @@ const AddPromotion = () => {
                         className="customTime input"
                         format="YYYY-MM-DD"
                         onChange={(date, dateString) => {
+
                           setStartDate(dateString);
                           setErrors((prev) => ({ ...prev, fromDate: "" }));
                         }}
@@ -535,6 +537,7 @@ const AddPromotion = () => {
               </div>
 
               {/* Merchant Component */}
+              {droppedMerchants?.length > 0 && droppedBrand && (
               <div className="accordion-container">
                 <Formik
                   enableReinitialize
@@ -773,13 +776,13 @@ const AddPromotion = () => {
                             );
                           }
                         )}
-                      {droppedMerchants?.length > 0 && droppedBrand && (
+                      {/* {droppedMerchants?.length > 0 && droppedBrand && ( */}
                         <div className="d-flex justify-end">
                           <button type="submit" className="btn w164">
                             Submit
                           </button>
                         </div>
-                      )}
+                      {/* )} */}
                     </Form>
                   )}
                 </Formik>
@@ -860,6 +863,7 @@ const AddPromotion = () => {
                   </div>
                 ))} */}
               </div>
+              )}
             </div>
           </div>
         </DndProvider>
