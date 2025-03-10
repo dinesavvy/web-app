@@ -1751,7 +1751,7 @@ input.addTitleInput::placeholder {
   .react-tel-input.phoneInput .form-control,.react-tel-input .flag-dropdown {
     padding: 8.5px 10px !important;
   }
-  .deleteBtn{
+  .deleteBtn, .deleteBtn:hover{
     min-width: 40px;
   }
   .radioImage {

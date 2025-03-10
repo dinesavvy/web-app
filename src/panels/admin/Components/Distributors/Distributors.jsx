@@ -159,6 +159,7 @@ const Distributors = () => {
                               </div>
                               <div className="d-flex align-center gap-12 fs-14">
                                 <img src={phoneCard} alt="" className="h30" />
+                               +{item?.contactPhoneNumber}
                               </div>
                               <div className="d-flex align-center gap-10">
                                 <div
