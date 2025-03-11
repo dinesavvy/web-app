@@ -691,20 +691,20 @@ const AddPromotion = () => {
                                         placeholder="Enter Price"
                                         autoComplete="off"
                                         maxLength={5}
-                                        onKeyDown={(e) => {
-                                          if (
-                                            !/^\d$/.test(e.key) && // Allow numbers
-                                            ![
-                                              "Backspace",
-                                              "Delete",
-                                              "ArrowLeft",
-                                              "ArrowRight",
-                                              "Tab",
-                                            ].includes(e.key) // Allow navigation keys
-                                          ) {
-                                            e.preventDefault();
-                                          }
-                                        }}
+                                        // onKeyDown={(e) => {
+                                        //   if (
+                                        //     !/^\d$/.test(e.key) && // Allow numbers
+                                        //     ![
+                                        //       "Backspace",
+                                        //       "Delete",
+                                        //       "ArrowLeft",
+                                        //       "ArrowRight",
+                                        //       "Tab",
+                                        //     ].includes(e.key) // Allow navigation keys
+                                        //   ) {
+                                        //     e.preventDefault();
+                                        //   }
+                                        // }}
                                       />
                                       <ErrorMessage
                                         name={`merchants.${indexDroppedMerchant}.msrp`}
@@ -726,20 +726,20 @@ const AddPromotion = () => {
                                         placeholder="Enter Price"
                                         autoComplete="off"
                                         maxLength={5}
-                                        onKeyDown={(e) => {
-                                          if (
-                                            !/^\d$/.test(e.key) && // Allow numbers
-                                            ![
-                                              "Backspace",
-                                              "Delete",
-                                              "ArrowLeft",
-                                              "ArrowRight",
-                                              "Tab",
-                                            ].includes(e.key) // Allow navigation keys
-                                          ) {
-                                            e.preventDefault();
-                                          }
-                                        }}
+                                        // onKeyDown={(e) => {
+                                        //   if (
+                                        //     !/^\d$/.test(e.key) && // Allow numbers
+                                        //     ![
+                                        //       "Backspace",
+                                        //       "Delete",
+                                        //       "ArrowLeft",
+                                        //       "ArrowRight",
+                                        //       "Tab",
+                                        //     ].includes(e.key) // Allow navigation keys
+                                        //   ) {
+                                        //     e.preventDefault();
+                                        //   }
+                                        // }}
                                       />
                                       {/* <ErrorMessage
                                         name={`merchants.${indexDroppedMerchant}.priceForReimbursement`}

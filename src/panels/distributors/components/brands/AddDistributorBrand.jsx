@@ -294,6 +294,7 @@ const AddDistributorBrand = () => {
                                 placeholder="Red Bull - 8.4 oz energy drink (12-pack)"
                                 name={`SKUs[${index}].description`}
                                 autoComplete="off"
+                                maxLength={300}
                               />
                               <ErrorMessage
                                 name={`SKUs[${index}].description`}

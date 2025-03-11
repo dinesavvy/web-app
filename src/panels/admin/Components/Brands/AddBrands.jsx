@@ -384,6 +384,7 @@ const AddBrands = () => {
                                 name={`SKUs[${index}].description`}
                                 autoComplete="off"
                                 onKeyDown={handleKeyPressSpace}
+                                maxLength={300}
                               />
                               <ErrorMessage
                                 name={`SKUs[${index}].description`}

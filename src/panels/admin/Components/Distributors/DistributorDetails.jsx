@@ -310,6 +310,7 @@ const DistributorDetails = ({
                       name="distributorName"
                       autocomplete="off"
                       onKeyDown={handleKeyPressSpace}
+                      maxLength={30}
                     />
                     <ErrorMessage
                       name="distributorName"
@@ -327,6 +328,7 @@ const DistributorDetails = ({
                       name="distributorContactName"
                       autocomplete="off"
                       onKeyDown={handleKeyPressSpace}
+                      maxLength={30}
                     />
                     <ErrorMessage
                       name="distributorContactName"
@@ -344,6 +346,7 @@ const DistributorDetails = ({
                       name="distributorPosition"
                       autocomplete="off"
                       onKeyDown={handleKeyPressSpace}
+                      maxLength={30}
                     />
                   </div>
                   <div className="mb-20">
