@@ -1372,6 +1372,9 @@ margin: 20px 0;
   bottom: 12px;
   color: #808080;
 }
+.tabGrey{
+  color: #808080;
+}
 .px16{
   padding: 0 16px;
 }
@@ -1824,7 +1827,53 @@ input.addTitleInput::placeholder {
 .back-button:hover {
   background-color: #0056b3;
 }
+.tabContainer{
+  /* border-bottom: 1px solid #E6E6E6; */
+  position: relative;z-index: 1;
+  box-sizing: border-box;
+}
+.overflowx{
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+.tabContainer .tabbing{
+  padding: 10px 0;
+  position: relative;
+  min-width: 115px;
+  text-align: center;
+  cursor: pointer;
+}
+.tabContainer .tabbing::after{
+  position: absolute;
+  content: "";
+  width: 100%;
+  height: 1px;
+  left: 0;
+  bottom: 0;
+  background-color: #E6E6E6;
+}
+.tabbing.active{
+  color: #056DFF !important;
+}
+.tabbing.active::after{
+  height: 2px;
+  background-color: #056DFF;
+}
+.tabContainer::-webkit-scrollbar{
+  display: none;
+}
+.codeImage{
+  height: 70px;
+  width: 70px;
+  min-height: 70px;
+  min-width: 70px;
+  border-radius: 10px;
+  overflow: hidden;
+}
+.codeImage img{
 
+  object-fit: cover;
+}
 /* Responsive Design */
 @media (max-width: 768px) {
   .error-code {
@@ -1849,6 +1898,17 @@ input.addTitleInput::placeholder {
 
 
 @media (max-width: 1549.98px) {
+  .codeImage{
+    height: 60px;
+    width: 60px;
+    min-height: 60px;
+    min-width: 60px;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .tabContainer .tabbing{
+    padding: 8px 0;
+  }
   .image80 {
     height: 60px;
     min-width: 60px;

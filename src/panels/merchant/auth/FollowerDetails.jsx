@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import closeRightSidebar from "../../../assets/images/closeRightSidebar.svg";
+import restaurantCard from "../../../assets/images/restaurantCard.png";
 import dish from "../../../assets/images/dish.png";
 // import restaurantCard from "../../../assets/images/restaurantCard.png";
 import Loader from "../../../common/Loader/Loader";
@@ -91,7 +92,9 @@ const FollowerDetails = ({ isOpen, toggleSidebar, followerDetails }) => {
                   <div key={`${index}-${subIndex}`}>{item1}</div>
                 ))
               ) : (
-                <div key={index}className="noDataFound">No data available</div>
+                <div key={index} className="noDataFound">
+                  No data available
+                </div>
               );
             })}
           </div>
@@ -112,7 +115,7 @@ const FollowerDetails = ({ isOpen, toggleSidebar, followerDetails }) => {
               );
             })}
           </div>
-          <div className="fs-14 mb-16">Accepted Nudges</div>
+          {/* <div className="fs-14 mb-16">Accepted Nudges</div>
           {businessListByUserIdSelectorAccepted?.acceptedList?.data?.records
             ?.length > 0 ? (
             businessListByUserIdSelectorAccepted.acceptedList.data.records.map(
@@ -175,6 +178,62 @@ const FollowerDetails = ({ isOpen, toggleSidebar, followerDetails }) => {
 
           <div className="pc fs-16 fw-700 cursor-pointer text-center mb-20">
             Show More
+          </div> */}
+          <div className="overflowx tabContainer  mb-16">
+            <div className="d-flex  align-center ">
+              <div className="tabbing fs-16 tabGrey active">Redeemed</div>
+              <div className="tabbing fs-16 tabGrey active">Accepted</div>
+              <div className="tabbing fs-16 tabGrey ">Declined</div>
+              <div className="tabbing fs-16 tabGrey ">Ignored</div>
+            </div>
+          </div>
+          <div className="tabPanelDetailed">
+            <div>
+              <div className="d-flex align-center gap-10 mb-10">
+                <div className="codeImage">
+                  <img src={restaurantCard} alt="" className="w-100 h-100" />
+                </div>
+                <div>
+                  <div className="fs-16 fw-700 mb-5">Free drink</div>
+                  <div className="fs-14">
+                    Free drink on Happy Hours! From 07:00 PM to 08:00 PM
+                  </div>
+                </div>
+              </div>
+              <div className="d-flex align-center justify-between gap-10 mb-8 fs-14">
+                <div>Date Sent</div>
+                <div className="fw-500">Sep 19, 2024</div>
+              </div>
+              <div className="d-flex align-center justify-between gap-10 mb-8 fs-14">
+                <div>Date Accepted</div>
+                <div className="fw-500">Sep 19, 2024</div>
+              </div>
+            </div>
+            <div className="divider2"></div>
+          </div>
+          <div className="tabPanelDetailed">
+            <div>
+              <div className="d-flex align-center gap-10 mb-10">
+                <div className="codeImage">
+                  <img src={restaurantCard} alt="" className="w-100 h-100" />
+                </div>
+                <div>
+                  <div className="fs-16 fw-700 mb-5">Free drink</div>
+                  <div className="fs-14">
+                    Free drink on Happy Hours! From 07:00 PM to 08:00 PM
+                  </div>
+                </div>
+              </div>
+              <div className="d-flex align-center justify-between gap-10 mb-8 fs-14">
+                <div>Date Sent</div>
+                <div className="fw-500">Sep 19, 2024</div>
+              </div>
+              <div className="d-flex align-center justify-between gap-10 mb-8 fs-14">
+                <div>Date Accepted</div>
+                <div className="fw-500">Sep 19, 2024</div>
+              </div>
+            </div>
+            <div className="divider2"></div>
           </div>
         </div>
       </div>
