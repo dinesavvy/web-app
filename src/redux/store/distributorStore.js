@@ -9,6 +9,7 @@ import distributorPromotionListSlice from "../action/distributorsAction/distribu
 import distributorMerchantListSlice from "../action/distributorsAction/distributorMerchantList";
 import createDistributorPromotionSlice from "../action/distributorsAction/createDistributorPromotion";
 import distributorPromotionDetailsSlice from "../action/distributorsAction/distributorPromotionDetails";
+import distributorEndPromotionSlice from "../action/distributorsAction/distributorEndPromotion";
 
 const store = configureStore({
   reducer: {
@@ -22,6 +23,7 @@ const store = configureStore({
     distributorMerchantList: distributorMerchantListSlice,
     createDistributorPromotion: createDistributorPromotionSlice,
     distributorPromotionDetails: distributorPromotionDetailsSlice,
+    distributorEndPromotion: distributorEndPromotionSlice,
   },
 });
 

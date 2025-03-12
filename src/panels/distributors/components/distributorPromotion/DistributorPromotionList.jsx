@@ -19,6 +19,9 @@ const DistributorPromotionList = () => {
   const [activeTab, setActiveTab] = useState("active");
   const [isOpen, setIsOpen] = useState(false);
   const [promotionalDetailsData, setPromotionalDetailsData] = useState();
+  const distributorEndPromotion = useSelector(
+        (state) => state?.distributorEndPromotion
+      );
 
   const dispatch = useDispatch();
   const selectRef = useRef(null);
@@ -78,7 +81,7 @@ const DistributorPromotionList = () => {
       isActive: activeTab !== "active" ? false : true,
     };
     dispatch(distributorPromotionListHandler(payload));
-  }, [pagination, searchString, activeTab]);
+  }, [pagination, searchString, activeTab,distributorEndPromotion]);
 
 
   return (
@@ -268,6 +271,8 @@ const DistributorPromotionList = () => {
         isOpen={isDetailsOpen}
         toggleDetails={toggleDetails}
         promotionalDetailsData={promotionalDetailsData}
+        setIsDetailsOpen={setIsDetailsOpen}
+        activeTab={activeTab}
       />
     </>
   );

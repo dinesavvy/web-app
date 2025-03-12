@@ -10,6 +10,7 @@ import supplierMerchantListSlice from "../action/supplierActions/supplierMerchan
 import addSupplierPromotionSlice from "../action/supplierActions/addSupplierPromotion";
 import supplierPromotionDetailsSlice from "../action/supplierActions/supplierPromotionDetails";
 import removeBrandSupplierSlice from "../action/supplierActions/removeBrandSupplier";
+import supplierEndPromotionSlice from "../action/supplierActions/supplierEndPromotion";
 
 const store = configureStore({
   reducer: {
@@ -24,6 +25,7 @@ const store = configureStore({
     addSupplierPromotion: addSupplierPromotionSlice,
     supplierPromotionDetails: supplierPromotionDetailsSlice,
     removeBrandSupplier: removeBrandSupplierSlice,
+    supplierEndPromotion: supplierEndPromotionSlice,
   },
 });
 

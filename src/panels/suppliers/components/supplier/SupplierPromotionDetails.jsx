@@ -10,40 +10,26 @@ import { useDispatch, useSelector } from "react-redux";
 import Loader from "../../../../common/Loader/Loader";
 import { supplierPromotionDetailsHandler } from "../../../../redux/action/supplierActions/supplierPromotionDetails";
 import noImageFound from "../../../../assets/images/noImageFound.png";
+import { supplierEndPromotionAction, supplierEndPromotionHandler } from "../../../../redux/action/supplierActions/supplierEndPromotion";
+import CommonModal from "../../../admin/Components/CommonModal";
 
 const SupplierPromotionDetails = ({
   isOpen,
   toggleDetails,
   promotionalDetailsData,
+  setIsDetailsOpen,
+  activeTab
 }) => {
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [openIndex, setOpenIndex] = useState(null);
   const [addFund, setAddFund] = useState(false);
+  const [endPromotionModal, setEndPromotionModal] = useState(false);
 
   const promotionDetailsSelector = useSelector(
     (state) => state?.supplierPromotionDetails
   );
 
   const dispatch = useDispatch();
-
-  const toggleAccordion = (index) => {
-    setOpenIndex(index === openIndex ? null : index);
-  };
-
-  const items = [
-    {
-      title: "Burger King",
-      content: "Content for section 1 goes here.",
-    },
-    {
-      title: "Taco Bell",
-      content: "Content for section 2 goes here.",
-    },
-    {
-      title: "Chili’s",
-      content: "Content for section 3 goes here.",
-    },
-  ];
 
   useEffect(() => {
     if (isCartOpen) {
@@ -71,9 +57,40 @@ const SupplierPromotionDetails = ({
     }
   }, [promotionalDetailsData]);
 
+
+const supplierEndPromotion = useSelector(
+    (state) => state?.supplierEndPromotion
+  );
+
+  const endPromotion = () => {
+    // let payload = {
+    //   promotionId: promotionalDetailsData?._id,
+    // };
+    // dispatch(supplierEndPromotionHandler(payload));
+    setEndPromotionModal(true);
+  };
+
+  // useEffect(() => {
+  //   if (supplierEndPromotion?.data?.statusCode === 200) {
+  //     messageApi.open({
+  //       type: "success",
+  //       content: supplierEndPromotion?.data?.message,
+  //     });
+  //     setIsDetailsOpen(false);
+  //     dispatch(supplierEndPromotionAction.supplierEndPromotionReset());
+  //   } else if (supplierEndPromotion?.data?.statusCode === 400) {
+  //     messageApi.open({
+  //       type: "error",
+  //       content: supplierEndPromotion?.data?.message,
+  //     });
+  //     dispatch(supplierEndPromotionAction.supplierEndPromotionReset());
+  //   }
+  // }, [supplierEndPromotion]);
+
+
   return (
     <>
-      {promotionDetailsSelector?.isLoading && <Loader />}
+      {(promotionDetailsSelector?.isLoading||supplierEndPromotion?.isLoading) && <Loader />}
       {isOpen && <div className="overlay2" onClick={toggleDetails}></div>}
 
       <div className={`rightSidebar rightSidebar2 ${isOpen ? "open" : ""}`}>
@@ -331,10 +348,27 @@ const SupplierPromotionDetails = ({
             </>
             {/* ))} */}
           </div>
-          <div className="deleteBtnfull btn disabled">End Promotion</div>
+          {/* <div className="deleteBtnfull btn" onClick={endPromotion}>End Promotion</div> */}
+          {activeTab === "active" && (
+            <>
+              <div className="divider2"></div>
+              <div className="deleteBtnfull btn" onClick={endPromotion}>
+                Close Promotion
+              </div>
+            </>
+          )}
         </div>
       </div>
       {/* <PromotionCart isOpen={isCartOpen} toggleCart={toggleCart} /> */}
+      {endPromotionModal && (
+        <CommonModal
+          endPromotionModal={endPromotionModal}
+          setEndPromotionModal={setEndPromotionModal}
+          // brandDetails={brandDetails}
+          setIsDetailsOpen={setIsDetailsOpen}
+          promotionalDetailsData={promotionalDetailsData}
+        />
+      )}
     </>
   );
 };

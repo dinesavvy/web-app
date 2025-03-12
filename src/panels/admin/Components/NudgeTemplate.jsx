@@ -93,7 +93,7 @@ const NudgeTemplate = () => {
 
   const handleButtonClick = () => {
     if (fileInputRef.current) {
-      fileInputRef.current.click(); // Trigger the file input click
+      fileInputRef.current.click(); 
     }
   };
 

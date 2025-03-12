@@ -24,6 +24,9 @@ const Promotions = () => {
   const navigate = useNavigate();
 
   const adminPromotionList = useSelector((state) => state?.adminPromotion);
+  const adminEndPromotionSelector = useSelector(
+      (state) => state?.adminEndPromotion
+    );
 
   const handleSearchChange = (value) => {
     setSearchString(value);
@@ -76,7 +79,7 @@ const Promotions = () => {
       isActive: activeTab !== "active" ? false : true,
     };
     dispatch(adminPromotionListHandler(payload));
-  }, [pagination, searchString, activeTab]);
+  }, [pagination, searchString, activeTab,adminEndPromotionSelector]);
 
   return (
     <>
@@ -367,7 +370,7 @@ const Promotions = () => {
                     start + adminPromotionList?.data?.data?.records?.length - 1,
                     adminPromotionList?.data?.data?.recordsCount
                   );
-                  return `Showing ${start} to ${end} of ${adminPromotionList?.data?.data?.recordsCount} Suppliers`;
+                  return `Showing ${start} to ${end} of ${adminPromotionList?.data?.data?.recordsCount} Promotions`;
                 })()}
               </div>
               <Pagination
@@ -384,6 +387,8 @@ const Promotions = () => {
         isOpen={isDetailsOpen}
         toggleDetails={toggleDetails}
         promotionalDetailsData={promotionalDetailsData}
+        setIsDetailsOpen = {setIsDetailsOpen}
+        activeTab={activeTab}
       />
     </>
   );

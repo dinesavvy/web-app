@@ -37,6 +37,7 @@ import updateBrandSlice from "../action/updateBrand";
 import adminPromotionSlice from "../action/adminPromotion";
 import createPromotionSlice from "../action/createPromotion";
 import promotionDetailsSlice from "../action/promotionDetails";
+import adminEndPromotionSlice from "../action/adminEndPromotion";
 
 const store = configureStore({
   reducer: {
@@ -79,6 +80,7 @@ const store = configureStore({
     adminPromotion: adminPromotionSlice,
     createPromotion: createPromotionSlice,
     promotionDetails: promotionDetailsSlice,
+    adminEndPromotion: adminEndPromotionSlice,
   },
 });
 

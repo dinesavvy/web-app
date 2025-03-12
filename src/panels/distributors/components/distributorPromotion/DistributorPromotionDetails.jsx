@@ -1,48 +1,34 @@
 import React, { useEffect, useState } from "react";
 import closeRightSidebar from "../../../../assets/images/closeRightSidebar.svg";
 import arrowUp from "../../../../assets/images/arrow-up.svg";
-import olive from "../../../../assets/images/olive.png";
+// import olive from "../../../../assets/images/olive.png";
 // import PromotionCart from "./PromotionCart";
 import moment from "moment";
 import { promotionDetailsHandler } from "../../../../redux/action/promotionDetails";
 import { useDispatch, useSelector } from "react-redux";
 import Loader from "../../../../common/Loader/Loader";
 import { distributorPromotionDetailsHandler } from "../../../../redux/action/distributorsAction/distributorPromotionDetails";
+import { distributorEndPromotionHandler,distributorEndPromotionAction } from "../../../../redux/action/distributorsAction/distributorEndPromotion";
 import noImageFound from "../../../../assets/images/noImageFound.png";
+import CommonModal from "../../../admin/Components/CommonModal";
 
 const DistributorPromotionDetails = ({
   isOpen,
   toggleDetails,
   promotionalDetailsData,
+  setIsDetailsOpen,
+  activeTab
 }) => {
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [openIndex, setOpenIndex] = useState(null);
   const [addFund, setAddFund] = useState(false);
+  const [endPromotionModal, setEndPromotionModal] = useState(false);
 
   const promotionDetailsSelector = useSelector(
     (state) => state?.distributorPromotionDetails
   );
 
   const dispatch = useDispatch();
-
-  const toggleAccordion = (index) => {
-    setOpenIndex(index === openIndex ? null : index);
-  };
-
-  const items = [
-    {
-      title: "Burger King",
-      content: "Content for section 1 goes here.",
-    },
-    {
-      title: "Taco Bell",
-      content: "Content for section 2 goes here.",
-    },
-    {
-      title: "Chili’s",
-      content: "Content for section 3 goes here.",
-    },
-  ];
 
   useEffect(() => {
     if (isCartOpen) {
@@ -70,9 +56,22 @@ const DistributorPromotionDetails = ({
     }
   }, [promotionalDetailsData]);
 
+
+  const distributorEndPromotion = useSelector(
+    (state) => state?.distributorEndPromotion
+  );
+
+  const endPromotion = () => {
+    // let payload = {
+    //   promotionId: promotionalDetailsData?._id,
+    // };
+    // dispatch(distributorEndPromotionHandler(payload));
+    setEndPromotionModal(true);
+  };
+  
   return (
     <>
-      {promotionDetailsSelector?.isLoading && <Loader />}
+      {(promotionDetailsSelector?.isLoading ||distributorEndPromotion?.isLoading) && <Loader />}
       {isOpen && <div className="overlay2" onClick={toggleDetails}></div>}
 
       <div className={`rightSidebar rightSidebar2 ${isOpen ? "open" : ""}`}>
@@ -321,10 +320,27 @@ const DistributorPromotionDetails = ({
             </>
             {/* ))} */}
           </div>
-          <div className="deleteBtnfull btn disabled">End Promotion</div>
+          {/* <div className="deleteBtnfull btn" onClick = {endPromotion}>End Promotion</div> */}
+          {activeTab === "active" && (
+            <>
+              <div className="divider2"></div>
+              <div className="deleteBtnfull btn" onClick={endPromotion}>
+                Close Promotion
+              </div>
+            </>
+          )}
         </div>
       </div>
       {/* <PromotionCart isOpen={isCartOpen} toggleCart={toggleCart} /> */}
+      {endPromotionModal && (
+        <CommonModal
+          endPromotionModal={endPromotionModal}
+          setEndPromotionModal={setEndPromotionModal}
+          // brandDetails={brandDetails}
+          setIsDetailsOpen={setIsDetailsOpen}
+          promotionalDetailsData={promotionalDetailsData}
+        />
+      )}
     </>
   );
 };

@@ -23,6 +23,10 @@ const SupplierPromotionList = () => {
   const selectRef = useRef(null);
   const navigate = useNavigate();
 
+  const supplierEndPromotion = useSelector(
+      (state) => state?.supplierEndPromotion
+    );
+
   const supplierPromotionList = useSelector(
     (state) => state?.supplierPromotionList
   );
@@ -78,7 +82,7 @@ const SupplierPromotionList = () => {
       isActive: activeTab !== "active" ? false : true,
     };
     dispatch(supplierPromotionListHandler(payload));
-  }, [pagination, searchString, activeTab]);
+  }, [pagination, searchString, activeTab,supplierEndPromotion]);
 
   return (
     <>
@@ -267,6 +271,8 @@ const SupplierPromotionList = () => {
         isOpen={isDetailsOpen}
         toggleDetails={toggleDetails}
         promotionalDetailsData={promotionalDetailsData}
+        setIsDetailsOpen={setIsDetailsOpen}
+        activeTab={activeTab}
       />
     </>
   );

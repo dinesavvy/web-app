@@ -2,48 +2,41 @@ import React, { useEffect, useState } from "react";
 import closeRightSidebar from "../../../assets/images/closeRightSidebar.svg";
 import arrowUp from "../../../assets/images/arrow-up.svg";
 import coke from "../../../assets/images/coke.svg";
-import olive from "../../../assets/images/olive.png";
-import restaurantCard from "../../../assets/images/restaurantCard.png";
+// import olive from "../../../assets/images/olive.png";
+// import restaurantCard from "../../../assets/images/restaurantCard.png";
 import PromotionCart from "./PromotionCart";
 import moment from "moment";
 import { promotionDetailsHandler } from "../../../redux/action/promotionDetails";
 import { useDispatch, useSelector } from "react-redux";
 import Loader from "../../../common/Loader/Loader";
 import noImageFound from "../../../assets/images/noImageFound.png";
+// import {
+//   adminEndPromotionAction,
+//   adminEndPromotionHandler,
+// } from "../../../redux/action/adminEndPromotion";
+// import { useCommonMessage } from "../../../common/CommonMessage";
+import CommonModal from "./CommonModal";
 
 const PromotionDetails = ({
   isOpen,
   toggleDetails,
   promotionalDetailsData,
+  setIsDetailsOpen,
+  activeTab,
 }) => {
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [openIndex, setOpenIndex] = useState(false);
   const [addFund, setAddFund] = useState(false);
+  const [endPromotionModal, setEndPromotionModal] = useState(false);
 
   const promotionDetailsSelector = useSelector(
     (state) => state?.promotionDetails
   );
+  const adminEndPromotionSelector = useSelector(
+    (state) => state?.adminEndPromotion
+  );
 
   const dispatch = useDispatch();
-
-  const toggleAccordion = (index) => {
-    setOpenIndex(index === openIndex ? null : index);
-  };
-
-  const items = [
-    {
-      title: "Burger King",
-      content: "Content for section 1 goes here.",
-    },
-    {
-      title: "Taco Bell",
-      content: "Content for section 2 goes here.",
-    },
-    {
-      title: "Chili’s",
-      content: "Content for section 3 goes here.",
-    },
-  ];
 
   useEffect(() => {
     if (isCartOpen) {
@@ -71,9 +64,18 @@ const PromotionDetails = ({
     }
   }, [promotionalDetailsData]);
 
+  const endPromotion = () => {
+    // let payload = {
+    //   promotionId: promotionalDetailsData?._id,
+    // };
+    // dispatch(adminEndPromotionHandler(payload));
+    setEndPromotionModal(true);
+  };
+
   return (
     <>
-      {promotionDetailsSelector?.isLoading && <Loader />}
+      {(promotionDetailsSelector?.isLoading ||
+        adminEndPromotionSelector?.isLoading) && <Loader />}
       {isOpen && <div className="overlay2" onClick={toggleDetails}></div>}
 
       <div className={`rightSidebar rightSidebar2 ${isOpen ? "open" : ""}`}>
@@ -101,7 +103,6 @@ const PromotionDetails = ({
                   ?.imageUrl[0] || coke
               }
               alt={promotionDetailsSelector?.data?.data?.promotionTitle}
-              
             />
           </div>
           <div className="d-flex justify-between align-center gap-10">
@@ -272,11 +273,19 @@ const PromotionDetails = ({
                       className="rangePercentage"
                       // style={{ width: "50%" }}
                       style={{
-                        width: `${promotionDetailsSelector?.data?.data?.redemptionPercentage || 0}%`,
+                        width: `${
+                          promotionDetailsSelector?.data?.data
+                            ?.redemptionPercentage || 0
+                        }%`,
                       }}
                     ></div>
-                    <div className="percentageAbsolute fs-14 fw-500">{promotionDetailsSelector?.data?.data
-                            ?.redemptionPercentage}%</div>
+                    <div className="percentageAbsolute fs-14 fw-500">
+                      {
+                        promotionDetailsSelector?.data?.data
+                          ?.redemptionPercentage
+                      }
+                      %
+                    </div>
                   </div>
                   <div className="divider2"></div>
                   {addFund === true ? (
@@ -318,14 +327,29 @@ const PromotionDetails = ({
                   )}
                 </div>
               </div>
-              <div className="divider2"></div>
             </>
             {/* ))} */}
           </div>
-          <div className="deleteBtnfull btn disabled">End Promotion</div>
+          {activeTab === "active" && (
+            <>
+              <div className="divider2"></div>
+              <div className="deleteBtnfull btn" onClick={endPromotion}>
+                Close Promotion
+              </div>
+            </>
+          )}
         </div>
       </div>
       <PromotionCart isOpen={isCartOpen} toggleCart={toggleCart} />
+      {endPromotionModal && (
+        <CommonModal
+          endPromotionModal={endPromotionModal}
+          setEndPromotionModal={setEndPromotionModal}
+          // brandDetails={brandDetails}
+          setIsDetailsOpen={setIsDetailsOpen}
+          promotionalDetailsData={promotionalDetailsData}
+        />
+      )}
     </>
   );
 };

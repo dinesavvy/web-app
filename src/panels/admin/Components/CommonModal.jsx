@@ -33,7 +33,19 @@ import {
   removeBrandSupplierAction,
   removeBrandSupplierHandler,
 } from "../../../redux/action/supplierActions/removeBrandSupplier";
-import { deleteDistributorBrandAction, deleteDistributorBrandHandler } from "../../../redux/action/distributorsAction/deleteDistributorBrand";
+import {
+  deleteDistributorBrandAction,
+  deleteDistributorBrandHandler,
+} from "../../../redux/action/distributorsAction/deleteDistributorBrand";
+import {
+  adminEndPromotionAction,
+  adminEndPromotionHandler,
+} from "../../../redux/action/adminEndPromotion";
+import {
+  supplierEndPromotionAction,
+  supplierEndPromotionHandler,
+} from "../../../redux/action/supplierActions/supplierEndPromotion";
+import { distributorEndPromotionAction, distributorEndPromotionHandler } from "../../../redux/action/distributorsAction/distributorEndPromotion";
 
 const CommonModal = ({
   modal2Open,
@@ -50,6 +62,9 @@ const CommonModal = ({
   setDeleteModal,
   brandDetails,
   setIsDetailsOpen,
+  endPromotionModal,
+  setEndPromotionModal,
+  promotionalDetailsData,
 }) => {
   const messageApi = useCommonMessage();
   const getMerchantId = localStorage.getItem("merchantId");
@@ -60,6 +75,15 @@ const CommonModal = ({
   const getSupplierLogin = localStorage.getItem("supplierLogin");
   const getAdminLogin = localStorage.getItem("adminLogin");
   const getDistriutorLogin = localStorage.getItem("distributorLogin");
+  const adminEndPromotionSelector = useSelector(
+    (state) => state?.adminEndPromotion
+  );
+  const distributorEndPromotion = useSelector(
+      (state) => state?.distributorEndPromotion
+    );
+  const supplierEndPromotion = useSelector(
+    (state) => state?.supplierEndPromotion
+  );
 
   let getLocationDetails = location?.pathname;
   const getBrandListSelector = useSelector((state) => state?.supplierBrandList);
@@ -126,6 +150,24 @@ const CommonModal = ({
         brandId: brandDetails?._id,
       };
       dispatch(deleteDistributorBrandHandler(payload));
+    }
+    if (endPromotionModal && getAdminLogin) {
+      let payload = {
+        promotionId: promotionalDetailsData?._id,
+      };
+      dispatch(adminEndPromotionHandler(payload));
+    }
+    if (endPromotionModal && getSupplierLogin) {
+      let payload = {
+        promotionId: promotionalDetailsData?._id,
+      };
+      dispatch(supplierEndPromotionHandler(payload));
+    }
+    if (endPromotionModal && getDistriutorLogin) {
+       let payload = {
+      promotionId: promotionalDetailsData?._id,
+    };
+    dispatch(distributorEndPromotionHandler(payload));
     }
   };
 
@@ -225,6 +267,63 @@ const CommonModal = ({
     }
   }, [deleteDistributorBrand]);
 
+  // adminEndPromotionSelector
+  useEffect(() => {
+    if (adminEndPromotionSelector?.data?.statusCode === 200) {
+      messageApi.open({
+        type: "success",
+        content: adminEndPromotionSelector?.data?.message,
+      });
+      setIsDetailsOpen(false);
+      setEndPromotionModal(false);
+      dispatch(adminEndPromotionAction.adminEndPromotionReset());
+    } else if (adminEndPromotionSelector?.data?.statusCode === 400) {
+      messageApi.open({
+        type: "error",
+        content: adminEndPromotionSelector?.data?.message,
+      });
+      dispatch(adminEndPromotionAction.adminEndPromotionReset());
+    }
+  }, [adminEndPromotionSelector]);
+
+  useEffect(() => {
+    if (supplierEndPromotion?.data?.statusCode === 200) {
+      messageApi.open({
+        type: "success",
+        content: supplierEndPromotion?.data?.message,
+      });
+      setIsDetailsOpen(false);
+      setEndPromotionModal(false);
+      dispatch(supplierEndPromotionAction.supplierEndPromotionReset());
+    } else if (supplierEndPromotion?.data?.statusCode === 400) {
+      messageApi.open({
+        type: "error",
+        content: supplierEndPromotion?.data?.message,
+      });
+      dispatch(supplierEndPromotionAction.supplierEndPromotionReset());
+    }
+  }, [supplierEndPromotion]);
+
+
+  useEffect(() => {
+      if (distributorEndPromotion?.data?.statusCode === 200) {
+        messageApi.open({
+          type: "success",
+          content: distributorEndPromotion?.data?.message,
+        });
+        setIsDetailsOpen(false);
+        setEndPromotionModal(false);
+        dispatch(distributorEndPromotionAction.distributorEndPromotionReset());
+      } else if (distributorEndPromotion?.data?.statusCode === 400) {
+        messageApi.open({
+          type: "error",
+          content: distributorEndPromotion?.data?.message,
+        });
+        dispatch(distributorEndPromotionAction.distributorEndPromotionReset());
+      }
+    }, [distributorEndPromotion]);
+  
+
   return (
     <>
       {(removeTeamMemberSelector?.isLoading ||
@@ -234,40 +333,48 @@ const CommonModal = ({
         deleteDistributorBrand?.isLoading) && <Loader />}
       <Modal
         centered
-        open={modal2Open || deleteModal}
+        open={modal2Open || deleteModal || endPromotionModal}
         onOk={() => {
           if (deleteModal) {
             setDeleteModal(false);
-          } else {
+          } else if (modal2Open) {
             setModal2Open(false);
+          } else if (endPromotionModal) {
+            setEndPromotionModal(false);
           }
         }}
         onCancel={() => {
           if (deleteModal) {
             setDeleteModal(false);
-          } else {
+          } else if (modal2Open) {
             setModal2Open(false);
+          } else if (endPromotionModal) {
+            setEndPromotionModal(false);
           }
         }}
         closable={false}
         footer={null}
       >
-        <div className="modalbg">
-          <img src={modalbg} alt="" />
-        </div>
+        {!endPromotionModal && (
+          <>
+            <div className="modalbg">
+              <img src={modalbg} alt="" />
+            </div>
 
-        <div className="modalImage mb-30">
-          <img
-            src={
-              deleteModal
-                ? deleteModalSVG
-                : !showLogoutModal
-                ? modalImage
-                : logoutModal
-            }
-            alt=""
-          />
-        </div>
+            <div className="modalImage mb-30">
+              <img
+                src={
+                  deleteModal
+                    ? deleteModalSVG
+                    : !showLogoutModal
+                    ? modalImage
+                    : logoutModal
+                }
+                alt=""
+              />
+            </div>
+          </>
+        )}
 
         {!showLogoutModal ? (
           <div className="text-center mb-30">
@@ -280,9 +387,10 @@ const CommonModal = ({
                   getLocationDetails === "/supplier/brands" ||
                   getLocationDetails === "/distributors/brands"
                 ? "Remove Brands"
+                : getLocationDetails === "/admin/promotions" ||getLocationDetails === "/supplier/promotion" || getLocationDetails === "/distributors/promotion"
+                ? "End Promotion?"
                 : "Delete Team Member"}
             </div>
-
             {deleteModal && (
               <div className="fs-18">
                 Are you sure you want to remove{" "}
@@ -295,7 +403,18 @@ const CommonModal = ({
                 </span>{" "}
               </div>
             )}
-            {!deleteModal && (
+
+            {endPromotionModal && (
+              <div className="fs-18">
+                {/* Are you sure you want to remove{" "} */}
+                Are you sure you want this nudge? This will remove it from all
+                your customers
+                {/* <span className="fw-600">
+                </span>{" "} */}
+              </div>
+            )}
+
+            {!deleteModal && !endPromotionModal && (
               <div className="fs-18">
                 Are you sure you want to remove{" "}
                 <span className="fw-600">
@@ -334,8 +453,10 @@ const CommonModal = ({
               onClick={() => {
                 if (deleteModal) {
                   setDeleteModal(false);
-                } else {
+                } else if (modal2Open) {
                   setModal2Open(false);
+                } else if (endPromotionModal) {
+                  setEndPromotionModal(false);
                 }
               }}
             >
