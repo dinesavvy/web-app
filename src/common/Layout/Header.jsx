@@ -13,7 +13,7 @@ import { useBusiness } from "./BusinessContext";
 const Header = ({ handleTrigger }) => {
   const [isModalOpen, setModalOpen] = useState(false);
   const dispatch = useDispatch();
-  // const { selectedBusiness, setSelectedBusiness } = useBusiness();
+  const { selectedBusiness, setSelectedBusiness } = useBusiness();
 
   const location = useLocation();
   const getRestaurantName = localStorage.getItem("restaurantName");
@@ -48,7 +48,7 @@ const Header = ({ handleTrigger }) => {
 
   // Handle Selection
   const handleSelect = (item) => {
-    // setSelectedBusiness(item);
+    setSelectedBusiness(item);
     window.location.reload("/merchant/dashboard");
     setModalOpen(false);
   };
@@ -112,7 +112,7 @@ const Header = ({ handleTrigger }) => {
           {/* {getMerchantBusinessSelector!==null && ( */}
           {/* {businessListSelector?.data?.data?.records?.length > 0 && localStorage.getItem("merchantLogin")===true &&selectedBusiness !==undefined &&  ( */}
 
-          {/* <div
+          <div
               className="d-flex selectCommon cursor-pointer align-center gap-6 "
               onClick={toggleModal}
             >
@@ -127,7 +127,7 @@ const Header = ({ handleTrigger }) => {
               <div className="h16">
                 <img src={arrowRight} alt="arrowRight" />
               </div> 
-            </div>  */}
+            </div> 
           {/* )}  */}
           {/* )}  */}
           {/* Modal Component */}
@@ -145,7 +145,7 @@ const Header = ({ handleTrigger }) => {
         items={items}
         // selectedItem={selectedItem}
         businessListSelector={businessListSelector}
-        // selectedBusiness={selectedBusiness}
+        selectedBusiness={selectedBusiness}
       />
       {/* )}   */}
     </>
