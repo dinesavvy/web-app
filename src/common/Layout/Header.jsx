@@ -86,7 +86,8 @@ const Header = ({ handleTrigger }) => {
     "/distributors/brands": "Brands",
     "/distributors/promotion": "Promotions",
     "/distributors/add-promotions": "Create single promotions",
-    "/distributors/dashboard": "Dashoard",
+    "/distributors/dashboard": "Distributor Dashboard",
+    "/supplier/dashboard":"Supplier Dashboard"
   };
 
   return (

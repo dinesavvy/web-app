@@ -573,7 +573,7 @@ const AddPromotion = () => {
                     // validationSchema={validationSchema}
                     onSubmit={handleSubmit}
                   >
-                    {({ values,setFieldValue }) => (
+                    {({ values, setFieldValue }) => (
                       <Form>
                         {droppedMerchants?.length > 0 &&
                           droppedMerchants.map(
@@ -706,7 +706,7 @@ const AddPromotion = () => {
                                         //   }
                                         // }}
                                       /> */}
-                                        <Field
+                                        {/* <Field
                                           name={`merchants.${indexDroppedMerchant}.msrp`}
                                         >
                                           {({ field, form }) => (
@@ -742,7 +742,66 @@ const AddPromotion = () => {
                                               }}
                                             />
                                           )}
+                                        </Field> */}
+
+                                        <Field
+                                          name={`merchants.${indexDroppedMerchant}.msrp`}
+                                        >
+                                          {({ field, form }) => (
+                                            <input
+                                              {...field}
+                                              type="text"
+                                              placeholder="Enter Price"
+                                              autoComplete="off"
+                                              maxLength={5}
+                                              onChange={(e) => {
+                                                const msrpValue =
+                                                  e.target.value;
+
+                                                // Allow only numbers and one decimal point
+                                                if (
+                                                  /^\d*\.?\d*$/.test(msrpValue)
+                                                ) {
+                                                  form.setFieldValue(
+                                                    `merchants.${indexDroppedMerchant}.msrp`,
+                                                    msrpValue
+                                                  );
+
+                                                  const calculatedQuantity = (
+                                                    droppedBrand?.selectedBrands?.brandItem?.reduce(
+                                                      (sum, item) =>
+                                                        sum +
+                                                        (item?.mSRP *
+                                                          item?.quantity || 0),
+                                                      0
+                                                    ) / msrpValue
+                                                  )?.toFixed(2);
+
+                                                  form.setFieldValue(
+                                                    `merchants.${indexDroppedMerchant}.quantity`,
+                                                    msrpValue
+                                                      ? calculatedQuantity
+                                                      : droppedBrand?.selectedBrands?.brandItem?.reduce(
+                                                          (sum, item) =>
+                                                            sum +
+                                                            (item?.mSRP *
+                                                              item?.quantity ||
+                                                              0),
+                                                          0
+                                                        ) /
+                                                          droppedBrand?.selectedBrands?.brandItem?.reduce(
+                                                            (sum, item) =>
+                                                              sum +
+                                                              (item?.mSRP || 0),
+                                                            0
+                                                          )
+                                                  );
+                                                }
+                                              }}
+                                            />
+                                          )}
                                         </Field>
+
                                         {/* <ErrorMessage
                                           name={`merchants.${indexDroppedMerchant}.msrp`}
                                           component="div"

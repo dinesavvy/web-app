@@ -155,7 +155,7 @@ const SupplierDashboard = () => {
                   }
                   chartPromotionImage={chartnudge}
                   buttonText="See Nudges"
-                  onButtonClick={() => navigate("/merchant/nudges")}
+                  // onButtonClick={() => navigate("/merchant/nudges")}
                   middleComponent={
                     // <BarChart
                     //   labels={["Bar 1", "Bar 2"]}
@@ -178,7 +178,7 @@ const SupplierDashboard = () => {
                   count={
                     79
                   }
-                  onButtonClick={() => navigate("/merchant/followers")}
+                  // onButtonClick={() => navigate("/merchant/followers")}
                   chartPromotionImage={chartfollower}
                   buttonText="See Followers"
                   middleComponent={
