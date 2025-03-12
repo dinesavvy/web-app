@@ -166,7 +166,7 @@ const Followers = () => {
     };
     dispatch(businessFollowerListHandler(payload));
   }, [searchQuery]);
-  
+
   return (
     <>
       {businessListFollowerListSelector?.isLoading && <Loader />}
@@ -295,15 +295,23 @@ const Followers = () => {
                       <div className="divider2"></div>
                       <div className="fs-14 mb-6">Preferences</div>
                       <div className="flexTag mb-20">
-                        {item?.customerPreferenceData?.map((item, index) => {
-                          return item?.filterData?.length > 0 ? (
-                            item.filterData.map((item1, subIndex) => (
-                              <div key={`${index}-${subIndex}`}>{item1}</div>
-                            ))
-                          ) : (
-                            <div key={index}className="noDataFound">No data available</div>
-                          );
-                        })}
+                        {item?.customerPreferenceData?.length > 0 ? (
+                          item?.customerPreferenceData?.map((itemData, index) =>
+                            itemData?.filterData?.length > 0 ? (
+                              itemData?.filterData?.map(
+                                (filteredItem, filteredIndex) => (
+                                  <div key={`${index}-${filteredIndex}`}>
+                                    {filteredItem}
+                                  </div>
+                                )
+                              )
+                            ) : (
+                              <div key={index}>No data available</div>
+                            )
+                          )
+                        ) : (
+                          <div>No data available</div>
+                        )}
                       </div>
                       <div
                         className="btn btnSecondary"

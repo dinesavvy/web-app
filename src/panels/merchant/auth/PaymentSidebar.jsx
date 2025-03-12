@@ -8,15 +8,15 @@ import {
   businessAddNudgeCreditHandler,
 } from "../../../redux/action/businessAction/businessAddNudgeCredit";
 import { useCommonMessage } from "../../../common/CommonMessage";
-import {loadStripe} from '@stripe/stripe-js';
-import {
-  PaymentElement,
-  Elements,
-  useStripe,
-  useElements,
-} from '@stripe/react-stripe-js';
+// import {loadStripe} from '@stripe/stripe-js';
+// import {
+//   PaymentElement,
+//   Elements,
+//   useStripe,
+//   useElements,
+// } from '@stripe/react-stripe-js';
 
-const stripePromise = loadStripe("pk_test_6pRNASCoBOKtIshFeQd4XMUh");
+// const stripePromise = loadStripe("pk_test_6pRNASCoBOKtIshFeQd4XMUh");
 
 const PaymentSidebar = ({
   isPaymentSidebar,
@@ -44,25 +44,25 @@ const PaymentSidebar = ({
         type: "success",
         content: businessAddNudgeCreditSelector?.data?.message,
       });
-      const processPayment = async () => {
-        const clientSecret = businessAddNudgeCreditSelector?.data?.data?.clientSecret
-        const stripe = await stripePromise;
+      // const processPayment = async () => {
+      //   const clientSecret = businessAddNudgeCreditSelector?.data?.data?.clientSecret
+      //   const stripe = await stripePromise;
   
-        if (!stripe || !clientSecret) return;
+      //   if (!stripe || !clientSecret) return;
   
-        const { error } = await stripe.confirmPayment({
-          clientSecret,
-          confirmParams: {
-            return_url: "https://www.google.com/", // Redirect URL after payment
-          },
-        });
+      //   const { error } = await stripe.confirmPayment({
+      //     clientSecret,
+      //     confirmParams: {
+      //       return_url: "https://www.google.com/", // Redirect URL after payment
+      //     },
+      //   });
   
-        if (error) {
-          console.error("Payment error:", error.message);
-        }
-      };
+      //   if (error) {
+      //     console.error("Payment error:", error.message);
+      //   }
+      // };
   
-      processPayment();
+      // processPayment();
       dispatch(businessAddNudgeCreditAction.businessAddNudgCreditReset());
     } else if (businessAddNudgeCreditSelector?.message) {
       messageApi.open({

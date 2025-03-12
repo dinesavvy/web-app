@@ -27,6 +27,7 @@ import {
   businessNudgeAnalyticHandler,
   getNudgeAnalyticHandler,
 } from "../../../redux/action/businessAction/businessNudgeAnalytic";
+import noImageFound from "../../../assets/images/noImageFound.png";
 
 const Nudges = () => {
   const [tempState, setTempState] = useState([]);
@@ -430,7 +431,8 @@ const Nudges = () => {
                       </div> */}
                           <div className="text-center nudgeCardImage180">
                             <img
-                              src={item?.image || dish2}
+                              src={noImageFound}
+                              // src = {item?.image}
                               alt=""
                               className="h-100 w-100"
                             />
@@ -445,7 +447,8 @@ const Nudges = () => {
                                 (itemFollower, index) => (
                                   <div className="imageCollaps" key={index}>
                                     <img
-                                      src={itemFollower?.photoURL}
+                                      // src={itemFollower?.photoURL}
+                                      src = {noImageFound}
                                       alt={item?.title}
                                       className="w-100 h-100"
                                     />
