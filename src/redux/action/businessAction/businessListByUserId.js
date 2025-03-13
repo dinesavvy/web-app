@@ -22,12 +22,13 @@ const businessListByUserIdSlice = createSlice({
     // },
     businessListByUserIdSuccess(state, action) {
       state.isLoading = false;
-      const { nudgeType, data } = action.payload;
-      if (nudgeType === "Accepted") {
-        state.acceptedList = data;
-      } else if (nudgeType === "Denied") {
-        state.deniedList = data;
-      }
+      state.data = action.payload;
+      // const { nudgeType, data } = action.payload;
+      // if (nudgeType === "Accepted") {
+      //   state.acceptedList = data;
+      // } else if (nudgeType === "Denied") {
+      //   state.deniedList = data;
+      // }
       state.message = "";
     },
     businessListByUserIdFailure(state, action) {

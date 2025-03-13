@@ -333,6 +333,7 @@ const AddPromotion = () => {
                       <>
                         {merchantsListSelector?.data?.data?.records?.map(
                           (item, index) => {
+                            console.log(item,"item")
                             return (
                               <>
                                 <div

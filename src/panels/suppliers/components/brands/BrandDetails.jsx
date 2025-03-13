@@ -6,7 +6,12 @@ import { useNavigate } from "react-router-dom";
 import noImageFound from "../../../../assets/images/noImageFound.png";
 import CommonModal from "../../../admin/Components/CommonModal";
 
-const BrandDetails = ({ isOpen, toggleDetails, brandDetails,setIsDetailsOpen }) => {
+const BrandDetails = ({
+  isOpen,
+  toggleDetails,
+  brandDetails,
+  setIsDetailsOpen,
+}) => {
   const [deleteModal, setDeleteModal] = useState(false);
   const navigate = useNavigate();
 
@@ -72,7 +77,8 @@ const BrandDetails = ({ isOpen, toggleDetails, brandDetails,setIsDetailsOpen }) 
           ) : (
             <div className="noDataFound">No data available</div>
           )}
-          <div className="d-flex align-center gap-10">
+
+          {/* <div className="d-flex align-center gap-10">
             <div
               className="btn btnSecondary w-100 gap-8"
               onClick={() =>
@@ -85,6 +91,30 @@ const BrandDetails = ({ isOpen, toggleDetails, brandDetails,setIsDetailsOpen }) 
               Edit
             </div>
             <div className="deleteBtn btn" onClick={deleteBrand}>
+              <img src={deleteMember} alt="" />
+            </div>
+          </div> */}
+          <div className="d-flex align-center gap-10">
+            <div
+              className={`btn btnSecondary w-100 gap-8 ${
+                brandDetails?.brandType === 1 ? "disabled" : ""
+              }`}
+              onClick={() =>
+                brandDetails?.brandType !== 1 &&
+                navigate("/supplier/addBrand", {
+                  state: { brandDetails: brandDetails },
+                })
+              }
+            >
+              <img src={editMember} alt="" />
+              Edit
+            </div>
+            <div
+              className={`deleteBtn btn ${
+                brandDetails?.brandType === 1 ? "disabled" : ""
+              }`}
+              onClick={brandDetails?.brandType !== 1 ? deleteBrand : undefined}
+            >
               <img src={deleteMember} alt="" />
             </div>
           </div>

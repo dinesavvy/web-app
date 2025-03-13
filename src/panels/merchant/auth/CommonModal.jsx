@@ -1,6 +1,7 @@
 import React from "react";
 import modalbg from "../../../assets/images/modalbg.png";
 import { Modal } from "antd";
+import { useDispatch } from "react-redux";
 
 const CommonModal = ({
   modal2Open,
@@ -8,10 +9,14 @@ const CommonModal = ({
   modalImage,
   removeTeamMember,
   isSidebarOpen,
-  setIsSidebarOpen
+  setIsSidebarOpen,
 }) => {
+  const dispatch = useDispatch();
 
 
+  // const commonOnclick = () =>{
+
+  // }
 
   return (
     <>
@@ -32,15 +37,23 @@ const CommonModal = ({
         <div className="text-center mb-30">
           <div className="fs-26 fw-700 mb-15">End Nudge?</div>
           <div className="fs-18">
-          Are you sure you want this nudge? This will remove it from all your customers
+            Are you sure you want this nudge? This will remove it from all your
+            customers
           </div>
         </div>
         <div className="div d-flex align-center gap-16">
-          <div className="btn btnSecondary w-100" onClick={()=>{setIsSidebarOpen(false);setModal2Open(false)}}>
-          Yes
+          <div
+            className="btn btnSecondary w-100"
+            // onClick={() => {
+            //   setIsSidebarOpen(false);
+            //   setModal2Open(false);
+            // }}
+            // onClick={commonOnclick}
+          >
+            Yes
           </div>
           <div className="btn w-100" onClick={() => setModal2Open(false)}>
-          Cancel
+            Cancel
           </div>
         </div>
       </Modal>

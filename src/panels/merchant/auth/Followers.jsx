@@ -50,6 +50,7 @@ const Followers = () => {
       const matchedBusiness = businessListSelector?.data?.data?.records?.find(
         (element) => element?._id === selectedBusiness?._id
       );
+      console.log(businessListSelector,"businessListSelector")
 
       if (matchedBusiness) {
         setTempState(matchedBusiness);
@@ -166,6 +167,8 @@ const Followers = () => {
     };
     dispatch(businessFollowerListHandler(payload));
   }, [searchQuery]);
+
+  console.log(tempState,"tempState?.roleData?.permissions?.viewFollowers")
 
   return (
     <>

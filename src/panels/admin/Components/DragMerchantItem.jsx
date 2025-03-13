@@ -37,6 +37,10 @@ const DragMerchantItem = ({ id, name, selectedMerchants, onClick, items }) => {
         />
       </div>
       <div className="fs-14">
+      <div className="d-flex gap-4 mb-10">
+          <div className="w-80">Restaurant:</div>
+          <div className="fw-700">{items?.name}</div>
+        </div>
         <div className="d-flex gap-4 mb-10">
           <div className="w-80">Followers:</div>
           <div className="fw-700">{items?.followerCount}</div>

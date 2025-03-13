@@ -1,7 +1,7 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import closeRightSidebar from "../../../assets/images/closeRightSidebar.svg";
 import restaurantCard from "../../../assets/images/restaurantCard.png";
-import dish from "../../../assets/images/dish.png";
+// import dish from "../../../assets/images/dish.png";
 // import restaurantCard from "../../../assets/images/restaurantCard.png";
 import Loader from "../../../common/Loader/Loader";
 import moment from "moment";
@@ -11,41 +11,40 @@ import { useDispatch, useSelector } from "react-redux";
 
 const FollowerDetails = ({ isOpen, toggleSidebar, followerDetails }) => {
   const navigate = useNavigate();
+  const [activeTab, setActiveTab] = useState("Redeemed");
 
-  const businessListByUserIdSelectorAccepted = useSelector(
-    (state) => state?.businessListByUserId
-  );
+  const tabs = ["Redeemed", "Accepted", "Declined","Ignored"];
 
-  const businessListByUserIdSelectorDeclined = useSelector(
+
+  const listByUserId = useSelector(
     (state) => state?.businessListByUserId
   );
 
   const dispatch = useDispatch();
 
+
   useEffect(() => {
-    if (followerDetails) {
-      let payloadAccepted = {
-        page: 1,
-        limit: 10,
-        userId: followerDetails?.userId?._id,
-        nudgeType: "Accepted",
+    if (activeTab && followerDetails) {
+      let payload = {
+          page: 1,
+          limit: 10,
+          userId: followerDetails?.userId?._id,
+          nudgeType: 
+              activeTab === "Redeemed" 
+                  ? "Redeemed"
+                  : activeTab === "Accepted"
+                  ? "Accepted"
+                  : activeTab === "Declined"
+                  ? "Denied"
+                  : "Redeemed",
       };
-
-      let payloadDenied = {
-        page: 1,
-        limit: 10,
-        userId: followerDetails?.userId?._id,
-        nudgeType: "Denied",
-      };
-
-      dispatch(businessListByUserIdHandler(payloadAccepted));
-      dispatch(businessListByUserIdHandler(payloadDenied));
-    }
-  }, [followerDetails]);
+      dispatch(businessListByUserIdHandler(payload));
+  }
+  }, [activeTab,followerDetails]);
 
   return (
     <>
-      {/* {businessListByUserIdSelectorAccepted?.isLoading && <Loader />} */}
+      {listByUserId?.isLoading && <Loader />}
       {isOpen && <div className="overlay2" onClick={toggleSidebar}></div>}
       {/* Sidebar */}
       <div className={`rightSidebar ${isOpen ? "open" : ""}`}>
@@ -86,7 +85,7 @@ const FollowerDetails = ({ isOpen, toggleSidebar, followerDetails }) => {
             <div>Drinks</div>
             <div>Weight Watchers</div>
             <div>Casual Dining</div> */}
-            {followerDetails?.customerPreferenceData?.map((item, index) => {
+            {/* {followerDetails?.customerPreferenceData?.map((item, index) => {
               return item?.filterData?.length > 0 ? (
                 item.filterData.map((item1, subIndex) => (
                   <div key={`${index}-${subIndex}`}>{item1}</div>
@@ -96,7 +95,20 @@ const FollowerDetails = ({ isOpen, toggleSidebar, followerDetails }) => {
                   No data available
                 </div>
               );
-            })}
+            })} */}
+            {followerDetails?.customerPreferenceData?.length > 0 ? (
+              followerDetails?.customerPreferenceData?.map((itemData, index) =>
+                itemData?.filterData?.length > 0 ? (
+                  itemData?.filterData?.map((filteredItem, filteredIndex) => (
+                    <div key={`${index}-${filteredIndex}`}>{filteredItem}</div>
+                  ))
+                ) : (
+                  <div key={index}>No data available</div>
+                )
+              )
+            ) : (
+              <div>No data available</div>
+            )}
           </div>
           <div className="fs-14 mb-6">What they love</div>
           <div className="flexTagHfull mb-20 fs-14">
@@ -181,10 +193,21 @@ const FollowerDetails = ({ isOpen, toggleSidebar, followerDetails }) => {
           </div> */}
           <div className="overflowx tabContainer  mb-16">
             <div className="d-flex  align-center ">
-              <div className="tabbing fs-16 tabGrey active">Redeemed</div>
+              {/* <div className="tabbing fs-16 tabGrey active">Redeemed</div>
               <div className="tabbing fs-16 tabGrey active">Accepted</div>
               <div className="tabbing fs-16 tabGrey ">Declined</div>
-              <div className="tabbing fs-16 tabGrey ">Ignored</div>
+              <div className="tabbing fs-16 tabGrey ">Ignored</div> */}
+              {tabs.map((tab) => (
+                <div
+                  key={tab}
+                  className={`tabbing fs-16 tabGrey ${
+                    activeTab === tab ? "active" : ""
+                  }`}
+                  onClick={() => setActiveTab(tab)}
+                >
+                  {tab}
+                </div>
+              ))}
             </div>
           </div>
           <div className="tabPanelDetailed">

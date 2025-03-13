@@ -21,6 +21,7 @@ import updateTeamBusinessSlice from "../action/businessAction/updateTeamBusiness
 import businessResendInviteLinkSlice from "../action/businessAction/businessResendInviteLink";
 import nudgeAnalyticSlice from "../action/businessAction/businessNudgeAnalytic";
 import businessAddNudgeCreditSlice from "../action/businessAction/businessAddNudgeCredit";
+import endNudgeSlice from "../action/businessAction/endNudgeSlice"
 
 const store = configureStore({
   reducer: {
@@ -46,6 +47,7 @@ const store = configureStore({
     businessResendInviteLink: businessResendInviteLinkSlice,
     businessNudgeAnalytic: nudgeAnalyticSlice,
     businessAddNudgeCredit: businessAddNudgeCreditSlice,
+    endNudge:endNudgeSlice
   },
 });
 

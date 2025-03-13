@@ -96,7 +96,7 @@ const MerchantList = () => {
                 }`}
                 onClick={() => {
                   if(activeTab === tab.label){
-                    setActiveTab("");
+                    setActiveTab("merchant");
                   }
                 }}
               >

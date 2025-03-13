@@ -74,7 +74,7 @@ const BrandDetails = ({
           ) : (
             <div className="noDataFound">No data available</div>
           )}
-          <div className="d-flex align-center gap-10">
+          {/* <div className="d-flex align-center gap-10">
             <div
               className="btn btnSecondary w-100 gap-8"
               onClick={() =>
@@ -89,7 +89,31 @@ const BrandDetails = ({
             <div className="deleteBtn btn" onClick={deleteBrand}>
               <img src={deleteMember} alt="" />
             </div>
-          </div>
+          </div> */}
+          <div className="d-flex align-center gap-10">
+                      <div
+                        className={`btn btnSecondary w-100 gap-8 ${
+                          brandDetails?.brandType === 1 ? "disabled" : ""
+                        }`}
+                        onClick={() =>
+                          brandDetails?.brandType !== 1 &&
+                          navigate("/distributors/add-distributor-brands", {
+                            state: { brandDetails: brandDetails },
+                          })
+                        }
+                      >
+                        <img src={editMember} alt="" />
+                        Edit
+                      </div>
+                      <div
+                        className={`deleteBtn btn ${
+                          brandDetails?.brandType === 1 ? "disabled" : ""
+                        }`}
+                        onClick={brandDetails?.brandType !== 1 ? deleteBrand : undefined}
+                      >
+                        <img src={deleteMember} alt="" />
+                      </div>
+                    </div>
         </div>
       </div>
       {deleteModal && (
