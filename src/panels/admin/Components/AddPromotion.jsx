@@ -45,7 +45,7 @@ const AddPromotion = () => {
     promotionTitle: "",
     msrp: "",
   });
-
+  const [errorMessage, setErrorMessage] = useState("");
   const [mercahnts, setMercahnts] = useState([]);
   const [droppedMerchants, setDroppedMerchants] = useState([]);
   const [selectedMerchants, setSelectedMerchants] = useState([]);
@@ -190,7 +190,7 @@ const AddPromotion = () => {
   };
 
   const handleSubmit = (values) => {
-    if (validateDates()) {
+    if (validateDates() && !errorMessage) {
       let payload = {
         promotionTitle: promotionTitle,
         brandId: droppedBrand?.id,
@@ -201,8 +201,10 @@ const AddPromotion = () => {
             merchantId: droppedMerchants?.map((item) => item?._id).join(""),
             quantity: item?.quantity,
             promotionFund: item?.promotionalFunds.join(""),
-            mSRP: item?.msrp,
-            retailPrice: item?.priceForReimbursement,
+            mSRP: item?.msrp.join(""),
+            retailPrice: item?.priceForReimbursement
+              ? item?.priceForReimbursement
+              : undefined,
             fundAmount: item?.foundAmount?.join(" "),
           };
         }),
@@ -214,6 +216,7 @@ const AddPromotion = () => {
       //   dispatch(createPromotionHandler(payload));
       // }
       dispatch(createPromotionHandler(payload));
+      // console.log(payload, "payload");
     }
   };
 
@@ -333,7 +336,6 @@ const AddPromotion = () => {
                       <>
                         {merchantsListSelector?.data?.data?.records?.map(
                           (item, index) => {
-                            console.log(item,"item")
                             return (
                               <>
                                 <div
@@ -546,7 +548,7 @@ const AddPromotion = () => {
                     enableReinitialize
                     initialValues={{
                       merchants: droppedMerchants?.map(() => ({
-                        quantity: (
+                        quantity:
                           droppedBrand?.selectedBrands?.brandItem?.reduce(
                             (sum, item) =>
                               sum + (item?.mSRP * item?.quantity || 0),
@@ -555,15 +557,17 @@ const AddPromotion = () => {
                             droppedBrand?.selectedBrands?.brandItem?.reduce(
                               (sum, item) => sum + (item?.mSRP || 0),
                               0
-                            ) || 0
-                        ).toFixed(2),
+                            ) || 0,
 
                         promotionalFunds:
                           droppedBrand?.selectedBrands?.brandItem?.map((item) =>
                             (item?.mSRP * item?.quantity)?.toFixed(2)
                           ) || "",
 
-                        msrp: "",
+                        msrp: droppedBrand?.selectedBrands?.brandItem?.map(
+                          (item) => item?.mSRP
+                        ),
+                        // msrp:"",
                         priceForReimbursement: "",
                         foundAmount:
                           droppedBrand?.selectedBrands?.brandItem?.map((item) =>
@@ -755,50 +759,51 @@ const AddPromotion = () => {
                                               placeholder="Enter Price"
                                               autoComplete="off"
                                               maxLength={5}
-                                              onChange={(e) => {
-                                                const msrpValue =
-                                                  e.target.value;
+                                              disabled
+                                              // onChange={(e) => {
+                                              //   const msrpValue =
+                                              //     e.target.value;
 
-                                                // Allow only numbers and one decimal point
-                                                if (
-                                                  /^\d*\.?\d*$/.test(msrpValue)
-                                                ) {
-                                                  form.setFieldValue(
-                                                    `merchants.${indexDroppedMerchant}.msrp`,
-                                                    msrpValue
-                                                  );
+                                              //   // Allow only numbers and one decimal point
+                                              //   if (
+                                              //     /^\d*\.?\d*$/.test(msrpValue)
+                                              //   ) {
+                                              //     form.setFieldValue(
+                                              //       `merchants.${indexDroppedMerchant}.msrp`,
+                                              //       msrpValue
+                                              //     );
 
-                                                  const calculatedQuantity = (
-                                                    droppedBrand?.selectedBrands?.brandItem?.reduce(
-                                                      (sum, item) =>
-                                                        sum +
-                                                        (item?.mSRP *
-                                                          item?.quantity || 0),
-                                                      0
-                                                    ) / msrpValue
-                                                  )?.toFixed(2);
+                                              //     const calculatedQuantity = (
+                                              //       droppedBrand?.selectedBrands?.brandItem?.reduce(
+                                              //         (sum, item) =>
+                                              //           sum +
+                                              //           (item?.mSRP *
+                                              //             item?.quantity || 0),
+                                              //         0
+                                              //       ) / msrpValue
+                                              //     )?.toFixed(2);
 
-                                                  form.setFieldValue(
-                                                    `merchants.${indexDroppedMerchant}.quantity`,
-                                                    msrpValue
-                                                      ? calculatedQuantity
-                                                      : droppedBrand?.selectedBrands?.brandItem?.reduce(
-                                                          (sum, item) =>
-                                                            sum +
-                                                            (item?.mSRP *
-                                                              item?.quantity ||
-                                                              0),
-                                                          0
-                                                        ) /
-                                                          droppedBrand?.selectedBrands?.brandItem?.reduce(
-                                                            (sum, item) =>
-                                                              sum +
-                                                              (item?.mSRP || 0),
-                                                            0
-                                                          )
-                                                  );
-                                                }
-                                              }}
+                                              //     form.setFieldValue(
+                                              //       `merchants.${indexDroppedMerchant}.quantity`,
+                                              //       msrpValue
+                                              //         ? calculatedQuantity
+                                              //         : droppedBrand?.selectedBrands?.brandItem?.reduce(
+                                              //             (sum, item) =>
+                                              //               sum +
+                                              //               (item?.mSRP *
+                                              //                 item?.quantity ||
+                                              //                 0),
+                                              //             0
+                                              //           ) /
+                                              //             droppedBrand?.selectedBrands?.brandItem?.reduce(
+                                              //               (sum, item) =>
+                                              //                 sum +
+                                              //                 (item?.mSRP || 0),
+                                              //               0
+                                              //             )
+                                              //     );
+                                              //   }
+                                              // }}
                                             />
                                           )}
                                         </Field>
@@ -817,32 +822,173 @@ const AddPromotion = () => {
                                         >
                                           Price for Reimbursement
                                         </label>
-                                        <Field
-                                          type="text"
+                                        {/* <Field
                                           name={`merchants.${indexDroppedMerchant}.priceForReimbursement`}
-                                          placeholder="Enter Price"
-                                          autoComplete="off"
-                                          maxLength={5}
-                                          // onKeyDown={(e) => {
-                                          //   if (
-                                          //     !/^\d$/.test(e.key) && // Allow numbers
-                                          //     ![
-                                          //       "Backspace",
-                                          //       "Delete",
-                                          //       "ArrowLeft",
-                                          //       "ArrowRight",
-                                          //       "Tab",
-                                          //     ].includes(e.key) // Allow navigation keys
-                                          //   ) {
-                                          //     e.preventDefault();
-                                          //   }
-                                          // }}
-                                        />
-                                        {/* <ErrorMessage
-                                        name={`merchants.${indexDroppedMerchant}.priceForReimbursement`}
-                                        component="div"
-                                        className="error"
-                                      /> */}
+                                        >
+                                          {({ field, form }) => (
+                                            <input
+                                              type="text"
+                                              name={`merchants.${indexDroppedMerchant}.priceForReimbursement`}
+                                              placeholder="Enter Price"
+                                              autoComplete="off"
+                                              maxLength={5}
+                                              onChange={(e) => {
+                                                let priceForReimbursement =
+                                                  parseFloat(e.target.value) ||
+                                                  0;
+
+                                                // Ensure priceForReimbursement does not exceed promotionalFund
+                                                const promotionalFund =
+                                                  promotionalFund; // Replace with dynamic value if needed
+                                                if (
+                                                  priceForReimbursement >
+                                                  promotionalFund
+                                                ) {
+                                                  priceForReimbursement =
+                                                    promotionalFund;
+                                                }
+
+                                                // Calculate total MSRP * quantity sum
+                                                const totalMSRP =
+                                                  droppedBrand?.selectedBrands?.brandItem?.reduce(
+                                                    (sum, item) =>
+                                                      sum +
+                                                      (item?.mSRP *
+                                                        item?.quantity || 0),
+                                                    0
+                                                  );
+
+                                                // Compute quantity and round to an integer
+                                                const calculatedQuantity =
+                                                  priceForReimbursement > 0
+                                                    ? Math.round(
+                                                        totalMSRP /
+                                                          priceForReimbursement
+                                                      )
+                                                    : droppedBrand?.selectedBrands?.brandItem?.reduce(
+                                                        (sum, item) =>
+                                                          sum +
+                                                          (item?.mSRP *
+                                                            item?.quantity ||
+                                                            0),
+                                                        0
+                                                      ) /
+                                                        droppedBrand?.selectedBrands?.brandItem?.reduce(
+                                                          (sum, item) =>
+                                                            sum +
+                                                            (item?.mSRP || 0),
+                                                          0
+                                                        ) || 0;
+
+                                                // Set the field values
+                                                form.setFieldValue(
+                                                  `merchants.${indexDroppedMerchant}.priceForReimbursement`,
+                                                  priceForReimbursement
+                                                );
+
+                                                form.setFieldValue(
+                                                  `merchants.${indexDroppedMerchant}.quantity`,
+                                                  calculatedQuantity
+                                                );
+
+                                                const validation =
+                                                  droppedBrand?.selectedBrands?.brandItem?.map(
+                                                    (item) =>
+                                                      (
+                                                        item?.mSRP *
+                                                        item?.quantity
+                                                      )?.toFixed(2)
+                                                  ) > priceForReimbursement;
+                                              }}
+                                            />
+                                          )}
+                                        </Field> */}
+
+                                        <Field
+                                          name={`merchants.${indexDroppedMerchant}.priceForReimbursement`}
+                                        >
+                                          {({ field, form }) => (
+                                            <>
+                                              <input
+                                                type="text"
+                                                name={`merchants.${indexDroppedMerchant}.priceForReimbursement`}
+                                                placeholder="Enter Price"
+                                                autoComplete="off"
+                                                maxLength={5}
+                                                onChange={(e) => {
+                                                  let priceForReimbursement =
+                                                    parseFloat(
+                                                      e.target.value
+                                                    ) || 0;
+
+                                                  const promotionalFund =
+                                                    form.values?.merchants?.[
+                                                      indexDroppedMerchant
+                                                    ]?.promotionalFunds || 0;
+
+                                                  if (
+                                                    priceForReimbursement >
+                                                    promotionalFund
+                                                  ) {
+                                                    setErrorMessage(
+                                                      "You cannot request reimbursement for an amount greater than the promotional funds"
+                                                    );
+                                                  } else {
+                                                    setErrorMessage(""); // Clear error when valid
+                                                  }
+
+                                                  form.setFieldValue(
+                                                    `merchants.${indexDroppedMerchant}.priceForReimbursement`,
+                                                    priceForReimbursement
+                                                  );
+
+                                                  // Calculate total MSRP * quantity sum
+                                                  const totalMSRP =
+                                                    droppedBrand?.selectedBrands?.brandItem?.reduce(
+                                                      (sum, item) =>
+                                                        sum +
+                                                        (item?.mSRP *
+                                                          item?.quantity || 0),
+                                                      0
+                                                    );
+
+                                                  const calculatedQuantity =
+                                                    priceForReimbursement > 0
+                                                      ? Math.round(
+                                                          totalMSRP /
+                                                            priceForReimbursement
+                                                        )
+                                                      : droppedBrand?.selectedBrands?.brandItem?.reduce(
+                                                          (sum, item) =>
+                                                            sum +
+                                                            (item?.mSRP *
+                                                              item?.quantity ||
+                                                              0),
+                                                          0
+                                                        ) /
+                                                          droppedBrand?.selectedBrands?.brandItem?.reduce(
+                                                            (sum, item) =>
+                                                              sum +
+                                                              (item?.mSRP || 0),
+                                                            0
+                                                          ) || 0;
+
+                                                  form.setFieldValue(
+                                                    `merchants.${indexDroppedMerchant}.quantity`,
+                                                    calculatedQuantity
+                                                  );
+                                                }}
+                                              />
+
+                                              {/* Display Validation Message */}
+                                              {errorMessage && (
+                                                <div className="mt-10 fw-500 fs-14 error">
+                                                  {errorMessage}
+                                                </div>
+                                              )}
+                                            </>
+                                          )}
+                                        </Field>
                                       </div>
 
                                       <div>
