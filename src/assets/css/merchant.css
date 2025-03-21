@@ -616,7 +616,15 @@
   border-radius: 20px;
   overflow: hidden;
 }
-
+.range.pc {
+  height: 8px;
+  background-color: rgba(5, 109, 255, 0.25) ;
+  overflow: hidden;
+}
+.range.pc .rangePercentage{
+  background-color: #056DFF;
+  height: 8px;
+}
 .rangePercentage {
   height: 12px;
   background-color: #5FEE6D;
@@ -990,7 +998,7 @@ input[type="radio"]:checked+.custom-radio-button {
   position: absolute;
   left: 0;
   top: 0;
-  width: 100%;
+  width: calc(100% - 10px);
   color: white;
   opacity: 0;
 }
@@ -1875,6 +1883,9 @@ input.addTitleInput::placeholder {
 .codeImage img{
 
   object-fit: cover;
+}
+.m10{
+  margin: 10px 0;
 }
 /* Responsive Design */
 @media (max-width: 768px) {

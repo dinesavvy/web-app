@@ -131,15 +131,15 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
             navigate: getLoggedInDetails ? "/merchant/nudges" : "/admin/nudges",
             disabled: "",
           },
-          // {
-          //   id: 6,
-          //   name: "Promotions",
-          //   icon: promotions,
-          //   iconFull: promotionsFull,
-          //   // navigate: getLoggedInDetails ? "/merchant/promotion" : "/admin/nudges",
-          //   navigate:"/merchant/promotions",
-          //   disabled: "",
-          // },
+          {
+            id: 6,
+            name: "Promotions",
+            icon: promotions,
+            iconFull: promotionsFull,
+            // navigate: getLoggedInDetails ? "/merchant/promotion" : "/admin/nudges",
+            navigate:"/merchant/promotions",
+            disabled: "",
+          },
           ...(getLoggedInDetails
             ? [
                 {
