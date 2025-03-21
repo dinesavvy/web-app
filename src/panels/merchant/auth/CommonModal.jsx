@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useEffect } from "react";
 import modalbg from "../../../assets/images/modalbg.png";
 import { Modal } from "antd";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { endNudgeAction, endNudgeHandler } from "../../../redux/action/businessAction/endNudgeSlice";
+import { useCommonMessage } from "../../../common/CommonMessage";
 
 const CommonModal = ({
   modal2Open,
@@ -10,13 +12,30 @@ const CommonModal = ({
   removeTeamMember,
   isSidebarOpen,
   setIsSidebarOpen,
+  endNudgeItem
 }) => {
   const dispatch = useDispatch();
+const messageApi = useCommonMessage();
+  const endNudgeSelector = useSelector((state)=>state?.endNudge)
+  const commonOnclick = () =>{
+    let payload = {
+      nudgeId:endNudgeItem?._id
+    }
+    dispatch(endNudgeHandler(payload))
+  }
 
 
-  // const commonOnclick = () =>{
-
-  // }
+  useEffect(() => {
+  if(endNudgeSelector?.data?.statusCode==200){
+    // messageApi.open({
+    //   type: "success",
+    //   content: endNudgeSelector?.data?.message,
+    // });
+    setModal2Open(false)
+    dispatch(endNudgeAction.endNudgeReset())
+  }
+  }, [endNudgeSelector])
+  
 
   return (
     <>
@@ -25,7 +44,7 @@ const CommonModal = ({
         open={modal2Open}
         onOk={() => setModal2Open(false)}
         onCancel={() => setModal2Open(false)}
-        closable={false} // Removes the close button in the header
+        closable={false}
         footer={null}
       >
         <div className="modalbg">
@@ -48,7 +67,7 @@ const CommonModal = ({
             //   setIsSidebarOpen(false);
             //   setModal2Open(false);
             // }}
-            // onClick={commonOnclick}
+            onClick={commonOnclick}
           >
             Yes
           </div>

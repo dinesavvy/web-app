@@ -28,6 +28,13 @@ import {
   getNudgeAnalyticHandler,
 } from "../../../redux/action/businessAction/businessNudgeAnalytic";
 import noImageFound from "../../../assets/images/noImageFound.png";
+import { reverseNudgeListHandler } from "../../../redux/action/businessAction/businessReverseNudgeList";
+import {
+  relaunchNudgeAction,
+  relaunchNudgeHandler,
+} from "../../../redux/action/businessAction/relaunchNudge";
+import { useCommonMessage } from "../../../common/CommonMessage";
+import moment from "moment";
 
 const Nudges = () => {
   const [tempState, setTempState] = useState([]);
@@ -36,13 +43,18 @@ const Nudges = () => {
   const [isChecked, setIsChecked] = useState(false);
   const [isPaymentSidebar, setIsPaymentSidebar] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [endNudgeItem, setEndNudgeItem] = useState();
   const [activeTab, setActiveTab] = useState("active"); // Default active tab is 'active'
   const navigate = useNavigate();
-
-  const nudges = [5, 10, 15, 20, 25,100];
+  const messageApi = useCommonMessage();
+  const nudges = [5, 10, 15, 20, 25, 100];
   const businessAddNudgeCreditSelector = useSelector(
     (state) => state?.businessAddNudgeCredit
   );
+  const reverseNudgListSelector = useSelector(
+    (state) => state?.reverseNudgList
+  );
+  const relaunchNudgeSelector = useSelector((state) => state?.relaunchNudge);
   const togglePaymentSidebar = (item) => {
     setIsPaymentSidebar((prevState) => !prevState);
   };
@@ -58,6 +70,8 @@ const Nudges = () => {
   const getSelectedBusiness = JSON.parse(
     localStorage.getItem("selectedBusiness")
   );
+
+  const endNudgeSelector = useSelector((state) => state?.endNudge);
 
   const dispatch = useDispatch();
 
@@ -86,10 +100,12 @@ const Nudges = () => {
   }, []);
 
   const toggleSidebar = (item) => {
+    // if(isSidebarOpen===false){
     let payload = {
       nudgeId: item?._id,
     };
     dispatch(businessNudgeDetailsHandler(payload));
+    // }
   };
 
   useEffect(() => {
@@ -110,14 +126,24 @@ const Nudges = () => {
   };
 
   useEffect(() => {
-    let payload = {
-      page: 1,
-      limit: 10,
-      locationId: getSelectedBusiness?._id,
-      isActive: activeTab === "active" ? true : false,
-    };
-    dispatch(businessNudgesListHandler(payload));
-  }, [activeTab]);
+    if (activeTab === "reverse") {
+      dispatch(
+        reverseNudgeListHandler({
+          page: 1,
+          limit: 10,
+          locationId: getSelectedBusiness?._id,
+        })
+      );
+    } else {
+      let payload = {
+        page: 1,
+        limit: 10,
+        locationId: getSelectedBusiness?._id,
+        isActive: activeTab === "active",
+      };
+      dispatch(businessNudgesListHandler(payload));
+    }
+  }, [activeTab, endNudgeSelector]);
 
   useEffect(() => {
     if (isPaymentSidebar) {
@@ -135,7 +161,6 @@ const Nudges = () => {
   useEffect(() => {
     if (businessNudgeDetailsSelector?.data?.statusCode === 200) {
       setIsSidebarOpen((prevState) => !prevState);
-      // dispatch(businessNudgeDetailAction.businessNudgeDetailsReset());
     }
   }, [businessNudgeDetailsSelector]);
 
@@ -154,11 +179,43 @@ const Nudges = () => {
   const nudgeSent = nudgeAnalyticSelector?.data?.data?.nudgeSent || 0;
   const percentage = nudgeGoal > 0 ? (nudgeSent / nudgeGoal) * 100 : 0;
 
+  // Relaunch Nudge
+  const relaunchNudgeFn = (item) => {
+    let payload = {
+      nudgeId: item?._id,
+    };
+    dispatch(relaunchNudgeHandler(payload));
+  };
+
+  useEffect(() => {
+    if (relaunchNudgeSelector?.data?.statusCode === 200) {
+      messageApi.open({
+        type: "success",
+        content: relaunchNudgeSelector?.data?.message,
+      });
+      if(isSidebarOpen){
+        setIsSidebarOpen(false)
+      }
+      dispatch(relaunchNudgeAction.relaunchNudgeReset());
+    } else if (relaunchNudgeSelector?.message) {
+      messageApi.open({
+        type: "error",
+        content: relaunchNudgeSelector?.message,
+      });
+      if(isSidebarOpen){
+        setIsSidebarOpen(false)
+      }
+      dispatch(relaunchNudgeAction.relaunchNudgeReset());
+    }
+  }, [relaunchNudgeSelector]);
+
   return (
     <>
       {(businessNudgesListSelector?.isLoading ||
         businessNudgeDetailsSelector?.isLoading ||
-        businessAddNudgeCreditSelector?.isLoading) && <Loader />}
+        businessAddNudgeCreditSelector?.isLoading ||
+        reverseNudgListSelector?.isLoading ||
+        relaunchNudgeSelector?.isLoading) && <Loader />}
       {/* <div className="emptyHeight">
         <div className="modal-content">
           <div className="ant-modal-body">
@@ -418,151 +475,195 @@ const Nudges = () => {
             </div>
             <div className="tabPadding">
               <div className="merchantGrid mb-20">
-                {businessNudgesListSelector?.data?.data?.length > 0 ? (
-                  businessNudgesListSelector?.data?.data?.map((item) => {
-                    return (
-                      <div
-                        className="merchantCard position-relative"
-                        key={item?.id}
-                      >
-                        <div>
-                          {/* <div className="nailedIt active fs-14">
-                        {getTimeRemaining(item?.createdAt)}
-                      </div> */}
-                          <div className="text-center nudgeCardImage180">
-                            <img
-                              src={noImageFound}
-                              // src = {item?.image}
-                              alt=""
-                              className="h-100 w-100"
-                            />
-                          </div>
-                        </div>
-                        <div className="bottomPadding">
-                          <div className="fs-16 fw-700 mb-8">{item?.title}</div>
-                          <div className="fs-14 mb-20">{item?.description}</div>
-                          <div className="d-flex gap-8 align-center mb-20">
-                            <div className="position-relative d-flex">
-                              {item?.acceptedFollowerList?.map(
-                                (itemFollower, index) => (
-                                  <div className="imageCollaps" key={index}>
-                                    <img
-                                      // src={itemFollower?.photoURL}
-                                      src = {noImageFound}
-                                      alt={item?.title}
-                                      className="w-100 h-100"
-                                    />
-                                  </div>
-                                )
-                              )}
-                            </div>
-                            {item?.totalAcceptedFollowerList > 0 && (
-                              <div className="fs-14 fw-700 gc">
-                                {item?.totalAcceptedFollowerList} people
-                                accepted
+                {activeTab !== "reverse" ? (
+                  <>
+                    {businessNudgesListSelector?.data?.data?.length > 0 ? (
+                      businessNudgesListSelector?.data?.data?.map((item) => {
+                        return (
+                          <div
+                            className="merchantCard position-relative"
+                            key={item?.id}
+                          >
+                            <div>
+                              <div className="nailedIt active fs-14">
+                                {moment(item?.deactivateAt).isBefore(
+                                  moment()
+                                ) ? (
+                                  <>
+                                    Expired on{" "}
+                                    {moment(item?.deactivateAt).format(
+                                      "Do MMMM YYYY"
+                                    )}
+                                  </>
+                                ) : (
+                                  <>
+                                    Expires in{" "}
+                                    {moment
+                                      .utc(
+                                        moment(item?.deactivateAt).diff(
+                                          moment()
+                                        )
+                                      )
+                                      .format("HH:mm:ss")}
+                                  </>
+                                )}
                               </div>
-                            )}
-                          </div>
-                          <div className="d-flex gap-10">
-                            <div
-                              className="btn btnSecondary w-100"
-                              onClick={() => toggleSidebar(item)}
-                            >
-                              View Details
-                            </div>
-                            <div
-                              className="btn deleteBtnfull w-100"
-                              onClick={() => setModal2Open(true)}
-                            >
-                              End Nudge
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    );
-                  })
-                ) : (
-                  <div className="noDataFound">No data available</div>
-                )}
 
-                {/* <div className="merchantCard position-relative">
-              <div className="">
-                <div className="nailedIt active fs-14">12h 20m remaining</div>
-                <div className="text-center nudgeCardImage180">
-                  <img src={dish2} alt="" className="h-100 w-100" />
-                </div>
-              </div>
-              <div className="bottomPadding">
-                <div className="fs-16 fw-700 mb-8">
-                  Double the Flavor, Half the Price
-                </div>
-                <div className="fs-14 mb-20">
-                  Get 20% off on all large pizzas today! Limited time offer.
-                </div>
-                <div className="d-flex gap-8 align-center mb-20">
-                  <div className="position-relative d-flex">
-                    <div className="imageCollaps">
-                      <img src={dish2} alt="" className="w-100 h-100" />
-                    </div>
-                    <div className="imageCollaps">
-                      <img src={dish2} alt="" className="w-100 h-100" />
-                    </div>
-                    <div className="imageCollaps">
-                      <img src={dish2} alt="" className="w-100 h-100" />
-                    </div>
-                    <div className="imageCollaps">
-                      <img src={dish2} alt="" className="w-100 h-100" />
-                    </div>
-                    <div className="imageCollaps">
-                      <img src={dish2} alt="" className="w-100 h-100" />
-                    </div>
-                  </div>
-                  <div className="fs-14 fw-700 gc">52 people accepted</div>
-                </div>
-                <div className="d-flex gap-10">
-                  <div className="btn btnSecondary w-100">View Details</div>
-                  <div className="btn  w-100">Relaunch</div>
-                </div>
-              </div>
-            </div> */}
-                {/* <div className="merchantCard position-relative">
-              <div className="">
-                <div className="text-center nudgeCardImage180">
-                  <img src={dish2} alt="" className="h-100 w-100" />
-                </div>
-              </div>
-              <div className="bottomPadding">
-                <div className="fs-16 fw-700 mb-8">
-                  Double the Flavor, Half the Price
-                </div>
-                <div className="fs-14 mb-20">
-                  Get 20% off on all large pizzas today! Limited time offer.
-                </div>
-                <div className="d-flex gap-8 align-center mb-20">
-                  <div className="position-relative d-flex">
-                    <div className="imageCollaps">
-                      <img src={dish2} alt="" className="w-100 h-100" />
-                    </div>
-                    <div className="imageCollaps">
-                      <img src={dish2} alt="" className="w-100 h-100" />
-                    </div>
-                    <div className="imageCollaps">
-                      <img src={dish2} alt="" className="w-100 h-100" />
-                    </div>
-                    <div className="imageCollaps">
-                      <img src={dish2} alt="" className="w-100 h-100" />
-                    </div>
-                    <div className="imageCollaps">
-                      <img src={dish2} alt="" className="w-100 h-100" />
-                    </div>
-                  </div>
-                  <div className="fs-14 fw-700 gc">52 people accepted</div>
-                </div>
-                <div className="d-flex gap-10">
-                  <div className="btn btnSecondary w-100">View Details</div>
-                </div>
-              </div>
-            </div> */}
+                              <div className="text-center nudgeCardImage180">
+                                <img
+                                  // src={noImageFound}
+                                  src={item?.image||noImageFound}
+                                  alt=""
+                                  className="h-100 w-100"
+                                />
+                              </div>
+                            </div>
+                            <div className="bottomPadding">
+                              <div className="fs-16 fw-700 mb-8">
+                                {item?.title}
+                              </div>
+                              <div className="fs-14 mb-20">
+                                {item?.description}
+                              </div>
+                              {item?.acceptedFollowerList?.length > 0 ? (
+                                <>
+                                  <div className="d-flex gap-8 align-center mb-20">
+                                    <div className="position-relative d-flex">
+                                      {item?.acceptedFollowerList?.map(
+                                        (itemFollower, index) => (
+                                          <div
+                                            className="imageCollaps"
+                                            key={index}
+                                          >
+                                            <img
+                                              // src={itemFollower?.photoURL}
+                                              src={noImageFound}
+                                              alt={item?.title}
+                                              className="w-100 h-100"
+                                            />
+                                          </div>
+                                        )
+                                      )}
+                                    </div>
+                                    {item?.totalAcceptedFollowerList > 0 && (
+                                      <div className="fs-14 fw-700 gc">
+                                        {item?.totalAcceptedFollowerList} people
+                                        accepted
+                                      </div>
+                                    )}
+                                  </div>
+                                </>
+                              ) : (
+                                <div className="mb-20 imageCollapsh32"></div>
+                              )}
+                              <div className="d-flex gap-10">
+                                <div
+                                  className="btn btnSecondary w-100"
+                                  onClick={() => toggleSidebar(item)}
+                                >
+                                  View Details
+                                </div>
+                                {activeTab === "active" ? (
+                                  <div
+                                    className="btn deleteBtnfull w-100"
+                                    onClick={() => {
+                                      setModal2Open(true);
+                                      setEndNudgeItem(item);
+                                    }}
+                                  >
+                                    End Nudge
+                                  </div>
+                                ) : (
+                                  <div
+                                    className="btn  w-100"
+                                    onClick={() => relaunchNudgeFn(item)}
+                                  >
+                                    Relaunch
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                        );
+                      })
+                    ) : (
+                      <div className="noDataFound">No data available</div>
+                    )}
+                  </>
+                ) : (
+                  <>
+                    {reverseNudgListSelector?.data?.data?.records?.length >
+                    0 ? (
+                      reverseNudgListSelector?.data?.data?.records?.map(
+                        (item) => {
+                          return (
+                            <div
+                              className="merchantCard position-relative"
+                              key={item?.id}
+                            >
+                              <div>
+                                {/* <div className="nailedIt active fs-14">
+          {getTimeRemaining(item?.createdAt)}
+        </div> */}
+                                <div className="text-center nudgeCardImage180">
+                                  <img
+                                    // src={noImageFound}
+                                    src={item?.photoURL}
+                                    alt=""
+                                    className="h-100 w-100"
+                                  />
+                                </div>
+                              </div>
+                              <div className="bottomPadding">
+                                <div className="fs-16 fw-700 mb-8">
+                                  {item?.title}
+                                </div>
+                                <div className="fs-14 mb-20">
+                                  {item?.message}
+                                </div>
+                                <div className="d-flex gap-8 align-center mb-20">
+                                  <div className="position-relative d-flex">
+                                    {item?.reversNudgeUserList?.map(
+                                      (itemFollower, index) => (
+                                        <div
+                                          className="imageCollaps"
+                                          key={index}
+                                        >
+                                          <img
+                                            // src={itemFollower?.photoURL}
+                                            src={noImageFound}
+                                            alt={item?.title}
+                                            className="w-100 h-100"
+                                          />
+                                        </div>
+                                      )
+                                    )}
+                                  </div>
+                                  {item?.reversNudgeUserList?.length > 0 && (
+                                    <div className="fs-14 fw-700 gc">
+                                      {item?.reversNudgeUserList?.length} people
+                                      accepted
+                                    </div>
+                                  )}
+                                </div>
+                                <div className="d-flex gap-10">
+                                  <div
+                                    className="btn btnSecondary w-100"
+                                    onClick={() => toggleSidebar(item)}
+                                  >
+                                    View Details
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          );
+                        }
+                      )
+                    ) : (
+                      <div className="noDataFound">No data available</div>
+                    )}
+                  </>
+                )}
               </div>
             </div>
           </div>
@@ -570,6 +671,7 @@ const Nudges = () => {
             modal2Open={modal2Open}
             setModal2Open={setModal2Open}
             modalImage={deleteModal}
+            endNudgeItem={endNudgeItem}
           />
           <MerchantNudgeDetails
             setIsSidebarOpen={setIsSidebarOpen}
@@ -577,6 +679,7 @@ const Nudges = () => {
             toggleSidebar={toggleSidebar}
             activeTab={activeTab}
             businessNudgeDetailsSelector={businessNudgeDetailsSelector}
+            endNudgeItem={endNudgeItem}
           />
           <PaymentSidebar
             isPaymentSidebar={isPaymentSidebar}

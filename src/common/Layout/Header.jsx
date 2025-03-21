@@ -73,6 +73,7 @@ const Header = ({ handleTrigger }) => {
     "/merchant/hierarchy": "Profile Hierarchy",
     "/merchant/profile": "Profile",
     "/merchant/create-nudge": "Nudges",
+    "/merchant/promotions": "Promotions",
     "/admin/merchant/edit-member": `Merchants - ${getRestaurantName}`,
     "/admin/promotions": "Promotions",
     "/admin/brands": "Brands",
@@ -87,7 +88,7 @@ const Header = ({ handleTrigger }) => {
     "/distributors/promotion": "Promotions",
     "/distributors/add-promotions": "Create single promotions",
     "/distributors/dashboard": "Distributor Dashboard",
-    "/supplier/dashboard":"Supplier Dashboard"
+    "/supplier/dashboard": "Supplier Dashboard",
   };
 
   return (
@@ -113,21 +114,21 @@ const Header = ({ handleTrigger }) => {
           {/* {businessListSelector?.data?.data?.records?.length > 0 && localStorage.getItem("merchantLogin")===true &&selectedBusiness !==undefined &&  ( */}
 
           {/* <div
-              className="d-flex selectCommon cursor-pointer align-center gap-6 "
-              onClick={toggleModal}
-            >
-              <div className="fs-16"> 
-                <>
-                    {selectedBusiness?.businessName
-                    ? selectedBusiness?.businessName
-                    : businessListSelector?.data?.data?.records?.[0]
-                        ?.businessName}  
-                </>
-              </div> 
-              <div className="h16">
-                <img src={arrowRight} alt="arrowRight" />
-              </div> 
-            </div>  */}
+            className="d-flex selectCommon cursor-pointer align-center gap-6 "
+            onClick={toggleModal}
+          >
+            <div className="fs-16">
+              <>
+                {selectedBusiness?.businessName
+                  ? selectedBusiness?.businessName
+                  : businessListSelector?.data?.data?.records?.[0]
+                      ?.businessName}
+              </>
+            </div>
+            <div className="h16">
+              <img src={arrowRight} alt="arrowRight" />
+            </div>
+          </div> */}
           {/* )}  */}
           {/* )}  */}
           {/* Modal Component */}

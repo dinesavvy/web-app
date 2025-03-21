@@ -9,38 +9,34 @@ import { useNavigate } from "react-router-dom";
 import { businessListByUserIdHandler } from "../../../redux/action/businessAction/businessListByUserId";
 import { useDispatch, useSelector } from "react-redux";
 
-const FollowerDetails = ({ isOpen, toggleSidebar, followerDetails }) => {
+const FollowerDetails = ({ isOpen, toggleSidebar, followerDetails,state }) => {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("Redeemed");
 
-  const tabs = ["Redeemed", "Accepted", "Declined","Ignored"];
+  const tabs = ["Redeemed", "Accepted", "Declined", "Ignored"];
 
-
-  const listByUserId = useSelector(
-    (state) => state?.businessListByUserId
-  );
+  const listByUserId = useSelector((state) => state?.businessListByUserId);
 
   const dispatch = useDispatch();
 
-
   useEffect(() => {
-    if (activeTab && followerDetails) {
+    if (activeTab && followerDetails || state) {
       let payload = {
-          page: 1,
-          limit: 10,
-          userId: followerDetails?.userId?._id,
-          nudgeType: 
-              activeTab === "Redeemed" 
-                  ? "Redeemed"
-                  : activeTab === "Accepted"
-                  ? "Accepted"
-                  : activeTab === "Declined"
-                  ? "Denied"
-                  : "Redeemed",
+        page: 1,
+        limit: 10,
+        userId: followerDetails?.userId?._id || state?.userId,
+        nudgeType:
+          activeTab === "Redeemed"
+            ? "Redeemed"
+            : activeTab === "Accepted"
+            ? "Accepted"
+            : activeTab === "Declined"
+            ? "Denied"
+            : "Redeemed",
       };
       dispatch(businessListByUserIdHandler(payload));
-  }
-  }, [activeTab,followerDetails]);
+    }
+  }, [activeTab, followerDetails,state]);
 
   return (
     <>
@@ -210,7 +206,44 @@ const FollowerDetails = ({ isOpen, toggleSidebar, followerDetails }) => {
               ))}
             </div>
           </div>
-          <div className="tabPanelDetailed">
+          {listByUserId?.data?.data?.data?.records?.length > 0 ? (
+            listByUserId.data.data.data.records.map((item, index) => (
+              <div key={index} className="tabPanelDetailed">
+                <div>
+                  <div className="d-flex align-center gap-10 mb-10">
+                    <div className="codeImage">
+                      <img
+                        src={item?.photoURL}
+                        alt=""
+                        className="w-100 h-100"
+                      />
+                    </div>
+                    <div>
+                      <div className="fs-16 fw-700 mb-5">{item?.title}</div>
+                      <div className="fs-14">{item?.message}</div>
+                    </div>
+                  </div>
+                  <div className="d-flex align-center justify-between gap-10 mb-8 fs-14">
+                    <div>Date Sent</div>
+                    <div className="fw-500">
+                      {moment(item?.nudgeSenderList?.sentAt).format("MMM DD, YYYY")}
+                    </div>
+                  </div>
+                  <div className="d-flex align-center justify-between gap-10 mb-8 fs-14">
+                    <div>Date Accepted</div>
+                    <div className="fw-500">
+                      {moment(item?.nudgeSenderList?.acceptedAt).format("MMM DD, YYYY")}
+                    </div>
+                  </div>
+                </div>
+                <div className="divider2"></div>
+              </div>
+            ))
+          ) : (
+            <div className="noDataFound">No data available</div>
+          )}
+
+          {/* <div className="tabPanelDetailed">
             <div>
               <div className="d-flex align-center gap-10 mb-10">
                 <div className="codeImage">
@@ -233,31 +266,7 @@ const FollowerDetails = ({ isOpen, toggleSidebar, followerDetails }) => {
               </div>
             </div>
             <div className="divider2"></div>
-          </div>
-          <div className="tabPanelDetailed">
-            <div>
-              <div className="d-flex align-center gap-10 mb-10">
-                <div className="codeImage">
-                  <img src={restaurantCard} alt="" className="w-100 h-100" />
-                </div>
-                <div>
-                  <div className="fs-16 fw-700 mb-5">Free drink</div>
-                  <div className="fs-14">
-                    Free drink on Happy Hours! From 07:00 PM to 08:00 PM
-                  </div>
-                </div>
-              </div>
-              <div className="d-flex align-center justify-between gap-10 mb-8 fs-14">
-                <div>Date Sent</div>
-                <div className="fw-500">Sep 19, 2024</div>
-              </div>
-              <div className="d-flex align-center justify-between gap-10 mb-8 fs-14">
-                <div>Date Accepted</div>
-                <div className="fw-500">Sep 19, 2024</div>
-              </div>
-            </div>
-            <div className="divider2"></div>
-          </div>
+          </div> */}
         </div>
       </div>
     </>

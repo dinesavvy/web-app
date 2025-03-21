@@ -10,6 +10,8 @@ import consumers from "../../assets/images/sidebar/consumers.svg";
 import consumersFull from "../../assets/images/sidebar/consumersFull.svg";
 import nudge from "../../assets/images/sidebar/nudge.svg";
 import nudgeFull from "../../assets/images/sidebar/nudgeFull.svg";
+// import promotion from "../../assets/images/sidebar/promotion.svg"
+// import promotionFull from "../../assets/images/sidebar/promotionFull.svg"
 import promotions from "../../assets/images/sidebar/promotions.svg";
 import promotionsFull from "../../assets/images/sidebar/promotionsFull.svg";
 import brands from "../../assets/images/sidebar/brands.svg";
@@ -129,6 +131,15 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
             navigate: getLoggedInDetails ? "/merchant/nudges" : "/admin/nudges",
             disabled: "",
           },
+          // {
+          //   id: 6,
+          //   name: "Promotions",
+          //   icon: promotions,
+          //   iconFull: promotionsFull,
+          //   // navigate: getLoggedInDetails ? "/merchant/promotion" : "/admin/nudges",
+          //   navigate:"/merchant/promotions",
+          //   disabled: "",
+          // },
           ...(getLoggedInDetails
             ? [
                 {

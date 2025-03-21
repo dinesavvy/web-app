@@ -195,7 +195,8 @@ const AddSupplierPromotion = () => {
         promotionTitle: promotionTitle,
         brandId: droppedBrand?.id,
         startDate: startDate ? moment(startDate).valueOf() : null,
-        endDate: endDate ? moment(endDate).valueOf() : null,
+        // endDate: endDate ? moment(endDate).valueOf() : null,
+        endDate:endDate ? moment(endDate).set({ hour: 12, minute: 0, second: 0 }).valueOf() : null,
         merchants: values?.merchants?.map((item, index) => {
           return {
             merchantId: droppedMerchants?.map((item) => item?._id).join(""),

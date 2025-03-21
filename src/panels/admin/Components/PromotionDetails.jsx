@@ -330,7 +330,7 @@ const PromotionDetails = ({
             </>
             {/* ))} */}
           </div>
-          {activeTab === "active" && (
+          {activeTab === "active" && promotionDetailsSelector?.data?.data?.promotionStatus === "Pending" && (
             <>
               <div className="divider2"></div>
               <div className="deleteBtnfull btn" onClick={endPromotion}>

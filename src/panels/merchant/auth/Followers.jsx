@@ -15,6 +15,7 @@ import deleteList from "../../../assets/images/deleteList.svg";
 import { followerAnalyticsHandler } from "../../../redux/action/businessAction/followerAnalytics";
 import { useBusiness } from "../../../common/Layout/BusinessContext";
 import AccessDeniedModal from "../accessDeniedModal/accessDeniedModal";
+import { followerDetailsHandler } from "../../../redux/action/businessAction/followerDetailsAPI";
 
 const Followers = () => {
   const [tempState, setTempState] = useState([]);
@@ -50,8 +51,6 @@ const Followers = () => {
       const matchedBusiness = businessListSelector?.data?.data?.records?.find(
         (element) => element?._id === selectedBusiness?._id
       );
-      console.log(businessListSelector,"businessListSelector")
-
       if (matchedBusiness) {
         setTempState(matchedBusiness);
       }
@@ -153,10 +152,25 @@ const Followers = () => {
 
   const [followerDetails, setFollowerDetails] = useState();
 
+  // const getSelectedBusiness = JSON.parse(localStorage.getItem("selectedBusiness"))
+
   const toggleSidebar = (item) => {
+    console.log(item,"item")
     setIsSidebarOpen((prevState) => !prevState);
     setFollowerDetails(item);
+    // let payload = {
+    //   locationId: getSelectedBusiness?._id,
+    //   userId: item?.userId?._id,
+    // };
+    // console.log(payload,"payload")
+    // dispatch(followerDetailsHandler(payload))
   };
+
+  // useEffect(() => {
+  //   if (state?.userId) {
+  //     setIsSidebarOpen(true);
+  //   }
+  // }, [state]);
 
   useEffect(() => {
     let payload = {
@@ -167,8 +181,6 @@ const Followers = () => {
     };
     dispatch(businessFollowerListHandler(payload));
   }, [searchQuery]);
-
-  console.log(tempState,"tempState?.roleData?.permissions?.viewFollowers")
 
   return (
     <>
@@ -395,6 +407,7 @@ const Followers = () => {
             isOpen={isSidebarOpen}
             toggleSidebar={toggleSidebar}
             followerDetails={followerDetails}
+            state={state}
           />
         </div>
       )}

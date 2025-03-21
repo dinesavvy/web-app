@@ -8,6 +8,7 @@ import NudgeTemplateMerchant from "../auth/NudgeTemplateMerchant";
 import Profile from "../auth/Profile";
 import Hierarchy from "../auth/Hierarchy";
 import NoPageFound from "../../../common/noPageFound/NoPageFound";
+import PromotionsList from "../promotions/PromotionsList";
 
 const merchantRoutes = [
   {
@@ -50,6 +51,12 @@ const merchantRoutes = [
   {
     path: "/merchant/nudges",
     element: Nudges,
+    isPrivate: false,
+    isLayout: true,
+  },
+  {
+    path: "/merchant/promotions",
+    element: PromotionsList,
     isPrivate: false,
     isLayout: true,
   },

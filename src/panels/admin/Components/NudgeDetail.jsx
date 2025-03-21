@@ -116,7 +116,7 @@ const NudgeDetail = ({
                         /
                         {(
                           (nudgeDetailsMainSelector?.data?.data
-                            ?.totalAcceptedFollowerList /
+                            ?.totalAcceptedFollowerList  /
                             nudgeDetailsMainSelector?.data?.data
                               ?.recipientCount) *
                           100
@@ -140,7 +140,7 @@ const NudgeDetail = ({
                     {nudgeDetailsMainSelector?.data?.data?.disLikeUserList >
                     0 ? (
                       <>
-                        {item?.disLikeUserList}/
+                        {nudgeDetailsMainSelector?.data?.data?.disLikeUserList}/
                         {(
                           (nudgeDetailsMainSelector?.data?.data
                             ?.disLikeUserList /

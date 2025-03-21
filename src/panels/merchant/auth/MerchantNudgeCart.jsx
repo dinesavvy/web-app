@@ -20,6 +20,7 @@ const MerchantNudgecart = ({
   state,
   fileuploadSelector,
   setIsCartOpen,
+  imagePreview
 }) => {
   const createNudgeSelector = useSelector((state) => state?.businessCreateNudge);
   const messageApi = useCommonMessage();
@@ -27,7 +28,6 @@ const MerchantNudgecart = ({
   const navigate = useNavigate()
 
   const selectedBusinessSelector = JSON.parse(localStorage.getItem("selectedBusiness"))
-
   const sendNudge = () => {
     let payload = {
       locationId: selectedBusinessSelector?._id,
@@ -35,9 +35,7 @@ const MerchantNudgecart = ({
       message: values?.description,
       isPublic: false,
       followerList: state?.selectedItems?.map((item) => item?.userId?._id),
-      photoURL:
-        nudgesCards?.imageUrl?.[0] ||
-        fileuploadSelector?.data?.data?.map((item) => item?.src),
+      photoURL:fileuploadSelector?.data?.data?.map((item) => item?.src).join("")??nudgesCards?.imageUrl?.[0].join(""),
       deactivateAt: Date.now() + 24 * 60 * 60 * 1000,
       imageId: "",
       totalQuantity: Number(values?.quantity),
@@ -75,7 +73,7 @@ const MerchantNudgecart = ({
             <div className="dividerbtn">
               <img
                 className="w-100 merchantImg br10 mb-6"
-                src={uploadedImage || nudgesCards?.imageUrl?.[0]}
+                src={imagePreview || nudgesCards?.imageUrl?.[0]}
                 alt={nudgesCards?.title}
               />
               <div className="fs-16 fw-600">{values?.title}</div>

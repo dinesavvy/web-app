@@ -195,7 +195,8 @@ const AddPromotion = () => {
         promotionTitle: promotionTitle,
         brandId: droppedBrand?.id,
         startDate: startDate ? moment(startDate).valueOf() : null,
-        endDate: endDate ? moment(endDate).valueOf() : null,
+        // endDate: endDate ? moment(endDate).valueOf() : null,
+        endDate: endDate ? moment(endDate).set({ hour: 12, minute: 0, second: 0 }).valueOf() : null,
         merchants: values?.merchants?.map((item, index) => {
           return {
             merchantId: droppedMerchants?.map((item) => item?._id).join(""),
@@ -209,14 +210,7 @@ const AddPromotion = () => {
           };
         }),
       };
-      // if (!promotionTitle) {
-      //   setPromotionTitleError("Promotion title is required");
-      //   return;
-      // } else {
-      //   dispatch(createPromotionHandler(payload));
-      // }
       dispatch(createPromotionHandler(payload));
-      // console.log(payload, "payload");
     }
   };
 
@@ -695,7 +689,6 @@ const AddPromotion = () => {
                                         placeholder="Enter Price"
                                         autoComplete="off"
                                         maxLength={5}
-                                        onChange = {(e)=>console.log(e.target.value,"sssss")}
                                         // onKeyDown={(e) => {
                                         //   if (
                                         //     !/^\d$/.test(e.key) && // Allow numbers

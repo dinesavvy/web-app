@@ -15,7 +15,8 @@ import { businessFileUploadHandler } from "../../../redux/action/businessAction/
 
 const NudgeTemplateMerchant = () => {
   const [uploadedImage, setUploadedImage] = useState(nudgesCards?.imageUrl[0]);
-
+  const [imagePreview, setImagePreview] = useState(nudgesCards?.imageUrl[0]|| null);
+const [fileObject, setFileObject] = useState();
   const dispatch = useDispatch();
   const { state } = useLocation();
 
@@ -74,18 +75,56 @@ const NudgeTemplateMerchant = () => {
   const handleSubmit = (values) => {
     console.log("Form values:", values);
   };
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    const imageUrl = URL.createObjectURL(file);
-    setUploadedImage(imageUrl);
+
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    setFileObject(file);
     if (file) {
-      // Automatically trigger file upload after selection
+      const allowedTypes = ["image/jpeg", "image/png", "image/jpg"];
+      if (!allowedTypes.includes(file.type)) {
+        messageApi.open({
+          type: "error",
+          content: "Only JPG, JPEG, and PNG formats are allowed",
+        });
+        return;
+      }
+      const maxSize = 5 * 1024 * 1024; // 5MB
+      if (file.size > maxSize) {
+        messageApi.open({
+          type: "error",
+          content: "File size must not exceed 5MB.",
+        });
+        return;
+      }
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result);
+      };
       let payload = {
         fileList: [{ fileName: file?.name }],
       };
       dispatch(businessFileUploadHandler(payload));
+      reader.readAsDataURL(file);
     }
   };
+  useEffect(() => {
+      const uploadFile = async () => {
+        if (fileuploadSelector?.data?.statusCode === 200) {
+          try {
+            const response = await fetch(
+              fileuploadSelector?.data?.data?.[0]?.url,
+              {
+                method: "PUT",
+                body: fileObject,
+              }
+            );
+          } catch (error) {
+            console.error("Error uploading file", error);
+          }
+        }
+      };
+      uploadFile();
+    }, [fileuploadSelector]);
 
   const fileInputRef = useRef(null);
 
@@ -107,7 +146,7 @@ const NudgeTemplateMerchant = () => {
                 src={backButton}
                 alt="backButton"
                 className="cursor-pointer backButton "
-                onClick={()=>navigate("/merchant/nudges")}
+                onClick={() => navigate("/merchant/nudges")}
               />
               <div>
                 <div className="fs-24 fw-600">Nudges Template</div>
@@ -166,10 +205,7 @@ const NudgeTemplateMerchant = () => {
                       <div className="d-flex align-end gap-16 mb-20 flexWrapsm">
                         <div className="reflectImage">
                           <img
-                            src={
-                              uploadedImage ||
-                              nudgesCards?.imageUrl[0] 
-                            }
+                            src={imagePreview  || nudgesCards?.imageUrl[0]}
                             alt=""
                           />
                         </div>
@@ -305,7 +341,7 @@ const NudgeTemplateMerchant = () => {
                         <div className="image80">
                           <img
                             src={
-                              uploadedImage ||
+                              imagePreview ||
                               nudgesCards?.imageUrl?.[0] ||
                               state?.locationId?.nudgePrev?.imageUrl[0] ||
                               dish
@@ -357,6 +393,7 @@ const NudgeTemplateMerchant = () => {
                       state={state}
                       fileuploadSelector={fileuploadSelector}
                       setIsCartOpen={setIsCartOpen}
+                      imagePreview={imagePreview}
                     />
                   </>
                 )}

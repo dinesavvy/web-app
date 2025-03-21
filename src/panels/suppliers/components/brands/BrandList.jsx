@@ -172,8 +172,6 @@ const Brands = () => {
           )}
         </div>
       </div>
-      
-      {console.log(brandDetails,"brandDetails")}
       <BrandDetails
         isOpen={isDetailsOpen}
         toggleDetails={toggleDetails}

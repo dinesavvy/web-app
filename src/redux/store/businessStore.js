@@ -22,6 +22,10 @@ import businessResendInviteLinkSlice from "../action/businessAction/businessRese
 import nudgeAnalyticSlice from "../action/businessAction/businessNudgeAnalytic";
 import businessAddNudgeCreditSlice from "../action/businessAction/businessAddNudgeCredit";
 import endNudgeSlice from "../action/businessAction/endNudgeSlice"
+import reverseNudgListSlice from "../action/businessAction/businessReverseNudgeList"
+import relaunchNudgeSlice from "../action/businessAction/relaunchNudge"
+import followerDetailsSlice from "../action/businessAction/followerDetailsAPI"
+import activePromotionListSlice from "../action/businessAction/activePromotionList"
 
 const store = configureStore({
   reducer: {
@@ -47,7 +51,11 @@ const store = configureStore({
     businessResendInviteLink: businessResendInviteLinkSlice,
     businessNudgeAnalytic: nudgeAnalyticSlice,
     businessAddNudgeCredit: businessAddNudgeCreditSlice,
-    endNudge:endNudgeSlice
+    endNudge:endNudgeSlice,
+    reverseNudgList:reverseNudgListSlice,
+    relaunchNudge:relaunchNudgeSlice,
+    followerDetails:followerDetailsSlice,
+    activePromotionList:activePromotionListSlice
   },
 });
 
