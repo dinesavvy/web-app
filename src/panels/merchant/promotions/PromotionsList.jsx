@@ -10,6 +10,7 @@ import Loader from "../../../common/Loader/Loader";
 import moment from "moment";
 import noImageFound from "../../../assets/images/noImageFound.png";
 import remainTime from "../../../assets/images/remainTime.svg";
+import searchIcon from "../../../assets/images/searchIcon.svg";
 import successNailedIt from "../../../assets/images/successNailedIt.svg";
 import {
   activePromotionListAction,
@@ -176,52 +177,49 @@ const PromotionsList = () => {
           </div>
         </div> */}
 
-
-
         <div className="tabs-container tab3 tabFull tabing">
-            <div className="tabs">
-              <button
-                className={`tab-button ${
-                  activeTab === "active" ? "active" : ""
-                }`}
-                onClick={() => {
-                  setActiveTab("active");
-                  setPagination({ page: 1, limit: 9 });
-                  dispatch(
-                    archivePromotionListAction.archivePromotionListReset()
-                  );
-                }}
-              >
-                Active
-              </button>
-              <button
-                className={`tab-button d-flex align-center justify-center gap-8 ${
-                  activeTab === "offer" ? "active" : ""
-                }`}
-                onClick={() => {
-                  setActiveTab("offer");
-                  setPagination({ page: 1, limit: 9 });
-                }}
-              >
-                Offer{" "}
-                <div className="tagNumber fs-14 fw-500">{activeTab === "offer"
-                    ? archivePromotionListSelector?.data?.data?.records?.length
-                    : ""}</div>
-              </button>
-              <button
-                className={`tab-button ${
-                  activeTab === "archive" ? "active" : ""
-                }`}
-                onClick={() => {
-                  setActiveTab("archive");
-                  setPagination({ page: 1, limit: 9 });
-                }}
-              >
-                Archive
-              </button>
-            </div>
+          <div className="tabs">
+            <button
+              className={`tab-button ${activeTab === "active" ? "active" : ""}`}
+              onClick={() => {
+                setActiveTab("active");
+                setPagination({ page: 1, limit: 9 });
+                dispatch(
+                  archivePromotionListAction.archivePromotionListReset()
+                );
+              }}
+            >
+              Active
+            </button>
+            <button
+              className={`tab-button d-flex align-center justify-center gap-8 ${
+                activeTab === "offer" ? "active" : ""
+              }`}
+              onClick={() => {
+                setActiveTab("offer");
+                setPagination({ page: 1, limit: 9 });
+              }}
+            >
+              Offer{" "}
+              <div className="tagNumber fs-14 fw-500">
+                {activeTab === "offer"
+                  ? archivePromotionListSelector?.data?.data?.records?.length
+                  : ""}
+              </div>
+            </button>
+            <button
+              className={`tab-button ${
+                activeTab === "archive" ? "active" : ""
+              }`}
+              onClick={() => {
+                setActiveTab("archive");
+                setPagination({ page: 1, limit: 9 });
+              }}
+            >
+              Archive
+            </button>
           </div>
-
+        </div>
 
         <div className="tabPadding">
           <div className="d-flex justify-between align-center mb-20 gap-10 flexsm">
@@ -309,34 +307,27 @@ const PromotionsList = () => {
           /> */}
           {activeTab === "active" && (
             <>
-            <div className="card mb-20">
-              <div className="grid3 gap-20">
-              <div className="borderRight">
-                  <div className="fs-24 fw-700">
-                    03
+              <div className="card mb-20">
+                <div className="grid3 gap-20 mb-20">
+                  <div className="borderRight">
+                    <div className="fs-24 fw-700">03</div>
+                    <div className="fs-14 fw-500">Active Promotions</div>
                   </div>
-                  <div className="fs-14 fw-500">
-                  Active Promotions
+                  <div className="borderRight">
+                    <div className="fs-24 fw-700">$200</div>
+                    <div className="fs-14 fw-500">Funds available</div>
                   </div>
+                  <div className="borderRight">
+                    <div className="fs-24 fw-700">$1200</div>
+                    <div className="fs-14 fw-500">Funds withdrawn</div>
+                  </div>
+                </div>
+                <div className="btnSecondary btn">Withdraw</div>
               </div>
-              <div className="borderRight">
-                  <div className="fs-24 fw-700">
-                  $200
-                  </div>
-                  <div className="fs-14 fw-500">
-                  Funds available
-                  </div>
+              <div className="lineSearch w-100 mb-20" >
+                <input type="text" autoComplete="off" placeholder="Search for Promotions"/>
+                <img src={searchIcon} alt="" className="absoluteImage" />
               </div>
-              <div className="borderRight">
-                  <div className="fs-24 fw-700">
-                  $1200
-                  </div>
-                  <div className="fs-14 fw-500">
-                  Funds withdrawn
-                  </div>
-              </div>
-              </div>
-            </div>
             </>
           )}
           <div className="merchantGrid mb-20">
@@ -359,8 +350,17 @@ const PromotionsList = () => {
                               </>
                             ) : (
                               <>
-                                <img src={successNailedIt} className="successNailedItIcon" alt="" />
-                                <img src={remainTime} className="remainTime" alt="" /> Expires in{" "}
+                                <img
+                                  src={successNailedIt}
+                                  className="successNailedItIcon"
+                                  alt=""
+                                />
+                                <img
+                                  src={remainTime}
+                                  className="remainTime"
+                                  alt=""
+                                />{" "}
+                                Expires in{" "}
                                 {moment(item?.endDate).diff(moment(), "days") >
                                 0
                                   ? `${moment(item?.endDate).diff(
@@ -433,76 +433,73 @@ const PromotionsList = () => {
                               {item?.nudgeRedeemedCount}
                                 </div>
                           </div> */}
-                              <div className="divider2 m10"></div>
-                              <div className="fs-14 mb-10">
-                                Depletion progress
-                              </div>
-                              <div className="range mb-5 pc">
-                                <div
-                                  className="rangePercentage"
-                                  style={{ width: `${item?.nudgeGoal || 0}%` }}
-                                ></div>
-                              </div>
-                              <div className="fs-12 fw-500 mb-10 pc">{item?.nudgeGoal}%</div>
-                              <div className="d-flex mb-6 justify-between align-center gap-10">
-                                <div className="fs-12  grey">Retail Price</div>
-                                <div className="fs-16 pc fw-500">
-                                  {/* {item?.brandDetails?.brandItem?.map(
+                          <div className="divider2 m10"></div>
+                          <div className="fs-14 mb-10">Depletion progress</div>
+                          <div className="range mb-5 pc">
+                            <div
+                              className="rangePercentage"
+                              style={{ width: `${item?.nudgeGoal || 0}%` }}
+                            ></div>
+                          </div>
+                          <div className="fs-12 fw-500 mb-10 pc">
+                            {item?.nudgeGoal}%
+                          </div>
+                          <div className="d-flex mb-6 justify-between align-center gap-10">
+                            <div className="fs-12  grey">Retail Price</div>
+                            <div className="fs-16 pc fw-500">
+                              {/* {item?.brandDetails?.brandItem?.map(
                                     (item) => item?.sku
                                   )} */}
-                                  ${item?.merchant?.retailPrice}
-                                </div>
-                              </div>
-                              <div className="d-flex mb-6 justify-between align-center gap-10">
-                                <div className="fs-12  grey">Item Quantity</div>
-                                <div className="fs-16  fw-500">
-                                  {/* {item?.brandDetails?.brandItem?.map(
+                              ${item?.merchant?.retailPrice}
+                            </div>
+                          </div>
+                          <div className="d-flex mb-6 justify-between align-center gap-10">
+                            <div className="fs-12  grey">Item Quantity</div>
+                            <div className="fs-16  fw-500">
+                              {/* {item?.brandDetails?.brandItem?.map(
                                     (item) => item?.sku
                                   )} */}
-                                  {item?.merchant?.quantity}
-                                </div>
-                              </div>
-                              <div className="d-flex mb-6 justify-between align-center gap-10">
-                                <div className="fs-12  grey">
-                                  Nudges Redeemed
-                                </div>
-                                <div className="fs-16  fw-500">
-                                  {/* {item?.brandDetails?.brandItem?.map(
+                              {item?.merchant?.quantity}
+                            </div>
+                          </div>
+                          <div className="d-flex mb-6 justify-between align-center gap-10">
+                            <div className="fs-12  grey">Nudges Redeemed</div>
+                            <div className="fs-16  fw-500">
+                              {/* {item?.brandDetails?.brandItem?.map(
                                     (item) => item?.sku
                                   )} */}
-                                  {item?.nudgeRedeemedCount}
-                                </div>
-                              </div>
-                                {/* <div className="fs-14 fw-600">
+                              {item?.nudgeRedeemedCount}
+                            </div>
+                          </div>
+                          {/* <div className="fs-14 fw-600">
                                   ${item?.remainingWithdrawFund}
                                 </div> */}
-                                <div className="d-flex mb-6 justify-between align-center gap-10">
-                                  <div className="fs-12  grey">
-                                    Funds Available for pc Withdrawal
-                                  </div>
-                                  <div className="fs-16 pc fw-500">
-                                    {/* {item?.brandDetails?.brandItem?.map(
+                          <div className="d-flex mb-6 justify-between align-center gap-10">
+                            <div className="fs-12  grey">
+                              Funds Available for pc Withdrawal
+                            </div>
+                            <div className="fs-16 pc fw-500">
+                              {/* {item?.brandDetails?.brandItem?.map(
                                       (item) => item?.sku
                                     )} */}
-                                     ${item?.remainingWithdrawFund}
-                                  </div>
-                                </div>
-                                <div className="divider2"></div>
-                                <div
-                                  className="btn btnSecondary"
-                                  onClick={() => {
-                                    navigate("/merchant/create-nudge");
-                                    localStorage.setItem(
-                                      "promotionNudgeItem",
-                                      JSON.stringify(item)
-                                    );
-                                  }}
-                                >
-                                  Send Nudges
-                                </div>
-                              </div>
+                              ${item?.remainingWithdrawFund}
                             </div>
-                        
+                          </div>
+                          <div className="divider2"></div>
+                          <div
+                            className="btn btnSecondary"
+                            onClick={() => {
+                              navigate("/merchant/create-nudge");
+                              localStorage.setItem(
+                                "promotionNudgeItem",
+                                JSON.stringify(item)
+                              );
+                            }}
+                          >
+                            Send Nudges
+                          </div>
+                        </div>
+                      </div>
                     );
                   }
                 )}
@@ -546,12 +543,12 @@ const PromotionsList = () => {
                         <div className="nailedIt active fs-14">
                           {moment(item?.endDate).isBefore(moment()) ? (
                             <>
-                               Expired on{" "}
+                              Expired on{" "}
                               {moment(item?.endDate).format("Do MMMM YYYY")}
                             </>
                           ) : (
                             <>
-                               Expires in{" "}
+                              Expires in{" "}
                               {moment(item?.endDate).diff(moment(), "days") > 0
                                 ? `${moment(item?.endDate).diff(
                                     moment(),
