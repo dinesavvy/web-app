@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 
 import dropdownArrow from "../../../assets/images/dropdownArrow.svg";
 import closeRightSidebar from "../../../assets/images/closeRightSidebar.svg";
+import deleteImage from "../../../assets/images/deleteImage.svg";
 import { galleryListHandler } from "../../../redux/action/businessAction/galleryList";
 import { useDispatch, useSelector } from "react-redux";
 import Loader from "../../../common/Loader/Loader";
@@ -75,13 +76,16 @@ const ImageGallery = ({
           {galleryListSelector?.data?.data?.records?.length > 0 ? (
             <>
               {galleryListSelector?.data?.data?.records?.map((item, index) => (
-                <div key={index}>
+                <div key={index} className="position-relative">
                   <img
                     src={item?.imageUrl}
                     alt={`Gallery item ${index + 1}`}
                     className="w-100 h-100"
                     onClick={() => openModal(index)}
                   />
+                  <div className="deleteImage" >
+                    <img src={deleteImage}  alt="" />
+                  </div>
                 </div>
               ))}
             </>
