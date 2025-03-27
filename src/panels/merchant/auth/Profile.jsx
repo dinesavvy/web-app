@@ -229,7 +229,7 @@ const Profile = () => {
         <div className="tabPadding">
           <div className="d-flex align-center justify-between mb-20">
             <div className="fs-20 fw-600">Gallery</div>
-            {activeTab === "merchant_upload" && (
+            {activeTab === "Merchant Upload" && (
               <div
                 className="addCircle cursor-pointer"
                 onClick={() => toggleModal()}
