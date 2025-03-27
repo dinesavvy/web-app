@@ -29,6 +29,8 @@ import activePromotionListSlice from "../action/businessAction/activePromotionLi
 import archivePromotionSlice from "../action/businessAction/archivePromotion"
 import updatePromotionSlice from "../action/businessAction/updateProotionPrice"
 import topNudgesSlice from "../action/businessAction/topNudgesSlice"
+import getProfileSlice from "../action/businessAction/getProfile"
+import galleryListSlice from "../action/businessAction/galleryList"
 
 const store = configureStore({
   reducer: {
@@ -61,7 +63,9 @@ const store = configureStore({
     activePromotionList:activePromotionListSlice,
     archivePromotionList:archivePromotionSlice,
     updatePromotionPrice:updatePromotionSlice,
-    topNudges:topNudgesSlice
+    topNudges:topNudgesSlice,
+    getProfileDetails:getProfileSlice,
+    galleryList:galleryListSlice
   },
 });
 
