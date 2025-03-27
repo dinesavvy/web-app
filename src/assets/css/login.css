@@ -48,8 +48,21 @@
     border: 2px solid #056DFF;
 
 }
+
+  .text-black{
+    color: black;
+  }
 @media (max-width: 1549.98px) {
     .logo{
         height: 70px;
     }
+    .line input {
+        padding-left: 58px;
+        width: calc(100% - 72px) !important;
+      }
+      .line::after {
+        height: 20px;
+        width: 1px;
+        left: 45px;
+      }
 }

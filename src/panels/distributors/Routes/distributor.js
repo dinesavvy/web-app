@@ -6,6 +6,9 @@ import DistributorPromotionList from "../components/distributorPromotion/distrib
 import DistributorLogin from "../components/login/Login";
 import DistributorDashboard from "./../components/distributorDashboard/DistributorDashboard";
 import NoPageFound from "../../../common/noPageFound/NoPageFound";
+import ForgotPassword from "../components/ForgotPassword/ForgotPassword";
+import ExpireLink from "../components/ForgotPassword/ExpireLink";
+import ResetPassword from "../components/ForgotPassword/ResetPassword";
 
 
 const supplierRoutes = [
@@ -45,6 +48,24 @@ const supplierRoutes = [
     element: AddDistributorPromotion,
     isPrivate: false,
     isLayout: true,
+  },
+  {
+    path: "/distributors/forgot-password",
+    element: ForgotPassword,
+    isPrivate: false,
+    isLayout: false,
+  },
+  {
+    path: "/distributors/expire-link",
+    element: ExpireLink,
+    isPrivate: false,
+    isLayout: false,
+  },
+  {
+    path: "/distributors/reset-password",
+    element: ResetPassword,
+    isPrivate: false,
+    isLayout: false,
   },
   {
     path: "/distributors/no-page-found",

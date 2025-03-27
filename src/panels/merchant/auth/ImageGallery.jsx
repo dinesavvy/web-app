@@ -155,6 +155,17 @@ const ImageGallery = ({
                     alt={selectedItem?.title}
                     className="w-100 h-100"
                   />
+                  <button onClick={prevImage} className="nav-btn prev-btn">
+                <img src={dropdownArrow} alt="" />
+              </button>
+              {/* <img
+              src={images[selectedIndex]}
+              alt="Selected"
+              className="modal-image"
+            /> */}
+              <button onClick={nextImage} className="nav-btn next-btn">
+                <img src={dropdownArrow} alt="" />
+              </button>
                 </div>
                 <div className="details">
                   {/* <div className="mb-10 fs-20 fw-700">
@@ -190,17 +201,7 @@ const ImageGallery = ({
                   </button>
                 </div>
               </div>
-              <button onClick={prevImage} className="nav-btn prev-btn">
-                <img src={dropdownArrow} alt="" />
-              </button>
-              {/* <img
-              src={images[selectedIndex]}
-              alt="Selected"
-              className="modal-image"
-            /> */}
-              <button onClick={nextImage} className="nav-btn next-btn">
-                <img src={dropdownArrow} alt="" />
-              </button>
+              
               {/* <button onClick={closeModal} className="close-btn">
             <img src={deleteList} alt="" />
             </button> */}

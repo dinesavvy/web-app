@@ -7,6 +7,9 @@ import AddSupplierPromotion from "../components/supplier/AddSupplierPromotion";
 import SupplierPromotionList from "../components/supplier/supplierPromotionList";
 import SupplierDashboard from "../components/supplierDashboard/SupplierDashboard";
 import NoPageFound from "../../../common/noPageFound/NoPageFound";
+import ForgotPassword from "../components/ForgotPassword/ForgotPassword";
+import ExpireLink from "../components/ForgotPassword/ExpireLink";
+import ResetPassword from "../components/ForgotPassword/ResetPassword";
 
 const supplierRoutes = [
   {
@@ -50,6 +53,24 @@ const supplierRoutes = [
     element: AddSupplierPromotion,
     isPrivate: false,
     isLayout: true,
+  },
+  {
+    path: "/supplier/forgot-password",
+    element: ForgotPassword,
+    isPrivate: false,
+    isLayout: false,
+  },
+  {
+    path: "/supplier/expire-link",
+    element: ExpireLink,
+    isPrivate: false,
+    isLayout: false,
+  },
+  {
+    path: "/supplier/reset-password",
+    element: ResetPassword,
+    isPrivate: false,
+    isLayout: false,
   },
   {
     path: "/supplier/no-page-found",

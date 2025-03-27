@@ -1,12 +1,14 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
-import React from "react";
+import React, { useState } from "react";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import "../../assets/css/Login.css";
 import login from "../../assets/images/login.jpg";
 import logo from "../../assets/images/logo.svg";
 import emailInput from "../../assets/images/emailInput.svg";
 import passwordInput from "../../assets/images/passwordInput.svg";
+import password from "../../assets/images/password.svg";
+import nopassword from "../../assets/images/nopassword.svg";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useCommonMessage } from "../CommonMessage";
@@ -20,7 +22,7 @@ const Login = () => {
   const loginSelector = useSelector((state) => state?.loginSliceDetails);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
+  const [showPassword, setShowPassword] = useState(false);
   const handleFormSubmit = (values) => {
     let payload = {
       email: values?.email,
@@ -37,7 +39,7 @@ const Login = () => {
       });
       navigate("/admin/merchant/dashboard");
       dispatch(loginSliceAction.loginDetailsSliceReset());
-    } else if (loginSelector?.message?.status===400) {
+    } else if (loginSelector?.message?.status === 400) {
       messageApi.open({
         type: "error",
         content: loginSelector?.message?.message,
@@ -93,23 +95,28 @@ const Login = () => {
                       className="mt-10 fw-500 fs-14 error"
                     />
                   </div>
-                  <div className="mb-60">
+                  <div className="mb-16">
                     <label className="fs-14 fw-500 mb-10" htmlFor="password">
                       Password*
                     </label>
                     <div className="line">
                       <Field
-                        type="password"
+                        type={showPassword ? "text" : "password"}
                         name="password"
                         placeholder="Enter your password"
                         id="password"
                       />
-
                       <img
                         src={passwordInput}
                         alt=""
                         className="absoluteImage"
                       />
+                    <div
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolutePassword"
+                    >
+                      {showPassword ? <img src={password} /> : <img src={nopassword} />}
+                    </div>
                     </div>
                     <ErrorMessage
                       name="password"
