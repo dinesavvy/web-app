@@ -405,17 +405,17 @@ const PromotionsList = () => {
                               <div className="range mb-5 pc">
                                 <div
                                   className="rangePercentage"
-                                  style={{ width: "50%" }}
+                                  style={{ width: `${item?.nudgeGoal || 0}%` }}
                                 ></div>
                               </div>
-                              <div className="fs-12 fw-500 mb-10 pc">20%</div>
+                              <div className="fs-12 fw-500 mb-10 pc">{item?.nudgeGoal}%</div>
                               <div className="d-flex mb-6 justify-between align-center gap-10">
                                 <div className="fs-12  grey">Retail Price</div>
                                 <div className="fs-16 pc fw-500">
                                   {/* {item?.brandDetails?.brandItem?.map(
                                     (item) => item?.sku
                                   )} */}
-                                  {item?.merchant?.retailPrice}
+                                  ${item?.merchant?.retailPrice}
                                 </div>
                               </div>
                               <div className="d-flex mb-6 justify-between align-center gap-10">
