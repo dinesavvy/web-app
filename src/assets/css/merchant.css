@@ -1773,6 +1773,15 @@ input.addTitleInput::placeholder {
   overflow: hidden;
   position: relative;
 }
+.deleteImage{
+  position: absolute;
+  top:6px;
+  right: 6px;
+  height: 36px !important;
+  width: 36px !important;
+  z-index: 2;
+  cursor: pointer;
+}
 .merchantCardCheckbox{
   position: absolute;
   right: 20px;
@@ -2186,6 +2195,16 @@ input.addTitleInput::placeholder {
   }
   .flexTag {
     height: 68px;
+  }
+  .deleteImage{
+    top:5px;
+    right: 5px;
+    height: 30px !important;
+    width: 30px !important;
+  }
+  .deleteImage img{
+    height: 100%;
+    width: 100%;
   }
   .freeAbsolute{
     left: 15px;
