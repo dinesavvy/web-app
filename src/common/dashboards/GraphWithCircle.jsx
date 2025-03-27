@@ -32,7 +32,7 @@ const GraphWithCircle = ({
           <div className="circleinfo mb-10">
             <img src={circleinfo} className="circleAbsolute" alt="" />
             <div className="fs-34 fw-700 z1">{merchantsCount}</div>
-            <div className="fs-14 z1">Merchants</div>
+            <div className="fs-14 z1">Nearby</div>
           </div>
         </div>
       </div>

@@ -21,18 +21,19 @@ import updateTeamBusinessSlice from "../action/businessAction/updateTeamBusiness
 import businessResendInviteLinkSlice from "../action/businessAction/businessResendInviteLink";
 import nudgeAnalyticSlice from "../action/businessAction/businessNudgeAnalytic";
 import businessAddNudgeCreditSlice from "../action/businessAction/businessAddNudgeCredit";
-import endNudgeSlice from "../action/businessAction/endNudgeSlice"
-import reverseNudgListSlice from "../action/businessAction/businessReverseNudgeList"
-import relaunchNudgeSlice from "../action/businessAction/relaunchNudge"
-import followerDetailsSlice from "../action/businessAction/followerDetailsAPI"
-import activePromotionListSlice from "../action/businessAction/activePromotionList"
-import archivePromotionSlice from "../action/businessAction/archivePromotion"
-import updatePromotionSlice from "../action/businessAction/updateProotionPrice"
-import topNudgesSlice from "../action/businessAction/topNudgesSlice"
-import getProfileSlice from "../action/businessAction/getProfile"
-import galleryListSlice from "../action/businessAction/galleryList"
-import addImageDataSlice from "../action/businessAction/addImage"
-import deleteImageSlice from "../action/businessAction/deleteImage"
+import endNudgeSlice from "../action/businessAction/endNudgeSlice";
+import reverseNudgListSlice from "../action/businessAction/businessReverseNudgeList";
+import relaunchNudgeSlice from "../action/businessAction/relaunchNudge";
+import followerDetailsSlice from "../action/businessAction/followerDetailsAPI";
+import activePromotionListSlice from "../action/businessAction/activePromotionList";
+import archivePromotionSlice from "../action/businessAction/archivePromotion";
+import updatePromotionSlice from "../action/businessAction/updateProotionPrice";
+import topNudgesSlice from "../action/businessAction/topNudgesSlice";
+import getProfileSlice from "../action/businessAction/getProfile";
+import galleryListSlice from "../action/businessAction/galleryList";
+import addImageDataSlice from "../action/businessAction/addImage";
+import deleteImageSlice from "../action/businessAction/deleteImage";
+import editImageSlice from "../action/businessAction/editImage";
 
 const store = configureStore({
   reducer: {
@@ -58,18 +59,19 @@ const store = configureStore({
     businessResendInviteLink: businessResendInviteLinkSlice,
     businessNudgeAnalytic: nudgeAnalyticSlice,
     businessAddNudgeCredit: businessAddNudgeCreditSlice,
-    endNudge:endNudgeSlice,
-    reverseNudgList:reverseNudgListSlice,
-    relaunchNudge:relaunchNudgeSlice,
-    followerDetails:followerDetailsSlice,
-    activePromotionList:activePromotionListSlice,
-    archivePromotionList:archivePromotionSlice,
-    updatePromotionPrice:updatePromotionSlice,
-    topNudges:topNudgesSlice,
-    getProfileDetails:getProfileSlice,
-    galleryList:galleryListSlice,
-    addImageData:addImageDataSlice,
-    deleteImage:deleteImageSlice
+    endNudge: endNudgeSlice,
+    reverseNudgList: reverseNudgListSlice,
+    relaunchNudge: relaunchNudgeSlice,
+    followerDetails: followerDetailsSlice,
+    activePromotionList: activePromotionListSlice,
+    archivePromotionList: archivePromotionSlice,
+    updatePromotionPrice: updatePromotionSlice,
+    topNudges: topNudgesSlice,
+    getProfileDetails: getProfileSlice,
+    galleryList: galleryListSlice,
+    addImageData: addImageDataSlice,
+    deleteImage: deleteImageSlice,
+    editImage: editImageSlice,
   },
 });
 

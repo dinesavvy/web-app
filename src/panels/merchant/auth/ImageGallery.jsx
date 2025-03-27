@@ -11,6 +11,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Loader from "../../../common/Loader/Loader";
 import moment from "moment";
 import { useCommonMessage } from "../../../common/CommonMessage";
+import { editImageAction, editImageHandler } from "../../../redux/action/businessAction/editImage";
 
 const ImageGallery = ({
   images,
@@ -23,6 +24,22 @@ const ImageGallery = ({
   const [isModalOpen, setIsModalOpen] = useState(openImage || false);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [selectedItem, setSelectedItem] = useState({});
+  const [isChecked, setIsChecked] = useState(false);
+
+  console.log(selectedItem,"selectedItem")
+
+  const handleChange = (event) => {
+    setIsChecked(event.target.checked);
+    let payload = {
+      imageId: selectedItem?._id,
+      title: activeTab,
+      imageUrl: selectedItem?.imageUrl,
+      isSpecial: event.target.checked,
+      imageCategoryType: activeTab,
+    };
+    dispatch(editImageHandler(payload));
+    console.log(payload,"payload")
+  };
 
   const dispatch = useDispatch();
 
@@ -31,6 +48,8 @@ const ImageGallery = ({
   const galleryListSelector = useSelector((state) => state?.galleryList);
 
   const deleteImageSelector = useSelector((state) => state?.deleteImage);
+
+  const editImageSelector = useSelector((state) => state?.editImage);
 
   const openModal = (item, index = 0) => {
     setSelectedIndex(index);
@@ -69,6 +88,19 @@ const ImageGallery = ({
     }
   }, [deleteImageSelector]);
 
+
+  useEffect(()=>{
+    if(editImageSelector?.data?.statusCode ===200){
+      messageApi.open({
+        type: "success",
+        content: editImageSelector?.data?.message,
+      });
+      dispatch(editImageAction.editImageReset())
+      setIsModalOpen(false);
+      setOpenImage(false);
+    }
+  },[editImageSelector])
+
   useEffect(() => {
     if (isModalOpen) {
       document.body.classList.add("overflow-Hidden");
@@ -100,13 +132,13 @@ const ImageGallery = ({
       };
       dispatch(galleryListHandler(payload));
     }
-  }, [activeTab, addImageDataSelector, deleteImageSelector]);
+  }, [activeTab, addImageDataSelector, deleteImageSelector,editImageSelector]);
 
   return (
     <>
-      {(galleryListSelector?.isLoading || deleteImageSelector?.isLoading) && (
-        <Loader />
-      )}
+      {(galleryListSelector?.isLoading ||
+        deleteImageSelector?.isLoading ||
+        editImageSelector?.isLoading) && <Loader />}
       <div className="w-100">
         <div className="imgGrid mb-20">
           {galleryListSelector?.data?.data?.records?.length > 0 ? (
@@ -118,9 +150,9 @@ const ImageGallery = ({
                     alt={`Gallery item ${index + 1}`}
                     className="w-100 h-100"
                     onClick={() => {
-                      if (activeTab === "Merchant Upload") {
+                      // if (activeTab === "Merchant Upload") {
                         openModal(item, index);
-                      }
+                      // }
                     }}
                   />
                 </div>
@@ -156,16 +188,16 @@ const ImageGallery = ({
                     className="w-100 h-100"
                   />
                   <button onClick={prevImage} className="nav-btn prev-btn">
-                <img src={dropdownArrow} alt="" />
-              </button>
-              {/* <img
+                    <img src={dropdownArrow} alt="" />
+                  </button>
+                  {/* <img
               src={images[selectedIndex]}
               alt="Selected"
               className="modal-image"
             /> */}
-              <button onClick={nextImage} className="nav-btn next-btn">
-                <img src={dropdownArrow} alt="" />
-              </button>
+                  <button onClick={nextImage} className="nav-btn next-btn">
+                    <img src={dropdownArrow} alt="" />
+                  </button>
                 </div>
                 <div className="details">
                   {/* <div className="mb-10 fs-20 fw-700">
@@ -174,7 +206,7 @@ const ImageGallery = ({
                   <div className="d-flex align-center justify-between gap-10 fs-14 mb-10">
                     Uploaded by:{" "}
                     <span className="fw-500">
-                      {selectedItem?.createdBy?.displayName}
+                      {selectedItem?.createdBy?.displayName??"-"}
                     </span>{" "}
                   </div>
                   <div className="d-flex align-center justify-between gap-10 fs-14 ">
@@ -184,10 +216,16 @@ const ImageGallery = ({
                     </span>{" "}
                   </div>
                   <div className="divider2 my-16"></div>
+                  {activeTab === "Merchant Upload" && (
+                    <>
                   <div className="mb-30">
                     <div className="custom-checkbox">
                       <label className="checkLabel">
-                        <input type="checkbox" />
+                        <input
+                          type="checkbox"
+                          checked={isChecked}
+                          onChange={handleChange}
+                        />
                         <span className="checkmark"></span>
                         Mark as Special
                       </label>
@@ -199,9 +237,11 @@ const ImageGallery = ({
                   >
                     Delete
                   </button>
+                  </>
+                  )}
                 </div>
               </div>
-              
+
               {/* <button onClick={closeModal} className="close-btn">
             <img src={deleteList} alt="" />
             </button> */}

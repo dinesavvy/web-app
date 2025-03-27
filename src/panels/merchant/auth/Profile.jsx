@@ -24,6 +24,7 @@ import {
   addImageAction,
   addImageHandler,
 } from "../../../redux/action/businessAction/addImage";
+import qrCode from "../../../assets/images/qrcode.png"
 
 const Profile = () => {
   const [openIndex, setOpenIndex] = useState(null);
@@ -207,6 +208,11 @@ const Profile = () => {
     businessPhoto,
     restaurantCard,
   ];
+const [qrCodeModal,setQrCodeModal] = useState(false)
+
+  const qrCodeModalMain = () =>{
+    setQrCodeModal(true)
+  }
 
   return (
     <>
@@ -218,7 +224,7 @@ const Profile = () => {
         <div className="tabPadding mb-30">
           <div className="d-flex justify-between align-center">
             <div className="fs-24 fw-600">Basic Info</div>
-            <div className="qrImage">
+            <div className="qrImage" onClick = {qrCodeModalMain}>
               <img src={qrImage} alt="" />
             </div>
           </div>
@@ -440,6 +446,33 @@ const Profile = () => {
               </div>
             </div>
           )}
+        </div>
+      </Modal>
+
+
+{/* QR Code Modal */}
+      <Modal
+        centered
+        visible={qrCodeModal} // Control the visibility of the modal  // Handle close
+        footer={null} // Hide the footer (buttons)
+        closable={false}
+        className="selecModal"
+      >
+        <div className="p20">
+          <div className=" d-flex justify-between align-center">
+            <div className="fs-18 fw-700">
+              {/* {!imagePreview ? "Upload Photo" : "Image Details"}{" "} */}
+              <img src = {qrCode} />
+            </div>
+            <div
+              className="closeSidebar"
+              onClick={() => {
+                setQrCodeModal(false)
+              }}
+            >
+              <img src={closeRightSidebar} alt="closeRightSidebar" />
+            </div>
+          </div>
         </div>
       </Modal>
     </>
