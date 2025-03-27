@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import qrImage from "../../../assets/images/qrImage.svg";
 import arrowUp from "../../../assets/images/arrow-up.svg";
 import addCircle from "../../../assets/images/addCircle.svg";
@@ -11,12 +11,30 @@ import restaurantCard from "../../../assets/images/restaurantCard.png";
 import businessPhoto from "../../../assets/images/businessPhoto.png";
 import ImageGallery from "./ImageGallery";
 import { Modal } from "antd";
+import { useDispatch, useSelector } from "react-redux";
+import { getProfileHandler } from "../../../redux/action/businessAction/getProfile";
+import Loader from "../../../common/Loader/Loader";
+import { galleryListHandler } from "../../../redux/action/businessAction/galleryList";
 
 const Profile = () => {
   const [openIndex, setOpenIndex] = useState(null);
   const [openImage, setOpenImage] = useState(false);
   const [isModalOpen, setModalOpen] = useState(false);
   const [uploadedImage, setUploadedImage] = useState(null);
+  const [activeTab, setActiveTab] = useState("Additional");
+  console.log(activeTab,"activeTab")
+
+  const dispatch = useDispatch();
+
+  const tabs = [
+    { key: "additional", label: "Additional" },
+    { key: "cover", label: "Cover" },
+    { key: "profile", label: "Profile" },
+    { key: "logo", label: "Logo" },
+    { key: "food_drink", label: "Food & Drink" },
+    { key: "menu", label: "Menu" },
+    { key: "merchant_upload", label: "Merchant Upload" },
+  ];
 
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
@@ -41,18 +59,49 @@ const Profile = () => {
     localStorage.getItem("selectedBusiness")
   );
 
+  const getProfileDetailsSelector = useSelector(
+    (state) => state?.getProfileDetails
+  );
+
+  
+
+  console.log(getSelectedBusinessData, "getSelectedBusinessData");
+
+  useEffect(() => {
+    dispatch(getProfileHandler(getSelectedBusinessData?._id));
+  }, []);
+
+  // useEffect(() => {
+  //   if(activeTab){
+  //     let payload = {
+  //       page: 1,
+  //       limit: 10,
+  //       imageCategoryType: activeTab,
+  //     };
+  //     dispatch(galleryListHandler(payload));
+  //   }
+  // }, [activeTab]);
+
   const items = [
     {
       title: "About",
-      content: <AboutProfile />,
+      content: (
+        <AboutProfile getProfileDetailsSelector={getProfileDetailsSelector} />
+      ),
     },
     {
       title: "Account Info",
-      content: <AccountInfoProfile />,
+      content: (
+        <AccountInfoProfile
+          getProfileDetailsSelector={getProfileDetailsSelector}
+        />
+      ),
     },
     {
       title: "Hours",
-      content: <HoursProfile />,
+      content: (
+        <HoursProfile getProfileDetailsSelector={getProfileDetailsSelector} />
+      ),
     },
   ];
   const toggleModal = () => {
@@ -74,6 +123,7 @@ const Profile = () => {
   ];
   return (
     <>
+      {getProfileDetailsSelector?.isLoading && <Loader />}
       <div className="dashboard">
         <div className="tabPadding mb-30">
           <div className="d-flex justify-between align-center">
@@ -84,15 +134,19 @@ const Profile = () => {
           </div>
           <div className="divider2"></div>
           <div className="d-flex align-center gap-20">
-            <div className="profileImage">{JSON.parse(
+            <div className="profileImage">
+              {JSON.parse(
                 localStorage.getItem("loginResponse")
               )?.firstName?.charAt(0)}
               {JSON.parse(
                 localStorage.getItem("loginResponse")
-              )?.lastName?.charAt(0)}</div>
+              )?.lastName?.charAt(0)}
+            </div>
             <div>
-              <div className="fs-24 fw-600 mb-10">{JSON.parse(localStorage.getItem("loginResponse")).firstName}</div>
-              <div className="positionTag fs-16 fw-600">{getSelectedBusinessData?.roleTitle}</div>
+              <div className="fs-24 fw-600 mb-10"></div>
+              <div className="positionTag fs-16 fw-600">
+                {getSelectedBusinessData?.roleTitle}
+              </div>
             </div>
           </div>
           <div className="divider2"></div>
@@ -105,6 +159,9 @@ const Profile = () => {
                 type="text"
                 className="input"
                 placeholder="Business name"
+                defaultValue={
+                  getProfileDetailsSelector?.data?.data?.businessName
+                }
               />
             </div>
             <div>
@@ -115,6 +172,9 @@ const Profile = () => {
                 type="text"
                 className="input"
                 placeholder="Street address"
+                defaultValue={
+                  getProfileDetailsSelector?.data?.data?.address?.addressLine1
+                }
               />
             </div>
             <div>
@@ -125,6 +185,15 @@ const Profile = () => {
                 type="text"
                 className="input"
                 placeholder="Street address"
+                defaultValue={[
+                  getProfileDetailsSelector?.data?.data?.address?.locality,
+                  getProfileDetailsSelector?.data?.data?.address
+                    ?.administrativeDistrictLevel1,
+                  getProfileDetailsSelector?.data?.data?.address?.country,
+                  getProfileDetailsSelector?.data?.data?.address?.postalCode,
+                ]
+                  .filter(Boolean)
+                  .join(", ")}
               />
             </div>
           </div>
@@ -160,26 +229,36 @@ const Profile = () => {
         <div className="tabPadding">
           <div className="d-flex align-center justify-between mb-20">
             <div className="fs-20 fw-600">Gallery</div>
-            <div
-              className="addCircle cursor-pointer"
-              onClick={() => toggleModal()}
-            >
-              <img src={addCircle} alt="" />
-            </div>
+            {activeTab === "merchant_upload" && (
+              <div
+                className="addCircle cursor-pointer"
+                onClick={() => toggleModal()}
+              >
+                <img src={addCircle} alt="" />
+              </div>
+            )}
           </div>
           <div className="tabs-container tab3 tabFull mb-20">
             <div className="tabs">
-              <button className="tab-button active">Drinks</button>
-              <button className="tab-button ">Appetizers</button>
-              <button className="tab-button ">Meals</button>
-              <button className="tab-button ">Restaurant</button>
-              <button className="tab-button ">Customer Submitted</button>
+              {tabs.map((tab) => (
+                <button
+                  key={tab.key}
+                  className={`tab-button ${
+                    activeTab === tab.label ? "active" : ""
+                  }`}
+                  onClick={() => setActiveTab(tab.label)}
+                >
+                  {tab.label}
+                </button>
+              ))}
             </div>
           </div>
           <ImageGallery
             images={images}
             openImage={openImage}
             setOpenImage={setOpenImage}
+            // galleryListSelector={galleryListSelector}
+            activeTab={activeTab}
           />
         </div>
       </div>
