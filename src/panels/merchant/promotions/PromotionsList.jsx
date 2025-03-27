@@ -13,7 +13,10 @@ import {
   activePromotionListAction,
   activePromotionListHandler,
 } from "../../../redux/action/businessAction/activePromotionList";
-import { archivePromotionHandler, archivePromotionListAction } from "../../../redux/action/businessAction/archivePromotion";
+import {
+  archivePromotionHandler,
+  archivePromotionListAction,
+} from "../../../redux/action/businessAction/archivePromotion";
 import {
   updatePromotionPriceAction,
   updatePromotionPriceHandler,
@@ -143,6 +146,81 @@ const PromotionsList = () => {
         archivePromotionListSelector?.isLoading ||
         updatePromotionPriceSelector?.isLoading) && <Loader />}
       <div className="dashboard">
+        {/* <div className="tabs-container tab3 tabFull tabing">
+          <div className="tabs">
+            <button
+              className={`tab-button ${activeTab === "active" ? "active" : ""}`}
+              onClick={() => setActiveTab("active")}
+            >
+              Active
+            </button>
+            <button
+              className={`tab-button ${activeTab === "offer" ? "active" : ""}`}
+              onClick={() => setActiveTab("offer")}
+            >
+              <div className="d-flex align-center justify-center gap-8">
+                Offer
+                <div className="tagNumber fs-14 fw-500">3</div>
+              </div>
+            </button>
+            <button
+              className={`tab-button ${
+                activeTab === "archive" ? "active" : ""
+              }`}
+              onClick={() => setActiveTab("archive")}
+            >
+              Archive
+            </button>
+          </div>
+        </div> */}
+
+
+
+        <div className="tabs-container tab3 tabFull tabing">
+            <div className="tabs">
+              <button
+                className={`tab-button ${
+                  activeTab === "active" ? "active" : ""
+                }`}
+                onClick={() => {
+                  setActiveTab("active");
+                  setPagination({ page: 1, limit: 9 });
+                  dispatch(
+                    archivePromotionListAction.archivePromotionListReset()
+                  );
+                }}
+              >
+                Active
+              </button>
+              <button
+                className={`tab-button d-flex align-center justify-center gap-8 ${
+                  activeTab === "offer" ? "active" : ""
+                }`}
+                onClick={() => {
+                  setActiveTab("offer");
+                  setPagination({ page: 1, limit: 9 });
+                }}
+              >
+                Offer{" "}
+                <div className="tagNumber fs-14 fw-500">{activeTab === "offer"
+                    ? archivePromotionListSelector?.data?.data?.records?.length
+                    : ""}</div>
+              </button>
+              <button
+                className={`tab-button ${
+                  activeTab === "archive" ? "active" : ""
+                }`}
+                onClick={() => {
+                  setActiveTab("archive");
+                  setPagination({ page: 1, limit: 9 });
+                }}
+              >
+                Archive
+              </button>
+            </div>
+          </div>
+
+
         <div className="tabPadding">
           <div className="d-flex justify-between align-center mb-20 gap-10 flexsm">
             <div className="fs-24 fw-600">Promotions</div>
@@ -178,13 +256,19 @@ const PromotionsList = () => {
               </div>
             </div> */}
           </div>
-          <div className="tabs-container tab3 tabing mb-20">
+          {/* <div className="tabs-container tab3 tabing mb-20">
             <div className="tabs">
               <button
                 className={`tab-button ${
                   activeTab === "active" ? "active" : ""
                 }`}
-                onClick={() => {setActiveTab("active");setPagination({ page: 1, limit: 9 });dispatch(archivePromotionListAction.archivePromotionListReset());}}
+                onClick={() => {
+                  setActiveTab("active");
+                  setPagination({ page: 1, limit: 9 });
+                  dispatch(
+                    archivePromotionListAction.archivePromotionListReset()
+                  );
+                }}
               >
                 Active
               </button>
@@ -216,7 +300,7 @@ const PromotionsList = () => {
                 Archive
               </button>
             </div>
-          </div>
+          </div> */}
           {/* <SearchSelect
             onSearchChange={handleSearchChange}
             onSearchAreaChange={handleSearchAreaChange}
@@ -233,7 +317,7 @@ const PromotionsList = () => {
                         key={index}
                       >
                         <div className="p-10">
-                          <div className="nailedIt active fs-14">
+                          <div className="nailedIt active fs-14 ">
                             {moment(item?.endDate).isBefore(moment()) ? (
                               <>
                                 Expired on{" "}
@@ -293,18 +377,8 @@ const PromotionsList = () => {
                                 : ""}
                             </div>
                           </div>
-                          <div className="grid2 mb-20">
-                            <div>
-                              <div className="fs-14 mb-4">SKUs</div>
-                              <div className="fs-14 fw-600">
-                                {item?.brandDetails?.brandItem?.map(
-                                  (item) => item?.sku
-                                )}
-                              </div>
-                            </div>
-                          </div>
-                          <div className="d-flex justify-between align-center gap-10">
-                            <div className="fs-14 mb-4">Retail Price</div>
+                          <div>
+                            <div className="fs-14 mb-4">SKUs</div>
                             <div className="fs-14 fw-600">
                               {/* {item?.brandDetails?.brandItem?.map(
                                 (item) => item?.sku
@@ -322,28 +396,70 @@ const PromotionsList = () => {
                             <div className="fs-14 mb-4">Nudges Redeemed</div>
                             <div className="fs-14 fw-600">
                               {item?.nudgeRedeemedCount}
+                              <div className="divider2 m10"></div>
+                              <div className="fs-14 mb-10">
+                                Depletion progress
+                              </div>
+                              <div className="range mb-5 pc">
+                                <div
+                                  className="rangePercentage"
+                                  style={{ width: "50%" }}
+                                ></div>
+                              </div>
+                              <div className="fs-12 fw-500 mb-10 pc">20%</div>
+                              <div className="d-flex mb-6 justify-between align-center gap-10">
+                                <div className="fs-12  grey">Retail Price</div>
+                                <div className="fs-16 pc fw-500">
+                                  {item?.brandDetails?.brandItem?.map(
+                                    (item) => item?.sku
+                                  )}
+                                </div>
+                              </div>
+                              <div className="d-flex mb-6 justify-between align-center gap-10">
+                                <div className="fs-12  grey">Item Quantity</div>
+                                <div className="fs-16  fw-500">
+                                  {item?.brandDetails?.brandItem?.map(
+                                    (item) => item?.sku
+                                  )}
+                                </div>
+                              </div>
+                              <div className="d-flex mb-6 justify-between align-center gap-10">
+                                <div className="fs-12  grey">
+                                  Nudges Redeemed
+                                </div>
+                                <div className="fs-16  fw-500">
+                                  {item?.brandDetails?.brandItem?.map(
+                                    (item) => item?.sku
+                                  )}
+                                </div>
+                                <div className="fs-14 fw-600">
+                                  ${item?.remainingWithdrawFund}
+                                </div>
+                                <div className="d-flex mb-6 justify-between align-center gap-10">
+                                  <div className="fs-12  grey">
+                                    Funds Available fo6 pc Withdrawal
+                                  </div>
+                                  <div className="fs-16 pc fw-500">
+                                    {item?.brandDetails?.brandItem?.map(
+                                      (item) => item?.sku
+                                    )}
+                                  </div>
+                                </div>
+                                <div className="divider2"></div>
+                                <div
+                                  className="btn btnSecondary"
+                                  onClick={() => {
+                                    navigate("/merchant/create-nudge");
+                                    localStorage.setItem(
+                                      "promotionNudgeItem",
+                                      JSON.stringify(item)
+                                    );
+                                  }}
+                                >
+                                  Send Nudges
+                                </div>
+                              </div>
                             </div>
-                          </div>
-                          <div className="d-flex justify-between align-center gap-10">
-                            <div className="fs-14 mb-4">
-                              Funds Available for Withdrawal
-                            </div>
-                            <div className="fs-14 fw-600">
-                              ${item?.remainingWithdrawFund}
-                            </div>
-                          </div>
-                          <div className="divider2"></div>
-                          <div
-                            className="btn btnSecondary"
-                            onClick={() => {
-                              navigate("/merchant/create-nudge");
-                              localStorage.setItem(
-                                "promotionNudgeItem",
-                                JSON.stringify(item)
-                              );
-                            }}
-                          >
-                            Send Nudges
                           </div>
                         </div>
                       </div>
