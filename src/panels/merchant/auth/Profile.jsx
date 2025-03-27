@@ -15,16 +15,31 @@ import { useDispatch, useSelector } from "react-redux";
 import { getProfileHandler } from "../../../redux/action/businessAction/getProfile";
 import Loader from "../../../common/Loader/Loader";
 import { galleryListHandler } from "../../../redux/action/businessAction/galleryList";
+import { useCommonMessage } from "../../../common/CommonMessage";
+import {
+  businessFileUploadAction,
+  businessFileUploadHandler,
+} from "../../../redux/action/businessAction/businessFileUpload";
+import {
+  addImageAction,
+  addImageHandler,
+} from "../../../redux/action/businessAction/addImage";
 
 const Profile = () => {
   const [openIndex, setOpenIndex] = useState(null);
+  const [loading, setLoading] = useState(false);
   const [openImage, setOpenImage] = useState(false);
   const [isModalOpen, setModalOpen] = useState(false);
   const [uploadedImage, setUploadedImage] = useState(null);
   const [activeTab, setActiveTab] = useState("Additional");
-  console.log(activeTab,"activeTab")
+  const [imagePreview, setImagePreview] = useState(null);
+  const [fileObject, setFileObject] = useState();
+  const [isSpecial, setIsSpecial] = useState(false);
+
+  const fileuploadSelector = useSelector((state) => state?.businessFileUpload);
 
   const dispatch = useDispatch();
+  const messageApi = useCommonMessage();
 
   const tabs = [
     { key: "additional", label: "Additional" },
@@ -38,19 +53,67 @@ const Profile = () => {
 
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
+    setFileObject(file);
     if (file) {
-      const imageUrl = URL.createObjectURL(file);
-      setUploadedImage({
-        name: file.name,
-        url: imageUrl,
-        uploader: "John Cooper",
-        uploadDate: "1 month ago",
-      });
+      const allowedTypes = ["image/jpeg", "image/png", "image/jpg"];
+      if (!allowedTypes.includes(file.type)) {
+        messageApi.open({
+          type: "error",
+          content: "Only JPG, JPEG, and PNG formats are allowed",
+        });
+        return;
+      }
+      const maxSize = 5 * 1024 * 1024; // 5MB
+      if (file.size > maxSize) {
+        messageApi.open({
+          type: "error",
+          content: "File size must not exceed 5MB.",
+        });
+        return;
+      }
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result);
+      };
+      let payload = {
+        fileList: [{ fileName: file?.name }],
+      };
+      dispatch(businessFileUploadHandler(payload));
+      reader.readAsDataURL(file);
     }
   };
 
+  useEffect(() => {
+    const uploadFile = async () => {
+      if (fileuploadSelector?.data?.statusCode === 200) {
+        setLoading(true);
+        try {
+          const response = await fetch(
+            fileuploadSelector?.data?.data?.[0]?.url,
+            {
+              method: "PUT",
+              body: fileObject,
+            }
+          );
+
+          if (!response.ok) {
+            throw new Error("File upload failed");
+          }
+        } catch (error) {
+          console.error("Error uploading file", error);
+        } finally {
+          setLoading(false);
+        }
+      }
+    };
+
+    uploadFile();
+  }, [fileuploadSelector]);
+
   const handleDelete = () => {
     setUploadedImage(null);
+    setImagePreview(null);
+    setModalOpen(false);
   };
   const toggleAccordion = (index) => {
     setOpenIndex(index === openIndex ? null : index);
@@ -63,24 +126,47 @@ const Profile = () => {
     (state) => state?.getProfileDetails
   );
 
-  
-
-  console.log(getSelectedBusinessData, "getSelectedBusinessData");
+  const addImageDataSelector = useSelector((state) => state?.addImageData);
 
   useEffect(() => {
     dispatch(getProfileHandler(getSelectedBusinessData?._id));
   }, []);
 
-  // useEffect(() => {
-  //   if(activeTab){
-  //     let payload = {
-  //       page: 1,
-  //       limit: 10,
-  //       imageCategoryType: activeTab,
-  //     };
-  //     dispatch(galleryListHandler(payload));
-  //   }
-  // }, [activeTab]);
+
+  const handleCheckboxChange = (event) => {
+    setIsSpecial(event.target.checked);
+  };
+
+  const handleUploadImage = () => {
+    let payload = {
+      title: activeTab,
+      imageUrl: fileuploadSelector?.data?.data
+        ?.map((item) => item?.src)
+        .join(""),
+      isSpecial: isSpecial,
+      imageCategoryType: activeTab,
+    };
+    setModalOpen(false);
+    dispatch(addImageHandler(payload));
+    console.log(payload, "payload");
+  };
+
+  useEffect(() => {
+    if (addImageDataSelector?.message) {
+      messageApi.open({
+        type: "error",
+        content: addImageDataSelector?.message,
+      });
+      dispatch(addImageAction.addImageReset());
+    }else if (addImageDataSelector?.data?.statusCode===200){
+      messageApi.open({
+        type: "success",
+        content: addImageDataSelector?.data?.message,
+      });
+      setImagePreview(null)
+      dispatch(addImageAction.addImageReset());
+    }
+  }, [addImageDataSelector]);
 
   const items = [
     {
@@ -121,9 +207,13 @@ const Profile = () => {
     businessPhoto,
     restaurantCard,
   ];
+
   return (
     <>
-      {getProfileDetailsSelector?.isLoading && <Loader />}
+      {(getProfileDetailsSelector?.isLoading ||
+        addImageDataSelector?.isLoading ||
+        fileuploadSelector?.isLoading ||
+        loading) && <Loader />}
       <div className="dashboard">
         <div className="tabPadding mb-30">
           <div className="d-flex justify-between align-center">
@@ -259,9 +349,11 @@ const Profile = () => {
             setOpenImage={setOpenImage}
             // galleryListSelector={galleryListSelector}
             activeTab={activeTab}
+            addImageDataSelector={addImageDataSelector}
           />
         </div>
       </div>
+      {/* Upload Image modal */}
       <Modal
         centered
         visible={isModalOpen} // Control the visibility of the modal  // Handle close
@@ -272,14 +364,20 @@ const Profile = () => {
         <div className="p20">
           <div className=" d-flex justify-between align-center">
             <div className="fs-18 fw-700">
-              {!uploadedImage ? "Upload Photo" : "Image Details"}{" "}
+              {!imagePreview ? "Upload Photo" : "Image Details"}{" "}
             </div>
-            <div className="closeSidebar" onClick={() => setModalOpen(false)}>
+            <div
+              className="closeSidebar"
+              onClick={() => {
+                setModalOpen(false);
+                setImagePreview(null);
+              }}
+            >
               <img src={closeRightSidebar} alt="closeRightSidebar" />
             </div>
           </div>
           <div className="divider2"></div>
-          {!uploadedImage ? (
+          {!imagePreview ? (
             <label className="uploadDrag text-center" htmlFor="file">
               <input
                 type="file"
@@ -300,17 +398,21 @@ const Profile = () => {
             <div className="image-details">
               <div className="image-preview mb-20">
                 <img
-                  src={uploadedImage.url}
-                  alt={uploadedImage.name}
+                  src={imagePreview}
+                  // alt={uploadedImage.name}
                   className="w-100 h-100"
                 />
               </div>
               <div className="details">
-                <div className="fs-20 fw-700 mb-20">{uploadedImage.name}</div>
+                {/* <div className="fs-20 fw-700 mb-20">{uploadedImage.name}</div> */}
                 <div>
                   <div className="custom-checkbox">
                     <label className="checkLabel">
-                      <input type="checkbox" />
+                      <input
+                        type="checkbox"
+                        checked={isSpecial}
+                        onChange={handleCheckboxChange}
+                      />
                       <span className="checkmark"></span>
                       Mark as Special
                     </label>
@@ -326,10 +428,11 @@ const Profile = () => {
                   </div>
                   <div
                     className="w-100 btn"
-                    onClick={() => {
-                      setModalOpen(false);
-                      handleDelete();
-                    }}
+                    // onClick={() => {
+                    //   setModalOpen(false);
+                    //   handleDelete();
+                    // }}
+                    onClick={handleUploadImage}
                   >
                     Upload
                   </div>

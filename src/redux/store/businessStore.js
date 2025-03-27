@@ -32,6 +32,7 @@ import topNudgesSlice from "../action/businessAction/topNudgesSlice"
 import getProfileSlice from "../action/businessAction/getProfile"
 import galleryListSlice from "../action/businessAction/galleryList"
 import addImageDataSlice from "../action/businessAction/addImage"
+import deleteImageSlice from "../action/businessAction/deleteImage"
 
 const store = configureStore({
   reducer: {
@@ -67,7 +68,8 @@ const store = configureStore({
     topNudges:topNudgesSlice,
     getProfileDetails:getProfileSlice,
     galleryList:galleryListSlice,
-    addImageData:addImageDataSlice
+    addImageData:addImageDataSlice,
+    deleteImage:deleteImageSlice
   },
 });
 

@@ -20,7 +20,7 @@ const CommonModal = ({
   const dispatch = useDispatch();
   const messageApi = useCommonMessage();
   const endNudgeSelector = useSelector((state) => state?.endNudge);
-  console.log(endNudgeSelector, "endNudgeSelector");
+  
   const commonOnclick = () => {
     let payload = {
       nudgeId: endNudgeItem?._id,

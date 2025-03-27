@@ -3,8 +3,14 @@ import React, { useEffect, useState } from "react";
 import dropdownArrow from "../../../assets/images/dropdownArrow.svg";
 import closeRightSidebar from "../../../assets/images/closeRightSidebar.svg";
 import { galleryListHandler } from "../../../redux/action/businessAction/galleryList";
+import {
+  deleteImageAction,
+  deleteImageHandler,
+} from "../../../redux/action/businessAction/deleteImage";
 import { useDispatch, useSelector } from "react-redux";
 import Loader from "../../../common/Loader/Loader";
+import moment from "moment";
+import { useCommonMessage } from "../../../common/CommonMessage";
 
 const ImageGallery = ({
   images,
@@ -12,16 +18,24 @@ const ImageGallery = ({
   setOpenImage,
   // galleryListSelector,
   activeTab,
+  addImageDataSelector,
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(openImage || false);
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const [selectedItem, setSelectedItem] = useState({});
+
   const dispatch = useDispatch();
+
+  const messageApi = useCommonMessage();
 
   const galleryListSelector = useSelector((state) => state?.galleryList);
 
-  const openModal = (index = 0) => {
+  const deleteImageSelector = useSelector((state) => state?.deleteImage);
+
+  const openModal = (item, index = 0) => {
     setSelectedIndex(index);
     setIsModalOpen(true);
+    setSelectedItem(item);
   };
 
   useEffect(() => {
@@ -30,10 +44,30 @@ const ImageGallery = ({
       setIsModalOpen(true);
     }
   }, [openImage]);
+
+  const deleteImage = () => {
+    let payload = {
+      imageId: selectedItem?._id,
+    };
+    dispatch(deleteImageHandler(payload));
+  };
+
   const closeModal = () => {
     setIsModalOpen(false);
     setOpenImage(false);
   };
+
+  useEffect(() => {
+    if (deleteImageSelector?.data?.statusCode === 200) {
+      messageApi.open({
+        type: "success",
+        content: deleteImageSelector?.data?.message,
+      });
+      setIsModalOpen(false);
+      setOpenImage(false);
+      dispatch(deleteImageAction.deleteImageReset());
+    }
+  }, [deleteImageSelector]);
 
   useEffect(() => {
     if (isModalOpen) {
@@ -46,6 +80,7 @@ const ImageGallery = ({
       document.body.classList.remove("overflow-Hidden");
     };
   }, [isModalOpen]);
+
   const nextImage = () => {
     setSelectedIndex((prevIndex) => (prevIndex + 1) % images.length);
   };
@@ -65,11 +100,13 @@ const ImageGallery = ({
       };
       dispatch(galleryListHandler(payload));
     }
-  }, [activeTab]);
+  }, [activeTab, addImageDataSelector, deleteImageSelector]);
 
   return (
     <>
-      {galleryListSelector?.isLoading && <Loader />}
+      {(galleryListSelector?.isLoading || deleteImageSelector?.isLoading) && (
+        <Loader />
+      )}
       <div className="w-100">
         <div className="imgGrid mb-20">
           {galleryListSelector?.data?.data?.records?.length > 0 ? (
@@ -80,7 +117,11 @@ const ImageGallery = ({
                     src={item?.imageUrl}
                     alt={`Gallery item ${index + 1}`}
                     className="w-100 h-100"
-                    onClick={() => openModal(index)}
+                    onClick={() => {
+                      if (activeTab === "Merchant Upload") {
+                        openModal(item, index);
+                      }
+                    }}
                   />
                 </div>
               ))}
@@ -109,20 +150,27 @@ const ImageGallery = ({
               <div className="image-details">
                 <div className="image-preview mb-20">
                   <img
-                    src={images[selectedIndex]}
-                    alt={images[selectedIndex]}
+                    // src={images[selectedIndex]}
+                    src={selectedItem?.imageUrl}
+                    alt={selectedItem?.title}
                     className="w-100 h-100"
                   />
                 </div>
                 <div className="details">
-                  <div className="mb-10 fs-20 fw-700">
+                  {/* <div className="mb-10 fs-20 fw-700">
                     {images[selectedIndex]}
-                  </div>
+                  </div> */}
                   <div className="d-flex align-center justify-between gap-10 fs-14 mb-10">
-                    Uploaded by: <span className="fw-500">John Cooper</span>{" "}
+                    Uploaded by:{" "}
+                    <span className="fw-500">
+                      {selectedItem?.createdBy?.displayName}
+                    </span>{" "}
                   </div>
                   <div className="d-flex align-center justify-between gap-10 fs-14 ">
-                    Date <span className="fw-500">1 month ago</span>{" "}
+                    Date{" "}
+                    <span className="fw-500">
+                      {moment(selectedItem).fromNow()}
+                    </span>{" "}
                   </div>
                   <div className="divider2 my-16"></div>
                   <div className="mb-30">
@@ -135,7 +183,7 @@ const ImageGallery = ({
                     </div>
                   </div>
                   <button
-                    onClick={closeModal}
+                    onClick={deleteImage}
                     className="btn deleteBtnfull w-100"
                   >
                     Delete
