@@ -1771,6 +1771,7 @@ input.addTitleInput::placeholder {
   height: 300px;
   border-radius: 8px;
   overflow: hidden;
+  position: relative;
 }
 .merchantCardCheckbox{
   position: absolute;

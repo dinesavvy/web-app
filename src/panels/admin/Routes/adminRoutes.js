@@ -17,6 +17,7 @@ import Suppliers from "../Components/Suppliers/Suppliers";
 import Distributors from "../Components/Distributors/Distributors";
 import AddBrands from "../Components/Brands/AddBrands";
 import NoPageFound from "../../../common/noPageFound/NoPageFound";
+import ForgotPassword from "../../suppliers/components/ForgotPassword/ForgotPassword";
 
 
 const adminRoutes = [
