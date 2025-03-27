@@ -1026,8 +1026,21 @@ input[type="radio"]:checked+.custom-radio-button {
   width: calc(100% - 10px);
   color: white;
   opacity: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
 }
 
+.successNailedItIcon,.successNailedIt .remainTime{
+  display: none;
+}
+.successNailedIt .successNailedItIcon,.remainTime{
+  display: block;
+}
+.successNailedIt{
+  background-color: #00D014;
+}
 .nailedIt.active {
   opacity: 1;
 }
@@ -1912,6 +1925,10 @@ input.addTitleInput::placeholder {
 .m10{
   margin: 10px 0;
 }
+.borderRight:not(:last-child){
+  padding-right: 20px;
+  border-right: 1px solid #E3E3E8;
+}
 /* Responsive Design */
 @media (max-width: 768px) {
   .error-code {
@@ -1936,6 +1953,9 @@ input.addTitleInput::placeholder {
 
 
 @media (max-width: 1549.98px) {
+  .borderRight:not(:last-child){
+    padding-right: 16px;
+  }
   .codeImage{
     height: 60px;
     width: 60px;
@@ -2372,7 +2392,10 @@ input.addTitleInput::placeholder {
     flex-direction: column;
     align-items: start;
   }
-
+.borderRight:not(:last-child){
+  padding: 0;
+  border: none;
+}
   .merchantGrid {
     grid-template-columns: repeat(2, 1fr);
   }

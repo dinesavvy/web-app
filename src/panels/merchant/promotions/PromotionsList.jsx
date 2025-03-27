@@ -9,6 +9,8 @@ import { useDispatch, useSelector } from "react-redux";
 import Loader from "../../../common/Loader/Loader";
 import moment from "moment";
 import noImageFound from "../../../assets/images/noImageFound.png";
+import remainTime from "../../../assets/images/remainTime.svg";
+import successNailedIt from "../../../assets/images/successNailedIt.svg";
 import {
   activePromotionListAction,
   activePromotionListHandler,
@@ -305,6 +307,38 @@ const PromotionsList = () => {
             onSearchChange={handleSearchChange}
             onSearchAreaChange={handleSearchAreaChange}
           /> */}
+          {activeTab === "active" && (
+            <>
+            <div className="card mb-20">
+              <div className="grid3 gap-20">
+              <div className="borderRight">
+                  <div className="fs-24 fw-700">
+                    03
+                  </div>
+                  <div className="fs-14 fw-500">
+                  Active Promotions
+                  </div>
+              </div>
+              <div className="borderRight">
+                  <div className="fs-24 fw-700">
+                  $200
+                  </div>
+                  <div className="fs-14 fw-500">
+                  Funds available
+                  </div>
+              </div>
+              <div className="borderRight">
+                  <div className="fs-24 fw-700">
+                  $1200
+                  </div>
+                  <div className="fs-14 fw-500">
+                  Funds withdrawn
+                  </div>
+              </div>
+              </div>
+            </div>
+            </>
+          )}
           <div className="merchantGrid mb-20">
             {activePromotionListSelector?.data?.data?.records?.length > 0 &&
             activeTab === "active" ? (
@@ -317,7 +351,7 @@ const PromotionsList = () => {
                         key={index}
                       >
                         <div className="p-10">
-                          <div className="nailedIt active fs-14 ">
+                          <div className="nailedIt successNailedIt active fs-14 ">
                             {moment(item?.endDate).isBefore(moment()) ? (
                               <>
                                 Expired on{" "}
@@ -325,7 +359,8 @@ const PromotionsList = () => {
                               </>
                             ) : (
                               <>
-                                Expires in{" "}
+                                <img src={successNailedIt} className="successNailedItIcon" alt="" />
+                                <img src={remainTime} className="remainTime" alt="" /> Expires in{" "}
                                 {moment(item?.endDate).diff(moment(), "days") >
                                 0
                                   ? `${moment(item?.endDate).diff(
@@ -511,12 +546,12 @@ const PromotionsList = () => {
                         <div className="nailedIt active fs-14">
                           {moment(item?.endDate).isBefore(moment()) ? (
                             <>
-                              Expired on{" "}
+                               Expired on{" "}
                               {moment(item?.endDate).format("Do MMMM YYYY")}
                             </>
                           ) : (
                             <>
-                              Expires in{" "}
+                               Expires in{" "}
                               {moment(item?.endDate).diff(moment(), "days") > 0
                                 ? `${moment(item?.endDate).diff(
                                     moment(),
