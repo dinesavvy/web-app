@@ -1939,6 +1939,18 @@ input.addTitleInput::placeholder {
   padding-right: 20px;
   border-right: 1px solid #E3E3E8;
 }
+.bgPrimary{
+  background-color: #005CDE;
+}
+.closeRightSidebarModals{
+  position: absolute;
+  top: 15px;
+  right: 15px;
+}
+
+.closeRightSidebarModalsIcon{
+  filter: brightness(0) invert(1);
+}
 /* Responsive Design */
 @media (max-width: 768px) {
   .error-code {
@@ -1976,6 +1988,10 @@ input.addTitleInput::placeholder {
   }
   .tabContainer .tabbing{
     padding: 8px 0;
+  }
+  .closeRightSidebarModalsIcon{
+    height: 30px;
+    width: 30px;
   }
   .image80 {
     height: 60px;

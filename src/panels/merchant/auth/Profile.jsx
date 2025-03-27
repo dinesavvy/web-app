@@ -458,19 +458,19 @@ const [qrCodeModal,setQrCodeModal] = useState(false)
         closable={false}
         className="selecModal"
       >
-        <div className="p20">
-          <div className=" d-flex justify-between align-center">
-            <div className="fs-18 fw-700">
+        <div className="p20 bgPrimary">
+          <div className=" d-flex justify-center align-center ">
+            <div className="fs-18 fw-700 ">
               {/* {!imagePreview ? "Upload Photo" : "Image Details"}{" "} */}
-              <img src = {qrCode} />
+              <img src = {qrCode} className="w-100" />
             </div>
             <div
-              className="closeSidebar"
+              className="closeRightSidebarModals"
               onClick={() => {
                 setQrCodeModal(false)
               }}
             >
-              <img src={closeRightSidebar} alt="closeRightSidebar" />
+              <img src={closeRightSidebar} alt="closeRightSidebar" className="closeRightSidebarModalsIcon"  />
             </div>
           </div>
         </div>
