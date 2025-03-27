@@ -34,9 +34,6 @@ const activePromotionListSlice = createSlice({
   },
 });
 
-
-
-
 export const activePromotionListHandler = (data) => async (dispatch) => {
   try {
     dispatch(activePromotionListAction.activePromotionListInfo());
