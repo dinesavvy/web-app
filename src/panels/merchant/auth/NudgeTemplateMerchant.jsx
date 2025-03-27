@@ -12,9 +12,11 @@ import { fileUploadHandler } from "../../../redux/action/fileUpload";
 import { businessNudgesTemplateHandler } from "../../../redux/action/businessAction/businessNudgesTemplate";
 import MerchantNudgecart from "./MerchantNudgeCart";
 import { businessFileUploadHandler } from "../../../redux/action/businessAction/businessFileUpload";
+import { useCommonMessage } from "../../../common/CommonMessage";
 
 const NudgeTemplateMerchant = () => {
   const [uploadedImage, setUploadedImage] = useState(nudgesCards?.imageUrl[0]);
+  const messageApi = useCommonMessage();
   const [imagePreview, setImagePreview] = useState(
     nudgesCards?.imageUrl[0] || null
   );

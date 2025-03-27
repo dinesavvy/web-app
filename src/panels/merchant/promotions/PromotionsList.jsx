@@ -25,7 +25,7 @@ import {
   updatePromotionPriceHandler,
 } from "../../../redux/action/businessAction/updateProotionPrice";
 import { useCommonMessage } from "../../../common/CommonMessage";
-// import SearchSelect from "../../admin/Components/SearchSelect";
+import SearchSelect from "../../admin/Components/SearchSelect";
 
 const PromotionsList = () => {
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
@@ -106,6 +106,7 @@ const PromotionsList = () => {
     let payload = {
       page: pagination?.page,
       limit: pagination?.limit,
+      // payload.searchString = searchString;
     };
 
     if (activeTab === "active") {
@@ -113,9 +114,11 @@ const PromotionsList = () => {
       dispatch(activePromotionListHandler(payload));
     } else if (activeTab === "offer") {
       payload.isActive = true;
+      payload.searchString = searchString;
       dispatch(archivePromotionHandler(payload));
     } else if (activeTab === "archive") {
       payload.isActive = false;
+      payload.searchString = searchString;
       dispatch(archivePromotionHandler(payload));
     }
   }, [pagination, searchString, activeTab, updatePromotionPriceSelector]);
@@ -142,6 +145,13 @@ const PromotionsList = () => {
       dispatch(updatePromotionPriceAction.updatePromotionPriceReset());
     }
   }, [updatePromotionPriceSelector]);
+
+  const withdrawFund = () => {
+    messageApi.open({
+      type: "",
+      content: "Coming Soon",
+    });
+  };
 
   return (
     <>
@@ -187,10 +197,12 @@ const PromotionsList = () => {
                 dispatch(
                   archivePromotionListAction.archivePromotionListReset()
                 );
+                setSearchString("");
               }}
             >
               Active
             </button>
+
             <button
               className={`tab-button d-flex align-center justify-center gap-8 ${
                 activeTab === "offer" ? "active" : ""
@@ -198,14 +210,15 @@ const PromotionsList = () => {
               onClick={() => {
                 setActiveTab("offer");
                 setPagination({ page: 1, limit: 9 });
+                setSearchString("");
               }}
             >
               Offer{" "}
-              <div className="tagNumber fs-14 fw-500">
-                {activeTab === "offer"
-                  ? archivePromotionListSelector?.data?.data?.records?.length
-                  : ""}
-              </div>
+              {activeTab === "offer" && (
+                <div className="tagNumber pc fs-14 fw-500">
+                  {archivePromotionListSelector?.data?.data?.records?.length}
+                </div>
+              )}
             </button>
             <button
               className={`tab-button ${
@@ -214,6 +227,7 @@ const PromotionsList = () => {
               onClick={() => {
                 setActiveTab("archive");
                 setPagination({ page: 1, limit: 9 });
+                setSearchString("");
               }}
             >
               Archive
@@ -305,28 +319,56 @@ const PromotionsList = () => {
             onSearchChange={handleSearchChange}
             onSearchAreaChange={handleSearchAreaChange}
           /> */}
+          <div className="lineSearch w-100 mb-20">
+            <input
+              type="text"
+              autoComplete="off"
+              value={searchString}
+              placeholder="Search for Promotions"
+              onChange={(e) => {
+                setSearchString(e.target.value);
+                setPagination((prev) => ({ ...prev, page: 1 }));
+              }}
+            />
+            <img src={searchIcon} alt="" className="absoluteImage" />
+          </div>
           {activeTab === "active" && (
             <>
               <div className="card mb-20">
                 <div className="grid3 gap-20 mb-20">
                   <div className="borderRight">
-                    <div className="fs-24 fw-700">03</div>
+                    <div className="fs-24 fw-700">
+                      {
+                        activePromotionListSelector?.data?.data
+                          ?.promotionSummary?.activePromotion
+                      }
+                    </div>
                     <div className="fs-14 fw-500">Active Promotions</div>
                   </div>
                   <div className="borderRight">
-                    <div className="fs-24 fw-700">$200</div>
+                    <div className="fs-24 fw-700">
+                      $
+                      {
+                        activePromotionListSelector?.data?.data
+                          ?.promotionSummary?.fundAvailable
+                      }
+                    </div>
                     <div className="fs-14 fw-500">Funds available</div>
                   </div>
                   <div className="borderRight">
-                    <div className="fs-24 fw-700">$1200</div>
+                    <div className="fs-24 fw-700">
+                      $
+                      {
+                        activePromotionListSelector?.data?.data
+                          ?.promotionSummary?.totalWithdrawFund
+                      }
+                    </div>
                     <div className="fs-14 fw-500">Funds withdrawn</div>
                   </div>
                 </div>
-                <div className="btnSecondary btn">Withdraw</div>
-              </div>
-              <div className="lineSearch w-100 mb-20" >
-                <input type="text" autoComplete="off" placeholder="Search for Promotions"/>
-                <img src={searchIcon} alt="" className="absoluteImage" />
+                <div className="btnSecondary btn" onClick={withdrawFund}>
+                  Withdraw
+                </div>
               </div>
             </>
           )}
@@ -342,7 +384,8 @@ const PromotionsList = () => {
                         key={index}
                       >
                         <div className="p-10">
-                          <div className="nailedIt successNailedIt active fs-14 ">
+                          {/* successNailedIt */}
+                          <div className="nailedIt  active fs-14 ">
                             {moment(item?.endDate).isBefore(moment()) ? (
                               <>
                                 Expired on{" "}

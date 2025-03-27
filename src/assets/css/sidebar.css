@@ -90,9 +90,9 @@
 }
 .tagNumber{
   padding: 0px 8px;
-  background-color: #056DFF;
+  background-color: white;
   border-radius: 4px;
-  color: white;
+  /* color: 056DFF; */
   height: 22px;
   display: flex;
   justify-content: center;
