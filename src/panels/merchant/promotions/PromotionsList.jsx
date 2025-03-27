@@ -386,7 +386,7 @@ const PromotionsList = () => {
                               ${item?.merchant?.retailPrice}
                             </div>
                           </div>
-                          <div className="d-flex justify-between align-center gap-10">
+                          {/* <div className="d-flex justify-between align-center gap-10">
                             <div className="fs-14 mb-4">Item Quantity</div>
                             <div className="fs-14 fw-600">
                               {item?.merchant?.quantity}
@@ -396,6 +396,8 @@ const PromotionsList = () => {
                             <div className="fs-14 mb-4">Nudges Redeemed</div>
                             <div className="fs-14 fw-600">
                               {item?.nudgeRedeemedCount}
+                                </div>
+                          </div> */}
                               <div className="divider2 m10"></div>
                               <div className="fs-14 mb-10">
                                 Depletion progress
@@ -410,17 +412,19 @@ const PromotionsList = () => {
                               <div className="d-flex mb-6 justify-between align-center gap-10">
                                 <div className="fs-12  grey">Retail Price</div>
                                 <div className="fs-16 pc fw-500">
-                                  {item?.brandDetails?.brandItem?.map(
+                                  {/* {item?.brandDetails?.brandItem?.map(
                                     (item) => item?.sku
-                                  )}
+                                  )} */}
+                                  {item?.merchant?.retailPrice}
                                 </div>
                               </div>
                               <div className="d-flex mb-6 justify-between align-center gap-10">
                                 <div className="fs-12  grey">Item Quantity</div>
                                 <div className="fs-16  fw-500">
-                                  {item?.brandDetails?.brandItem?.map(
+                                  {/* {item?.brandDetails?.brandItem?.map(
                                     (item) => item?.sku
-                                  )}
+                                  )} */}
+                                  {item?.merchant?.quantity}
                                 </div>
                               </div>
                               <div className="d-flex mb-6 justify-between align-center gap-10">
@@ -428,21 +432,24 @@ const PromotionsList = () => {
                                   Nudges Redeemed
                                 </div>
                                 <div className="fs-16  fw-500">
-                                  {item?.brandDetails?.brandItem?.map(
+                                  {/* {item?.brandDetails?.brandItem?.map(
                                     (item) => item?.sku
-                                  )}
+                                  )} */}
+                                  {item?.nudgeRedeemedCount}
                                 </div>
-                                <div className="fs-14 fw-600">
+                              </div>
+                                {/* <div className="fs-14 fw-600">
                                   ${item?.remainingWithdrawFund}
-                                </div>
+                                </div> */}
                                 <div className="d-flex mb-6 justify-between align-center gap-10">
                                   <div className="fs-12  grey">
-                                    Funds Available fo6 pc Withdrawal
+                                    Funds Available for pc Withdrawal
                                   </div>
                                   <div className="fs-16 pc fw-500">
-                                    {item?.brandDetails?.brandItem?.map(
+                                    {/* {item?.brandDetails?.brandItem?.map(
                                       (item) => item?.sku
-                                    )}
+                                    )} */}
+                                     ${item?.remainingWithdrawFund}
                                   </div>
                                 </div>
                                 <div className="divider2"></div>
@@ -460,9 +467,7 @@ const PromotionsList = () => {
                                 </div>
                               </div>
                             </div>
-                          </div>
-                        </div>
-                      </div>
+                        
                     );
                   }
                 )}
