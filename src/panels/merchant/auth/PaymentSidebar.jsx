@@ -56,10 +56,6 @@ const PaymentSidebar = ({
       //       return_url: "https://www.google.com/", // Redirect URL after payment
       //     },
       //   });
-  
-      //   if (error) {
-      //     console.error("Payment error:", error.message);
-      //   }
       // };
   
       // processPayment();

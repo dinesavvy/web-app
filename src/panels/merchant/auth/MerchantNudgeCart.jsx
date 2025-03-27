@@ -10,6 +10,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { useCommonMessage } from "../../../common/CommonMessage";
 import { useNavigate } from "react-router-dom";
+import Loader from "../../../common/Loader/Loader";
 
 const MerchantNudgecart = ({
   isOpen,
@@ -20,14 +21,19 @@ const MerchantNudgecart = ({
   state,
   fileuploadSelector,
   setIsCartOpen,
-  imagePreview
+  imagePreview,
+  getPromotionNudge,
 }) => {
-  const createNudgeSelector = useSelector((state) => state?.businessCreateNudge);
+  const createNudgeSelector = useSelector(
+    (state) => state?.businessCreateNudge
+  );
   const messageApi = useCommonMessage();
   const dispatch = useDispatch();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
-  const selectedBusinessSelector = JSON.parse(localStorage.getItem("selectedBusiness"))
+  const selectedBusinessSelector = JSON.parse(
+    localStorage.getItem("selectedBusiness")
+  );
   const sendNudge = () => {
     let payload = {
       locationId: selectedBusinessSelector?._id,
@@ -35,7 +41,10 @@ const MerchantNudgecart = ({
       message: values?.description,
       isPublic: false,
       followerList: state?.selectedItems?.map((item) => item?.userId?._id),
-      photoURL:fileuploadSelector?.data?.data?.map((item) => item?.src).join("")??nudgesCards?.imageUrl?.[0].join(""),
+      photoURL:
+        fileuploadSelector?.data?.data?.map((item) => item?.src).join("") ??
+        nudgesCards?.imageUrl?.[0].join("") ??
+        getPromotionNudge?.brandDetails?.imageUrl.join(""),
       deactivateAt: Date.now() + 24 * 60 * 60 * 1000,
       imageId: "",
       totalQuantity: Number(values?.quantity),
@@ -51,13 +60,19 @@ const MerchantNudgecart = ({
       });
       setIsCartOpen(false);
       dispatch(businessCreateNudgeAction.businessCreateNudgeReset());
-      navigate("/merchant/followers")
+      navigate("/merchant/followers");
+    } else if (createNudgeSelector?.message) {
+      messageApi.open({
+        type: "error",
+        content: createNudgeSelector?.message,
+      });
+      dispatch(businessCreateNudgeAction.businessCreateNudgeReset());
     }
   }, [createNudgeSelector]);
 
   return (
     <>
-      {/* {createNudgeSelector?.isLoading && <Loader />} */}
+      {createNudgeSelector?.isLoading && <Loader />}
       {isOpen && <div className="overlay2" onClick={toggleCart}></div>}
 
       <div className={`rightSidebar ${isOpen ? "open" : ""}`}>
@@ -73,7 +88,11 @@ const MerchantNudgecart = ({
             <div className="dividerbtn">
               <img
                 className="w-100 merchantImg br10 mb-6"
-                src={imagePreview || nudgesCards?.imageUrl?.[0]}
+                src={
+                  imagePreview ||
+                  nudgesCards?.imageUrl?.[0] ||
+                  getPromotionNudge?.brandDetails?.imageUrl?.[0]
+                }
                 alt={nudgesCards?.title}
               />
               <div className="fs-16 fw-600">{values?.title}</div>

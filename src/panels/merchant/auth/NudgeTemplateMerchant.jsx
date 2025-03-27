@@ -15,11 +15,14 @@ import { businessFileUploadHandler } from "../../../redux/action/businessAction/
 
 const NudgeTemplateMerchant = () => {
   const [uploadedImage, setUploadedImage] = useState(nudgesCards?.imageUrl[0]);
-  const [imagePreview, setImagePreview] = useState(nudgesCards?.imageUrl[0]|| null);
-const [fileObject, setFileObject] = useState();
+  const [imagePreview, setImagePreview] = useState(
+    nudgesCards?.imageUrl[0] || null
+  );
+  const [fileObject, setFileObject] = useState();
   const dispatch = useDispatch();
   const { state } = useLocation();
 
+  const getPromotionNudge = JSON.parse(localStorage.getItem("promotionNudgeItem"))
   const selectedBusiness = JSON.parse(localStorage.getItem("selectedBusiness"));
 
   const [isCartOpen, setIsCartOpen] = useState(false);
@@ -108,23 +111,23 @@ const [fileObject, setFileObject] = useState();
     }
   };
   useEffect(() => {
-      const uploadFile = async () => {
-        if (fileuploadSelector?.data?.statusCode === 200) {
-          try {
-            const response = await fetch(
-              fileuploadSelector?.data?.data?.[0]?.url,
-              {
-                method: "PUT",
-                body: fileObject,
-              }
-            );
-          } catch (error) {
-            console.error("Error uploading file", error);
-          }
+    const uploadFile = async () => {
+      if (fileuploadSelector?.data?.statusCode === 200) {
+        try {
+          const response = await fetch(
+            fileuploadSelector?.data?.data?.[0]?.url,
+            {
+              method: "PUT",
+              body: fileObject,
+            }
+          );
+        } catch (error) {
+          console.error("Error uploading file", error);
         }
-      };
-      uploadFile();
-    }, [fileuploadSelector]);
+      }
+    };
+    uploadFile();
+  }, [fileuploadSelector]);
 
   const fileInputRef = useRef(null);
 
@@ -179,10 +182,14 @@ const [fileObject, setFileObject] = useState();
             enableReinitialize
             initialValues={{
               title:
-                nudgesCards?.title || state?.locationId?.statePrev?.title || "",
+                nudgesCards?.title ||
+                state?.locationId?.statePrev?.title ||
+                getPromotionNudge?.promotionTitle ||
+                "",
               description:
                 nudgesCards?.description ||
                 state?.locationId?.statePrev?.description ||
+                getPromotionNudge?.brandDetails?.brandItem?.[0]?.description ||
                 "",
               quantity:
                 nudgesCards?.quantity ||
@@ -194,18 +201,23 @@ const [fileObject, setFileObject] = useState();
           >
             {({ errors, touched, values, isValid }) => (
               <Form>
-                {(nudgesCards || state?.locationId?.statePrev) && (
+                {(nudgesCards || state?.locationId?.statePrev || getPromotionNudge) && (
                   <>
                     <div className="tabPadding mb-20">
                       <div className="fs-24 fw-600">
                         {nudgesCards?.title ||
-                          state?.locationId?.statePrev?.title}
+                          state?.locationId?.statePrev?.title ||
+                          getPromotionNudge?.brandDetails?.brandName}
                       </div>
                       <div className="divider"></div>
                       <div className="d-flex align-end gap-16 mb-20 flexWrapsm">
                         <div className="reflectImage">
                           <img
-                            src={imagePreview  || nudgesCards?.imageUrl[0]}
+                            src={
+                              imagePreview ||
+                              nudgesCards?.imageUrl?.[0] ||
+                              getPromotionNudge?.brandDetails?.imageUrl?.[0]
+                            }
                             alt=""
                           />
                         </div>
@@ -343,8 +355,8 @@ const [fileObject, setFileObject] = useState();
                             src={
                               imagePreview ||
                               nudgesCards?.imageUrl?.[0] ||
-                              state?.locationId?.nudgePrev?.imageUrl[0] ||
-                              dish
+                              state?.locationId?.nudgePrev?.imageUrl[0] || state?.brandDetails?.imageUrl?.[0]||
+                              getPromotionNudge?.brandDetails?.imageUrl?.[0]
                             }
                             alt="dish"
                           />
@@ -394,6 +406,7 @@ const [fileObject, setFileObject] = useState();
                       fileuploadSelector={fileuploadSelector}
                       setIsCartOpen={setIsCartOpen}
                       imagePreview={imagePreview}
+                      getPromotionNudge={getPromotionNudge}
                     />
                   </>
                 )}

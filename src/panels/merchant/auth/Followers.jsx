@@ -155,14 +155,12 @@ const Followers = () => {
   // const getSelectedBusiness = JSON.parse(localStorage.getItem("selectedBusiness"))
 
   const toggleSidebar = (item) => {
-    console.log(item,"item")
     setIsSidebarOpen((prevState) => !prevState);
     setFollowerDetails(item);
     // let payload = {
     //   locationId: getSelectedBusiness?._id,
     //   userId: item?.userId?._id,
     // };
-    // console.log(payload,"payload")
     // dispatch(followerDetailsHandler(payload))
   };
 

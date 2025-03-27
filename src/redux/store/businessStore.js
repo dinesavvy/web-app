@@ -26,6 +26,9 @@ import reverseNudgListSlice from "../action/businessAction/businessReverseNudgeL
 import relaunchNudgeSlice from "../action/businessAction/relaunchNudge"
 import followerDetailsSlice from "../action/businessAction/followerDetailsAPI"
 import activePromotionListSlice from "../action/businessAction/activePromotionList"
+import archivePromotionSlice from "../action/businessAction/archivePromotion"
+import updatePromotionSlice from "../action/businessAction/updateProotionPrice"
+import topNudgesSlice from "../action/businessAction/topNudgesSlice"
 
 const store = configureStore({
   reducer: {
@@ -55,7 +58,10 @@ const store = configureStore({
     reverseNudgList:reverseNudgListSlice,
     relaunchNudge:relaunchNudgeSlice,
     followerDetails:followerDetailsSlice,
-    activePromotionList:activePromotionListSlice
+    activePromotionList:activePromotionListSlice,
+    archivePromotionList:archivePromotionSlice,
+    updatePromotionPrice:updatePromotionSlice,
+    topNudges:topNudgesSlice
   },
 });
 

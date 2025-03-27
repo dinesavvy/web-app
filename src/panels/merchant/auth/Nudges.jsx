@@ -35,6 +35,8 @@ import {
 } from "../../../redux/action/businessAction/relaunchNudge";
 import { useCommonMessage } from "../../../common/CommonMessage";
 import moment from "moment";
+import { topNudgesHandler } from "../../../redux/action/businessAction/topNudgesSlice";
+import TopNudges from "./topNudges";
 
 const Nudges = () => {
   const [tempState, setTempState] = useState([]);
@@ -55,6 +57,10 @@ const Nudges = () => {
     (state) => state?.reverseNudgList
   );
   const relaunchNudgeSelector = useSelector((state) => state?.relaunchNudge);
+  const nudgeAnalyticSelector = useSelector(
+    (state) => state?.businessNudgeAnalytic
+  );
+
   const togglePaymentSidebar = (item) => {
     setIsPaymentSidebar((prevState) => !prevState);
   };
@@ -72,6 +78,7 @@ const Nudges = () => {
   );
 
   const endNudgeSelector = useSelector((state) => state?.endNudge);
+  const topNudgesSelector= useSelector((state)=>state?.topNudges)
 
   const dispatch = useDispatch();
 
@@ -91,12 +98,11 @@ const Nudges = () => {
     }
   }, [businessListSelector, selectedBusiness]);
 
-  const nudgeAnalyticSelector = useSelector(
-    (state) => state?.businessNudgeAnalytic
-  );
 
   useEffect(() => {
     dispatch(businessNudgeAnalyticHandler());
+    // Get Top nudges
+    dispatch(topNudgesHandler(selectedBusiness?._id))
   }, []);
 
   const toggleSidebar = (item) => {
@@ -106,6 +112,7 @@ const Nudges = () => {
     };
     dispatch(businessNudgeDetailsHandler(payload));
     // }
+    setEndNudgeItem(item);
   };
 
   useEffect(() => {
@@ -161,6 +168,7 @@ const Nudges = () => {
   useEffect(() => {
     if (businessNudgeDetailsSelector?.data?.statusCode === 200) {
       setIsSidebarOpen((prevState) => !prevState);
+      // dispatch(businessNudgeDetailAction.businessNudgeDetailsReset())
     }
   }, [businessNudgeDetailsSelector]);
 
@@ -193,8 +201,8 @@ const Nudges = () => {
         type: "success",
         content: relaunchNudgeSelector?.data?.message,
       });
-      if(isSidebarOpen){
-        setIsSidebarOpen(false)
+      if (isSidebarOpen) {
+        setIsSidebarOpen(false);
       }
       dispatch(relaunchNudgeAction.relaunchNudgeReset());
     } else if (relaunchNudgeSelector?.message) {
@@ -202,8 +210,8 @@ const Nudges = () => {
         type: "error",
         content: relaunchNudgeSelector?.message,
       });
-      if(isSidebarOpen){
-        setIsSidebarOpen(false)
+      if (isSidebarOpen) {
+        setIsSidebarOpen(false);
       }
       dispatch(relaunchNudgeAction.relaunchNudgeReset());
     }
@@ -215,7 +223,7 @@ const Nudges = () => {
         businessNudgeDetailsSelector?.isLoading ||
         businessAddNudgeCreditSelector?.isLoading ||
         reverseNudgListSelector?.isLoading ||
-        relaunchNudgeSelector?.isLoading) && <Loader />}
+        relaunchNudgeSelector?.isLoading||topNudgesSelector?.isLoading) && <Loader />}
       {/* <div className="emptyHeight">
         <div className="modal-content">
           <div className="ant-modal-body">
@@ -283,7 +291,7 @@ const Nudges = () => {
                 ></div>
               </div>
               <div className="fs-14 fw-500 grey mb-20">
-                You are just {percentage}% behind to achieve Goal
+                You are just {percentage.toFixed(2)}% behind to achieve Goal
               </div>
               {/* <div className="weekNudge pc mb-20">
             <div className="fs-18 fw-600">Nudges Expected This Week</div>
@@ -393,7 +401,7 @@ const Nudges = () => {
               </div>
             </div> */}
               {/* </div> */}
-              <div className="fs-20 fw-700 mb-10">Top Nudge</div>
+              {/* <div className="fs-20 fw-700 mb-10">Top Nudge</div>
               <div className="d-flex gap-20 ">
                 <div className="cardNudge w-100">
                   <div className="image150 position-relative ">
@@ -430,7 +438,9 @@ const Nudges = () => {
                     </div>
                     <div className="TagFull">Valid till 1st September 2024</div>
                   </div>
+                  
                 </div>
+                
                 <div className="w-100 card bgGrey d-flex gap-20 align-center">
                   <PercentageFiller percentage={50} />
                   <div>
@@ -441,7 +451,8 @@ const Nudges = () => {
                     </div>
                   </div>
                 </div>
-              </div>
+              </div> */}
+              <TopNudges topNudgesSelector = {topNudgesSelector} />
             </div>
             <div className="tabs-container tab3 tabFull ">
               <div className="tabs">
@@ -512,7 +523,7 @@ const Nudges = () => {
                               <div className="text-center nudgeCardImage180">
                                 <img
                                   // src={noImageFound}
-                                  src={item?.image||noImageFound}
+                                  src={item?.image || noImageFound}
                                   alt=""
                                   className="h-100 w-100"
                                 />
@@ -525,7 +536,7 @@ const Nudges = () => {
                               <div className="fs-14 mb-20">
                                 {item?.description}
                               </div>
-                              {item?.acceptedFollowerList?.length > 0 ? (
+                              {/* {item?.acceptedFollowerList?.length > 0 ? ( */}
                                 <>
                                   <div className="d-flex gap-8 align-center mb-20">
                                     <div className="position-relative d-flex">
@@ -545,17 +556,17 @@ const Nudges = () => {
                                         )
                                       )}
                                     </div>
-                                    {item?.totalAcceptedFollowerList > 0 && (
-                                      <div className="fs-14 fw-700 gc">
-                                        {item?.totalAcceptedFollowerList} people
-                                        accepted
-                                      </div>
-                                    )}
+                                  {/* {item?.totalAcceptedFollowerList  && ( */}
+                                    <div className="fs-14 fw-700 gc">
+                                      {item?.totalAcceptedFollowerList} people
+                                      accepted
+                                    </div>
+                                   {/* )}  */}
                                   </div>
                                 </>
-                              ) : (
+                              {/* ) : (
                                 <div className="mb-20 imageCollapsh32"></div>
-                              )}
+                              )} */}
                               <div className="d-flex gap-10">
                                 <div
                                   className="btn btnSecondary w-100"
@@ -667,12 +678,16 @@ const Nudges = () => {
               </div>
             </div>
           </div>
+          {modal2Open && (
           <CommonModal
             modal2Open={modal2Open}
             setModal2Open={setModal2Open}
             modalImage={deleteModal}
             endNudgeItem={endNudgeItem}
+            setIsSidebarOpen={setIsSidebarOpen}
           />
+          )}
+          {isSidebarOpen && (
           <MerchantNudgeDetails
             setIsSidebarOpen={setIsSidebarOpen}
             isSidebarOpen={isSidebarOpen}
@@ -681,6 +696,7 @@ const Nudges = () => {
             businessNudgeDetailsSelector={businessNudgeDetailsSelector}
             endNudgeItem={endNudgeItem}
           />
+          )}
           <PaymentSidebar
             isPaymentSidebar={isPaymentSidebar}
             togglePaymentSidebar={togglePaymentSidebar}

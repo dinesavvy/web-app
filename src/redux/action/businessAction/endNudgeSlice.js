@@ -40,7 +40,7 @@ export const endNudgeHandler = (data) => async (dispatch) => {
     const response = await endNudgeAPI(data);
     dispatch(endNudgeAction.endNudgeSuccess(response));
   } catch (e) {
-    dispatch(endNudgeAction.endNudgeFailure(e));
+    dispatch(endNudgeAction.endNudgeFailure(e.response.data));
   }
 };
 export default endNudgeSlice.reducer;

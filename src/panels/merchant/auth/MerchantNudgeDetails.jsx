@@ -186,30 +186,39 @@ const MerchantNudgeDetails = ({
                 className="position-relative d-flex"
                 onClick={() => toggleSidebarNudgeFollower("maybe")}
               >
-                <div className="imageCollaps">
+                {/* <div className="imageCollaps">
                   <img src={dish2} alt="" className="w-100 h-100" />
-                </div>
-                <div className="imageCollaps">
-                  <img src={dish2} alt="" className="w-100 h-100" />
-                </div>
-                <div className="imageCollaps">
-                  <img src={dish2} alt="" className="w-100 h-100" />
-                </div>
-                <div className="imageCollaps">
-                  <img src={dish2} alt="" className="w-100 h-100" />
-                </div>
-                <div className="imageCollaps">
-                  <img src={dish2} alt="" className="w-100 h-100" />
-                </div>
+                </div> */}
+                {businessNudgeDetailsSelector?.data?.data?.maybeLaterUserList?.map(
+                  (item) => {
+                    return (
+                      <>
+                        <div className="imageCollaps">
+                          <img
+                            src={item?.userInfo?.photoURL}
+                            alt={item?.userInfo?.displayName}
+                            className="w-100 h-100"
+                          />
+                        </div>
+                      </>
+                    );
+                  }
+                )}
               </div>
               <div
                 className="fs-14 pc cursor-pointer"
-                // onClick={() => toggleSidebarNudgeFollower()}
+                onClick={() => toggleSidebarNudgeFollower("maybe")}
               >
-                +44 People
+                {businessNudgeDetailsSelector?.data?.data?.maybeLaterUserList?.length>5 && (
+                  <>
+                  +{businessNudgeDetailsSelector?.data?.data?.maybeLaterUserList?.length} People 
+                  </>
+                )}
               </div>
             </div>
-            <div className="fs-14">52 people</div>
+            {businessNudgeDetailsSelector?.data?.data?.maybeLaterUserList?.length>0 && (
+            <div className="fs-14">{businessNudgeDetailsSelector?.data?.data?.maybeLaterUserList?.length} people</div>
+            )}
           </div>
           <div className="divider2"></div>
           <div className="fs-16 fw-700 mb-10">Not for me</div>
@@ -281,6 +290,7 @@ const MerchantNudgeDetails = ({
           )}
         </div>
       </div>
+      {modal2Open && (
       <CommonModal
         setIsSidebarOpen={setIsSidebarOpen}
         isSidebarOpen={isSidebarOpen}
@@ -289,11 +299,13 @@ const MerchantNudgeDetails = ({
         modalImage={deleteModal}
         endNudgeItem={endNudgeItem}
       />
+      )}
       <MerchantNudgeFollowers
         toggleSidebarNudgeFollower={toggleSidebarNudgeFollower}
         isMercahntNudgeFollowers={isMercahntNudgeFollowers}
         nudgeType={nudgeType}
         businessNudgeDetailsSelector={businessNudgeDetailsSelector}
+        setIsSidebarOpen={setIsSidebarOpen}
       />
     </>
   );

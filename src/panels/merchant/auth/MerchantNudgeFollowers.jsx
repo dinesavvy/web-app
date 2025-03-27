@@ -9,14 +9,18 @@ import arrowRight from "../../../assets/images/arrowRight.svg";
 import { useNavigate } from "react-router-dom";
 import CommonModal from "./CommonModal";
 import moment from "moment";
+import { businessNudgeDetailAction } from "../../../redux/action/businessAction/businessNudgeDetails";
+import { useDispatch } from "react-redux";
 
 const MerchantNudgeFollowers = ({
   isMercahntNudgeFollowers,
   toggleSidebarNudgeFollower,
   nudgeType,
   businessNudgeDetailsSelector,
+  setIsSidebarOpen,
 }) => {
   const navigate = useNavigate();
+  const dispatch = useDispatch()
 
   return (
     <>
@@ -45,6 +49,8 @@ const MerchantNudgeFollowers = ({
         <div className="overflowSidebar">
           {(nudgeType === "not_for_me"
             ? businessNudgeDetailsSelector?.data?.data?.disLikeUserList
+            : nudgeType === "maybe"
+            ? businessNudgeDetailsSelector?.data?.data?.maybeLaterUserList
             : businessNudgeDetailsSelector?.data?.data?.acceptedUserList
           )?.map((item, index) => {
             return (
@@ -54,6 +60,8 @@ const MerchantNudgeFollowers = ({
                   onClick={() => {
                     // navigate("/merchant/followers",{state:item})
                     navigate("/merchant/followers");
+                    setIsSidebarOpen(false);
+                    dispatch(businessNudgeDetailAction.businessNudgeDetailsReset());
                   }}
                 >
                   <div className="d-flex align-center gap-8">

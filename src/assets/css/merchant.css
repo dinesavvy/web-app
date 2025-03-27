@@ -729,9 +729,34 @@
 }
 
 .overflowCart{
-  height: calc(100vh - 445px);
+  /* height: calc(100vh - 445px); */
   overflow-y: auto;
 }
+/* 
+.tab-button {
+  background-color: transparent;
+  border: none;
+  font-size: 16px;
+  position: relative;
+  cursor: pointer;
+} */
+
+/* .tab-button:hover {
+  background-color: transparent;
+} */
+
+.count {
+  display: inline-block;
+  background-color: white;
+  color: #005CDE;
+   border-radius: 8px;
+  padding: 5px 10px;
+  font-size: 14px;
+  margin-left: 5px;
+  width: 5px;
+}
+
+
 .brandFlex {
   display: flex;
   gap: 4px;

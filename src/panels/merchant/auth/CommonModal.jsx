@@ -2,7 +2,10 @@ import React, { useEffect } from "react";
 import modalbg from "../../../assets/images/modalbg.png";
 import { Modal } from "antd";
 import { useDispatch, useSelector } from "react-redux";
-import { endNudgeAction, endNudgeHandler } from "../../../redux/action/businessAction/endNudgeSlice";
+import {
+  endNudgeAction,
+  endNudgeHandler,
+} from "../../../redux/action/businessAction/endNudgeSlice";
 import { useCommonMessage } from "../../../common/CommonMessage";
 
 const CommonModal = ({
@@ -12,30 +15,34 @@ const CommonModal = ({
   removeTeamMember,
   isSidebarOpen,
   setIsSidebarOpen,
-  endNudgeItem
+  endNudgeItem,
 }) => {
   const dispatch = useDispatch();
-const messageApi = useCommonMessage();
-  const endNudgeSelector = useSelector((state)=>state?.endNudge)
-  const commonOnclick = () =>{
+  const messageApi = useCommonMessage();
+  const endNudgeSelector = useSelector((state) => state?.endNudge);
+  console.log(endNudgeSelector, "endNudgeSelector");
+  const commonOnclick = () => {
     let payload = {
-      nudgeId:endNudgeItem?._id
-    }
-    dispatch(endNudgeHandler(payload))
-  }
-
+      nudgeId: endNudgeItem?._id,
+    };
+    dispatch(endNudgeHandler(payload));
+  };
 
   useEffect(() => {
-  if(endNudgeSelector?.data?.statusCode==200){
-    // messageApi.open({
-    //   type: "success",
-    //   content: endNudgeSelector?.data?.message,
-    // });
-    setModal2Open(false)
-    dispatch(endNudgeAction.endNudgeReset())
-  }
-  }, [endNudgeSelector])
-  
+    if (endNudgeSelector?.data?.statusCode == 200) {
+      setModal2Open(false);
+      setIsSidebarOpen(false);
+      dispatch(endNudgeAction.endNudgeReset());
+    } else if (endNudgeSelector?.message) {
+      messageApi.open({
+        type: "error",
+        content: endNudgeSelector?.message,
+      });
+      setModal2Open(false);
+      // setIsSidebarOpen(false);
+      dispatch(endNudgeAction.endNudgeReset());
+    }
+  }, [endNudgeSelector]);
 
   return (
     <>
