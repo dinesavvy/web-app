@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { businessListByUserIdHandler } from "../../../redux/action/businessAction/businessListByUserId";
 import { useDispatch, useSelector } from "react-redux";
 
-const FollowerDetails = ({ isOpen, toggleSidebar, followerDetails,state }) => {
+const FollowerDetails = ({ isOpen, toggleSidebar, followerDetails, state,followerDetailsSelector }) => {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("Redeemed");
 
@@ -20,7 +20,7 @@ const FollowerDetails = ({ isOpen, toggleSidebar, followerDetails,state }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (activeTab && followerDetails || state) {
+    if ((activeTab && followerDetails) || state) {
       let payload = {
         page: 1,
         limit: 10,
@@ -36,7 +36,7 @@ const FollowerDetails = ({ isOpen, toggleSidebar, followerDetails,state }) => {
       };
       dispatch(businessListByUserIdHandler(payload));
     }
-  }, [activeTab, followerDetails,state]);
+  }, [activeTab, followerDetails, state]);
 
   return (
     <>
@@ -226,13 +226,17 @@ const FollowerDetails = ({ isOpen, toggleSidebar, followerDetails,state }) => {
                   <div className="d-flex align-center justify-between gap-10 mb-8 fs-14">
                     <div>Date Sent</div>
                     <div className="fw-500">
-                      {moment(item?.nudgeSenderList?.sentAt).format("MMM DD, YYYY")}
+                      {moment(item?.nudgeSenderList?.sentAt).format(
+                        "MMM DD, YYYY"
+                      )}
                     </div>
                   </div>
                   <div className="d-flex align-center justify-between gap-10 mb-8 fs-14">
                     <div>Date Accepted</div>
                     <div className="fw-500">
-                      {moment(item?.nudgeSenderList?.acceptedAt).format("MMM DD, YYYY")}
+                      {moment(item?.nudgeSenderList?.acceptedAt).format(
+                        "MMM DD, YYYY"
+                      )}
                     </div>
                   </div>
                 </div>

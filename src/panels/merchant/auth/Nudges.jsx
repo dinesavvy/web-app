@@ -37,6 +37,9 @@ import { useCommonMessage } from "../../../common/CommonMessage";
 import moment from "moment";
 import { topNudgesHandler } from "../../../redux/action/businessAction/topNudgesSlice";
 import TopNudges from "./topNudges";
+import { Pagination } from "antd";
+import { reverseNudgeHandler } from "../../../redux/action/businessAction/reverseNudgeDetails";
+import ReverseNudgeDrawer from "../reverseNudgeDrawer/ReverseNudgeDrawer";
 
 const Nudges = () => {
   const [tempState, setTempState] = useState([]);
@@ -45,8 +48,11 @@ const Nudges = () => {
   const [isChecked, setIsChecked] = useState(false);
   const [isPaymentSidebar, setIsPaymentSidebar] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [reverseSideBar, setReverseSidebar] = useState(false);
+
   const [endNudgeItem, setEndNudgeItem] = useState();
   const [activeTab, setActiveTab] = useState("active"); // Default active tab is 'active'
+  const [pagination, setPagination] = useState({ page: 1, limit: 9 });
   const navigate = useNavigate();
   const messageApi = useCommonMessage();
   const nudges = [5, 10, 15, 20, 25, 100];
@@ -65,6 +71,10 @@ const Nudges = () => {
     setIsPaymentSidebar((prevState) => !prevState);
   };
 
+  const handlePaginationChange = (page, pageSize) => {
+    setPagination({ page, limit: pageSize });
+  };
+
   const businessNudgesListSelector = useSelector(
     (state) => state?.businessNudgesList
   );
@@ -78,7 +88,7 @@ const Nudges = () => {
   );
 
   const endNudgeSelector = useSelector((state) => state?.endNudge);
-  const topNudgesSelector= useSelector((state)=>state?.topNudges)
+  const topNudgesSelector = useSelector((state) => state?.topNudges);
 
   const dispatch = useDispatch();
 
@@ -98,11 +108,10 @@ const Nudges = () => {
     }
   }, [businessListSelector, selectedBusiness]);
 
-
   useEffect(() => {
     dispatch(businessNudgeAnalyticHandler());
     // Get Top nudges
-    dispatch(topNudgesHandler(selectedBusiness?._id))
+    dispatch(topNudgesHandler(selectedBusiness?._id));
   }, []);
 
   const toggleSidebar = (item) => {
@@ -114,6 +123,22 @@ const Nudges = () => {
     // }
     setEndNudgeItem(item);
   };
+
+  const reverseNudgeSelector = useSelector((state) => state?.reverseNudge);
+
+  const toggleSidebarReverse = (item) => {
+    let payload = {
+      nudgeId: item?._id,
+      locationId: getSelectedBusiness?._id,
+    };
+    dispatch(reverseNudgeHandler(payload));
+  };
+
+  useEffect(() => {
+    if (reverseNudgeSelector?.data?.statusCode === 200) {
+      setReverseSidebar((prevState) => !prevState);
+    }
+  }, [reverseNudgeSelector]);
 
   useEffect(() => {
     if (isSidebarOpen) {
@@ -136,15 +161,15 @@ const Nudges = () => {
     if (activeTab === "reverse") {
       dispatch(
         reverseNudgeListHandler({
-          page: 1,
-          limit: 10,
+          page: pagination.page,
+          limit: pagination.limit,
           locationId: getSelectedBusiness?._id,
         })
       );
     } else {
       let payload = {
-        page: 1,
-        limit: 10,
+        page: pagination.page,
+        limit: pagination.limit,
         locationId: getSelectedBusiness?._id,
         isActive: activeTab === "active",
       };
@@ -223,7 +248,8 @@ const Nudges = () => {
         businessNudgeDetailsSelector?.isLoading ||
         businessAddNudgeCreditSelector?.isLoading ||
         reverseNudgListSelector?.isLoading ||
-        relaunchNudgeSelector?.isLoading||topNudgesSelector?.isLoading) && <Loader />}
+        relaunchNudgeSelector?.isLoading ||
+        topNudgesSelector?.isLoading||reverseNudgeSelector?.isLoading) && <Loader />}
       {/* <div className="emptyHeight">
         <div className="modal-content">
           <div className="ant-modal-body">
@@ -452,7 +478,7 @@ const Nudges = () => {
                   </div>
                 </div>
               </div> */}
-              <TopNudges topNudgesSelector = {topNudgesSelector} />
+              <TopNudges topNudgesSelector={topNudgesSelector} />
             </div>
             <div className="tabs-container tab3 tabFull ">
               <div className="tabs">
@@ -537,33 +563,33 @@ const Nudges = () => {
                                 {item?.description}
                               </div>
                               {/* {item?.acceptedFollowerList?.length > 0 ? ( */}
-                                <>
-                                  <div className="d-flex gap-8 align-center mb-20">
-                                    <div className="position-relative d-flex">
-                                      {item?.acceptedFollowerList?.map(
-                                        (itemFollower, index) => (
-                                          <div
-                                            className="imageCollaps"
-                                            key={index}
-                                          >
-                                            <img
-                                              // src={itemFollower?.photoURL}
-                                              src={noImageFound}
-                                              alt={item?.title}
-                                              className="w-100 h-100"
-                                            />
-                                          </div>
-                                        )
-                                      )}
-                                    </div>
-                                  {/* {item?.totalAcceptedFollowerList  && ( */}
-                                    <div className="fs-14 fw-700 gc">
-                                      {item?.totalAcceptedFollowerList} people
-                                      accepted
-                                    </div>
-                                   {/* )}  */}
+                              <>
+                                <div className="d-flex gap-8 align-center mb-20">
+                                  <div className="position-relative d-flex">
+                                    {item?.acceptedFollowerList?.map(
+                                      (itemFollower, index) => (
+                                        <div
+                                          className="imageCollaps"
+                                          key={index}
+                                        >
+                                          <img
+                                            // src={itemFollower?.photoURL}
+                                            src={noImageFound}
+                                            alt={item?.title}
+                                            className="w-100 h-100"
+                                          />
+                                        </div>
+                                      )
+                                    )}
                                   </div>
-                                </>
+                                  {/* {item?.totalAcceptedFollowerList  && ( */}
+                                  <div className="fs-14 fw-700 gc">
+                                    {item?.totalAcceptedFollowerList} people
+                                    accepted
+                                  </div>
+                                  {/* )}  */}
+                                </div>
+                              </>
                               {/* ) : (
                                 <div className="mb-20 imageCollapsh32"></div>
                               )} */}
@@ -600,6 +626,33 @@ const Nudges = () => {
                     ) : (
                       <div className="noDataFound">No data available</div>
                     )}
+                    {/* {businessNudgesListSelector?.data?.data?.length > 0 && (
+                      <div className="d-flex align-center justify-between flexPagination mt-20">
+                        <div className="fs-16">
+                          {(() => {
+                            const start =
+                              (pagination.page - 1) * pagination.limit + 1;
+                            const end = Math.min(
+                              start +
+                                businessNudgesListSelector?.data?.data?.records
+                                  ?.length -
+                                1,
+                              businessNudgesListSelector?.data?.data
+                                ?.recordsCount
+                            );
+                            return `Showing ${start} to ${end} of ${businessNudgesListSelector?.data?.data?.recordsCount} Restaurants`;
+                          })()}
+                        </div>
+                        <Pagination
+                          current={pagination.page}
+                          pageSize={pagination.limit}
+                          total={
+                            businessNudgesListSelector?.data?.data?.recordsCount
+                          }
+                          onChange={handlePaginationChange}
+                        />
+                      </div>
+                    )} */}
                   </>
                 ) : (
                   <>
@@ -613,9 +666,6 @@ const Nudges = () => {
                               key={item?.id}
                             >
                               <div>
-                                {/* <div className="nailedIt active fs-14">
-          {getTimeRemaining(item?.createdAt)}
-        </div> */}
                                 <div className="text-center nudgeCardImage180">
                                   <img
                                     // src={noImageFound}
@@ -660,7 +710,7 @@ const Nudges = () => {
                                 <div className="d-flex gap-10">
                                   <div
                                     className="btn btnSecondary w-100"
-                                    onClick={() => toggleSidebar(item)}
+                                    onClick={() => toggleSidebarReverse(item)}
                                   >
                                     View Details
                                   </div>
@@ -673,29 +723,57 @@ const Nudges = () => {
                     ) : (
                       <div className="noDataFound">No data available</div>
                     )}
+                    {/* {reverseNudgListSelector?.data?.data?.records?.length > 0 && (
+                      <div className="d-flex align-center justify-between flexPagination mt-20">
+                        <div className="fs-16">
+                          {(() => {
+                            const start =
+                              (pagination.page - 1) * pagination.limit + 1;
+                            const end = Math.min(
+                              start +
+                                reverseNudgListSelector?.data?.data?.records
+                                  ?.length -
+                                1,
+                              reverseNudgListSelector?.data?.data
+                                ?.recordsCount
+                            );
+                            return `Showing ${start} to ${end} of ${reverseNudgListSelector?.data?.data?.recordsCount} Nudges`;
+                          })()}
+                        </div>
+                        <Pagination
+                          current={pagination.page}
+                          pageSize={pagination.limit}
+                          total={
+                            reverseNudgListSelector?.data?.data?.recordsCount
+                          }
+                          onChange={handlePaginationChange}
+                        />
+                      </div>
+                    )} */}
                   </>
                 )}
               </div>
             </div>
           </div>
           {modal2Open && (
-          <CommonModal
-            modal2Open={modal2Open}
-            setModal2Open={setModal2Open}
-            modalImage={deleteModal}
-            endNudgeItem={endNudgeItem}
-            setIsSidebarOpen={setIsSidebarOpen}
-          />
+            <CommonModal
+              modal2Open={modal2Open}
+              setModal2Open={setModal2Open}
+              modalImage={deleteModal}
+              endNudgeItem={endNudgeItem}
+              setIsSidebarOpen={setIsSidebarOpen}
+            />
           )}
+          {console.log(activeTab, "activeTab")}
           {isSidebarOpen && (
-          <MerchantNudgeDetails
-            setIsSidebarOpen={setIsSidebarOpen}
-            isSidebarOpen={isSidebarOpen}
-            toggleSidebar={toggleSidebar}
-            activeTab={activeTab}
-            businessNudgeDetailsSelector={businessNudgeDetailsSelector}
-            endNudgeItem={endNudgeItem}
-          />
+            <MerchantNudgeDetails
+              setIsSidebarOpen={setIsSidebarOpen}
+              isSidebarOpen={isSidebarOpen}
+              toggleSidebar={toggleSidebar}
+              activeTab={activeTab}
+              businessNudgeDetailsSelector={businessNudgeDetailsSelector}
+              endNudgeItem={endNudgeItem}
+            />
           )}
           <PaymentSidebar
             isPaymentSidebar={isPaymentSidebar}
@@ -703,6 +781,14 @@ const Nudges = () => {
             activeNudge={activeNudge}
             businessAddNudgeCreditSelector={businessAddNudgeCreditSelector}
           />
+          {reverseSideBar && (
+            <ReverseNudgeDrawer
+              setReverseSidebar={setReverseSidebar}
+              reverseSideBar={reverseSideBar}
+              businessNudgeDetailsSelector={businessNudgeDetailsSelector}
+              reverseNudgeSelector={reverseNudgeSelector}
+            />
+          )}
         </>
       )}
       {/* {isChecked && <AccessDeniedModal />} */}

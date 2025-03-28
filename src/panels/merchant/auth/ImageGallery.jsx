@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 
 import dropdownArrow from "../../../assets/images/dropdownArrow.svg";
 import closeRightSidebar from "../../../assets/images/closeRightSidebar.svg";
-import deleteImage from "../../../assets/images/deleteImage.svg";
+import deleteImageIcon from "../../../assets/images/deleteImage.svg";
 import { galleryListHandler } from "../../../redux/action/businessAction/galleryList";
 import {
   deleteImageAction,
@@ -27,8 +27,6 @@ const ImageGallery = ({
   const [selectedItem, setSelectedItem] = useState({});
   const [isChecked, setIsChecked] = useState(false);
 
-  console.log(selectedItem,"selectedItem")
-
   const handleChange = (event) => {
     setIsChecked(event.target.checked);
     let payload = {
@@ -47,9 +45,7 @@ const ImageGallery = ({
   const messageApi = useCommonMessage();
 
   const galleryListSelector = useSelector((state) => state?.galleryList);
-
   const deleteImageSelector = useSelector((state) => state?.deleteImage);
-
   const editImageSelector = useSelector((state) => state?.editImage);
 
   const openModal = (item, index = 0) => {
@@ -65,9 +61,9 @@ const ImageGallery = ({
     }
   }, [openImage]);
 
-  const deleteImage = () => {
+  const deleteImage = (item) => {
     let payload = {
-      imageId: selectedItem?._id,
+      imageId: selectedItem?._id||item?._id,
     };
     dispatch(deleteImageHandler(payload));
   };
@@ -85,6 +81,12 @@ const ImageGallery = ({
       });
       setIsModalOpen(false);
       setOpenImage(false);
+      dispatch(deleteImageAction.deleteImageReset());
+    }else if (deleteImageSelector?.message){
+      messageApi.open({
+        type: "error",
+        content: deleteImageSelector?.message,
+      });
       dispatch(deleteImageAction.deleteImageReset());
     }
   }, [deleteImageSelector]);
@@ -156,9 +158,11 @@ const ImageGallery = ({
                       // }
                     }}
                   />
-                  <div className="deleteImage" >
-                    <img src={deleteImage}  alt="" />
+                  {activeTab === "Merchant Upload" && (
+                  <div className="deleteImage" onClick={()=>deleteImage(item)}>
+                    <img src={deleteImageIcon}  alt="" />
                   </div>
+                  )}
                 </div>
               ))}
             </>
@@ -191,17 +195,17 @@ const ImageGallery = ({
                     alt={selectedItem?.title}
                     className="w-100 h-100"
                   />
-                  <button onClick={prevImage} className="nav-btn prev-btn">
+                  {/* <button onClick={prevImage} className="nav-btn prev-btn">
                     <img src={dropdownArrow} alt="" />
-                  </button>
+                  </button> */}
                   {/* <img
               src={images[selectedIndex]}
               alt="Selected"
               className="modal-image"
             /> */}
-                  <button onClick={nextImage} className="nav-btn next-btn">
+                  {/* <button onClick={nextImage} className="nav-btn next-btn">
                     <img src={dropdownArrow} alt="" />
-                  </button>
+                  </button> */}
                 </div>
                 <div className="details">
                   {/* <div className="mb-10 fs-20 fw-700">

@@ -99,8 +99,6 @@ const MerchantNudgeDetails = ({
             {businessNudgeDetailsSelector?.data?.data?.title}
           </div>
           <div className="fs-14 mb-20">
-            {/* Free drink on Happy Hours! From 07:00 PM to 08:00 PM */}
-            {/* Free drink on Happy Hours! From 07:00 PM to 08:00 PM */}
             {businessNudgeDetailsSelector?.data?.data?.description}
           </div>
           <div className="nudgeGrid3">

@@ -11,6 +11,7 @@ import addSupplierPromotionSlice from "../action/supplierActions/addSupplierProm
 import supplierPromotionDetailsSlice from "../action/supplierActions/supplierPromotionDetails";
 import removeBrandSupplierSlice from "../action/supplierActions/removeBrandSupplier";
 import supplierEndPromotionSlice from "../action/supplierActions/supplierEndPromotion";
+import forgotPasswordSupplierSlice from  "../action/supplierActions/forgotPasswordSupplier"
 
 const store = configureStore({
   reducer: {
@@ -26,6 +27,7 @@ const store = configureStore({
     supplierPromotionDetails: supplierPromotionDetailsSlice,
     removeBrandSupplier: removeBrandSupplierSlice,
     supplierEndPromotion: supplierEndPromotionSlice,
+    forgotPasswordSupplier: forgotPasswordSupplierSlice,
   },
 });
 

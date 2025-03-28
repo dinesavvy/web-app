@@ -89,6 +89,7 @@ const Header = ({ handleTrigger }) => {
     "/distributors/add-promotions": "Create single promotions",
     "/distributors/dashboard": "Distributor Dashboard",
     "/supplier/dashboard": "Supplier Dashboard",
+    "/merchant/reverse-nudge":"Followers"
   };
 
   return (
@@ -133,9 +134,9 @@ const Header = ({ handleTrigger }) => {
           {/* )}  */}
           {/* Modal Component */}
 
-          <div className="notification">
+          {/* <div className="notification">
             <img src={notification} alt="icon" className="h-100" />
-          </div>
+          </div> */}
         </div>
       </header>
       {/* {localStorage.getItem("merchantLogin")===true&& ( */}

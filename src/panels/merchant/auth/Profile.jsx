@@ -224,7 +224,7 @@ const [qrCodeModal,setQrCodeModal] = useState(false)
         <div className="tabPadding mb-30">
           <div className="d-flex justify-between align-center">
             <div className="fs-24 fw-600">Basic Info</div>
-            <div className="qrImage" onClick = {qrCodeModalMain}>
+            <div className="qrImage cursor-pointer" onClick = {qrCodeModalMain}>
               <img src={qrImage} alt="" />
             </div>
           </div>

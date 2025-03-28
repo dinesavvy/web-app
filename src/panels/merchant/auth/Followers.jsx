@@ -152,7 +152,7 @@ const Followers = () => {
 
   const [followerDetails, setFollowerDetails] = useState();
 
-  // const getSelectedBusiness = JSON.parse(localStorage.getItem("selectedBusiness"))
+  const getSelectedBusiness = JSON.parse(localStorage.getItem("selectedBusiness"))
 
   const toggleSidebar = (item) => {
     setIsSidebarOpen((prevState) => !prevState);
@@ -244,10 +244,10 @@ const Followers = () => {
               className="w-100 btn btnSecondary gap-8 noborderbtn"
               onClick={() => navigate("/merchant/reverse-nudge")}
             >
-              Your 3 followers need nudges <img src={btnArrowblue} alt="" />
+              Followers needing Nudges <img src={btnArrowblue} alt="" />
             </div>
             <div className="w-100 btn btnSecondary gap-8 noborderbtn">
-              Followers with pending Nudges <img src={btnArrowblue} alt="" />
+            Redeem Nudges <img src={btnArrowblue} alt="" />
             </div>
           </div>
           <div className="tabPadding">
