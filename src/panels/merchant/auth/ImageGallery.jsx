@@ -37,7 +37,6 @@ const ImageGallery = ({
       imageCategoryType: activeTab,
     };
     dispatch(editImageHandler(payload));
-    console.log(payload,"payload")
   };
 
   const dispatch = useDispatch();

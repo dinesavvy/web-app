@@ -7,6 +7,7 @@ import {
   endNudgeHandler,
 } from "../../../redux/action/businessAction/endNudgeSlice";
 import { useCommonMessage } from "../../../common/CommonMessage";
+import { businessNudgeDetailAction } from "../../../redux/action/businessAction/businessNudgeDetails";
 
 const CommonModal = ({
   modal2Open,
@@ -32,6 +33,7 @@ const CommonModal = ({
     if (endNudgeSelector?.data?.statusCode == 200) {
       setModal2Open(false);
       setIsSidebarOpen(false);
+      dispatch(businessNudgeDetailAction.businessNudgeDetailsReset());
       dispatch(endNudgeAction.endNudgeReset());
     } else if (endNudgeSelector?.message) {
       messageApi.open({
@@ -39,7 +41,8 @@ const CommonModal = ({
         content: endNudgeSelector?.message,
       });
       setModal2Open(false);
-      // setIsSidebarOpen(false);
+      setIsSidebarOpen(false);
+      dispatch(businessNudgeDetailAction.businessNudgeDetailsReset());
       dispatch(endNudgeAction.endNudgeReset());
     }
   }, [endNudgeSelector]);

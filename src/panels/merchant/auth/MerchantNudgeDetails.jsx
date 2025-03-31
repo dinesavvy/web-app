@@ -282,6 +282,7 @@ const MerchantNudgeDetails = ({
             <div
               className="btn w-100"
               onClick={() => relaunchNudgeFn()}
+              
             >
               Relaunch
             </div>

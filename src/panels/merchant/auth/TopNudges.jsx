@@ -6,15 +6,10 @@ import nudgeCardImage from "../../../assets/images/nudgeCardImage.svg";
 import moment from "moment";
 
 const TopNudges = ({ topNudgesSelector }) => {
-  console.log(topNudgesSelector,"topNudgesSelector")
-
   const hoorayPercentage = (
     (topNudgesSelector?.data?.data?.totalNudgeAcceptedCount * 100) /
     topNudgesSelector?.data?.data?.totalNudgeSendToUser
   )?.toFixed(2);
-  
-
-console.log(hoorayPercentage,"hoorayPercentage")
 
   return (
     <>
@@ -68,8 +63,8 @@ console.log(hoorayPercentage,"hoorayPercentage")
           <div>
             <div className="fs-24 fw-700 mb-8 gc">Hooray! 🎉</div>
             <div className="fs-16">
-              <span className="gc fw-700">{hoorayPercentage}%</span> of people who got the nudge
-              came in!
+              <span className="gc fw-700">{hoorayPercentage}%</span> of people
+              who got the nudge came in!
             </div>
           </div>
         </div>

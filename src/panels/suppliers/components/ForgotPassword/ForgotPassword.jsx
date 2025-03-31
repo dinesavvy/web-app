@@ -15,17 +15,18 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import Loader from "../../../../common/Loader/Loader";
 import { useCommonMessage } from "../../../../common/CommonMessage";
+import { useNavigate } from "react-router-dom";
 
 const ForgotPassword = () => {
   const [sendLink, setSendLink] = useState(false);
 
   const dispatch = useDispatch();
+  const navigate = useNavigate()
   const messageApi = useCommonMessage();
 
   const forgotPasswordSupplierSelector = useSelector(
     (state) => state?.forgotPasswordSupplier
   );
-  console.log(forgotPasswordSupplierSelector, "forgotPasswordSupplierSelector");
 
   const handleFormSubmit = (values) => {
     console.log(values, "values");
@@ -72,16 +73,17 @@ const ForgotPassword = () => {
                 <button
                   className="btn w-100 mb-30"
                   type="submit"
-                  onClick={() => (window.location.href = "mailto:")}
+                  // onClick={() => (window.location.href = "mailto:")}
+                  onClick={() => navigate("/")}
                 >
-                  Open Gmail
+                  Go back to login
                 </button>
-                <div className="tabGrey text-center fs-14">
+                {/* <div className="tabGrey text-center fs-14">
                   Didn't receive email? &nbsp;
                   <span className="text-black fw-500">
                     Request again in 01:59
                   </span>
-                </div>
+                </div> */}
               </>
             ) : (
               <>

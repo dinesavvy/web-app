@@ -229,6 +229,7 @@ const Nudges = () => {
       if (isSidebarOpen) {
         setIsSidebarOpen(false);
       }
+      dispatch(businessNudgeDetailAction.businessNudgeDetailsReset());
       dispatch(relaunchNudgeAction.relaunchNudgeReset());
     } else if (relaunchNudgeSelector?.message) {
       messageApi.open({
@@ -238,6 +239,7 @@ const Nudges = () => {
       if (isSidebarOpen) {
         setIsSidebarOpen(false);
       }
+      dispatch(businessNudgeDetailAction.businessNudgeDetailsReset());
       dispatch(relaunchNudgeAction.relaunchNudgeReset());
     }
   }, [relaunchNudgeSelector]);
@@ -249,7 +251,9 @@ const Nudges = () => {
         businessAddNudgeCreditSelector?.isLoading ||
         reverseNudgListSelector?.isLoading ||
         relaunchNudgeSelector?.isLoading ||
-        topNudgesSelector?.isLoading||reverseNudgeSelector?.isLoading) && <Loader />}
+        topNudgesSelector?.isLoading ||
+        reverseNudgeSelector?.isLoading ||
+        endNudgeSelector?.isLoading) && <Loader />}
       {/* <div className="emptyHeight">
         <div className="modal-content">
           <div className="ant-modal-body">
@@ -764,7 +768,6 @@ const Nudges = () => {
               setIsSidebarOpen={setIsSidebarOpen}
             />
           )}
-          {console.log(activeTab, "activeTab")}
           {isSidebarOpen && (
             <MerchantNudgeDetails
               setIsSidebarOpen={setIsSidebarOpen}
