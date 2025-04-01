@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { businessNudgesListHandler } from "../../../redux/action/businessAction/businessNudgesList";
 import Loader from "../../../common/Loader/Loader";
 import noImageFound from "../../../assets/images/noImageFound.png";
+import arrowRight from "../../../assets/images/arrowRight.svg";
 import RedeemedNudgeFollowerList from "./RedeemedNudgeFollowerList";
 // import { businessNudgeDetailsHandler } from "../../../redux/action/businessAction/businessNudgeDetails";
 
@@ -46,7 +47,6 @@ const RedeemedNudges = ({ redeemedNudges, setRedeemedNudges }) => {
     setRedeemedFollowerList(true);
   };
 
-
   return (
     <>
       {(businessNudgesListSelector?.isLoading ||
@@ -87,50 +87,54 @@ const RedeemedNudges = ({ redeemedNudges, setRedeemedNudges }) => {
               {businessNudgesListSelector?.data?.data?.map((item, index) => {
                 return (
                   <div
-                    className="card16 d-flex align-center gap-16"
+                    className="card16 d-flex  gap-12 mb-20"
                     key={index}
                     // onClick={()=>{setRedeemedFollowerList(true);setRedeemedFollowerItem(item)}}
                     onClick={() => nudgeDetails(item)}
                   >
-                    <div className="image80">
+                    <div className="imageHeight100">
                       <img
                         src={item?.image || noImageFound}
                         alt={item?.title}
+                        className="w-100 h-100"
                       />
                     </div>
-                    <div>
-                      <div className="fs-16 fw-500 grey mb-5">
-                        {item?.title}
-                      </div>
-                      <div className="fs-16 fw-500">
+                    <div className="w-100 d-flex flexColumn justify-between gap-20">
+                      <div>
+                      <div className="fs-16 fw-700  mb-8">{item?.title}</div>
+                      <div className="fs-14 fw-500 ">
                         {/* Unlock a 20% discount on our signature dishes this week. */}
                         {item?.description}
                       </div>
-                      <div className="d-flex gap-8 align-center mb-12">
-                        <div className="position-relative d-flex">
-                          {item?.acceptedFollowerList?.map(
-                            (acceptedFollowerList, acceptedFollowerIndex) => {
-                              return (
-                                <div
-                                  className="imageCollaps"
-                                  key={acceptedFollowerIndex}
-                                >
-                                  <img
-                                    src={
-                                      acceptedFollowerList?.photoURL ||
-                                      noImageFound
-                                    }
-                                    alt={acceptedFollowerList?.displayName}
-                                    className="w-100 h-100"
-                                  />
-                                </div>
-                              );
-                            }
-                          )}
-                        </div>
                       </div>
-                      <div className="fs-14 fw-700 gc">
-                        {item?.acceptedFollowerList?.length} people accepted
+                      <div className="d-flex gap-8 justify-between align-center w-100">
+                        <div className="d-flex gap-8 align-center ">
+                          <div className="position-relative d-flex">
+                            {item?.acceptedFollowerList?.map(
+                              (acceptedFollowerList, acceptedFollowerIndex) => {
+                                return (
+                                  <div
+                                    className="imageCollaps"
+                                    key={acceptedFollowerIndex}
+                                  >
+                                    <img
+                                      src={
+                                        acceptedFollowerList?.photoURL ||
+                                        noImageFound
+                                      }
+                                      alt={acceptedFollowerList?.displayName}
+                                      className="w-100 h-100"
+                                    />
+                                  </div>
+                                );
+                              }
+                            )}
+                          </div>
+                          <div className="fs-14 fw-700 gc">
+                            {item?.acceptedFollowerList?.length} people accepted
+                          </div>
+                        </div>
+                        <div className="h24"><img src={arrowRight} alt="" className="h-100" /></div>
                       </div>
                     </div>
                   </div>
@@ -145,12 +149,12 @@ const RedeemedNudges = ({ redeemedNudges, setRedeemedNudges }) => {
         </div>
       </div>
       {/* {businessNudgeDetailSelector && ( */}
-        <RedeemedNudgeFollowerList
-          setRedeemedFollowerList={setRedeemedFollowerList}
-          redeemedFollowerList={redeemedFollowerList}
-          redeemedFollowerItem={redeemedFollowerItem}
-          businessNudgeDetailSelector={businessNudgeDetailSelector}
-        />
+      <RedeemedNudgeFollowerList
+        setRedeemedFollowerList={setRedeemedFollowerList}
+        redeemedFollowerList={redeemedFollowerList}
+        redeemedFollowerItem={redeemedFollowerItem}
+        businessNudgeDetailSelector={businessNudgeDetailSelector}
+      />
       {/* )} */}
     </>
   );

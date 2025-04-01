@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import closeRightSidebar from "../../../assets/images/closeRightSidebar.svg";
+import nonotification from "../../../assets/images/nonotification.svg";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { useDispatch, useSelector } from "react-redux";
 import { notificationHandler } from "../../../redux/action/businessAction/notificationList";
@@ -130,6 +131,7 @@ const NotificationDrawer = ({ notificationDrawer, setNotificationDrawer }) => {
         </div>
         <div className="divider2"></div>
         <div className="overflowSidebar" id="scrollableDiv">
+          {notifications?.length < 0 ? (
           <InfiniteScroll
             dataLength={notifications.length}
             next={loadMoreNotifications}
@@ -146,8 +148,8 @@ const NotificationDrawer = ({ notificationDrawer, setNotificationDrawer }) => {
               <div
                 className={
                   notification?.isRead === false
-                    ? "isRead cursor-pointer"
-                    : "cursor-pointer"
+                    ? "isRead padding20read cursor-pointer"
+                    : "cursor-pointer padding20read"
                 }
                 key={notification.id}
                 onClick={() => navigateToNotification(notification)}
@@ -160,10 +162,19 @@ const NotificationDrawer = ({ notificationDrawer, setNotificationDrawer }) => {
                   {timeAgo(notification?.createdAt)}
                 </div>
 
-                <div className="divider"></div>
               </div>
             ))}
           </InfiniteScroll>
+          ):(
+            <div className="h-100 d-flex text-center justify-center align-center">
+              <div className="">
+                <img src={nonotification} alt="" className="mb-12 nonotification" />
+                <div className="fs-26 fw-700">
+                No Notifications Yet
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </>

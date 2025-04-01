@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import closeRightSidebar from "../../../assets/images/closeRightSidebar.svg";
 import noImageFound from "../../../assets/images/noImageFound.png";
 import moment from "moment";
-import arrowRight from "../../../assets/images/arrowRight.svg";
+import redeem from "../../../assets/images/redeem.svg";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -118,18 +118,21 @@ const RedeemedNudgeFollowerList = ({
                             </div>
                           </div>
                         </div>
-                        <div>
-                          <button
-                            onClick={() => {
-                              if (item?.nudgeStatus !== "Redeemed") {
-                                redeemedNudge(item);
-                              }
-                            }}
-                          >
-                            {item?.nudgeStatus === "Redeemed"
-                              ? "Redeemed"
-                              : "Pending"}
-                          </button>
+                        <div
+                          onClick={() => {
+                            if (item?.nudgeStatus !== "Redeemed") {
+                              redeemedNudge(item);
+                            }
+                          }}
+                          className={item?.nudgeStatus === "Redeemed"
+                            ? "RedeemedTag RedeemTag"
+                            : "RedeemTag"}
+                        >
+                          <img src={redeem} alt="" />
+                          {item?.nudgeStatus === "Redeemed"
+                            ? "Redeemed"
+                            : "Pending"}
+
                         </div>
                       </div>
                     </>
