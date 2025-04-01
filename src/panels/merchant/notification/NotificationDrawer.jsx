@@ -98,6 +98,8 @@ const NotificationDrawer = ({ notificationDrawer, setNotificationDrawer }) => {
     } else if (notification?.notificationType === 10) {
       navigate("/merchant/followers");
       setNotificationDrawer(false);
+    }else {
+      setNotificationDrawer(false);
     }
   };
 
