@@ -137,7 +137,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
             icon: promotions,
             iconFull: promotionsFull,
             // navigate: getLoggedInDetails ? "/merchant/promotion" : "/admin/nudges",
-            navigate:"/merchant/promotions",
+            navigate: "/merchant/promotions",
             disabled: "",
           },
           ...(getLoggedInDetails
@@ -253,7 +253,13 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
         </div>
         <Tooltip id="sidebar-tooltip" place="right" />
       </div>
-      {showLogoutModal && <CommonModal modal2Open={showLogoutModal} showLogoutModal = {showLogoutModal} setModal2Open = {setShowLogoutModal}/>}
+      {showLogoutModal && (
+        <CommonModal
+          modal2Open={showLogoutModal}
+          showLogoutModal={showLogoutModal}
+          setModal2Open={setShowLogoutModal}
+        />
+      )}
     </>
   );
 };

@@ -28,6 +28,10 @@
   width: 100% !important;
 }
 
+.isRead {
+  background-color: #F4F5F6;
+}
+
 .dropdown-button {
   background-color: transparent;
   border: none;

@@ -36,6 +36,9 @@ import deleteImageSlice from "../action/businessAction/deleteImage";
 import editImageSlice from "../action/businessAction/editImage";
 import reverseNudgeSlice from "../action/businessAction/reverseNudgeDetails";
 import reverseNudgeStatusUpdateSlice from "../action/businessAction/reverseNudgeStatusUpdate";
+import notificationListSlice from "../action/businessAction/notificationList";
+import markAsReadSlice from "../action/businessAction/markAsRead"
+import nudgeRedeemedSlice from "../action/businessAction/nudgeRedeemed"
 
 const store = configureStore({
   reducer: {
@@ -76,6 +79,9 @@ const store = configureStore({
     editImage: editImageSlice,
     reverseNudge: reverseNudgeSlice,
     reverseNudgeStatusUpdate: reverseNudgeStatusUpdateSlice,
+    notificationList: notificationListSlice,
+    markAsRead:markAsReadSlice,
+    nudgeRedeemed:nudgeRedeemedSlice
   },
 });
 

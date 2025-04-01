@@ -45,7 +45,11 @@ import {
   supplierEndPromotionAction,
   supplierEndPromotionHandler,
 } from "../../../redux/action/supplierActions/supplierEndPromotion";
-import { distributorEndPromotionAction, distributorEndPromotionHandler } from "../../../redux/action/distributorsAction/distributorEndPromotion";
+import {
+  distributorEndPromotionAction,
+  distributorEndPromotionHandler,
+} from "../../../redux/action/distributorsAction/distributorEndPromotion";
+import { useBusiness } from "../../../common/Layout/BusinessContext";
 
 const CommonModal = ({
   modal2Open,
@@ -79,8 +83,8 @@ const CommonModal = ({
     (state) => state?.adminEndPromotion
   );
   const distributorEndPromotion = useSelector(
-      (state) => state?.distributorEndPromotion
-    );
+    (state) => state?.distributorEndPromotion
+  );
   const supplierEndPromotion = useSelector(
     (state) => state?.supplierEndPromotion
   );
@@ -164,17 +168,19 @@ const CommonModal = ({
       dispatch(supplierEndPromotionHandler(payload));
     }
     if (endPromotionModal && getDistriutorLogin) {
-       let payload = {
-      promotionId: promotionalDetailsData?._id,
-    };
-    dispatch(distributorEndPromotionHandler(payload));
+      let payload = {
+        promotionId: promotionalDetailsData?._id,
+      };
+      dispatch(distributorEndPromotionHandler(payload));
     }
   };
-
+  const { setSelectedBusiness } = useBusiness();
+  
   const logout = () => {
     navigate("/");
     localStorage.clear();
     setModal2Open(false);
+    setSelectedBusiness({});
   };
 
   useEffect(() => {
@@ -304,25 +310,23 @@ const CommonModal = ({
     }
   }, [supplierEndPromotion]);
 
-
   useEffect(() => {
-      if (distributorEndPromotion?.data?.statusCode === 200) {
-        messageApi.open({
-          type: "success",
-          content: distributorEndPromotion?.data?.message,
-        });
-        setIsDetailsOpen(false);
-        setEndPromotionModal(false);
-        dispatch(distributorEndPromotionAction.distributorEndPromotionReset());
-      } else if (distributorEndPromotion?.data?.statusCode === 400) {
-        messageApi.open({
-          type: "error",
-          content: distributorEndPromotion?.data?.message,
-        });
-        dispatch(distributorEndPromotionAction.distributorEndPromotionReset());
-      }
-    }, [distributorEndPromotion]);
-  
+    if (distributorEndPromotion?.data?.statusCode === 200) {
+      messageApi.open({
+        type: "success",
+        content: distributorEndPromotion?.data?.message,
+      });
+      setIsDetailsOpen(false);
+      setEndPromotionModal(false);
+      dispatch(distributorEndPromotionAction.distributorEndPromotionReset());
+    } else if (distributorEndPromotion?.data?.statusCode === 400) {
+      messageApi.open({
+        type: "error",
+        content: distributorEndPromotion?.data?.message,
+      });
+      dispatch(distributorEndPromotionAction.distributorEndPromotionReset());
+    }
+  }, [distributorEndPromotion]);
 
   return (
     <>
@@ -387,7 +391,9 @@ const CommonModal = ({
                   getLocationDetails === "/supplier/brands" ||
                   getLocationDetails === "/distributors/brands"
                 ? "Remove Brands"
-                : getLocationDetails === "/admin/promotions" ||getLocationDetails === "/supplier/promotion" || getLocationDetails === "/distributors/promotion"
+                : getLocationDetails === "/admin/promotions" ||
+                  getLocationDetails === "/supplier/promotion" ||
+                  getLocationDetails === "/distributors/promotion"
                 ? "End Promotion?"
                 : "Delete Team Member"}
             </div>

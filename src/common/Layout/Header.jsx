@@ -8,12 +8,15 @@ import SelectModal from "../../panels/merchant/auth/SelectModal";
 import { useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { businessListHandler } from "../../redux/action/businessAction/businessListSlice";
-// import { useBusiness } from "./BusinessContext";
+import { useBusiness } from "./BusinessContext";
+import NotificationDrawer from "../../panels/merchant/notification/NotificationDrawer";
 
 const Header = ({ handleTrigger }) => {
   const [isModalOpen, setModalOpen] = useState(false);
+  const [notificationDrawer, setNotificationDrawer] = useState(false);
+
   const dispatch = useDispatch();
-  // const { selectedBusiness, setSelectedBusiness } = useBusiness();
+  const { selectedBusiness, setSelectedBusiness } = useBusiness();
 
   const location = useLocation();
   const getRestaurantName = localStorage.getItem("restaurantName");
@@ -37,6 +40,18 @@ const Header = ({ handleTrigger }) => {
   };
 
   useEffect(() => {
+    if (notificationDrawer) {
+      document.body.classList.add("overflow-Hidden");
+    } else {
+      document.body.classList.remove("overflow-Hidden");
+    }
+    return () => {
+      document.body.classList.remove("overflow-Hidden");
+    };
+  }, [notificationDrawer]);
+
+
+  useEffect(() => {
     if (getMerchantLogin) {
       let payload = {
         page: 1,
@@ -48,7 +63,7 @@ const Header = ({ handleTrigger }) => {
 
   // Handle Selection
   const handleSelect = (item) => {
-    // setSelectedBusiness(item);
+    setSelectedBusiness(item);
     window.location.reload("/merchant/dashboard");
     setModalOpen(false);
   };
@@ -89,7 +104,7 @@ const Header = ({ handleTrigger }) => {
     "/distributors/add-promotions": "Create single promotions",
     "/distributors/dashboard": "Distributor Dashboard",
     "/supplier/dashboard": "Supplier Dashboard",
-    "/merchant/reverse-nudge":"Followers"
+    "/merchant/reverse-nudge": "Followers",
   };
 
   return (
@@ -114,7 +129,7 @@ const Header = ({ handleTrigger }) => {
           {/* {getMerchantBusinessSelector!==null && ( */}
           {/* {businessListSelector?.data?.data?.records?.length > 0 && localStorage.getItem("merchantLogin")===true &&selectedBusiness !==undefined &&  ( */}
 
-          {/* <div
+          <div
             className="d-flex selectCommon cursor-pointer align-center gap-6 "
             onClick={toggleModal}
           >
@@ -129,14 +144,17 @@ const Header = ({ handleTrigger }) => {
             <div className="h16">
               <img src={arrowRight} alt="arrowRight" />
             </div>
-          </div> */}
+          </div>
           {/* )}  */}
           {/* )}  */}
           {/* Modal Component */}
 
-          {/* <div className="notification">
+          <div
+            className="notification"
+            onClick={() => setNotificationDrawer(true)}
+          >
             <img src={notification} alt="icon" className="h-100" />
-          </div> */}
+          </div>
         </div>
       </header>
       {/* {localStorage.getItem("merchantLogin")===true&& ( */}
@@ -147,9 +165,16 @@ const Header = ({ handleTrigger }) => {
         items={items}
         // selectedItem={selectedItem}
         businessListSelector={businessListSelector}
-        // selectedBusiness={selectedBusiness}
+        selectedBusiness={selectedBusiness}
       />
       {/* )}   */}
+
+      {notificationDrawer && (
+        <NotificationDrawer
+          notificationDrawer={notificationDrawer}
+          setNotificationDrawer={setNotificationDrawer}
+        />
+      )}
     </>
   );
 };

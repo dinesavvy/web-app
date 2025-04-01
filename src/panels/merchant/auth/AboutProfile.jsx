@@ -1,7 +1,6 @@
 import React from "react";
 
 const AboutProfile = ({ getProfileDetailsSelector }) => {
-  console.log(getProfileDetailsSelector, "getProfileDetailsSelector");
   return (
     <>
       <div className="inputGrid gap-20 mb-20">
@@ -9,7 +8,12 @@ const AboutProfile = ({ getProfileDetailsSelector }) => {
           <label htmlFor="name" className="grey mb-10 fs-16 fw-500">
             Type Of Business
           </label>
-          <input type="text" className="input" placeholder="Restaurant" defaultValue={"Restaurant"}/>
+          <input
+            type="text"
+            className="input"
+            placeholder="Restaurant"
+            defaultValue={"Restaurant"}
+          />
         </div>
         <div className="twoSpace position-relative">
           <label htmlFor="name" className="grey mb-10 fs-16 fw-500">

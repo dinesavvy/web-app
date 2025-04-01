@@ -15,13 +15,15 @@ import deleteList from "../../../assets/images/deleteList.svg";
 import { followerAnalyticsHandler } from "../../../redux/action/businessAction/followerAnalytics";
 import { useBusiness } from "../../../common/Layout/BusinessContext";
 import AccessDeniedModal from "../accessDeniedModal/accessDeniedModal";
-import { followerDetailsHandler } from "../../../redux/action/businessAction/followerDetailsAPI";
+import RedeemedNudges from "../redeemedNudges/RedeemedNudges";
 
 const Followers = () => {
   const [tempState, setTempState] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [checkedItems, setCheckedItems] = useState({});
   const [selectedItems, setSelectedItems] = useState([]);
+  const [redeemedNudges, setRedeemedNudges] = useState(false);
+
   const navigate = useNavigate();
   const [pagination, setPagination] = useState({ page: 1, limit: 9 });
   const dispatch = useDispatch();
@@ -152,23 +154,15 @@ const Followers = () => {
 
   const [followerDetails, setFollowerDetails] = useState();
 
-  const getSelectedBusiness = JSON.parse(localStorage.getItem("selectedBusiness"))
+  const getSelectedBusiness = JSON.parse(
+    localStorage.getItem("selectedBusiness")
+  );
 
   const toggleSidebar = (item) => {
     setIsSidebarOpen((prevState) => !prevState);
     setFollowerDetails(item);
-    // let payload = {
-    //   locationId: getSelectedBusiness?._id,
-    //   userId: item?.userId?._id,
-    // };
-    // dispatch(followerDetailsHandler(payload))
   };
 
-  // useEffect(() => {
-  //   if (state?.userId) {
-  //     setIsSidebarOpen(true);
-  //   }
-  // }, [state]);
 
   useEffect(() => {
     let payload = {
@@ -179,6 +173,10 @@ const Followers = () => {
     };
     dispatch(businessFollowerListHandler(payload));
   }, [searchQuery]);
+
+  const redeemedNudgeFn = () => {
+    setRedeemedNudges(true);
+  };
 
   return (
     <>
@@ -246,8 +244,11 @@ const Followers = () => {
             >
               Followers needing Nudges <img src={btnArrowblue} alt="" />
             </div>
-            <div className="w-100 btn btnSecondary gap-8 noborderbtn">
-            Redeem Nudges <img src={btnArrowblue} alt="" />
+            <div
+              className="w-100 btn btnSecondary gap-8 noborderbtn"
+              onClick={() => redeemedNudgeFn()}
+            >
+              Redeem Nudges <img src={btnArrowblue} alt="" />
             </div>
           </div>
           <div className="tabPadding">
@@ -407,6 +408,9 @@ const Followers = () => {
             followerDetails={followerDetails}
             state={state}
           />
+          {redeemedNudges&& (
+          <RedeemedNudges redeemedNudges={redeemedNudges} setRedeemedNudges={setRedeemedNudges} />
+          )}
         </div>
       )}
     </>

@@ -45,13 +45,14 @@ const SelectModal = ({
                     <div
                       key={index}
                       className={`modal-item d-flex justify-between align-center gap-16 ${
-                        selectedBusiness?.name === item?.name ? "active" : ""
+                        (selectedBusiness?.name||businessListSelector?.data?.data?.records?.[0]?.name) === item?.name ? "active" : ""
                       }`}
                       onClick={() => {
-                        onSelect(item); // Select the item
-                        setModalOpen(false); // Close the modal
+                        onSelect(item);
+                        setModalOpen(false);
                       }}
                     >
+                      {console.log(selectedBusiness,"selectedBusiness")}
                       <div>
                         <div className="fs-18 fw-500 mb-4">
                           {item.businessName}

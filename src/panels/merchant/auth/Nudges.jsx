@@ -22,7 +22,7 @@ import {
 } from "../../../redux/action/businessAction/businessNudgeDetails";
 import { useBusiness } from "../../../common/Layout/BusinessContext";
 import AccessDeniedModal from "../accessDeniedModal/accessDeniedModal";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import {
   businessNudgeAnalyticHandler,
   getNudgeAnalyticHandler,
@@ -53,6 +53,15 @@ const Nudges = () => {
   const [endNudgeItem, setEndNudgeItem] = useState();
   const [activeTab, setActiveTab] = useState("active"); // Default active tab is 'active'
   const [pagination, setPagination] = useState({ page: 1, limit: 9 });
+
+  const { state } = useLocation();
+
+  useEffect(() => {
+    if (state?.notificationType === 30) {
+      setActiveTab("reverse");
+    }
+  }, [state]);
+
   const navigate = useNavigate();
   const messageApi = useCommonMessage();
   const nudges = [5, 10, 15, 20, 25, 100];
@@ -482,7 +491,9 @@ const Nudges = () => {
                   </div>
                 </div>
               </div> */}
-              <TopNudges topNudgesSelector={topNudgesSelector} />
+              {topNudgesSelector?.data?.data?.topNudge?.length > 0 && (
+                <TopNudges topNudgesSelector={topNudgesSelector} />
+              )}
             </div>
             <div className="tabs-container tab3 tabFull ">
               <div className="tabs">

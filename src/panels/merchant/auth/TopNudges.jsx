@@ -57,17 +57,18 @@ const TopNudges = ({ topNudgesSelector }) => {
             </div>
           );
         })}
-
-        <div className="w-100 card bgGrey d-flex gap-20 align-center">
-          <PercentageFiller percentage={Number(hoorayPercentage)} />
-          <div>
-            <div className="fs-24 fw-700 mb-8 gc">Hooray! 🎉</div>
-            <div className="fs-16">
-              <span className="gc fw-700">{hoorayPercentage}%</span> of people
-              who got the nudge came in!
+        {hoorayPercentage > 0 && (
+          <div className="w-100 card bgGrey d-flex gap-20 align-center">
+            <PercentageFiller percentage={Number(hoorayPercentage)} />
+            <div>
+              <div className="fs-24 fw-700 mb-8 gc">Hooray! 🎉</div>
+              <div className="fs-16">
+                <span className="gc fw-700">{hoorayPercentage}%</span> of people
+                who got the nudge came in!
+              </div>
             </div>
           </div>
-        </div>
+        )}
       </div>
     </>
   );

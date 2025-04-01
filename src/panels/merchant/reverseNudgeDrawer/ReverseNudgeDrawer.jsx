@@ -49,13 +49,7 @@ const ReverseNudgeDrawer = ({
   const followerDetailsSelector = useSelector(
     (state) => state?.followerDetails
   );
-  console.log(followerDetailsSelector, "followerDetailsSelector");
-
-  console.log(
-    reverseNudgeStatusUpdateSelector,
-    "reverseNudgeStatusUpdateSelector"
-  );
-
+  
   const handleChange = (event) => {
     setChecked(event.target.checked);
   };

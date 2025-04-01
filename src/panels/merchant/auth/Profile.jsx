@@ -149,7 +149,6 @@ const Profile = () => {
     };
     setModalOpen(false);
     dispatch(addImageHandler(payload));
-    console.log(payload, "payload");
   };
 
   useEffect(() => {
