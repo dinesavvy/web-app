@@ -44,7 +44,7 @@ const SelectModal = ({
                   (item, index) => (
                     <div
                       key={index}
-                      className={`modal-item d-flex justify-between align-center gap-16 ${
+                      className={`modal-item ${
                         (selectedBusiness?.name||businessListSelector?.data?.data?.records?.[0]?.name) === item?.name ? "active" : ""
                       }`}
                       onClick={() => {
@@ -52,7 +52,7 @@ const SelectModal = ({
                         setModalOpen(false);
                       }}
                     >
-                      {console.log(selectedBusiness,"selectedBusiness")}
+                     <div className="d-flex justify-between align-center gap-16 mb-8">
                       <div>
                         <div className="fs-18 fw-500 mb-4">
                           {item.businessName}
@@ -73,6 +73,11 @@ const SelectModal = ({
                       <div className="rightIcon">
                         <img src={rightactive} alt="rightactive" />
                       </div>
+                      </div>
+                      {/* <div className="d-flex align-center gap-10">
+                        <div className="btn w135">Accept</div>
+                        <div className="btn w135 btnSecondary">Reject</div>
+                      </div> */}
                     </div>
                   )
                 )}

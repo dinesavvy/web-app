@@ -155,7 +155,7 @@ const ReverseNudgeDrawer = ({
             {reverseNudgeSelector?.data?.data?.nudgeData?.title}
           </div>
           <div className="fs-14 mb-20">
-            {reverseNudgeSelector?.data?.data?.nudgeData?.description}
+            {reverseNudgeSelector?.data?.data?.nudgeData?.message}
           </div>
           <div className="divider2"></div>
           <div className="fs-16 fw-600">Follower requesting Reverse Nudge</div>
@@ -176,7 +176,7 @@ const ReverseNudgeDrawer = ({
                       </div>
                     </div>
                     {/* greenLabel */}
-                    <div className={item?.status==="Accepted"?"label greenLabel mb-20":"label greenLabel mb-20"}>{item?.status}</div>
+                    <div className={item?.status==="Accepted"?"label greenLabel ":"label greenLabel "}>{item?.status}</div>
                   </div>
                   {item?.status === "Pending" && (
                     <div className="custom-checkbox">
@@ -193,7 +193,7 @@ const ReverseNudgeDrawer = ({
                         <span className="checkmark"></span>
                       </label>
                     </div>
-                  )}
+                  )} 
                 </div>
 
                 <div className="divider2"></div>
@@ -218,7 +218,7 @@ const ReverseNudgeDrawer = ({
                 className="btn btnSecondary w-100"
                 onClick={() => nudgeStatusFn("Accepted")}
               >
-                Accept Nudge
+                Accept
               </div>
             </div>
           )}

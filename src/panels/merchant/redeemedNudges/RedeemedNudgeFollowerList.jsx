@@ -2,10 +2,13 @@ import React, { useEffect } from "react";
 import closeRightSidebar from "../../../assets/images/closeRightSidebar.svg";
 import noImageFound from "../../../assets/images/noImageFound.png";
 import moment from "moment";
-import arrowRight from "../../../assets/images/arrowRight.svg";
+import redeem from "../../../assets/images/redeem.svg";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { nudgeRedeemedAction, nudgeRedeemedHandler } from "../../../redux/action/businessAction/nudgeRedeemed";
+import {
+  nudgeRedeemedAction,
+  nudgeRedeemedHandler,
+} from "../../../redux/action/businessAction/nudgeRedeemed";
 import Loader from "../../../common/Loader/Loader";
 import { businessNudgeDetailsHandler } from "../../../redux/action/businessAction/businessNudgeDetails";
 
@@ -37,9 +40,9 @@ const RedeemedNudgeFollowerList = ({
         nudgeId: redeemedFollowerItem?._id,
       };
       dispatch(businessNudgeDetailsHandler(payload));
-      dispatch(nudgeRedeemedAction.nudgeRedeemedReset())
+      dispatch(nudgeRedeemedAction.nudgeRedeemedReset());
     }
-  }, [redeemedFollowerList,nudgeRedeemedSelector]);
+  }, [redeemedFollowerList, nudgeRedeemedSelector]);
 
   return (
     <>
@@ -108,18 +111,21 @@ const RedeemedNudgeFollowerList = ({
                             </div>
                           </div>
                         </div>
-                        <div>
-                          <button
-                            onClick={() => {
-                              if (item?.nudgeStatus !== "Redeemed") {
-                                redeemedNudge(item);
-                              }
-                            }}
-                          >
-                            {item?.nudgeStatus === "Redeemed"
-                              ? "Redeemed"
-                              : "Pending"}
-                          </button>
+                        <div
+                          onClick={() => {
+                            if (item?.nudgeStatus !== "Redeemed") {
+                              redeemedNudge(item);
+                            }
+                          }}
+                          className={item?.nudgeStatus === "Redeemed"
+                            ? "RedeemedTag RedeemTag"
+                            : "RedeemTag"}
+                        >
+                          <img src={redeem} alt="" />
+                          {item?.nudgeStatus === "Redeemed"
+                            ? "Redeemed"
+                            : "Pending"}
+
                         </div>
                       </div>
                     </>

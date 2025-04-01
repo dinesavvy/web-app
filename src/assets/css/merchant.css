@@ -29,9 +29,13 @@
 }
 
 .isRead {
-  background-color: #F4F5F6;
+  background-color: #F4F5F6 ;
+  position: relative;
 }
-
+.padding20read{
+  padding: 20px;
+  border-bottom: 1px solid #00000033;
+}
 .dropdown-button {
   background-color: transparent;
   border: none;
@@ -173,6 +177,7 @@
   padding: 8px;
   border-radius: 4px;
   width: fit-content;
+  height: fit-content;
 }
 
 .greenLabel {
@@ -577,7 +582,19 @@
   border: 1px solid #E3E3E8;
   border-radius: 12px;
 }
-
+.imageHeight100{
+  height: 100%;
+  max-width: 100px;
+  height: 118px;
+  border-radius: 8px;
+  overflow: hidden;
+}
+.imageHeight100 img{
+  object-fit: cover;
+}
+.h24{
+  height: 24px;
+}
 .image80 {
   height: 80px;
   min-width: 80px;
@@ -1955,6 +1972,33 @@ input.addTitleInput::placeholder {
 .closeRightSidebarModalsIcon{
   filter: brightness(0) invert(1);
 }
+.w135{
+  width: 135px;
+  height: 38px;
+}
+.w135.btnSecondary{
+  height: 36px;
+}
+.RedeemTag{
+  width: 99px;
+  height: 30px;
+  font-size: 12px;
+  line-height: 18px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  border-radius: 20px;
+  background-color: #005CDE;
+  color: white;
+}
+.RedeemedTag{
+  background-color: #5FEE6D;
+  color: #18222C;
+}
+.RedeemedTag img{
+  display: none;
+}
 /* Responsive Design */
 @media (max-width: 768px) {
   .error-code {
@@ -1979,8 +2023,32 @@ input.addTitleInput::placeholder {
 
 
 @media (max-width: 1549.98px) {
+  .nonotification{
+    height: 48px;
+    width: 48px;
+  }
+  .RedeemTag {
+    width: 75px;
+    height: 25px;
+    font-size: 10px;
+    line-height: 14px;
+    align-items: center;
+    gap: 4px;
+    border-radius: 16px;
+  }
+  .RedeemTag img{
+    height: 14px;
+  }
   .borderRight:not(:last-child){
     padding-right: 16px;
+  }
+  .w135{
+    width: 100px;
+    height: 32px;
+    border-radius: 8px;
+  }
+  .w135.btnSecondary{
+    height: 30px;
   }
   .codeImage{
     height: 60px;
@@ -2184,6 +2252,9 @@ input.addTitleInput::placeholder {
     border-radius: 14px;
     gap: 8px;
   }
+  .padding20read{
+    padding: 16px;
+  }
   .h-24 {
     height: 20px;
   }
@@ -2191,6 +2262,22 @@ input.addTitleInput::placeholder {
     gap: 8px;
     width: 250px;
     border-radius: 8px;
+  }
+  .card16{
+    padding: 12px;
+    border-radius: 8px;
+  }
+  .imageHeight100 {
+    max-width: 78px;
+    height: 96px;
+    border-radius: 6px;
+  }
+  .h24{
+    height: 20px;
+  }
+  .imageCollaps {
+    height: 24px;
+    width: 24px;
   }
   .cardFollow {
     border: 1px solid #E3E3E8;
