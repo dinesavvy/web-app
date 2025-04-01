@@ -87,6 +87,7 @@ const NotificationDrawer = ({ notificationDrawer, setNotificationDrawer }) => {
   };
 
   const navigateToNotification = (notification) => {
+    console.log(notification,"notification")
     let payload = {
       notificationIds: [notification?._id],
       isReadAll: false,
@@ -98,7 +99,10 @@ const NotificationDrawer = ({ notificationDrawer, setNotificationDrawer }) => {
     } else if (notification?.notificationType === 10) {
       navigate("/merchant/followers");
       setNotificationDrawer(false);
-    }else {
+    } else if (notification?.notificationType === 35) {
+      navigate("/merchant/followers", { state: notification });
+      setNotificationDrawer(false);
+    } else {
       setNotificationDrawer(false);
     }
   };

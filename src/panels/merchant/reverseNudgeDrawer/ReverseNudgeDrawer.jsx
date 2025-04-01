@@ -22,7 +22,7 @@ const ReverseNudgeDrawer = ({
   reverseSideBar,
 }) => {
   const dispatch = useDispatch();
-  console.log(reverseNudgeSelector, "reverseNudgeSelector");
+  
   const [modal2Open, setModal2Open] = useState(false);
   const [nudgeType, setNudgeType] = useState("");
   const [checked, setChecked] = useState(false);

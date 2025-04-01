@@ -30,6 +30,16 @@ const Followers = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const { state } = useLocation();
+
+  // When notification type is 35 then open redeemed redeeme nudge drawer and when refresh then reset navigation state
+  useEffect(() => {
+    if (state?.notificationType === 35) {
+      setRedeemedNudges(true);
+      // Reset state after setting it
+      navigate(window.location.pathname, { replace: true, state: null });
+    }
+  }, [state, window.location.pathname]);
+
   const businessListFollowerListSelector = useSelector(
     (state) => state?.businessListFollowerList
   );
@@ -162,7 +172,6 @@ const Followers = () => {
     setIsSidebarOpen((prevState) => !prevState);
     setFollowerDetails(item);
   };
-
 
   useEffect(() => {
     let payload = {
@@ -408,8 +417,11 @@ const Followers = () => {
             followerDetails={followerDetails}
             state={state}
           />
-          {redeemedNudges&& (
-          <RedeemedNudges redeemedNudges={redeemedNudges} setRedeemedNudges={setRedeemedNudges} />
+          {redeemedNudges && (
+            <RedeemedNudges
+              redeemedNudges={redeemedNudges}
+              setRedeemedNudges={setRedeemedNudges}
+            />
           )}
         </div>
       )}

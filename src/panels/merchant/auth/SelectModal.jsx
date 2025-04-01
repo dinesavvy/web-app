@@ -52,7 +52,6 @@ const SelectModal = ({
                         setModalOpen(false);
                       }}
                     >
-                      {console.log(selectedBusiness,"selectedBusiness")}
                       <div>
                         <div className="fs-18 fw-500 mb-4">
                           {item.businessName}

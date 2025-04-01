@@ -5,9 +5,15 @@ import moment from "moment";
 import arrowRight from "../../../assets/images/arrowRight.svg";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { nudgeRedeemedAction, nudgeRedeemedHandler } from "../../../redux/action/businessAction/nudgeRedeemed";
+import {
+  nudgeRedeemedAction,
+  nudgeRedeemedHandler,
+} from "../../../redux/action/businessAction/nudgeRedeemed";
 import Loader from "../../../common/Loader/Loader";
-import { businessNudgeDetailsHandler } from "../../../redux/action/businessAction/businessNudgeDetails";
+import {
+  businessNudgeDetailAction,
+  businessNudgeDetailsHandler,
+} from "../../../redux/action/businessAction/businessNudgeDetails";
 
 const RedeemedNudgeFollowerList = ({
   redeemedFollowerList,
@@ -20,8 +26,6 @@ const RedeemedNudgeFollowerList = ({
 
   const dispatch = useDispatch();
   const nudgeRedeemedSelector = useSelector((state) => state?.nudgeRedeemed);
-
-  console.log(businessNudgeDetailSelector, "businessNudgeDetailSelector");
 
   const redeemedNudge = (item) => {
     let payload = {
@@ -37,9 +41,9 @@ const RedeemedNudgeFollowerList = ({
         nudgeId: redeemedFollowerItem?._id,
       };
       dispatch(businessNudgeDetailsHandler(payload));
-      dispatch(nudgeRedeemedAction.nudgeRedeemedReset())
+      dispatch(nudgeRedeemedAction.nudgeRedeemedReset());
     }
-  }, [redeemedFollowerList,nudgeRedeemedSelector]);
+  }, [redeemedFollowerList, nudgeRedeemedSelector]);
 
   return (
     <>
@@ -47,7 +51,10 @@ const RedeemedNudgeFollowerList = ({
       {redeemedFollowerList && (
         <div
           className="overlay2"
-          onClick={() => setRedeemedFollowerList(false)}
+          onClick={() => {
+            setRedeemedFollowerList(false);
+            dispatch(businessNudgeDetailAction.businessNudgeDetailsReset());
+          }}
         ></div>
       )}
 
@@ -58,7 +65,10 @@ const RedeemedNudgeFollowerList = ({
           </div>
           <div
             className="closeSidebar"
-            onClick={() => setRedeemedFollowerList(false)}
+            onClick={() => {
+              setRedeemedFollowerList(false);
+              dispatch(businessNudgeDetailAction.businessNudgeDetailsReset());
+            }}
           >
             <img src={closeRightSidebar} alt="closeRightSidebar" />
           </div>
