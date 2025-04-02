@@ -1,13 +1,14 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Modal } from "antd";
 import closeRightSidebar from "../../../assets/images/closeRightSidebar.svg";
 import rightactive from "../../../assets/images/rightactive.svg";
-// import { useDispatch, useSelector } from "react-redux";
-// import {
-//   businessListAction,
-//   businessListHandler,
-// } from "../../../redux/action/businessAction/businessListSlice";
 import Loader from "../../../common/Loader/Loader";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  acceptInviteAction,
+  acceptInviteHandler,
+} from "../../../redux/action/businessAction/acceptInvite";
+import { useBusiness } from "../../../common/Layout/BusinessContext";
 
 const SelectModal = ({
   isModalOpen,
@@ -18,13 +19,50 @@ const SelectModal = ({
   businessListSelector,
   setModalOpen,
   selectedBusiness,
+  isModalOpenNotification,
+  setModalOpenNotification,
 }) => {
+  const dispatch = useDispatch();
+
+  const acceptInviteSelector = useSelector((state) => state?.acceptInvite);
+  // console.log(acceptInviteSelector, "acceptInviteSelector");
+
+  const [tempItem, setTempItem] = useState(false);
+  const { setSelectedBusiness } = useBusiness();
+
+  const handleAcceptDecline = (value, item) => {
+    let payload = {
+      locationId: item?._id,
+      status: value,
+    };
+    dispatch(acceptInviteHandler(payload));
+    if (value === "accepted") {
+      setTempItem(item);
+    }
+  };
+
+  useEffect(() => {
+    if (acceptInviteSelector?.data?.statusCode === 200) {
+      dispatch(acceptInviteAction.acceptInviteReset());
+      setSelectedBusiness(tempItem);
+      window.location.reload();
+      // setModalOpen(false);
+      if (isModalOpenNotification) {
+        setModalOpenNotification(false);
+      } else {
+        setModalOpen(false);
+      }
+    }
+  }, [acceptInviteSelector,]);
+
   return (
     <>
-      {businessListSelector?.isLoading && <Loader />}
+      {(businessListSelector?.isLoading || acceptInviteSelector?.isLoading) && (
+        <Loader />
+      )}
       <Modal
         centered
-        visible={isModalOpen} // Control the visibility of the modal  // Handle close
+        visible={isModalOpen || isModalOpenNotification} // Control the visibility of the modal  // Handle close
         footer={null} // Hide the footer (buttons)
         closable={false}
         className="selecModal"
@@ -32,7 +70,16 @@ const SelectModal = ({
         <div className="">
           <div className="topPadding d-flex justify-between align-center">
             <div className="fs-26 fw-700">Your Business</div>
-            <div className="closeSidebar" onClick={() => setModalOpen(false)}>
+            <div
+              className="closeSidebar"
+              onClick={() => {
+                if (isModalOpenNotification) {
+                  setModalOpenNotification(false);
+                } else {
+                  setModalOpen(false);
+                }
+              }}
+            >
               <img src={closeRightSidebar} alt="closeRightSidebar" />
             </div>
           </div>
@@ -45,39 +92,59 @@ const SelectModal = ({
                     <div
                       key={index}
                       className={`modal-item ${
-                        (selectedBusiness?.name||businessListSelector?.data?.data?.records?.[0]?.name) === item?.name ? "active" : ""
+                        (selectedBusiness?.name ||
+                          businessListSelector?.data?.data?.records?.[0]
+                            ?.name) === item?.name
+                          ? "active"
+                          : ""
                       }`}
                       onClick={() => {
-                        onSelect(item);
-                        setModalOpen(false);
+                        if (item?.roleStatus === "accepted") {
+                          onSelect(item);
+                          // setModalOpen(false);
+                        }
                       }}
                     >
-                     <div className="d-flex justify-between align-center gap-16 mb-8">
-                      <div>
-                        <div className="fs-18 fw-500 mb-4">
-                          {item.businessName}
+                      <div className="d-flex justify-between align-center gap-16 mb-8">
+                        <div>
+                          <div className="fs-18 fw-500 mb-4">
+                            {item.businessName}
+                          </div>
+                          <div className="fs-14 grey">
+                            {[
+                              item.address?.addressLine1,
+                              item.address?.addressLine2,
+                              item.address?.locality,
+                              item.address?.administrativeDistrictLevel1,
+                              item.address?.country,
+                              item.address?.postalCode,
+                            ]
+                              .filter(Boolean)
+                              .join(" ")}
+                          </div>
                         </div>
-                        <div className="fs-14 grey">
-                          {[
-                            item.address?.addressLine1,
-                            item.address?.addressLine2,
-                            item.address?.locality,
-                            item.address?.administrativeDistrictLevel1,
-                            item.address?.country,
-                            item.address?.postalCode,
-                          ]
-                            .filter(Boolean)
-                            .join(" ")}
+                        <div className="rightIcon">
+                          <img src={rightactive} alt="rightactive" />
                         </div>
                       </div>
-                      <div className="rightIcon">
-                        <img src={rightactive} alt="rightactive" />
-                      </div>
-                      </div>
-                      {/* <div className="d-flex align-center gap-10">
-                        <div className="btn w135">Accept</div>
-                        <div className="btn w135 btnSecondary">Reject</div>
-                      </div> */}
+                      {item?.roleStatus === "pending" && (
+                        <div className="d-flex align-center gap-10">
+                          <div
+                            className="btn w135"
+                            onClick={() =>
+                              handleAcceptDecline("accepted", item)
+                            }
+                          >
+                            Accept
+                          </div>
+                          <div
+                            className="btn w135 btnSecondary"
+                            onClick={() => handleAcceptDecline("deny", item)}
+                          >
+                            Reject
+                          </div>
+                        </div>
+                      )}
                     </div>
                   )
                 )}

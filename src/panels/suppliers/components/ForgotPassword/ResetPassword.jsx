@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../../../../assets/css/Login.css";
 import login from "../../../../assets/images/login.jpg";
 import emailInput from "../../../../assets/images/emailInput.svg";
@@ -8,18 +8,59 @@ import password from "../../../../assets/images/password.svg";
 import passwordInput from "../../../../assets/images/passwordInput.svg";
 import nopassword from "../../../../assets/images/nopassword.svg";
 import { ErrorMessage, Field, Form, Formik } from "formik";
-import {resetPasswordvalidationSchema} from "./forgotPasswordValidation"
+import { resetPasswordvalidationSchema } from "./forgotPasswordValidation";
+import { useDispatch, useSelector } from "react-redux";
+import Loader from "../../../../common/Loader/Loader";
+import {
+  resetPasswordAction,
+  resetPasswordHandler,
+} from "../../../../redux/action/supplierActions/resetPassword";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useCommonMessage } from "../../../../common/CommonMessage";
 
 const ResetPassword = () => {
+  const messageApi = useCommonMessage();
   const [showPassword, setShowPassword] = useState(false);
   const [showPassword2, setShowPassword2] = useState(false);
 
+  const dispatch = useDispatch();
+  const location = useLocation();
+
+  const navigate = useNavigate();
+
+  const resetPasswordSelector = useSelector((state) => state?.resetPassword);
+  console.log(location?.pathname?.split("/"), "location");
+
   const handleFormSubmit = (values) => {
-    console.log(values, "values");
+    let payload = {
+      email: location?.pathname?.split("/")?.[4],
+      password: values?.password,
+      resetToken: location?.pathname?.split("/")?.[3],
+    };
+    console.log(payload, "payload");
+    dispatch(resetPasswordHandler(payload));
   };
+
+  useEffect(() => {
+    if (resetPasswordSelector?.data?.statusCode === 200) {
+      messageApi.open({
+        type: "success",
+        content: resetPasswordSelector?.data?.message,
+      });
+      dispatch(resetPasswordAction.resetPasswordReset());
+      navigate("/");
+    } else if (resetPasswordSelector?.message) {
+      messageApi.open({
+        type: "error",
+        content: resetPasswordSelector?.message,
+      });
+      dispatch(resetPasswordAction.resetPasswordReset());
+    }
+  }, [resetPasswordSelector, location]);
 
   return (
     <>
+      {resetPasswordSelector?.isLoading && <Loader />}
       <div className="loginFlex ">
         <div className="w-50 h-100 position-relative mobileHide fixLeft">
           <img src={login} alt="" className="w-100 h-100 object-cover" />
@@ -75,11 +116,11 @@ const ResetPassword = () => {
                         )}
                       </div>
                     </div>
-                      <ErrorMessage
-                        name="password"
-                        component="div"
-                        className="mt-10 fw-500 fs-14 error"
-                      />
+                    <ErrorMessage
+                      name="password"
+                      component="div"
+                      className="mt-10 fw-500 fs-14 error"
+                    />
                   </div>
                   <div className="mb-30">
                     <label className="fs-14 fw-500 mb-10" htmlFor="password">
@@ -114,11 +155,11 @@ const ResetPassword = () => {
                         )}
                       </div>
                     </div>
-                      <ErrorMessage
-                        name="confirmPassword"
-                        component="div"
-                        className="mt-10 fw-500 fs-14 error"
-                      />
+                    <ErrorMessage
+                      name="confirmPassword"
+                      component="div"
+                      className="mt-10 fw-500 fs-14 error"
+                    />
                   </div>
                   <button
                     className="btn w-100"

@@ -18,6 +18,8 @@ const Header = ({ handleTrigger }) => {
   const dispatch = useDispatch();
   const { selectedBusiness, setSelectedBusiness } = useBusiness();
 
+  const acceptInviteSelector = useSelector((state) => state?.acceptInvite);
+
   const location = useLocation();
   const getRestaurantName = localStorage.getItem("restaurantName");
   const getMerchantBusinessSelector = JSON.parse(
@@ -59,12 +61,12 @@ const Header = ({ handleTrigger }) => {
       };
       dispatch(businessListHandler(payload));
     }
-  }, []);
+  }, [acceptInviteSelector]);
 
   // Handle Selection
   const handleSelect = (item) => {
     setSelectedBusiness(item);
-    window.location.reload("/merchant/dashboard");
+    window.location.reload();
     setModalOpen(false);
   };
 
@@ -128,7 +130,6 @@ const Header = ({ handleTrigger }) => {
         </div> */}
           {/* {getMerchantBusinessSelector!==null && ( */}
           {/* {businessListSelector?.data?.data?.records?.length > 0 && localStorage.getItem("merchantLogin")===true &&selectedBusiness !==undefined &&  ( */}
-
           <div
             className="d-flex selectCommon cursor-pointer align-center gap-6 "
             onClick={toggleModal}

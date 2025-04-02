@@ -11,6 +11,7 @@ import createDistributorPromotionSlice from "../action/distributorsAction/create
 import distributorPromotionDetailsSlice from "../action/distributorsAction/distributorPromotionDetails";
 import distributorEndPromotionSlice from "../action/distributorsAction/distributorEndPromotion";
 import forgotPasswordSlice from "../action/distributorsAction/forgotPassword"
+import resetPasswordDistributorSlice from "../action/distributorsAction/resetPasswordDistributor"
 
 const store = configureStore({
   reducer: {
@@ -25,7 +26,8 @@ const store = configureStore({
     createDistributorPromotion: createDistributorPromotionSlice,
     distributorPromotionDetails: distributorPromotionDetailsSlice,
     distributorEndPromotion: distributorEndPromotionSlice,
-    forgotPassword:forgotPasswordSlice
+    forgotPassword:forgotPasswordSlice,
+    resetPasswordDistributor:resetPasswordDistributorSlice
   },
 });
 

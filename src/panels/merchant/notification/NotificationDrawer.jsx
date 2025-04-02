@@ -10,9 +10,14 @@ import {
   markAsReadAction,
   markAsReadHandler,
 } from "../../../redux/action/businessAction/markAsRead";
+import SelectModal from "../auth/SelectModal";
+import { businessListHandler } from "../../../redux/action/businessAction/businessListSlice";
+import { useBusiness } from "../../../common/Layout/BusinessContext";
 
 const NotificationDrawer = ({ notificationDrawer, setNotificationDrawer }) => {
   const dispatch = useDispatch();
+
+  const [isModalOpenNotification, setModalOpenNotification] = useState(false);
 
   const [page, setPage] = useState(1);
   const [notifications, setNotifications] = useState([]);
@@ -28,7 +33,7 @@ const NotificationDrawer = ({ notificationDrawer, setNotificationDrawer }) => {
 
   useEffect(() => {
     fetchNotifications(1, true);
-  }, []);
+  }, [markAsReadSelector]);
 
   useEffect(() => {
     if (notificationListSelector?.data?.data?.records) {
@@ -86,6 +91,15 @@ const NotificationDrawer = ({ notificationDrawer, setNotificationDrawer }) => {
     }
     return "Just now";
   };
+  const businessListSelector = useSelector((state) => state?.businessList);
+  const getMerchantLogin = localStorage.getItem("merchantLogin");
+  const { selectedBusiness, setSelectedBusiness } = useBusiness();
+
+  const handleSelect = (item) => {
+    setSelectedBusiness(item);
+    window.location.reload();
+    setModalOpenNotification(false);
+  };
 
   const navigateToNotification = (notification) => {
     console.log(notification, "notification");
@@ -103,10 +117,28 @@ const NotificationDrawer = ({ notificationDrawer, setNotificationDrawer }) => {
     } else if (notification?.notificationType === 35) {
       navigate("/merchant/followers", { state: notification });
       setNotificationDrawer(false);
+    } else if (
+      notification?.notificationType === 20 ||
+      notification?.notificationType === 21
+    ) {
+      setModalOpenNotification(true);
+    } else if (notification?.notificationType === 1) {
+      navigate("/merchant/promotions");
+      setNotificationDrawer(false);
     } else {
       setNotificationDrawer(false);
     }
   };
+
+  useEffect(() => {
+    if (getMerchantLogin && isModalOpenNotification) {
+      let payload = {
+        page: 1,
+        limit: 10,
+      };
+      dispatch(businessListHandler(payload));
+    }
+  }, [isModalOpenNotification]);
 
   return (
     <>
@@ -180,6 +212,15 @@ const NotificationDrawer = ({ notificationDrawer, setNotificationDrawer }) => {
           )}
         </div>
       </div>
+      {isModalOpenNotification && (
+        <SelectModal
+          isModalOpenNotification={isModalOpenNotification}
+          setModalOpenNotification={setModalOpenNotification}
+          businessListSelector={businessListSelector}
+          onSelect={handleSelect}
+          selectedBusiness={selectedBusiness}
+        />
+      )}
     </>
   );
 };

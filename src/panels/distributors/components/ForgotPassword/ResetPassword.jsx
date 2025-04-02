@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../../../../assets/css/Login.css";
 import login from "../../../../assets/images/login.jpg";
 import emailInput from "../../../../assets/images/emailInput.svg";
@@ -9,17 +9,59 @@ import passwordInput from "../../../../assets/images/passwordInput.svg";
 import nopassword from "../../../../assets/images/nopassword.svg";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import {resetPasswordvalidationSchema} from "./forgotPasswordValidation"
+import { resetPasswordAction, resetPasswordHandler } from "../../../../redux/action/supplierActions/resetPassword";
+import Loader from "../../../../common/Loader/Loader";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { useCommonMessage } from "../../../../common/CommonMessage";
+import { resetPasswordDistributorAction, resetPasswordDistributorHandler } from "../../../../redux/action/distributorsAction/resetPasswordDistributor";
 
 const ResetPassword = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showPassword2, setShowPassword2] = useState(false);
+const messageApi = useCommonMessage();
 
-  const handleFormSubmit = (values) => {
-    console.log(values, "values");
-  };
+const dispatch = useDispatch()
+const navigate = useNavigate()
+
+  const resetPasswordSelector = useSelector((state)=>state?.resetPasswordDistributor)
+  console.log(resetPasswordSelector,"resetPasswordSelector")
+  console.log(location?.pathname?.split("/") ,"location")
+  
+  
+    const handleFormSubmit = (values) => {
+      console.log(values, "values");
+      let payload = {
+        email: location?.pathname?.split("/")?.[4],
+        password: values?.password,
+        resetToken: location?.pathname?.split("/")?.[3],
+      };
+      console.log(payload,"payload")
+      dispatch(resetPasswordDistributorHandler(payload))
+    };
+  
+  
+    useEffect(() => {
+     if(resetPasswordSelector?.data?.statusCode ===200){
+      messageApi.open({
+        type: "success",
+        content: resetPasswordSelector?.data?.message,
+      });
+      dispatch(resetPasswordDistributorAction.resetPasswordDistributorReset())
+        navigate("/")
+     }else if(resetPasswordSelector?.message){
+      messageApi.open({
+        type: "error",
+        content: resetPasswordSelector?.message,
+      });
+      dispatch(resetPasswordDistributorAction.resetPasswordDistributorReset())
+     }
+    }, [resetPasswordSelector,location])
+    
 
   return (
     <>
+    {resetPasswordSelector?.isLoading && <Loader />}
       <div className="loginFlex ">
         <div className="w-50 h-100 position-relative mobileHide fixLeft">
           <img src={login} alt="" className="w-100 h-100 object-cover" />

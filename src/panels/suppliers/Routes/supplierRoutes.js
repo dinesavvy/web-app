@@ -67,7 +67,13 @@ const supplierRoutes = [
     isLayout: false,
   },
   {
-    path: "/supplier/reset-password",
+    path: "/supplier/reset-password/*",
+    element: ResetPassword,
+    isPrivate: false,
+    isLayout: false,
+  },
+  {
+    path: "/supplier/new-password/*",
     element: ResetPassword,
     isPrivate: false,
     isLayout: false,

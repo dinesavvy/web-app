@@ -39,6 +39,7 @@ import reverseNudgeStatusUpdateSlice from "../action/businessAction/reverseNudge
 import notificationListSlice from "../action/businessAction/notificationList";
 import markAsReadSlice from "../action/businessAction/markAsRead"
 import nudgeRedeemedSlice from "../action/businessAction/nudgeRedeemed"
+import acceptInviteSlice from "../action/businessAction/acceptInvite"
 
 const store = configureStore({
   reducer: {
@@ -81,7 +82,8 @@ const store = configureStore({
     reverseNudgeStatusUpdate: reverseNudgeStatusUpdateSlice,
     notificationList: notificationListSlice,
     markAsRead:markAsReadSlice,
-    nudgeRedeemed:nudgeRedeemedSlice
+    nudgeRedeemed:nudgeRedeemedSlice,
+    acceptInvite:acceptInviteSlice
   },
 });
 
