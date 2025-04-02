@@ -64,7 +64,7 @@ const Nudges = () => {
 
   const navigate = useNavigate();
   const messageApi = useCommonMessage();
-  const nudges = [5, 10, 15, 20, 25, 100];
+  const nudges = [5, 10, 15, 20, 25, 100,110];
   const businessAddNudgeCreditSelector = useSelector(
     (state) => state?.businessAddNudgeCredit
   );

@@ -42,9 +42,9 @@ const MerchantNudgecart = ({
       isPublic: false,
       followerList: state?.selectedItems?.map((item) => item?.userId?._id),
       photoURL:
-        fileuploadSelector?.data?.data?.map((item) => item?.src).join("") ??
-        nudgesCards?.imageUrl?.[0].join("") ??
-        getPromotionNudge?.brandDetails?.imageUrl.join(""),
+        fileuploadSelector?.data?.data?.map((item) => item?.src)?.join("") ??
+        nudgesCards?.imageUrl?.[0] ??
+        getPromotionNudge?.brandDetails?.imageUrl?.join(""),
       deactivateAt: Date.now() + 24 * 60 * 60 * 1000,
       imageId: "",
       totalQuantity: Number(values?.quantity),

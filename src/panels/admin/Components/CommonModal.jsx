@@ -116,10 +116,9 @@ const CommonModal = ({
 
   const deleteTeam = () => {
     if (merchantApp) {
-      dispatch(removeSupplierHandler({ teamMappingId: removeTeamMember?._id }));
+      dispatch(removeTeamMemberBusinessHandler({ teamMappingId: removeTeamMember?._id }));
       return;
     }
-
     if (getLocationDetails !== "/admin/suppliers" && removeTeamMember?._id) {
       dispatch(
         removeTeamMemberHandler({ teamMappingId: removeTeamMember._id })

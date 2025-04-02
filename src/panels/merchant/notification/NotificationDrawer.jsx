@@ -39,7 +39,7 @@ const NotificationDrawer = ({ notificationDrawer, setNotificationDrawer }) => {
       );
 
       // If returned records are less than limit, stop fetching
-      if (newNotifications.length < 10) {
+      if (newNotifications?.length < 10) {
         setHasMore(false);
       }
     }
@@ -88,7 +88,7 @@ const NotificationDrawer = ({ notificationDrawer, setNotificationDrawer }) => {
   };
 
   const navigateToNotification = (notification) => {
-    console.log(notification,"notification")
+    console.log(notification, "notification");
     let payload = {
       notificationIds: [notification?._id],
       isReadAll: false,
@@ -131,47 +131,50 @@ const NotificationDrawer = ({ notificationDrawer, setNotificationDrawer }) => {
         </div>
         <div className="divider2"></div>
         <div className="overflowSidebar" id="scrollableDiv">
-          {notifications?.length < 0 ? (
-          <InfiniteScroll
-            dataLength={notifications.length}
-            next={loadMoreNotifications}
-            hasMore={hasMore}
-            loader={<h4>Loading...</h4>}
-            endMessage={
-              <p style={{ textAlign: "center" }}>
-                <b>No more notifications</b>
-              </p>
-            }
-            scrollableTarget="scrollableDiv"
-          >
-            {notifications?.map((notification) => (
-              <div
-                className={
-                  notification?.isRead === false
-                    ? "isRead padding20read cursor-pointer"
-                    : "cursor-pointer padding20read"
-                }
-                key={notification.id}
-                onClick={() => navigateToNotification(notification)}
-              >
-                <div className="d-flex align-center mb-10 gap-12">
-                  <div className="fs-16 fw-600">{notification.title}</div>
+          {notifications?.length > 0 ? (
+            <InfiniteScroll
+              dataLength={notifications.length}
+              next={loadMoreNotifications}
+              hasMore={hasMore}
+              loader={<h4>Loading...</h4>}
+              endMessage={
+                <p style={{ textAlign: "center" }}>
+                  <b>No more notifications</b>
+                </p>
+              }
+              scrollableTarget="scrollableDiv"
+            >
+              {notifications?.map((notification) => (
+                <div
+                  className={
+                    notification?.isRead === false
+                      ? "isRead padding20read cursor-pointer"
+                      : "cursor-pointer padding20read"
+                  }
+                  key={notification.id}
+                  onClick={() => navigateToNotification(notification)}
+                >
+                  <div className="d-flex align-center mb-10 gap-12">
+                    <div className="fs-16 fw-600">{notification.title}</div>
+                  </div>
+                  <div className="fs-16 fw-100 mb-12">
+                    {notification.message}
+                  </div>
+                  <div className="fs-16 fw-100 o5">
+                    {timeAgo(notification?.createdAt)}
+                  </div>
                 </div>
-                <div className="fs-16 fw-100 mb-12">{notification.message}</div>
-                <div className="fs-16 fw-100 o5">
-                  {timeAgo(notification?.createdAt)}
-                </div>
-
-              </div>
-            ))}
-          </InfiniteScroll>
-          ):(
+              ))}
+            </InfiniteScroll>
+          ) : (
             <div className="h-100 d-flex text-center justify-center align-center">
               <div className="">
-                <img src={nonotification} alt="" className="mb-12 nonotification" />
-                <div className="fs-26 fw-700">
-                No Notifications Yet
-                </div>
+                <img
+                  src={nonotification}
+                  alt=""
+                  className="mb-12 nonotification"
+                />
+                <div className="fs-26 fw-700">No Notifications Yet</div>
               </div>
             </div>
           )}
