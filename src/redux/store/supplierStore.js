@@ -13,6 +13,7 @@ import removeBrandSupplierSlice from "../action/supplierActions/removeBrandSuppl
 import supplierEndPromotionSlice from "../action/supplierActions/supplierEndPromotion";
 import forgotPasswordSupplierSlice from  "../action/supplierActions/forgotPasswordSupplier"
 import resetPasswordSlice from "../action/supplierActions/resetPassword"
+import checkResetPasswordSlice from "../action/supplierActions/checkResetPasswordLink"
 
 const store = configureStore({
   reducer: {
@@ -29,7 +30,8 @@ const store = configureStore({
     removeBrandSupplier: removeBrandSupplierSlice,
     supplierEndPromotion: supplierEndPromotionSlice,
     forgotPasswordSupplier: forgotPasswordSupplierSlice,
-    resetPassword:resetPasswordSlice
+    resetPassword:resetPasswordSlice,
+    checkResetPassword:checkResetPasswordSlice
   },
 });
 

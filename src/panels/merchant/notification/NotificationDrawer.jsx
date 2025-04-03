@@ -102,7 +102,6 @@ const NotificationDrawer = ({ notificationDrawer, setNotificationDrawer }) => {
   };
 
   const navigateToNotification = (notification) => {
-    console.log(notification, "notification");
     let payload = {
       notificationIds: [notification?._id],
       isReadAll: false,

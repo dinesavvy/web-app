@@ -56,7 +56,7 @@ const supplierRoutes = [
     isLayout: false,
   },
   {
-    path: "/distributors/expire-link",
+    path: "/distributors/expire-link/*",
     element: ExpireLink,
     isPrivate: false,
     isLayout: false,

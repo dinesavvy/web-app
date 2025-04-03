@@ -173,13 +173,13 @@ const CommonModal = ({
       dispatch(distributorEndPromotionHandler(payload));
     }
   };
-  const { setSelectedBusiness } = useBusiness();
+  // const { setSelectedBusiness } = useBusiness();
   
   const logout = () => {
     navigate("/");
     localStorage.clear();
     setModal2Open(false);
-    setSelectedBusiness({});
+    // setSelectedBusiness({});
   };
 
   useEffect(() => {

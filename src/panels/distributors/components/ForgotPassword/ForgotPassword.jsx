@@ -32,10 +32,8 @@ const ForgotPassword = () => {
   const forgotPasswordSelector = useSelector((state) => state?.forgotPassword);
 
   const handleFormSubmit = (values) => {
-    console.log(values, "values");
-
     let payload = {
-      email: values?.email,
+      email: values?.email.toLowerCase(),
     };
     dispatch(forgotPasswordHandler(payload));
   };

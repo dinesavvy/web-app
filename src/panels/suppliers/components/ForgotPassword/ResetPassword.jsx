@@ -17,6 +17,12 @@ import {
 } from "../../../../redux/action/supplierActions/resetPassword";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useCommonMessage } from "../../../../common/CommonMessage";
+import {
+  checkResetPasswordAction,
+  checkResetPasswordLinkHandler,
+} from "../../../../redux/action/supplierActions/checkResetPasswordLink";
+import backToLogin from "../../../../assets/images/backToLogin.svg";
+
 
 const ResetPassword = () => {
   const messageApi = useCommonMessage();
@@ -29,7 +35,10 @@ const ResetPassword = () => {
   const navigate = useNavigate();
 
   const resetPasswordSelector = useSelector((state) => state?.resetPassword);
-  console.log(location?.pathname?.split("/"), "location");
+  const checkResetPasswordSelector = useSelector(
+    (state) => state?.checkResetPassword
+  );
+
 
   const handleFormSubmit = (values) => {
     let payload = {
@@ -37,7 +46,6 @@ const ResetPassword = () => {
       password: values?.password,
       resetToken: location?.pathname?.split("/")?.[3],
     };
-    console.log(payload, "payload");
     dispatch(resetPasswordHandler(payload));
   };
 
@@ -58,9 +66,29 @@ const ResetPassword = () => {
     }
   }, [resetPasswordSelector, location]);
 
+  // Check Link expire api
+
+  useEffect(() => {
+    if (location) {
+      let payload = {
+        email: location?.pathname?.split("/")?.[4],
+        resetToken: location?.pathname?.split("/")?.[3],
+      };
+      dispatch(checkResetPasswordLinkHandler(payload));
+    }
+  }, [location]);
+
+  useEffect(() => {
+    if (checkResetPasswordSelector?.message?.data?.statusCode === 400) {
+      navigate("/supplier/expire-link", { state: { email: location?.pathname?.split("/")?.[4] } });
+      dispatch(checkResetPasswordAction.checkResetPasswordReset());
+    }
+  }, [checkResetPasswordSelector]);
+
   return (
     <>
-      {resetPasswordSelector?.isLoading && <Loader />}
+      {(resetPasswordSelector?.isLoading ||
+        checkResetPasswordSelector?.isLoading) && <Loader />}
       <div className="loginFlex ">
         <div className="w-50 h-100 position-relative mobileHide fixLeft">
           <img src={login} alt="" className="w-100 h-100 object-cover" />
@@ -168,6 +196,13 @@ const ResetPassword = () => {
                   >
                     Set new password
                   </button>
+                  <div className="back-to-login" onClick={()=>navigate("/")}>
+                                      <span className="back-icon">
+                                        {" "}
+                                        <img src={backToLogin} alt="" />
+                                      </span>{" "}
+                                      Back to login
+                                    </div>
                 </Form>
               )}
             </Formik>

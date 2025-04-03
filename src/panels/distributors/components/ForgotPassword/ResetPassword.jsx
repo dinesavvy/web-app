@@ -8,60 +8,90 @@ import password from "../../../../assets/images/password.svg";
 import passwordInput from "../../../../assets/images/passwordInput.svg";
 import nopassword from "../../../../assets/images/nopassword.svg";
 import { ErrorMessage, Field, Form, Formik } from "formik";
-import {resetPasswordvalidationSchema} from "./forgotPasswordValidation"
-import { resetPasswordAction, resetPasswordHandler } from "../../../../redux/action/supplierActions/resetPassword";
+import { resetPasswordvalidationSchema } from "./forgotPasswordValidation";
+import {
+  resetPasswordAction,
+  resetPasswordHandler,
+} from "../../../../redux/action/supplierActions/resetPassword";
 import Loader from "../../../../common/Loader/Loader";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useCommonMessage } from "../../../../common/CommonMessage";
-import { resetPasswordDistributorAction, resetPasswordDistributorHandler } from "../../../../redux/action/distributorsAction/resetPasswordDistributor";
+import {
+  resetPasswordDistributorAction,
+  resetPasswordDistributorHandler,
+} from "../../../../redux/action/distributorsAction/resetPasswordDistributor";
+import {
+  checkResetPasswordAction,
+  checkResetPasswordLinkHandler,
+} from "../../../../redux/action/distributorsAction/checkResetPasswordLink";
+import backToLogin from "../../../../assets/images/backToLogin.svg";
 
 const ResetPassword = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showPassword2, setShowPassword2] = useState(false);
-const messageApi = useCommonMessage();
+  const messageApi = useCommonMessage();
 
-const dispatch = useDispatch()
-const navigate = useNavigate()
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  const resetPasswordSelector = useSelector((state)=>state?.resetPasswordDistributor)
-  console.log(resetPasswordSelector,"resetPasswordSelector")
-  console.log(location?.pathname?.split("/") ,"location")
-  
-  
-    const handleFormSubmit = (values) => {
-      console.log(values, "values");
-      let payload = {
-        email: location?.pathname?.split("/")?.[4],
-        password: values?.password,
-        resetToken: location?.pathname?.split("/")?.[3],
-      };
-      console.log(payload,"payload")
-      dispatch(resetPasswordDistributorHandler(payload))
+  const resetPasswordSelector = useSelector(
+    (state) => state?.resetPasswordDistributor
+  );
+
+  const checkResetPasswordSelector = useSelector(
+    (state) => state?.checkResetPassword
+  );
+
+  const handleFormSubmit = (values) => {
+    let payload = {
+      email: location?.pathname?.split("/")?.[4],
+      password: values?.password,
+      resetToken: location?.pathname?.split("/")?.[3],
     };
-  
-  
-    useEffect(() => {
-     if(resetPasswordSelector?.data?.statusCode ===200){
+    dispatch(resetPasswordDistributorHandler(payload));
+  };
+
+  useEffect(() => {
+    if (resetPasswordSelector?.data?.statusCode === 200) {
       messageApi.open({
         type: "success",
         content: resetPasswordSelector?.data?.message,
       });
-      dispatch(resetPasswordDistributorAction.resetPasswordDistributorReset())
-        navigate("/")
-     }else if(resetPasswordSelector?.message){
+      dispatch(resetPasswordDistributorAction.resetPasswordDistributorReset());
+      navigate("/");
+    } else if (resetPasswordSelector?.message) {
       messageApi.open({
         type: "error",
         content: resetPasswordSelector?.message,
       });
-      dispatch(resetPasswordDistributorAction.resetPasswordDistributorReset())
-     }
-    }, [resetPasswordSelector,location])
-    
+      dispatch(resetPasswordDistributorAction.resetPasswordDistributorReset());
+    }
+  }, [resetPasswordSelector, location]);
+
+  useEffect(() => {
+    if (location) {
+      let payload = {
+        email: location?.pathname?.split("/")?.[4],
+        resetToken: location?.pathname?.split("/")?.[3],
+      };
+      dispatch(checkResetPasswordLinkHandler(payload));
+    }
+  }, [location]);
+
+  useEffect(() => {
+    if (checkResetPasswordSelector?.message?.data?.statusCode === 400) {
+      navigate("/distributors/expire-link", {
+        state: { email: location?.pathname?.split("/")?.[4] },
+      });
+      dispatch(checkResetPasswordAction.checkResetPasswordReset());
+    }
+  }, [checkResetPasswordSelector]);
 
   return (
     <>
-    {resetPasswordSelector?.isLoading && <Loader />}
+      {(resetPasswordSelector?.isLoading ||
+        checkResetPasswordSelector?.isLoading) && <Loader />}
       <div className="loginFlex ">
         <div className="w-50 h-100 position-relative mobileHide fixLeft">
           <img src={login} alt="" className="w-100 h-100 object-cover" />
@@ -117,11 +147,11 @@ const navigate = useNavigate()
                         )}
                       </div>
                     </div>
-                      <ErrorMessage
-                        name="password"
-                        component="div"
-                        className="mt-10 fw-500 fs-14 error"
-                      />
+                    <ErrorMessage
+                      name="password"
+                      component="div"
+                      className="mt-10 fw-500 fs-14 error"
+                    />
                   </div>
                   <div className="mb-30">
                     <label className="fs-14 fw-500 mb-10" htmlFor="password">
@@ -156,11 +186,11 @@ const navigate = useNavigate()
                         )}
                       </div>
                     </div>
-                      <ErrorMessage
-                        name="confirmPassword"
-                        component="div"
-                        className="mt-10 fw-500 fs-14 error"
-                      />
+                    <ErrorMessage
+                      name="confirmPassword"
+                      component="div"
+                      className="mt-10 fw-500 fs-14 error"
+                    />
                   </div>
                   <button
                     className="btn w-100"
@@ -169,6 +199,13 @@ const navigate = useNavigate()
                   >
                     Set new password
                   </button>
+                  <div className="back-to-login" onClick={()=>navigate("/")}>
+                    <span className="back-icon">
+                      {" "}
+                      <img src={backToLogin} alt="" />
+                    </span>{" "}
+                    Back to login
+                  </div>
                 </Form>
               )}
             </Formik>

@@ -19,15 +19,19 @@ import {
   loginSliceAction,
 } from "../../../../redux/action/supplierActions/loginSlice";
 import "../../../../assets/css/Login.css";
+
 const Login = () => {
+
   const messageApi = useCommonMessage();
   const loginSelector = useSelector((state) => state?.loginSliceDetails);
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [showPassword, setShowPassword] = useState(false);
+
   const handleFormSubmit = (values) => {
     let payload = {
-      email: values?.email,
+      email: values?.email.toLowerCase(),
       password: values?.password,
     };
     dispatch(loginHandler(payload));
@@ -44,7 +48,7 @@ const Login = () => {
     } else if (loginSelector?.message?.status === 400) {
       messageApi.open({
         type: "error",
-        content: loginSelector?.message?.message,
+        content: loginSelector?.message?.response?.data?.message,
       });
       dispatch(loginSliceAction.loginDetailsSliceReset());
     }

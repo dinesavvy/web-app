@@ -25,10 +25,9 @@ const SelectModal = ({
   const dispatch = useDispatch();
 
   const acceptInviteSelector = useSelector((state) => state?.acceptInvite);
-  // console.log(acceptInviteSelector, "acceptInviteSelector");
 
   const [tempItem, setTempItem] = useState(false);
-  const { setSelectedBusiness } = useBusiness();
+  // const { setSelectedBusiness } = useBusiness();
 
   const handleAcceptDecline = (value, item) => {
     let payload = {
@@ -44,7 +43,7 @@ const SelectModal = ({
   useEffect(() => {
     if (acceptInviteSelector?.data?.statusCode === 200) {
       dispatch(acceptInviteAction.acceptInviteReset());
-      setSelectedBusiness(tempItem);
+      // setSelectedBusiness(tempItem);
       window.location.reload();
       // setModalOpen(false);
       if (isModalOpenNotification) {

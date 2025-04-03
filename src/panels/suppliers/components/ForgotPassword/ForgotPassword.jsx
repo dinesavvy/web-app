@@ -29,10 +29,8 @@ const ForgotPassword = () => {
   );
 
   const handleFormSubmit = (values) => {
-    console.log(values, "values");
-
     let payload = {
-      email: values?.email,
+      email: values?.email.toLowerCase(),
     };
     dispatch(forgotPasswordSupplierHandler(payload));
   };

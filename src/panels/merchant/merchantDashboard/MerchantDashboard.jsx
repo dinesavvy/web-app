@@ -166,7 +166,7 @@ const MerchantDashboard = () => {
               <div className="d-grid chartGrid gap-20">
                 <PromotionCard
                   title="Promotions"
-                  count={80}
+                  count={businessDashBoardSelector?.data?.data?.promotionsCount}
                   chartPromotionImage={chartPromotion}
                   buttonText="You need promotions"
                   middleComponent={
@@ -184,7 +184,7 @@ const MerchantDashboard = () => {
                 <PromotionCard
                   title="Nudges"
                   count={
-                    businessDashBoardSelector?.data?.data?.nudgeData?.length
+                    businessDashBoardSelector?.data?.data?.totalNudgeCount
                   }
                   chartPromotionImage={chartnudge}
                   buttonText="See Nudges"
