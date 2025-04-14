@@ -28,6 +28,10 @@ const Hierarchy = () => {
     localStorage.getItem("selectedBusiness")
   );
 
+  const updateTeamBusinessSelector = useSelector(
+    (state) => state?.updateTeamBusiness
+  );
+
   const businessTeamListSelector = useSelector(
     (state) => state?.businessTeamList
   );
@@ -95,7 +99,7 @@ const Hierarchy = () => {
 
   return (
     <>
-      {businessTeamListSelector?.isLoading && <Loader />}
+      {(businessTeamListSelector?.isLoading || updateTeamBusinessSelector?.isLoading) && <Loader />}
       <div className="dashboard">
         <div className="tabPadding mb-30">
           <div className="fs-24 fw-600">Hierarchy </div>

@@ -131,7 +131,7 @@ const AddSupplierBrand = () => {
     if (!state?.brandDetails) {
       dispatch(addSupplierBrandHandler(payload));
     } else if (state?.brandDetails) {
-      payload.brandId = state?.brandDetails?._id;
+      // payload.brandId = state?.brandDetails?._id;
       dispatch(updateSupplierBrandHandler(payload));
     }
   };
@@ -168,6 +168,14 @@ const AddSupplierBrand = () => {
       messageApi.open({
         type: "error",
         content: updateBrandSelector?.message?.data?.message,
+      });
+      dispatch(fileUploadSupplierAction.fileuploadReset());
+      dispatch(updateSupplierBrandAction.updateSupplierBrandReset());
+    }
+    else if (updateBrandSelector?.message?.status === 400) {
+      messageApi.open({
+        type: "error",
+        content: updateBrandSelector?.message?.response?.data?.message,
       });
       dispatch(fileUploadSupplierAction.fileuploadReset());
       dispatch(updateSupplierBrandAction.updateSupplierBrandReset());

@@ -30,6 +30,7 @@ const ForgotPassword = () => {
   const messageApi = useCommonMessage();
 
   const forgotPasswordSelector = useSelector((state) => state?.forgotPassword);
+  console.log(forgotPasswordSelector,"forgotPasswordSelector")
 
   const handleFormSubmit = (values) => {
     let payload = {
@@ -39,10 +40,10 @@ const ForgotPassword = () => {
   };
 
   useEffect(() => {
-    if (forgotPasswordSelector?.message) {
+    if (forgotPasswordSelector?.message?.status===400) {
       messageApi.open({
         type: "error",
-        content: forgotPasswordSelector?.message,
+        content: forgotPasswordSelector?.message?.response?.data?.message,
       });
       dispatch(forgotPasswordAction.forgotPasswordReset());
     } else if (forgotPasswordSelector?.data?.statusCode === 200) {
@@ -52,7 +53,7 @@ const ForgotPassword = () => {
       });
       setSendLink(true);
       dispatch(forgotPasswordAction.forgotPasswordReset());
-    }
+    } 
   }, [forgotPasswordSelector]);
 
   return (

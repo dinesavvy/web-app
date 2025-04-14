@@ -39,7 +39,7 @@ export const loginDistributorHandler = (data) => async (dispatch) => {
     dispatch(loginDistributorAction.loginDistributorInfo());
     const response = await loginDistributorAPI(data);
     dispatch(loginDistributorAction.loginDistributorSuccess(response));
-    localStorage.setItem("token", response?.data?.deviceData?.deviceToken);
+    localStorage.setItem("token", response?.data?.deviceDetails?.[0]?.deviceToken);
     localStorage.setItem("distributorId", response?.data?._id);
     localStorage.setItem("distributorLogin",true)
   } catch (e) {

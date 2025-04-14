@@ -22,7 +22,7 @@ const updateTeamBusinessSlice = createSlice({
     },
     updateTeamBusinessFailure(state, action) {
       state.isLoading = false;
-      state.message = action.payload.message;
+      state.message = action.payload;
       state.data = null;
     },
     updateTeamBusinessReset(state) {

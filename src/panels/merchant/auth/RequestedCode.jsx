@@ -117,14 +117,15 @@ const RequestedCode = ({ loginValue,requestLogin,setRequestLogin,countryCode,pho
       });
       navigate("/merchant/dashboard");
       dispatch(businessLoginAction.businessLoginSliceReset());
-    } else if (businessLoginSelector?.message) {
+    } else if (businessLoginSelector?.message?.status===400) {
       messageApi.open({
         type: "error",
-        content: businessLoginSelector?.message,
+        content: businessLoginSelector?.message?.response?.data?.message,
       });
       dispatch(businessLoginAction.businessLoginSliceReset());
     }
   }, [businessLoginSelector]);
+  console.log(businessLoginSelector,"businessLoginSelector")
 
   const resendOTP = () => {
     // setSeconds(60);

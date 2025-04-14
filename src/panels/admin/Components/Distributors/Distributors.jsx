@@ -206,7 +206,7 @@ const Distributors = () => {
                       1,
                     getDistributorListSelector?.data?.data?.recordsCount
                   );
-                  return `Showing ${start} to ${end} of ${getDistributorListSelector?.data?.data?.recordsCount} Suppliers`;
+                  return `Showing ${start} to ${end} of ${getDistributorListSelector?.data?.data?.recordsCount} Distributors`;
                 })()}
               </div>
               <Pagination

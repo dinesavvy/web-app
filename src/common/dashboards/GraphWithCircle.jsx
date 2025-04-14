@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import circleinfo from "../../assets/images/circleinfo.gif";
-import AreaChart from "../charts/AreaChart";
+// import AreaChart from "../charts/AreaChart";
 import AreaChartStatic from "../charts/AreaChartStatic";
 
 const GraphWithCircle = ({
@@ -9,7 +9,10 @@ const GraphWithCircle = ({
   value,
   trend,
   merchantsCount,
-    chartImage,
+  // chartImage,
+  businessDashBoardSelector,
+  tempArray,
+  activeTab
 }) => {
   return (
     <div className="chartborder">
@@ -37,12 +40,16 @@ const GraphWithCircle = ({
         </div>
       </div>
       <AreaChartStatic
-        labels={["M", "T", "W", "T", "F", "S"]}
-        datas={[65, 59, 80, 81, 56, 55, 40]}
+        // labels={["M", "T", "W", "T", "F", "S"]}
+        labels={tempArray?.length>0 ? new Array(tempArray?.length).fill("") : ["M", "T", "W", "T", "F", "S"]}
+        //datas={[65, 59, 80, 81, 56, 55, 40]}
+         datas={tempArray?.length>0?tempArray:[65, 59, 80, 81, 56, 55, 40]}
         topColor={"rgba(2, 124, 255, 0.5)"}
         bottomColor={"rgba(215, 210, 226, 0.2)"}
         borderColor={"rgba(0, 123, 255, 1)"}
         className={"w-100 mxh"}
+        activeTab={activeTab}
+        businessDashBoardSelector={businessDashBoardSelector}
       />
       {/* <img src={chartImage} alt="" className="w-100 mxh" /> */}
     </div>

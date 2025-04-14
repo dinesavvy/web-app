@@ -22,7 +22,7 @@ const businessCreateNudgeSlice = createSlice({
     },
     businessCreateNudgeFailure(state, action) {
       state.isLoading = false;
-      state.message = action.payload.message;
+      state.message = action.payload;
       state.data = null;
     },
     businessCreateNudgeReset(state) {

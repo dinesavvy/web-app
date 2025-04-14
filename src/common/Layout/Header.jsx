@@ -63,6 +63,7 @@ const Header = ({ handleTrigger }) => {
     }
   }, [acceptInviteSelector]);
 
+
   // Handle Selection
   const handleSelect = (item) => {
     // setSelectedBusiness(item);

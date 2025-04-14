@@ -245,13 +245,15 @@ const MerchantList = () => {
                               </div>
                               <div className="gridBtn">
                                 <div
-                                  className="btn disabled"
+                                  className="btn"
                                   // onClick={() => {
                                   //   navigate("/admin/merchant/details", {
                                   //     state: item,
                                   //   });
                                   //   localStorage.setItem("merchantId", item?._id);
                                   // }}
+
+                                  onClick={()=>navigate("/admin/promotions")}
                                 >
                                   Promote
                                 </div>

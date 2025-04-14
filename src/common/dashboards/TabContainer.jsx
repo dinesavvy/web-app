@@ -34,6 +34,7 @@ const TabContainer = ({ tabs, activeTab, setActiveTab }) => {
     </div>
   );
 };
+
 TabContainer.propTypes = {
   tabs: PropTypes.arrayOf(
     PropTypes.shape({

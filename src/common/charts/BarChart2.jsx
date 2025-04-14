@@ -115,17 +115,36 @@ const BarChart2 = ({
         setHoveredIndex(null);
       }
     },
+    // scales: {
+    //   x: {
+    //     display: xDisplay,
+    //     stacked: false, // Set to false to allow spacing
+    //   },
+    //   y: {
+    //     beginAtZero: true,
+    //     display: yDisplay,
+    //   },
+    // },
     scales: {
       x: {
         display: xDisplay,
-        stacked: false, // Set to false to allow spacing
+        stacked: false,
       },
       y: {
         beginAtZero: true,
         display: yDisplay,
+        min: 0,
+        max: 100,
+        ticks: {
+          stepSize: 20, // This sets tick intervals at every 20 units
+          callback: function (value) {
+            return value; // Optional: format the ticks if needed
+          },
+        },
       },
     },
   };
+  
 
   return <Bar data={data} options={options} className={className} />;
 };

@@ -28,11 +28,32 @@ const MerchantDashboard = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { selectedBusiness, setSelectedBusiness } = useBusiness();
-  const [activeTab, setActiveTab] = useState("1");
+  const [activeTab, setActiveTab] = useState("1D");
 
   const businessDashBoardSelector = useSelector(
     (state) => state?.businessDashboard
   );
+
+  // Nudge Graph
+  const temp = businessDashBoardSelector?.data?.data?.nudgeData
+    ?.map((item) => item?.value)
+    .join(",");
+
+  const tempArray = temp ? temp.split(",").map(Number) : [0, 0,0,0,0];
+
+  // Follower Graph
+  const followerData = businessDashBoardSelector?.data?.data?.followerData
+    ?.map((item) => item?.value)
+    .join(",");
+
+  const followerDataNumber = followerData?.split(",")?.map(Number);
+
+  // Promotion Graph
+  const promotionData = businessDashBoardSelector?.data?.data?.promotionData
+    ?.map((item) => item?.value)
+    .join(",");
+
+  const promotionDataNumber = promotionData?.split(",")?.map(Number);
 
   const getSelectedBusiness = JSON.parse(
     localStorage.getItem("selectedBusiness")
@@ -52,85 +73,36 @@ const MerchantDashboard = () => {
   }, [businessListSelector, selectedBusiness]);
 
   useEffect(() => {
-    dispatch(businessDashboardHandler());
-  }, []);
+    const selectedTab = tabOptions.find((tab) => tab.id === activeTab);
+    if (selectedTab) {
+      dispatch(businessDashboardHandler({ timeFrame: selectedTab.timeFrame }));
+    }
+  }, [activeTab]);
 
-  const tabs = [
-    {
-      id: "1",
-      label: "1D",
-      content: (
-        <GraphWithCircle
-          title="Habitual Followers"
-          value="8,000"
-          trend={10}
-          merchantsCount={256}
-          chartImage={chart}
-        />
-      ),
-    },
-    {
-      id: "2",
-      label: "1W",
-      content: (
-        <GraphWithCircle
-          title="Habitual Followers"
-          value="8,000"
-          trend={10}
-          merchantsCount={256}
-          chartImage={chart}
-        />
-      ),
-    },
-    {
-      id: "3",
-      label: "3M",
-      content: (
-        <GraphWithCircle
-          title="Habitual Followers"
-          value="8,000"
-          trend={10}
-          merchantsCount={256}
-          chartImage={chart}
-        />
-      ),
-    },
-    {
-      id: "4",
-      label: "4M",
-      content: (
-        <GraphWithCircle
-          title="Habitual Followers"
-          value="8,000"
-          trend={10}
-          merchantsCount={256}
-          chartImage={chart}
-        />
-      ),
-    },
-    {
-      id: "5",
-      label: "5M",
-      content: (
-        <GraphWithCircle
-          title="Habitual Followers"
-          value="8,000"
-          trend={10}
-          merchantsCount={256}
-          chartImage={chart}
-        />
-      ),
-    },
+  const tabOptions = [
+    { id: "1D", label: "1D", timeFrame: "today" },
+    { id: "1W", label: "1W", timeFrame: "weekly" },
+    { id: "3M", label: "3M", timeFrame: "quarterly" },
+    { id: "YTD", label: "YTD", timeFrame: "startYear" },
+    { id: "1Y", label: "1Y", timeFrame: "yearly" },
   ];
 
-  const labels = businessDashBoardSelector?.data?.data?.nudgeData.map(
-    (item) => `${item._id}`
-  );
-  const datas = businessDashBoardSelector?.data?.data?.nudgeData.map(
-    (item) => item.value
-  );
-
-
+  const tabs = tabOptions?.map(({ id, label }) => ({
+    id,
+    label,
+    content: (
+      <GraphWithCircle
+        title="Habitual Followers"
+        value={businessDashBoardSelector?.data?.data?.habitualUserCount}
+        trend={businessDashBoardSelector?.data?.data?.habitualUserCount ?businessDashBoardSelector?.data?.data?.habitualUserCount/businessDashBoardSelector?.data?.data?.habitualUserList?.length:"0"}
+        merchantsCount={256}
+        chartImage={chart}
+        businessDashBoardSelector={businessDashBoardSelector}
+        tempArray={tempArray}
+        activeTab={activeTab}
+      />
+    ),
+  }));
 
   return (
     <>
@@ -138,8 +110,9 @@ const MerchantDashboard = () => {
       {/*********************** Empty Content ************************/}
       {/* {(getSelectedBusiness !== null && getSelectedBusiness?.roleTitle !== "Owner" && 
       getSelectedBusiness?.roleData?.permissions?.viewAnalytics !== 2|| businessListSelector?.data?.data?.records?.length===0) ? ( */}
-      {(tempState?.length>0 && tempState?.roleTitle !== "Owner" &&
-      tempState?.roleData?.permissions?.viewAnalytics !== 2)? (
+      {tempState?.length > 0 &&
+      tempState?.roleTitle !== "Owner" &&
+      tempState?.roleData?.permissions?.viewAnalytics !== 2 ? (
         <AccessDeniedModal />
       ) : (
         <>
@@ -170,29 +143,10 @@ const MerchantDashboard = () => {
                   chartPromotionImage={chartPromotion}
                   buttonText="You need promotions"
                   middleComponent={
-                    <BarChart
-                      labels={["Bar 1", "Bar 2"]}
-                      datas={[50, 110]}
-                      className="w-100"
-                      barThickness={100}
-                      borderSkipped={false}
-                      xDisplay={false}
-                      yDisplay={true}
-                    />
-                  }
-                />
-                <PromotionCard
-                  title="Nudges"
-                  count={
-                    businessDashBoardSelector?.data?.data?.totalNudgeCount
-                  }
-                  chartPromotionImage={chartnudge}
-                  buttonText="See Nudges"
-                  onButtonClick={() => navigate("/merchant/nudges")}
-                  middleComponent={
                     // <BarChart
-                    //   labels={["Bar 1", "Bar 2"]}
-                    //   datas={[58, 160]}
+                    //   // labels={["Bar 1", "Bar 2"]}
+                    //   labels={promotionDataNumber ? new Array(promotionDataNumber?.length).fill("") : [""]}
+                    //   datas={promotionDataNumber}
                     //   className="w-100"
                     //   barThickness={100}
                     //   borderSkipped={false}
@@ -200,24 +154,46 @@ const MerchantDashboard = () => {
                     //   yDisplay={true}
                     // />
                     <LineChart
-                      labels={["", ""]}
-                      datas={datas}
+                      labels={
+                        promotionDataNumber ? new Array(promotionDataNumber?.length).fill("") : [""]
+                      }
                       className="w-100"
+                      businessDashBoardSelector={businessDashBoardSelector}
+                      datas={promotionDataNumber}
+                    />
+                  }
+                />
+                <PromotionCard
+                  title="Nudges"
+                  count={businessDashBoardSelector?.data?.data?.totalNudgeCount}
+                  chartPromotionImage={chartnudge}
+                  buttonText="See Nudges"
+                  onButtonClick={() => navigate("/merchant/nudges")}
+                  middleComponent={
+                    <LineChart
+                      labels={
+                        tempArray ? new Array(tempArray?.length).fill("") : [""]
+                      }
+                      className="w-100"
+                      businessDashBoardSelector={businessDashBoardSelector}
+                      datas={tempArray}
                     />
                   }
                 />{" "}
                 <PromotionCard
                   title="Followers"
-                  count={
-                    businessDashBoardSelector?.data?.data?.followerData?.length
-                  }
+                  count={businessDashBoardSelector?.data?.data?.followerCount}
                   onButtonClick={() => navigate("/merchant/followers")}
                   chartPromotionImage={chartfollower}
                   buttonText="See Followers"
                   middleComponent={
                     <LineChart
-                      labels={["", ""]}
-                      datas={["", ""]}
+                      labels={
+                        followerDataNumber
+                          ? new Array(followerDataNumber?.length).fill("")
+                          : [""]
+                      }
+                      datas={followerDataNumber}
                       className="w-100"
                     />
                   }

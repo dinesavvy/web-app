@@ -179,7 +179,10 @@ const CommonModal = ({
     navigate("/");
     localStorage.clear();
     setModal2Open(false);
-    // setSelectedBusiness({});
+    // if(merchantApp) {
+
+    //   setSelectedBusiness({});
+    // }
   };
 
   useEffect(() => {
@@ -306,6 +309,12 @@ const CommonModal = ({
         content: supplierEndPromotion?.data?.message,
       });
       dispatch(supplierEndPromotionAction.supplierEndPromotionReset());
+    }else if (supplierEndPromotion?.message?.status === 400) {
+      messageApi.open({
+        type: "error",
+        content: supplierEndPromotion?.message?.response?.data?.message,
+      });
+      dispatch(supplierEndPromotionAction.supplierEndPromotionReset());
     }
   }, [supplierEndPromotion]);
 
@@ -412,8 +421,7 @@ const CommonModal = ({
             {endPromotionModal && (
               <div className="fs-18">
                 {/* Are you sure you want to remove{" "} */}
-                Are you sure you want this nudge? This will remove it from all
-                your customers
+                This will remove the promotion and its nudge from all customers. Do you want to continue?
                 {/* <span className="fw-600">
                 </span>{" "} */}
               </div>

@@ -18,7 +18,10 @@ merchantPerformanceAnalyticsDetailsSelector?.data?.data?.nudgeData?.forEach(item
   totalNudgeSentCount += item.nudgeSentCount;
 });
 
-  const percentage = ((totalNudgeAcceptCount / totalNudgeSentCount) * 100).toFixed(2);
+const percentage = totalNudgeSentCount > 0
+? ((totalNudgeAcceptCount / totalNudgeSentCount) * 100).toFixed(2)
+: "0.00";
+
   const chartData = {
     labels: data.labels,
     datasets: [

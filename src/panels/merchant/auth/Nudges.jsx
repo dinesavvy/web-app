@@ -801,6 +801,8 @@ const Nudges = () => {
               reverseSideBar={reverseSideBar}
               businessNudgeDetailsSelector={businessNudgeDetailsSelector}
               reverseNudgeSelector={reverseNudgeSelector}
+              setIsSidebarOpen={setIsSidebarOpen}
+              isSidebarOpen={isSidebarOpen}
             />
           )}
         </>

@@ -115,6 +115,8 @@ const MemberHierarchy = ({
     }
   }, [createTeamSelector]);
 
+  console.log(updateTeamBusinessSelector,"updateTeamBusinessSelector")
+
   useEffect(() => {
     if (updateTeamBusinessSelector?.data?.statusCode === 200) {
       messageApi.open({
@@ -124,10 +126,10 @@ const MemberHierarchy = ({
       toggleMemberHierarchy();
       dispatch(businessTeamListHandler());
       dispatch(updateTeamBusinessAction.updateTeamBusinessReset());
-    } else if (updateTeamBusinessSelector?.message) {
+    } else if (updateTeamBusinessSelector?.message?.status===400) {
       messageApi.open({
         type: "error",
-        content: createTeamSelector?.message,
+        content: updateTeamBusinessSelector?.message?.response?.data?.message,
       });
       dispatch(updateTeamBusinessAction.updateTeamBusinessReset());
     }

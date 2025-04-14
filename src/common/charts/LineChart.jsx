@@ -4,14 +4,15 @@ import { Chart as ChartJS, LineElement, CategoryScale, LinearScale, PointElement
 
 ChartJS.register(LineElement, CategoryScale, LinearScale, PointElement);
 
-const LineChart = ({ labels, datas, className }) => {
+const LineChart = ({ labels, datas, className,businessDashBoardSelector,tempArray }) => {
 
   const data = {
     labels,
     datasets: [
       {
         label: "Line Chart Data",
-        data: datas,
+        // data: datas?datas:tempArray,
+        data:datas,
         borderColor: "rgba(75, 192, 192, 1)",
         backgroundColor: "rgba(75, 192, 192, 0.2)",
         borderWidth: 2,

@@ -48,7 +48,6 @@ const BarChart = ({
     "rgba(255, 206, 86, 0.6)",
     "rgba(54, 162, 235, 0.6)",
   ];
-
   const sortedData = merchantPerformanceAnalyticsDetailsSelector
     ? [...merchantPerformanceAnalyticsDetailsSelector].sort(
         (a, b) => new Date(a._id) - new Date(b._id)
@@ -56,9 +55,9 @@ const BarChart = ({
     : [];
   // Extract labels and data points
   const labels = sortedData?.map((item) =>
-    moment(item?._id).format("DD HH:mm")
+    moment(item?._id).format("HH:mm")
   );
-  const datas = sortedData?.map((item) => item.value);
+  const datas = sortedData?.map((item) => item.nudgeSentCount||item.value);
 
   const newDataSet =
     isDatasMap === true

@@ -61,10 +61,10 @@ const MerchantNudgecart = ({
       setIsCartOpen(false);
       dispatch(businessCreateNudgeAction.businessCreateNudgeReset());
       navigate("/merchant/followers");
-    } else if (createNudgeSelector?.message) {
+    } else if (createNudgeSelector?.message?.status===400) {
       messageApi.open({
         type: "error",
-        content: createNudgeSelector?.message,
+        content: createNudgeSelector?.message?.response?.data?.message,
       });
       dispatch(businessCreateNudgeAction.businessCreateNudgeReset());
     }

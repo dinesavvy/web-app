@@ -31,17 +31,36 @@ const AreaChartStatic = ({
   bottomColor,
   borderColor,
   className,
-  datas1,
-  merchantPerformanceAnalyticsDetailsSelector
+  activeTab,
+  businessDashBoardSelector
 }) => {
-  // Sample data
+  // const filteredData = businessDashBoardSelector?.data?.data?.nudgeData
+  //   .filter(item => moment(item._id, "YYYY-MM-DD HH:mm").format("HH:mm"))
+  //   .map(item => ({
+  //       _id: moment(item._id, "YYYY-MM-DD HH:mm").format("YYYY-MM-DDTHH:mm"),
+  //       value: item.value
+  //   }));
+  
+    console.log(businessDashBoardSelector,"businessDashBoardSelector")
+
+  // Define labels conditionally based on activeTab
+  let yAxisLabels = [];
+  let xAxisLabels = [];
+  if (activeTab === "1D") {
+    yAxisLabels = ["9:00", "10:00", "11:00", "12:00", "1:00", "2:00"];
+    xAxisLabels = ["0", "20", "40", "60", "80", "100","120"];
+  } else {
+    yAxisLabels = labels; // Default to provided labels
+    xAxisLabels = datas.map((_, i) => i + 1); // Default x-axis labels as index
+  }
+
   const data = {
     labels: labels,
     datasets: [
       {
         label: "Habitual Users",
         data: datas,
-        fill: true, // Fill the area under the line
+        fill: true,
         backgroundColor: (context) => {
           const chart = context.chart;
           const { ctx, chartArea } = chart;
@@ -54,13 +73,13 @@ const AreaChartStatic = ({
             0,
             chartArea.bottom
           );
-          gradient.addColorStop(0, topColor); // Darker color at the top
-          gradient.addColorStop(1, bottomColor); // Lighter color at the bottom
+          gradient.addColorStop(0, topColor);
+          gradient.addColorStop(1, bottomColor);
           return gradient;
         },
-        borderColor: borderColor, // Blue border
+        borderColor: borderColor,
         borderWidth: 2,
-        tension: 0.4, // Smooth the line
+        tension: 0.4,
       },
     ],
   };
@@ -73,12 +92,10 @@ const AreaChartStatic = ({
       },
       tooltip: {
         enabled: true,
-        mode: "nearest", // Ensure tooltips appear for the closest point
-        intersect: false, // Show tooltip even when hovering near the line
+        mode: "nearest",
+        intersect: false,
         callbacks: {
-          label: (tooltipItem) => {
-            return ` ${tooltipItem.dataset?.label}`; // Ensure proper tooltip text
-          },
+          label: (tooltipItem) => ` ${tooltipItem.dataset?.label}`,
         },
       },
     },
@@ -87,12 +104,23 @@ const AreaChartStatic = ({
         title: {
           display: true,
         },
+        
+        // ticks: {
+        //   callback: function (value, index) {
+        //     return yAxisLabels[index];
+        //   },
+        // },
+        
       },
       y: {
-        display: false,
-        title: {
+        ticks: {
           display: false,
         },
+        // ticks: {
+        //   callback: function (value, index) {
+        //     return xAxisLabels[index];
+        //   },
+        // },
       },
     },
   };
@@ -107,6 +135,7 @@ AreaChartStatic.propTypes = {
   topColor: PropTypes.any,
   bottomColor: PropTypes.any,
   borderColor: PropTypes.any,
-  tooltip:PropTypes.any
+  activeTab: PropTypes.string,
 };
+
 export default AreaChartStatic;

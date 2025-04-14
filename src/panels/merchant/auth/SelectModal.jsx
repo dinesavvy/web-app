@@ -45,14 +45,13 @@ const SelectModal = ({
       dispatch(acceptInviteAction.acceptInviteReset());
       // setSelectedBusiness(tempItem);
       window.location.reload();
-      // setModalOpen(false);
       if (isModalOpenNotification) {
         setModalOpenNotification(false);
       } else {
         setModalOpen(false);
       }
     }
-  }, [acceptInviteSelector,]);
+  }, [acceptInviteSelector,isModalOpenNotification]);
 
   return (
     <>

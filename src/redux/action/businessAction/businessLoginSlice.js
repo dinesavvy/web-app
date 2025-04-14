@@ -23,7 +23,7 @@ const businessLoginDetailsSlice = createSlice({
     businessLoginSliceFailure(state, action) {
 
       state.isLoading = false;
-      state.message = action.payload.message;
+      state.message = action.payload;
       state.data = null;
     },
     businessLoginSliceReset(state) {

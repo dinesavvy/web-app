@@ -95,7 +95,16 @@ const AdminDashboard = () => {
           <div className="card w-100">
             <div className="d-flex justify-between align-center ">
               <div className="fs-16 fw-600 ">New Followers Added</div>
-              <div className="fs-16 ">12/day (avg)</div>
+              {merchantPerformanceAnalyticsDetailsSelector?.data?.data
+                ?.followerData?.length > 0 && (
+                <div className="fs-16 ">
+                  {
+                    merchantPerformanceAnalyticsDetailsSelector?.data?.data
+                      ?.followerData?.length
+                  }
+                  /day (avg)
+                </div>
+              )}
             </div>
             <div className="divider2"></div>
             {/* <img src={chart4} alt="" className="w-100 mxh" /> */}
@@ -120,7 +129,16 @@ const AdminDashboard = () => {
           <div className="card w-100">
             <div className="d-flex justify-between align-center mb-20">
               <div className="fs-16 fw-600 ">Nudges Sent</div>
-              <div className="fs-16 ">12/day (avg)</div>
+              {merchantPerformanceAnalyticsDetailsSelector?.data?.data
+                ?.nudgeData?.length > 0 && (
+                <div className="fs-16 ">
+                  {
+                    merchantPerformanceAnalyticsDetailsSelector?.data?.data
+                      ?.nudgeData?.length
+                  }
+                  /day (avg)
+                </div>
+              )}
             </div>
             <div className="divider2"></div>
             {/* <img src={chart4} alt="" className="w-100 mxh" /> */}
@@ -306,7 +324,7 @@ const AdminDashboard = () => {
       holdingSort: activeTab3 === "1" ? true : false,
     };
     dispatch(merchantPerfomanceAnalyticsListHandler(payload));
-  }, [activeTab2, activeTab3]);
+  }, [activeTab2, activeTab3, pagination]);
 
   // useEffect(() => {
   //   if (merchantPerformanceAnalyticsDetailsSelector?.data?.statusCode === 200) {
@@ -365,14 +383,15 @@ const AdminDashboard = () => {
         <div className="d-grid chartGrid gap-20">
           <PromotionCard
             title="Promotions"
-            count={
-              analyticsDetailsSelector?.data?.data?.targetPromotionsCount +
-              analyticsDetailsSelector?.data?.data?.promotionsCount
-            }
+            count={(
+              (analyticsDetailsSelector?.data?.data?.targetPromotionsCount ||
+                0) +
+              (analyticsDetailsSelector?.data?.data?.promotionsCount || 0)
+            ).toFixed(2)}
             chartPromotionImage={chartPromotion}
             // analyticsDetailsSelector ={analyticsDetailsSelector}
-            // onButtonClick={() => navigate("/admin/promotions")}
             buttonText="See promotions"
+            onButtonClick={() => navigate("/admin/promotions")}
             middleComponent={
               <BarChartProtion
                 labels={["Target Promotion", "Promotions"]}
@@ -474,7 +493,10 @@ const AdminDashboard = () => {
                   className={`tab-button ${
                     activeTab3 === tab.id ? "active" : ""
                   }`}
-                  onClick={() => setActiveTab3(tab.id)}
+                  onClick={() => {
+                    setActiveTab3(tab.id);
+                    setOpenIndex();
+                  }}
                 >
                   {tab.label}
                 </button>
