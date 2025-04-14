@@ -13,9 +13,9 @@ import { loadStripe } from "@stripe/stripe-js";
 import CheckoutForm from "./CheckoutForm"; // Make sure you have this form to handle the payment process
 import { Modal } from "antd";
 
-const stripePromise = loadStripe(
-  "pk_test_51QhDunE3An7OFziSHkki0YdsnYqIM3tg0ZYHSvovC2F6FFphzxZu58bZII3VKVtpy8Kl43Q4kaIQ7V7UmbYz36zf00c5PLSjvH"
-);
+// const stripePromise = loadStripe(
+//   "pk_test_51QhDunE3An7OFziSHkki0YdsnYqIM3tg0ZYHSvovC2F6FFphzxZu58bZII3VKVtpy8Kl43Q4kaIQ7V7UmbYz36zf00c5PLSjvH"
+// );
 
 const PaymentSidebar = ({
   isPaymentSidebar,
@@ -43,10 +43,10 @@ const PaymentSidebar = ({
     try {
       const res = await fetch("https://api.stripe.com/v1/prices", {
         method: "POST",
-        headers: {
-          Authorization: `Bearer sk_test_51QhDunE3An7OFziSoNkwsbbgiI4VRtOjzX4CyDdobRvuuDrkSr7I5VvF4Sd8iVrkZnRQqzBR5gYYIbTUVNti9WZZ00A2vlz00M`,
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
+        // headers: {
+        //   Authorization: `Bearer sk_test_51QhDunE3An7OFziSoNkwsbbgiI4VRtOjzX4CyDdobRvuuDrkSr7I5VvF4Sd8iVrkZnRQqzBR5gYYIbTUVNti9WZZ00A2vlz00M`,
+        //   "Content-Type": "application/x-www-form-urlencoded",
+        // },
 
         body: new URLSearchParams({
           currency: "usd",
@@ -74,10 +74,10 @@ const PaymentSidebar = ({
         // });
         const res1 = await fetch("https://api.stripe.com/v1/checkout/sessions", {
           method: "POST",
-          headers: {
-            Authorization: `Bearer sk_test_51QhDunE3An7OFziSoNkwsbbgiI4VRtOjzX4CyDdobRvuuDrkSr7I5VvF4Sd8iVrkZnRQqzBR5gYYIbTUVNti9WZZ00A2vlz00M`,
-            "Content-Type": "application/x-www-form-urlencoded",
-          },
+          // headers: {
+          //   Authorization: `Bearer sk_test_51QhDunE3An7OFziSoNkwsbbgiI4VRtOjzX4CyDdobRvuuDrkSr7I5VvF4Sd8iVrkZnRQqzBR5gYYIbTUVNti9WZZ00A2vlz00M`,
+          //   "Content-Type": "application/x-www-form-urlencoded",
+          // },
           body: new URLSearchParams({
             "line_items[0][price]": data?.id,
             "line_items[0][quantity]": activeNudge,
