@@ -608,6 +608,7 @@ const Nudges = () => {
                               {/* ) : (
                                 <div className="mb-20 imageCollapsh32"></div>
                               )} */}
+                              
                               <div className="d-flex gap-10">
                                 <div
                                   className="btn btnSecondary w-100"
