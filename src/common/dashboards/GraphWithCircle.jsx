@@ -12,7 +12,7 @@ const GraphWithCircle = ({
   // chartImage,
   businessDashBoardSelector,
   tempArray,
-  activeTab
+  activeTab,
 }) => {
   return (
     <div className="chartborder">
@@ -32,8 +32,14 @@ const GraphWithCircle = ({
           </div>
         </div>
         <div>
-          <div className="circleinfo mb-10">
-            <img src={circleinfo} className="circleAbsolute" alt="" />
+          <div class="ring-container circleinfo ringExpand">
+            <div class="ring"></div>
+            <div class="ring"></div>
+            <div class="ring"></div>
+            <div class="ring"></div>
+            <div class="ring"></div>
+
+            {/* <img src={circleinfo} className="circleAbsolute" alt="" /> */}
             <div className="fs-34 fw-700 z1">{merchantsCount}</div>
             <div className="fs-14 z1">Nearby</div>
           </div>
@@ -41,9 +47,13 @@ const GraphWithCircle = ({
       </div>
       <AreaChartStatic
         // labels={["M", "T", "W", "T", "F", "S"]}
-        labels={tempArray?.length>0 ? new Array(tempArray?.length).fill("") : ["M", "T", "W", "T", "F", "S"]}
+        labels={
+          tempArray?.length > 0
+            ? new Array(tempArray?.length).fill("")
+            : ["M", "T", "W", "T", "F", "S"]
+        }
         //datas={[65, 59, 80, 81, 56, 55, 40]}
-         datas={tempArray?.length>0?tempArray:[65, 59, 80, 81, 56, 55, 40]}
+        datas={tempArray?.length > 0 ? tempArray : [65, 59, 80, 81, 56, 55, 40]}
         topColor={"rgba(2, 124, 255, 0.5)"}
         bottomColor={"rgba(215, 210, 226, 0.2)"}
         borderColor={"rgba(0, 123, 255, 1)"}

@@ -6,8 +6,13 @@ import { useNavigate } from "react-router-dom";
 const MerchantCard = ({ count, trend,value }) => {
   return (
     <>
-      <div className="circleinfo mb-10">
-        <img src={circleAbsolute2} className="circleAbsolute" alt="" />
+       <div class="ring-container blueRing circleinfo ringExpand">
+            <div class="ring"></div>
+            <div class="ring"></div>
+            <div class="ring"></div>
+            <div class="ring"></div>
+            <div class="ring"></div>
+        {/* <img src={circleAbsolute2} className="circleAbsolute" alt="" /> */}
         <div className="fs-34 fw-700 z1">{count}</div>
         <div className="fs-14 z1">{value}</div>
       </div>

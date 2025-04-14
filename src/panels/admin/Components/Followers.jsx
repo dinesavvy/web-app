@@ -21,7 +21,7 @@ import moment from "moment";
 const Followers = () => {
   const [archive, setArchive] = useState(false);
   const [arr, setArr] = useState([]);
-  const [pagination, setPagination] = useState({ page: 1, limit: 9 });
+  const [pagination, setPagination] = useState({ page: 1, limit: 12 });
   const [searchString, setSearchString] = useState("");
   const [searchArea, setSearchArea] = useState([]);
 

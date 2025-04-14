@@ -25,7 +25,7 @@ const Distributors = () => {
   const [searchString, setSearchString] = useState("");
   const [searchArea, setSearchArea] = useState([]);
   const [removeDistributor, setRemoveDistributor] = useState({});
-  const [pagination, setPagination] = useState({ page: 1, limit: 9 });
+  const [pagination, setPagination] = useState({ page: 1, limit: 12 });
   const createDistributorSelector = useSelector(
     (state) => state?.createDistributor
   );
@@ -119,7 +119,7 @@ const Distributors = () => {
                             <div className="merchantImage">
                               <img src={item?.logoUrl || noImageFound} alt="" />
                             </div>
-                            <div className="fs-16 fw-700 mb-10">
+                            <div className="fs-16 fw-700 mb-10 singleLine">
                               {item?.distributorName
                                 ? item?.distributorName
                                     .charAt(0)

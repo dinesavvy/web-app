@@ -38,7 +38,7 @@ const MerchantDetails = () => {
   const [editInput, setEditInput] = useState(false);
   const [switchState, setSwitchState] = useState(false);
   const [viewDetail, setViewDetail] = useState(false);
-  const [pagination, setPagination] = useState({ page: 1, limit: 9 });
+  const [pagination, setPagination] = useState({ page: 1, limit: 12 });
   const [nudgeId, setNudgeId] = useState("");
   const [searchString, setSearchString] = useState("");
   const [searchArea, setSearchArea] = useState([]);

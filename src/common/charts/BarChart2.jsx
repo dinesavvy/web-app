@@ -37,7 +37,7 @@ const BarChart2 = ({
 }) => {
   const [hoveredIndex, setHoveredIndex] = useState(null);
   const colors = [
-    "#005CDE1A",
+    "#e6effc",
     "#005CDE",
     "rgba(255, 206, 86, 0.6)",
     "rgba(54, 162, 235, 0.6)",

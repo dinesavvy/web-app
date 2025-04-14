@@ -31,7 +31,7 @@ const FollowersModal = ({
   const dispatch = useDispatch();
 
   const [searchString, setSearchString] = useState("");
-  const [pagination, setPagination] = useState({ page: 1, limit: 9 });
+  const [pagination, setPagination] = useState({ page: 1, limit: 12 });
   const [checkedItems, setCheckedItems] = useState({});
   const [searchArea, setSearchArea] = useState([]);
 

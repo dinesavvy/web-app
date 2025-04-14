@@ -20,7 +20,7 @@ import SearchSelect from "../SearchSelect";
 const Suppliers = () => {
   const [modal2Open, setModal2Open] = useState(false);
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
-  const [pagination, setPagination] = useState({ page: 1, limit: 9 });
+  const [pagination, setPagination] = useState({ page: 1, limit: 12 });
   const [removeSupplier, setRemoveSupplier] = useState({});
   const removeSupplierSelector = useSelector((state) => state?.removeSupplier);
   const [selectedSupplier, setSelectedSupplier] = useState(null);
@@ -119,7 +119,7 @@ const Suppliers = () => {
                               alt="No Image"
                             />
                           </div>
-                          <div className="fs-16 fw-700 mb-10">
+                          <div className="fs-16 fw-700 mb-10 singleLine">
                             {item?.supplierName
                               ? item.supplierName.charAt(0).toUpperCase() +
                                 item.supplierName.slice(1)

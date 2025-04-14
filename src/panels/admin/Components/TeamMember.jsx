@@ -13,7 +13,7 @@ import { merchantTeamsHandler } from "../../../redux/action/merchantTeams";
 import Loader from "../../../common/Loader/Loader";
 
 const TeamMember = ({ merchantDetailsSelector, activeTab3, setActiveTab3 }) => {
-  const [pagination, setPagination] = useState({ page: 1, limit: 9 });
+  const [pagination, setPagination] = useState({ page: 1, limit: 12 });
   const [removeTeamMember, setRemoveTeamMember] = useState({});
   const navigate = useNavigate();
   const dispatch = useDispatch();

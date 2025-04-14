@@ -52,7 +52,7 @@ const Nudges = () => {
 
   const [endNudgeItem, setEndNudgeItem] = useState();
   const [activeTab, setActiveTab] = useState("active"); // Default active tab is 'active'
-  const [pagination, setPagination] = useState({ page: 1, limit: 9 });
+  const [pagination, setPagination] = useState({ page: 1, limit: 12 });
 
   const { state } = useLocation();
 

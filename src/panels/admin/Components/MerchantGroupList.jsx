@@ -81,7 +81,7 @@ const MerchantGroupList = () => {
               <div className="merchantImage">
                 <img src={noImageFound} alt="" />
               </div>
-              <div className="fs-16 fw-700 mb-10">
+              <div className="fs-16 fw-700 mb-10 singleLine">
                 Garden Grove Café & Bistro
               </div>
             </div>

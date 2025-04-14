@@ -13,7 +13,7 @@ import SupplierPromotionDetails from "./SupplierPromotionDetails";
 
 const SupplierPromotionList = () => {
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
-  const [pagination, setPagination] = useState({ page: 1, limit: 9 });
+  const [pagination, setPagination] = useState({ page: 1, limit: 12 });
   const [searchString, setSearchString] = useState("");
   const [activeTab, setActiveTab] = useState("active");
   const [isOpen, setIsOpen] = useState(false);

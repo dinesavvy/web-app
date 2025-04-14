@@ -18,7 +18,7 @@ import { deleteDistributorBrandAction } from "../../../../redux/action/distribut
 
 const BrandsListDistributor = () => {
   const messageApi = useCommonMessage();
-  const [pagination, setPagination] = useState({ page: 1, limit: 9 });
+  const [pagination, setPagination] = useState({ page: 1, limit: 12 });
   const [searchString, setSearchString] = useState("");
   const [brandDetails, setBrandDetails] = useState({});
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);

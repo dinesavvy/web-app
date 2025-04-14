@@ -16,7 +16,7 @@ const ReverseNudge = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [pagination, setPagination] = useState({ page: 1, limit: 9 });
+  const [pagination, setPagination] = useState({ page: 1, limit: 12 });
 
   const reverseNudgListSelector = useSelector(
     (state) => state?.reverseNudgList

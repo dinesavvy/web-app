@@ -26,7 +26,7 @@ import ChartComponent from "./Chart/Chart";
 
 const AdminDashboard = () => {
   const [communicateItem, setCommunicateItem] = useState();
-  const [pagination, setPagination] = useState({ page: 1, limit: 9 });
+  const [pagination, setPagination] = useState({ page: 1, limit: 12 });
   const [activeTab, setActiveTab] = useState("1");
   const [activeTab2, setActiveTab2] = useState("today");
   const [activeTab3, setActiveTab3] = useState("1");

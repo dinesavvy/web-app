@@ -25,7 +25,7 @@ const Followers = () => {
   const [redeemedNudges, setRedeemedNudges] = useState(false);
 
   const navigate = useNavigate();
-  const [pagination, setPagination] = useState({ page: 1, limit: 9 });
+  const [pagination, setPagination] = useState({ page: 1, limit: 12 });
   const dispatch = useDispatch();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 

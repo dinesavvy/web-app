@@ -96,7 +96,7 @@ const Login = () => {
                       className="mt-10 fw-500 fs-14 error"
                     />
                   </div>
-                  <div className="mb-16">
+                  <div className="mb-40">
                     <label className="fs-14 fw-500 mb-10" htmlFor="password">
                       Password*
                     </label>

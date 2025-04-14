@@ -16,8 +16,8 @@ import noImageFound from "../../../assets/images/noImageFound.png";
 import { useNavigate } from "react-router-dom";
 
 const Nudges = () => {
-  const navigate = useNavigate()
-  const [pagination, setPagination] = useState({ page: 1, limit: 9 });
+  const navigate = useNavigate();
+  const [pagination, setPagination] = useState({ page: 1, limit: 12 });
   const [activeTab, setActiveTab] = useState(true);
   const [nudgeId, setNudgeId] = useState("");
 
@@ -98,7 +98,7 @@ const Nudges = () => {
   };
 
   const handleChange = (value) => {
-    localStorage.setItem("merchantId",value?._id)
+    localStorage.setItem("merchantId", value?._id);
     setSelectedValue(value);
   };
 
@@ -149,7 +149,7 @@ const Nudges = () => {
                       </div>
                       <div className="radioCafeName">
                         <div>
-                          <div className="pc fs-14 fw-500">
+                          <div className="pc fs-14 fw-500 oneLine">
                             {option?.businessName &&
                               option.businessName.charAt(0).toUpperCase() +
                                 option.businessName.slice(1)}
@@ -208,7 +208,14 @@ const Nudges = () => {
                   {selectedValue?.businessName.charAt(0).toUpperCase() +
                     selectedValue?.businessName.slice(1)}
                 </div>
-                <div className="btn btnSecondary p16 gap-8" onClick={()=>navigate("/admin/nudges/template",{state:{dineSavvyNudge:true}})}>
+                <div
+                  className="btn btnSecondary p16 gap-8"
+                  onClick={() =>
+                    navigate("/admin/nudges/template", {
+                      state: { dineSavvyNudge: true },
+                    })
+                  }
+                >
                   <img src={addCredits} alt="addCredits" />
                   Create a Nudge
                 </div>
@@ -266,102 +273,108 @@ const Nudges = () => {
                             </div>
                           </div>
                           <div className="bottomPadding">
-                            <div className="lightBlack fs-14 mb-20">
-                              {/* Get 20% off on all large pizzas today! Limited
+                            <div>
+                              <div className="lightBlack fs-14 mb-20">
+                                {/* Get 20% off on all large pizzas today! Limited
                               time offer. */}
-                              {item?.message}
-                            </div>
-                            <div className="d-flex justify-between align-center gap-20 mb-8">
-                              <div className="fs-14 lightBlack ">Sent date</div>
-                              <div className="fs-14 fw-500">
-                                {moment(item?.createdAt).format("DD MMMM,YYYY")}
+                                {item?.message}
                               </div>
-                            </div>
-                            <div className="d-flex justify-between align-center gap-20 mb-8">
-                              <div className="fs-14 lightBlack ">
-                                Expiration date
-                              </div>
-                              <div className="fs-14 fw-500">
-                                {moment(item?.deactivateAt).format(
-                                  "DD MMMM,YYYY"
-                                )}
-                              </div>
-                            </div>
-                            <div className="divider2"></div>
-                            <div className="grid2 mb-20">
-                              <div>
-                                <div className="fs-14 mb-4 lightBlack">
-                                  Recipients:
+                              <div className="d-flex justify-between align-center gap-20 mb-8">
+                                <div className="fs-14 lightBlack ">
+                                  Sent date
                                 </div>
-                                <div className="fs-14 fw-600">
-                                  {item?.recipientCount}
-                                </div>
-                              </div>
-                              <div>
-                                <div className="fs-14 mb-4 lightBlack">
-                                  Accepted:
-                                </div>
-                                <div className="fs-14 fw-600 gc">
-                                  {/* {item?.totalAcceptedFollowerList >0 &&item?.totalAcceptedFollowerList >0 ? ( */}
-                                  {item?.totalAcceptedFollowerList > 0 ? (
-                                    <>
-                                      {item?.totalAcceptedFollowerList}/
-                                      {(
-                                        (item?.totalAcceptedFollowerList /
-                                          item?.recipientCount) *
-                                        100
-                                      ).toFixed(0)}
-                                      %
-                                    </>
-                                  ) : (
-                                    <>0</>
-                                  )}
-                                  {/* ):(<>0</>)} */}
-                                </div>
-                              </div>
-                              <div>
-                                <div className="fs-14 mb-4 lightBlack">
-                                  Declined:
-                                </div>
-                                <div className="fs-14 fw-600 rc">
-                                  {item?.disLikeUserList > 0 ? (
-                                    <>
-                                      {item?.disLikeUserList}/
-                                      {(
-                                        (item?.disLikeUserList /
-                                          item?.recipientCount) *
-                                        100
-                                      ).toFixed(0)}
-                                      %
-                                    </>
-                                  ) : (
-                                    <>0</>
+                                <div className="fs-14 fw-500">
+                                  {moment(item?.createdAt).format(
+                                    "DD MMMM,YYYY"
                                   )}
                                 </div>
                               </div>
-                              <div>
-                                <div className="fs-14 mb-4 lightBlack">
-                                  No Response
+                              <div className="d-flex justify-between align-center gap-20 mb-8">
+                                <div className="fs-14 lightBlack ">
+                                  Expiration date
                                 </div>
-                                <div className="fs-14 fw-600 greyColor">
-                                  {item?.recipientCount > 0 ? (
-                                    <>
-                                      {item?.recipientCount -
-                                        (item?.totalAcceptedFollowerList +
-                                          item?.disLikeUserList)}
-                                      /
-                                      {(
-                                        ((item?.recipientCount -
+                                <div className="fs-14 fw-500">
+                                  {moment(item?.deactivateAt).format(
+                                    "DD MMMM,YYYY"
+                                  )}
+                                </div>
+                              </div>
+                              <div className="divider2"></div>
+                              <div className="grid2 mb-20">
+                                <div>
+                                  <div className="fs-14 mb-4 lightBlack">
+                                    Recipients:
+                                  </div>
+                                  <div className="fs-14 fw-600">
+                                    {item?.recipientCount}
+                                  </div>
+                                </div>
+                                <div>
+                                  <div className="fs-14 mb-4 lightBlack">
+                                    Accepted:
+                                  </div>
+                                  <div className="fs-14 fw-600 gc">
+                                    {/* {item?.totalAcceptedFollowerList >0 &&item?.totalAcceptedFollowerList >0 ? ( */}
+                                    {item?.totalAcceptedFollowerList > 0 ? (
+                                      <>
+                                        {item?.totalAcceptedFollowerList}/
+                                        {(
+                                          (item?.totalAcceptedFollowerList /
+                                            item?.recipientCount) *
+                                          100
+                                        ).toFixed(0)}
+                                        %
+                                      </>
+                                    ) : (
+                                      <>0</>
+                                    )}
+                                    {/* ):(<>0</>)} */}
+                                  </div>
+                                </div>
+                                <div>
+                                  <div className="fs-14 mb-4 lightBlack">
+                                    Declined:
+                                  </div>
+                                  <div className="fs-14 fw-600 rc">
+                                    {item?.disLikeUserList > 0 ? (
+                                      <>
+                                        {item?.disLikeUserList}/
+                                        {(
+                                          (item?.disLikeUserList /
+                                            item?.recipientCount) *
+                                          100
+                                        ).toFixed(0)}
+                                        %
+                                      </>
+                                    ) : (
+                                      <>0</>
+                                    )}
+                                  </div>
+                                </div>
+                                <div>
+                                  <div className="fs-14 mb-4 lightBlack">
+                                    No Response
+                                  </div>
+                                  <div className="fs-14 fw-600 greyColor">
+                                    {item?.recipientCount > 0 ? (
+                                      <>
+                                        {item?.recipientCount -
                                           (item?.totalAcceptedFollowerList +
-                                            item?.disLikeUserList)) /
-                                          item?.recipientCount) *
-                                        100
-                                      ).toFixed(2)}
-                                      %
-                                    </>
-                                  ) : (
-                                    <>0</>
-                                  )}
+                                            item?.disLikeUserList)}
+                                        /
+                                        {(
+                                          ((item?.recipientCount -
+                                            (item?.totalAcceptedFollowerList +
+                                              item?.disLikeUserList)) /
+                                            item?.recipientCount) *
+                                          100
+                                        ).toFixed(2)}
+                                        %
+                                      </>
+                                    ) : (
+                                      <>0</>
+                                    )}
+                                  </div>
                                 </div>
                               </div>
                             </div>

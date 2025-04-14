@@ -1,5 +1,6 @@
 .o5{
     opacity: 0.5;
+    word-break: break-all;
 }
 .fw-300{
     font-weight: 300;
