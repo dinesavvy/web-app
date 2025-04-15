@@ -9,7 +9,6 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 
 const DoughnutChart = ({ data,className,merchantPerformanceAnalyticsDetailsSelector }) => {
 
-
 let totalNudgeAcceptCount = 0;
 let totalNudgeSentCount = 0;
 
@@ -18,8 +17,8 @@ merchantPerformanceAnalyticsDetailsSelector?.data?.data?.nudgeData?.forEach(item
   totalNudgeSentCount += item.nudgeSentCount;
 });
 
-const percentage = totalNudgeSentCount > 0
-? ((totalNudgeAcceptCount / totalNudgeSentCount) * 100).toFixed(2)
+const percentage = merchantPerformanceAnalyticsDetailsSelector?.data?.data?.totalNudgeSentCount > 0
+? ((merchantPerformanceAnalyticsDetailsSelector?.data?.data?.totalNudgeAcceptCount / merchantPerformanceAnalyticsDetailsSelector?.data?.data?.totalNudgeSentCount) * 100).toFixed(2)
 : "0.00";
 
   const chartData = {
@@ -27,9 +26,9 @@ const percentage = totalNudgeSentCount > 0
     datasets: [
       {
         label: "My Dataset",
-        data: [totalNudgeAcceptCount, totalNudgeSentCount - totalNudgeAcceptCount],
+        data: [merchantPerformanceAnalyticsDetailsSelector?.data?.data?.totalNudgeAcceptCount, merchantPerformanceAnalyticsDetailsSelector?.data?.data?.totalNudgeSentCount - merchantPerformanceAnalyticsDetailsSelector?.data?.data?.totalNudgeAcceptCount],
         backgroundColor: [
-          "rgba(75, 192, 192, 0.6)", // Progress color
+          "#005CDE", // Progress color
           "rgba(201, 203, 207, 0.6)", // Remaining color
         ],
         borderColor: "rgba(255, 255, 255, 1)",
@@ -46,11 +45,17 @@ const percentage = totalNudgeSentCount > 0
       },
       tooltip: {
         callbacks: {
-          label: (tooltipItem) => {
-            return `${tooltipItem.label}: ${tooltipItem.raw}`;
-          },
-        },
-      },
+          label: function (tooltipItem) {
+            const index = tooltipItem.dataIndex;
+            const value = tooltipItem.raw;
+            const total = tooltipItem.dataset.data.reduce((a, b) => a + b, 0);
+            const percent = ((value / total) * 100).toFixed(2);
+      
+            const label = index === 0 ? 'Completed' : 'Remaining';
+            return `${label}:  (${percent}%)`;
+          }
+        }
+      }
     },
   };
 

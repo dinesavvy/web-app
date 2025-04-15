@@ -6,20 +6,20 @@ const TabContainer = ({ tabs, activeTab, setActiveTab }) => {
       <div className="tabs-container h-100">
         {/* Tab Buttons */}
         <div className="tabs mb-10">
-          {tabs.map((tab) => (
+          {tabs?.map((tab) => (
             <button
-              key={tab.id}
-              className={`tab-button ${activeTab === tab.id ? "active" : ""}`}
-              onClick={() => setActiveTab(tab.id)}
+              key={tab?.id}
+              className={`tab-button ${activeTab === tab?.id ? "active" : ""}`}
+              onClick={() => setActiveTab(tab?.id)}
             >
-              {tab.label}
+              {tab?.label}
             </button>
           ))}
         </div>
 
         {/* Tab Content */}
         <div className="tab-content">
-          {tabs.map((tab) => (
+          {tabs?.map((tab) => (
             <div
               key={tab.id}
               className={`tab-panel  ${

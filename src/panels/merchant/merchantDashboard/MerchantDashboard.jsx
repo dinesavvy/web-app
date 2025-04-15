@@ -21,6 +21,7 @@ import LineChart from "../../../common/charts/LineChart";
 import { useBusiness } from "../../../common/Layout/BusinessContext";
 import Loader from "../../../common/Loader/Loader";
 import AccessDeniedModal from "../accessDeniedModal/accessDeniedModal";
+import { loyaltyGraphHandler } from "../../../redux/action/businessAction/loyaltyGraph";
 
 const MerchantDashboard = () => {
   const [tempState, setTempState] = useState([]);
@@ -34,19 +35,32 @@ const MerchantDashboard = () => {
     (state) => state?.businessDashboard
   );
 
+  const loyaltyGraphSelector = useSelector((state) => state?.loyaltyGraph);
+
   // Nudge Graph
   const temp = businessDashBoardSelector?.data?.data?.nudgeData
     ?.map((item) => item?.value)
     .join(",");
 
-  const tempArray = temp ? temp.split(",").map(Number) : [0, 0,0,0,0];
+  const tempArray = temp ? temp.split(",").map(Number) : [0, 0, 0, 0, 0];
 
   // Follower Graph
   const followerData = businessDashBoardSelector?.data?.data?.followerData
     ?.map((item) => item?.value)
     .join(",");
+  const followerDataNumber = followerData
+    ? followerData?.split(",")?.map(Number)
+    : [0, 0, 0, 0, 0];
 
-  const followerDataNumber = followerData?.split(",")?.map(Number);
+  // habitual Follower Data
+  const HabitualFollowerData =
+    loyaltyGraphSelector?.data?.data?.loyaltyGraphData
+      ?.map((item) => item?.value)
+      .join(",");
+
+  const HabitualFollowerGraph = HabitualFollowerData
+    ? HabitualFollowerData?.split(",")?.map(Number)
+    : [0, 0, 0, 0, 0];
 
   // Promotion Graph
   const promotionData = businessDashBoardSelector?.data?.data?.promotionData
@@ -75,6 +89,7 @@ const MerchantDashboard = () => {
   useEffect(() => {
     const selectedTab = tabOptions.find((tab) => tab.id === activeTab);
     if (selectedTab) {
+      dispatch(loyaltyGraphHandler({ timeFrame: selectedTab.timeFrame }));
       dispatch(businessDashboardHandler({ timeFrame: selectedTab.timeFrame }));
     }
   }, [activeTab]);
@@ -87,26 +102,48 @@ const MerchantDashboard = () => {
     { id: "1Y", label: "1Y", timeFrame: "yearly" },
   ];
 
+  const trend = (() => {
+    const lastFrameCount =
+      loyaltyGraphSelector?.data?.data?.habitualUserLastFrameCount;
+    const userCount = loyaltyGraphSelector?.data?.data?.habitualUserCount;
+
+    if (lastFrameCount <= 0 || userCount < lastFrameCount) {
+      return 0;
+    }
+
+    return ((userCount - lastFrameCount) / lastFrameCount) * 100;
+  })();
+
   const tabs = tabOptions?.map(({ id, label }) => ({
     id,
     label,
     content: (
       <GraphWithCircle
-        title="Habitual Followers"
-        value={businessDashBoardSelector?.data?.data?.habitualUserCount}
-        trend={businessDashBoardSelector?.data?.data?.habitualUserCount ?businessDashBoardSelector?.data?.data?.habitualUserCount/businessDashBoardSelector?.data?.data?.habitualUserList?.length:"0"}
-        merchantsCount={256}
+        title="Your Habitual Followers"
+        value={loyaltyGraphSelector?.data?.data?.habitualUserCount}
+        trend={trend}
+        merchantsCount={loyaltyGraphSelector?.data?.data?.nearByUserCount}
         chartImage={chart}
-        businessDashBoardSelector={businessDashBoardSelector}
-        tempArray={tempArray}
+        businessDashBoardSelector={loyaltyGraphSelector}
+        tempArray={HabitualFollowerGraph}
         activeTab={activeTab}
+        loyaltyGraphSelector={loyaltyGraphSelector}
+        title2={
+          loyaltyGraphSelector?.data?.data?.habitualCompetitorData
+            ?.businessName || "N/A"
+        }
+        value2={
+          loyaltyGraphSelector?.data?.data?.habitualCompetitorData
+            ?.habitualUserCount || "0"
+        }
       />
     ),
   }));
 
   return (
     <>
-      {businessDashBoardSelector?.isLoading && <Loader />}
+      {(businessDashBoardSelector?.isLoading ||
+        loyaltyGraphSelector?.isLoading) && <Loader />}
       {/*********************** Empty Content ************************/}
       {/* {(getSelectedBusiness !== null && getSelectedBusiness?.roleTitle !== "Owner" && 
       getSelectedBusiness?.roleData?.permissions?.viewAnalytics !== 2|| businessListSelector?.data?.data?.records?.length===0) ? ( */}
@@ -143,23 +180,16 @@ const MerchantDashboard = () => {
                   chartPromotionImage={chartPromotion}
                   buttonText="You need promotions"
                   middleComponent={
-                    // <BarChart
-                    //   // labels={["Bar 1", "Bar 2"]}
-                    //   labels={promotionDataNumber ? new Array(promotionDataNumber?.length).fill("") : [""]}
-                    //   datas={promotionDataNumber}
-                    //   className="w-100"
-                    //   barThickness={100}
-                    //   borderSkipped={false}
-                    //   xDisplay={false}
-                    //   yDisplay={true}
-                    // />
                     <LineChart
                       labels={
-                        promotionDataNumber ? new Array(promotionDataNumber?.length).fill("") : [""]
+                        promotionDataNumber
+                          ? new Array(promotionDataNumber?.length).fill("")
+                          : [""]
                       }
                       className="w-100"
                       businessDashBoardSelector={businessDashBoardSelector}
                       datas={promotionDataNumber}
+                      promotion={true}
                     />
                   }
                 />
@@ -177,6 +207,7 @@ const MerchantDashboard = () => {
                       className="w-100"
                       businessDashBoardSelector={businessDashBoardSelector}
                       datas={tempArray}
+                      nudges={true}
                     />
                   }
                 />{" "}

@@ -23,11 +23,11 @@ import { merchantPerfomanceAnalyticsListHandler } from "../../../redux/action/me
 import { merchantPerformanceAnalyticsDetailsHandler } from "../../../redux/action/merchantPerformanceAnalyticsDetails";
 import BarChartProtion from "../../../common/charts/BarChartPromotion";
 import ChartComponent from "./Chart/Chart";
+import { loyaltyGraphHandler } from "../../../redux/action/loyaltyGraph";
 
 const AdminDashboard = () => {
-  const [communicateItem, setCommunicateItem] = useState();
   const [pagination, setPagination] = useState({ page: 1, limit: 12 });
-  const [activeTab, setActiveTab] = useState("1");
+  const [activeTab, setActiveTab] = useState("1D");
   const [activeTab2, setActiveTab2] = useState("today");
   const [activeTab3, setActiveTab3] = useState("1");
   const [openIndex, setOpenIndex] = useState(); // Initially, the first item is open
@@ -76,9 +76,6 @@ const AdminDashboard = () => {
             <div className="chartpadding mb-20">
               <div className="fs-16 fw-600 ">Habitual Users</div>
             </div>
-            {/* <img src={chart} alt="" className="w-100 mxh" />
-             */}
-
             <AreaChart
               labels={["M", "T", "W", "T", "F", "S"]}
               datas1={[65, 59, 80, 81, 56, 55, 40]}
@@ -88,7 +85,7 @@ const AdminDashboard = () => {
               className={"w-100 mxh"}
               merchantPerformanceAnalyticsDetailsSelector={
                 merchantPerformanceAnalyticsDetailsSelector?.data?.data
-                  ?.userData
+                  ?.habitualCompetitorData
               }
             />
           </div>
@@ -156,6 +153,7 @@ const AdminDashboard = () => {
                 merchantPerformanceAnalyticsDetailsSelector?.data?.data
                   ?.nudgeData
               }
+              nudgeSent={true}
             />
           </div>
           <div className="card mx369">
@@ -180,115 +178,78 @@ const AdminDashboard = () => {
     );
   };
 
-  // const tabs = [
-  //   {
-  //     id: "1",
-  //     label: "1D",
-  //     content: (
-  //       <GraphWithCircle
-  //         title="Habitual Followers"
-  //         value="8,000"
-  //         trend={10}
-  //         merchantsCount={256}
-  //         chartImage={<ChartComponent />}
-  //       />
-  //     ),
-  //   },
-  //   {
-  //     id: "2",
-  //     label: "1W",
-  //     content: (
-  //       <GraphWithCircle
-  //         title="Habitual Followers"
-  //         value="8,000"
-  //         trend={10}
-  //         merchantsCount={256}
-  //         chartImage={<ChartComponent />}
-  //       />
-  //     ),
-  //   },
-  //   {
-  //     id: "3",
-  //     label: "3M",
-  //     content: (
-  //       <GraphWithCircle
-  //         title="Habitual Followers"
-  //         value="8,000"
-  //         trend={10}
-  //         merchantsCount={256}
-  //         chartImage={<ChartComponent />}
-  //       />
-  //     ),
-  //   },
-  //   {
-  //     id: "4",
-  //     label: "4M",
-  //     content: (
-  //       <GraphWithCircle
-  //         title="Habitual Followers"
-  //         value="8,000"
-  //         trend={10}
-  //         merchantsCount={256}
-  //         chartImage={<ChartComponent />}
-  //       />
-  //     ),
-  //   },
-  //   {
-  //     id: "5",
-  //     label: "5M",
-  //     content: (
-  //       <GraphWithCircle
-  //         title="Habitual Followers"
-  //         value="8,000"
-  //         trend={10}
-  //         merchantsCount={256}
-  //         chartImage={<ChartComponent />}
-  //       />
-  //     ),
-  //   },
-  // ];
-
-  const tabs = [
-    {
-      id: "1",
-      label: "1D",
-      content: (
-        <GraphWithCircle
-          title="Habitual Followers"
-          value="8,000"
-          trend={10}
-          merchantsCount={256}
-          // chartImage={<ChartComponent />}
-        />
-      ),
-    },
-    {
-      id: "2",
-      label: "1W",
-      content: (
-        <GraphWithCircle
-          title="Habitual Followers"
-          value="8,000"
-          trend={10}
-          merchantsCount={256}
-          // chartImage={<ChartComponent />}
-        />
-      ),
-    },
-    {
-      id: "3",
-      label: "3M",
-      content: (
-        <GraphWithCircle
-          title="Habitual Followers"
-          value="8,000"
-          trend={10}
-          merchantsCount={256}
-          // chartImage={<ChartComponent />}
-        />
-      ),
-    },
+  const tabOptions = [
+    { id: "1D", label: "1D", timeFrame: "today" },
+    { id: "1W", label: "1W", timeFrame: "weekly" },
+    { id: "3M", label: "3M", timeFrame: "quarterly" },
+    { id: "YTD", label: "YTD", timeFrame: "startYear" },
+    { id: "1Y", label: "1Y", timeFrame: "yearly" },
   ];
+
+  const getAdminLogin = localStorage.getItem("adminLogin");
+
+  const loyaltyGraphSelector = useSelector((state) => state?.loyaltyGraph);
+
+  useEffect(() => {
+    if (getAdminLogin) {
+      let timeFrame =
+        activeTab === "1D"
+          ? "today"
+          : activeTab === "1W"
+          ? "weekly"
+          : activeTab === "3M"
+          ? "quarterly"
+          : activeTab === "YTD"
+          ? "startYear"
+          : activeTab === "1Y"
+          ? "yearly"
+          : "";
+
+      const payload = { timeFrame };
+      dispatch(loyaltyGraphHandler(payload));
+    }
+  }, [activeTab]);
+
+  const temp = loyaltyGraphSelector?.data?.data?.loyaltyGraphData
+    ?.map((item) => item?.value)
+    .join(",");
+
+  const tempArray = temp ? temp.split(",").map(Number) : [0, 0, 0, 0, 0];
+
+  // const trend = (() => {
+  //   // Loyalty
+  //   const lastFrameCount = loyaltyGraphSelector?.data?.data?.loyalty;
+  //   //Total
+  //   const userCount = loyaltyGraphSelector?.data?.data?.totalLoyalty;
+
+  //   if (lastFrameCount <= 0 || userCount < lastFrameCount) {
+  //     return 0;
+  //   }
+
+  //   return ((lastFrameCount - userCount) / userCount) * 100;
+  // })();
+
+  const tabs = tabOptions?.map(({ id, label }) => ({
+    id, 
+    label,
+    content: (
+      <GraphWithCircle
+        title="Habitual Followers"
+        value={loyaltyGraphSelector?.data?.data?.habitualUserCount}
+                  trend={
+                    loyaltyGraphSelector?.data?.data?.totalLoyalty>0?((loyaltyGraphSelector?.data?.data?.loyalty -
+                      loyaltyGraphSelector?.data?.data?.totalLoyalty) /
+                      loyaltyGraphSelector?.data?.data?.totalLoyalty) *
+                    100:"0"
+                  }
+        merchantsCount={loyaltyGraphSelector?.data?.data?.nudgeSentCount}
+        chartImage={chart}
+        activeTab={activeTab}
+        loyaltyGraphSelector={loyaltyGraphSelector}
+        tempArray={tempArray}
+      />
+    ),
+  }));
 
   const tabs2 = [
     {
@@ -317,30 +278,14 @@ const AdminDashboard = () => {
 
   useEffect(() => {
     let payload = {
-      page: pagination.page,
-      limit: pagination.limit,
+      page: pagination?.page,
+      limit: pagination?.limit,
       timeFrame: activeTab2,
       sortOn: "performance",
       holdingSort: activeTab3 === "1" ? true : false,
     };
     dispatch(merchantPerfomanceAnalyticsListHandler(payload));
   }, [activeTab2, activeTab3, pagination]);
-
-  // useEffect(() => {
-  //   if (merchantPerformanceAnalyticsDetailsSelector?.data?.statusCode === 200) {
-  //     messageApi.open({
-  //       type: "success",
-  //       content: merchantPerformanceAnalyticsDetailsSelector?.data?.message,
-  //     });
-  //     dispatch(
-  //       merchantPerformanceAnalyticsDetailsAction.merchantPerformanceAnalyticsDetailsReset()
-  //     );
-  //     if (communicateItem) {
-  //       localStorage.setItem("merchantId", communicateItem?._id);
-  //       navigate("/admin/merchant/details", { state: communicateItem });
-  //     }
-  //   }
-  // }, [merchantPerformanceAnalyticsDetailsSelector]);
 
   const restaurantItemClick = (item, index) => {
     setOpenIndex(index);
@@ -355,7 +300,7 @@ const AdminDashboard = () => {
   };
 
   const handleCommunicate = (item) => {
-    setCommunicateItem(item);
+    // setCommunicateItem(item);
     localStorage.setItem("merchantId", item?._id);
     navigate("/admin/merchant/details", { state: item });
   };
@@ -364,7 +309,8 @@ const AdminDashboard = () => {
     <>
       {(analyticsDetailsSelector?.isLoading ||
         merchantPerformanceAnalyticsListSelector?.isLoading ||
-        merchantPerformanceAnalyticsDetailsSelector?.isLoading) && <Loader />}
+        merchantPerformanceAnalyticsDetailsSelector?.isLoading ||
+        loyaltyGraphSelector?.isLoading) && <Loader />}
       <div className="dashboard">
         <div className="d-flex flexWrap gap-20">
           <div className="mx292">
@@ -477,7 +423,10 @@ const AdminDashboard = () => {
                     className={`tab-button ${
                       activeTab2 === tab.value ? "active" : ""
                     }`}
-                    onClick={() => setActiveTab2(tab.value)}
+                    onClick={() => {
+                      setActiveTab2(tab.value);
+                      setOpenIndex();
+                    }}
                   >
                     {tab.label}
                   </button>

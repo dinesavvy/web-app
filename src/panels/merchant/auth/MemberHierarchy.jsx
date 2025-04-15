@@ -115,7 +115,6 @@ const MemberHierarchy = ({
     }
   }, [createTeamSelector]);
 
-  console.log(updateTeamBusinessSelector,"updateTeamBusinessSelector")
 
   useEffect(() => {
     if (updateTeamBusinessSelector?.data?.statusCode === 200) {

@@ -34,6 +34,7 @@ const BarChart = ({
   displayLegend,
   merchantPerformanceAnalyticsDetailsSelector,
   analyticsDetailsSelector,
+  nudgeSent,
 }) => {
   const [hoveredIndex, setHoveredIndex] = useState(null);
   const colors = [
@@ -50,18 +51,17 @@ const BarChart = ({
   ];
   const sortedData = merchantPerformanceAnalyticsDetailsSelector
     ? [...merchantPerformanceAnalyticsDetailsSelector].sort(
-        (a, b) => new Date(a._id) - new Date(b._id)
+        (a, b) => a._id - b._id
       )
     : [];
+
   // Extract labels and data points
-  const labels = sortedData?.map((item) =>
-    moment(item?._id).format("HH:mm")
-  );
-  const datas = sortedData?.map((item) => item.nudgeSentCount||item.value);
+  const labels = sortedData?.map((item) => moment(item?._id).format('DD-MM'));
+  const datas = sortedData?.map((item) => item.nudgeSentCount || item.value);
 
   const newDataSet =
     isDatasMap === true
-      ? Array.isArray(datas)  // Check if nextDatasets is an array
+      ? Array.isArray(datas) // Check if nextDatasets is an array
         ? datas.map((dataSet, index) => ({
             label: labels[index],
             data: [dataSet],
@@ -77,9 +77,7 @@ const BarChart = ({
             data: Array.isArray(datas) ? datas : [], // Ensure datas is an array
             backgroundColor: (context) => {
               const index = context.dataIndex;
-              return index === hoveredIndex
-                ? "blue"
-                : "rgba(75, 192, 192, 0.2)";
+              return index === hoveredIndex ? "blue" : "#E5EFFC";
             },
             borderWidth: 1,
             borderRadius: 6,
@@ -111,8 +109,9 @@ const BarChart = ({
             }
           },
           label: function (context) {
-            // Display the label and data for the hovered bar
-            return `${context.dataset.label}: ${context.raw}`;
+            const labelText =
+              nudgeSent === true ? "Nudge Sent" : "New Follower Added";
+            return `${labelText}: ${context.raw}`;
           },
         },
       },

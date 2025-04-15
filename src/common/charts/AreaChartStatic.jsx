@@ -32,16 +32,7 @@ const AreaChartStatic = ({
   borderColor,
   className,
   activeTab,
-  businessDashBoardSelector
 }) => {
-  // const filteredData = businessDashBoardSelector?.data?.data?.nudgeData
-  //   .filter(item => moment(item._id, "YYYY-MM-DD HH:mm").format("HH:mm"))
-  //   .map(item => ({
-  //       _id: moment(item._id, "YYYY-MM-DD HH:mm").format("YYYY-MM-DDTHH:mm"),
-  //       value: item.value
-  //   }));
-  
-    console.log(businessDashBoardSelector,"businessDashBoardSelector")
 
   // Define labels conditionally based on activeTab
   let yAxisLabels = [];
@@ -94,35 +85,60 @@ const AreaChartStatic = ({
         enabled: true,
         mode: "nearest",
         intersect: false,
-        callbacks: {
-          label: (tooltipItem) => ` ${tooltipItem.dataset?.label}`,
-        },
+        label: function (context) {
+          const label = context.dataset.label || '';
+          const value = context.raw;
+          return ` ${label}: ${value}`;
+        }
       },
     },
+    // scales: {
+    //   x: {
+    //     title: {
+    //       display: true,
+    //     },
+        
+    //     // ticks: {
+    //     //   callback: function (value, index) {
+    //     //     return yAxisLabels[index];
+    //     //   },
+    //     // },
+        
+    //   },
+    //   y: {
+    //     ticks: {
+    //       display: false,
+    //     },
+    //     // ticks: {
+    //     //   callback: function (value, index) {
+    //     //     return xAxisLabels[index];
+    //     //   },
+    //     // },
+    //   },
+    // },
     scales: {
       x: {
         title: {
           display: true,
+          text: "Time", // or whatever label you want
         },
-        
-        // ticks: {
-        //   callback: function (value, index) {
-        //     return yAxisLabels[index];
-        //   },
-        // },
-        
+        ticks: {
+          autoSkip: false, // show all labels even if crowded
+        },
+        grid: {
+          display: true, // optional: improve visual
+        },
       },
       y: {
-        ticks: {
+        display: true,
+        title: {
           display: false,
         },
-        // ticks: {
-        //   callback: function (value, index) {
-        //     return xAxisLabels[index];
-        //   },
-        // },
+        min: 0,
+        max: 100, // Add some buffer so you can see the 0 line clearly
       },
     },
+    
   };
 
   return <Line data={data} options={options} className={className} />;

@@ -34,10 +34,10 @@ const AreaChart = ({
   datas1,
   merchantPerformanceAnalyticsDetailsSelector
 }) => {
-
   const sortedData = merchantPerformanceAnalyticsDetailsSelector
-  ? [...merchantPerformanceAnalyticsDetailsSelector].sort((a, b) => new Date(a._id) - new Date(b._id))
-  : [];
+  ? [...merchantPerformanceAnalyticsDetailsSelector].sort((a, b) => a._id - b._id)
+  : []
+
   // Extract labels and data points
   const labels = sortedData?.map((item) => moment(item?._id).format('DD-MM'));
   const datas = sortedData?.map((item) => item.value);
@@ -83,17 +83,41 @@ const AreaChart = ({
         enabled: true, // Disable tooltips
       },
     },
+    // scales: {
+    //   x: {
+    //     title: {
+    //       display: true,
+    //     },
+    //   },
+    //   y: {
+    //     display: false,
+    //     title: {
+    //       display: false,
+    //     },
+    //   },
+    //   min: 0, // Set your desired minimum
+    //   max: 100, // Set your desired maximum
+    // },
     scales: {
       x: {
         title: {
           display: true,
+          text: "Time", // or whatever label you want
+        },
+        ticks: {
+          autoSkip: false, // show all labels even if crowded
+        },
+        grid: {
+          display: true, // optional: improve visual
         },
       },
       y: {
-        display: false,
+        display: true,
         title: {
           display: false,
         },
+        min: 0,
+        max: 100, // Add some buffer so you can see the 0 line clearly
       },
     },
   };

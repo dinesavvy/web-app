@@ -38,6 +38,7 @@ import adminPromotionSlice from "../action/adminPromotion";
 import createPromotionSlice from "../action/createPromotion";
 import promotionDetailsSlice from "../action/promotionDetails";
 import adminEndPromotionSlice from "../action/adminEndPromotion";
+import loyaltyGraphSlice from "../action/loyaltyGraph";
 
 const store = configureStore({
   reducer: {
@@ -81,6 +82,7 @@ const store = configureStore({
     createPromotion: createPromotionSlice,
     promotionDetails: promotionDetailsSlice,
     adminEndPromotion: adminEndPromotionSlice,
+    loyaltyGraph: loyaltyGraphSlice,
   },
 });
 

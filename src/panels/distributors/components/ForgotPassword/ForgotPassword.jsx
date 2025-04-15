@@ -30,7 +30,6 @@ const ForgotPassword = () => {
   const messageApi = useCommonMessage();
 
   const forgotPasswordSelector = useSelector((state) => state?.forgotPassword);
-  console.log(forgotPasswordSelector,"forgotPasswordSelector")
 
   const handleFormSubmit = (values) => {
     let payload = {

@@ -33,7 +33,7 @@ import AddNudgeCreditDrawer from "./merchant/AddCreditDrawer";
 
 const MerchantDetails = () => {
   const { state } = useLocation();
-  const [activeNudge, setActiveNudge] = useState(5);
+    const [activeNudge, setActiveNudge] = useState(5);
   const [activeTab3, setActiveTab3] = useState("1");
   const [editInput, setEditInput] = useState(false);
   const [switchState, setSwitchState] = useState(false);

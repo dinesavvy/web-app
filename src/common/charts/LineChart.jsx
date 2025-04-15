@@ -4,14 +4,13 @@ import { Chart as ChartJS, LineElement, CategoryScale, LinearScale, PointElement
 
 ChartJS.register(LineElement, CategoryScale, LinearScale, PointElement);
 
-const LineChart = ({ labels, datas, className,businessDashBoardSelector,tempArray }) => {
+const LineChart = ({ labels, datas, className,businessDashBoardSelector,tempArray,nudges,promotion }) => {
 
   const data = {
     labels,
     datasets: [
       {
-        label: "Line Chart Data",
-        // data: datas?datas:tempArray,
+        label: nudges ? "Nudges" : (promotion ? "Promotions" : "Followers"),
         data:datas,
         borderColor: "rgba(75, 192, 192, 1)",
         backgroundColor: "rgba(75, 192, 192, 0.2)",
@@ -25,9 +24,31 @@ const LineChart = ({ labels, datas, className,businessDashBoardSelector,tempArra
   const options = {
     responsive: true,
     maintainAspectRatio: false,
+    // scales: {
+    //   x: { display: false },
+    //   y: { display: false },
+    // },
     scales: {
-      x: { display: true },
-      y: { display: true },
+      x: {
+        title: {
+          display: true,
+          text: "Time", // or whatever label you want
+        },
+        ticks: {
+          autoSkip: false, // show all labels even if crowded
+        },
+        grid: {
+          display: true, // optional: improve visual
+        },
+      },
+      y: {
+        display: true,
+        title: {
+          display: false,
+        },
+        min: 0,
+        max: 100, // Add some buffer so you can see the 0 line clearly
+      },
     },
   };
 

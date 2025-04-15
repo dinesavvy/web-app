@@ -22,7 +22,7 @@ const Header = ({ handleTrigger }) => {
 
   const location = useLocation();
   const getRestaurantName = localStorage.getItem("restaurantName");
-  const getMerchantBusinessSelector = JSON.parse(
+    const getMerchantBusinessSelector = JSON.parse(
     localStorage.getItem("selectedBusiness")
   );
   const businessListSelector = useSelector((state) => state?.businessList);
@@ -66,7 +66,7 @@ const Header = ({ handleTrigger }) => {
 
   // Handle Selection
   const handleSelect = (item) => {
-    // setSelectedBusiness(item);
+    // setSelectedBusiness(item);  
     window.location.reload();
     setModalOpen(false);
   };
@@ -130,7 +130,7 @@ const Header = ({ handleTrigger }) => {
           </div>
         </div> */}
           {/* {getMerchantBusinessSelector!==null && ( */}
-          {/* {businessListSelector?.data?.data?.records?.length > 0 && localStorage.getItem("merchantLogin")===true &&selectedBusiness !==undefined &&  ( */}
+          {/* {businessListSelector?.data?.data?.records?.length > 0 && localStorage.getItem("merchantLogin")===true &&selectedBusiness !==undefined &&  ( */} 
           {/* <div
             className="d-flex selectCommon cursor-pointer align-center gap-6 "
             onClick={toggleModal}
@@ -147,7 +147,7 @@ const Header = ({ handleTrigger }) => {
               <img src={arrowRight} alt="arrowRight" />
             </div>
           </div> */}
-          {/* )}  */}
+          {/* )} 
           {/* )}  */}
           {/* Modal Component */}
 

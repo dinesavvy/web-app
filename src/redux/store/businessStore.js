@@ -40,6 +40,7 @@ import notificationListSlice from "../action/businessAction/notificationList";
 import markAsReadSlice from "../action/businessAction/markAsRead"
 import nudgeRedeemedSlice from "../action/businessAction/nudgeRedeemed"
 import acceptInviteSlice from "../action/businessAction/acceptInvite"
+import loyaltyGraphSlice from "../action/businessAction/loyaltyGraph"
 
 const store = configureStore({
   reducer: {
@@ -83,7 +84,8 @@ const store = configureStore({
     notificationList: notificationListSlice,
     markAsRead:markAsReadSlice,
     nudgeRedeemed:nudgeRedeemedSlice,
-    acceptInvite:acceptInviteSlice
+    acceptInvite:acceptInviteSlice,
+    loyaltyGraph:loyaltyGraphSlice
   },
 });
 

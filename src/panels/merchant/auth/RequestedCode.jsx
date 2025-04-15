@@ -125,7 +125,6 @@ const RequestedCode = ({ loginValue,requestLogin,setRequestLogin,countryCode,pho
       dispatch(businessLoginAction.businessLoginSliceReset());
     }
   }, [businessLoginSelector]);
-  console.log(businessLoginSelector,"businessLoginSelector")
 
   const resendOTP = () => {
     // setSeconds(60);
