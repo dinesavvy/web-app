@@ -9,9 +9,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { brandListsHandler } from "../../../../redux/action/brandListSlice";
 import Loader from "../../../../common/Loader/Loader";
 import { useCommonMessage } from "../../../../common/CommonMessage";
-import { deleteBrandsAction } from "../../../../redux/action/deleteBrand";
+// import { deleteBrandsAction } from "../../../../redux/action/deleteBrand";
 import noImageFound from "../../../../assets/images/noImageFound.png";
-import axios from "axios";
 
 const Brands = () => {
   const messageApi = useCommonMessage();
