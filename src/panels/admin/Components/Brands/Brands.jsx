@@ -65,17 +65,6 @@ const Brands = () => {
     setIsDetailsOpen((prevState) => !prevState);
   };
 
-  // useEffect(() => {
-  //   if (deleteBrandSelector?.data?.statusCode === 200) {
-  //     messageApi.open({
-  //       type: "success",
-  //       content: deleteBrandSelector?.data?.message,
-  //     });
-  //     setIsDetailsOpen(false);
-  //     dispatch(deleteBrandsAction.deleteBrandReset());
-  //   }
-  // }, [deleteBrandSelector]);
-
   return (
     <>
       {(getBrandListSelector?.isLoading || deleteBrandSelector?.isLoading) && (
