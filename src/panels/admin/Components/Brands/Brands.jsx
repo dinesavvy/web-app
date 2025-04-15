@@ -28,35 +28,6 @@ const Brands = () => {
   const handlePaginationChange = (page, pageSize) => {
     setPagination({ page, limit: pageSize });
   };
-const temp =async() =>{
-  
-  try {
-    const response = await axios.get(
-      'https://mybusinessbusinessinformation.googleapis.com/v1/accounts/106021926532639185063/locations',
-      {
-        params: {
-          readMask: 'name,title,categories,labels,languageCode,latlng,metadata,moreHours,openInfo,phoneNumbers,profile,regularHours,relationshipData,serviceArea,serviceItems,specialHours,storeCode,storefrontAddress,websiteUri',
-          alt: 'json',
-        },
-        headers: {
-          'user-agent': 'Dart/3.6 (dart:io)',
-          'content-type': 'application/json',
-          'accept-encoding': 'gzip',
-          'authorization': 'Bearer ya29.a0AZYkNZjNOicNqmy3OtkifGhafSbyDDvpQsDJxjqRoG7UcO97_5y2B3Q-VadHCwXV5SOaOlax28vkY9d2So2-pq7bmBhmcyYPNc9s0d6hC4mzACOyDsO6LzemtFLdLWHiFuHQilS58yyQdsM6gEEaCr102eetYgJXVuG--jM9aCgYKAUwSARcSFQHGX2MiHyxY0qz5bZVA1f6JtSKXeg0175',
-          'host': 'mybusinessbusinessinformation.googleapis.com'
-        }
-      }
-    );
-
-  } catch (error) {
-    console.error('Error fetching location data:', error.response?.data || error.message);
-  }
-}
-
-  useEffect( () => {
-    temp()
-  }, [])
-  
 
   const handleSearchChange = (value) => {
     setSearchString(value);
