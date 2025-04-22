@@ -115,7 +115,8 @@ const RequestedCode = ({ loginValue,requestLogin,setRequestLogin,countryCode,pho
         type: "success",
         content: businessLoginSelector?.data?.message,
       });
-      navigate("/merchant/dashboard");
+      // navigate("/merchant/dashboard");
+      window.location.replace("/merchant/dashboard")
       dispatch(businessLoginAction.businessLoginSliceReset());
     } else if (businessLoginSelector?.message?.status===400) {
       messageApi.open({

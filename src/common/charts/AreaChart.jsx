@@ -40,6 +40,9 @@ const AreaChart = ({
 
   // Extract labels and data points
   const labels = sortedData?.map((item) => moment(item?._id).format('DD-MM'));
+  // const labels = sortedData?.map((item) =>
+  //   moment(item?._id, 'YYYY-MM-DD-HH:mm').format('DD-MM')
+  // );
   const datas = sortedData?.map((item) => item.value);
 
   // Sample data

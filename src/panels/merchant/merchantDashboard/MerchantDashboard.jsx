@@ -120,9 +120,9 @@ const MerchantDashboard = () => {
     content: (
       <GraphWithCircle
         title="Your Habitual Followers"
-        value={loyaltyGraphSelector?.data?.data?.habitualUserCount}
+        value={loyaltyGraphSelector?.data?.data?.habitualUserCount||"0"}
         trend={trend}
-        merchantsCount={loyaltyGraphSelector?.data?.data?.nearByUserCount}
+        merchantsCount={loyaltyGraphSelector?.data?.data?.nearByUserCount ||"0"}
         chartImage={chart}
         businessDashBoardSelector={loyaltyGraphSelector}
         tempArray={HabitualFollowerGraph}

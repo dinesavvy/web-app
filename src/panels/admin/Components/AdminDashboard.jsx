@@ -230,18 +230,20 @@ const AdminDashboard = () => {
   // })();
 
   const tabs = tabOptions?.map(({ id, label }) => ({
-    id, 
+    id,
     label,
     content: (
       <GraphWithCircle
         title="Habitual Followers"
         value={loyaltyGraphSelector?.data?.data?.habitualUserCount}
-                  trend={
-                    loyaltyGraphSelector?.data?.data?.totalLoyalty>0?((loyaltyGraphSelector?.data?.data?.loyalty -
-                      loyaltyGraphSelector?.data?.data?.totalLoyalty) /
-                      loyaltyGraphSelector?.data?.data?.totalLoyalty) *
-                    100:"0"
-                  }
+        trend={
+          loyaltyGraphSelector?.data?.data?.totalLoyalty > 0
+            ? ((loyaltyGraphSelector?.data?.data?.loyalty -
+                loyaltyGraphSelector?.data?.data?.totalLoyalty) /
+                loyaltyGraphSelector?.data?.data?.totalLoyalty) *
+              100
+            : "0"
+        }
         merchantsCount={loyaltyGraphSelector?.data?.data?.nudgeSentCount}
         chartImage={chart}
         activeTab={activeTab}
@@ -304,6 +306,37 @@ const AdminDashboard = () => {
     localStorage.setItem("merchantId", item?._id);
     navigate("/admin/merchant/details", { state: item });
   };
+
+  // const [imageUrls, setImageUrls] = useState({}); // Store object URLs for images
+
+  // Function to fetch image and convert to Blob
+  // const fetchImageAsBlob = async (url, index) => {
+  //   try {
+  //     const response = await fetch(url);
+  //     const blob = await response.blob();
+  //     const objectUrl = URL.createObjectURL(blob);
+  //     setImageUrls((prev) => ({ ...prev, [index]: objectUrl }));
+  //   } catch (error) {
+  //     console.error("Error fetching image:", error);
+  //     setImageUrls((prev) => ({ ...prev, [index]: noImageFound }));
+  //   }
+  // };
+
+  // Cleanup object URLs when component unmounts
+  // useEffect(() => {
+  //   return () => {
+  //     Object.values(imageUrls).forEach((url) => URL.revokeObjectURL(url));
+  //   };
+  // }, [imageUrls]);
+  // useEffect(() => {
+  //   merchantPerformanceAnalyticsListSelector?.data?.data?.records?.forEach(
+  //     (item, index) => {
+  //       if (item?.logoUrl && !imageUrls[index]) {
+  //         fetchImageAsBlob(item.logoUrl, index);
+  //       }
+  //     }
+  //   );
+  // }, [merchantPerformanceAnalyticsListSelector?.data?.data?.records]);
 
   return (
     <>
@@ -468,8 +501,16 @@ const AdminDashboard = () => {
                     }}
                   >
                     <img
-                      src={item.logoUrl || noImageFound}
-                      alt={item.businessName}
+                      // src={imageUrls[index] || noImageFound} // Use object URL or fallback
+                      src = {item?.logoUrl || noImageFound}
+                      alt={item?.businessName}
+                      loading="lazy"
+                      // onLoad={() => {
+                      //   // Fetch image when img tag is rendered
+                      //   if (item?.logoUrl && !imageUrls[index]) {
+                      //     fetchImageAsBlob(item.logoUrl, index);
+                      //   }
+                      // }}
                     />
                     <div className="fs-18 fw-600">{item.businessName}</div>
                     <div className="tag">

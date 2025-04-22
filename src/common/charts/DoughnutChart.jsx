@@ -21,12 +21,21 @@ const percentage = merchantPerformanceAnalyticsDetailsSelector?.data?.data?.tota
 ? ((merchantPerformanceAnalyticsDetailsSelector?.data?.data?.totalNudgeAcceptCount / merchantPerformanceAnalyticsDetailsSelector?.data?.data?.totalNudgeSentCount) * 100).toFixed(2)
 : "0.00";
 
+
+
   const chartData = {
     labels: data.labels,
     datasets: [
       {
         label: "My Dataset",
-        data: [merchantPerformanceAnalyticsDetailsSelector?.data?.data?.totalNudgeAcceptCount, merchantPerformanceAnalyticsDetailsSelector?.data?.data?.totalNudgeSentCount - merchantPerformanceAnalyticsDetailsSelector?.data?.data?.totalNudgeAcceptCount],
+        // data: [merchantPerformanceAnalyticsDetailsSelector?.data?.data?.totalNudgeAcceptCount, merchantPerformanceAnalyticsDetailsSelector?.data?.data?.totalNudgeSentCount - merchantPerformanceAnalyticsDetailsSelector?.data?.data?.totalNudgeAcceptCount],
+        data: merchantPerformanceAnalyticsDetailsSelector?.data?.data?.totalNudgeSentCount > 0
+  ? [
+      merchantPerformanceAnalyticsDetailsSelector?.data?.data?.totalNudgeAcceptCount,
+      merchantPerformanceAnalyticsDetailsSelector?.data?.data?.totalNudgeSentCount -
+        merchantPerformanceAnalyticsDetailsSelector?.data?.data?.totalNudgeAcceptCount,
+    ]
+  : [0, 1], // Show full gray when there's no sent count
         backgroundColor: [
           "#005CDE", // Progress color
           "rgba(201, 203, 207, 0.6)", // Remaining color
