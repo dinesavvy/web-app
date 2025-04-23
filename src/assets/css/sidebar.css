@@ -98,6 +98,10 @@
   justify-content: center;
   align-items: center;
 }
+.tagcolor{
+  background-color: #056DFF;
+  color: white;
+}
 @media (max-width: 1549.98px) {
   .sidebar{
     width: 250px;

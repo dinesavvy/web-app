@@ -18,6 +18,8 @@ import Distributors from "../Components/Distributors/Distributors";
 import AddBrands from "../Components/Brands/AddBrands";
 import NoPageFound from "../../../common/noPageFound/NoPageFound";
 import ForgotPassword from "../../suppliers/components/ForgotPassword/ForgotPassword";
+import Support from "../Components/Support/Support";
+import EditSupport from "../Components/Support/EditSupport";
 
 
 const adminRoutes = [
@@ -126,6 +128,18 @@ const adminRoutes = [
   {
     path: "/admin/distributors",
     element: Distributors,
+    isPrivate: false,
+    isLayout: true,
+  },
+  {
+    path: "/admin/support",
+    element: Support,
+    isPrivate: false,
+    isLayout: true,
+  },
+  {
+    path: "/admin/edit-support",
+    element: EditSupport,
     isPrivate: false,
     isLayout: true,
   },
