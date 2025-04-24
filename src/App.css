@@ -176,6 +176,10 @@ label {
   font-weight: 600;
   cursor: pointer;
   white-space: nowrap;
+  gap: 8px;
+}
+.w170{
+  width: 170px;
 }
 .resendBtn {
   background-color: #056DFF;
@@ -243,6 +247,7 @@ label {
   border: 1px solid #056DFF;
   background: white;
   color: #056DFF;
+  box-sizing: border-box;
 }
 
 .btnSecondary:hover {
@@ -272,6 +277,12 @@ label {
   height: 1px;
   background-color: #E3E3E8;
   margin: 20px 0;
+}
+.divider18 {
+  width: 100%;
+  height: 1px;
+  background-color: #E3E3E8;
+  margin: 18px 0;
 }
 .divider3 {
   width: 100%;

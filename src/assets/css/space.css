@@ -31,6 +31,9 @@
 .mb-16{
     margin-bottom: 16px;
 }
+.mb-18{
+    margin-bottom: 18px;
+}
 .mb-20{
     margin-bottom: 20px;
 }
@@ -86,6 +89,9 @@
   .mb-16 {
     margin-bottom: 10px;
   }
+  .mb-18{
+    margin-bottom: 13px;
+}
   .mb-20 {
       margin-bottom: 16px;
   }

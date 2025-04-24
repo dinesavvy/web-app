@@ -26,6 +26,8 @@ import profile from "../../assets/images/sidebar/profile.svg";
 import profileFull from "../../assets/images/sidebar/profileFull.svg";
 import hierarchy from "../../assets/images/sidebar/hierarchy.svg";
 import hierarchyFull from "../../assets/images/sidebar/hierarchyFull.svg";
+import support from "../../assets/images/sidebar/support.svg";
+import supportFull from "../../assets/images/sidebar/supportFull.svg";
 import "react-tooltip/dist/react-tooltip.css";
 import { Tooltip } from "react-tooltip";
 import { useNavigate } from "react-router-dom";
@@ -176,6 +178,16 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                   navigate: "/admin/brands",
                 },
               ]),
+            {
+              id: 12,
+              name: "Support",
+              icon: support,
+              iconFull: supportFull,
+              navigate: "/admin/support",
+              disabled: "",
+              tag: 9
+            },
+            
         ];
 
   const onNavigate = (path) => {
@@ -208,7 +220,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
             {links.map((link) => (
               <div
                 key={link.id}
-                className={`sidebarLink justify-between ${
+                className={`sidebarLink align-center justify-between ${
                   window.location.pathname === link.navigate ? "active" : ""
                 } ${isOpen ? "" : "tooltip-container"} ${
                   link?.disabled ? "disabled" : ""
@@ -231,7 +243,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                   <span>{link.name}</span>
                 </div>
                 {link?.tag && (
-                  <div className="tagNumber fs-14 fw-500">{link?.tag}</div>
+                  <div className="tagNumber fs-14 fw-500 tagcolor">{link?.tag}</div>
                 )}
               </div>
             ))}
