@@ -50,7 +50,7 @@ const Followers = () => {
   const filteredFollowers =
     businessListFollowerListSelector?.data?.data?.records?.filter((item) =>
       item?.userId?.displayName
-        ?.toLowerCase()
+        ?.toLowerCase() || item?.customerPreferenceData?.personalPreference
         .includes(searchQuery.toLowerCase())
     ) || [];
 
@@ -318,7 +318,7 @@ const Followers = () => {
                       <div className="divider2"></div>
                       <div className="fs-14 mb-6">Preferences</div>
                       <div className="flexTag mb-20">
-                        {item?.customerPreferenceData?.length > 0 ? (
+                        {/* {item?.customerPreferenceData?.length > 0 ? (
                           item?.customerPreferenceData?.map((itemData, index) =>
                             itemData?.filterData?.length > 0 ? (
                               itemData?.filterData?.map(
@@ -332,6 +332,18 @@ const Followers = () => {
                               <div key={index}>No data available</div>
                             )
                           )
+                        ) : (
+                          <div>No data available</div>
+                        )} */}
+                        {item?.customerPreferenceData?.personalPreference?.length >
+                        0 ? (
+                          <>
+                            {item?.customerPreferenceData?.personalPreference?.map(
+                              (item) => {
+                                return <div>{item}</div>;
+                              }
+                            )}
+                          </>
                         ) : (
                           <div>No data available</div>
                         )}

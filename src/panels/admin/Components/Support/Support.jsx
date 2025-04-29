@@ -1,15 +1,34 @@
 import React, { useEffect, useState } from "react";
 import SupportDetail from "./SupportDetail";
+import { useDispatch, useSelector } from "react-redux";
+import { supportListHandler } from "../../../../redux/action/supportList";
+import { Pagination } from "antd";
+import Loader from "../../../../common/Loader/Loader";
+import {
+  resolveSupportRequestAction,
+  resolveSupportRequestHandler,
+} from "../../../../redux/action/resolveSupportRequest";
+import { useCommonMessage } from "../../../../common/CommonMessage";
+import axios from "axios";
 
 const Support = () => {
-  const [activeTab, setActiveTab] = useState(true);
+  const messageApi = useCommonMessage();
+  const [activeTab, setActiveTab] = useState("Active");
+  const [pagination, setPagination] = useState({ page: 1, limit: 12 });
+  const dispatch = useDispatch();
+
+  const [supportItem, setSupportItem] = useState({});
+
   const handleTabClick = (tab) => {
     setActiveTab(tab); // Update the active tab
   };
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const toggleSidebar = () => {
+
+  const toggleSidebar = async(item) => {
+    setSupportItem(item);
     setIsSidebarOpen((prevState) => !prevState);
   };
+
   useEffect(() => {
     if (isSidebarOpen) {
       document.body.classList.add("overflow-Hidden");
@@ -21,70 +40,184 @@ const Support = () => {
       document.body.classList.remove("overflow-Hidden");
     };
   }, [isSidebarOpen]);
+
+  const supportListSelector = useSelector((state) => state.supportList);
+
+  const resolveSupportRequestSelector = useSelector(
+    (state) => state?.resolveSupportRequest
+  );
+
+  const handlePaginationChange = (page, pageSize) => {
+    setPagination({ page, limit: pageSize });
+  };
+
+  useEffect(() => {
+    if (activeTab) {
+      let payload = {
+        page: pagination?.page,
+        limit: pagination?.limit,
+        status: activeTab === "Active" ? "Pending" : "Completed", // Completed , Rejected, Pending
+      };
+      dispatch(supportListHandler(payload));
+    }
+  }, [pagination, activeTab, resolveSupportRequestSelector]);
+
+  const resolveSupportReq = (item) => {
+    let payload = {
+      status: "Completed",
+      businessRequestId: item?._id,
+    };
+    dispatch(resolveSupportRequestHandler(payload));
+  };
+  // Resolve business useEffect
+  useEffect(() => {
+    if (resolveSupportRequestSelector?.data?.statusCode === 200) {
+      messageApi.open({
+        type: "success",
+        content: resolveSupportRequestSelector?.data?.message,
+      });
+      dispatch(resolveSupportRequestAction.resolveSupportRequestInfoReset());
+    }else if (resolveSupportRequestSelector?.message?.status===400){
+      messageApi.open({
+        type: "error",
+        content: resolveSupportRequestSelector?.message?.response?.data?.message,
+      });
+      dispatch(resolveSupportRequestAction.resolveSupportRequestInfoReset());
+    }
+  }, [resolveSupportRequestSelector]);
+
   return (
     <>
+      {supportListSelector?.isLoading  && <Loader />}
       <div className="dashboard">
         <div className="tabPadding">
           <div className="fs-24 fw-600 mb-30">Support Request</div>
           <div className="tabs-container tab3 tabing mb-30">
             <div className="tabs">
               <button
-                className={`tab-button ${activeTab === true ? "active" : ""}`}
-                onClick={() => handleTabClick(true)}
+                className={`tab-button ${
+                  activeTab === "Active" ? "active" : ""
+                }`}
+                onClick={() => handleTabClick("Active")}
               >
                 Active
               </button>
               <button
-                className={`tab-button ${activeTab === false ? "active" : ""}`}
-                onClick={() => handleTabClick(false)}
+                className={`tab-button ${
+                  activeTab === "Resolve" ? "active" : ""
+                }`}
+                onClick={() => handleTabClick("Resolve")}
               >
-                Resolve
+                Resolved
               </button>
             </div>
           </div>
           <div>
             <div className="merchantGrid">
-              <div className="cardFollow">
-                <div className="d-flex justify-between flexColumn">
-                  <div>
-                    <div className="d-flex align-center gap-12">
-                      <div className="initialName">JW</div>
-                      <div>
-                        <div className="fw-700">Jenny Wilson</div>
-                        <div className="fs-14 fw-300 o5 ">#123456</div>
-                      </div>
-                    </div>
-                    <div className="divider2"></div>
-                    <div className="mb-20">
-                      <div className="fs-14  mb-16">
-                        <div className="lightBlack mb-4">Business name</div>
-                        <div className="fw-600">Garden Grove Café & Bistro</div>
-                      </div>
-                      <div className="fs-14  mb-16">
-                        <div className="lightBlack mb-4">Phone number</div>
-                        <div className="fw-600">123 456 7890</div>
-                      </div>
-                      <div className="fs-14  mb-16">
-                        <div className="lightBlack mb-4">Email address</div>
-                        <div className="fw-600">jennywilson@gmail.com</div>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="gridBtn">
-                    <div className="btn" onClick={() => toggleSidebar()}>
-                      View Details
-                    </div>
-                    {activeTab === true && (
-                      <div className="btnSecondary detailBtn btn">Resolve</div>
-                    )}
-                  </div>
-                </div>
-              </div>
+              {supportListSelector?.data?.data?.records?.length > 0 ? (
+                <>
+                  {supportListSelector?.data?.data?.records?.map(
+                    (item, index) => {
+                      return (
+                        <>
+                          <div className="cardFollow" key={index}>
+                            <div className="d-flex justify-between flexColumn">
+                              <div>
+                                <div className="d-flex align-center gap-12">
+                                  <div className="initialName">
+                                    {item?.fullName
+                                      ?.split(" ")
+                                      .map((word) => word[0])
+                                      .join("")
+                                      .toUpperCase()}
+                                  </div>
+                                  <div>
+                                    <div className="fw-700">
+                                      {item?.fullName || "-"}
+                                    </div>
+                                    {/* <div className="fs-14 fw-300 o5 ">{index+1}</div> */}
+                                  </div>
+                                </div>
+                                <div className="divider2"></div>
+                                <div className="mb-20">
+                                  <div className="fs-14  mb-16">
+                                    <div className="lightBlack mb-4">
+                                      Business name
+                                    </div>
+                                    <div className="fw-600">
+                                      {item?.businessName || "-"}
+                                    </div>
+                                  </div>
+                                  <div className="fs-14  mb-16">
+                                    <div className="lightBlack mb-4">
+                                      Phone number
+                                    </div>
+                                    <div className="fw-600">
+                                      {item?.phoneNumber || "-"}
+                                    </div>
+                                  </div>
+                                  <div className="fs-14  mb-16">
+                                    <div className="lightBlack mb-4">
+                                      Email address
+                                    </div>
+                                    <div className="fw-600">
+                                      {item?.emailAddress || "-"}
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              <div className="gridBtn">
+                                <div
+                                  className="btn"
+                                  onClick={() => toggleSidebar(item)}
+                                >
+                                  View Details
+                                </div>
+                                {activeTab === "Active" && (
+                                  <div
+                                    className="btnSecondary detailBtn btn"
+                                    onClick={() => resolveSupportReq(item)}
+                                  >
+                                    Resolve
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                        </>
+                      );
+                    }
+                  )}
+                </>
+              ) : (
+                <div className="d-flex gap-30 flexWrap">No data available</div>
+              )}
             </div>
           </div>
+          {supportListSelector?.data?.data?.records?.length > 0 && (
+            <div className="d-flex align-center justify-between flexPagination">
+              <div className="fs-16">
+                Showing {pagination?.page} to {pagination?.limit} of{" "}
+                {supportListSelector?.data?.data?.recordsCount} support
+              </div>
+              {/* <Pagination defaultCurrent={1} total={50} /> */}
+              <Pagination
+                current={pagination?.page}
+                pageSize={pagination?.limit}
+                total={supportListSelector?.data?.data?.recordsCount}
+                onChange={handlePaginationChange}
+              />
+            </div>
+          )}
         </div>
       </div>
-      <SupportDetail isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
+      <SupportDetail
+        isOpen={isSidebarOpen}
+        toggleSidebar={toggleSidebar}
+        supportItem={supportItem}
+        setActiveTab={setActiveTab}
+        activeTab={activeTab}
+      />
     </>
   );
 };

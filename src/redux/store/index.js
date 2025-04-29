@@ -39,6 +39,11 @@ import createPromotionSlice from "../action/createPromotion";
 import promotionDetailsSlice from "../action/promotionDetails";
 import adminEndPromotionSlice from "../action/adminEndPromotion";
 import loyaltyGraphSlice from "../action/loyaltyGraph";
+import supportListSlice from "../action/supportList";
+import resolveSupportRequestSlice from "../action/resolveSupportRequest";
+import googleBusinessSlice from "../action/googleBusinessSlice"
+import categoryListSlice from "../action/categoryList"
+import addBusinessSlice from "../action/addBusinessAdminSlice"
 
 const store = configureStore({
   reducer: {
@@ -83,6 +88,11 @@ const store = configureStore({
     promotionDetails: promotionDetailsSlice,
     adminEndPromotion: adminEndPromotionSlice,
     loyaltyGraph: loyaltyGraphSlice,
+    supportList: supportListSlice,
+    resolveSupportRequest: resolveSupportRequestSlice,
+    googleBusiness:googleBusinessSlice,
+    categoryList:categoryListSlice,
+    addBusiness:addBusinessSlice
   },
 });
 

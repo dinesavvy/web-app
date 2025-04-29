@@ -294,7 +294,7 @@ const [qrCodeModal,setQrCodeModal] = useState(false)
           </div>
         </div>
         <div className="accordionCustom nudgeAccourdian">
-          {items.map((item, index) => (
+          {items?.map((item, index) => (
             <>
               <div key={index} className=" accordionItem  mb-30">
                 <div
@@ -315,7 +315,7 @@ const [qrCodeModal,setQrCodeModal] = useState(false)
                     openIndex === index ? "open" : ""
                   }`}
                 >
-                  {item.content}
+                  {item?.content}
                 </div>
               </div>
             </>
@@ -324,26 +324,24 @@ const [qrCodeModal,setQrCodeModal] = useState(false)
         <div className="tabPadding">
           <div className="d-flex align-center justify-between mb-20">
             <div className="fs-20 fw-600">Gallery</div>
-            {activeTab === "Merchant Upload" && (
               <div
                 className="addCircle cursor-pointer"
                 onClick={() => toggleModal()}
               >
                 <img src={addCircle} alt="" />
               </div>
-            )}
           </div>
           <div className="tabs-container tab3 tabFull mb-20">
             <div className="tabs">
-              {tabs.map((tab) => (
+              {tabs?.map((tab) => (
                 <button
-                  key={tab.key}
+                  key={tab?.key}
                   className={`tab-button ${
-                    activeTab === tab.label ? "active" : ""
+                    activeTab === tab?.label ? "active" : ""
                   }`}
-                  onClick={() => setActiveTab(tab.label)}
+                  onClick={() => setActiveTab(tab?.label)}
                 >
-                  {tab.label}
+                  {tab?.label}
                 </button>
               ))}
             </div>

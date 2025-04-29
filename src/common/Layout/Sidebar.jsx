@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../../assets/css/sidebar.css";
 import logo from "../../assets/images/logo.svg";
 import logout from "../../assets/images/sidebar/logout.svg";
@@ -32,13 +32,30 @@ import "react-tooltip/dist/react-tooltip.css";
 import { Tooltip } from "react-tooltip";
 import { useNavigate } from "react-router-dom";
 import CommonModal from "../../panels/admin/Components/CommonModal";
+import { supportListHandler } from "../../redux/action/supportList";
+import { useDispatch, useSelector } from "react-redux";
 
 const Sidebar = ({ isOpen, setIsOpen }) => {
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const navigate = useNavigate();
+  const dispatch= useDispatch()
   const getLoggedInDetails = localStorage.getItem("merchantLogin");
   const getSupplierDetails = localStorage.getItem("supplierLogin");
   const getDistributorLoginDetails = localStorage.getItem("distributorLogin");
+
+  // useEffect(() => {
+  //   // if (activeTab) {
+  //     let payload = {
+  //       page: 1,
+  //       limit: 20,
+  //       status: "Active", // Completed , Rejected, Pending
+  //     };
+  //     dispatch(supportListHandler(payload));
+  //   // }
+  // }, []);
+
+
+  // const supportListSelector = useSelector((state)=>state?.supportList)
 
   const links =
     getSupplierDetails || getDistributorLoginDetails
@@ -177,17 +194,16 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                   disabled: false,
                   navigate: "/admin/brands",
                 },
+                {
+                  id: 12,
+                  name: "Support",
+                  icon: support,
+                  iconFull: supportFull,
+                  navigate: "/admin/support",
+                  disabled: "",
+                  // tag: 9,
+                },
               ]),
-            {
-              id: 12,
-              name: "Support",
-              icon: support,
-              iconFull: supportFull,
-              navigate: "/admin/support",
-              disabled: "",
-              tag: 9
-            },
-            
         ];
 
   const onNavigate = (path) => {
@@ -243,7 +259,9 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                   <span>{link.name}</span>
                 </div>
                 {link?.tag && (
-                  <div className="tagNumber fs-14 fw-500 tagcolor">{link?.tag}</div>
+                  <div className="tagNumber fs-14 fw-500 tagcolor">
+                    {link?.tag}
+                  </div>
                 )}
               </div>
             ))}

@@ -130,12 +130,12 @@ const AreaChartStatic = ({
         },
       },
       y: {
-        display: true,
+        display: false,
         title: {
           display: false,
         },
         min: 0,
-        max: 100, // Add some buffer so you can see the 0 line clearly
+        // max: 100, // Add some buffer so you can see the 0 line clearly
       },
     },
     

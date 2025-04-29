@@ -9,7 +9,13 @@ import { useNavigate } from "react-router-dom";
 import { businessListByUserIdHandler } from "../../../redux/action/businessAction/businessListByUserId";
 import { useDispatch, useSelector } from "react-redux";
 
-const FollowerDetails = ({ isOpen, toggleSidebar, followerDetails, state,followerDetailsSelector }) => {
+const FollowerDetails = ({
+  isOpen,
+  toggleSidebar,
+  followerDetails,
+  state,
+  followerDetailsSelector,
+}) => {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("Redeemed");
 
@@ -92,7 +98,7 @@ const FollowerDetails = ({ isOpen, toggleSidebar, followerDetails, state,followe
                 </div>
               );
             })} */}
-            {followerDetails?.customerPreferenceData?.length > 0 ? (
+            {/* {followerDetails?.customerPreferenceData?.length > 0 ? (
               followerDetails?.customerPreferenceData?.map((itemData, index) =>
                 itemData?.filterData?.length > 0 ? (
                   itemData?.filterData?.map((filteredItem, filteredIndex) => (
@@ -104,6 +110,18 @@ const FollowerDetails = ({ isOpen, toggleSidebar, followerDetails, state,followe
               )
             ) : (
               <div>No data available</div>
+            )} */}
+
+            {followerDetails?.customerPreferenceData?.filterData?.length > 0 ? (
+              <>
+                {followerDetails?.customerPreferenceData?.filterData?.map(
+                  (item) => {
+                    return <div>{item}</div>;
+                  }
+                )}
+              </>
+            ) : (
+              <div>No data available</div>
             )}
           </div>
           <div className="fs-14 mb-6">What they love</div>
@@ -113,7 +131,7 @@ const FollowerDetails = ({ isOpen, toggleSidebar, followerDetails, state,followe
               on classic dishes or entirely new flavors. I’m always excited to
               try something I haven't had before.
             </div> */}
-            {followerDetails?.customerPreferenceData?.map((item, index) => {
+            {/* {followerDetails?.customerPreferenceData?.map((item, index) => {
               return item?.personalPreference?.length > 0 ? (
                 item.personalPreference.map((item1, subIndex) => (
                   <div key={`${index}-${subIndex}`}>{item1}</div>
@@ -121,7 +139,19 @@ const FollowerDetails = ({ isOpen, toggleSidebar, followerDetails, state,followe
               ) : (
                 <div key={index}>No data available</div>
               );
-            })}
+            })} */}
+            {followerDetails?.customerPreferenceData?.personalPreference
+              ?.length > 0 ? (
+              <>
+                {followerDetails?.customerPreferenceData?.personalPreference?.map(
+                  (item) => {
+                    return <div>{item}</div>;
+                  }
+                )}
+              </>
+            ) : (
+              <div>No data available</div>
+            )}
           </div>
           {/* <div className="fs-14 mb-16">Accepted Nudges</div>
           {businessListByUserIdSelectorAccepted?.acceptedList?.data?.records

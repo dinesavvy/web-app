@@ -620,7 +620,9 @@ iframe{
     padding: 0 20px;
     padding-bottom: 20px;
   }
-  
+  .tab3{
+    overflow-x: auto;
+  }
 }
 @media (max-width:1199.98px) {
   .overviewGrid2{
@@ -644,9 +646,7 @@ iframe{
   .card.w-100,.card.mx369{
     width: calc(100% - 40px) !important;
   }
-  .tab3{
-    overflow-x: auto;
-  }
+ 
   .mxh {
     max-height: 240px;
   }

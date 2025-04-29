@@ -382,13 +382,13 @@ const MerchantBusinessProfile = ({ merchantDetailsSelector }) => {
                         <label htmlFor="" className="fs-14 fw-500 mb-10">
                           From
                         </label>
-                        <TimePicker className="customTime input" />
+                        <TimePicker className="customTime input" showOk={false} />
                       </div>
                       <div className="w-100">
                         <label htmlFor="" className="fs-14 fw-500 mb-10">
                           to
                         </label>
-                        <TimePicker className="customTime input" />
+                        <TimePicker className="customTime input" showOk={false} />
                       </div>
                       <div className="addTime">
                         <img src={addTime} alt="" />
@@ -414,13 +414,13 @@ const MerchantBusinessProfile = ({ merchantDetailsSelector }) => {
                         <label htmlFor="" className="fs-14 fw-500 mb-10">
                           From
                         </label>
-                        <TimePicker className="customTime input" />
+                        <TimePicker className="customTime input" showOk={false} />
                       </div>
                       <div className="w-100">
                         <label htmlFor="" className="fs-14 fw-500 mb-10">
                           to
                         </label>
-                        <TimePicker className="customTime input" />
+                        <TimePicker className="customTime input" showOk={false} />
                       </div>
                       <div className="addTime">
                         <img src={addTime} alt="" />
@@ -446,13 +446,13 @@ const MerchantBusinessProfile = ({ merchantDetailsSelector }) => {
                         <label htmlFor="" className="fs-14 fw-500 mb-10">
                           From
                         </label>
-                        <TimePicker className="customTime input" />
+                        <TimePicker className="customTime input" showOk={false} />
                       </div>
                       <div className="w-100">
                         <label htmlFor="" className="fs-14 fw-500 mb-10">
                           to
                         </label>
-                        <TimePicker className="customTime input" />
+                        <TimePicker className="customTime input" showOk={false} />
                       </div>
                       <div className="addTime">
                         <img src={addTime} alt="" />
@@ -478,13 +478,13 @@ const MerchantBusinessProfile = ({ merchantDetailsSelector }) => {
                         <label htmlFor="" className="fs-14 fw-500 mb-10">
                           From
                         </label>
-                        <TimePicker className="customTime input" />
+                        <TimePicker className="customTime input" showOk={false} />
                       </div>
                       <div className="w-100">
                         <label htmlFor="" className="fs-14 fw-500 mb-10">
                           to
                         </label>
-                        <TimePicker className="customTime input" />
+                        <TimePicker className="customTime input" showOk={false} />
                       </div>
                       <div className="addTime">
                         <img src={addTime} alt="" />
@@ -510,13 +510,13 @@ const MerchantBusinessProfile = ({ merchantDetailsSelector }) => {
                         <label htmlFor="" className="fs-14 fw-500 mb-10">
                           From
                         </label>
-                        <TimePicker className="customTime input" />
+                        <TimePicker className="customTime input" showOk={false} />
                       </div>
                       <div className="w-100">
                         <label htmlFor="" className="fs-14 fw-500 mb-10">
                           to
                         </label>
-                        <TimePicker className="customTime input" />
+                        <TimePicker className="customTime input" showOk={false} />
                       </div>
                       <div className="addTime">
                         <img src={addTime} alt="" />
@@ -542,13 +542,13 @@ const MerchantBusinessProfile = ({ merchantDetailsSelector }) => {
                         <label htmlFor="" className="fs-14 fw-500 mb-10">
                           From
                         </label>
-                        <TimePicker className="customTime input" />
+                        <TimePicker className="customTime input" showOk={false} />
                       </div>
                       <div className="w-100">
                         <label htmlFor="" className="fs-14 fw-500 mb-10">
                           to
                         </label>
-                        <TimePicker className="customTime input" />
+                        <TimePicker className="customTime input" showOk={false} />
                       </div>
                       <div className="addTime">
                         <img src={addTime} alt="" />
@@ -574,45 +574,13 @@ const MerchantBusinessProfile = ({ merchantDetailsSelector }) => {
                         <label htmlFor="" className="fs-14 fw-500 mb-10">
                           From
                         </label>
-                        <TimePicker className="customTime input" />
+                        <TimePicker className="customTime input" showOk={false} />
                       </div>
                       <div className="w-100">
                         <label htmlFor="" className="fs-14 fw-500 mb-10">
                           to
                         </label>
-                        <TimePicker className="customTime input" />
-                      </div>
-                      <div className="addTime">
-                        <img src={addTime} alt="" />
-                      </div>
-                    </div>
-                  )}
-                </div>
-                <div className="divider2"></div>
-                <div className="minw">
-                  <div className="d-flex align-center justify-between">
-                    <div className="grey fs-16">Sunday</div>
-                    <div className="d-flex align-center gap-16">
-                      <CustomSwitch
-                        isOn={switchState}
-                        onToggle={handleToggle}
-                      />
-                      <div>Closed</div>
-                    </div>
-                  </div>
-                  {switchState && (
-                    <div className="mt-10 d-flex align-end gap-10">
-                      <div className="w-100">
-                        <label htmlFor="" className="fs-14 fw-500 mb-10">
-                          From
-                        </label>
-                        <TimePicker className="customTime input" />
-                      </div>
-                      <div className="w-100">
-                        <label htmlFor="" className="fs-14 fw-500 mb-10">
-                          to
-                        </label>
-                        <TimePicker className="customTime input" />
+                        <TimePicker className="customTime input" showOk={false} />
                       </div>
                       <div className="addTime">
                         <img src={addTime} alt="" />

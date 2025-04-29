@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-
-import dropdownArrow from "../../../assets/images/dropdownArrow.svg";
+// import dropdownArrow from "../../../assets/images/dropdownArrow.svg";
 import closeRightSidebar from "../../../assets/images/closeRightSidebar.svg";
 import deleteImageIcon from "../../../assets/images/deleteImage.svg";
 import { galleryListHandler } from "../../../redux/action/businessAction/galleryList";
@@ -12,7 +11,11 @@ import { useDispatch, useSelector } from "react-redux";
 import Loader from "../../../common/Loader/Loader";
 import moment from "moment";
 import { useCommonMessage } from "../../../common/CommonMessage";
-import { editImageAction, editImageHandler } from "../../../redux/action/businessAction/editImage";
+import {
+  editImageAction,
+  editImageHandler,
+} from "../../../redux/action/businessAction/editImage";
+import noImageFound from "../../../assets/images/noImageFound.png";
 
 const ImageGallery = ({
   images,
@@ -21,12 +24,16 @@ const ImageGallery = ({
   // galleryListSelector,
   activeTab,
   addImageDataSelector,
+  businessDetailsData,
 }) => {
+  const merchantLogin = localStorage.getItem("merchantLogin");
+  const adminLogin = localStorage.getItem("adminLogin");
+
   const [isModalOpen, setIsModalOpen] = useState(openImage || false);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [selectedItem, setSelectedItem] = useState({});
   const [isChecked, setIsChecked] = useState(false);
-
+  console.log(businessDetailsData, "businessDetailsData");
   const handleChange = (event) => {
     setIsChecked(event.target.checked);
     let payload = {
@@ -62,7 +69,7 @@ const ImageGallery = ({
 
   const deleteImage = (item) => {
     let payload = {
-      imageId: selectedItem?._id||item?._id,
+      imageId: selectedItem?._id || item?._id,
     };
     dispatch(deleteImageHandler(payload));
   };
@@ -81,7 +88,7 @@ const ImageGallery = ({
       setIsModalOpen(false);
       setOpenImage(false);
       dispatch(deleteImageAction.deleteImageReset());
-    }else if (deleteImageSelector?.message){
+    } else if (deleteImageSelector?.message) {
       messageApi.open({
         type: "error",
         content: deleteImageSelector?.message,
@@ -90,18 +97,17 @@ const ImageGallery = ({
     }
   }, [deleteImageSelector]);
 
-
-  useEffect(()=>{
-    if(editImageSelector?.data?.statusCode ===200){
+  useEffect(() => {
+    if (editImageSelector?.data?.statusCode === 200) {
       messageApi.open({
         type: "success",
         content: editImageSelector?.data?.message,
       });
-      dispatch(editImageAction.editImageReset())
+      dispatch(editImageAction.editImageReset());
       setIsModalOpen(false);
       setOpenImage(false);
     }
-  },[editImageSelector])
+  }, [editImageSelector]);
 
   useEffect(() => {
     if (isModalOpen) {
@@ -126,7 +132,7 @@ const ImageGallery = ({
   };
 
   useEffect(() => {
-    if (activeTab) {
+    if (activeTab && merchantLogin) {
       let payload = {
         page: 1,
         limit: 10,
@@ -134,7 +140,16 @@ const ImageGallery = ({
       };
       dispatch(galleryListHandler(payload));
     }
-  }, [activeTab, addImageDataSelector, deleteImageSelector,editImageSelector]);
+  }, [activeTab, addImageDataSelector, deleteImageSelector, editImageSelector]);
+
+  const googleAPIKey = "AIzaSyBaLPuWhc_yVKRMBl0_4EoxSYDYJTsxVx8";
+
+  const getImageSource = (item) => {
+    if (item?.photo_reference) {
+      return `https://maps.googleapis.com/maps/api/place/photo?maxwidth=500&photo_reference=${item.photo_reference}&key=${googleAPIKey}`;
+    }
+    return item?.imageUrl;
+  };
 
   return (
     <>
@@ -142,36 +157,72 @@ const ImageGallery = ({
         deleteImageSelector?.isLoading ||
         editImageSelector?.isLoading) && <Loader />}
       <div className="w-100">
-        <div className="imgGrid mb-20">
-          {galleryListSelector?.data?.data?.records?.length > 0 ? (
-            <>
-              {galleryListSelector?.data?.data?.records?.map((item, index) => (
-                <div key={index} className="position-relative">
-                  <img
-                    src={item?.imageUrl}
-                    alt={`Gallery item ${index + 1}`}
-                    className="w-100 h-100"
-                    onClick={() => {
-                      // if (activeTab === "Merchant Upload") {
-                        openModal(item, index);
-                      // }
-                    }}
-                  />
-                  {activeTab === "Merchant Upload" && (
-                  <div className="deleteImage" onClick={()=>deleteImage(item)}>
-                    <img src={deleteImageIcon}  alt="" />
-                  </div>
-                  )}
-                </div>
-              ))}
-            </>
-          ) : (
-            <div className="noDataFound">No data available</div>
-          )}
-        </div>
-        {galleryListSelector?.data?.data?.records?.length > 8 && (
-          <div className="viewMoreBtn">View More</div>
+        {merchantLogin && (
+          <div className="imgGrid mb-20">
+            {galleryListSelector?.data?.data?.records?.length > 0 ? (
+              <>
+                {galleryListSelector?.data?.data?.records?.map(
+                  (item, index) => (
+                    <div key={index} className="position-relative">
+                      <img
+                        src={item?.imageUrl}
+                        alt={`Gallery item ${index + 1}`}
+                        className="w-100 h-100"
+                        onClick={() => openModal(item, index)}
+                      />
+                      {!item?.imageUrl?.includes("googleusercontent.com") && (
+                        <div
+                          className="deleteImage"
+                          onClick={() => deleteImage(item)}
+                        >
+                          <img src={deleteImageIcon} alt="Delete" />
+                        </div>
+                      )}
+                    </div>
+                  )
+                )}
+              </>
+            ) : (
+              <div className="noDataFound">No data available</div>
+            )}
+          </div>
         )}
+
+        {/* For Admin Panel */}
+        {adminLogin && (
+          <div className="imgGrid mb-20">
+            {businessDetailsData?.result?.photos?.length > 0 &&
+            activeTab === "Additional" ? (
+              <>
+                {businessDetailsData?.result?.photos?.map((item, index) => (
+                  <div key={index} className="position-relative">
+                    <img
+                      src={getImageSource(item)}
+                      alt={`Gallery item ${index + 1}`}
+                      className="w-100 h-100"
+                      onClick={() => openModal(item, index)}
+                    />
+                    {!item?.photo_reference && (
+                      <div
+                        className="deleteImage"
+                        onClick={() => deleteImage(item)}
+                      >
+                        <img src={deleteImageIcon} alt="Delete" />
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </>
+            ) : (
+              <div className="noDataFound">No data available</div>
+            )}
+          </div>
+        )}
+
+        {merchantLogin &&
+          galleryListSelector?.data?.data?.records?.length > 8 && (
+            <div className="viewMoreBtn">View More</div>
+          )}
 
         {isModalOpen && (
           <div className="modal-overlay" onClick={closeModal}>
@@ -188,11 +239,15 @@ const ImageGallery = ({
               <div className="divider2"></div>
               <div className="image-details">
                 <div className="image-preview mb-20">
+                  {console.log(selectedItem,"selectedItem")}
                   <img
                     // src={images[selectedIndex]}
-                    src={selectedItem?.imageUrl}
+                    src={
+                      selectedItem?.imageUrl || getImageSource(selectedItem)
+                    }
                     alt={selectedItem?.title}
                     className="w-100 h-100"
+                    // onError={e => { e.target.onerror = null; e.target.src = noImageFound; }}
                   />
                   {/* <button onClick={prevImage} className="nav-btn prev-btn">
                     <img src={dropdownArrow} alt="" />
@@ -210,41 +265,45 @@ const ImageGallery = ({
                   {/* <div className="mb-10 fs-20 fw-700">
                     {images[selectedIndex]}
                   </div> */}
-                  <div className="d-flex align-center justify-between gap-10 fs-14 mb-10">
-                    Uploaded by:{" "}
-                    <span className="fw-500">
-                      {selectedItem?.createdBy?.displayName??"-"}
-                    </span>{" "}
-                  </div>
-                  <div className="d-flex align-center justify-between gap-10 fs-14 ">
-                    Date{" "}
-                    <span className="fw-500">
-                      {moment(selectedItem).fromNow()}
-                    </span>{" "}
-                  </div>
+                  {selectedItem?.createdBy && (
+                    <>
+                      <div className="d-flex align-center justify-between gap-10 fs-14 mb-10">
+                        Uploaded by:{" "}
+                        <span className="fw-500">
+                          {selectedItem?.createdBy?.displayName ?? "-"}
+                        </span>{" "}
+                      </div>
+                      <div className="d-flex align-center justify-between gap-10 fs-14 ">
+                        Date{" "}
+                        <span className="fw-500">
+                          {moment(selectedItem).fromNow()}
+                        </span>{" "}
+                      </div>
+                    </>
+                  )}
                   <div className="divider2 my-16"></div>
                   {activeTab === "Merchant Upload" && (
                     <>
-                  <div className="mb-30">
-                    <div className="custom-checkbox">
-                      <label className="checkLabel">
-                        <input
-                          type="checkbox"
-                          checked={isChecked}
-                          onChange={handleChange}
-                        />
-                        <span className="checkmark"></span>
-                        Mark as Special
-                      </label>
-                    </div>
-                  </div>
-                  <button
-                    onClick={deleteImage}
-                    className="btn deleteBtnfull w-100"
-                  >
-                    Delete
-                  </button>
-                  </>
+                      <div className="mb-30">
+                        <div className="custom-checkbox">
+                          <label className="checkLabel">
+                            <input
+                              type="checkbox"
+                              checked={isChecked}
+                              onChange={handleChange}
+                            />
+                            <span className="checkmark"></span>
+                            Mark as Special
+                          </label>
+                        </div>
+                      </div>
+                      <button
+                        onClick={deleteImage}
+                        className="btn deleteBtnfull w-100"
+                      >
+                        Delete
+                      </button>
+                    </>
                   )}
                 </div>
               </div>
