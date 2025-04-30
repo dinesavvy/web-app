@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
@@ -6,6 +6,7 @@ import backButton from "../../../../assets/images/backButton.svg";
 import editIcon from "../../../../assets/images/editIcon.svg";
 import addTime from "../../../../assets/images/addTime.svg";
 import minusTime from "../../../../assets/images/minusTime.svg";
+import dropdownArrow from "../../../../assets/images/dropdownArrow.svg";
 import CustomSelect from "../CustomSelect";
 import CustomSwitch from "../CustomSwitch";
 import { Modal, TimePicker } from "antd";
@@ -32,6 +33,7 @@ const EditSupport = () => {
   const [activeTab, setActiveTab] = useState("Additional");
   const [imagePreview, setImagePreview] = useState(null);
   const [isSpecial, setIsSpecial] = useState(false);
+  const [isSelectOpen, setIsSelectOpen] = useState(false);
   const addImageDataSelector = useSelector((state) => state?.addImageData);
   const location = useLocation();
   const { state } = location;
@@ -459,7 +461,22 @@ console.log(payload,"payload")
       setFieldValue("address.city", "");
     }
   };
+  const wrapperRef = useRef(null);
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        wrapperRef.current &&
+        !wrapperRef.current.contains(event.target)
+      ) {
+        setIsSelectOpen(false);
+      }
+    };
 
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
   return (
     <>
       {(categoryListSelector?.isLoading || addBusinessSelector?.isLoading) && (
@@ -543,6 +560,7 @@ console.log(payload,"payload")
                     </label>
                     {editDetail ? (
                       <>
+                        <div className="position-relative" ref={wrapperRef}>
                         <Field name="businessCategory">
                           {({ field, form }) => (
                             <select
@@ -553,7 +571,9 @@ console.log(payload,"payload")
                                   "businessCategory",
                                   e.target.value
                                 );
+                                setIsSelectOpen(false); // Close after selection
                               }}
+                              onFocus={() => setIsSelectOpen(true)}
                             >
                               <option value="">Select a category</option>
                               {categoryListSelector?.data?.data?.categoriesList?.map(
@@ -569,6 +589,8 @@ console.log(payload,"payload")
                             </select>
                           )}
                         </Field>
+                        <img src={dropdownArrow}  className={`dropdownArrow ${isSelectOpen ? "rotate" : ""}`} alt="" />
+                        </div>
                         {errors?.businessCategory &&
                           touched?.businessCategory && (
                             <div className="mt-10 fw-500 fs-14 error">

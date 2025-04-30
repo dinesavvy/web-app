@@ -122,6 +122,15 @@ textarea {
   background-color: #F3F4F5;
   border-radius: 12px;
 }
+select.input{
+  width: 100% !important;
+}
+select{
+  appearance: none;        /* Standard */
+  -webkit-appearance: none; /* Safari */
+  -moz-appearance: none;   /* Firefox */
+  background: none;         /* Optional: if background includes arrow */
+}
 .custom-select .ant-select-selector {
   font-size: 14px !important;
   line-height: 21px !important;
@@ -479,8 +488,10 @@ input::-webkit-inner-spin-button {
   position: absolute;
   right: 12px;
   top: 12px;
+  transition: all 0.3s;
 }
-.rotate .dropdownArrow{
+
+.rotate .dropdownArrow,.rotate.dropdownArrow{
   transform: rotate(180deg);
 }
 .justify-end{
@@ -748,7 +759,11 @@ height: 100%;
   .rightSidebar .fs-18{
     font-size: 14px;
   }
-  
+  .dropdownArrow{
+    height: 20px;
+    width: 20px;
+    top: 10px;
+  }
 }
 @media (max-width: 1023.98px) {
   .mobileHide {
