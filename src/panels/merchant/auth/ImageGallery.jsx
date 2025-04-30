@@ -33,7 +33,6 @@ const ImageGallery = ({
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [selectedItem, setSelectedItem] = useState({});
   const [isChecked, setIsChecked] = useState(false);
-  console.log(businessDetailsData, "businessDetailsData");
   const handleChange = (event) => {
     setIsChecked(event.target.checked);
     let payload = {
@@ -239,7 +238,6 @@ const ImageGallery = ({
               <div className="divider2"></div>
               <div className="image-details">
                 <div className="image-preview mb-20">
-                  {console.log(selectedItem,"selectedItem")}
                   <img
                     // src={images[selectedIndex]}
                     src={

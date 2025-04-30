@@ -77,16 +77,17 @@ const Nudges = () => {
   useEffect(() => {
     const fetchMerchants = () => {
       const payload = {
-        page: page,
-        limit: 10,
+        page: pagination?.page,
+        limit: pagination?.limit,
         timeFrame: "today",
         searchString,
+        searchArea:[]
       };
       dispatch(merchantsListHandler(payload));
     };
 
     fetchMerchants();
-  }, [searchString, page]);
+  }, [searchString, pagination]);
 
   const toggleSidebar = (item, index) => {
     setNudgeId(index);
@@ -393,12 +394,35 @@ const Nudges = () => {
                   <div className="noDataFound">No Data Found</div>
                 )}
               </div>
-              {nudgesListSelector?.data?.data?.records?.length > 0 && (
+              {/* {nudgesListSelector?.data?.data?.records?.length > 0 && (
                 <div className="d-flex align-center justify-between flexPagination">
                   <div className="fs-16">
-                    {/* Showing {pagination.page} to {pagination.limit} of{" "}
-                    {merchantsListSelector?.data?.data?.recordsCount}{" "}
-                    Restaurants */}
+                    {(() => {
+                      const start =
+                        (pagination?.page - 1) * pagination?.limit + 1;
+                      const end = Math.min(
+                        start +
+                          merchantsListSelector?.data?.data?.records?.length -
+                          1,
+                        merchantsListSelector?.data?.data?.recordsCount
+                      );
+                      return `Showing ${start} to ${end} of ${merchantsListSelector?.data?.data?.recordsCount} Restaurants`;
+                    })()}
+                  </div>
+                  <Pagination
+                    current={pagination?.page}
+                    pageSize={pagination?.limit}
+                    total={merchantsListSelector?.data?.data?.recordsCount}
+                    onChange={handlePaginationChange}
+                  />
+                </div>
+              )} */}
+
+
+
+{merchantsListSelector?.data?.data?.records?.length > 0 && (
+                <div className="d-flex align-center justify-between flexPagination">
+                  <div className="fs-16">
                     {(() => {
                       const start =
                         (pagination.page - 1) * pagination.limit + 1;
@@ -419,6 +443,7 @@ const Nudges = () => {
                   />
                 </div>
               )}
+
             </div>
           </>
         )}

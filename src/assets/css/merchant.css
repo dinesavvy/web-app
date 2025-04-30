@@ -1723,6 +1723,7 @@ input.addTitleInput::placeholder {
 .disabled ,.btn:disabled{
   opacity: 0.5;
   cursor: not-allowed !important;
+  pointer-events: none;
 }
 .positionBlock .ant-space{
   width: 100% !important;

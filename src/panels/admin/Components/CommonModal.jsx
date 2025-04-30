@@ -15,6 +15,7 @@ import {
 } from "../../../redux/action/businessAction/removeTeamMember";
 import { businessTeamListHandler } from "../../../redux/action/businessAction/businessTeamList";
 import { useLocation, useNavigate } from "react-router-dom";
+import resolveTicketIcon from "../../../assets/images/resolveTicketIcon.svg";
 import {
   removeSupplierAction,
   removeSupplierHandler,
@@ -50,6 +51,7 @@ import {
   distributorEndPromotionHandler,
 } from "../../../redux/action/distributorsAction/distributorEndPromotion";
 import { useBusiness } from "../../../common/Layout/BusinessContext";
+import { resolveSupportRequestHandler } from "../../../redux/action/resolveSupportRequest";
 
 const CommonModal = ({
   modal2Open,
@@ -69,6 +71,9 @@ const CommonModal = ({
   endPromotionModal,
   setEndPromotionModal,
   promotionalDetailsData,
+  resolveModal,
+  setResolveModal,
+  resolveModalItem
 }) => {
   const messageApi = useCommonMessage();
   const getMerchantId = localStorage.getItem("merchantId");
@@ -116,7 +121,11 @@ const CommonModal = ({
 
   const deleteTeam = () => {
     if (merchantApp) {
-      dispatch(removeTeamMemberBusinessHandler({ teamMappingId: removeTeamMember?._id }));
+      dispatch(
+        removeTeamMemberBusinessHandler({
+          teamMappingId: removeTeamMember?._id,
+        })
+      );
       return;
     }
     if (getLocationDetails !== "/admin/suppliers" && removeTeamMember?._id) {
@@ -172,9 +181,17 @@ const CommonModal = ({
       };
       dispatch(distributorEndPromotionHandler(payload));
     }
+    if (resolveModal) {
+      let payload = {
+        status: "Completed",
+        businessRequestId: resolveModalItem?._id,
+      };
+      dispatch(resolveSupportRequestHandler(payload));
+    }
   };
+
   // const { setSelectedBusiness } = useBusiness();
-  
+
   const logout = () => {
     navigate("/");
     localStorage.clear();
@@ -309,7 +326,7 @@ const CommonModal = ({
         content: supplierEndPromotion?.data?.message,
       });
       dispatch(supplierEndPromotionAction.supplierEndPromotionReset());
-    }else if (supplierEndPromotion?.message?.status === 400) {
+    } else if (supplierEndPromotion?.message?.status === 400) {
       messageApi.open({
         type: "error",
         content: supplierEndPromotion?.message?.response?.data?.message,
@@ -345,7 +362,7 @@ const CommonModal = ({
         deleteDistributorBrand?.isLoading) && <Loader />}
       <Modal
         centered
-        open={modal2Open || deleteModal || endPromotionModal}
+        open={modal2Open || deleteModal || endPromotionModal || resolveModal}
         onOk={() => {
           if (deleteModal) {
             setDeleteModal(false);
@@ -353,6 +370,8 @@ const CommonModal = ({
             setModal2Open(false);
           } else if (endPromotionModal) {
             setEndPromotionModal(false);
+          } else if (resolveModal) {
+            setResolveModal(false);
           }
         }}
         onCancel={() => {
@@ -362,6 +381,8 @@ const CommonModal = ({
             setModal2Open(false);
           } else if (endPromotionModal) {
             setEndPromotionModal(false);
+          } else if (resolveModal) {
+            setResolveModal(false);
           }
         }}
         closable={false}
@@ -379,7 +400,7 @@ const CommonModal = ({
                   deleteModal
                     ? deleteModalSVG
                     : !showLogoutModal
-                    ? modalImage
+                    ? modalImage || resolveTicketIcon
                     : logoutModal
                 }
                 alt=""
@@ -402,7 +423,9 @@ const CommonModal = ({
                 : getLocationDetails === "/admin/promotions" ||
                   getLocationDetails === "/supplier/promotion" ||
                   getLocationDetails === "/distributors/promotion"
-                ? "End Promotion?"
+                ? "End Promotion"
+                : getLocationDetails === "/admin/support"
+                ? "Resolve Ticket"
                 : "Delete Team Member"}
             </div>
             {deleteModal && (
@@ -421,13 +444,14 @@ const CommonModal = ({
             {endPromotionModal && (
               <div className="fs-18">
                 {/* Are you sure you want to remove{" "} */}
-                This will remove the promotion and its nudge from all customers. Do you want to continue?
+                This will remove the promotion and its nudge from all customers.
+                Do you want to continue?
                 {/* <span className="fw-600">
                 </span>{" "} */}
               </div>
             )}
 
-            {!deleteModal && !endPromotionModal && (
+            {!deleteModal && !endPromotionModal && !resolveModal && (
               <div className="fs-18">
                 Are you sure you want to remove{" "}
                 <span className="fw-600">
@@ -447,6 +471,27 @@ const CommonModal = ({
                   ? "distributor?"
                   : "team?"}
               </div>
+            )}
+
+            {resolveModal && (
+              <>
+                <div className="fs-18">
+                  {/* Are you sure you want to mark this
+ticket as resolved? */}
+                  Are you sure you want to mark this{" "}
+                  <span className="fw-600">
+                    {/* {(() => {
+                    const name =
+                      removeTeamMember?.displayName ||
+                      removeSupplier?.supplierName ||
+                      removeDistributor?.distributorName ||
+                      "";
+                    return name.charAt(0).toUpperCase() + name.slice(1);
+                  })()} */}
+                  </span>{" "}
+                  ticket as resolved?
+                </div>
+              </>
             )}
           </div>
         ) : (
@@ -470,13 +515,15 @@ const CommonModal = ({
                   setModal2Open(false);
                 } else if (endPromotionModal) {
                   setEndPromotionModal(false);
+                }else if (resolveModal) {
+                  setResolveModal(false);
                 }
               }}
             >
               Cancel
             </div>
             <div className="btn btnSecondary w-100" onClick={deleteTeam}>
-              Delete
+              {resolveModal?"Resolve":"Delete"}
             </div>
           </div>
         ) : (

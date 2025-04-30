@@ -10,14 +10,19 @@ import {
 } from "../../../../redux/action/resolveSupportRequest";
 import { useCommonMessage } from "../../../../common/CommonMessage";
 import axios from "axios";
+import CommonModal from "../CommonModal";
 
 const Support = () => {
+
+  const [resolveModal,setResolveModal] = useState(false)
+
   const messageApi = useCommonMessage();
   const [activeTab, setActiveTab] = useState("Active");
   const [pagination, setPagination] = useState({ page: 1, limit: 12 });
   const dispatch = useDispatch();
 
   const [supportItem, setSupportItem] = useState({});
+  const [resolveModalItem,setResolveModalItem] = useState()
 
   const handleTabClick = (tab) => {
     setActiveTab(tab); // Update the active tab
@@ -63,11 +68,13 @@ const Support = () => {
   }, [pagination, activeTab, resolveSupportRequestSelector]);
 
   const resolveSupportReq = (item) => {
-    let payload = {
-      status: "Completed",
-      businessRequestId: item?._id,
-    };
-    dispatch(resolveSupportRequestHandler(payload));
+    setResolveModal(true)
+    setResolveModalItem(item)
+    // let payload = {
+    //   status: "Completed",
+    //   businessRequestId: item?._id,
+    // };
+    // dispatch(resolveSupportRequestHandler(payload));
   };
   // Resolve business useEffect
   useEffect(() => {
@@ -77,7 +84,9 @@ const Support = () => {
         content: resolveSupportRequestSelector?.data?.message,
       });
       dispatch(resolveSupportRequestAction.resolveSupportRequestInfoReset());
+      setResolveModal(false)
     }else if (resolveSupportRequestSelector?.message?.status===400){
+      setResolveModal(false)
       messageApi.open({
         type: "error",
         content: resolveSupportRequestSelector?.message?.response?.data?.message,
@@ -133,7 +142,7 @@ const Support = () => {
                                   </div>
                                   <div>
                                     <div className="fw-700">
-                                      {item?.fullName || "-"}
+                                      {item?.businessName.charAt(0).toUpperCase() + item?.businessName.slice(1).toLowerCase() || "-"}
                                     </div>
                                     {/* <div className="fs-14 fw-300 o5 ">{index+1}</div> */}
                                   </div>
@@ -145,7 +154,7 @@ const Support = () => {
                                       Business name
                                     </div>
                                     <div className="fw-600">
-                                      {item?.businessName || "-"}
+                                      {item?.businessName || "N/A"}
                                     </div>
                                   </div>
                                   <div className="fs-14  mb-16">
@@ -153,7 +162,7 @@ const Support = () => {
                                       Phone number
                                     </div>
                                     <div className="fw-600">
-                                      {item?.phoneNumber || "-"}
+                                      {item?.phoneNumber || "N/A"}
                                     </div>
                                   </div>
                                   <div className="fs-14  mb-16">
@@ -161,7 +170,7 @@ const Support = () => {
                                       Email address
                                     </div>
                                     <div className="fw-600">
-                                      {item?.emailAddress || "-"}
+                                      {item?.emailAddress || "N/A"}
                                     </div>
                                   </div>
                                 </div>
@@ -195,7 +204,7 @@ const Support = () => {
             </div>
           </div>
           {supportListSelector?.data?.data?.records?.length > 0 && (
-            <div className="d-flex align-center justify-between flexPagination">
+            <div className="d-flex align-center justify-between flexPagination mt-10">
               <div className="fs-16">
                 Showing {pagination?.page} to {pagination?.limit} of{" "}
                 {supportListSelector?.data?.data?.recordsCount} support
@@ -211,6 +220,7 @@ const Support = () => {
           )}
         </div>
       </div>
+      {isSidebarOpen && (
       <SupportDetail
         isOpen={isSidebarOpen}
         toggleSidebar={toggleSidebar}
@@ -218,6 +228,9 @@ const Support = () => {
         setActiveTab={setActiveTab}
         activeTab={activeTab}
       />
+      )}
+
+      <CommonModal resolveModal={resolveModal} setResolveModal={setResolveModal} resolveModalItem= {resolveModalItem}/>
     </>
   );
 };

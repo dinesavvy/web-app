@@ -4,6 +4,8 @@ import importIcon from "../../../../assets/images/importIcon.svg";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Loader from "../../../../common/Loader/Loader";
+import RightArrow from "../../../../assets/images/rightArrow.svg"
+
 const SupportDetail = ({ isOpen, toggleSidebar, supportItem,activeTab }) => {
   const navigate = useNavigate();
 
@@ -12,7 +14,6 @@ const SupportDetail = ({ isOpen, toggleSidebar, supportItem,activeTab }) => {
 
   const [isLoading, setIsLoading] = useState(false);
 
-console.log(placeDetails,"placeDetails")
 
   useEffect(() => {
   if(isOpen){
@@ -33,6 +34,7 @@ console.log(placeDetails,"placeDetails")
         if(response?.status === 200){
           // navigate("/admin/edit-support",{state:{businessDetail:response?.data,supportItem:supportItem}}); // Use the response data as state
           setPlaceDetails(response)
+          getAddress()
           // toggleSidebar();
         }
       } catch (error) {
@@ -44,7 +46,8 @@ console.log(placeDetails,"placeDetails")
     fetchPlaceDetails()
   }
   }, [isOpen])
-  
+
+
 
   const importFromGoogle = () => {
     if (supportItem) {
@@ -102,7 +105,7 @@ console.log(placeDetails,"placeDetails")
                 .toUpperCase()}
             </div>
             <div>
-              <div className="fw-700">{supportItem?.fullName || "-"}</div>
+              <div className="fw-700">{supportItem?.fullName.charAt(0).toUpperCase() + supportItem?.fullName.slice(1).toLowerCase() || "-"}</div>
               {/* <div className="fs-14 fw-300 o5 ">#123456</div> */}
             </div>
           </div>
@@ -110,24 +113,24 @@ console.log(placeDetails,"placeDetails")
           <div className="mb-40">
             <div className="fs-14">
               <div className="lightBlack mb-4">Business name</div>
-              <div className="fw-600">{supportItem?.businessName || "-"}</div>
+              <div className="fw-600">{supportItem?.fullName?.charAt(0)?.toUpperCase() + supportItem?.fullName?.slice(1)?.toLowerCase() || "-"}</div>
+              {/* {supportItem?.fullName?.charAt(0)?.toUpperCase() + supportItem?.fullName?.slice(1)?.toLowerCase() || "-"} */}
             </div>
             <div className="divider18"></div>
             <div className="fs-14">
               <div className="lightBlack mb-4">Phone number</div>
-              <div className="fw-600">{supportItem?.phoneNumber || "-"}</div>
+              <div className="fw-600">{supportItem?.phoneNumber || "N/A"}</div>
             </div>
             <div className="divider18"></div>
             <div className="fs-14">
               <div className="lightBlack mb-4">Email address</div>
-              <div className="fw-600">{supportItem?.emailAddress || "-"}</div>
+              <div className="fw-600">{supportItem?.emailAddress || "N/A"}</div>
             </div>
             <div className="divider18"></div>
             <div className="fs-14">
               <div className="lightBlack mb-4">Description</div>
               <div className="fw-600">
-                I’m struggling to create my dine savvy acount can you please
-                help me with login
+               {supportItem?.description|| "N/A"}
               </div>
             </div>
             {/* <div className="divider18"></div> */}
@@ -141,13 +144,18 @@ console.log(placeDetails,"placeDetails")
               <div className="fw-600">
                 {/* SG Iscon Junction TP, Shivalik Shilp, Hardcastle Restaurants Pvt
                 Ltd, Ground floor, 14, Sarkhej - Gandhinagar Hwy */}
-                {placeDetails?.data?.result?.formatted_address}
+                {placeDetails?.data?.result?.formatted_address|| "N/A"}
               </div>
             </div>
           </div>
           {activeTab==="Active"&& (
           <div className="btn" onClick={() => importFromGoogle()}>
             Import form Google <img src={importIcon} alt="" />
+          </div>
+          )}
+          {activeTab==="Resolve"&& (
+          <div className="btn" onClick={() => viewBusinessProfile()}>
+            View Google Business Profile <img src={RightArrow} alt="" />
           </div>
           )}
         </div>

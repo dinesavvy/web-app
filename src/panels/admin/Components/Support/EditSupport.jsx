@@ -35,8 +35,9 @@ const EditSupport = () => {
   const addImageDataSelector = useSelector((state) => state?.addImageData);
   const location = useLocation();
   const { state } = location;
+  const dispatch = useDispatch();
+
   const businessDetailsData = state?.businessDetail;
-  console.log(businessDetailsData, "businessDetailsData");
 
   const getAllCountry = Country.getAllCountries();
   const getAllState = State.getAllStates();
@@ -110,6 +111,7 @@ const EditSupport = () => {
     return component ? component.long_name : "";
   };
 
+
   // Extract address components
   // const country = getAddressComponent("country");
   // const stateName = getAddressComponent("administrative_area_level_1");
@@ -157,7 +159,6 @@ const EditSupport = () => {
     // setUploadedImage(null);
     // setImagePreview(null);
     setModalOpen(false);
-    console.log("delete image");
   };
 
   const handleImageUpload = (event) => {
@@ -199,13 +200,13 @@ const EditSupport = () => {
     const minute = timeStr.substring(2, 4);
     return dayjs(`${hour}:${minute}`, "HH:mm");
   };
-  console.log(businessDetailsData, "businessDetailsData");
   // Initial form values with proper address components
   const initialValues = {
     businessName: businessDetailsData?.result?.name || "",
     businessCategory: "Restaurant",
     website: businessDetailsData?.result?.website || "",
     phoneNumber: businessDetailsData?.result?.formatted_phone_number || "",
+    description:state?.supportItem?.description||"",
     address: {
       country: getAddressComponent("country") || "",
       state: getAddressComponent("administrative_area_level_1") || "",
@@ -223,8 +224,8 @@ const EditSupport = () => {
         slots:
           dayHours?.length > 0
             ? dayHours?.map((hour) => ({
-                from: hour.open.time,
-                to: hour.close.time,
+                from: hour?.open?.time,
+                to: hour?.close?.time,
               }))
             : [{ from: "", to: "" }],
       };
@@ -236,7 +237,6 @@ const EditSupport = () => {
     setModalOpen(!isModalOpen);
   };
 
-  const dispatch = useDispatch();
 
   useEffect(() => {
     let payload = {
@@ -278,15 +278,15 @@ const EditSupport = () => {
 
     // Process each day's operating hours
     Object.entries(values.operatingHours).forEach(([day, dayData]) => {
-      if (dayData.enabled && dayData.slots) {
-        dayData.slots.forEach((slot) => {
-          if (slot.from && slot.to) {
+      if (dayData?.enabled && dayData.slots) {
+        dayData?.slots.forEach((slot) => {
+          if (slot?.from && slot?.to) {
             // Convert time format from HHMM to HH:mm:00
-            const startTime = `${slot.from.substring(
+            const startTime = `${slot?.from.substring(
               0,
               2
             )}:${slot.from.substring(2, 4)}:00`;
-            const endTime = `${slot.to.substring(0, 2)}:${slot.to.substring(
+            const endTime = `${slot?.to.substring(0, 2)}:${slot?.to.substring(
               2,
               4
             )}:00`;
@@ -336,38 +336,43 @@ const EditSupport = () => {
         businessId: state?.supportItem?.businessId,
         locationId: businessDetailsData?.result?.place_id,
         businessRequestId: state?.supportItem?._id,
-        country:values?.address?.country,
-        businessName:values?.businessName,
-        description: "",
+        country: values?.address?.country,
+        businessName: values?.businessName,
+        description: values?.description||"",
         busLoc: {
           type: "Point",
           coordinates: [
-                businessDetailsData?.result.geometry?.location?.lng,
-                businessDetailsData?.result.geometry?.location?.lat,
-              ],
+            businessDetailsData?.result.geometry?.location?.lng,
+            businessDetailsData?.result.geometry?.location?.lat,
+          ],
         },
-        isLatLongSet: (businessDetailsData?.result.geometry?.location?.lng !== 0 &&
-          businessDetailsData?.result.geometry?.location?.lat !==0),
-        phoneNumber: businessDetailsData?.result?.formatted_phone_number,
-        name:values?.businessName,
+        isLatLongSet:
+          businessDetailsData?.result.geometry?.location?.lng !== 0 &&
+          businessDetailsData?.result.geometry?.location?.lat !== 0,
+        phoneNumber:
+          businessDetailsData?.result?.formatted_phone_number ||
+          values?.phoneNumber,
+        name: values?.businessName,
         address: {
-            addressLine1: getAddressComponent("administrative_area_level_1") || "",
-            addressLine2: getAddressComponent("administrative_area_level_2") || "",
-            locality: values?.address?.city || "",
-            administrativeDistrictLevel1: values?.address?.state || "",
-            postalCode: values?.address?.postalCode || "",
-            country: values?.address?.country || "",
-          },
+          addressLine1:"",
+            // getAddressComponent("administrative_area_level_1") || "",
+          addressLine2:"",
+            // getAddressComponent("administrative_area_level_2") || "",
+          locality: values?.address?.city || "",
+          administrativeDistrictLevel1: values?.address?.state || "",
+          postalCode: values?.address?.postalCode || "",
+          country: values?.address?.country || "",
+        },
+        formattedAddress: businessDetailsData?.result?.formatted_address,
         status: "OPERATIONAL",
         websiteUrl: values?.website,
         businessHours: transformedBusinessHours,
-        mapsUri:  businessDetailsData?.result?.url,
+        mapsUri: businessDetailsData?.result?.url,
         logoUrl: "",
         otherImages: [],
       },
     };
-
-    console.log(payload, "payload");
+console.log(payload,"payload")
     dispatch(addBusinessHandler(payload));
     // Handle form submission here
     // setEditDetail(false);
@@ -622,6 +627,34 @@ const EditSupport = () => {
                       </a>
                     )}
                   </div>
+                  <div>
+                    <label
+                      htmlFor="description"
+                      className="grey mb-10 fs-16 fw-500"
+                    >
+                      Description
+                    </label>
+                    {editDetail ? (
+                      <>
+                        <Field
+                          type="text"
+                          name="description"
+                          className="input"
+                          placeholder="Please enter description"
+                        />
+                        {console.log(values.description,"values.description")}
+                        {/* {errors.description && touched.description && (
+                          <div className="mt-10 fw-500 fs-14 error">
+                            {errors.description}
+                          </div>
+                        )} */}
+                      </>
+                    ) : (
+                      <a className="anchor" href={values.description}>
+                        {values.description || "N/A"}
+                      </a>
+                    )}
+                  </div>
                 </div>
               </div>
 
@@ -642,10 +675,10 @@ const EditSupport = () => {
                           {({ field, form }) => (
                             <select
                               {...field}
-                              className="input"
-                              onChange={(e) =>
-                                handleCountryChange(e, form.setFieldValue)
-                              }
+                              className="input disabled"
+                              // onChange={(e) =>
+                              //   handleCountryChange(e, form.setFieldValue)
+                              // }
                             >
                               <option value="">Select a country</option>
                               {getAllCountry?.map((country, index) => (
@@ -656,15 +689,15 @@ const EditSupport = () => {
                             </select>
                           )}
                         </Field>
-                        {errors.address?.country &&
+                        {errors?.address?.country &&
                           touched.address?.country && (
                             <div className="mt-10 fw-500 fs-14 error">
-                              {errors.address.country}
+                              {errors?.address.country}
                             </div>
                           )}
                       </>
                     ) : (
-                      <div className="">{values.address.country || "N/A"}</div>
+                      <div className="">{values?.address.country || "N/A"}</div>
                     )}
                   </div>
 
@@ -681,10 +714,10 @@ const EditSupport = () => {
                           {({ field, form }) => (
                             <select
                               {...field}
-                              className="input"
-                              onChange={(e) =>
-                                handleStateChange(e, form.setFieldValue)
-                              }
+                              className="input disabled"
+                              // onChange={(e) =>
+                              //   handleStateChange(e, form.setFieldValue)
+                              // }
                             >
                               <option value="">Select a state</option>
                               {stateOptions?.map((state, index) => (
@@ -718,7 +751,7 @@ const EditSupport = () => {
                         <Field
                           type="text"
                           name="address.streetAddress"
-                          className="input"
+                          className="input disabled"
                           placeholder="4517 Street Ave. Manchester"
                         />
                         {errors.address?.streetAddress &&
@@ -748,7 +781,7 @@ const EditSupport = () => {
                           {({ field, form }) => (
                             <select
                               {...field}
-                              className="input"
+                              className="input disabled"
                               disabled={!selectedState}
                             >
                               <option value="">Select a city</option>
@@ -783,13 +816,13 @@ const EditSupport = () => {
                         <Field
                           type="text"
                           name="address.postalCode"
-                          className="input"
+                          className="input disabled"
                           placeholder="39495"
                         />
-                        {errors.address?.postalCode &&
-                          touched.address?.postalCode && (
+                        {errors?.address?.postalCode &&
+                          touched?.address?.postalCode && (
                             <div className="mt-10 fw-500 fs-14 error">
-                              {errors.address.postalCode}
+                              {errors?.address?.postalCode}
                             </div>
                           )}
                       </>
@@ -815,8 +848,8 @@ const EditSupport = () => {
                               ? values.operatingHours[day].slots
                                   .map(
                                     (slot) =>
-                                      `${formatTime(slot.from)} - ${formatTime(
-                                        slot.to
+                                      `${formatTime(slot?.from)} - ${formatTime(
+                                        slot?.to
                                       )}`
                                   )
                                   .join(", ")
@@ -835,7 +868,6 @@ const EditSupport = () => {
                           <div className="d-flex align-center justify-between">
                             <div className="grey fs-16">{day}</div>
                             <div className="d-flex align-center gap-16">
-                              {console.log(values, "values")}
                               <CustomSwitch
                                 isOn={values.operatingHours[day].enabled}
                                 onToggle={() => {
