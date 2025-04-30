@@ -42,10 +42,12 @@ const Nudges = () => {
 
   const handlePaginationChange = (page, pageSize) => {
     setPagination({ page, limit: pageSize });
+    setSelectedValue("")
   };
 
   const handleSearchChange = (value) => {
     setSearchString(value);
+    setSelectedValue("")
   };
 
   useEffect(() => {

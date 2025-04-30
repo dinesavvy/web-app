@@ -52,6 +52,15 @@ const EditSupport = () => {
   const navigate = useNavigate();
   const [editDetail, setEditDetail] = useState(true);
 
+
+
+  useEffect(() => {
+    if(state?.fromResolve===true){
+      setEditDetail(false)
+    }
+  }, [state])
+  
+
   // Initialize data when component mounts
   useEffect(() => {
     if (businessDetailsData?.result?.address_components) {
@@ -488,7 +497,7 @@ console.log(payload,"payload")
                       </div>
                     </div>
                   </div>
-                  {!editDetail && (
+                  {editDetail &&state?.fromResolve===true&& (
                     <div
                       className="btn btnSecondary p32"
                       onClick={() => setEditDetail(true)}
@@ -641,8 +650,8 @@ console.log(payload,"payload")
                           name="description"
                           className="input"
                           placeholder="Please enter description"
+                          maxLength={700}
                         />
-                        {console.log(values.description,"values.description")}
                         {/* {errors.description && touched.description && (
                           <div className="mt-10 fw-500 fs-14 error">
                             {errors.description}

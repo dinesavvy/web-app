@@ -11,10 +11,10 @@ import {
 import { useCommonMessage } from "../../../../common/CommonMessage";
 import axios from "axios";
 import CommonModal from "../CommonModal";
+import { useNavigate } from "react-router-dom";
 
 const Support = () => {
-
-  const [resolveModal,setResolveModal] = useState(false)
+  const [resolveModal, setResolveModal] = useState(false);
 
   const messageApi = useCommonMessage();
   const [activeTab, setActiveTab] = useState("Active");
@@ -22,14 +22,14 @@ const Support = () => {
   const dispatch = useDispatch();
 
   const [supportItem, setSupportItem] = useState({});
-  const [resolveModalItem,setResolveModalItem] = useState()
+  const [resolveModalItem, setResolveModalItem] = useState();
 
   const handleTabClick = (tab) => {
     setActiveTab(tab); // Update the active tab
   };
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-  const toggleSidebar = async(item) => {
+  const toggleSidebar = async (item) => {
     setSupportItem(item);
     setIsSidebarOpen((prevState) => !prevState);
   };
@@ -68,8 +68,8 @@ const Support = () => {
   }, [pagination, activeTab, resolveSupportRequestSelector]);
 
   const resolveSupportReq = (item) => {
-    setResolveModal(true)
-    setResolveModalItem(item)
+    setResolveModal(true);
+    setResolveModalItem(item);
     // let payload = {
     //   status: "Completed",
     //   businessRequestId: item?._id,
@@ -84,20 +84,69 @@ const Support = () => {
         content: resolveSupportRequestSelector?.data?.message,
       });
       dispatch(resolveSupportRequestAction.resolveSupportRequestInfoReset());
-      setResolveModal(false)
-    }else if (resolveSupportRequestSelector?.message?.status===400){
-      setResolveModal(false)
+      setResolveModal(false);
+    } else if (resolveSupportRequestSelector?.message?.status === 400) {
+      setResolveModal(false);
       messageApi.open({
         type: "error",
-        content: resolveSupportRequestSelector?.message?.response?.data?.message,
+        content:
+          resolveSupportRequestSelector?.message?.response?.data?.message,
       });
       dispatch(resolveSupportRequestAction.resolveSupportRequestInfoReset());
     }
   }, [resolveSupportRequestSelector]);
+  
+const navigate = useNavigate()
+
+
+
+const [placeDetails, setPlaceDetails] = useState(null);
+const [isLoading, setIsLoading] = useState(false);
+  const googleAPIKey = "AIzaSyBaLPuWhc_yVKRMBl0_4EoxSYDYJTsxVx8";
+
+  const [viewBusiness,setViewBusiness] = useState()
+
+  useEffect(() => {
+    if(viewBusiness){
+      const fetchPlaceDetails = async () => {
+        setIsLoading(true);
+        try {
+          const response = await axios.get(
+            `https://maps.googleapis.com/maps/api/place/details/json`,
+            {
+              params: {
+                fields:
+                  "url,formatted_address,name,geometry,photo,place_id,rating,vicinity,opening_hours,website,reservable,delivery,formatted_phone_number,international_phone_number,address_component",
+                place_id: supportItem?.googlePlaceId,
+                key: googleAPIKey,
+              },
+            }
+          );
+          console.log(response,"response")
+          if(response?.status === 200){
+            setPlaceDetails(response)
+            navigate("/admin/edit-support",{state:{businessDetail:response?.data,supportItem:supportItem,fromResolve:true}});
+          }
+        } catch (error) {
+          console.error("Error fetching place details:", error);
+        } finally {
+          setIsLoading(false);
+        }
+      };
+      fetchPlaceDetails()
+    }
+    }, [viewBusiness])
+
+    console.log(supportItem,"supportItem")
+
+  const viewBusinessDetails = (item) =>{
+    setViewBusiness(true)
+    setSupportItem(item);
+  }
 
   return (
     <>
-      {supportListSelector?.isLoading  && <Loader />}
+      {(supportListSelector?.isLoading ||isLoading) && <Loader />}
       <div className="dashboard">
         <div className="tabPadding">
           <div className="fs-24 fw-600 mb-30">Support Request</div>
@@ -142,7 +191,12 @@ const Support = () => {
                                   </div>
                                   <div>
                                     <div className="fw-700">
-                                      {item?.businessName.charAt(0).toUpperCase() + item?.businessName.slice(1).toLowerCase() || "-"}
+                                      {item?.businessName
+                                        .charAt(0)
+                                        .toUpperCase() +
+                                        item?.businessName
+                                          .slice(1)
+                                          .toLowerCase() || "-"}
                                     </div>
                                     {/* <div className="fs-14 fw-300 o5 ">{index+1}</div> */}
                                   </div>
@@ -178,9 +232,17 @@ const Support = () => {
                               <div className="gridBtn">
                                 <div
                                   className="btn"
-                                  onClick={() => toggleSidebar(item)}
+                                  onClick={() => {
+                                    if (activeTab === "Active") {
+                                      toggleSidebar(item);
+                                    }else {
+                                      viewBusinessDetails(item)
+                                    }
+                                  }}
                                 >
-                                  View Details
+                                  {activeTab === "Active"
+                                    ? "View Details"
+                                    : "View Google Business Profile"}
                                 </div>
                                 {activeTab === "Active" && (
                                   <div
@@ -220,17 +282,21 @@ const Support = () => {
           )}
         </div>
       </div>
-      {isSidebarOpen && (
-      <SupportDetail
-        isOpen={isSidebarOpen}
-        toggleSidebar={toggleSidebar}
-        supportItem={supportItem}
-        setActiveTab={setActiveTab}
-        activeTab={activeTab}
-      />
+      {isSidebarOpen && activeTab === "Active" && (
+        <SupportDetail
+          isOpen={isSidebarOpen}
+          toggleSidebar={toggleSidebar}
+          supportItem={supportItem}
+          setActiveTab={setActiveTab}
+          activeTab={activeTab}
+        />
       )}
 
-      <CommonModal resolveModal={resolveModal} setResolveModal={setResolveModal} resolveModalItem= {resolveModalItem}/>
+      <CommonModal
+        resolveModal={resolveModal}
+        setResolveModal={setResolveModal}
+        resolveModalItem={resolveModalItem}
+      />
     </>
   );
 };

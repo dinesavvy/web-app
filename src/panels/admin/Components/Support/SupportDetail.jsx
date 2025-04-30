@@ -8,7 +8,6 @@ import RightArrow from "../../../../assets/images/rightArrow.svg"
 
 const SupportDetail = ({ isOpen, toggleSidebar, supportItem,activeTab }) => {
   const navigate = useNavigate();
-
   const [placeDetails, setPlaceDetails] = useState(null);
   const googleAPIKey = "AIzaSyBaLPuWhc_yVKRMBl0_4EoxSYDYJTsxVx8";
 
@@ -34,7 +33,7 @@ const SupportDetail = ({ isOpen, toggleSidebar, supportItem,activeTab }) => {
         if(response?.status === 200){
           // navigate("/admin/edit-support",{state:{businessDetail:response?.data,supportItem:supportItem}}); // Use the response data as state
           setPlaceDetails(response)
-          getAddress()
+          // getAddress()
           // toggleSidebar();
         }
       } catch (error) {
@@ -80,6 +79,11 @@ const SupportDetail = ({ isOpen, toggleSidebar, supportItem,activeTab }) => {
     navigate("/admin/edit-support",{state:{businessDetail:placeDetails?.data,supportItem:supportItem}});
     }
   };
+
+
+  const viewBusinessProfile = () =>{
+    navigate("/admin/edit-support",{state:{businessDetail:placeDetails?.data,supportItem:supportItem,fromResolve:true}});
+  }
 
   return (
     <>
