@@ -54,14 +54,11 @@ const EditSupport = () => {
   const navigate = useNavigate();
   const [editDetail, setEditDetail] = useState(true);
 
-
-
   useEffect(() => {
-    if(state?.fromResolve===true){
-      setEditDetail(false)
+    if (state?.fromResolve === true) {
+      setEditDetail(false);
     }
-  }, [state])
-  
+  }, [state]);
 
   // Initialize data when component mounts
   useEffect(() => {
@@ -121,7 +118,6 @@ const EditSupport = () => {
     );
     return component ? component.long_name : "";
   };
-
 
   // Extract address components
   // const country = getAddressComponent("country");
@@ -217,7 +213,7 @@ const EditSupport = () => {
     businessCategory: "Restaurant",
     website: businessDetailsData?.result?.website || "",
     phoneNumber: businessDetailsData?.result?.formatted_phone_number || "",
-    description:state?.supportItem?.description||"",
+    description: state?.supportItem?.description || "",
     address: {
       country: getAddressComponent("country") || "",
       state: getAddressComponent("administrative_area_level_1") || "",
@@ -247,7 +243,6 @@ const EditSupport = () => {
   const toggleModal = () => {
     setModalOpen(!isModalOpen);
   };
-
 
   useEffect(() => {
     let payload = {
@@ -349,7 +344,7 @@ const EditSupport = () => {
         businessRequestId: state?.supportItem?._id,
         country: values?.address?.country,
         businessName: values?.businessName,
-        description: values?.description||"",
+        description: values?.description || "",
         busLoc: {
           type: "Point",
           coordinates: [
@@ -365,10 +360,10 @@ const EditSupport = () => {
           values?.phoneNumber,
         name: values?.businessName,
         address: {
-          addressLine1:"",
-            // getAddressComponent("administrative_area_level_1") || "",
-          addressLine2:"",
-            // getAddressComponent("administrative_area_level_2") || "",
+          addressLine1: "",
+          // getAddressComponent("administrative_area_level_1") || "",
+          addressLine2: "",
+          // getAddressComponent("administrative_area_level_2") || "",
           locality: values?.address?.city || "",
           administrativeDistrictLevel1: values?.address?.state || "",
           postalCode: values?.address?.postalCode || "",
@@ -383,7 +378,6 @@ const EditSupport = () => {
         otherImages: [],
       },
     };
-console.log(payload,"payload")
     dispatch(addBusinessHandler(payload));
     // Handle form submission here
     // setEditDetail(false);
@@ -464,10 +458,7 @@ console.log(payload,"payload")
   const wrapperRef = useRef(null);
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (
-        wrapperRef.current &&
-        !wrapperRef.current.contains(event.target)
-      ) {
+      if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
         setIsSelectOpen(false);
       }
     };
@@ -477,6 +468,19 @@ console.log(payload,"payload")
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+
+  const formatTime1 = (timeStr) => {
+    if (!timeStr) return "";
+    const [hour, minute] = timeStr.split(":");
+    const date = new Date();
+    date.setHours(hour, minute);
+    return date.toLocaleTimeString([], {
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: true,
+    });
+  };
+
   return (
     <>
       {(categoryListSelector?.isLoading || addBusinessSelector?.isLoading) && (
@@ -510,11 +514,13 @@ console.log(payload,"payload")
                     />
                     <div>
                       <div className="fs-24 fw-600">
-                        {businessDetailsData?.result?.name || "N/A"}
+                        {businessDetailsData?.result?.name ||
+                          state?.businessDetail?.businessName ||
+                          "N/A"}
                       </div>
                     </div>
                   </div>
-                  {editDetail &&state?.fromResolve===true&& (
+                  {editDetail && state?.fromResolve === true && (
                     <div
                       className="btn btnSecondary p32"
                       onClick={() => setEditDetail(true)}
@@ -547,7 +553,11 @@ console.log(payload,"payload")
                         )}
                       </>
                     ) : (
-                      <div className="">{values.businessName || "N/A"}</div>
+                      <div className="">
+                        {values.businessName ||
+                          state?.businessDetail?.businessName ||
+                          "N/A"}
+                      </div>
                     )}
                   </div>
 
@@ -561,35 +571,41 @@ console.log(payload,"payload")
                     {editDetail ? (
                       <>
                         <div className="position-relative" ref={wrapperRef}>
-                        <Field name="businessCategory">
-                          {({ field, form }) => (
-                            <select
-                              {...field}
-                              className="input"
-                              onChange={(e) => {
-                                form.setFieldValue(
-                                  "businessCategory",
-                                  e.target.value
-                                );
-                                setIsSelectOpen(false); // Close after selection
-                              }}
-                              onFocus={() => setIsSelectOpen(true)}
-                            >
-                              <option value="">Select a category</option>
-                              {categoryListSelector?.data?.data?.categoriesList?.map(
-                                (category, index) => (
-                                  <option
-                                    key={index}
-                                    value={category.displayName}
-                                  >
-                                    {category.displayName}
-                                  </option>
-                                )
-                              )}
-                            </select>
-                          )}
-                        </Field>
-                        <img src={dropdownArrow}  className={`dropdownArrow ${isSelectOpen ? "rotate" : ""}`} alt="" />
+                          <Field name="businessCategory">
+                            {({ field, form }) => (
+                              <select
+                                {...field}
+                                className="input"
+                                onChange={(e) => {
+                                  form.setFieldValue(
+                                    "businessCategory",
+                                    e.target.value
+                                  );
+                                  setIsSelectOpen(false); // Close after selection
+                                }}
+                                onFocus={() => setIsSelectOpen(true)}
+                              >
+                                <option value="">Select a category</option>
+                                {categoryListSelector?.data?.data?.categoriesList?.map(
+                                  (category, index) => (
+                                    <option
+                                      key={index}
+                                      value={category.displayName}
+                                    >
+                                      {category.displayName}
+                                    </option>
+                                  )
+                                )}
+                              </select>
+                            )}
+                          </Field>
+                          <img
+                            src={dropdownArrow}
+                            className={`dropdownArrow ${
+                              isSelectOpen ? "rotate" : ""
+                            }`}
+                            alt=""
+                          />
                         </div>
                         {errors?.businessCategory &&
                           touched?.businessCategory && (
@@ -626,7 +642,9 @@ console.log(payload,"payload")
                       </>
                     ) : (
                       <a className="anchor" href={values.website}>
-                        {values.website || "N/A"}
+                        {values.website ||
+                          state?.businessDetail?.businessDetails?.websiteUrl ||
+                          "N/A"}
                       </a>
                     )}
                   </div>
@@ -654,7 +672,9 @@ console.log(payload,"payload")
                       </>
                     ) : (
                       <a className="anchor" href={`tel:${values.phoneNumber}`}>
-                        {values.phoneNumber || "N/A"}
+                        {values.phoneNumber ||
+                          state?.businessDetail?.businessDetails?.phoneNumber ||
+                          "N/A"}
                       </a>
                     )}
                   </div>
@@ -682,7 +702,9 @@ console.log(payload,"payload")
                       </>
                     ) : (
                       <a className="anchor" href={values.description}>
-                        {values.description || "N/A"}
+                        {values.description ||
+                          state?.businessDetail?.description ||
+                          "N/A"}
                       </a>
                     )}
                   </div>
@@ -728,7 +750,12 @@ console.log(payload,"payload")
                           )}
                       </>
                     ) : (
-                      <div className="">{values?.address.country || "N/A"}</div>
+                      <div className="">
+                        {values?.address.country ||
+                          state?.businessDetail?.businessDetails?.address
+                            ?.country ||
+                          "N/A"}
+                      </div>
                     )}
                   </div>
 
@@ -766,7 +793,12 @@ console.log(payload,"payload")
                         )}
                       </>
                     ) : (
-                      <div className="">{values.address.state || "N/A"}</div>
+                      <div className="">
+                        {values.address.state ||
+                          state?.businessDetail?.businessDetails?.address
+                            ?.locality ||
+                          "N/A"}
+                      </div>
                     )}
                   </div>
 
@@ -794,7 +826,10 @@ console.log(payload,"payload")
                       </>
                     ) : (
                       <div className="">
-                        {values.address.streetAddress || "N/A"}
+                        {values.address.streetAddress ||
+                          state?.businessDetail?.businessDetails
+                            ?.formattedAddress ||
+                          "N/A"}
                       </div>
                     )}
                   </div>
@@ -859,7 +894,10 @@ console.log(payload,"payload")
                       </>
                     ) : (
                       <div className="">
-                        {values.address.postalCode || "N/A"}
+                        {values.address.postalCode ||
+                          state?.businessDetail?.businessDetails?.address
+                            ?.postalCode ||
+                          "N/A"}
                       </div>
                     )}
                   </div>
@@ -868,249 +906,323 @@ console.log(payload,"payload")
 
               <div className="tabPadding mb-30">
                 <div className="fs-20 fw-600 mb-20">Hours of operation</div>
-                {!editDetail ? (
-                  <div>
-                    {daysOfWeek.map((day, index) => (
-                      <React.Fragment key={day}>
-                        <div className="d-flex align-center justify-between">
-                          <div className="grey fs-16">{day}</div>
-                          <div style={{ whiteSpace: "pre-line" }}>
-                            {values.operatingHours[day].enabled
-                              ? values.operatingHours[day].slots
-                                  .map(
-                                    (slot) =>
-                                      `${formatTime(slot?.from)} - ${formatTime(
-                                        slot?.to
-                                      )}`
-                                  )
-                                  .join(", ")
-                              : "Closed"}
-                          </div>
-                        </div>
-                        <div className="divider2"></div>
-                      </React.Fragment>
-                    ))}
-                  </div>
-                ) : (
-                  <div className="overflow">
-                    {daysOfWeek.map((day, index) => (
-                      <React.Fragment key={day}>
-                        <div className="minw">
-                          <div className="d-flex align-center justify-between">
-                            <div className="grey fs-16">{day}</div>
-                            <div className="d-flex align-center gap-16">
-                              <CustomSwitch
-                                isOn={values.operatingHours[day].enabled}
-                                onToggle={() => {
-                                  const newEnabled =
-                                    !values.operatingHours[day].enabled;
-                                  setFieldValue(
-                                    `operatingHours.${day}.enabled`,
-                                    newEnabled
-                                  );
-                                  if (!newEnabled) {
-                                    // When turning off, set all slots to empty strings
-                                    const newSlots = values.operatingHours[
-                                      day
-                                    ].slots.map((slot) => ({
-                                      from: "",
-                                      to: "",
-                                    }));
-                                    setFieldValue(
-                                      `operatingHours.${day}.slots`,
-                                      newSlots
-                                    );
-                                  }
-                                }}
-                              />
-                              <div>
+                {state?.fromResolve === false && (
+                  <>
+                    {!editDetail ? (
+                      <div>
+                        {daysOfWeek.map((day, index) => (
+                          <React.Fragment key={day}>
+                            <div className="d-flex align-center justify-between">
+                              <div className="grey fs-16">{day}</div>
+                              <div style={{ whiteSpace: "pre-line" }}>
                                 {values.operatingHours[day].enabled
-                                  ? "Open"
+                                  ? values.operatingHours[day].slots
+                                      .map(
+                                        (slot) =>
+                                          `${formatTime(
+                                            slot?.from
+                                          )} - ${formatTime(slot?.to)}`
+                                      )
+                                      .join(", ")
                                   : "Closed"}
                               </div>
                             </div>
-                          </div>
-
-                          {values.operatingHours[day].enabled &&
-                            values.operatingHours[day].slots.map(
-                              (slot, slotIndex) => (
-                                <div
-                                  key={slotIndex}
-                                  className="mt-10 d-flex align-end gap-10"
-                                >
-                                  <div className="w-100">
-                                    <label className="fs-14 fw-500 mb-10">
-                                      From
-                                    </label>
-                                    <TimePicker
-                                      className="customTime input"
-                                      value={formatTimeToDate(slot.from)}
-                                      format="HH:mm"
-                                      showOk={false}
-                                      onSelect={(time) => {
-                                        const timeValue = time
-                                          ? time.format("HHmm")
-                                          : "";
-                                        const newSlots = [
-                                          ...values.operatingHours[day].slots,
-                                        ];
-                                        newSlots[slotIndex].from = timeValue;
-                                        setFieldValue(
-                                          `operatingHours.${day}.slots`,
-                                          newSlots
-                                        );
-                                      }}
-                                      onChange={(time, timeString) => {
-                                        const timeValue = time
-                                          ? time.format("HHmm")
-                                          : "";
-                                        const newSlots = [
-                                          ...values.operatingHours[day].slots,
-                                        ];
-                                        newSlots[slotIndex].from = timeValue;
-                                        setFieldValue(
-                                          `operatingHours.${day}.slots`,
-                                          newSlots
-                                        );
-                                      }}
-                                      disabledTime={() => {
-                                        if (slot.to) {
-                                          const toTime = dayjs(slot.to, "HHmm");
-                                          return {
-                                            disabledHours: () => {
-                                              const toHour = toTime.hour();
-                                              return Array.from(
-                                                { length: 24 },
-                                                (_, i) => i
-                                              ).filter((h) => h > toHour);
-                                            },
-                                            disabledMinutes: (hour) => {
-                                              if (hour === toTime.hour()) {
-                                                return Array.from(
-                                                  { length: 60 },
-                                                  (_, i) => i
-                                                ).filter(
-                                                  (m) => m >= toTime.minute()
-                                                );
-                                              }
-                                              return [];
-                                            },
-                                          };
-                                        }
-                                        return {};
-                                      }}
-                                    />
-                                  </div>
-                                  <div className="w-100">
-                                    <label className="fs-14 fw-500 mb-10">
-                                      To
-                                    </label>
-                                    <TimePicker
-                                      className="customTime input"
-                                      value={formatTimeToDate(slot.to)}
-                                      format="HH:mm"
-                                      showOk={false}
-                                      onSelect={(time) => {
-                                        const timeValue = time
-                                          ? time.format("HHmm")
-                                          : "";
-                                        const newSlots = [
-                                          ...values.operatingHours[day].slots,
-                                        ];
-                                        newSlots[slotIndex].to = timeValue;
-                                        setFieldValue(
-                                          `operatingHours.${day}.slots`,
-                                          newSlots
-                                        );
-                                      }}
-                                      onChange={(time, timeString) => {
-                                        const timeValue = time
-                                          ? time.format("HHmm")
-                                          : "";
-                                        const newSlots = [
-                                          ...values.operatingHours[day].slots,
-                                        ];
-                                        newSlots[slotIndex].to = timeValue;
-                                        setFieldValue(
-                                          `operatingHours.${day}.slots`,
-                                          newSlots
-                                        );
-                                      }}
-                                      disabledTime={() => {
-                                        if (slot.from) {
-                                          const fromTime = dayjs(
-                                            slot.from,
-                                            "HHmm"
-                                          );
-                                          return {
-                                            disabledHours: () => {
-                                              const fromHour = fromTime.hour();
-                                              return Array.from(
-                                                { length: 24 },
-                                                (_, i) => i
-                                              ).filter((h) => h < fromHour);
-                                            },
-                                            disabledMinutes: (hour) => {
-                                              if (hour === fromTime.hour()) {
-                                                return Array.from(
-                                                  { length: 60 },
-                                                  (_, i) => i
-                                                ).filter(
-                                                  (m) => m <= fromTime.minute()
-                                                );
-                                              }
-                                              return [];
-                                            },
-                                          };
-                                        }
-                                        return {};
-                                      }}
-                                    />
-                                  </div>
-                                  <div
-                                    className="addTime"
-                                    onClick={() => {
-                                      if (slotIndex === 0) {
-                                        const newSlots = [
-                                          ...values.operatingHours[day].slots,
-                                          { from: "", to: "" },
-                                        ];
-                                        setFieldValue(
-                                          `operatingHours.${day}.slots`,
-                                          newSlots
-                                        );
-                                      } else {
+                            <div className="divider2"></div>
+                          </React.Fragment>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="overflow">
+                        {daysOfWeek.map((day, index) => (
+                          <React.Fragment key={day}>
+                            <div className="minw">
+                              <div className="d-flex align-center justify-between">
+                                <div className="grey fs-16">{day}</div>
+                                <div className="d-flex align-center gap-16">
+                                  <CustomSwitch
+                                    isOn={values.operatingHours[day].enabled}
+                                    onToggle={() => {
+                                      const newEnabled =
+                                        !values.operatingHours[day].enabled;
+                                      setFieldValue(
+                                        `operatingHours.${day}.enabled`,
+                                        newEnabled
+                                      );
+                                      if (!newEnabled) {
+                                        // When turning off, set all slots to empty strings
                                         const newSlots = values.operatingHours[
                                           day
-                                        ].slots.filter(
-                                          (_, i) => i !== slotIndex
-                                        );
+                                        ].slots.map((slot) => ({
+                                          from: "",
+                                          to: "",
+                                        }));
                                         setFieldValue(
                                           `operatingHours.${day}.slots`,
                                           newSlots
                                         );
                                       }
                                     }}
-                                    style={{ cursor: "pointer" }}
-                                  >
-                                    <img
-                                      src={
-                                        slotIndex === 0 ? addTime : minusTime
-                                      }
-                                      alt={
-                                        slotIndex === 0
-                                          ? "Add Time Slot"
-                                          : "Remove Time Slot"
-                                      }
-                                    />
+                                  />
+                                  <div>
+                                    {values.operatingHours[day].enabled
+                                      ? "Open"
+                                      : "Closed"}
                                   </div>
                                 </div>
-                              )
-                            )}
-                        </div>
-                        <div className="divider2"></div>
-                      </React.Fragment>
-                    ))}
+                              </div>
+
+                              {values.operatingHours[day].enabled &&
+                                values.operatingHours[day].slots.map(
+                                  (slot, slotIndex) => (
+                                    <div
+                                      key={slotIndex}
+                                      className="mt-10 d-flex align-end gap-10"
+                                    >
+                                      <div className="w-100">
+                                        <label className="fs-14 fw-500 mb-10">
+                                          From
+                                        </label>
+                                        <TimePicker
+                                          className="customTime input"
+                                          value={formatTimeToDate(slot.from)}
+                                          format="HH:mm"
+                                          showOk={false}
+                                          onSelect={(time) => {
+                                            const timeValue = time
+                                              ? time.format("HHmm")
+                                              : "";
+                                            const newSlots = [
+                                              ...values.operatingHours[day]
+                                                .slots,
+                                            ];
+                                            newSlots[slotIndex].from =
+                                              timeValue;
+                                            setFieldValue(
+                                              `operatingHours.${day}.slots`,
+                                              newSlots
+                                            );
+                                          }}
+                                          onChange={(time, timeString) => {
+                                            const timeValue = time
+                                              ? time.format("HHmm")
+                                              : "";
+                                            const newSlots = [
+                                              ...values.operatingHours[day]
+                                                .slots,
+                                            ];
+                                            newSlots[slotIndex].from =
+                                              timeValue;
+                                            setFieldValue(
+                                              `operatingHours.${day}.slots`,
+                                              newSlots
+                                            );
+                                          }}
+                                          disabledTime={() => {
+                                            if (slot.to) {
+                                              const toTime = dayjs(
+                                                slot.to,
+                                                "HHmm"
+                                              );
+                                              return {
+                                                disabledHours: () => {
+                                                  const toHour = toTime.hour();
+                                                  return Array.from(
+                                                    { length: 24 },
+                                                    (_, i) => i
+                                                  ).filter((h) => h > toHour);
+                                                },
+                                                disabledMinutes: (hour) => {
+                                                  if (hour === toTime.hour()) {
+                                                    return Array.from(
+                                                      { length: 60 },
+                                                      (_, i) => i
+                                                    ).filter(
+                                                      (m) =>
+                                                        m >= toTime.minute()
+                                                    );
+                                                  }
+                                                  return [];
+                                                },
+                                              };
+                                            }
+                                            return {};
+                                          }}
+                                        />
+                                      </div>
+                                      <div className="w-100">
+                                        <label className="fs-14 fw-500 mb-10">
+                                          To
+                                        </label>
+                                        <TimePicker
+                                          className="customTime input"
+                                          value={formatTimeToDate(slot.to)}
+                                          format="HH:mm"
+                                          showOk={false}
+                                          onSelect={(time) => {
+                                            const timeValue = time
+                                              ? time.format("HHmm")
+                                              : "";
+                                            const newSlots = [
+                                              ...values.operatingHours[day]
+                                                .slots,
+                                            ];
+                                            newSlots[slotIndex].to = timeValue;
+                                            setFieldValue(
+                                              `operatingHours.${day}.slots`,
+                                              newSlots
+                                            );
+                                          }}
+                                          onChange={(time, timeString) => {
+                                            const timeValue = time
+                                              ? time.format("HHmm")
+                                              : "";
+                                            const newSlots = [
+                                              ...values.operatingHours[day]
+                                                .slots,
+                                            ];
+                                            newSlots[slotIndex].to = timeValue;
+                                            setFieldValue(
+                                              `operatingHours.${day}.slots`,
+                                              newSlots
+                                            );
+                                          }}
+                                          disabledTime={() => {
+                                            if (slot.from) {
+                                              const fromTime = dayjs(
+                                                slot.from,
+                                                "HHmm"
+                                              );
+                                              return {
+                                                disabledHours: () => {
+                                                  const fromHour =
+                                                    fromTime.hour();
+                                                  return Array.from(
+                                                    { length: 24 },
+                                                    (_, i) => i
+                                                  ).filter((h) => h < fromHour);
+                                                },
+                                                disabledMinutes: (hour) => {
+                                                  if (
+                                                    hour === fromTime.hour()
+                                                  ) {
+                                                    return Array.from(
+                                                      { length: 60 },
+                                                      (_, i) => i
+                                                    ).filter(
+                                                      (m) =>
+                                                        m <= fromTime.minute()
+                                                    );
+                                                  }
+                                                  return [];
+                                                },
+                                              };
+                                            }
+                                            return {};
+                                          }}
+                                        />
+                                      </div>
+                                      <div
+                                        className="addTime"
+                                        onClick={() => {
+                                          if (slotIndex === 0) {
+                                            const newSlots = [
+                                              ...values.operatingHours[day]
+                                                .slots,
+                                              { from: "", to: "" },
+                                            ];
+                                            setFieldValue(
+                                              `operatingHours.${day}.slots`,
+                                              newSlots
+                                            );
+                                          } else {
+                                            const newSlots =
+                                              values.operatingHours[
+                                                day
+                                              ].slots.filter(
+                                                (_, i) => i !== slotIndex
+                                              );
+                                            setFieldValue(
+                                              `operatingHours.${day}.slots`,
+                                              newSlots
+                                            );
+                                          }
+                                        }}
+                                        style={{ cursor: "pointer" }}
+                                      >
+                                        <img
+                                          src={
+                                            slotIndex === 0
+                                              ? addTime
+                                              : minusTime
+                                          }
+                                          alt={
+                                            slotIndex === 0
+                                              ? "Add Time Slot"
+                                              : "Remove Time Slot"
+                                          }
+                                        />
+                                      </div>
+                                    </div>
+                                  )
+                                )}
+                            </div>
+                            <div className="divider2"></div>
+                          </React.Fragment>
+                        ))}
+                      </div>
+                    )}
+                  </>
+                )}
+
+                {state?.fromResolve === true && (
+                  <div>
+                    {(state?.businessDetail?.businessDetails?.businessHours
+                      ?.periods?.length > 0
+                      ? state.businessDetail.businessDetails.businessHours
+                          .periods
+                      : daysOfWeek.map((day, i) => ({
+                          dayOfWeek: [
+                            "SUN",
+                            "MON",
+                            "TUE",
+                            "WED",
+                            "THU",
+                            "FRI",
+                            "SAT",
+                          ][i],
+                          startLocalTime: null,
+                          endLocalTime: null,
+                        }))
+                    ).map((day, index) => {
+                      const dayIndex = [
+                        "SUN",
+                        "MON",
+                        "TUE",
+                        "WED",
+                        "THU",
+                        "FRI",
+                        "SAT",
+                      ].indexOf(day.dayOfWeek);
+                      const fullDayName = daysOfWeek[dayIndex];
+
+                      const hasTime = day?.startLocalTime && day?.endLocalTime;
+
+                      return (
+                        <React.Fragment key={index}>
+                          <div className="d-flex align-center justify-between">
+                            <div className="grey fs-16">{fullDayName}</div>
+                            <div style={{ whiteSpace: "pre-line" }}>
+                              {hasTime
+                                ? `${formatTime1(
+                                    day.startLocalTime
+                                  )} To ${formatTime1(day.endLocalTime)}`
+                                : "Closed"}
+                            </div>
+                          </div>
+                          <div className="divider2"></div>
+                        </React.Fragment>
+                      );
+                    })}
                   </div>
                 )}
               </div>

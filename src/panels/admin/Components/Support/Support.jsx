@@ -106,42 +106,43 @@ const [isLoading, setIsLoading] = useState(false);
 
   const [viewBusiness,setViewBusiness] = useState()
 
-  useEffect(() => {
-    if(viewBusiness){
-      const fetchPlaceDetails = async () => {
-        setIsLoading(true);
-        try {
-          const response = await axios.get(
-            `https://maps.googleapis.com/maps/api/place/details/json`,
-            {
-              params: {
-                fields:
-                  "url,formatted_address,name,geometry,photo,place_id,rating,vicinity,opening_hours,website,reservable,delivery,formatted_phone_number,international_phone_number,address_component",
-                place_id: supportItem?.googlePlaceId,
-                key: googleAPIKey,
-              },
-            }
-          );
-          console.log(response,"response")
-          if(response?.status === 200){
-            setPlaceDetails(response)
-            navigate("/admin/edit-support",{state:{businessDetail:response?.data,supportItem:supportItem,fromResolve:true}});
-          }
-        } catch (error) {
-          console.error("Error fetching place details:", error);
-        } finally {
-          setIsLoading(false);
-        }
-      };
-      fetchPlaceDetails()
-    }
-    }, [viewBusiness])
+  // useEffect(() => {
+  //   if(viewBusiness){
+  //     const fetchPlaceDetails = async () => {
+  //       setIsLoading(true);
+  //       try {
+  //         const response = await axios.get(
+  //           `https://maps.googleapis.com/maps/api/place/details/json`,
+  //           {
+  //             params: {
+  //               fields:
+  //                 "url,formatted_address,name,geometry,photo,place_id,rating,vicinity,opening_hours,website,reservable,delivery,formatted_phone_number,international_phone_number,address_component",
+  //               place_id: supportItem?.googlePlaceId,
+  //               key: googleAPIKey,
+  //             },
+  //           }
+  //         );
+  //         console.log(response,"response")
+  //         if(response?.status === 200){
+  //           setPlaceDetails(response)
+  //           navigate("/admin/edit-support",{state:{businessDetail:response?.data,supportItem:supportItem,fromResolve:true}});
+  //         }
+  //       } catch (error) {
+  //         console.error("Error fetching place details:", error);
+  //       } finally {
+  //         setIsLoading(false);
+  //       }
+  //     };
+  //     fetchPlaceDetails()
+  //   }
+  //   }, [viewBusiness])
 
     console.log(supportItem,"supportItem")
 
   const viewBusinessDetails = (item) =>{
     setViewBusiness(true)
-    setSupportItem(item);
+    // setSupportItem(item);
+    navigate("/admin/edit-support",{state:{businessDetail:item,fromResolve:true}});
   }
 
   return (

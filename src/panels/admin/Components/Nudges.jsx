@@ -5,7 +5,7 @@ import radioSelected from "../../../assets/images/radioSelected.svg";
 import olive from "../../../assets/images/olive.png";
 import restaurantCard from "../../../assets/images/restaurantCard.png";
 import NudgeDetail from "../Components/NudgeDetail";
-import { merchantsListHandler } from "../../../redux/action/merchantsList";
+import { merchantListAction, merchantsListHandler } from "../../../redux/action/merchantsList";
 import { useDispatch, useSelector } from "react-redux";
 import Loader from "../../../common/Loader/Loader";
 import { nudgesListHandler } from "../../../redux/action/nudgesList";
@@ -18,6 +18,10 @@ import { useNavigate } from "react-router-dom";
 const Nudges = () => {
   const navigate = useNavigate();
   const [pagination, setPagination] = useState({ page: 1, limit: 12 });
+  const [merchantPagination, setMerchantPagination] = useState({
+    page: 1,
+    limit: 12,
+  });
   const [activeTab, setActiveTab] = useState(true);
   const [nudgeId, setNudgeId] = useState("");
 
@@ -33,6 +37,7 @@ const Nudges = () => {
   const [page, setPage] = useState(1);
   const scrollContainerRef = useRef(null);
   const [searchString, setSearchString] = useState("");
+  const [searchString1, setSearchString1] = useState("");
   const [selectedValue, setSelectedValue] = useState("");
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
@@ -42,12 +47,25 @@ const Nudges = () => {
 
   const handlePaginationChange = (page, pageSize) => {
     setPagination({ page, limit: pageSize });
-    setSelectedValue("")
+    setSelectedValue("");
+  };
+
+  const handleMerchantPageChange = (page, pageSize) => {
+    // setMerchantPagination((prev) => ({ ...prev, page: newPage }));
+    setMerchantPagination({ page, limit: pageSize });
   };
 
   const handleSearchChange = (value) => {
-    setSearchString(value);
-    setSelectedValue("")
+    // console.log(value,"value")
+    setSearchString(value)
+    // setSearchString1(value);
+    // setSearchString1(value);
+    // if(!value){
+    //   setSearchString(value);
+    // }else {
+    //   setSearchString1(value);
+    // }
+    setSelectedValue("");
   };
 
   useEffect(() => {
@@ -63,18 +81,20 @@ const Nudges = () => {
   }, [isSidebarOpen]);
 
   useEffect(() => {
-    const fetchNudgesList = () => {
-      const payload = {
-        locationId: selectedValue?._id,
-        page: pagination.page,
-        limit: pagination.limit,
-        searchString,
-        isActive: activeTab,
+    // if (selectedValue) {
+      const fetchNudgesList = () => {
+        const payload = {
+          locationId: selectedValue?._id,
+          page: merchantPagination?.page,
+          limit: merchantPagination?.limit,
+          searchString:searchString1,
+          isActive: activeTab,
+        };
+        dispatch(nudgesListHandler(payload));
       };
-      dispatch(nudgesListHandler(payload));
-    };
-    fetchNudgesList();
-  }, [pagination, searchString, activeTab, selectedValue]);
+      fetchNudgesList();
+    // }
+  }, [merchantPagination, searchString1, activeTab,selectedValue]);
 
   useEffect(() => {
     const fetchMerchants = () => {
@@ -83,7 +103,7 @@ const Nudges = () => {
         limit: pagination?.limit,
         timeFrame: "today",
         searchString,
-        searchArea:[]
+        searchArea: [],
       };
       dispatch(merchantsListHandler(payload));
     };
@@ -243,6 +263,7 @@ const Nudges = () => {
                   </button>
                 </div>
               </div>
+
               <div className="merchantGrid mb-20">
                 {nudgesListSelector?.data?.data?.records?.length > 0 ? (
                   nudgesListSelector?.data?.data?.records?.map(
@@ -420,32 +441,57 @@ const Nudges = () => {
                 </div>
               )} */}
 
-
-
-{merchantsListSelector?.data?.data?.records?.length > 0 && (
-                <div className="d-flex align-center justify-between flexPagination">
-                  <div className="fs-16">
-                    {(() => {
-                      const start =
-                        (pagination.page - 1) * pagination.limit + 1;
-                      const end = Math.min(
-                        start +
-                          merchantsListSelector?.data?.data?.records?.length -
-                          1,
-                        merchantsListSelector?.data?.data?.recordsCount
-                      );
-                      return `Showing ${start} to ${end} of ${merchantsListSelector?.data?.data?.recordsCount} Restaurants`;
-                    })()}
+              {!selectedValue &&
+                merchantsListSelector?.data?.data?.records?.length > 0 && (
+                  <div className="d-flex align-center justify-between flexPagination">
+                    <div className="fs-16">
+                      {(() => {
+                        const start =
+                          (pagination.page - 1) * pagination.limit + 1;
+                        const end = Math.min(
+                          start +
+                            merchantsListSelector?.data?.data?.records?.length -
+                            1,
+                          merchantsListSelector?.data?.data?.recordsCount
+                        );
+                        return `Showing ${start} to ${end} of ${merchantsListSelector?.data?.data?.recordsCount} Restaurants`;
+                      })()}
+                    </div>
+                    <Pagination
+                      current={pagination.page}
+                      pageSize={pagination.limit}
+                      total={merchantsListSelector?.data?.data?.recordsCount}
+                      onChange={handlePaginationChange}
+                    />
                   </div>
-                  <Pagination
-                    current={pagination.page}
-                    pageSize={pagination.limit}
-                    total={merchantsListSelector?.data?.data?.recordsCount}
-                    onChange={handlePaginationChange}
-                  />
-                </div>
-              )}
+                )}
 
+              {selectedValue &&
+                nudgesListSelector?.data?.data?.records?.length > 0 && (
+                  <div className="d-flex align-center justify-between flexPagination">
+                    <div className="fs-16">
+                      {(() => {
+                        const start =
+                          (merchantPagination.page - 1) *
+                            merchantPagination.limit +
+                          1;
+                        const end = Math.min(
+                          start +
+                            nudgesListSelector?.data?.data?.records?.length -
+                            1,
+                          nudgesListSelector?.data?.data?.recordsCount
+                        );
+                        return `Showing ${start} to ${end} of ${nudgesListSelector?.data?.data?.recordsCount} Restaurants`;
+                      })()}
+                    </div>
+                    <Pagination
+                      current={merchantPagination.page}
+                      pageSize={merchantPagination.limit}
+                      total={nudgesListSelector?.data?.data?.recordsCount}
+                      onChange={handleMerchantPageChange}
+                    />
+                  </div>
+                )}
             </div>
           </>
         )}
