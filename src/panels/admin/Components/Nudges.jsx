@@ -17,10 +17,10 @@ import { useNavigate } from "react-router-dom";
 
 const Nudges = () => {
   const navigate = useNavigate();
-  const [pagination, setPagination] = useState({ page: 1, limit: 12 });
+  const [pagination, setPagination] = useState({ page: 1, limit: 10 });
   const [merchantPagination, setMerchantPagination] = useState({
     page: 1,
-    limit: 12,
+    limit: 10,
   });
   const [activeTab, setActiveTab] = useState(true);
   const [nudgeId, setNudgeId] = useState("");
@@ -56,7 +56,6 @@ const Nudges = () => {
   };
 
   const handleSearchChange = (value) => {
-    // console.log(value,"value")
     setSearchString(value)
     // setSearchString1(value);
     // setSearchString1(value);

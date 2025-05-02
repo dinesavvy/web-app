@@ -18,7 +18,7 @@ const Support = () => {
 
   const messageApi = useCommonMessage();
   const [activeTab, setActiveTab] = useState("Active");
-  const [pagination, setPagination] = useState({ page: 1, limit: 12 });
+  const [pagination, setPagination] = useState({ page: 1, limit: 10 });
   const dispatch = useDispatch();
 
   const [supportItem, setSupportItem] = useState({});
@@ -122,7 +122,6 @@ const [isLoading, setIsLoading] = useState(false);
   //             },
   //           }
   //         );
-  //         console.log(response,"response")
   //         if(response?.status === 200){
   //           setPlaceDetails(response)
   //           navigate("/admin/edit-support",{state:{businessDetail:response?.data,supportItem:supportItem,fromResolve:true}});
@@ -136,8 +135,6 @@ const [isLoading, setIsLoading] = useState(false);
   //     fetchPlaceDetails()
   //   }
   //   }, [viewBusiness])
-
-    console.log(supportItem,"supportItem")
 
   const viewBusinessDetails = (item) =>{
     setViewBusiness(true)

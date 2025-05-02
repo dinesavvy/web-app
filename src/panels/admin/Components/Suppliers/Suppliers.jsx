@@ -20,7 +20,7 @@ import SearchSelect from "../SearchSelect";
 const Suppliers = () => {
   const [modal2Open, setModal2Open] = useState(false);
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
-  const [pagination, setPagination] = useState({ page: 1, limit: 12 });
+  const [pagination, setPagination] = useState({ page: 1, limit: 10 });
   const [removeSupplier, setRemoveSupplier] = useState({});
   const removeSupplierSelector = useSelector((state) => state?.removeSupplier);
   const [selectedSupplier, setSelectedSupplier] = useState(null);

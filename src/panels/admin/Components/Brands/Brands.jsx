@@ -15,7 +15,7 @@ import noImageFound from "../../../../assets/images/noImageFound.png";
 const Brands = () => {
   const messageApi = useCommonMessage();
   const [searchString, setSearchString] = useState("");
-  const [pagination, setPagination] = useState({ page: 1, limit: 12 });
+  const [pagination, setPagination] = useState({ page: 1, limit: 10 });
   const [brandDetails, setBrandDetails] = useState({});
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
   const navigate = useNavigate();

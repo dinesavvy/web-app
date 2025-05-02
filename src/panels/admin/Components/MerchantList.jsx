@@ -15,7 +15,7 @@ import Loader from "../../../common/Loader/Loader";
 import GroupList from "./GroupList";
 
 const MerchantList = () => {
-  const [pagination, setPagination] = useState({ page: 1, limit: 12 });
+  const [pagination, setPagination] = useState({ page: 1, limit: 10 });
   const [searchString, setSearchString] = useState("");
   const [searchArea, setSearchArea] = useState([]);
   const [activeTab2, setActiveTab2] = useState("today");

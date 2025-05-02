@@ -44,6 +44,7 @@ import resolveSupportRequestSlice from "../action/resolveSupportRequest";
 import googleBusinessSlice from "../action/googleBusinessSlice"
 import categoryListSlice from "../action/categoryList"
 import addBusinessSlice from "../action/addBusinessAdminSlice"
+import placeDetailsSlice from "../action/placeDetailsSlice"
 
 const store = configureStore({
   reducer: {
@@ -92,7 +93,8 @@ const store = configureStore({
     resolveSupportRequest: resolveSupportRequestSlice,
     googleBusiness:googleBusinessSlice,
     categoryList:categoryListSlice,
-    addBusiness:addBusinessSlice
+    addBusiness:addBusinessSlice,
+    placeDetails:placeDetailsSlice
   },
 });
 

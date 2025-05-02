@@ -25,7 +25,7 @@ const Distributors = () => {
   const [searchString, setSearchString] = useState("");
   const [searchArea, setSearchArea] = useState([]);
   const [removeDistributor, setRemoveDistributor] = useState({});
-  const [pagination, setPagination] = useState({ page: 1, limit: 12 });
+  const [pagination, setPagination] = useState({ page: 1, limit: 10 });
   const createDistributorSelector = useSelector(
     (state) => state?.createDistributor
   );

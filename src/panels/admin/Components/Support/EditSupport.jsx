@@ -98,13 +98,13 @@ const EditSupport = () => {
     businessCategory: Yup.string().required("Business category is required"),
     website: Yup.string().url("Must be a valid URL"),
     phoneNumber: Yup.string().required("Phone number is required"),
-    address: Yup.object().shape({
-      country: Yup.string().required("Country is required"),
-      state: Yup.string().required("State is required"),
-      streetAddress: Yup.string().required("Street address is required"),
-      city: Yup.string().required("City is required"),
-      postalCode: Yup.string().required("Postal code is required"),
-    }),
+    // address: Yup.object().shape({
+      // country: Yup.string().required("Country is required"),
+      // state: Yup.string().required("State is required"),
+      // streetAddress: Yup.string().required("Street address is required"),
+      // city: Yup.string().required("City is required"),
+      // postalCode: Yup.string().required("Postal code is required"),
+    // }),
     operatingHours: Yup.object().shape({
       // We'll add validation for operating hours if needed
     }),
@@ -619,7 +619,7 @@ const EditSupport = () => {
                     )}
                   </div>
 
-                  <div>
+                  <div className="wordWrap">
                     <label
                       htmlFor="website"
                       className="grey mb-10 fs-16 fw-500"
@@ -641,8 +641,13 @@ const EditSupport = () => {
                         )}
                       </>
                     ) : (
-                      <a className="anchor" href={values.website}>
-                        {values.website ||
+                      <a  className="anchor"
+                      href={values?.website ||
+                        state?.businessDetail?.businessDetails?.websiteUrl ||
+                        "N/A"}
+                      target="_blank"
+                      rel="noopener noreferrer">
+                        {values?.website ||
                           state?.businessDetail?.businessDetails?.websiteUrl ||
                           "N/A"}
                       </a>
@@ -671,7 +676,9 @@ const EditSupport = () => {
                         )}
                       </>
                     ) : (
-                      <a className="anchor" href={`tel:${values.phoneNumber}`}>
+                      <a className="anchor" href={`tel:${values.phoneNumber ||
+                        state?.businessDetail?.businessDetails?.phoneNumber ||
+                        "N/A"}`}>
                         {values.phoneNumber ||
                           state?.businessDetail?.businessDetails?.phoneNumber ||
                           "N/A"}
@@ -701,11 +708,11 @@ const EditSupport = () => {
                         )} */}
                       </>
                     ) : (
-                      <a className="anchor" href={values.description}>
+                      <div>
                         {values.description ||
                           state?.businessDetail?.description ||
                           "N/A"}
-                      </a>
+                      </div>
                     )}
                   </div>
                 </div>
@@ -906,7 +913,7 @@ const EditSupport = () => {
 
               <div className="tabPadding mb-30">
                 <div className="fs-20 fw-600 mb-20">Hours of operation</div>
-                {state?.fromResolve === false && (
+                {!state?.fromResolve  && (
                   <>
                     {!editDetail ? (
                       <div>

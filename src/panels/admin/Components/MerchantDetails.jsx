@@ -33,7 +33,7 @@ import AddNudgeCreditDrawer from "./merchant/AddCreditDrawer";
 
 const MerchantDetails = () => {
   const { state } = useLocation();
-    const [activeNudge, setActiveNudge] = useState(5);
+  const [activeNudge, setActiveNudge] = useState(5);
   const [activeTab3, setActiveTab3] = useState("1");
   const [editInput, setEditInput] = useState(false);
   const [switchState, setSwitchState] = useState(false);
@@ -621,36 +621,40 @@ const MerchantDetails = () => {
                     </div>
                   )}
                 </div>
+                  {merchantDetailsSelector?.data?.data?.businessHours?.periods?.length>0 && (
+
                 <div className="card">
                   <div className="d-flex align-center justify-between gap-20 mb-20 flexmd">
                     <div className="fs-20 fw-700">Hours of operation</div>
                   </div>
-                  {!editInput && (
-                    <div>
-                      {merchantDetailsSelector?.data?.data?.businessHours?.periods?.map(
-                        (item, index) => {
-                          return (
-                            <>
-                              <div className="divider2"></div>
-                              <div
-                                className="d-flex align-center justify-between"
-                                key={index}
-                              >
-                                <div className="grey fs-16">
-                                  {item?.dayOfWeek}
-                                </div>
-                                <div className="fs-16">
-                                  {item?.startLocalTime +
-                                    " to " +
-                                    item?.endLocalTime}
-                                </div>
-                              </div>
-                            </>
-                          );
-                        }
+                 
+                      {!editInput && (
+                        <div>
+                          {merchantDetailsSelector?.data?.data?.businessHours?.periods?.map(
+                            (item, index) => {
+                              return (
+                                <>
+                                  <div className="divider2"></div>
+                                  <div
+                                    className="d-flex align-center justify-between"
+                                    key={index}
+                                  >
+                                    <div className="grey fs-16">
+                                      {item?.dayOfWeek}
+                                    </div>
+                                    <div className="fs-16">
+                                      {item?.startLocalTime +
+                                        " to " +
+                                        item?.endLocalTime}
+                                    </div>
+                                  </div>
+                                </>
+                              );
+                            }
+                          )}
+                        </div>
                       )}
-                    </div>
-                  )}
+                    
                   {editInput && (
                     <>
                       <div className="overflow">
@@ -674,7 +678,10 @@ const MerchantDetails = () => {
                                 >
                                   From
                                 </label>
-                                <TimePicker className="customTime input" showOk={false} />
+                                <TimePicker
+                                  className="customTime input"
+                                  showOk={false}
+                                />
                               </div>
                               <div className="w-100">
                                 <label
@@ -683,7 +690,10 @@ const MerchantDetails = () => {
                                 >
                                   to
                                 </label>
-                                <TimePicker className="customTime input" showOk={false} />
+                                <TimePicker
+                                  className="customTime input"
+                                  showOk={false}
+                                />
                               </div>
                               <div className="addTime">
                                 <img src={addTime} alt="" />
@@ -712,7 +722,10 @@ const MerchantDetails = () => {
                                 >
                                   From
                                 </label>
-                                <TimePicker className="customTime input" showOk={false} />
+                                <TimePicker
+                                  className="customTime input"
+                                  showOk={false}
+                                />
                               </div>
                               <div className="w-100">
                                 <label
@@ -721,7 +734,10 @@ const MerchantDetails = () => {
                                 >
                                   to
                                 </label>
-                                <TimePicker className="customTime input" showOk={false} />
+                                <TimePicker
+                                  className="customTime input"
+                                  showOk={false}
+                                />
                               </div>
                               <div className="addTime">
                                 <img src={addTime} alt="" />
@@ -750,7 +766,10 @@ const MerchantDetails = () => {
                                 >
                                   From
                                 </label>
-                                <TimePicker className="customTime input" showOk={false} />
+                                <TimePicker
+                                  className="customTime input"
+                                  showOk={false}
+                                />
                               </div>
                               <div className="w-100">
                                 <label
@@ -759,7 +778,10 @@ const MerchantDetails = () => {
                                 >
                                   to
                                 </label>
-                                <TimePicker className="customTime input" showOk={false} />
+                                <TimePicker
+                                  className="customTime input"
+                                  showOk={false}
+                                />
                               </div>
                               <div className="addTime">
                                 <img src={addTime} alt="" />
@@ -788,7 +810,10 @@ const MerchantDetails = () => {
                                 >
                                   From
                                 </label>
-                                <TimePicker className="customTime input" showOk={false} />
+                                <TimePicker
+                                  className="customTime input"
+                                  showOk={false}
+                                />
                               </div>
                               <div className="w-100">
                                 <label
@@ -797,7 +822,10 @@ const MerchantDetails = () => {
                                 >
                                   to
                                 </label>
-                                <TimePicker className="customTime input" showOk={false} />
+                                <TimePicker
+                                  className="customTime input"
+                                  showOk={false}
+                                />
                               </div>
                               <div className="addTime">
                                 <img src={addTime} alt="" />
@@ -826,7 +854,10 @@ const MerchantDetails = () => {
                                 >
                                   From
                                 </label>
-                                <TimePicker className="customTime input" showOk={false} />
+                                <TimePicker
+                                  className="customTime input"
+                                  showOk={false}
+                                />
                               </div>
                               <div className="w-100">
                                 <label
@@ -835,7 +866,10 @@ const MerchantDetails = () => {
                                 >
                                   to
                                 </label>
-                                <TimePicker className="customTime input" showOk={false} />
+                                <TimePicker
+                                  className="customTime input"
+                                  showOk={false}
+                                />
                               </div>
                               <div className="addTime">
                                 <img src={addTime} alt="" />
@@ -864,7 +898,10 @@ const MerchantDetails = () => {
                                 >
                                   From
                                 </label>
-                                <TimePicker className="customTime input" showOk={false} />
+                                <TimePicker
+                                  className="customTime input"
+                                  showOk={false}
+                                />
                               </div>
                               <div className="w-100">
                                 <label
@@ -873,7 +910,10 @@ const MerchantDetails = () => {
                                 >
                                   to
                                 </label>
-                                <TimePicker className="customTime input" showOk={false} />
+                                <TimePicker
+                                  className="customTime input"
+                                  showOk={false}
+                                />
                               </div>
                               <div className="addTime">
                                 <img src={addTime} alt="" />
@@ -902,7 +942,10 @@ const MerchantDetails = () => {
                                 >
                                   From
                                 </label>
-                                <TimePicker className="customTime input" showOk={false} />
+                                <TimePicker
+                                  className="customTime input"
+                                  showOk={false}
+                                />
                               </div>
                               <div className="w-100">
                                 <label
@@ -911,7 +954,10 @@ const MerchantDetails = () => {
                                 >
                                   to
                                 </label>
-                                <TimePicker className="customTime input" showOk={false} />
+                                <TimePicker
+                                  className="customTime input"
+                                  showOk={false}
+                                />
                               </div>
                               <div className="addTime">
                                 <img src={addTime} alt="" />
@@ -939,6 +985,7 @@ const MerchantDetails = () => {
                     </div>
                   )}
                 </div>
+                  )}
               </div>
             </>
           ) : activeTab3 === "2" ? (
