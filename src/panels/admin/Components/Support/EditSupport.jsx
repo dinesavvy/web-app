@@ -37,6 +37,7 @@ const EditSupport = () => {
   const addImageDataSelector = useSelector((state) => state?.addImageData);
   const location = useLocation();
   const { state } = location;
+  console.log(state,"state")
   const dispatch = useDispatch();
 
   const businessDetailsData = state?.businessDetail;
@@ -1270,8 +1271,7 @@ const EditSupport = () => {
                   businessDetailsData={businessDetailsData}
                 />
               </div>
-
-              {editDetail && (
+              {state?.supportItem?.requestStatus !== "Imported" && !state?.fromResolve && (
                 <div className="d-flex align-center justify-end">
                   <button
                     type="submit"

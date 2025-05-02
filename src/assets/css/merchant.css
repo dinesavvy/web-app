@@ -298,8 +298,16 @@
   border: 1px solid #E3E3E8;
   border-radius: 20px;
   padding: 20px;
+  position: relative;
+  overflow: hidden;
+  box-sizing: border-box;
 }
-
+.cardFollow > .d-flex{
+  box-sizing: border-box;
+}
+.paddingsupport{
+  padding: 10px;
+}
 .w-172 {
   width: 172px;
 }

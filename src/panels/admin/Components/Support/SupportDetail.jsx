@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import closeRightSidebar from "../../../../assets/images/closeRightSidebar.svg";
 import importIcon from "../../../../assets/images/importIcon.svg";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import Loader from "../../../../common/Loader/Loader";
 import RightArrow from "../../../../assets/images/rightArrow.svg";
 import { placeDetailsHandler } from "../../../../redux/action/placeDetailsSlice";
@@ -26,7 +25,10 @@ const SupportDetail = ({ isOpen, toggleSidebar, supportItem, activeTab }) => {
   const importFromGoogle = () => {
     if (supportItem) {
       navigate("/admin/edit-support", {
-        state: { businessDetail: placeDetailsSelector?.data?.data, supportItem: supportItem },
+        state: {
+          businessDetail: placeDetailsSelector?.data?.data,
+          supportItem: supportItem,
+        },
       });
     }
   };
@@ -115,7 +117,15 @@ const SupportDetail = ({ isOpen, toggleSidebar, supportItem, activeTab }) => {
           </div>
           {activeTab === "Active" && (
             <div className="btn" onClick={() => importFromGoogle()}>
-              Import form Google <img src={importIcon} alt="" />
+              {supportItem?.requestStatus === "Imported" ? (
+                <>
+                  View Business Details <img src={RightArrow} alt="" />
+                </>
+              ) : (
+                <>
+                  Import form Google <img src={importIcon} alt="" />
+                </>
+              )}
             </div>
           )}
           {activeTab === "Resolve" && (

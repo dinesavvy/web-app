@@ -15,19 +15,19 @@ import { useNavigate } from "react-router-dom";
 
 const Support = () => {
   const [resolveModal, setResolveModal] = useState(false);
-
-  const messageApi = useCommonMessage();
   const [activeTab, setActiveTab] = useState("Active");
   const [pagination, setPagination] = useState({ page: 1, limit: 10 });
-  const dispatch = useDispatch();
-
   const [supportItem, setSupportItem] = useState({});
   const [resolveModalItem, setResolveModalItem] = useState();
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const messageApi = useCommonMessage();
 
   const handleTabClick = (tab) => {
     setActiveTab(tab); // Update the active tab
   };
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const toggleSidebar = async (item) => {
     setSupportItem(item);
@@ -70,11 +70,6 @@ const Support = () => {
   const resolveSupportReq = (item) => {
     setResolveModal(true);
     setResolveModalItem(item);
-    // let payload = {
-    //   status: "Completed",
-    //   businessRequestId: item?._id,
-    // };
-    // dispatch(resolveSupportRequestHandler(payload));
   };
   // Resolve business useEffect
   useEffect(() => {
@@ -95,56 +90,16 @@ const Support = () => {
       dispatch(resolveSupportRequestAction.resolveSupportRequestInfoReset());
     }
   }, [resolveSupportRequestSelector]);
-  
-const navigate = useNavigate()
 
-
-
-const [placeDetails, setPlaceDetails] = useState(null);
-const [isLoading, setIsLoading] = useState(false);
-  const googleAPIKey = "AIzaSyBaLPuWhc_yVKRMBl0_4EoxSYDYJTsxVx8";
-
-  const [viewBusiness,setViewBusiness] = useState()
-
-  // useEffect(() => {
-  //   if(viewBusiness){
-  //     const fetchPlaceDetails = async () => {
-  //       setIsLoading(true);
-  //       try {
-  //         const response = await axios.get(
-  //           `https://maps.googleapis.com/maps/api/place/details/json`,
-  //           {
-  //             params: {
-  //               fields:
-  //                 "url,formatted_address,name,geometry,photo,place_id,rating,vicinity,opening_hours,website,reservable,delivery,formatted_phone_number,international_phone_number,address_component",
-  //               place_id: supportItem?.googlePlaceId,
-  //               key: googleAPIKey,
-  //             },
-  //           }
-  //         );
-  //         if(response?.status === 200){
-  //           setPlaceDetails(response)
-  //           navigate("/admin/edit-support",{state:{businessDetail:response?.data,supportItem:supportItem,fromResolve:true}});
-  //         }
-  //       } catch (error) {
-  //         console.error("Error fetching place details:", error);
-  //       } finally {
-  //         setIsLoading(false);
-  //       }
-  //     };
-  //     fetchPlaceDetails()
-  //   }
-  //   }, [viewBusiness])
-
-  const viewBusinessDetails = (item) =>{
-    setViewBusiness(true)
-    // setSupportItem(item);
-    navigate("/admin/edit-support",{state:{businessDetail:item,fromResolve:true}});
-  }
+  const viewBusinessDetails = (item) => {
+    navigate("/admin/edit-support", {
+      state: { businessDetail: item, fromResolve: true },
+    });
+  };
 
   return (
     <>
-      {(supportListSelector?.isLoading ||isLoading) && <Loader />}
+      {supportListSelector?.isLoading && <Loader />}
       <div className="dashboard">
         <div className="tabPadding">
           <div className="fs-24 fw-600 mb-30">Support Request</div>
@@ -177,7 +132,15 @@ const [isLoading, setIsLoading] = useState(false);
                       return (
                         <>
                           <div className="cardFollow" key={index}>
-                            <div className="d-flex justify-between flexColumn">
+                            <div className="d-flex justify-between h-100 flexColumn">
+                              {item?.requestStatus === "Imported" && (
+                                <>
+                                  <div className="paddingsupport"></div>
+                                  <div className="nailedIt active fs-14">
+                                    Merchant Business Imported
+                                  </div>
+                                </>
+                              )}
                               <div>
                                 <div className="d-flex align-center gap-12">
                                   <div className="initialName">
@@ -185,6 +148,7 @@ const [isLoading, setIsLoading] = useState(false);
                                       ?.split(" ")
                                       .map((word) => word[0])
                                       .join("")
+                                      .slice(0, 2)
                                       .toUpperCase()}
                                   </div>
                                   <div>
@@ -233,8 +197,8 @@ const [isLoading, setIsLoading] = useState(false);
                                   onClick={() => {
                                     if (activeTab === "Active") {
                                       toggleSidebar(item);
-                                    }else {
-                                      viewBusinessDetails(item)
+                                    } else {
+                                      viewBusinessDetails(item);
                                     }
                                   }}
                                 >
