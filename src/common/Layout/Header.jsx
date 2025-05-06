@@ -155,7 +155,7 @@ const Header = ({ handleTrigger }) => {
 
           <div
             className="notification"
-            onClick={() => setNotificationDrawer(true)}
+            // onClick={() => setNotificationDrawer(true)}
           >
             <img src={notification} alt="icon" className="h-100" />
           </div>

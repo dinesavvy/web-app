@@ -41,6 +41,7 @@ const EditSupport = () => {
   const dispatch = useDispatch();
 
   const businessDetailsData = state?.businessDetail;
+  
 
   const getAllCountry = Country.getAllCountries();
   const getAllState = State.getAllStates();
@@ -210,17 +211,17 @@ const EditSupport = () => {
   };
   // Initial form values with proper address components
   const initialValues = {
-    businessName: businessDetailsData?.result?.name || "",
+    businessName: state?.fromResolve ===true ?state?.businessDetail?.businessDetails?.businessName: businessDetailsData?.result?.name || "",
     businessCategory: "Restaurant",
-    website: businessDetailsData?.result?.website || "",
-    phoneNumber: businessDetailsData?.result?.formatted_phone_number || "",
+    website:state?.fromResolve ===true? state?.businessDetail?.businessDetails?.websiteUrl:  businessDetailsData?.result?.website || "",
+    phoneNumber: state?.fromResolve ===true ?state?.businessDetail?.businessDetails?.phoneNumber :businessDetailsData?.result?.formatted_phone_number || "",
     description: state?.supportItem?.description || "",
     address: {
-      country: getAddressComponent("country") || "",
-      state: getAddressComponent("administrative_area_level_1") || "",
+      country: state?.fromResolve ===true?state?.businessDetail?.businessDetails?.address?.country: getAddressComponent("country") || "",
+      state:state?.fromResolve ===true?state?.businessDetail?.businessDetails?.address?.locality :getAddressComponent("administrative_area_level_1") || "",
       streetAddress: businessDetailsData?.result?.formatted_address || "",
       city: getAddressComponent("locality") || "",
-      postalCode: getAddressComponent("postal_code") || "",
+      postalCode:  state?.fromResolve ===true?state?.businessDetail?.businessDetails?.address?.postalCode :getAddressComponent("postal_code") || "",
     },
     operatingHours: daysOfWeek.reduce((acc, day, index) => {
       const dayHours =
@@ -516,7 +517,8 @@ const EditSupport = () => {
                     <div>
                       <div className="fs-24 fw-600">
                         {businessDetailsData?.result?.name ||
-                          state?.businessDetail?.businessName ||
+                          // state?.businessDetail?.businessName ||
+                          state?.businessDetail?.businessDetails?.businessName||
                           "N/A"}
                       </div>
                     </div>

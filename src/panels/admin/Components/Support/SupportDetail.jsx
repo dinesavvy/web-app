@@ -60,7 +60,7 @@ const SupportDetail = ({ isOpen, toggleSidebar, supportItem, activeTab }) => {
         <div className="overflowSidebar">
           <div className="d-flex align-center gap-12 mb-18">
             <div className="initialName">
-              {supportItem?.fullName
+              {supportItem?.businessName
                 ?.split(" ")
                 .map((word) => word[0])
                 .join("")
@@ -68,8 +68,8 @@ const SupportDetail = ({ isOpen, toggleSidebar, supportItem, activeTab }) => {
             </div>
             <div>
               <div className="fw-700">
-                {supportItem?.fullName.charAt(0).toUpperCase() +
-                  supportItem?.fullName.slice(1).toLowerCase() || "-"}
+                {supportItem?.businessName.charAt(0).toUpperCase() +
+                  supportItem?.businessName.slice(1).toLowerCase() || "-"}
               </div>
               {/* <div className="fs-14 fw-300 o5 ">#123456</div> */}
             </div>
@@ -79,8 +79,8 @@ const SupportDetail = ({ isOpen, toggleSidebar, supportItem, activeTab }) => {
             <div className="fs-14">
               <div className="lightBlack mb-4">Business name</div>
               <div className="fw-600">
-                {supportItem?.fullName?.charAt(0)?.toUpperCase() +
-                  supportItem?.fullName?.slice(1)?.toLowerCase() || "-"}
+                {supportItem?.businessName?.charAt(0)?.toUpperCase() +
+                  supportItem?.businessName?.slice(1)?.toLowerCase() || "-"}
               </div>
               {/* {supportItem?.fullName?.charAt(0)?.toUpperCase() + supportItem?.fullName?.slice(1)?.toLowerCase() || "-"} */}
             </div>
