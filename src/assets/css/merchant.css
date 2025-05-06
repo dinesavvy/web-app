@@ -1710,6 +1710,10 @@ input.addTitleInput::placeholder {
 .selectMerchant .brandItem img{
   object-fit: contain;
 }
+.overflow-Y {
+  overflow-y: auto;
+  max-height: 400px;
+}
 .custom-drag-item {
   position: absolute;
   display: flex;

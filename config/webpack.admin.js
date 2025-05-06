@@ -1,6 +1,7 @@
 // config/webpack.admin.js
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+const CopyWebpackPlugin = require("copy-webpack-plugin");
 
 module.exports = {
   mode: "development",
@@ -9,6 +10,7 @@ module.exports = {
     path: path.resolve(__dirname, "../dist/admin"),
     filename: "bundle.js",
     publicPath: "/", // Ensure the correct public path
+    assetModuleFilename: 'assets/[name][ext]' // Add this line for better asset handling
   },
   module: {
     rules: [
@@ -22,10 +24,10 @@ module.exports = {
         use: ["style-loader", "css-loader"],
       },
       {
-        test: /\.(png|jpe?g|gif|svg|webp)$/, // Match common image formats
+        test: /\.(png|jpe?g|gif|svg|webp|ico)$/, // Match common image formats
         type: "asset/resource", // Emits a separate file and exports the URL
         generator: {
-          filename: "images/[name][hash][ext]", // Custom output folder and name
+          filename: "assets/images/[name][ext]", // Updated path for images
         },
       },
     ],
@@ -34,15 +36,36 @@ module.exports = {
     extensions: [".js", ".jsx"],
     alias: {
       "@panels": path.resolve(__dirname, "../src/panels"),
+      "@assets": path.resolve(__dirname, "../src/assets"),
     },
   },
   plugins: [
     new HtmlWebpackPlugin({
       template: "./public/index.html",
     }),
+    new CopyWebpackPlugin({
+      patterns: [
+        {
+          from: "src/assets/images",
+          to: "images",
+        },
+        {
+          from: "src/assets/images/Favicon.png",
+          to: "favicon.png",
+        }
+      ],
+    }),
   ],
   devServer: {
-    static: path.join(__dirname, "../dist/admin"),
+    static: [
+      {
+        directory: path.join(__dirname, "../dist/admin"),
+      },
+      {
+        directory: path.join(__dirname, "../src/assets"),
+        publicPath: "/assets"
+      }
+    ],
     port: 3002,
     open: true,
     historyApiFallback: {

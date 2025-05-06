@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState, useRef, useCallback } from "react";
 import burgerMenu from "../../assets/images/burgerMenu.svg";
 import notification from "../../assets/images/notification.svg";
 import cartIcon from "../../assets/images/cartIcon.svg";
@@ -53,11 +53,12 @@ const Header = ({ handleTrigger }) => {
   }, [notificationDrawer]);
 
 
+
   useEffect(() => {
     if (getMerchantLogin) {
       let payload = {
         page: 1,
-        limit: 10,
+        limit: 100,
       };
       dispatch(businessListHandler(payload));
     }

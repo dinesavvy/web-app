@@ -37,7 +37,7 @@ const EditSupport = () => {
   const addImageDataSelector = useSelector((state) => state?.addImageData);
   const location = useLocation();
   const { state } = location;
-  console.log(state,"state")
+  // console.log(state,"state")
   const dispatch = useDispatch();
 
   const businessDetailsData = state?.businessDetail;
@@ -107,9 +107,9 @@ const EditSupport = () => {
       // city: Yup.string().required("City is required"),
       // postalCode: Yup.string().required("Postal code is required"),
     // }),
-    operatingHours: Yup.object().shape({
+    // operatingHours: Yup.object().shape({
       // We'll add validation for operating hours if needed
-    }),
+    // }),
   });
 
   // Helper function to extract address components
@@ -256,14 +256,19 @@ const EditSupport = () => {
   const categoryListSelector = useSelector((state) => state?.categoryList);
   const addBusinessSelector = useSelector((state) => state?.addBusiness);
 
-  useEffect(() => {
-    if (addBusinessSelector?.data?.statusCode === 200) {
-      navigate("/admin/support");
-      dispatch(addBusinessAction.addBusinessReset());
-    }
-  }, [addBusinessSelector]);
 
-  // Handle submit function when create business
+
+  // Add scrollToError function
+  const scrollToError = (errors) => {
+    const firstErrorField = Object.keys(errors)[0];
+    const errorElement = document.querySelector(`[name="${firstErrorField}"]`);
+    if (errorElement) {
+      errorElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      errorElement.focus();
+    }
+  };
+
+  // Update handleSubmit function
   const handleSubmit = (values, { setSubmitting }) => {
     console.log("Form values:", values);
     // setEditDetail(false)
@@ -393,8 +398,16 @@ const EditSupport = () => {
         content: addBusinessSelector?.message?.response?.data?.message,
       });
       dispatch(addBusinessAction.addBusinessReset());
+    }else if(addBusinessSelector?.data?.statusCode === 200){
+      messageApi.open({
+        type: "success",
+        content: addBusinessSelector?.data?.message,
+      });
+      navigate("/admin/support");
+      dispatch(addBusinessAction.addBusinessReset());
     }
   }, [addBusinessSelector]);
+
 
   const images = [
     businessPhoto,
@@ -493,6 +506,8 @@ const EditSupport = () => {
           initialValues={initialValues}
           validationSchema={validationSchema}
           onSubmit={handleSubmit}
+          validateOnBlur={true}
+          validateOnChange={true}
         >
           {({
             values,
@@ -504,7 +519,13 @@ const EditSupport = () => {
             isSubmitting,
             setFieldValue,
           }) => (
-            <Form>
+            <Form onSubmit={(e) => {
+              e.preventDefault();
+              if (Object.keys(errors).length > 0) {
+                scrollToError(errors);
+              }
+              handleSubmit(e);
+            }}>
               <div className="tabPadding mb-30">
                 <div className="d-flex align-center justify-between gap-20 w-100">
                   <div className="d-flex align-center gap-20">
