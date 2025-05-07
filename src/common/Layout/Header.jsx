@@ -8,7 +8,7 @@ import SelectModal from "../../panels/merchant/auth/SelectModal";
 import { useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { businessListHandler } from "../../redux/action/businessAction/businessListSlice";
-import { useBusiness } from "./BusinessContext";
+// import { useBusiness } from "./BusinessContext";
 import NotificationDrawer from "../../panels/merchant/notification/NotificationDrawer";
 
 const Header = ({ handleTrigger }) => {
@@ -16,7 +16,7 @@ const Header = ({ handleTrigger }) => {
   const [notificationDrawer, setNotificationDrawer] = useState(false);
 
   const dispatch = useDispatch();
-  const { selectedBusiness, setSelectedBusiness } = useBusiness();
+  // const { selectedBusiness, setSelectedBusiness } = useBusiness();
 
   const acceptInviteSelector = useSelector((state) => state?.acceptInvite);
 
@@ -67,7 +67,7 @@ const Header = ({ handleTrigger }) => {
 
   // Handle Selection
   const handleSelect = (item) => {
-    setSelectedBusiness(item);  
+    // setSelectedBusiness(item);  
     window.location.reload();
     setModalOpen(false);
   };
@@ -134,7 +134,7 @@ const Header = ({ handleTrigger }) => {
         </div> */}
           {/* {getMerchantBusinessSelector!==null && ( */}
           {/* {businessListSelector?.data?.data?.records?.length > 0 && localStorage.getItem("merchantLogin")===true &&selectedBusiness !==undefined &&  ( */} 
-          <div
+          {/* <div
             className="d-flex selectCommon cursor-pointer align-center gap-6 "
             onClick={toggleModal}
           >
@@ -149,7 +149,7 @@ const Header = ({ handleTrigger }) => {
             <div className="h16">
               <img src={arrowRight} alt="arrowRight" />
             </div>
-          </div>
+          </div> */}
           {/* )} 
           {/* )}  */}
           {/* Modal Component */}
