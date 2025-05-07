@@ -1,6 +1,7 @@
 // config/webpack.merchant.js
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+const CopyWebpackPlugin = require("copy-webpack-plugin");
 
 module.exports = {
   mode: "development", // Change to "production" for production builds
@@ -22,10 +23,10 @@ module.exports = {
         use: ["style-loader", "css-loader"], // Use style-loader and css-loader
       },
       {
-        test: /\.(png|jpe?g|gif|svg|webp)$/, // Match common image formats
+        test: /\.(png|jpe?g|gif|svg|webp|ico)$/, // Match common image formats
         type: "asset/resource", // Emits a separate file and exports the URL
         generator: {
-          filename: "images/[name][hash][ext]", // Custom output folder and name for images
+          filename: "static/[name][ext]",
         },
       },
     ],
@@ -34,16 +35,26 @@ module.exports = {
     extensions: [".js", ".jsx"], // Resolve these extensions
     alias: {
       "@panels": path.resolve(__dirname, "../src/panels"), // Alias for easier imports
+      "@assets": path.resolve(__dirname, "../src/assets"), // Add assets alias
     },
   },
   plugins: [
     new HtmlWebpackPlugin({
       template: "./public/index.html", // Template for the HTML file
-      filename: "index.html", // Output HTML file name
+    }),
+    new CopyWebpackPlugin({
+      patterns: [
+        {
+          from: "src/assets/images/Favicon.png",
+          to: "favicon.png",
+        },
+      ],
     }),
   ],
   devServer: {
-    static: path.join(__dirname, "../dist/merchant"), // Serve static files from this directory
+    static: {
+      directory: path.join(__dirname, "../dist/merchant"),
+    },
     port: 3001, // Port for the dev server
     open: true, // Automatically open the browser
     historyApiFallback: true, // Support for React Router

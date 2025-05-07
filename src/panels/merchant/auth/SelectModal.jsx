@@ -82,7 +82,7 @@ const SelectModal = ({
             </div>
           </div>
           {/* List of items */}
-          <div className="padding30">
+          <div className="padding30 overflow-Y">
             {businessListSelector?.data?.data?.records?.length > 0 ? (
               <>
                 {businessListSelector?.data?.data?.records?.map(
@@ -106,7 +106,7 @@ const SelectModal = ({
                       <div className="d-flex justify-between align-center gap-16 mb-8">
                         <div>
                           <div className="fs-18 fw-500 mb-4">
-                            {item.businessName}
+                            {item?.businessName}
                           </div>
                           <div className="fs-14 grey">
                             {[
