@@ -50,7 +50,7 @@
   color: #005CDE;
   background: #005CDE1A;
   border-radius: 4px;
-  padding: 4px 18px;
+  padding: 4px 14px;
   font-size: 12px;
   line-height: 18px;
   width: fit-content;
@@ -401,34 +401,37 @@ iframe{
 .blueRing{
   background-color: #005dde2c;
 }
-.blueRing.ring-container{
+.blueRing.ring-container,.ring100.ring-container{
   height: 100px ;
   width: 100px;
 }
 .blueRing .ring{
   border: 4px solid #005ddeb2;
 }
-.blueRing .ring:nth-child(1) {
+.ring100 .ring{
+  border-width: 4px;
+}
+.blueRing .ring:nth-child(1),.ring100 .ring:nth-child(1) {
   width: 43px;
   height: 43px;
 }
 
-.blueRing .ring:nth-child(2) {
+.blueRing .ring:nth-child(2),.ring100 .ring:nth-child(2) {
   width: 58px;
   height: 58px;
 }
 
-.blueRing .ring:nth-child(3) {
+.blueRing .ring:nth-child(3),.ring100 .ring:nth-child(3) {
   width: 73px;
   height: 73px;
 }
 
-.blueRing .ring:nth-child(4) {
+.blueRing .ring:nth-child(4),.ring100 .ring:nth-child(4) {
   width: 88px;
   height: 88px;
 }
 
-.blueRing .ring:nth-child(5) {
+.blueRing .ring:nth-child(5),.ring100 .ring:nth-child(5) {
   width: 100px;
   height: 100px;
 }
@@ -481,34 +484,37 @@ iframe{
     width: 90px;
     height: 90px;
   }
-  .blueRing.ring-container{
+  .blueRing.ring-container,.ring100.ring-container{
     height: 90px ;
     width: 90px;
   }
   .blueRing .ring{
     border: 3px solid #005ddeb2;
   }
-  .blueRing .ring:nth-child(1) {
+  .ring100 .ring{
+    border-width: 3px;
+  }
+  .blueRing .ring:nth-child(1),.ring100 .ring:nth-child(1) {
     width: 36px;
     height: 36px;
   }
 
-  .blueRing .ring:nth-child(2) {
+  .blueRing .ring:nth-child(2),.ring100 .ring:nth-child(2) {
     width: 48px;
     height: 48px;
   }
 
-  .blueRing .ring:nth-child(3) {
+  .blueRing .ring:nth-child(3),.ring100 .ring:nth-child(3) {
     width: 60px;
     height: 60px;
   }
 
-  .blueRing .ring:nth-child(4) {
+  .blueRing .ring:nth-child(4) ,.ring100 .ring:nth-child(4){
     width: 72px;
     height: 72px;
   }
 
-  .blueRing .ring:nth-child(5) {
+  .blueRing .ring:nth-child(5),.ring100 .ring:nth-child(5) {
     width: 84px;
     height: 84px;
   }
@@ -579,9 +585,7 @@ iframe{
     font-size: 16px;
     line-height: 20px;
   }
-  .arrowUp, .arrow{
-    height: 20px;
-  }
+ 
   .marginminus {
     margin-bottom: -17px;
   }
@@ -613,9 +617,7 @@ iframe{
     padding: 5px 22px;
     border-radius: 9px 9px 0 0;
   }
-  .tabFull .tab-button{
-    padding: 12px 25px !important;
-  }
+
   .dashboard {
     padding: 0 20px;
     padding-bottom: 20px;

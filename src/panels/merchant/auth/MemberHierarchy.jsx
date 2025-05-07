@@ -249,7 +249,7 @@ const MemberHierarchy = ({
                         }
                       />
                       <div className="inputIcon">
-                        <img src={phoneEdit} alt="" />
+                        <img src={phoneEdit} alt="" className="h-100 " />
                       </div>
                     </div>
                     {/* <ErrorMessage

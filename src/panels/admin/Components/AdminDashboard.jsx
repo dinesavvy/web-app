@@ -448,22 +448,24 @@ const AdminDashboard = () => {
         <div className="card">
           <div className="d-flex align-center justify-between mb-20 flexWraplg">
             <div className="fs-24 fw-600">Restaurants performance</div>
-            <div className="tabs-container tab2">
-              <div className="tabs">
-                {tabs2.map((tab) => (
-                  <button
-                    key={tab.value}
-                    className={`tab-button ${
-                      activeTab2 === tab.value ? "active" : ""
-                    }`}
-                    onClick={() => {
-                      setActiveTab2(tab.value);
-                      setOpenIndex();
-                    }}
-                  >
-                    {tab.label}
-                  </button>
-                ))}
+            <div className="tabAfter">
+              <div className="tabs-container tab2">
+                <div className="tabs">
+                  {tabs2.map((tab) => (
+                    <button
+                      key={tab.value}
+                      className={`tab-button ${
+                        activeTab2 === tab.value ? "active" : ""
+                      }`}
+                      onClick={() => {
+                        setActiveTab2(tab.value);
+                        setOpenIndex();
+                      }}
+                    >
+                      {tab.label}
+                    </button>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
@@ -502,7 +504,7 @@ const AdminDashboard = () => {
                   >
                     <img
                       // src={imageUrls[index] || noImageFound} // Use object URL or fallback
-                      src = {item?.logoUrl || noImageFound}
+                      src={item?.logoUrl || noImageFound}
                       alt={item?.businessName}
                       loading="lazy"
                       // onLoad={() => {

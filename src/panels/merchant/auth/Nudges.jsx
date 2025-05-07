@@ -371,7 +371,7 @@ const Nudges = () => {
                 {/* <div className="mb-16">
               <input type="text" placeholder="Enter number of credits" />
             </div> */}
-                <div className="d-flex justify-between align-center gap-20 ">
+                <div className="d-flex justify-between align-center gap-20 flexnudge">
                   <div className="d-flex align-center gap-16 flex-wrap">
                     {nudges?.map((nudge) => (
                       <div
@@ -495,6 +495,7 @@ const Nudges = () => {
                 <TopNudges topNudgesSelector={topNudgesSelector} />
               )}
             </div>
+            <div className="tabAfter">
             <div className="tabs-container tab3 tabFull ">
               <div className="tabs">
                 <button
@@ -524,6 +525,7 @@ const Nudges = () => {
                   Reverse Nudges
                 </button>
               </div>
+            </div>
             </div>
             <div className="tabPadding">
               <div className="merchantGrid mb-20">

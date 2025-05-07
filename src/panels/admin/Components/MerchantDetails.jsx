@@ -280,6 +280,7 @@ const MerchantDetails = () => {
         <Loader />
       ) : (
         <div className="dashboard">
+          <div className="tabAfter">
           <div className="tabs-container tab3 tabFull">
             <div className="tabs">
               {tabs3?.map((tab) => (
@@ -298,6 +299,7 @@ const MerchantDetails = () => {
                 </button>
               ))}
             </div>
+          </div>
           </div>
           {activeTab3 === "1" ? (
             <>

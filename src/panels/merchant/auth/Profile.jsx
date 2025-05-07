@@ -331,6 +331,7 @@ const [qrCodeModal,setQrCodeModal] = useState(false)
                 <img src={addCircle} alt="" />
               </div>
           </div>
+          <div className="tabAfter">
           <div className="tabs-container tab3 tabFull mb-20">
             <div className="tabs">
               {tabs?.map((tab) => (
@@ -345,6 +346,7 @@ const [qrCodeModal,setQrCodeModal] = useState(false)
                 </button>
               ))}
             </div>
+          </div>
           </div>
           <ImageGallery
             images={images}

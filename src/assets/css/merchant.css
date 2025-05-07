@@ -1543,6 +1543,7 @@ input.addTitleInput::placeholder {
 .noborderbtn{
   border: none !important;
   background-color: #056DFF1A !important;
+  padding: 0 10px;
 }
 
 .ant-modal-close-x{
@@ -1858,9 +1859,10 @@ input.addTitleInput::placeholder {
   justify-content: center;
 
 }
-.tabs-container  + .tabPadding{
+.tabs-container  + .tabPadding,.tabAfter  + .tabPadding{
   border-radius: 0 0 16px 16px;
 }
+
 /* No Page found */
 
 /* Full-page container */
@@ -2036,30 +2038,18 @@ input.addTitleInput::placeholder {
 .RedeemedTag img{
   display: none;
 }
-/* Responsive Design */
-@media (max-width: 768px) {
-  .error-code {
-    font-size: 120px;
-    top: 35%;
-  }
 
-  .error-box {
-    width: 90%;
-    padding: 20px;
-  }
-
-  .error-title {
-    font-size: 18px;
-  }
-
-  .error-message {
-    font-size: 12px;
-  }
-}
 
 
 
 @media (max-width: 1549.98px) {
+  .addNudge2 {
+    gap: 12px;
+    width: 80px;
+    height: 30px;
+    border-radius: 6px;
+    font-size: 12px;
+}
   .nonotification{
     height: 48px;
     width: 48px;
@@ -2148,6 +2138,25 @@ input.addTitleInput::placeholder {
   }
   .selecModalFollowerList .ant-modal-content{
     max-width: 800px !important;
+  }
+  .profileImage {
+    font-size: 26px;
+    min-height: 70px;
+    min-width: 70px;
+  }
+  .qrImage {
+    height: 32px;
+    width: 32px;
+  }
+  .qrImage img{
+    height: 100%;
+    width: 100%;
+  }
+  .nudgeAccourdian .accordionItem{
+    padding: 16px;
+  }
+  .positionTag {
+    padding: 3px 8px;
   }
   .dropdown-button{
     font-size: 14px;
@@ -2316,6 +2325,9 @@ input.addTitleInput::placeholder {
     height: 96px;
     border-radius: 6px;
   }
+  .tabFull .tab-button{
+    padding: 12px 25px !important;
+  }
   .h24{
     height: 20px;
   }
@@ -2353,7 +2365,11 @@ input.addTitleInput::placeholder {
     height: 30px !important;
     width: 30px !important;
   }
-  .deleteImage img{
+  .addCircle {
+    height: 22px;
+    width: 22px;
+  }
+  .deleteImage img,.addCircle img{
     height: 100%;
     width: 100%;
   }
@@ -2361,11 +2377,17 @@ input.addTitleInput::placeholder {
     left: 15px;
     bottom: 20px;
   }
+  .arrowUp, .arrow{
+    height: 20px;
+  }
   .merchantImg {
     height: 140px;
   }
   .range,.rangePercentage{
     height: 9px;
+  }
+  .inputIcon{
+    height: 18px;
   }
   .weekNudge {
     background-color: #ECF4FF;
@@ -2402,8 +2424,9 @@ input.addTitleInput::placeholder {
   .positionSticky {
     height: calc(100vh - 100px);
   }
-  .input{
+  .input,textarea{
     padding: 8.5px 10px;
+    font-size: 12px !important;
   } 
   .datePickerImg {
     right: 10px;
@@ -2489,6 +2512,10 @@ input.addTitleInput::placeholder {
   .customTime{
     width: 100% !important;
   }
+  .arrowRight {
+    height: 20px;
+    width: 20px;
+  }
 }
 @media (max-width: 1499.98px) {
   .merchantGrid {
@@ -2537,9 +2564,54 @@ input.addTitleInput::placeholder {
   .selecModalFollowerList .merchantGrid{
     grid-template-columns: repeat(2,1fr);
   }
+  .p16 {
+    padding: 0px 12px;
+  }
+  .selectCommon {
+    border: 1px solid #E6E6E6;
+    border-radius: 8px;
+    padding: 5.5px 9px;
+  } 
+  .tabAfter{
+    position: relative;
+  }
+  .tabAfter::after{
+    content: "";
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 100%;
+    width: 70px;
+    background: linear-gradient(270deg, #FFFFFF 0%, rgba(255, 255, 255, 0) 100%);
+  
+  }
+  .selectCommon .fs-16{
+    width: 85px;
+  }
 }
 
 @media (max-width: 767.98px) {
+  .flexnudge{
+    flex-direction: column;
+    align-items: flex-end;
+  }
+  .error-code {
+    font-size: 120px;
+    top: 35%;
+  }
+
+  .error-box {
+    width: 90%;
+    padding: 20px;
+  }
+
+  .error-title {
+    font-size: 18px;
+  }
+
+  .error-message {
+    font-size: 12px;
+  }
 
   .inputGrid,
   .grid3 {
@@ -2585,7 +2657,9 @@ input.addTitleInput::placeholder {
     gap: 10px;
     align-items: flex-end;
   }
-
+  .custom-checkbox .checkmark::after {
+    left: 4.5px;
+  }
   .bottomPadding {
     padding: 16px;
   }
@@ -2678,11 +2752,24 @@ input.addTitleInput::placeholder {
   .grid5{
     grid-template-columns: repeat(2,1fr);
   }
+  .custom-checkbox .checkmark {
+    min-height: 12px;
+    min-width: 12px;
+  }
+  .custom-checkbox .checkmark::after {
+    left: 3.5px;
+    top: 0px;
+    width: 2.5px;
+    height: 7px;
+  }
   .flexBtn {
     flex-direction: column;
     align-items: end;
   }.m30 {
     margin: 16px 0 !important;
+  }
+  .myteamFlex{
+    padding: 9px;
   }
   .merchantGrid {
     grid-template-columns: repeat(1, 1fr);
@@ -2691,7 +2778,9 @@ input.addTitleInput::placeholder {
   .w240 {
     width: 100%;
   }
-
+  .flex575{
+    flex-direction: column;
+  }
   .changeBrandImage {
     width: calc(100% - 32px);
   }
@@ -2714,4 +2803,11 @@ input.addTitleInput::placeholder {
   .btn img {
     height: 16px;
   }
+  body {
+    font-size: 14px;
+  }
+  .hchartImage {
+    height: 35px;
+  }
+
 }

@@ -110,6 +110,7 @@ const MerchantList = () => {
             <div className="tabPadding">
               <div className="d-flex align-center justify-between mb-20 flexWraplg">
                 <div className="fs-24 fw-600">Merchants</div>
+                <div className="tabAfter">
                 <div className="tabs-container tab2">
                   <div className="tabs">
                     {tabs2.map((tab) => (
@@ -124,6 +125,7 @@ const MerchantList = () => {
                       </button>
                     ))}
                   </div>
+                </div>
                 </div>
               </div>
               <SearchSelect

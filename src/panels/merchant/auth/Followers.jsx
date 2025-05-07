@@ -199,42 +199,48 @@ const Followers = () => {
             <div className="tabPadding">
               <div className="fs-24 lh1 fw-600">Followers</div>
               <div className="divider2"></div>
-              <div>
-                <div className="circleinfo mb-10">
-                  <img
+              <div class="ring-container blueRing circleinfo ringExpand">
+                <div class="ring"></div>
+                <div class="ring"></div>
+                <div class="ring"></div>
+                <div class="ring"></div>
+                <div class="ring"></div>
+                  {/* <img
                     src={circleAbsolute2}
                     className="circleAbsolute"
                     alt=""
-                  />
+                  /> */}
                   <div className="fs-34 fw-700 z1">
                     {followerAnalyticsSelector?.data?.data?.followerCount}
                   </div>
                   <div className="fs-14 z1">to go</div>
-                </div>
+                
               </div>
             </div>
             <div className="tabPadding">
               <div className="fs-24 lh1 fw-600">Nearby</div>
               <div className="divider2"></div>
-              <div>
-                <div className="circleinfo mb-10">
-                  <img src={circleinfo} className="circleAbsolute" alt="" />
+              <div class="ring-container circleinfo ring100 ringExpand">
+              <div class="ring"></div>
+              <div class="ring"></div>
+              <div class="ring"></div>
+              <div class="ring"></div>
+              <div class="ring"></div>
                   <div className="fs-34 fw-700 z1">
                     {followerAnalyticsSelector?.data?.data?.nearByFollowerCount}
                   </div>
                 </div>
-              </div>
+              
             </div>
             <div className="tabPadding">
               <div className="fs-24 lh1 fw-600">Loyalty</div>
               <div className="divider2"></div>
-              <div>
-                <div className="circleinfo mb-10">
-                  <img
-                    src={circleAbsolute2}
-                    className="circleAbsolute"
-                    alt=""
-                  />
+              <div class="ring-container blueRing circleinfo ringExpand">
+              <div class="ring"></div>
+              <div class="ring"></div>
+              <div class="ring"></div>
+              <div class="ring"></div>
+              <div class="ring"></div>
                   <div className="fs-34 fw-700 z1">
                     {
                       followerAnalyticsSelector?.data?.data
@@ -243,10 +249,10 @@ const Followers = () => {
                   </div>
                   <div className="fs-14 z1">to go</div>
                 </div>
-              </div>
+              
             </div>
           </div>
-          <div className="d-flex align-center gap-20 mb-30">
+          <div className="d-flex align-center gap-20 mb-30 flex575">
             <div
               className="w-100 btn btnSecondary gap-8 noborderbtn"
               onClick={() => navigate("/merchant/reverse-nudge")}

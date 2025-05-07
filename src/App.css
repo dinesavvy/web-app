@@ -272,6 +272,7 @@ label {
   color: #F5453B ;
   background-color: transparent;
   min-width: 50px;
+  box-sizing: border-box;
 }
 
 .deleteBtnfull,.deleteBtnfull:hover{
