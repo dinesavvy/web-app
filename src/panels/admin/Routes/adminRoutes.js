@@ -20,6 +20,7 @@ import NoPageFound from "../../../common/noPageFound/NoPageFound";
 import ForgotPassword from "../../suppliers/components/ForgotPassword/ForgotPassword";
 import Support from "../Components/Support/Support";
 import EditSupport from "../Components/Support/EditSupport";
+import Settings from "../Components/Settings/Settings";
 
 
 const adminRoutes = [
@@ -140,6 +141,12 @@ const adminRoutes = [
   {
     path: "/admin/edit-support",
     element: EditSupport,
+    isPrivate: false,
+    isLayout: true,
+  },
+  {
+    path: "/admin/settings",
+    element: Settings,
     isPrivate: false,
     isLayout: true,
   },

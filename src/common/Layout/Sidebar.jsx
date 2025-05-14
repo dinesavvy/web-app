@@ -16,8 +16,8 @@ import promotions from "../../assets/images/sidebar/promotions.svg";
 import promotionsFull from "../../assets/images/sidebar/promotionsFull.svg";
 import brands from "../../assets/images/sidebar/brands.svg";
 import brandsFull from "../../assets/images/sidebar/brandsFull.svg";
-// import setting from "../../assets/images/sidebar/setting.svg";
-// import settingFull from "../../assets/images/sidebar/settingFull.svg";
+import settings from "../../assets/images/sidebar/setting.svg";
+import settingsFull from "../../assets/images/sidebar/settingFull.svg";
 import suppliers from "../../assets/images/sidebar/suppliers.svg";
 import suppliersFull from "../../assets/images/sidebar/suppliersFull.svg";
 import distributor from "../../assets/images/sidebar/distributor.svg";
@@ -200,6 +200,15 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                   icon: support,
                   iconFull: supportFull,
                   navigate: "/admin/support",
+                  disabled: "",
+                  // tag: 9,
+                },
+                {
+                  id: 13,
+                  name: "Settings",
+                  icon: settings,
+                  iconFull: settingsFull,
+                  navigate: "/admin/settings",
                   disabled: "",
                   // tag: 9,
                 },

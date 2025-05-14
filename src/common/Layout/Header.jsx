@@ -110,7 +110,8 @@ const Header = ({ handleTrigger }) => {
     "/supplier/dashboard": "Supplier Dashboard",
     "/merchant/reverse-nudge": "Followers",
     "/admin/support": "Support",
-    "/admin/edit-support" : "Verify Business"
+    "/admin/edit-support" : "Verify Business",
+    "/admin/settings" : "Settings",
   };
 
   return (
