@@ -2369,6 +2369,9 @@ input.addTitleInput::placeholder {
     height: 30px !important;
     width: 30px !important;
   }
+  .custom-select{
+    height: 40px !important;
+  }
   .addCircle {
     height: 22px;
     width: 22px;
