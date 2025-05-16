@@ -76,6 +76,9 @@
 .gap-20{
     gap: 20px !important;
 }
+.gap-24{
+    gap: 24px !important;
+}
 .gap-30{
     gap: 30px;
 }
@@ -115,5 +118,8 @@
   }
   .gap-20 {
       gap: 16px !important;
+  }
+  .gap-24{
+    gap: 18px !important;
   }
 }

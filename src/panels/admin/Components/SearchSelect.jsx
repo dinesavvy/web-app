@@ -77,11 +77,11 @@ const SearchSelect = ({ onSearchChange, onSearchAreaChange }) => {
     "/admin/distributors": "Search Distributors",
     "/admin/brands": "Search Brands",
     "/admin/promotions": "Search Promotions",
-    "/supplier/brands":"Search Brands",
-    "/supplier/promotion":"Search Promotions",
-    "/distributors/brands":"Search Brands",
-    "/distributors/promotion":"Search Promotions",
-    "/merchant/promotions":"Search for Promotions"
+    "/supplier/brands": "Search Brands",
+    "/supplier/promotion": "Search Promotions",
+    "/distributors/brands": "Search Brands",
+    "/distributors/promotion": "Search Promotions",
+    "/merchant/promotions": "Search for Promotions",
   };
 
   const placeholder = placeholders[location.pathname] || "Search Merchants";
@@ -153,20 +153,24 @@ const SearchSelect = ({ onSearchChange, onSearchAreaChange }) => {
       </div>
 
       {/* Selected Items */}
-      <div className={`selected-items ${selectedItems.length ? "mb-20" : ""}`}>
-        {selectedItems.map((item, index) => (
-          <div key={index} className="selected-item">
-            {/* {item} */}
-            {item.charAt(0).toUpperCase() + item.slice(1)}
-            <button
-              className="remove-button"
-              onClick={() => handleRemove(item)}
-            >
-              <img src={deleteList} alt="" />
-            </button>
-          </div>
-        ))}
-      </div>
+      {selectedItems.length === true && (
+        <div
+          className={`selected-items ${selectedItems.length ? "mb-20" : ""}`}
+        >
+          {selectedItems.map((item, index) => (
+            <div key={index} className="selected-item">
+              {/* {item} */}
+              {item.charAt(0).toUpperCase() + item.slice(1)}
+              <button
+                className="remove-button"
+                onClick={() => handleRemove(item)}
+              >
+                <img src={deleteList} alt="" />
+              </button>
+            </div>
+          ))}
+        </div>
+      )}
     </>
   );
 };
