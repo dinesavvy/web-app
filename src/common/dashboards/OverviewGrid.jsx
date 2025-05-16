@@ -55,22 +55,22 @@ const OverviewGrid = ({ analyticsDetailsSelector }) => {
 const merchantData = [
   { 
       count: analyticsDetailsSelector?.data?.data?.merchantCount?analyticsDetailsSelector?.data?.data?.merchantCount:0, 
-      trend: `${analyticsDetailsSelector?.data?.data?.trendMerchantCount.toFixed(2)}%`?`${analyticsDetailsSelector?.data?.data?.trendMerchantCount.toFixed(2)}%`:"10%",
+      trend: `${analyticsDetailsSelector?.data?.data?.trendMerchantCount?.toFixed(2)}%`?`${analyticsDetailsSelector?.data?.data?.trendMerchantCount?.toFixed(2)}%`:"10%",
       value: "Merchants" 
   },
   { 
       count: analyticsDetailsSelector?.data?.data?.supplierCount?analyticsDetailsSelector?.data?.data?.supplierCount:0, 
-      trend: `${analyticsDetailsSelector?.data?.data?.trendSupplierCount.toFixed(2)}%`?`${analyticsDetailsSelector?.data?.data?.trendSupplierCount.toFixed(2)}%`:"10%",
+      trend: `${analyticsDetailsSelector?.data?.data?.trendSupplierCount?.toFixed(2)}%`?`${analyticsDetailsSelector?.data?.data?.trendSupplierCount?.toFixed(2)}%`:"10%",
       value: "Suppliers" 
   },
   { 
       count: analyticsDetailsSelector?.data?.data?.brandCount?analyticsDetailsSelector?.data?.data?.brandCount:0, 
-      trend: `${analyticsDetailsSelector?.data?.data?.trendBrandCount.toFixed(2)}%`?`${analyticsDetailsSelector?.data?.data?.trendBrandCount.toFixed(2)}%`:"10%",
+      trend: `${analyticsDetailsSelector?.data?.data?.trendBrandCount.toFixed(2)}%`?`${analyticsDetailsSelector?.data?.data?.trendBrandCount?.toFixed(2)}%`:"10%",
       value: "Brands" 
   },
   { 
       count: analyticsDetailsSelector?.data?.data?.distributorCount?analyticsDetailsSelector?.data?.data?.distributorCount:0, 
-      trend: `${analyticsDetailsSelector?.data?.data?.trendDistributorCount.toFixed(2)}%`?`${analyticsDetailsSelector?.data?.data?.trendDistributorCount.toFixed(2)}%`:"10%",
+      trend: `${analyticsDetailsSelector?.data?.data?.trendDistributorCount?.toFixed(2)}%`?`${analyticsDetailsSelector?.data?.data?.trendDistributorCount?.toFixed(2)}%`:"10%",
       value: "Distributors" 
   },
 ];
@@ -93,7 +93,7 @@ const handleClick = (item) => {
     <div className="card d-grid gap-20 overviewGrid2">
       {merchantData.map((data, index) => (
         <div key={index + 1} onClick={() => handleClick(data)} className="cursor-pointer">
-          <MerchantCard key={index} count={data.count} trend={data.trend} value = {data?.value}/>
+          <MerchantCard key={index} count={data?.count} trend={data?.trend} value = {data?.value}/>
         </div>
       ))}
     </div>

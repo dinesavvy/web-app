@@ -366,7 +366,7 @@ const AdminDashboard = () => {
               (analyticsDetailsSelector?.data?.data?.targetPromotionsCount ||
                 0) +
               (analyticsDetailsSelector?.data?.data?.promotionsCount || 0)
-            ).toFixed(2)}
+            )?.toFixed(2)}
             chartPromotionImage={chartPromotion}
             // analyticsDetailsSelector ={analyticsDetailsSelector}
             buttonText="See promotions"

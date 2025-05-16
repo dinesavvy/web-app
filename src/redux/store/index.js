@@ -45,6 +45,7 @@ import googleBusinessSlice from "../action/googleBusinessSlice"
 import categoryListSlice from "../action/categoryList"
 import addBusinessSlice from "../action/addBusinessAdminSlice"
 import placeDetailsSlice from "../action/placeDetailsSlice"
+import createVersionSlice from "../action/createVersion";
 
 const store = configureStore({
   reducer: {
@@ -94,7 +95,8 @@ const store = configureStore({
     googleBusiness:googleBusinessSlice,
     categoryList:categoryListSlice,
     addBusiness:addBusinessSlice,
-    placeDetails:placeDetailsSlice
+    placeDetails:placeDetailsSlice,
+    createVersion:createVersionSlice
   },
 });
 

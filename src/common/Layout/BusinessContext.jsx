@@ -13,7 +13,7 @@ export const BusinessProvider = ({ children }) => {
   useEffect(() => {
     let payload = {
       page: 1,
-      limit: 10,
+      limit: 100,
     };
     dispatch(businessListHandler(payload));
   }, []);
@@ -23,14 +23,13 @@ export const BusinessProvider = ({ children }) => {
   useEffect(() => {
     // Check if it's the first time the user is loading (no selectedBusiness in localStorage)
     if (
-      !selectedBusiness &&
+      Object.keys(selectedBusiness).length === 0 &&
       businessListSelector?.data?.data?.records?.length > 0
     ) {
       // Set the first business record as the selected business
       const firstBusiness = businessListSelector?.data?.data?.records?.[0];
       setSelectedBusiness(firstBusiness); // Update state
-      // localStorage.setItem("selectedBusiness", JSON.stringify(firstBusiness)); // Save to localStorage
-    } else if (selectedBusiness) {
+    } else if (Object.keys(selectedBusiness).length > 0) {
       localStorage.setItem(
         "selectedBusiness",
         JSON.stringify(selectedBusiness)

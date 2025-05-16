@@ -178,11 +178,12 @@ const MerchantDashboard = () => {
                   title="Promotions"
                   count={businessDashBoardSelector?.data?.data?.promotionsCount}
                   chartPromotionImage={chartPromotion}
+                  onButtonClick={() => navigate("/merchant/promotions")}
                   buttonText="You need promotions"
                   middleComponent={
                     <LineChart
                       labels={
-                        promotionDataNumber
+                      promotionDataNumber
                           ? new Array(promotionDataNumber?.length).fill("")
                           : [""]
                       }
