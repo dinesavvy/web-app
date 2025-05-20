@@ -153,7 +153,7 @@ const Support = () => {
                                   </div>
                                   <div>
                                     <div className="fw-700">
-                                      {item?.businessName
+                                      {item?.requestStatus === "Imported" ? item?.businessDetails?.businessName : item?.businessName
                                         .charAt(0)
                                         .toUpperCase() +
                                         item?.businessName
@@ -163,14 +163,18 @@ const Support = () => {
                                     {/* <div className="fs-14 fw-300 o5 ">{index+1}</div> */}
                                   </div>
                                 </div>
+                                {console.log("item",item)}
                                 <div className="divider2"></div>
                                 <div className="mb-20">
                                   <div className="fs-14  mb-16">
                                     <div className="lightBlack mb-4">
                                       Business name
                                     </div>
+                                    
                                     <div className="fw-600">
-                                      {item?.businessName || "N/A"}
+                                      {item?.requestStatus === "Imported" ?item?.businessDetails?.businessName : item?.businessName || "N/A"}
+                                      {/* {item?.businessName || "N/A"} */}
+                                      {/* {item?.requestStatus === "Imported" ?item?.businessDetails?.emailAddress : item?.emailAddress || "N/A"} */}
                                     </div>
                                   </div>
                                   <div className="fs-14  mb-16">
@@ -178,7 +182,7 @@ const Support = () => {
                                       Phone number
                                     </div>
                                     <div className="fw-600">
-                                      {item?.phoneNumber || "N/A"}
+                                      {item?.requestStatus === "Imported" ?item?.businessDetails?.phoneNumber : item?.phoneNumber || "N/A"}
                                     </div>
                                   </div>
                                   <div className="fs-14  mb-16">
@@ -187,6 +191,8 @@ const Support = () => {
                                     </div>
                                     <div className="fw-600">
                                       {item?.emailAddress || "N/A"}
+                                      {/* {item?.requestStatus === "Imported" ?item?.businessDetails?.emailAddress : item?.emailAddress || "N/A"} */}
+
                                     </div>
                                   </div>
                                 </div>

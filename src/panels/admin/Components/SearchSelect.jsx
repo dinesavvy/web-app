@@ -82,6 +82,7 @@ const SearchSelect = ({ onSearchChange, onSearchAreaChange }) => {
     "/distributors/brands": "Search Brands",
     "/distributors/promotion": "Search Promotions",
     "/merchant/promotions": "Search for Promotions",
+    "/admin/settings": "Search Settings",
   };
 
   const placeholder = placeholders[location.pathname] || "Search Merchants";

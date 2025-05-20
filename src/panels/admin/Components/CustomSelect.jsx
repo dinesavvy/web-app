@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import dropdownArrow from "../../../assets/images/dropdownArrow.svg"
 
-const CustomSelect = ({ options, onChange }) => {
+const CustomSelect = ({ options, onChange,value }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState(null);
   const selectRef = useRef(null);

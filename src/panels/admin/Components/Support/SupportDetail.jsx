@@ -68,7 +68,7 @@ const SupportDetail = ({ isOpen, toggleSidebar, supportItem, activeTab }) => {
             </div>
             <div>
               <div className="fw-700">
-                {supportItem?.businessName.charAt(0).toUpperCase() +
+                {supportItem?.requestStatus === "Imported" ? supportItem?.businessDetails?.businessName : supportItem?.businessName.charAt(0).toUpperCase() +
                   supportItem?.businessName.slice(1).toLowerCase() || "-"}
               </div>
               {/* <div className="fs-14 fw-300 o5 ">#123456</div> */}
@@ -79,7 +79,7 @@ const SupportDetail = ({ isOpen, toggleSidebar, supportItem, activeTab }) => {
             <div className="fs-14">
               <div className="lightBlack mb-4">Business name</div>
               <div className="fw-600">
-                {supportItem?.businessName?.charAt(0)?.toUpperCase() +
+                {supportItem?.requestStatus === "Imported" ? supportItem?.businessDetails?.businessName : supportItem?.businessName?.charAt(0)?.toUpperCase() +
                   supportItem?.businessName?.slice(1)?.toLowerCase() || "-"}
               </div>
               {/* {supportItem?.fullName?.charAt(0)?.toUpperCase() + supportItem?.fullName?.slice(1)?.toLowerCase() || "-"} */}
@@ -87,17 +87,18 @@ const SupportDetail = ({ isOpen, toggleSidebar, supportItem, activeTab }) => {
             <div className="divider18"></div>
             <div className="fs-14">
               <div className="lightBlack mb-4">Phone number</div>
-              <div className="fw-600">{supportItem?.phoneNumber || "N/A"}</div>
+              <div className="fw-600">{supportItem?.requestStatus === "Imported" ? supportItem?.businessDetails?.phoneNumber : supportItem?.phoneNumber || "N/A"}</div>
             </div>
             <div className="divider18"></div>
             <div className="fs-14">
               <div className="lightBlack mb-4">Email address</div>
+              {/* <div className="fw-600">{supportItem?.requestStatus === "Imported" ? supportItem?.businessDetails?.emailAddress : supportItem?.emailAddress || "N/A"}</div> */}
               <div className="fw-600">{supportItem?.emailAddress || "N/A"}</div>
             </div>
             <div className="divider18"></div>
             <div className="fs-14">
               <div className="lightBlack mb-4">Description</div>
-              <div className="fw-600">{supportItem?.description || "N/A"}</div>
+              <div className="fw-600">{supportItem?.requestStatus === "Imported" ? supportItem?.businessDetails?.description : supportItem?.description || "N/A"}</div>
             </div>
             {/* <div className="divider18"></div> */}
             {/* <div className="fs-14">

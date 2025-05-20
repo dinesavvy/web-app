@@ -46,6 +46,7 @@ import categoryListSlice from "../action/categoryList"
 import addBusinessSlice from "../action/addBusinessAdminSlice"
 import placeDetailsSlice from "../action/placeDetailsSlice"
 import createVersionSlice from "../action/createVersion";
+import settingListSlice from "../action/settingList";
 
 const store = configureStore({
   reducer: {
@@ -96,7 +97,8 @@ const store = configureStore({
     categoryList:categoryListSlice,
     addBusiness:addBusinessSlice,
     placeDetails:placeDetailsSlice,
-    createVersion:createVersionSlice
+    createVersion:createVersionSlice,
+    settingList:settingListSlice
   },
 });
 

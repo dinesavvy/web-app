@@ -202,7 +202,6 @@ const EditSupport = () => {
       reader.readAsDataURL(file);
     }
   };
-
   const formatTimeToDate = (timeStr) => {
     if (!timeStr) return null;
     const hour = timeStr.substring(0, 2);
@@ -363,7 +362,7 @@ const EditSupport = () => {
           businessDetailsData?.result.geometry?.location?.lng !== 0 &&
           businessDetailsData?.result.geometry?.location?.lat !== 0,
         phoneNumber:
-          businessDetailsData?.result?.formatted_phone_number ||
+          // businessDetailsData?.result?.formatted_phone_number ||
           values?.phoneNumber,
         name: values?.businessName,
         address: {
@@ -385,6 +384,7 @@ const EditSupport = () => {
         otherImages: [],
       },
     };
+    // console.log("payload",payload)
     dispatch(addBusinessHandler(payload));
     // Handle form submission here
     // setEditDetail(false);
@@ -1296,7 +1296,7 @@ const EditSupport = () => {
                   businessDetailsData={businessDetailsData}
                 />
               </div>
-              {state?.supportItem?.requestStatus !== "Imported" && !state?.fromResolve && (
+              {/* {state?.supportItem?.requestStatus !== "Imported" && !state?.fromResolve && ( */}
                 <div className="d-flex align-center justify-end">
                   <button
                     type="submit"
@@ -1306,7 +1306,7 @@ const EditSupport = () => {
                     Submit
                   </button>
                 </div>
-              )}
+              {/* )} */}
             </Form>
           )}
         </Formik>
