@@ -47,7 +47,15 @@ const BrandDetails = ({
                 : ""}
             </div>
 
-            <div className="fs-16 fw-600 roi green">Performance: 52%</div>
+            <div
+              className={
+                brandDetails?.performance > 50
+                  ? "fs-16 fw-600 roi green mb-20"
+                  : "fs-16 fw-600 roi blue mb-20"
+              }
+            >
+              Performance: {brandDetails?.performance}%
+            </div>
           </div>
           <div className="divider2"></div>
           {brandDetails?.brandItem?.length > 0 ? (

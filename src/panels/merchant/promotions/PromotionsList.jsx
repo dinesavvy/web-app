@@ -25,7 +25,8 @@ import {
   updatePromotionPriceHandler,
 } from "../../../redux/action/businessAction/updateProotionPrice";
 import { useCommonMessage } from "../../../common/CommonMessage";
-import SearchSelect from "../../admin/Components/SearchSelect";
+// import SearchSelect from "../../admin/Components/SearchSelect";
+import useScrollToTop from "../../../hooks/useScrollToTop";
 
 const PromotionsList = () => {
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
@@ -40,6 +41,10 @@ const PromotionsList = () => {
   const selectRef = useRef(null);
   const navigate = useNavigate();
 
+
+  // Scroll to top when the component mounts
+  useScrollToTop([pagination?.page]);
+
   const activePromotionListSelector = useSelector(
     (state) => state?.activePromotionList
   );
@@ -52,14 +57,14 @@ const PromotionsList = () => {
     (state) => state?.updatePromotionPrice
   );
 
-  const handleSearchChange = (value) => {
-    setSearchString(value);
-    setPagination((prev) => ({ ...prev, page: 1 })); // Reset to the first page on search
-  };
+  // const handleSearchChange = (value) => {
+  //   setSearchString(value);
+  //   setPagination((prev) => ({ ...prev, page: 1 })); // Reset to the first page on search
+  // };
 
-  const handleSearchAreaChange = (selectedAreas) => {
-    setSearchArea(selectedAreas);
-  };
+  // const handleSearchAreaChange = (selectedAreas) => {
+  //   setSearchArea(selectedAreas);
+  // };
 
   const handleOfferPriceChange = (e, index) => {
     setOfferPrice((prev) => ({
@@ -123,7 +128,6 @@ const PromotionsList = () => {
     }
   }, [pagination, searchString, activeTab, updatePromotionPriceSelector]);
 
-  const [tempState, setTempState] = useState(true);
 
   const handleAction = (item, value, index) => {
     let payload = {

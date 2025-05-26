@@ -16,6 +16,7 @@ import { followerAnalyticsHandler } from "../../../redux/action/businessAction/f
 import { useBusiness } from "../../../common/Layout/BusinessContext";
 import AccessDeniedModal from "../accessDeniedModal/accessDeniedModal";
 import RedeemedNudges from "../redeemedNudges/RedeemedNudges";
+import useScrollToTop from "../../../hooks/useScrollToTop";
 
 const Followers = () => {
   const [tempState, setTempState] = useState([]);
@@ -29,6 +30,10 @@ const Followers = () => {
   const dispatch = useDispatch();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
+
+// Scroll to top when the component mounts
+useScrollToTop([pagination?.page]);
+  
   const { state } = useLocation();
 
   // When notification type is 35 then open redeemed redeeme nudge drawer and when refresh then reset navigation state
@@ -341,10 +346,10 @@ const Followers = () => {
                         ) : (
                           <div>No data available</div>
                         )} */}
-                        {item?.customerPreferenceData?.personalPreference?.length >
+                        {item?.customerPreferenceData?.filterData?.length >
                         0 ? (
                           <>
-                            {item?.customerPreferenceData?.personalPreference?.map(
+                            {item?.customerPreferenceData?.filterData?.map(
                               (item) => {
                                 return <div>{item}</div>;
                               }

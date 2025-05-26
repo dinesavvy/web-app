@@ -4,12 +4,13 @@ import React, { useEffect, useRef, useState } from "react";
 import SearchSelect from "./SearchSelect";
 import { Pagination } from "antd";
 import PromotionDetails from "./PromotionDetails";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { adminPromotionListHandler } from "../../../redux/action/adminPromotion";
 import { useDispatch, useSelector } from "react-redux";
 import Loader from "../../../common/Loader/Loader";
 import moment from "moment";
 import noImageFound from "../../../assets/images/noImageFound.png";
+import useScrollToTop from "../../../hooks/useScrollToTop";
 
 const Promotions = () => {
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
@@ -22,6 +23,10 @@ const Promotions = () => {
   const dispatch = useDispatch();
   const selectRef = useRef(null);
   const navigate = useNavigate();
+
+
+  // Scroll to top when the component mounts
+  useScrollToTop([pagination?.page]);
 
   const adminPromotionList = useSelector((state) => state?.adminPromotion);
   const adminEndPromotionSelector = useSelector(

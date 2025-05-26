@@ -10,7 +10,7 @@ import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import DragMerchantItem from "./DragMerchantItem";
 import DropMerchantZone from "./DropMerchantZone";
-import { DatePicker, TimePicker } from "antd";
+import { DatePicker, Spin, TimePicker } from "antd";
 // import DropBrandsZone from "./DropBrandsZone";
 import DragBrandsItem from "./DragBrandsItem";
 import CustomDragLayer from "./CustomDragLayer";
@@ -30,11 +30,16 @@ import {
   createPromotionHandler,
 } from "../../../redux/action/createPromotion";
 import { useCommonMessage } from "../../../common/CommonMessage";
-import { handleKeyPressSpace } from "../../../common/commonFunctions/CommonFunctions";
+import {
+  handleKeyPressSpace,
+  handleNumberFieldLength,
+} from "../../../common/commonFunctions/CommonFunctions";
+import InfiniteScroll from "react-infinite-scroll-component";
 
 const AddPromotion = () => {
   const [promotionTitle, setPromotionTitle] = useState("");
   // const [promotionTitleError, setPromotionTitleError] = useState("");
+  const [merchantItemMain, setMerchantItemMain] = useState(null);
   const [searchString, setSearchString] = useState("");
   const [searchStringMerchant, setSearchStringMerchant] = useState("");
   const [startDate, setStartDate] = useState("");
@@ -49,11 +54,18 @@ const AddPromotion = () => {
   const [mercahnts, setMercahnts] = useState([]);
   const [droppedMerchants, setDroppedMerchants] = useState([]);
   const [selectedMerchants, setSelectedMerchants] = useState([]);
+  const [merchantItem, setMerchantItem] = useState(null);
   const [dragging, setDragging] = useState(false);
   const [droppedBrand, setDroppedBrand] = useState(null);
   const [draggingItem, setDraggingItem] = useState(null);
+  const [merchantDraggerItem, setMerchantDraggerItem] = useState(null);
   const [brands, setBrands] = useState([{}]);
-
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+  const [merchantsData, setMerchantsData] = useState([]);
+  const [brandsPage, setBrandsPage] = useState(1);
+  const [brandsHasMore, setBrandsHasMore] = useState(true);
+  const [brandsData, setBrandsData] = useState([]);
   const messageApi = useCommonMessage();
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -85,6 +97,9 @@ const AddPromotion = () => {
     setSelectedMerchants((prevSelected) =>
       prevSelected.includes(itemId) ? [] : [itemId]
     );
+    // Find the merchant item that was checked/unchecked
+    const merchantItem = merchantsData.find(item => item._id === itemId);
+    setMerchantItemMain(merchantItem);
   };
 
   const handleDragStartMerchant = () => {
@@ -101,6 +116,7 @@ const AddPromotion = () => {
       prevDroppedMerchants.filter((item) => item?._id !== id)
     );
     setMercahnts((prevMercahnts) => [...prevMercahnts, removedItem]);
+    // setMerchantItemMain(null);
   };
 
   const handleDropMerchant = (draggedItem) => {
@@ -116,6 +132,7 @@ const AddPromotion = () => {
     setDroppedMerchants((prevDropped) => [...prevDropped, ...draggedItems]);
 
     setSelectedMerchants([]);
+    // setMerchantItemMain(null);  
   };
 
   useEffect(() => {
@@ -139,17 +156,17 @@ const AddPromotion = () => {
 
   useEffect(() => {
     let payload = {
-      page: 1,
+      page: brandsPage,
       limit: 10,
       searchString: searchString,
     };
     dispatch(brandListsHandler(payload));
-  }, [searchString]);
+  }, [searchString, brandsPage]);
 
   useEffect(() => {
     const fetchMerchants = () => {
       const payload = {
-        page: 1,
+        page: page,
         limit: 10,
         timeFrame: "today",
         searchString: searchStringMerchant,
@@ -159,7 +176,48 @@ const AddPromotion = () => {
     };
 
     fetchMerchants();
-  }, [searchStringMerchant]);
+  }, [searchStringMerchant, page]);
+
+  useEffect(() => {
+    if (merchantsListSelector?.data?.data?.records) {
+      if (page === 1) {
+        setMerchantsData(merchantsListSelector?.data?.data?.records);
+      } else {
+        setMerchantsData((prev) => [
+          ...prev,
+          ...merchantsListSelector?.data?.data?.records,
+        ]);
+      }
+      // Check if we have more data to load
+      setHasMore(merchantsListSelector?.data?.data?.records?.length === 10);
+    }
+  }, [merchantsListSelector?.data?.data?.records]);
+
+  useEffect(() => {
+    if (brandListSelector?.data?.data?.records) {
+      if (brandsPage === 1) {
+        setBrandsData(brandListSelector.data.data.records);
+      } else {
+        setBrandsData((prev) => [
+          ...prev,
+          ...brandListSelector.data.data.records,
+        ]);
+      }
+      setBrandsHasMore(brandListSelector?.data?.data?.records?.length === 10);
+    }
+  }, [brandListSelector?.data?.data?.records]);
+
+  const fetchMoreData = () => {
+    if (hasMore) {
+      setPage((prev) => prev + 1);
+    }
+  };
+
+  const fetchMoreBrands = () => {
+    if (brandsHasMore) {
+      setBrandsPage((prev) => prev + 1);
+    }
+  };
 
   const handleBrandDrop = (draggedItem) => {
     if (!droppedBrand) {
@@ -196,7 +254,9 @@ const AddPromotion = () => {
         brandId: droppedBrand?.id,
         startDate: startDate ? moment(startDate).valueOf() : null,
         // endDate: endDate ? moment(endDate).valueOf() : null,
-        endDate: endDate ? moment(endDate).set({ hour: 12, minute: 0, second: 0 }).valueOf() : null,
+        endDate: endDate
+          ? moment(endDate).set({ hour: 12, minute: 0, second: 0 }).valueOf()
+          : null,
         merchants: values?.merchants?.map((item, index) => {
           return {
             merchantId: droppedMerchants?.map((item) => item?._id).join(""),
@@ -216,9 +276,7 @@ const AddPromotion = () => {
 
   return (
     <>
-      {(brandListSelector?.isLoading || createPromotionSelector?.isLoading) && (
-        <Loader />
-      )}
+      {createPromotionSelector?.isLoading && <Loader />}
       <div className="dashboard">
         <DndProvider backend={HTML5Backend}>
           <div className="d-flex gap-20 position-relative">
@@ -252,43 +310,47 @@ const AddPromotion = () => {
                   </div>
                 </div>
                 <div className="paddingb20">
-                  <div className="selectGrid3">
-                    {brandListSelector?.data?.data?.records?.length > 0 ? (
-                      <>
-                        {brandListSelector?.data?.data?.records?.map(
-                          (item, index) => {
-                            return (
-                              <>
-                                <div
-                                  key={index}
-                                  // onClick={() => handleBrandClick(item)}
-                                  style={{
-                                    cursor:
-                                      draggingItem || droppedBrand
-                                        ? "not-allowed"
-                                        : "pointer",
-                                  }}
-                                >
-                                  <DragBrandsItem
-                                    id={item?._id}
-                                    name={item.brandName}
-                                    info={item?.brandName}
-                                    onDragEnd={handleDragEndMerchant}
-                                    type="brand"
-                                    onDragStart={() => handleDragStart(item)}
-                                    disabled={!!draggingItem || !!droppedBrand}
-                                    selectedBrands={item}
-                                  />
-                                </div>
-                              </>
-                            );
-                          }
-                        )}
-                      </>
-                    ) : (
-                      <div className="noDataFound">No data available</div>
-                    )}
-                  </div>
+                  <InfiniteScroll
+                    dataLength={brandsData?.length}
+                    next={fetchMoreBrands}
+                    hasMore={brandsHasMore}
+                    loader={
+                      <div className="text-center">
+                        <Spin />
+                      </div>
+                    }
+                    scrollableTarget="selectBrands"
+                    height={280}
+                  >
+                    <div className="selectGrid3" id="selectBrands">
+                      {brandsData?.length > 0 ? (
+                        brandsData?.map((item, index) => (
+                          <div
+                            key={index}
+                            style={{
+                              cursor:
+                                draggingItem || droppedBrand
+                                  ? "not-allowed"
+                                  : "pointer",
+                            }}
+                          >
+                            <DragBrandsItem
+                              id={item?._id}
+                              name={item.brandName}
+                              info={item?.brandName}
+                              onDragEnd={handleDragEndMerchant}
+                              type="brand"
+                              onDragStart={() => handleDragStart(item)}
+                              disabled={!!draggingItem || !!droppedBrand}
+                              selectedBrands={item}
+                            />
+                          </div>
+                        ))
+                      ) : (
+                        <div className="noDataFound">No data available</div>
+                      )}
+                    </div>
+                  </InfiniteScroll>
                 </div>
               </div>
               <div className="mb-20 ">
@@ -325,57 +387,71 @@ const AddPromotion = () => {
                 </div>
 
                 <div className="paddingb20">
-                  <div className="selectMerchant">
-                    {merchantsListSelector?.data?.data?.records?.length > 0 ? (
-                      <>
-                        {merchantsListSelector?.data?.data?.records?.map(
-                          (item, index) => {
-                            return (
-                              <>
-                                <div
-                                  key={index}
-                                  className="cursor-pointer position-relative"
-                                >
-                                  <div className="custom-checkbox">
-                                    <label className="checkLabel">
-                                      <input
-                                        type="checkbox"
-                                        checked={selectedMerchants.includes(
-                                          item?._id
-                                        )}
-                                        onChange={() =>
-                                          handleCheckboxChange(item._id)
-                                        }
-                                      />
-                                      <span className="checkmark"></span>
-                                    </label>
-                                  </div>
-                                  <div
-                                  // onClick={() => handleAddToDropZone(item)}
-                                  >
-                                    <DragMerchantItem
-                                      type="merchant"
-                                      id={item.id}
-                                      name={item.logoUrl}
-                                      selectedMerchants={selectedMerchants} // Pass selected items
-                                      onDragStart={() =>
-                                        handleDragStartMerchant(item)
-                                      }
-                                      items={item}
-                                    />
-                                  </div>
-                                  <div className="divider2"></div>
-                                  <CustomDragLayer merchants={mercahnts} />
-                                </div>
-                              </>
-                            );
-                          }
-                        )}
-                      </>
-                    ) : (
+                <div className="paddingb20">
+                  <InfiniteScroll
+                    dataLength={merchantsData?.length}
+                    next={fetchMoreData}
+                    hasMore={hasMore}
+                    loader={
+                      <div className="text-center">
+                        <Spin />
+                      </div>
+                    }
+                    scrollableTarget="selectMerchant"
+                    height={280}
+                  >
+                    {/* <div className="selectMerchant"> */}
+                    {/* {merchantsListSelector?.data?.data?.records?.length > 0 ? ( */}
+                    <div className="selectMerchant">
+                      {merchantsData?.map((item, index) => {
+                        return (
+                          <>
+                            <div
+                              key={index}
+                              className="cursor-pointer position-relative"
+                            >
+                              <div className="custom-checkbox">
+                                <label className="checkLabel">
+                                  <input
+                                    type="checkbox"
+                                    checked={selectedMerchants.includes(
+                                      item?._id
+                                    )}
+                                    onChange={() =>
+                                      handleCheckboxChange(item._id)
+                                    }
+                                  />
+                                  <span className="checkmark"></span>
+                                </label>
+                              </div>
+                              <div
+                              // onClick={() => handleAddToDropZone(item)}
+                              >
+                                <DragMerchantItem
+                                  type="merchant"
+                                  id={item?.id}
+                                  name={item?.logoUrl}
+                                  selectedMerchants={selectedMerchants} // Pass selected items
+                                  onDragStart={() =>
+                                    handleDragStartMerchant(item)
+                                  }
+                                  items={item}
+                                />
+                              </div>
+                              <div className="divider2"></div>
+                            </div>
+                          </>
+                        );
+                      })}
+                    </div>
+                  </InfiniteScroll>
+
+                      <CustomDragLayer merchants={mercahnts} merchantItemMain={merchantItemMain} />
+                  {/* ) : (
                       <div className="noDataFound">No data available</div>
-                    )}
-                  </div>
+                    )} */}
+                  {/* </div> */}
+                </div>
                 </div>
               </div>
             </div>
@@ -753,59 +829,9 @@ const AddPromotion = () => {
                                               autoComplete="off"
                                               maxLength={5}
                                               disabled
-                                              // onChange={(e) => {
-                                              //   const msrpValue =
-                                              //     e.target.value;
-
-                                              //   // Allow only numbers and one decimal point
-                                              //   if (
-                                              //     /^\d*\.?\d*$/.test(msrpValue)
-                                              //   ) {
-                                              //     form.setFieldValue(
-                                              //       `merchants.${indexDroppedMerchant}.msrp`,
-                                              //       msrpValue
-                                              //     );
-
-                                              //     const calculatedQuantity = (
-                                              //       droppedBrand?.selectedBrands?.brandItem?.reduce(
-                                              //         (sum, item) =>
-                                              //           sum +
-                                              //           (item?.mSRP *
-                                              //             item?.quantity || 0),
-                                              //         0
-                                              //       ) / msrpValue
-                                              //     )?.toFixed(2);
-
-                                              //     form.setFieldValue(
-                                              //       `merchants.${indexDroppedMerchant}.quantity`,
-                                              //       msrpValue
-                                              //         ? calculatedQuantity
-                                              //         : droppedBrand?.selectedBrands?.brandItem?.reduce(
-                                              //             (sum, item) =>
-                                              //               sum +
-                                              //               (item?.mSRP *
-                                              //                 item?.quantity ||
-                                              //                 0),
-                                              //             0
-                                              //           ) /
-                                              //             droppedBrand?.selectedBrands?.brandItem?.reduce(
-                                              //               (sum, item) =>
-                                              //                 sum +
-                                              //                 (item?.mSRP || 0),
-                                              //               0
-                                              //             )
-                                              //     );
-                                              //   }
-                                              // }}
                                             />
                                           )}
                                         </Field>
-
-                                        {/* <ErrorMessage
-                                          name={`merchants.${indexDroppedMerchant}.msrp`}
-                                          component="div"
-                                          className="error"
-                                        /> */}
                                       </div>
 
                                       <div>
@@ -815,88 +841,6 @@ const AddPromotion = () => {
                                         >
                                           Price for Reimbursement
                                         </label>
-                                        {/* <Field
-                                          name={`merchants.${indexDroppedMerchant}.priceForReimbursement`}
-                                        >
-                                          {({ field, form }) => (
-                                            <input
-                                              type="text"
-                                              name={`merchants.${indexDroppedMerchant}.priceForReimbursement`}
-                                              placeholder="Enter Price"
-                                              autoComplete="off"
-                                              maxLength={5}
-                                              onChange={(e) => {
-                                                let priceForReimbursement =
-                                                  parseFloat(e.target.value) ||
-                                                  0;
-
-                                                // Ensure priceForReimbursement does not exceed promotionalFund
-                                                const promotionalFund =
-                                                  promotionalFund; // Replace with dynamic value if needed
-                                                if (
-                                                  priceForReimbursement >
-                                                  promotionalFund
-                                                ) {
-                                                  priceForReimbursement =
-                                                    promotionalFund;
-                                                }
-
-                                                // Calculate total MSRP * quantity sum
-                                                const totalMSRP =
-                                                  droppedBrand?.selectedBrands?.brandItem?.reduce(
-                                                    (sum, item) =>
-                                                      sum +
-                                                      (item?.mSRP *
-                                                        item?.quantity || 0),
-                                                    0
-                                                  );
-
-                                                // Compute quantity and round to an integer
-                                                const calculatedQuantity =
-                                                  priceForReimbursement > 0
-                                                    ? Math.round(
-                                                        totalMSRP /
-                                                          priceForReimbursement
-                                                      )
-                                                    : droppedBrand?.selectedBrands?.brandItem?.reduce(
-                                                        (sum, item) =>
-                                                          sum +
-                                                          (item?.mSRP *
-                                                            item?.quantity ||
-                                                            0),
-                                                        0
-                                                      ) /
-                                                        droppedBrand?.selectedBrands?.brandItem?.reduce(
-                                                          (sum, item) =>
-                                                            sum +
-                                                            (item?.mSRP || 0),
-                                                          0
-                                                        ) || 0;
-
-                                                // Set the field values
-                                                form.setFieldValue(
-                                                  `merchants.${indexDroppedMerchant}.priceForReimbursement`,
-                                                  priceForReimbursement
-                                                );
-
-                                                form.setFieldValue(
-                                                  `merchants.${indexDroppedMerchant}.quantity`,
-                                                  calculatedQuantity
-                                                );
-
-                                                const validation =
-                                                  droppedBrand?.selectedBrands?.brandItem?.map(
-                                                    (item) =>
-                                                      (
-                                                        item?.mSRP *
-                                                        item?.quantity
-                                                      )?.toFixed(2)
-                                                  ) > priceForReimbursement;
-                                              }}
-                                            />
-                                          )}
-                                        </Field> */}
-
                                         <Field
                                           name={`merchants.${indexDroppedMerchant}.priceForReimbursement`}
                                         >
@@ -908,6 +852,18 @@ const AddPromotion = () => {
                                                 placeholder="Enter Price"
                                                 autoComplete="off"
                                                 maxLength={5}
+                                                onKeyPress={handleKeyPressSpace}
+                                                onInput={
+                                                  handleNumberFieldLength
+                                                }
+                                                onKeyDown={(event) => {
+                                                  if (
+                                                    event.key === "ArrowUp" ||
+                                                    event.key === "ArrowDown"
+                                                  ) {
+                                                    event.preventDefault();
+                                                  }
+                                                }}
                                                 onChange={(e) => {
                                                   let priceForReimbursement =
                                                     parseFloat(

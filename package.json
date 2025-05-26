@@ -23,6 +23,7 @@
     "@stripe/stripe-js": "^6.1.0",
     "antd": "^5.23.0",
     "axios": "^1.7.9",
+    "chart.js": "^4.4.9",
     "country-state-city": "^3.2.1",
     "crypto-js": "^4.2.0",
     "dayjs": "^1.11.13",

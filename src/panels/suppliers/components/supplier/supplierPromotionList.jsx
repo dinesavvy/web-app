@@ -10,6 +10,7 @@ import noImageFound from "../../../../assets/images/noImageFound.png";
 import SearchSelect from "../../../admin/Components/SearchSelect";
 import { supplierPromotionListHandler } from "../../../../redux/action/supplierActions/supplierPromotionList";
 import SupplierPromotionDetails from "./SupplierPromotionDetails";
+import useScrollToTop from "../../../../hooks/useScrollToTop";
 
 const SupplierPromotionList = () => {
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
@@ -22,6 +23,11 @@ const SupplierPromotionList = () => {
   const dispatch = useDispatch();
   const selectRef = useRef(null);
   const navigate = useNavigate();
+  
+
+  // Scroll to top when the component mounts
+  useScrollToTop([pagination?.page]);
+
 
   const supplierEndPromotion = useSelector(
       (state) => state?.supplierEndPromotion

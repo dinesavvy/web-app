@@ -26,6 +26,7 @@ import {
   addBusinessHandler,
 } from "../../../../redux/action/addBusinessAdminSlice";
 import { useCommonMessage } from "../../../../common/CommonMessage";
+import { handleKeyPressSpace } from "../../../../common/commonFunctions/CommonFunctions";
 
 const EditSupport = () => {
   const messageApi = useCommonMessage();
@@ -37,7 +38,6 @@ const EditSupport = () => {
   const addImageDataSelector = useSelector((state) => state?.addImageData);
   const location = useLocation();
   const { state } = location;
-  // console.log(state,"state")
   const dispatch = useDispatch();
 
   const businessDetailsData = state?.businessDetail;
@@ -566,6 +566,7 @@ const EditSupport = () => {
                       <>
                         <Field
                           type="text"
+                          onKeyPress={handleKeyPressSpace}
                           name="businessName"
                           className="input"
                           placeholder="Garden Grove Café & Bistro"
@@ -657,6 +658,7 @@ const EditSupport = () => {
                           name="website"
                           className="input"
                           placeholder="www.dinesavvy.com"
+                          onKeyPress={handleKeyPressSpace}
                         />
                         {errors.website && touched.website && (
                           <div className="mt-10 fw-500 fs-14 error">
@@ -692,6 +694,7 @@ const EditSupport = () => {
                           name="phoneNumber"
                           className="input"
                           placeholder="+91 123 456 7890"
+                          onKeyPress={handleKeyPressSpace}
                         />
                         {errors.phoneNumber && touched.phoneNumber && (
                           <div className="mt-10 fw-500 fs-14 error">
@@ -724,6 +727,7 @@ const EditSupport = () => {
                           className="input"
                           placeholder="Please enter description"
                           maxLength={700}
+                          onKeyPress={handleKeyPressSpace}
                         />
                         {/* {errors.description && touched.description && (
                           <div className="mt-10 fw-500 fs-14 error">

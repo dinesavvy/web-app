@@ -336,23 +336,24 @@ const Nudges = () => {
             <div className="fs-18 fw-600">Nudges Expected This Week</div>
             <div className="fw-700 fs-20">124</div>
           </div> */}
+          {console.log(nudgeAnalyticSelector,"nudgeAnalyticSelector")}
               <div className="card mb-20">
                 <div className="fs-20 fw-700 d-flex gap-20 align-center justify-between">
                   <div>Nudge Credits</div>
                   <div>{nudgeAnalyticSelector?.data?.data?.nudgeCredit}</div>
                 </div>
                 <div className="divider2"></div>
-                <div className="d-flex justify-between align-center gap-20 mb-6">
+                {/* <div className="d-flex justify-between align-center gap-20 mb-6">
                   <div className="fs-16 grey fw-500">Previous balance</div>
                   <div className="fs-20 fw-700">30</div>
-                </div>
-                <div className="d-flex justify-between align-center gap-20 mb-6">
+                </div> */}
+                {/* <div className="d-flex justify-between align-center gap-20 mb-6">
                   <div className="fs-16 grey fw-500">Followers added today</div>
                   <div className="gc fs-20 fw-700">
                     {nudgeAnalyticSelector?.data?.data?.followerAddedToday}
                   </div>
-                </div>
-                <div className="d-flex justify-between align-center gap-20">
+                </div> */}
+                {/* <div className="d-flex justify-between align-center gap-20">
                   <div className="fs-16 grey fw-500">
                     Promotional credits added today
                   </div>
@@ -360,6 +361,29 @@ const Nudges = () => {
                     {
                       nudgeAnalyticSelector?.data?.data
                         ?.promotionNudgeCreditAddedToday
+                    }
+                  </div>
+                </div> */}
+                <div className="d-flex justify-between align-center gap-20 mb-6">
+                  <div className="fs-16 grey fw-500">
+                    Followers activity today
+                  </div>
+                  <div className="gc fs-20 fw-700">
+                    {
+                      nudgeAnalyticSelector?.data?.data
+                        ?.followerAddedToday
+                    }
+                  </div>
+                </div>
+
+                <div className="d-flex justify-between align-center gap-20">
+                  <div className="fs-16 grey fw-500">
+                    Credit purchased today
+                  </div>
+                  <div className="gc fs-20 fw-700">
+                    {
+                      nudgeAnalyticSelector?.data?.data
+                        ?.totalNudgeCreditAddedToday
                     }
                   </div>
                 </div>

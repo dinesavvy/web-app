@@ -114,8 +114,6 @@ const PromotionDetails = ({
                   1
                 )}
             </div>
-
-            {/* <div className="fs-16 fw-600 roi red">Redeemed: {promotionDetailsSelector?.data?.data?.redemptionPercentage}%</div> */}
             <div
               className={
                 promotionDetailsSelector?.data?.data?.redemptionPercentage > 50

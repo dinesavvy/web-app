@@ -423,7 +423,7 @@ const AdminDashboard = () => {
             }
             chartPromotionImage={chartfollower}
             buttonText="See Followers"
-            onButtonClick={() => navigate("/admin/merchant/followers")}
+            onButtonClick={() => navigate("/admin/followers")}
             middleComponent={
               <BarChart2
                 labels={["Target Followers", "Followers"]}

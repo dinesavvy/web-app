@@ -38,7 +38,7 @@ const Login = () => {
         type: "success",
         content: loginSelector?.data?.message,
       });
-      navigate("/admin/merchant/dashboard");
+      navigate("/admin/dashboard");
       dispatch(loginSliceAction.loginDetailsSliceReset());
     } else if (loginSelector?.message?.status === 400) {
       messageApi.open({

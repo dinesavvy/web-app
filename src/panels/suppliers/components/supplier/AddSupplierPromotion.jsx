@@ -6,7 +6,7 @@ import datePicker from "../../../../assets/images/datePicker.svg";
 import closeIcon from "../../../../assets/images/closeIcon.svg";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
-import { DatePicker, TimePicker } from "antd";
+import { DatePicker, Spin, TimePicker } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 // import { merchantsListHandler } from "../../../../redux/action/merchantsList";
@@ -30,7 +30,11 @@ import {
   addSupplierPromotionAction,
   addSupplierPromotionHandler,
 } from "../../../../redux/action/supplierActions/addSupplierPromotion";
-import { handleKeyPressSpace } from "../../../../common/commonFunctions/CommonFunctions";
+import {
+  handleKeyPressSpace,
+  handleNumberFieldLength,
+} from "../../../../common/commonFunctions/CommonFunctions";
+import InfiniteScroll from "react-infinite-scroll-component";
 
 const AddSupplierPromotion = () => {
   const [promotionTitle, setPromotionTitle] = useState("");
@@ -39,6 +43,12 @@ const AddSupplierPromotion = () => {
   const [searchStringMerchant, setSearchStringMerchant] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
+  const [merchantsData, setMerchantsData] = useState([]);
+  const [hasMore, setHasMore] = useState(true);
+  const [page, setPage] = useState(1);
+  const [brandsPage, setBrandsPage] = useState(1);
+  const [brandsHasMore, setBrandsHasMore] = useState(true);
+  const [brandsData, setBrandsData] = useState([]);
   const [errors, setErrors] = useState({
     fromDate: "",
     toDate: "",
@@ -139,17 +149,17 @@ const AddSupplierPromotion = () => {
 
   useEffect(() => {
     let payload = {
-      page: 1,
+      page: brandsPage,
       limit: 10,
       searchString: searchString,
     };
     dispatch(supplierBrandListHandler(payload));
-  }, [searchString]);
+  }, [searchString, brandsPage]);
 
   useEffect(() => {
     const fetchMerchants = () => {
       const payload = {
-        page: 1,
+        page: page,
         limit: 10,
         timeFrame: "today",
         searchString: searchStringMerchant,
@@ -159,7 +169,48 @@ const AddSupplierPromotion = () => {
     };
 
     fetchMerchants();
-  }, [searchStringMerchant]);
+  }, [searchStringMerchant, page]);
+
+  useEffect(() => {
+    if (merchantsListSelector?.data?.data?.records) {
+      if (page === 1) {
+        setMerchantsData(merchantsListSelector?.data?.data?.records);
+      } else {
+        setMerchantsData((prev) => [
+          ...prev,
+          ...merchantsListSelector?.data?.data?.records,
+        ]);
+      }
+      // Check if we have more data to load
+      setHasMore(merchantsListSelector?.data?.data?.records?.length === 10);
+    }
+  }, [merchantsListSelector?.data?.data?.records]);
+
+  useEffect(() => {
+    if (brandListSelector?.data?.data?.records) {
+      if (brandsPage === 1) {
+        setBrandsData(brandListSelector.data.data.records);
+      } else {
+        setBrandsData((prev) => [
+          ...prev,
+          ...brandListSelector.data.data.records,
+        ]);
+      }
+      setBrandsHasMore(brandListSelector?.data?.data?.records?.length === 10);
+    }
+  }, [brandListSelector?.data?.data?.records]);
+
+  const fetchMoreData = () => {
+    if (hasMore) {
+      setPage((prev) => prev + 1);
+    }
+  };
+
+  const fetchMoreBrands = () => {
+    if (brandsHasMore) {
+      setBrandsPage((prev) => prev + 1);
+    }
+  };
 
   const handleBrandDrop = (draggedItem) => {
     if (!droppedBrand) {
@@ -168,12 +219,12 @@ const AddSupplierPromotion = () => {
     }
   };
 
-  const handleBrandClick = (item) => {
-    if (!droppedBrand) {
-      setBrands((prevBrands) => prevBrands.filter((i) => i?._id !== item?._id));
-      setDroppedBrand(item);
-    }
-  };
+  // const handleBrandClick = (item) => {
+  //   if (!droppedBrand) {
+  //     setBrands((prevBrands) => prevBrands.filter((i) => i?._id !== item?._id));
+  //     setDroppedBrand(item);
+  //   }
+  // };
 
   const handleDragStart = (item) => {
     if (!droppedBrand) {
@@ -196,7 +247,9 @@ const AddSupplierPromotion = () => {
         brandId: droppedBrand?.id,
         startDate: startDate ? moment(startDate).valueOf() : null,
         // endDate: endDate ? moment(endDate).valueOf() : null,
-        endDate:endDate ? moment(endDate).set({ hour: 12, minute: 0, second: 0 }).valueOf() : null,
+        endDate: endDate
+          ? moment(endDate).set({ hour: 12, minute: 0, second: 0 }).valueOf()
+          : null,
         merchants: values?.merchants?.map((item, index) => {
           return {
             merchantId: droppedMerchants?.map((item) => item?._id).join(""),
@@ -222,7 +275,7 @@ const AddSupplierPromotion = () => {
 
   return (
     <>
-      {(brandListSelector?.isLoading || createPromotionSelector?.isLoading) && (
+      {createPromotionSelector?.isLoading && (
         <Loader />
       )}
       <div className="dashboard">
@@ -258,43 +311,48 @@ const AddSupplierPromotion = () => {
                   </div>
                 </div>
                 <div className="paddingb20">
-                  <div className="selectGrid3">
-                    {brandListSelector?.data?.data?.records?.length > 0 ? (
-                      <>
-                        {brandListSelector?.data?.data?.records?.map(
-                          (item, index) => {
-                            return (
-                              <>
-                                <div
-                                  key={index}
-                                  // onClick={() => handleBrandClick(item)}
-                                  style={{
-                                    cursor:
-                                      draggingItem || droppedBrand
-                                        ? "not-allowed"
-                                        : "pointer",
-                                  }}
-                                >
-                                  <DragBrandsItem
-                                    id={item?._id}
-                                    name={item.brandName}
-                                    info={item?.brandName}
-                                    onDragEnd={handleDragEndMerchant}
-                                    type="brand"
-                                    onDragStart={() => handleDragStart(item)}
-                                    disabled={!!draggingItem || !!droppedBrand}
-                                    selectedBrands={item}
-                                  />
-                                </div>
-                              </>
-                            );
-                          }
-                        )}
-                      </>
-                    ) : (
-                      <div className="noDataFound">No data available</div>
-                    )}
-                  </div>
+                  <InfiniteScroll
+                    dataLength={brandsData?.length}
+                    next={fetchMoreBrands}
+                    hasMore={brandsHasMore}
+                    loader={
+                      <div className="text-center">
+                        <Spin />
+                      </div>
+                    }
+                    scrollableTarget="selectBrands"
+                    height={280}
+                  >
+                    <div className="selectGrid3">
+                      {brandsData?.length > 0 ? (
+                        brandsData?.map((item, index) => (
+                          <div
+                            key={index}
+                            // onClick={() => handleBrandClick(item)}
+                            style={{
+                              cursor:
+                                draggingItem || droppedBrand
+                                  ? "not-allowed"
+                                  : "pointer",
+                            }}
+                          >
+                            <DragBrandsItem
+                              id={item?._id}
+                              name={item.brandName}
+                              info={item?.brandName}
+                              onDragEnd={handleDragEndMerchant}
+                              type="brand"
+                              onDragStart={() => handleDragStart(item)}
+                              disabled={!!draggingItem || !!droppedBrand}
+                              selectedBrands={item}
+                            />
+                          </div>
+                        ))
+                      ) : (
+                        <div className="noDataFound">No data available</div>
+                      )}
+                    </div>
+                  </InfiniteScroll>
                 </div>
               </div>
               <div className="mb-20 ">
@@ -331,57 +389,68 @@ const AddSupplierPromotion = () => {
                 </div>
 
                 <div className="paddingb20">
-                  <div className="selectMerchant">
-                    {merchantsListSelector?.data?.data?.records?.length > 0 ? (
-                      <>
-                        {merchantsListSelector?.data?.data?.records?.map(
-                          (item, index) => {
-                            return (
-                              <>
-                                <div
-                                  key={index}
-                                  className="cursor-pointer position-relative"
-                                >
-                                  <div className="custom-checkbox">
-                                    <label className="checkLabel">
-                                      <input
-                                        type="checkbox"
-                                        checked={selectedMerchants.includes(
-                                          item?._id
-                                        )}
-                                        onChange={() =>
-                                          handleCheckboxChange(item._id)
-                                        }
-                                      />
-                                      <span className="checkmark"></span>
-                                    </label>
-                                  </div>
-                                  <div
-                                  // onClick={() => handleAddToDropZone(item)}
-                                  >
-                                    <DragMerchantItem
-                                      type="merchant"
-                                      id={item?.id}
-                                      name={item?.logoUrl}
-                                      selectedMerchants={selectedMerchants} // Pass selected items
-                                      onDragStart={() =>
-                                        handleDragStartMerchant(item)
-                                      }
-                                      items={item}
-                                    />
-                                  </div>
-                                  <div className="divider2"></div>
-                                  <CustomDragLayer merchants={mercahnts} />
-                                </div>
-                              </>
-                            );
-                          }
-                        )}
-                      </>
-                    ) : (
+                  <InfiniteScroll
+                    dataLength={merchantsData?.length}
+                    next={fetchMoreData}
+                    hasMore={hasMore}
+                    loader={
+                      <div className="text-center">
+                        <Spin />
+                      </div>
+                    }
+                    scrollableTarget="selectMerchant"
+                    height={280}
+                  >
+                    {/* <div className="selectMerchant"> */}
+                    {/* {merchantsListSelector?.data?.data?.records?.length > 0 ? ( */}
+                    <div className="selectMerchant">
+                      {merchantsData?.map((item, index) => {
+                        return (
+                          <>
+                            <div
+                              key={index}
+                              className="cursor-pointer position-relative"
+                            >
+                              <div className="custom-checkbox">
+                                <label className="checkLabel">
+                                  <input
+                                    type="checkbox"
+                                    checked={selectedMerchants.includes(
+                                      item?._id
+                                    )}
+                                    onChange={() =>
+                                      handleCheckboxChange(item._id)
+                                    }
+                                  />
+                                  <span className="checkmark"></span>
+                                </label>
+                              </div>
+                              <div
+                              // onClick={() => handleAddToDropZone(item)}
+                              >
+                                <DragMerchantItem
+                                  type="merchant"
+                                  id={item?.id}
+                                  name={item?.logoUrl}
+                                  selectedMerchants={selectedMerchants} // Pass selected items
+                                  onDragStart={() =>
+                                    handleDragStartMerchant(item)
+                                  }
+                                  items={item}
+                                />
+                              </div>
+                              <div className="divider2"></div>
+                              <CustomDragLayer merchants={mercahnts} />
+                            </div>
+                          </>
+                        );
+                      })}
+                    </div>
+                  </InfiniteScroll>
+                  {/* ) : (
                       <div className="noDataFound">No data available</div>
-                    )}
-                  </div>
+                    )} */}
+                  {/* </div> */}
                 </div>
               </div>
             </div>
@@ -868,6 +937,18 @@ const AddSupplierPromotion = () => {
                                                 placeholder="Enter Price"
                                                 autoComplete="off"
                                                 maxLength={5}
+                                                onKeyPress={handleKeyPressSpace}
+                                                onInput={
+                                                  handleNumberFieldLength
+                                                }
+                                                onKeyDown={(event) => {
+                                                  if (
+                                                    event.key === "ArrowUp" ||
+                                                    event.key === "ArrowDown"
+                                                  ) {
+                                                    event.preventDefault();
+                                                  }
+                                                }}
                                                 onChange={(e) => {
                                                   let priceForReimbursement =
                                                     parseFloat(

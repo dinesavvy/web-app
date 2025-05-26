@@ -17,6 +17,7 @@ import editMember from "../../../../assets/images/editMember.svg";
 import deleteMember from "../../../../assets/images/deleteMember.svg";
 import deleteModal from "../../../../assets/images/deleteModal.svg";
 import SearchSelect from "../SearchSelect";
+import useScrollToTop from "../../../../hooks/useScrollToTop";
 
 const Distributors = () => {
   const [modal2Open, setModal2Open] = useState(false);
@@ -38,6 +39,9 @@ const Distributors = () => {
   );
 
   const dispatch = useDispatch();
+
+  // Scroll to top when the component mounts
+  useScrollToTop([pagination?.page]);
 
   const getDistributorListSelector = useSelector(
     (state) => state?.distributorsList

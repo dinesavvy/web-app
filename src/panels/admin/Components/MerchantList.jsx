@@ -13,6 +13,8 @@ import { merchantsListHandler } from "../../../redux/action/merchantsList";
 import moment from "moment";
 import Loader from "../../../common/Loader/Loader";
 import GroupList from "./GroupList";
+import useScrollToTop from "../../../hooks/useScrollToTop";
+
 
 const MerchantList = () => {
   const [pagination, setPagination] = useState({ page: 1, limit: 10 });
@@ -33,6 +35,8 @@ const MerchantList = () => {
     setSearchString(value);
     setPagination((prev) => ({ ...prev, page: 1 })); // Reset to the first page on search
   };
+
+  
 
   const handleSearchAreaChange = (selectedAreas) => {
     setSearchArea(selectedAreas);
@@ -70,6 +74,9 @@ const MerchantList = () => {
 
     fetchMerchants();
   }, [pagination, activeTab2, searchString, searchArea]);
+
+  // Scroll to top when the component mounts
+  useScrollToTop([activeTab, activeTab2, pagination?.page]);
 
   const tabs = [
     {
@@ -196,10 +203,11 @@ const MerchantList = () => {
                                     Volume Potential
                                   </div>
                                   <div className="fs-14 fw-600">
-                                    {
+                                    {/* {
                                       item?.nudge
                                         ?.timeFrameFollowerNudgeSentCount
-                                    }
+                                    } */}
+                                    0
                                   </div>
                                 </div>
                                 <div>
@@ -207,7 +215,8 @@ const MerchantList = () => {
                                     Depletions Potential
                                   </div>
                                   <div className="fs-14 fw-600">
-                                    {item?.nudge?.nudgeCredit}
+                                    {/* {item?.nudge?.nudgeCredit} */}
+                                    0
                                   </div>
                                 </div>
                                 <div>
@@ -255,7 +264,7 @@ const MerchantList = () => {
                                   //   localStorage.setItem("merchantId", item?._id);
                                   // }}
 
-                                  onClick={()=>navigate("/admin/promotions")}
+                                  onClick={()=>navigate("/admin/promotions",{state:item})}
                                 >
                                   Promote
                                 </div>

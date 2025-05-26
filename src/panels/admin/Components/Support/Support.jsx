@@ -6,12 +6,11 @@ import { Pagination } from "antd";
 import Loader from "../../../../common/Loader/Loader";
 import {
   resolveSupportRequestAction,
-  resolveSupportRequestHandler,
 } from "../../../../redux/action/resolveSupportRequest";
 import { useCommonMessage } from "../../../../common/CommonMessage";
-import axios from "axios";
 import CommonModal from "../CommonModal";
 import { useNavigate } from "react-router-dom";
+import useScrollToTop from "../../../../hooks/useScrollToTop";
 
 const Support = () => {
   const [resolveModal, setResolveModal] = useState(false);
@@ -24,6 +23,9 @@ const Support = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const messageApi = useCommonMessage();
+
+  // Scroll to top when the component mounts
+  useScrollToTop([pagination?.page]);
 
   const handleTabClick = (tab) => {
     setActiveTab(tab); // Update the active tab
@@ -144,7 +146,9 @@ const Support = () => {
                               <div>
                                 <div className="d-flex align-center gap-12">
                                   <div className="initialName">
-                                    {item?.fullName
+                                    {(item?.requestStatus === "Imported" 
+                                      ? item?.businessDetails?.businessName 
+                                      : item?.businessName)
                                       ?.split(" ")
                                       .map((word) => word[0])
                                       .join("")
@@ -160,10 +164,8 @@ const Support = () => {
                                           .slice(1)
                                           .toLowerCase() || "-"}
                                     </div>
-                                    {/* <div className="fs-14 fw-300 o5 ">{index+1}</div> */}
                                   </div>
                                 </div>
-                                {console.log("item",item)}
                                 <div className="divider2"></div>
                                 <div className="mb-20">
                                   <div className="fs-14  mb-16">
@@ -173,8 +175,6 @@ const Support = () => {
                                     
                                     <div className="fw-600">
                                       {item?.requestStatus === "Imported" ?item?.businessDetails?.businessName : item?.businessName || "N/A"}
-                                      {/* {item?.businessName || "N/A"} */}
-                                      {/* {item?.requestStatus === "Imported" ?item?.businessDetails?.emailAddress : item?.emailAddress || "N/A"} */}
                                     </div>
                                   </div>
                                   <div className="fs-14  mb-16">
@@ -191,8 +191,6 @@ const Support = () => {
                                     </div>
                                     <div className="fw-600">
                                       {item?.emailAddress || "N/A"}
-                                      {/* {item?.requestStatus === "Imported" ?item?.businessDetails?.emailAddress : item?.emailAddress || "N/A"} */}
-
                                     </div>
                                   </div>
                                 </div>
@@ -229,7 +227,7 @@ const Support = () => {
                   )}
                 </>
               ) : (
-                <div className="d-flex gap-30 flexWrap">No data available</div>
+                <div className="noDataFound">No data available</div>
               )}
             </div>
           </div>

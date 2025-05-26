@@ -17,6 +17,7 @@ import {
 } from "../../../redux/action/followerArchive";
 import { useNavigate } from "react-router-dom";
 import moment from "moment";
+import useScrollToTop from "../../../hooks/useScrollToTop";
 
 const Followers = () => {
   const [archive, setArchive] = useState(false);
@@ -29,6 +30,9 @@ const Followers = () => {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  // Scroll to top when the component mounts
+  useScrollToTop([pagination?.page]);
 
   const handlePaginationChange = (page, pageSize) => {
     setPagination({ page, limit: pageSize });
@@ -153,7 +157,8 @@ const Followers = () => {
                             <div className="d-flex align-center gap-12">
                               <div className="initialName">
                                 {item?.userInfo?.displayName.charAt(0) +
-                                  item?.userInfo?.displayName.charAt(1)}
+                                  item?.userInfo?.displayName.charAt(1) ||
+                                  "N/A"}
                               </div>
                               <div>
                                 <div className="fw-700">
@@ -169,7 +174,9 @@ const Followers = () => {
                                     : "-"}
                                 </div>
                                 <div className="fs-14 fw-300 o5">
-                                  {moment(item?.createdAt).format("MMMM,YYYY")}
+                                  {moment(item?.userInfo?.createdAt).format(
+                                    "MMMM,YYYY"
+                                  )}
                                 </div>
                               </div>
                             </div>
@@ -221,13 +228,13 @@ const Followers = () => {
                           <div className="divider2"></div>
                           <div className="fs-14 mb-6">Preferences</div>
                           <div className="flexTag mb-20">
-                            {item?.customerPreferencesData?.personalPreference
-                              ?.length > 0 ? (
-                              item.customerPreferencesData.personalPreference.map(
+                            {item?.customerPreferencesData?.filterData?.length >
+                            0 ? (
+                              item?.customerPreferencesData?.filterData?.map(
                                 (preference, index) => (
                                   <div key={index}>
-                                    {preference.charAt(0).toUpperCase() +
-                                      preference.slice(1)}
+                                    {preference?.charAt(0).toUpperCase() +
+                                      preference?.slice(1)}
                                   </div>
                                 )
                               )
@@ -272,7 +279,7 @@ const Followers = () => {
                           <div className="d-flex align-center gap-12">
                             <div className="initialName">
                               {item?.userInfo?.displayName.charAt(0) +
-                                item?.userInfo?.displayName.charAt(1)}
+                                item?.userInfo?.displayName.charAt(1) || "N/A"}
                             </div>
                             <div>
                               <div className="fw-700">
@@ -290,7 +297,9 @@ const Followers = () => {
                                   : "-"}
                               </div>
                               <div className="fs-14 fw-300 o5">
-                                {moment(item?.createdAt).format("MMMM,YYYY")}
+                                {moment(item?.userInfo?.createdAt).format(
+                                  "MMMM,YYYY"
+                                )}
                               </div>
                             </div>
                           </div>
@@ -331,13 +340,17 @@ const Followers = () => {
                         <div className="divider2"></div>
                         <div className="fs-14 mb-6">Preferences</div>
                         <div className="flexTag mb-20">
-                          {item?.customerPreferencesData?.personalPreference
-                            ?.length > 0 ? (
-                            item.customerPreferencesData.personalPreference.map(
+                          {console.log(
+                            item?.customerPreferencesData,
+                            "item?.customerPreferencesData"
+                          )}
+                          {item?.customerPreferencesData?.filterData?.length >
+                          0 ? (
+                            item?.customerPreferencesData?.filterData?.map(
                               (preference, index) => (
                                 <div key={index}>
-                                  {preference.charAt(0).toUpperCase() +
-                                    preference.slice(1)}
+                                  {preference?.charAt(0).toUpperCase() +
+                                    preference?.slice(1)}
                                 </div>
                               )
                             )

@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useCommonMessage } from "../../../../common/CommonMessage";
 import Loader from "../../../../common/Loader/Loader";
 import { settingListHandler } from "../../../../redux/action/settingList";
+import { handleKeyPressSpace } from "../../../../common/commonFunctions/CommonFunctions";
 
 const Settings = () => {
   const [environment, setEnvironment] = useState("Stage");
@@ -402,6 +403,7 @@ const Settings = () => {
                   placeholder="Enter your message"
                   value={message}
                   onChange={handleMessageChange}
+                  onKeyPress={handleKeyPressSpace}
                 ></textarea>
                 {errors.message && (
                   <div className="mt-10 fw-500 fs-14 error">

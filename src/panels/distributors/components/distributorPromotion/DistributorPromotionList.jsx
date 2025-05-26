@@ -10,6 +10,7 @@ import SearchSelect from "../../../admin/Components/SearchSelect";
 import { supplierPromotionListHandler } from "../../../../redux/action/supplierActions/supplierPromotionList";
 import { distributorPromotionListHandler } from "../../../../redux/action/distributorsAction/distributorPromotionList";
 import DistributorPromotionDetails from "./DistributorPromotionDetails";
+import useScrollToTop from "../../../../hooks/useScrollToTop";
 // import SupplierPromotionDetails from "./SupplierPromotionDetails";
 
 const DistributorPromotionList = () => {
@@ -26,6 +27,9 @@ const DistributorPromotionList = () => {
   const dispatch = useDispatch();
   const selectRef = useRef(null);
   const navigate = useNavigate();
+
+  // Scroll to top when the component mounts
+  useScrollToTop([pagination?.page]);
 
   const distributorPromotionList = useSelector(
     (state) => state?.distributorPromotionList

@@ -69,7 +69,7 @@ const SearchSelect = ({ onSearchChange, onSearchAreaChange }) => {
   }, []);
 
   const placeholders = {
-    "/admin/merchant/followers":
+    "/admin/followers":
       "Search by preferences, what they love or nudges",
     "/admin/merchant/details":
       "Search by preferences, what they love or nudges",
@@ -83,6 +83,7 @@ const SearchSelect = ({ onSearchChange, onSearchAreaChange }) => {
     "/distributors/promotion": "Search Promotions",
     "/merchant/promotions": "Search for Promotions",
     "/admin/settings": "Search Settings",
+    "/admin/followers":"Search Followers"
   };
 
   const placeholder = placeholders[location.pathname] || "Search Merchants";
@@ -114,7 +115,7 @@ const SearchSelect = ({ onSearchChange, onSearchAreaChange }) => {
 
             {isDropdownOpen && (
               <div className="dropdown-list">
-                {(location?.pathname === "/admin/merchant/followers" ||
+                {(location?.pathname === "/admin/followers" ||
                   location?.pathname === "/admin/merchant/details") &&
                   followerListFilter.map((option, index) => (
                     <div key={index} className="dropdown-item custom-checkbox">

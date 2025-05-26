@@ -79,8 +79,6 @@ const MerchantLogin = () => {
         content: businessSendOtpSelector?.data?.message,
       });
       setRequestLogin(true);
-
-      // navigate("/admin/merchant/dashboard");
       dispatch(businessSendOtpAction.businessSendOtpSliceReset());
     } else if (businessSendOtpSelector?.message?.status === 400) {
       messageApi.open({
