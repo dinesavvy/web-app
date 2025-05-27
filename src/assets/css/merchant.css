@@ -1056,9 +1056,129 @@ input[type="radio"]:checked+.custom-radio-button {
 .p-20 {
   padding: 20px;
 }
-
+.anchorBlue{
+  color: #0056FF;
+  text-decoration: underline;
+  cursor: pointer;
+}
+.videoModal .ant-modal-content{
+  padding: 0 !important;
+  border-radius: 0 !important;
+  width: 100%;
+  max-width: 100% !important;
+}
+.dot{
+  margin: 0 12px;
+  background-color: #000;
+  height: 4px;
+  width: 4px;
+  border-radius: 50%;
+}
+.savvynudge{
+  position: absolute;
+  z-index: 1;
+  right: 0;
+  bottom: 10px;
+}
+.playbtn{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+}
+.divider16 {
+  width: 100%;
+  height: 1px;
+  background-color: #E3E3E8;
+  margin: 16px 0;
+}
+.borderImageCollaps .imageCollaps{
+  background-color: white;
+  border: 1.07px solid #EEEEEE !important;
+  padding: 3px;
+}
+.selectedImage{
+  background-color: rgba(0, 0, 0,0.6);
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top: 0;
+  left: 0;
+}
+.gradiant{
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0) 29.4%, rgba(0, 0, 0, 0.8) 94.72%);
+}
+.savvyname{
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 20px;
+  color: white;
+}
+.videoThumbnail img,.PreviewideoThumbnail img{
+  object-fit: contain;
+}
+.videoThumbnail{
+  height: 150px;
+  border: 1px solid #CACACA;
+  background: #F3F4F5;
+  border-radius: 8px;
+}
+.PreviewideoThumbnail{
+  width: 265px;
+  border-radius: 8px;
+  height: 150px;
+  border: 1px solid #CACACA;
+  background: #F3F4F5;
+}
+.savvyGrid{
+  display: grid;
+  grid-template-columns: repeat(2,1fr);
+  gap: 16px;
+}
+.savvyInputGrid{
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+}
+.savvyImageSelect{
+  height: 200px;
+  width: 100%;
+  border-radius: 15px;
+  overflow: hidden;
+  position: relative;
+  cursor: pointer;
+  border: 2px solid transparent;
+}
+.selectedBorder{
+  border-color: #0056FF;
+}
+.savvyImageSelect img{
+  object-fit: cover;
+}
 .promotionImage {
   height: 90px;
+}
+.minsavvynudgevideo {
+  aspect-ratio: 333 / 188; /* or just 1.65 */
+  width: 100%;
+  min-height: 188px;
+  background: #000; /* fallback background while loading */
+  overflow: hidden;
+  position: relative;
+  cursor: pointer;
+}
+.minsavvynudgevideo iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
 }
 .nudgeCardImage180{
   height: 180px;
@@ -2044,8 +2164,78 @@ input.addTitleInput::placeholder {
 }
 
 
-
-
+.bb > * {
+  box-sizing: border-box;
+}
+.pt-30{
+  padding-top: 31px;
+}
+.flex1{
+  flex: 1;
+}
+textarea{
+  height: 160px;
+}
+.datePickerinput ,.datePickerinput:hover{
+  font-size: 14px !important;
+  line-height: 21px !important;
+  padding: 11px 13px;
+  border: 1.5px solid transparent;
+  width: calc(100% - 29px);
+  background-color: #F3F4F5 !important;
+  border-radius: 12px;
+}
+.merchantSelectList{
+  padding: 7.5px 15px;
+  border: 1px solid #E3E3E8;
+  border-radius: 66px;
+}
+.merchantAddList{
+  border: 1.5px dashed #056DFF;
+  border-radius: 66px;
+  color: #0056FF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5.5px;
+  padding: 7px 8px;
+  padding-right: 13px;
+}
+.aspect-video{
+  height: 528px;
+  width: 938px;
+}
+.videoModal{
+   width: 938px !important;
+}
+.merchantMiles{
+  width: 140px;
+  height: 40px;
+  border-radius: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  background-color: #E5F0FF;
+}
+.merchantMiles.selectedMiles{
+  color: white;
+  background-color: #0056FF;
+}
+.ant-modal .ant-modal-close:hover{
+  background-color: transparent !important;
+}
+.serchSelectall >.d-flex.mb-20{
+  margin-bottom: 0px;
+  width: 100%;
+}
+.wordWrapNone {
+  white-space: nowrap;
+}
+.addMerchantGrid{
+  display: grid;
+  grid-template-columns: repeat(4,1fr);
+}
 @media (max-width: 1549.98px) {
   .addNudge2 {
     gap: 12px;
@@ -2454,6 +2644,9 @@ input.addTitleInput::placeholder {
   }
   .promotionImage {
     height: 70px;
+  }
+  .minsavvynudgevideo {
+    min-height: 160px;
   }
   .dropdown-list {
     top: 48px;

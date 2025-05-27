@@ -38,7 +38,7 @@ import { useDispatch, useSelector } from "react-redux";
 const Sidebar = ({ isOpen, setIsOpen }) => {
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const navigate = useNavigate();
-  const dispatch= useDispatch()
+  const dispatch = useDispatch();
   const getLoggedInDetails = localStorage.getItem("merchantLogin");
   const getSupplierDetails = localStorage.getItem("supplierLogin");
   const getDistributorLoginDetails = localStorage.getItem("distributorLogin");
@@ -53,7 +53,6 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
   //     dispatch(supportListHandler(payload));
   //   // }
   // }, []);
-
 
   // const supportListSelector = useSelector((state)=>state?.supportList)
 
@@ -149,6 +148,15 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
             iconFull: nudgeFull,
             navigate: getLoggedInDetails ? "/merchant/nudges" : "/admin/nudges",
             disabled: "",
+          },
+          {
+            id: 14,
+            name: "Savvy Nudges",
+            icon: nudge,
+            iconFull: nudgeFull,
+            navigate: "/admin/savvy-nudge",
+            disabled: "",
+            // tag: 9,
           },
           // {
           //   id: 6,

@@ -21,6 +21,8 @@ import ForgotPassword from "../../suppliers/components/ForgotPassword/ForgotPass
 import Support from "../Components/Support/Support";
 import EditSupport from "../Components/Support/EditSupport";
 import Settings from "../Components/Settings/Settings";
+import SavvyNudge from "../Components/SavvyNudge/SavvyNudge";
+import CreateSavvyNudge from "../Components/SavvyNudge/CreateSavvyNudge";
 
 
 const adminRoutes = [
@@ -141,6 +143,18 @@ const adminRoutes = [
   {
     path: "/admin/edit-support",
     element: EditSupport,
+    isPrivate: false,
+    isLayout: true,
+  },
+  {
+    path: "/admin/savvy-nudge",
+    element: SavvyNudge,
+    isPrivate: false,
+    isLayout: true,
+  },
+  {
+    path: "/admin/create-savvy-nudge",
+    element: CreateSavvyNudge,
     isPrivate: false,
     isLayout: true,
   },
