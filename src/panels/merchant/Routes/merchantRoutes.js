@@ -9,6 +9,7 @@ import Profile from "../auth/Profile";
 import Hierarchy from "../auth/Hierarchy";
 import NoPageFound from "../../../common/noPageFound/NoPageFound";
 import PromotionsList from "../promotions/PromotionsList";
+import SavvyNudge from "../SavvyNudge/SavvyNudge";
 
 const merchantRoutes = [
   {
@@ -69,6 +70,12 @@ const merchantRoutes = [
   {
     path: "/merchant/hierarchy",
     element: Hierarchy,
+    isPrivate: false,
+    isLayout: true,
+  },
+  {
+    path: "/merchant/savvy-nudge",
+    element: SavvyNudge,
     isPrivate: false,
     isLayout: true,
   },

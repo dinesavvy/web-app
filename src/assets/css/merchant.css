@@ -1067,6 +1067,16 @@ input[type="radio"]:checked+.custom-radio-button {
   width: 100%;
   max-width: 100% !important;
 }
+.br10{
+  border-radius: 10px;
+  overflow: hidden;
+}
+.sidebarSavvynudge .nailedIt{
+  position: unset;
+}
+.sidebarSavvynudge .minsavvynudgevideo {
+  aspect-ratio: unset;
+}
 .dot{
   margin: 0 12px;
   background-color: #000;
@@ -1175,6 +1185,13 @@ input[type="radio"]:checked+.custom-radio-button {
   position: relative;
   cursor: pointer;
 }
+.sidebarSavvynudge .minsavvynudgevideo img{
+  object-fit: contain;
+}
+.sidebarSavvynudge .minsavvynudgevideo{
+  max-height: 188px;
+  height: 188px;
+}
 .minsavvynudgevideo iframe {
   width: 100%;
   height: 100%;
@@ -1246,9 +1263,14 @@ input[type="radio"]:checked+.custom-radio-button {
 .roi.green {
   background-color: #00D014;
 }
-
+.greenText{
+  color: #33CC55;
+}
 .roi.red {
   background-color: #BF0202;
+}
+.roi.brandred {
+  background-color: #F5453B;
 }
 .onlyArrowBtn{
   min-width: 50px;
@@ -2236,7 +2258,22 @@ textarea{
   display: grid;
   grid-template-columns: repeat(4,1fr);
 }
+.customItemAccordian{
+  padding: 0 !important; 
+}
+.customContentAccordian{
+  padding: 0 !important;
+  margin: 0 !important;
+  border: none !important;
+}
 @media (max-width: 1549.98px) {
+  .sidebarSavvynudge .minsavvynudgevideo {
+    max-height: 140px;
+    height: 140px;
+  }
+  .savvynudge{
+    height: 23px;
+  }
   .addNudge2 {
     gap: 12px;
     width: 80px;
@@ -2263,6 +2300,10 @@ textarea{
   .borderRight:not(:last-child){
     padding-right: 16px;
   }
+  .selectedImage img{
+    height: 35px;
+    width: 35px;
+  }
   .w135{
     width: 100px;
     height: 32px;
@@ -2270,6 +2311,9 @@ textarea{
   }
   .w135.btnSecondary{
     height: 30px;
+  }
+  .savvyImageSelect{
+    height: 150px;
   }
   .codeImage{
     height: 60px;
@@ -2282,7 +2326,45 @@ textarea{
   .tabContainer .tabbing{
     padding: 8px 0;
   }
+  .datePickerinput, .datePickerinput:hover{
+    font-size: 12px !important;
+    padding: 7px 9px;
+  }
   .closeRightSidebarModalsIcon{
+    height: 30px;
+    width: 30px;
+  }
+  .merchantSelectList {
+    padding: 5.5px 11px;
+  }
+  .merchantAddList {
+    gap: 4px;
+    padding: 5.5px 6px;
+    padding-right: 10px;
+  }
+  .merchantAddList img{
+    height: 17px;
+    width: 17px;
+  }
+  .calenderIcon{
+    height: 18px;
+    width: 18px;
+  }
+  .merchantMiles {
+    width: 110px;
+    height: 35px;
+    border-radius: 6px;
+    gap: 3px;
+  }
+  .merchantMiles img{
+    height: 16px;
+    width: 16px;
+  }
+  .PreviewideoThumbnail{
+    width: 220px;
+    height: 120px;
+  }
+  .playbtn{
     height: 30px;
     width: 30px;
   }
@@ -2646,7 +2728,7 @@ textarea{
     height: 70px;
   }
   .minsavvynudgevideo {
-    min-height: 160px;
+    min-height: 140px;
   }
   .dropdown-list {
     top: 48px;
@@ -2867,7 +2949,12 @@ textarea{
   .gridBtn {
     gap: 4px;
   }
-
+  .savvyInputGrid .threeSpace {
+    grid-column: span 1;  
+  }
+  .savvyInputGrid{
+    grid-template-columns: repeat(1,1fr);
+  }
   .ant-pagination-item {
     margin-inline-end: 4px !important
   }
@@ -2935,7 +3022,9 @@ textarea{
   .dropdown-list {
     width: 250px;
   }
-
+  .savvyGrid{
+    grid-template-columns: repeat(1,1fr);
+  }
   .rightSidebar {
     width: 100%;
     right: -100%;

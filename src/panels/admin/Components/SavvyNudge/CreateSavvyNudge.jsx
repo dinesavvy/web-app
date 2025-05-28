@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import backButton from "../../../../assets/images/backButton.svg";
 import selectedImage from "../../../../assets/images/selectedImage.svg";
 import calender from "../../../../assets/images/calender.svg";
@@ -13,6 +13,8 @@ import dayjs from "dayjs";
 import CustomSelect from "../CustomSelect";
 import { useNavigate } from "react-router-dom";
 import SearchSelect from "../SearchSelect";
+import SavvyNudgeDetail from "./SavvyNudgeDetail";
+import MerchantViewAll from "./MerchantViewAll";
 
 const CreateSavvyNudge = () => {
   const navigate = useNavigate();
@@ -41,7 +43,7 @@ const CreateSavvyNudge = () => {
   const [youtubeUrl, setYoutubeUrl] = useState("");
   const [videoId, setVideoId] = useState(null);
   const [activeVideoUrl, setActiveVideoUrl] = useState(null);
-
+ 
   const extractVideoId = (url) => {
     const regExp =
       /^.*(?:youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=|watch\?.+&v=)([^#\&\?]*).*/;
@@ -135,7 +137,7 @@ const CreateSavvyNudge = () => {
               <DatePicker
                 needConfirm
                 placeholder="Set merchant availability period "
-                suffixIcon={<img src={calender} alt="" />}
+                suffixIcon={<img src={calender} className="calenderIcon" alt="" />}
                 format="DD/MM/YYYY"
                 allowClear={false}
                 className="w-100 datePickerinput"
@@ -446,16 +448,13 @@ const CreateSavvyNudge = () => {
             </div>
           </label>
         </div>
-        <div className="pc text-center cursor-pointer">
-          View More
-        </div>
+        <div className="pc text-center cursor-pointer">View More</div>
         <div className="divider2"></div>
         <div className="d-flex justify-end">
-          <div className="btn p32">
-            Add
-          </div>
+          <div className="btn p32">Add</div>
         </div>
       </Modal>
+     
     </>
   );
 };

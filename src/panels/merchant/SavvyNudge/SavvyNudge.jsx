@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import coke from "../../../../assets/images/coke.svg";
-import addCredits from "../../../../assets/images/addCredits.svg";
-import remainTime from "../../../../assets/images/remainTime.svg";
-import savvynudge from "../../../../assets/images/savvynudge.svg";
-import playbtn from "../../../../assets/images/playbtn.svg";
+import coke from "../../../assets/images/coke.svg";
+import addCredits from "../../../assets/images/addCredits.svg";
+import remainTime from "../../../assets/images/remainTime.svg";
+import savvynudge from "../../../assets/images/savvynudge.svg";
+import playbtn from "../../../assets/images/playbtn.svg";
 import { Modal } from "antd";
 import SavvyNudgeDetail from "./SavvyNudgeDetail";
-import MerchantViewAll from "./MerchantViewAll";
+import SearchSelect from "../../admin/Components/SearchSelect";
 const getYoutubeId = (url) => {
   const regExp =
     /(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([\w-]{11})/;
@@ -16,7 +16,7 @@ const getYoutubeId = (url) => {
 };
 const SavvyNudge = () => {
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState(true);
+  const [activeTab, setActiveTab] = useState("active");
   const handleTabClick = (tab) => {
     setActiveTab(tab); // Update the active tab
   };
@@ -25,7 +25,7 @@ const SavvyNudge = () => {
   const toggleSidebar = () => {
     setIsSidebarOpen((prevState) => !prevState);
   };
-   useEffect(() => {
+  useEffect(() => {
     if (isSidebarOpen) {
       document.body.classList.add("overflow-Hidden");
     } else {
@@ -37,21 +37,7 @@ const SavvyNudge = () => {
     };
   }, [isSidebarOpen]);
 
-  const [isSidebarOpenMerchantViewAll, setIsSidebarOpenMerchantViewAll] = useState(false);
-  const toggleSidebarMerchantViewAll = () => {
-    setIsSidebarOpenMerchantViewAll((prevState) => !prevState);
-  };
-   useEffect(() => {
-    if (isSidebarOpenMerchantViewAll) {
-      document.body.classList.add("overflow-Hidden");
-    } else {
-      document.body.classList.remove("overflow-Hidden");
-    }
-    // Cleanup on component unmount
-    return () => {
-      document.body.classList.remove("overflow-Hidden");
-    };
-  }, [isSidebarOpenMerchantViewAll]);
+  
 
   const videoLinks = [
     "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
@@ -61,32 +47,47 @@ const SavvyNudge = () => {
   return (
     <>
       <div className="dashboard">
+        <div className="tabs-container tab3 tabFull tabing">
+          <div className="tabs">
+            <button
+              className={`tab-button ${activeTab === "active" ? "active" : ""}`}
+              onClick={() => {
+                setActiveTab("active");
+              }}
+            >
+              Active
+            </button>
+
+            <button
+              className={`tab-button d-flex align-center justify-center gap-8 ${
+                activeTab === "offer" ? "active" : ""
+              }`}
+              onClick={() => {
+                setActiveTab("offer");
+              }}
+            >
+              Offer{" "}
+              {activeTab === "offer" && (
+                <div className="tagNumber pc fs-14 fw-500">03</div>
+              )}
+            </button>
+            <button
+              className={`tab-button ${
+                activeTab === "archive" ? "active" : ""
+              }`}
+              onClick={() => {
+                setActiveTab("archive");
+              }}
+            >
+              Archive
+            </button>
+          </div>
+        </div>
         <div className="tabPadding">
           <div className="d-flex justify-between align-center mb-20 gap-10 flexsm">
             <div className="fs-24 fw-600">Savvy Nudges</div>
-            <div className="position-relative d-flex align-center gap-10">
-              <div className="gap-8 btnSecondary p16 btn z1" onClick={()=>navigate("/admin/create-savvy-nudge")}>
-                <img src={addCredits} alt="addCredits" />
-                Create Savvy Nudge
-              </div>
-            </div>
           </div>
-          <div className="tabs-container tab3 tabing mb-20">
-            <div className="tabs">
-              <button
-                className={`tab-button ${activeTab === true ? "active" : ""}`}
-                onClick={() => handleTabClick(true)}
-              >
-                Active
-              </button>
-              <button
-                className={`tab-button ${activeTab === false ? "active" : ""}`}
-                onClick={() => handleTabClick(false)}
-              >
-                Inactive
-              </button>
-            </div>
-          </div>
+          <SearchSelect />
           <div className="merchantGrid mb-20">
             {videoLinks.map((url) => {
               const videoId = getYoutubeId(url);
@@ -133,31 +134,6 @@ const SavvyNudge = () => {
                             All followers and everyone within 25 mi
                           </div>
                         </div>
-                        <div className="mb-16">
-                          <div className="fs-14 mb-4">Merchants</div>
-                          <div className="d-flex gap-8 align-center">
-                            <div className="position-relative d-flex borderImageCollaps">
-                              <div className="imageCollaps">
-                                <img src={coke} className="w-100 h-100" />
-                              </div>
-                              <div className="imageCollaps">
-                                <img src={coke} className="w-100 h-100" />
-                              </div>
-                              <div className="imageCollaps">
-                                <img src={coke} className="w-100 h-100" />
-                              </div>
-                              <div className="imageCollaps">
-                                <img src={coke} className="w-100 h-100" />
-                              </div>
-                              <div className="imageCollaps">
-                                <img src={coke} className="w-100 h-100" />
-                              </div>
-                            </div>
-                            <div className="cursor-pointer fs-14 fw-600" onClick={()=>toggleSidebarMerchantViewAll()}>
-                              +10 more
-                            </div>
-                          </div>
-                        </div>
                         <div className="">
                           <div className="fs-14 mb-4">Buy it from here</div>
                           <div className="d-flex align-center fs-14 fw-600">
@@ -178,7 +154,37 @@ const SavvyNudge = () => {
                           </div>
                         </div>
                       </div>
-                      <div className="btn btnSecondary" onClick={()=>toggleSidebar()}>View Details</div>
+                      {activeTab === "active" ? (
+                        <div className="d-flex gap-10">
+                          <div
+                            className="btn deleteBtn w-100"
+                            onClick={() => toggleSidebar()}
+                          >
+                            End Nudge
+                          </div>
+                          <div
+                            className="btn  w-100"
+                            onClick={() => toggleSidebar()}
+                          >
+                            View Details
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="d-flex gap-10">
+                          <div
+                            className="btn btnSecondary w-100"
+                            onClick={() => toggleSidebar()}
+                          >
+                            Decline
+                          </div>
+                          <div
+                            className="btn w-100"
+                            onClick={() => toggleSidebar()}
+                          >
+                            Accept
+                          </div>
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -213,8 +219,11 @@ const SavvyNudge = () => {
             </div>
           )}
         </Modal>
-        <SavvyNudgeDetail isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} videoUrl="https://www.youtube.com/watch?v=dQw4w9WgXcQ" />
-        <MerchantViewAll isOpenMerchantViewAll={isSidebarOpenMerchantViewAll} toggleSidebarMerchantViewAll={toggleSidebarMerchantViewAll} />
+        <SavvyNudgeDetail
+          isOpen={isSidebarOpen}
+          toggleSidebar={toggleSidebar}
+          videoUrl="https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+        />
       </div>
     </>
   );

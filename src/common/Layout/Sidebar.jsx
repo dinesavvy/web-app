@@ -154,7 +154,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
             name: "Savvy Nudges",
             icon: nudge,
             iconFull: nudgeFull,
-            navigate: "/admin/savvy-nudge",
+            navigate:getLoggedInDetails ?  "/merchant/savvy-nudge" :"/admin/savvy-nudge",
             disabled: "",
             // tag: 9,
           },
