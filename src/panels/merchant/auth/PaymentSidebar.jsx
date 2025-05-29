@@ -34,7 +34,7 @@ const PaymentSidebar = ({
     let payload = {
       nudgeCredit: activeNudge,
       nudgeAmount: activeNudge,
-      currency: "INR",
+      currency: "USD",
     };
     dispatch(businessAddNudgeCreditHandler(payload));
   };
@@ -58,38 +58,34 @@ const PaymentSidebar = ({
 
       const data = await res.json();
       if (data?.id) {
-        // const res1 = await fetch("https://api.stripe.com/v1/payment_links", {
-        //   method: "POST",
-        //   headers: {
-        //     Authorization: `Bearer sk_test_51QhDunE3An7OFziSoNkwsbbgiI4VRtOjzX4CyDdobRvuuDrkSr7I5VvF4Sd8iVrkZnRQqzBR5gYYIbTUVNti9WZZ00A2vlz00M`,
-        //     "Content-Type": "application/x-www-form-urlencoded",
-        //   },
-        //   body: new URLSearchParams({
-        //     "line_items[0][price]": data?.id,
-        //     "line_items[0][quantity]": activeNudge,
-        //     "after_completion[type]": "redirect",
-        //     "after_completion[redirect][url]":
-        //       "http://localhost:3001/merchant/nudges",
-        //   }),
-        // });
-        const res1 = await fetch("https://api.stripe.com/v1/checkout/sessions", {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer sk_test_51QhDunE3An7OFziSoNkwsbbgiI4VRtOjzX4CyDdobRvuuDrkSr7I5VvF4Sd8iVrkZnRQqzBR5gYYIbTUVNti9WZZ00A2vlz00M`,
-            "Content-Type": "application/x-www-form-urlencoded",
-          },
-          body: new URLSearchParams({
-            "line_items[0][price]": data?.id,
-            "line_items[0][quantity]": activeNudge,
-            mode: "payment",
-            currency: "usd", // optional here if price already defines it
-            "success_url": "http://localhost:3001/merchant/nudges?success=true",
-            "cancel_url": "http://localhost:3001/merchant/nudges?cancelled=true",
-          }),
-        });
+        const res1 = await fetch(
+          "https://api.stripe.com/v1/checkout/sessions",
+          {
+            method: "POST",
+            headers: {
+              Authorization: `Bearer sk_test_51QhDunE3An7OFziSoNkwsbbgiI4VRtOjzX4CyDdobRvuuDrkSr7I5VvF4Sd8iVrkZnRQqzBR5gYYIbTUVNti9WZZ00A2vlz00M`,
+              "Content-Type": "application/x-www-form-urlencoded",
+            },
+            body: new URLSearchParams({
+              "line_items[0][price]": data?.id,
+              "line_items[0][quantity]": activeNudge,
+              mode: "payment",
+              currency: "usd", // optional here if price already defines it
+              success_url: "http://localhost:3001/merchant/nudges?success=true",
+              cancel_url:
+                "http://localhost:3001/merchant/nudges?cancelled=true",
+            }),
+          }
+        );
         const finalUrl = await res1.json();
-
-        window.open(finalUrl.url, "_blank");
+        if (finalUrl?.url) {
+          window.open(finalUrl.url, "_blank");
+        } else {
+          messageApi.open({
+            type: "error",
+            content: finalUrl?.error?.message,
+          });
+        }
       }
     } catch (err) {
       console.error("Error creating Stripe price:", err);

@@ -98,7 +98,7 @@ const AddPromotion = () => {
       prevSelected.includes(itemId) ? [] : [itemId]
     );
     // Find the merchant item that was checked/unchecked
-    const merchantItem = merchantsData.find(item => item._id === itemId);
+    const merchantItem = merchantsData?.find(item => item._id === itemId);
     setMerchantItemMain(merchantItem);
   };
 

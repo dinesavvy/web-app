@@ -47,8 +47,8 @@ const CustomDragLayer = ({ merchants, items, merchantItemMain }) => {
           <div className="brandItem mx167 w-100">
             <img
               // src={merchants?.find((merchant) => merchant.id === id)?.name}
-              src={noImageFound}
-              alt={`Merchant ${id}`}
+              src={merchantItemMain?.logoUrl || noImageFound}
+              alt={`Merchant ${merchantItemMain?.businessName}`}
               style={{
                 width: "150px",
                 height: "150px",
@@ -75,7 +75,15 @@ const CustomDragLayer = ({ merchants, items, merchantItemMain }) => {
             </div>
             <div className="d-flex gap-4 ">
               <div className="w-80">Location:</div>
-              <div className="fw-700">
+              <div
+                className="fw-700"
+                style={{
+                  whiteSpace: "nowrap",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  maxWidth: "200px",
+                }}
+              >
                 {[
                   merchantItemMain?.address?.addressLine1,
                   merchantItemMain?.address?.administrativeDistrictLevel1,

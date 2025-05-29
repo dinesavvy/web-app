@@ -42,6 +42,7 @@ const AddSupplierPromotion = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [searchStringMerchant, setSearchStringMerchant] = useState("");
   const [startDate, setStartDate] = useState("");
+  const [merchantItemMain, setMerchantItemMain] = useState(null);
   const [endDate, setEndDate] = useState("");
   const [merchantsData, setMerchantsData] = useState([]);
   const [hasMore, setHasMore] = useState(true);
@@ -95,6 +96,9 @@ const AddSupplierPromotion = () => {
     setSelectedMerchants((prevSelected) =>
       prevSelected.includes(itemId) ? [] : [itemId]
     );
+    // Find the merchant item that was checked/unchecked
+    const merchantItem = merchantsData?.find(item => item._id === itemId);
+    setMerchantItemMain(merchantItem);
   };
 
   const handleDragStartMerchant = () => {
@@ -440,7 +444,7 @@ const AddSupplierPromotion = () => {
                                 />
                               </div>
                               <div className="divider2"></div>
-                              <CustomDragLayer merchants={mercahnts} />
+                              <CustomDragLayer merchants={mercahnts} merchantItemMain={merchantItemMain}/>
                             </div>
                           </>
                         );

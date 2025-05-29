@@ -1158,7 +1158,7 @@ console.log(state,"state?.statePrev?.selectedItems")
                         <div className="fs-20">
                           {
                             followerDetailsSelector?.data?.data?.userInfo
-                              ?.displayName
+                              ?.displayName||"-"
                           }
                         </div>
                       </div>
@@ -1171,7 +1171,7 @@ console.log(state,"state?.statePrev?.selectedItems")
                         </label>
                         <div className="fs-20">
                           {moment(
-                            followerDetailsSelector?.data?.data?.createdAt
+                            followerDetailsSelector?.data?.data?.userInfo?.createdAt
                           ).format("MMMM,YYYY")}
                         </div>
                       </div>
@@ -1185,7 +1185,7 @@ console.log(state,"state?.statePrev?.selectedItems")
                         <div className="fs-20">
                           {
                             followerDetailsSelector?.data?.data
-                              ?.totalFollowingCount
+                              ?.totalFollowingCount || "-"
                           }
                         </div>
                       </div>
@@ -1197,7 +1197,7 @@ console.log(state,"state?.statePrev?.selectedItems")
                           Email address
                         </label>
                         <div className="fs-20">
-                          {followerDetailsSelector?.data?.data?.userInfo?.email}
+                          {followerDetailsSelector?.data?.data?.userInfo?.email||"-"}
                         </div>
                       </div>
                     </div>
@@ -1211,7 +1211,7 @@ console.log(state,"state?.statePrev?.selectedItems")
                             ? "card activeNudge"
                             : "card"
                         }
-                        onClick={() => handleCardClick("Received")}
+                        onClick={() => {handleCardClick("Received");setActiveTab(true);}}
                       >
                         <div className="grey mb-10 fs-16 fw-500">
                           Nudges <br />
@@ -1451,19 +1451,19 @@ console.log(state,"state?.statePrev?.selectedItems")
                         <div className="grey mb-10 fs-16 fw-500">
                           Number of Sharing
                         </div>
-                        <div className="fs-22 fw-500">25k</div>
+                        <div className="fs-22 fw-500">0</div>
                       </div>
                       <div className="card">
                         <div className="grey mb-10 fs-16 fw-500">
                           Sharing invitations sent
                         </div>
-                        <div className="fs-22 fw-500">1.25k</div>
+                        <div className="fs-22 fw-500">0</div>
                       </div>
                       <div className="card">
                         <div className="grey mb-10 fs-16 fw-500">
                           Sharing invitations accepted
                         </div>
-                        <div className="fs-22 fw-500">2.25k</div>
+                        <div className="fs-22 fw-500">0</div>
                       </div>
                     </div>
                   </div>
@@ -1472,16 +1472,19 @@ console.log(state,"state?.statePrev?.selectedItems")
                     <div className="flexTag2">No data found</div>
                   </div>
                   <div className="tabPadding mb-30">
-                    {console.log(followerDetailsSelector?.data?.data?.customerPreferenceData?.filterData,"followerDetailsSelector?.data?.data?.customerPreferenceData?.filterData")}
                     <div className="fs-20 fw-700 mb-20">Items favorited</div>
                     <div className="flexTagFull">
                       {followerDetailsSelector?.data?.data
-                        ?.customerPreferenceData?.filterData?.length > 0 ? (
-                        followerDetailsSelector?.data?.data?.customerPreferenceData?.filterData?.map(
-                          (item, index) => <div key={index}>{item}</div>
+                        ?.customerPreferenceData?.filterData
+                        ?.filter(data => data?.trim() !== '')
+                        ?.length > 0 ? (
+                        followerDetailsSelector?.data?.data?.customerPreferenceData?.filterData
+                          ?.filter(data => data?.trim() !== '')
+                          ?.map(
+                          (item, index) => <div key={index} className="">{item}</div>
                         )
                       ) : (
-                        <div>No data found</div>
+                        <span>No data found</span>
                       )}
                     </div>
                   </div>
@@ -1492,10 +1495,10 @@ console.log(state,"state?.statePrev?.selectedItems")
                         ?.customerPreferenceData?.personalPreference?.length >
                       0 ? (
                         followerDetailsSelector.data.data.customerPreferenceData.personalPreference.map(
-                          (item, index) => <div key={index}>{item}</div>
+                          (item, index) => <div key={index} className="flexTagFull">{item}</div>
                         )
                       ) : (
-                        <div className=" text-center fs-18">No data found</div>
+                        <span>No data found</span>
                       )}
                     </div>
                   </div>
@@ -1581,7 +1584,7 @@ console.log(state,"state?.statePrev?.selectedItems")
                                         : "-"}
                                     </div>
                                     <div className="fs-14 fw-300 o5">
-                                      {moment(item?.createdAt).format(
+                                      {moment(item?.userInfo?.createdAt).format(
                                         "MMMM, YYYY"
                                       )}
                                     </div>
@@ -1624,7 +1627,7 @@ console.log(state,"state?.statePrev?.selectedItems")
                               <div className="divider2"></div>
                               <div className="fs-14 mb-6">Preferences</div>
                               <div className="flexTag mb-20">
-                                {item?.customerPreferencesData
+                                {/* {item?.customerPreferencesData
                                   ?.personalPreference?.length > 0 ? (
                                   item.customerPreferencesData.personalPreference.map(
                                     (preference, index) => (
@@ -1633,7 +1636,18 @@ console.log(state,"state?.statePrev?.selectedItems")
                                   )
                                 ) : (
                                   <div>No preferences available</div>
-                                )}
+                                )} */}
+                                {item?.customerPreferencesData?.filterData
+                            ?.filter(data => data?.trim() !== '')
+                            ?.length > 0 ? (
+                            item?.customerPreferencesData?.filterData
+                              ?.filter(data => data?.trim() !== '')
+                              ?.map(
+                              (preference, index) => <div key={index} className="flexTagFull">{preference}</div>
+                            )
+                          ) : (
+                            <div>No data available</div>
+                          )}
                               </div>
                               <div
                                 className="btn btnSecondary"
@@ -1786,7 +1800,7 @@ console.log(state,"state?.statePrev?.selectedItems")
                   </div>
                   <div className="divider2"></div>
 
-                  <div className="d-flex justify-between align-center gap-20 mb-6">
+                  {/* <div className="d-flex justify-between align-center gap-20 mb-6">
                     <div className="fs-16 grey fw-500">Previous balance</div>
                     <div className="fs-20 fw-700">
                       {nudgeAnalyticSelector?.data?.data?.nudgeCredit -
@@ -1794,10 +1808,10 @@ console.log(state,"state?.statePrev?.selectedItems")
                           nudgeAnalyticSelector?.data?.data
                             ?.promotionNudgeCreditAddedToday)}
                     </div>
-                  </div>
+                  </div> */}
                   <div className="d-flex justify-between align-center gap-20 mb-6">
                     <div className="fs-16 grey fw-500">
-                      Followers added today
+                      Followers activity today
                     </div>
                     <div className="gc fs-20 fw-700">
                       {nudgeAnalyticSelector?.data?.data?.followerAddedToday}
@@ -1805,7 +1819,8 @@ console.log(state,"state?.statePrev?.selectedItems")
                   </div>
                   <div className="d-flex justify-between align-center gap-20">
                     <div className="fs-16 grey fw-500">
-                      Promotional credits added today
+                      {/* Promotional credits added today */}
+                      Credit purchases today
                     </div>
                     <div className="gc fs-20 fw-700">
                       {

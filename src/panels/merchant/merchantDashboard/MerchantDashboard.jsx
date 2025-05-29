@@ -139,7 +139,6 @@ const MerchantDashboard = () => {
       />
     ),
   }));
-
   return (
     <>
       {(businessDashBoardSelector?.isLoading ||

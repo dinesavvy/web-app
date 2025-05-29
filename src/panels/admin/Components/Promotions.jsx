@@ -24,6 +24,8 @@ const Promotions = () => {
   const selectRef = useRef(null);
   const navigate = useNavigate();
 
+  const {state} = useLocation();
+
 
   // Scroll to top when the component mounts
   useScrollToTop([pagination?.page]);
@@ -82,6 +84,7 @@ const Promotions = () => {
       limit: pagination?.limit,
       searchString: searchString,
       isActive: activeTab !== "active" ? false : true,
+      merchantId: state?._id,
     };
     dispatch(adminPromotionListHandler(payload));
   }, [pagination, searchString, activeTab,adminEndPromotionSelector]);

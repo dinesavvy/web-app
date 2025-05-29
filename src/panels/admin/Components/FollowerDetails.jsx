@@ -118,7 +118,7 @@ const FollowerDetail = () => {
                 Began following
               </label>
               <div className="fs-20">
-                {moment(followerDetailsSelector?.data?.data?.createdAt).format(
+                {moment(followerDetailsSelector?.data?.data?.userInfo?.createdAt).format(
                   "MMMM,YYYY"
                 )}
               </div>
@@ -128,7 +128,7 @@ const FollowerDetail = () => {
                 Restaurants following
               </label>
               <div className="fs-20">
-                {followerDetailsSelector?.data?.data?.totalFollowingCount}
+                {followerDetailsSelector?.data?.data?.totalFollowingCount || "-"}
               </div>
             </div>
             {/* {followerDetailsSelector?.data?.data?.userInfo?.email &&( */}
@@ -137,7 +137,7 @@ const FollowerDetail = () => {
                 Email address
               </label>
               <div className="fs-20">
-                {followerDetailsSelector?.data?.data?.userInfo?.email || "N/A"}
+                {followerDetailsSelector?.data?.data?.userInfo?.email || "-"}
               </div>
             </div>
             {/* )} */}
@@ -150,7 +150,7 @@ const FollowerDetail = () => {
               className={
                 activeNudgeClass === "Received" ? "card activeNudge" : "card"
               }
-              onClick={() => handleCardClick("Received")}
+              onClick={() => {handleCardClick("Received");setActiveTab(true);}}
             >
               <div className="grey mb-10 fs-16 fw-500">
                 Nudges <br />
@@ -174,7 +174,7 @@ const FollowerDetail = () => {
                 Redeemed
               </div>
               <div className="fs-22 fw-500">
-                {followerDetailsSelector?.data?.data?.nudge?.redeemedNudge}
+                {followerDetailsSelector?.data?.data?.nudge?.redeemedNudge||"-"}
               </div>
             </div>
             <div

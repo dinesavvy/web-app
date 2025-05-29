@@ -329,32 +329,19 @@ useScrollToTop([pagination?.page]);
                       <div className="divider2"></div>
                       <div className="fs-14 mb-6">Preferences</div>
                       <div className="flexTag mb-20">
-                        {/* {item?.customerPreferenceData?.length > 0 ? (
-                          item?.customerPreferenceData?.map((itemData, index) =>
-                            itemData?.filterData?.length > 0 ? (
-                              itemData?.filterData?.map(
-                                (filteredItem, filteredIndex) => (
-                                  <div key={`${index}-${filteredIndex}`}>
-                                    {filteredItem}
-                                  </div>
-                                )
-                              )
-                            ) : (
-                              <div key={index}>No data available</div>
-                            )
+                        {item?.customerPreferenceData?.filterData?.length > 0 ? (
+                          item?.customerPreferenceData?.filterData?.filter(item => item?.trim()).length > 0 ? (
+                            item?.customerPreferenceData?.filterData?.map((item, index) => {
+                              const trimmedItem = item?.trim();
+                              return trimmedItem ? (
+                                <div key={index}>
+                                  {trimmedItem.charAt(0).toUpperCase() + trimmedItem.slice(1)}
+                                </div>
+                              ) : null;
+                            })
+                          ) : (
+                            <div>No data available</div>
                           )
-                        ) : (
-                          <div>No data available</div>
-                        )} */}
-                        {item?.customerPreferenceData?.filterData?.length >
-                        0 ? (
-                          <>
-                            {item?.customerPreferenceData?.filterData?.map(
-                              (item) => {
-                                return <div>{item}</div>;
-                              }
-                            )}
-                          </>
                         ) : (
                           <div>No data available</div>
                         )}

@@ -228,9 +228,12 @@ const Followers = () => {
                           <div className="divider2"></div>
                           <div className="fs-14 mb-6">Preferences</div>
                           <div className="flexTag mb-20">
-                            {item?.customerPreferencesData?.filterData?.length >
-                            0 ? (
-                              item?.customerPreferencesData?.filterData?.map(
+                            {item?.customerPreferencesData?.filterData
+                              ?.filter(data => data?.trim() !== '')
+                              ?.length > 0 ? (
+                              item?.customerPreferencesData?.filterData
+                                ?.filter(data => data?.trim() !== '')
+                                ?.map(
                                 (preference, index) => (
                                   <div key={index}>
                                     {preference?.charAt(0).toUpperCase() +
@@ -239,7 +242,7 @@ const Followers = () => {
                                 )
                               )
                             ) : (
-                              <div>No preferences available</div>
+                              <div>No data available</div>
                             )}
                           </div>
 
@@ -340,13 +343,12 @@ const Followers = () => {
                         <div className="divider2"></div>
                         <div className="fs-14 mb-6">Preferences</div>
                         <div className="flexTag mb-20">
-                          {console.log(
-                            item?.customerPreferencesData,
-                            "item?.customerPreferencesData"
-                          )}
-                          {item?.customerPreferencesData?.filterData?.length >
-                          0 ? (
-                            item?.customerPreferencesData?.filterData?.map(
+                          {item?.customerPreferencesData?.filterData
+                            ?.filter(data => data?.trim() !== '')
+                            ?.length > 0 ? (
+                            item?.customerPreferencesData?.filterData
+                              ?.filter(data => data?.trim() !== '')
+                              ?.map(
                               (preference, index) => (
                                 <div key={index}>
                                   {preference?.charAt(0).toUpperCase() +
@@ -355,7 +357,7 @@ const Followers = () => {
                               )
                             )
                           ) : (
-                            <div>No preferences available</div>
+                            <div>No data available</div>
                           )}
                         </div>
                         <div className="divider2"></div>
