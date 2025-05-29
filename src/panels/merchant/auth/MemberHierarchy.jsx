@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import closeRightSidebar from "../../../assets/images/closeRightSidebar.svg";
 import phoneEdit from "../../../assets/images/phoneEdit.svg";
 import editMember from "../../../assets/images/editMember.svg";
@@ -8,7 +8,8 @@ import * as Yup from "yup";
 import { businessListHandler } from "../../../redux/action/businessAction/businessListSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { businessRoleListHandler } from "../../../redux/action/businessAction/businessRoleList";
-// import Loader from "../../../common/Loader/Loader";
+import PhoneInput from "react-phone-input-2";
+import "react-phone-input-2/lib/style.css";
 import {
   createTeamAction,
   createTeamHandler,
@@ -25,6 +26,9 @@ import {
   businessResendInviteLinkAction,
   businessResendInviteLinkHandler,
 } from "../../../redux/action/businessAction/businessResendInviteLink";
+import { handleKeyPressSpace } from "../../../common/commonFunctions/CommonFunctions";
+import { getGeoInfo } from "../../../services/geoLocation";
+import Loader from "../../../common/Loader/Loader";
 
 const MemberHierarchy = ({
   isMemberHierarchy,
@@ -35,6 +39,8 @@ const MemberHierarchy = ({
   addTeam,
   getBusinessTeamSelector,
 }) => {
+  const [phone, setPhone] = useState("");
+  const [countryCode, setCountryCode] = useState("91");
   const dispatch = useDispatch();
   const messageApi = useCommonMessage();
 
@@ -53,6 +59,35 @@ const MemberHierarchy = ({
   const getSelectedBusiness = JSON.parse(
     localStorage.getItem("selectedBusiness")
   );
+
+  const handlePhoneChange = (value, data) => {
+    const dialCode = `${data?.dialCode}`;
+    let number = value.replace(dialCode, "").trim(); 
+  
+    if (!number) {
+      setCountryCode("");
+      return
+    } else {
+      setCountryCode(dialCode);
+    }
+    
+    setPhone(number);
+  };
+
+
+  // Fetch Geo location
+  useEffect(() => {
+    const fetchGeoInfo = async () => {
+      // setLoading(true);
+      const data = await getGeoInfo();
+      if (data) {
+        setCountryCode(data?.country_calling_code);
+      }
+      // setLoading(false);
+    };
+
+    fetchGeoInfo();
+  }, []);
 
   
   const validationSchema = Yup.object({
@@ -82,7 +117,7 @@ const MemberHierarchy = ({
       let payload = {
         roleId: values?.role,
         name: values?.name?.trim(),
-        phoneNumber: values?.phone_number,
+        phoneNumber: "+" + countryCode + " " + phone,
       };
       dispatch(createTeamHandler(payload));
     } else if (!addTeamModal) {
@@ -90,7 +125,7 @@ const MemberHierarchy = ({
         teamMappingId: selectTeam?._id,
         roleId: values?.role,
         name: values?.name,
-        phoneNumber: values?.phone_number,
+        phoneNumber: "+" + countryCode + " " + phone,
         locationId: selectTeam?.locationId?._id,
       };
       dispatch(updateTeamBusinessHandler(payload));
@@ -161,6 +196,7 @@ const MemberHierarchy = ({
 
   return (
     <>
+    {createTeamSelector?.isLoading && <Loader />}
       {isMemberHierarchy && (
         <div className="overlay2" onClick={toggleMemberHierarchy}></div>
       )}
@@ -210,7 +246,7 @@ const MemberHierarchy = ({
               handleFormSubmit(values);
             }}
           >
-            {({ setFieldValue, resetForm }) => (
+            {({ values,setFieldValue, resetForm }) => (
               <Form>
                 <div className="mb-40">
                   <div className="mb-20">
@@ -223,6 +259,8 @@ const MemberHierarchy = ({
                       placeholder="Enter your name"
                       id="name"
                       className="input"
+                      onKeyDown={handleKeyPressSpace}
+                      autoComplete="off"
                     />
                     <ErrorMessage
                       name="name"
@@ -238,16 +276,29 @@ const MemberHierarchy = ({
                       Phone number
                     </label>
                     <div className="position-relative">
-                      <Field
+                      {/* <Field
                         type="text"
                         name="phone_number"
                         placeholder="Enter your phone number"
                         id="phone_number"
                         className="input"
+                        onKeyDown={handleKeyPressSpace}
+                        autoComplete="off"
                         disabled={
                           selectTeam?.status === "accepted" ? true : false
                         }
-                      />
+                      /> */}
+                      <div className="">
+                          <PhoneInput
+                            // country={country} // Set country dynamically when user types a code
+                            value={values?.phone_number || countryCode + phone} // Show full value but keep them separate in state
+                            onChange={handlePhoneChange}
+                            disableCountryGuess={false} // Allow auto-detection of typed country code
+                            placeholder="Enter phone number"
+                            className="phoneInput"
+                            name="phone_number"
+                          />
+                        </div>
                       <div className="inputIcon">
                         <img src={phoneEdit} alt="" className="h-100 " />
                       </div>

@@ -141,7 +141,7 @@ const DistributorDetails = ({
         distributorName: values?.distributorName.trim(),
         contactName: values?.distributorContactName,
         contactPosition: values?.distributorPosition,
-        contactEmail: values?.distributorEmail,
+        contactEmail: values?.distributorEmail.toLowerCase(),
         contactPhoneNumber: values?.distributorContactNumber,
         logoUrl: fileuploadSelector?.data?.data
           ?.map((item) => item?.src)
@@ -161,7 +161,7 @@ const DistributorDetails = ({
         distributorName: values?.distributorName.trim(),
         contactName: values?.distributorContactName,
         contactPosition: values?.distributorPosition,
-        contactEmail: values?.distributorEmail,
+        contactEmail: values?.distributorEmail.toLowerCase(),
         contactPhoneNumber: values?.distributorContactNumber,
         logoUrl:
         fileuploadSelector?.data?.data?.map((item) => item?.src).join("")|| distributorItems?.logoUrl,

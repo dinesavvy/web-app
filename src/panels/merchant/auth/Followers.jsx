@@ -16,6 +16,7 @@ import { followerAnalyticsHandler } from "../../../redux/action/businessAction/f
 import { useBusiness } from "../../../common/Layout/BusinessContext";
 import AccessDeniedModal from "../accessDeniedModal/accessDeniedModal";
 import RedeemedNudges from "../redeemedNudges/RedeemedNudges";
+import useScrollToTop from "../../../hooks/useScrollToTop";
 
 const Followers = () => {
   const [tempState, setTempState] = useState([]);
@@ -29,6 +30,10 @@ const Followers = () => {
   const dispatch = useDispatch();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
+
+// Scroll to top when the component mounts
+useScrollToTop([pagination?.page]);
+  
   const { state } = useLocation();
 
   // When notification type is 35 then open redeemed redeeme nudge drawer and when refresh then reset navigation state
@@ -324,32 +329,19 @@ const Followers = () => {
                       <div className="divider2"></div>
                       <div className="fs-14 mb-6">Preferences</div>
                       <div className="flexTag mb-20">
-                        {/* {item?.customerPreferenceData?.length > 0 ? (
-                          item?.customerPreferenceData?.map((itemData, index) =>
-                            itemData?.filterData?.length > 0 ? (
-                              itemData?.filterData?.map(
-                                (filteredItem, filteredIndex) => (
-                                  <div key={`${index}-${filteredIndex}`}>
-                                    {filteredItem}
-                                  </div>
-                                )
-                              )
-                            ) : (
-                              <div key={index}>No data available</div>
-                            )
+                        {item?.customerPreferenceData?.filterData?.length > 0 ? (
+                          item?.customerPreferenceData?.filterData?.filter(item => item?.trim()).length > 0 ? (
+                            item?.customerPreferenceData?.filterData?.map((item, index) => {
+                              const trimmedItem = item?.trim();
+                              return trimmedItem ? (
+                                <div key={index}>
+                                  {trimmedItem.charAt(0).toUpperCase() + trimmedItem.slice(1)}
+                                </div>
+                              ) : null;
+                            })
+                          ) : (
+                            <div>No data available</div>
                           )
-                        ) : (
-                          <div>No data available</div>
-                        )} */}
-                        {item?.customerPreferenceData?.personalPreference?.length >
-                        0 ? (
-                          <>
-                            {item?.customerPreferenceData?.personalPreference?.map(
-                              (item) => {
-                                return <div>{item}</div>;
-                              }
-                            )}
-                          </>
                         ) : (
                           <div>No data available</div>
                         )}

@@ -57,3 +57,16 @@ export const handleKeyDown = (e) => {
     e.preventDefault();
   }
 }
+
+export const handleNumberFieldLength = (event) => {
+  // if (event.target.value.length > 0) {
+  //   event.target.value = event.target.value.slice(0, 6); // Limiting to 10 characters
+  // }
+  const input = event.target.value;
+
+  // Filter non-numeric values
+  const numericInput = input.replace(/\D/g, "");
+
+  // Limit the input length to 4 characters
+  event.target.value = numericInput.slice(0, 10);
+};

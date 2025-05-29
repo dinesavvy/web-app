@@ -49,7 +49,7 @@ const MerchantDetails = () => {
   const [selectedItems, setSelectedItems] = useState([]);
   const [addNudgeCredit, setAddNudgeCredit] = useState(false);
   const [numberOfCredits, setNumberOfCredits] = useState("");
-
+console.log(activeTab3,"activeTab3")
   const addCreditSelector = useSelector((state) => state?.addCredit);
   const listByUserIdSelector = useSelector((state) => state?.listByUserId);
   const followerListSelector = useSelector((state) => state?.followeList);
@@ -72,12 +72,10 @@ const MerchantDetails = () => {
   const addCreditsFuntion = () => {
     setAddNudgeCredit(true);
   };
-
+console.log(state,"state?.statePrev?.selectedItems")
   useEffect(() => {
     if (
-      (Array.isArray(state?.statePrev?.selectedItems) &&
-        state?.statePrev?.selectedItems?.length > 0) ||
-      state?.statePrev?.locationId?.locationId
+      (state?.fromSelectAudience)
     ) {
       setActiveTab3("3");
       const updatedCheckedItems = {};
@@ -113,7 +111,8 @@ const MerchantDetails = () => {
         limit: pagination?.limit,
         userId: followerDetailsSelector?.data?.data?.userId,
         nudgeType: activeNudgeClass, // "Received", "Accepted", "Denied", "NoAnswer", "Redeemed",
-        isActive: activeNudgeClass === "Received" ? activeTab : undefined,
+        // isActive: activeNudgeClass === "Received" ? activeTab : undefined,
+        isActive: activeTab,
       };
       dispatch(listByUserIdHandler(payload));
     }
@@ -198,8 +197,8 @@ const MerchantDetails = () => {
       const fetchMerchants = () => {
         const payload = {
           locationId: localStorage.getItem("merchantId"),
-          page: pagination.page,
-          limit: pagination.limit,
+          page: pagination?.page,
+          limit: pagination?.limit,
           status: "Active",
           searchString,
           searchArea,
@@ -269,7 +268,7 @@ const MerchantDetails = () => {
 
   const nudgeGoal = nudgeAnalyticSelector?.data?.data?.nudgeGoal || 0;
   const nudgeSent = nudgeAnalyticSelector?.data?.data?.nudgeSent || 0;
-  const percentage = nudgeGoal > 0 ? (nudgeSent / nudgeGoal) * 100 : 0;
+  const percentage = nudgeGoal > 0 ? Math.round((nudgeSent / nudgeGoal) * 100) : 0;
 
   return (
     <>
@@ -412,6 +411,7 @@ const MerchantDetails = () => {
                     </div>
                   </div>
                   <div className="inputGrid grid3">
+                    {/* {merchantDetailsSelector?.data?.data?.ownerDetails?.phoneNumber && ( */}
                     <div>
                       <label htmlFor="name" className="grey mb-10 fs-16 fw-500">
                         Phone number
@@ -424,15 +424,16 @@ const MerchantDetails = () => {
                         />
                       ) : (
                         <a className="anchor fs-18" href="tel:+911234567890">
-                          + {merchantDetailsSelector?.data?.data?.phoneNumber}
+                          {merchantDetailsSelector?.data?.data?.ownerDetails?.phoneNumber||"N/A"}
                         </a>
                       )}
-                    </div>
+                      </div>
+                      {/* )} */}
 
                     <div>
-                      {merchantDetailsSelector?.data?.data?.ownerDetails
+                      {/* {merchantDetailsSelector?.data?.data?.ownerDetails
                         ?.email && (
-                        <>
+                        <> */}
                           <label
                             htmlFor="name"
                             className="grey mb-10 fs-16 fw-500"
@@ -444,22 +445,23 @@ const MerchantDetails = () => {
                             href={
                               merchantDetailsSelector?.data?.data?.ownerDetails
                                 ?.email
-                                ? `mailto:${merchantDetailsSelector.data.data.ownerDetails.email}`
+                                ? `mailto:${merchantDetailsSelector.data.data.ownerDetails.email||undefined}`
                                 : "#"
                             }
                           >
                             {
                               merchantDetailsSelector?.data?.data?.ownerDetails
-                                ?.email
+                                ?.email||"N/A"
                             }
                           </a>
-                        </>
-                      )}
+                        {/* </>
+                      )} */}
                       {/* )} */}
                     </div>
+                    {/* {merchantDetailsSelector?.data?.data?.websiteUrl && ( */}
                     <div className="">
                       <label htmlFor="name" className="grey mb-10 fs-16 fw-500">
-                        Website link
+                        Website links
                       </label>
                       {editInput === true ? (
                         <input
@@ -470,13 +472,14 @@ const MerchantDetails = () => {
                       ) : (
                         <a
                           className="anchor fs-18"
-                          href={merchantDetailsSelector?.data?.data?.websiteUrl}
+                          href={merchantDetailsSelector?.data?.data?.websiteUrl||undefined}
                           target="_blank"
                         >
-                          {merchantDetailsSelector?.data?.data?.websiteUrl}
+                          {merchantDetailsSelector?.data?.data?.websiteUrl || "N/A"}
                         </a>
                       )}
                     </div>
+                    {/* )} */}
                   </div>
                   {editInput && (
                     <div className="d-flex gap-20 mt-20 justify-end flexBtn">
@@ -632,34 +635,83 @@ const MerchantDetails = () => {
                  
                       {!editInput && (
                         <div>
-                          {merchantDetailsSelector?.data?.data?.businessHours?.periods?.map(
-                            (item, index) => {
-                              return (
-                                <>
-                                  <div className="divider2"></div>
-                                  <div
-                                    className="d-flex align-center justify-between"
-                                    key={index}
-                                  >
-                                    <div className="grey fs-16">
-                                      {item?.dayOfWeek}
-                                    </div>
-                                    <div className="fs-16">
-                                      {item?.startLocalTime +
-                                        " to " +
-                                        item?.endLocalTime}
-                                    </div>
+                          {(() => {
+                            // Group periods by day
+                            const groupedPeriods = merchantDetailsSelector?.data?.data?.businessHours?.periods?.reduce((acc, period) => {
+                              if (!acc[period.dayOfWeek]) {
+                                acc[period.dayOfWeek] = [];
+                              }
+                              acc[period.dayOfWeek].push(period);
+                              return acc;
+                            }, {});
+
+                            return Object.entries(groupedPeriods || {}).map(([day, periods], index) => (
+                              <React.Fragment key={day}>
+                                <div className="divider2"></div>
+                                <div className="d-flex align-center justify-between">
+                                  <div className="grey fs-16">{day}</div>
+                                  <div className="fs-16">
+                                    {periods.map((period, i) => (
+                                      <React.Fragment key={i}>
+                                        {i > 0 && <br />}
+                                        {period.startLocalTime + " to " + period.endLocalTime}
+                                      </React.Fragment>
+                                    ))}
                                   </div>
-                                </>
-                              );
-                            }
-                          )}
+                                </div>
+                              </React.Fragment>
+                            ));
+                          })()}
                         </div>
                       )}
                     
                   {editInput && (
                     <>
                       <div className="overflow">
+                        <div className="minw">
+                          <div className="d-flex align-center justify-between">
+                            <div className="grey fs-16">Sunday</div>
+                            <div className="d-flex align-center gap-16">
+                              <CustomSwitch
+                                isOn={switchState}
+                                onToggle={handleToggle}
+                              />
+                              <div>Closed</div>
+                            </div>
+                          </div>
+                          {switchState && (
+                            <div className="mt-10 d-flex align-end gap-10">
+                              <div className="w-100">
+                                <label
+                                  htmlFor=""
+                                  className="fs-14 fw-500 mb-10"
+                                >
+                                  From
+                                </label>
+                                <TimePicker
+                                  className="customTime input"
+                                  showOk={false}
+                                />
+                              </div>
+                              <div className="w-100">
+                                <label
+                                  htmlFor=""
+                                  className="fs-14 fw-500 mb-10"
+                                >
+                                  to
+                                </label>
+                                <TimePicker
+                                  className="customTime input"
+                                  showOk={false}
+                                />
+                              </div>
+                              <div className="addTime">
+                                <img src={addTime} alt="" />
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                        <div className="divider2"></div>
                         <div className="minw">
                           <div className="d-flex align-center justify-between">
                             <div className="grey fs-16">Sunday</div>
@@ -1106,7 +1158,7 @@ const MerchantDetails = () => {
                         <div className="fs-20">
                           {
                             followerDetailsSelector?.data?.data?.userInfo
-                              ?.displayName
+                              ?.displayName||"-"
                           }
                         </div>
                       </div>
@@ -1119,7 +1171,7 @@ const MerchantDetails = () => {
                         </label>
                         <div className="fs-20">
                           {moment(
-                            followerDetailsSelector?.data?.data?.createdAt
+                            followerDetailsSelector?.data?.data?.userInfo?.createdAt
                           ).format("MMMM,YYYY")}
                         </div>
                       </div>
@@ -1133,7 +1185,7 @@ const MerchantDetails = () => {
                         <div className="fs-20">
                           {
                             followerDetailsSelector?.data?.data
-                              ?.totalFollowingCount
+                              ?.totalFollowingCount || "-"
                           }
                         </div>
                       </div>
@@ -1145,21 +1197,21 @@ const MerchantDetails = () => {
                           Email address
                         </label>
                         <div className="fs-20">
-                          {followerDetailsSelector?.data?.data?.userInfo?.email}
+                          {followerDetailsSelector?.data?.data?.userInfo?.email||"-"}
                         </div>
                       </div>
                     </div>
                   </div>
                   <div className="tabPadding mb-30">
                     <div className="fs-20 fw-700 mb-20">Nudges Info</div>
-                    <div className="grid5">
+                    <div className="grid5 cursor-pointer">
                       <div
                         className={
                           activeNudgeClass === "Received"
                             ? "card activeNudge"
                             : "card"
                         }
-                        onClick={() => handleCardClick("Received")}
+                        onClick={() => {handleCardClick("Received");setActiveTab(true);}}
                       >
                         <div className="grey mb-10 fs-16 fw-500">
                           Nudges <br />
@@ -1180,7 +1232,7 @@ const MerchantDetails = () => {
                         }
                         onClick={() => {
                           handleCardClick("Redeemed");
-                          setActiveTab(false);
+                          setActiveTab(true);
                         }}
                       >
                         <div className="grey mb-10 fs-16 fw-500">
@@ -1202,7 +1254,7 @@ const MerchantDetails = () => {
                         }
                         onClick={() => {
                           handleCardClick("Accepted");
-                          setActiveTab(false);
+                          setActiveTab(true);
                         }}
                       >
                         <div className="grey mb-10 fs-16 fw-500">
@@ -1235,7 +1287,7 @@ const MerchantDetails = () => {
                         }
                         onClick={() => {
                           handleCardClick("Denied");
-                          setActiveTab(false);
+                          setActiveTab(true);
                         }}
                       >
                         <div className="grey mb-10 fs-16 fw-500">
@@ -1263,7 +1315,7 @@ const MerchantDetails = () => {
                       <div
                         onClick={() => {
                           handleCardClick("NoAnswer");
-                          setActiveTab(false);
+                          setActiveTab(true);
                         }}
                         className={
                           activeNudgeClass === "NoAnswer"
@@ -1312,7 +1364,8 @@ const MerchantDetails = () => {
                         NoAnswer: "Nudges with no action",
                       }[activeNudgeClass] || ""}
                     </div>
-                    {activeNudgeClass === "Received" && (
+                    {/* Active And Inactive Tab */}
+                    {/* {activeNudgeClass === "Received" && ( */}
                       <div className="tabs-container tab3 tabing mb-20">
                         <div className="tabs">
                           <button
@@ -1333,8 +1386,8 @@ const MerchantDetails = () => {
                           </button>
                         </div>
                       </div>
-                    )}
-                    <div className="grid2 gap-20">
+                    {/* )} */}
+                    <div className="grid2 gap-20 mb-20">
                       {listByUserIdSelector?.data?.data?.records?.length > 0 ? (
                         listByUserIdSelector?.data?.data?.records?.map(
                           (item, index) => {
@@ -1398,19 +1451,19 @@ const MerchantDetails = () => {
                         <div className="grey mb-10 fs-16 fw-500">
                           Number of Sharing
                         </div>
-                        <div className="fs-22 fw-500">25k</div>
+                        <div className="fs-22 fw-500">0</div>
                       </div>
                       <div className="card">
                         <div className="grey mb-10 fs-16 fw-500">
                           Sharing invitations sent
                         </div>
-                        <div className="fs-22 fw-500">1.25k</div>
+                        <div className="fs-22 fw-500">0</div>
                       </div>
                       <div className="card">
                         <div className="grey mb-10 fs-16 fw-500">
                           Sharing invitations accepted
                         </div>
-                        <div className="fs-22 fw-500">2.25k</div>
+                        <div className="fs-22 fw-500">0</div>
                       </div>
                     </div>
                   </div>
@@ -1422,12 +1475,16 @@ const MerchantDetails = () => {
                     <div className="fs-20 fw-700 mb-20">Items favorited</div>
                     <div className="flexTagFull">
                       {followerDetailsSelector?.data?.data
-                        ?.customerPreferenceData?.filterData?.length > 0 ? (
-                        followerDetailsSelector.data.data.customerPreferenceData?.filterData?.map(
-                          (item, index) => <div key={index}>{item}</div>
+                        ?.customerPreferenceData?.filterData
+                        ?.filter(data => data?.trim() !== '')
+                        ?.length > 0 ? (
+                        followerDetailsSelector?.data?.data?.customerPreferenceData?.filterData
+                          ?.filter(data => data?.trim() !== '')
+                          ?.map(
+                          (item, index) => <div key={index} className="">{item}</div>
                         )
                       ) : (
-                        <div>No data found</div>
+                        <span>No data found</span>
                       )}
                     </div>
                   </div>
@@ -1438,10 +1495,10 @@ const MerchantDetails = () => {
                         ?.customerPreferenceData?.personalPreference?.length >
                       0 ? (
                         followerDetailsSelector.data.data.customerPreferenceData.personalPreference.map(
-                          (item, index) => <div key={index}>{item}</div>
+                          (item, index) => <div key={index} className="flexTagFull">{item}</div>
                         )
                       ) : (
-                        <div className=" text-center fs-18">No data found</div>
+                        <span>No data found</span>
                       )}
                     </div>
                   </div>
@@ -1527,7 +1584,7 @@ const MerchantDetails = () => {
                                         : "-"}
                                     </div>
                                     <div className="fs-14 fw-300 o5">
-                                      {moment(item?.createdAt).format(
+                                      {moment(item?.userInfo?.createdAt).format(
                                         "MMMM, YYYY"
                                       )}
                                     </div>
@@ -1570,7 +1627,7 @@ const MerchantDetails = () => {
                               <div className="divider2"></div>
                               <div className="fs-14 mb-6">Preferences</div>
                               <div className="flexTag mb-20">
-                                {item?.customerPreferencesData
+                                {/* {item?.customerPreferencesData
                                   ?.personalPreference?.length > 0 ? (
                                   item.customerPreferencesData.personalPreference.map(
                                     (preference, index) => (
@@ -1579,7 +1636,18 @@ const MerchantDetails = () => {
                                   )
                                 ) : (
                                   <div>No preferences available</div>
-                                )}
+                                )} */}
+                                {item?.customerPreferencesData?.filterData
+                            ?.filter(data => data?.trim() !== '')
+                            ?.length > 0 ? (
+                            item?.customerPreferencesData?.filterData
+                              ?.filter(data => data?.trim() !== '')
+                              ?.map(
+                              (preference, index) => <div key={index} className="flexTagFull">{preference}</div>
+                            )
+                          ) : (
+                            <div>No data available</div>
+                          )}
                               </div>
                               <div
                                 className="btn btnSecondary"
@@ -1647,7 +1715,7 @@ const MerchantDetails = () => {
                         className="btn fs-16"
                         onClick={() =>
                           navigate("/admin/nudges/template", {
-                            state: { locationId: state, selectedItems },
+                            state: { locationId: state, selectedItems ,quantity:state?.quantity},
                           })
                         }
                       >
@@ -1714,7 +1782,7 @@ const MerchantDetails = () => {
                   ></div>
                 </div>
                 <div className="fs-14 fw-500 grey mb-20">
-                  You are just {percentage}% behind to achieve Goal
+                  You are just {percentage.toFixed(2)}% behind to achieve Goal
                 </div>
                 <div className="weekNudge pc mb-20">
                   <div className="fs-18 fw-600">Nudges Expected This Week</div>
@@ -1732,7 +1800,7 @@ const MerchantDetails = () => {
                   </div>
                   <div className="divider2"></div>
 
-                  <div className="d-flex justify-between align-center gap-20 mb-6">
+                  {/* <div className="d-flex justify-between align-center gap-20 mb-6">
                     <div className="fs-16 grey fw-500">Previous balance</div>
                     <div className="fs-20 fw-700">
                       {nudgeAnalyticSelector?.data?.data?.nudgeCredit -
@@ -1740,10 +1808,10 @@ const MerchantDetails = () => {
                           nudgeAnalyticSelector?.data?.data
                             ?.promotionNudgeCreditAddedToday)}
                     </div>
-                  </div>
+                  </div> */}
                   <div className="d-flex justify-between align-center gap-20 mb-6">
                     <div className="fs-16 grey fw-500">
-                      Followers added today
+                      Followers activity today
                     </div>
                     <div className="gc fs-20 fw-700">
                       {nudgeAnalyticSelector?.data?.data?.followerAddedToday}
@@ -1751,7 +1819,8 @@ const MerchantDetails = () => {
                   </div>
                   <div className="d-flex justify-between align-center gap-20">
                     <div className="fs-16 grey fw-500">
-                      Promotional credits added today
+                      {/* Promotional credits added today */}
+                      Credit purchases today
                     </div>
                     <div className="gc fs-20 fw-700">
                       {
@@ -1821,7 +1890,7 @@ const MerchantDetails = () => {
                       navigate("/admin/nudges/template", {
                         state: { locationId: state },
                       });
-                      localStorage.setItem("createNudgeFromMerchant", true);
+                      localStorage.removeItem("nudgeQuantity");
                     }}
                   >
                     <img src={addCredits} alt="addCredits" />

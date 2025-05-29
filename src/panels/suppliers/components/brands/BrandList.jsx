@@ -12,6 +12,7 @@ import "../../../../assets/css/merchant.css";
 import { supplierBrandListHandler } from "../../../../redux/action/supplierActions/supplierBrandList";
 import BrandDetails from "./BrandDetails";
 import noImageFound from "../../../../assets/images/noImageFound.png";
+import useScrollToTop from "../../../../hooks/useScrollToTop";
 
 const Brands = () => {
   const messageApi = useCommonMessage();
@@ -21,6 +22,10 @@ const Brands = () => {
   const [searchString, setSearchString] = useState("");
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  // Scroll to top when the component mounts
+  useScrollToTop([pagination?.page]);
+
 
   const getBrandListSelector = useSelector((state) => state?.supplierBrandList);
   const deleteBrandSelector = useSelector((state) => state?.removeSupplier);

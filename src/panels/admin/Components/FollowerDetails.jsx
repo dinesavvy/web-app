@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Breadcrumb } from "antd";
+import { Breadcrumb, Pagination } from "antd";
 import breadCrumbIcon from "../../../assets/images/breadCrumb.svg";
 import backButton from "../../../assets/images/backButton.svg";
 import dish from "../../../assets/images/dish.png";
@@ -17,12 +17,17 @@ const FollowerDetail = () => {
   const [activeTab, setActiveTab] = useState(true);
   const { state } = useLocation();
   const navigate = useNavigate();
+  const [pagination, setPagination] = useState({ page: 1, limit: 10 });
 
   const dispatch = useDispatch();
   const followerDetailsSelector = useSelector(
     (state) => state?.followerDetails
   );
   const listByUserIdSelector = useSelector((state) => state?.listByUserId);
+
+  const handlePaginationChange = (page, pageSize) => {
+    setPagination({ page, limit: pageSize });
+  };
 
   const handleTabClick = (tab) => {
     setActiveTab(tab);
@@ -44,16 +49,17 @@ const FollowerDetail = () => {
   useEffect(() => {
     if (activeNudgeClass) {
       let payload = {
-        page: 1,
-        limit: 10,
+        page: pagination?.page,
+        limit: pagination?.limit,
         userId: followerDetailsSelector?.data?.data?.userId,
         nudgeType: activeNudgeClass, // "Received", "Accepted", "Denied", "NoAnswer", "Redeemed",
-        isActive: activeNudgeClass === "Received" ? activeTab : true,
+        // isActive: activeNudgeClass === "Received" ? activeTab : true,
+        isActive: activeTab,
       };
 
       dispatch(listByUserIdHandler(payload));
     }
-  }, [activeNudgeClass, followerDetailsSelector, activeTab]);
+  }, [activeNudgeClass, followerDetailsSelector, activeTab,pagination]);
 
   return (
     <>
@@ -68,7 +74,7 @@ const FollowerDetail = () => {
                 src={backButton}
                 alt=""
                 // onClick={() => setViewDetail(false)}
-                onClick={() => navigate("/admin/merchant/followers")}
+                onClick={() => navigate("/admin/followers")}
               />
               <div>
                 <div className="fs-24 fw-600 mb-4">Followers</div>
@@ -82,7 +88,7 @@ const FollowerDetail = () => {
                     },
                     {
                       title: "Followers",
-                      onClick: () => navigate("/admin/merchant/followers"),
+                      onClick: () => navigate("/admin/followers"),
                     },
                     {
                       title: "Follower Details",
@@ -112,7 +118,7 @@ const FollowerDetail = () => {
                 Began following
               </label>
               <div className="fs-20">
-                {moment(followerDetailsSelector?.data?.data?.createdAt).format(
+                {moment(followerDetailsSelector?.data?.data?.userInfo?.createdAt).format(
                   "MMMM,YYYY"
                 )}
               </div>
@@ -122,7 +128,7 @@ const FollowerDetail = () => {
                 Restaurants following
               </label>
               <div className="fs-20">
-                {followerDetailsSelector?.data?.data?.totalFollowingCount}
+                {followerDetailsSelector?.data?.data?.totalFollowingCount || "-"}
               </div>
             </div>
             {/* {followerDetailsSelector?.data?.data?.userInfo?.email &&( */}
@@ -131,7 +137,7 @@ const FollowerDetail = () => {
                 Email address
               </label>
               <div className="fs-20">
-                {followerDetailsSelector?.data?.data?.userInfo?.email || "N/A"}
+                {followerDetailsSelector?.data?.data?.userInfo?.email || "-"}
               </div>
             </div>
             {/* )} */}
@@ -139,12 +145,12 @@ const FollowerDetail = () => {
         </div>
         <div className="tabPadding mb-30">
           <div className="fs-20 fw-700 mb-20">Nudges Info</div>
-          <div className="grid5">
+          <div className="grid5 cursor-pointer">
             <div
               className={
                 activeNudgeClass === "Received" ? "card activeNudge" : "card"
               }
-              onClick={() => handleCardClick("Received")}
+              onClick={() => {handleCardClick("Received");setActiveTab(true);}}
             >
               <div className="grey mb-10 fs-16 fw-500">
                 Nudges <br />
@@ -160,7 +166,7 @@ const FollowerDetail = () => {
               }
               onClick={() => {
                 handleCardClick("Redeemed");
-                setActiveTab(false);
+                setActiveTab(true);
               }}
             >
               <div className="grey mb-10 fs-16 fw-500">
@@ -168,7 +174,7 @@ const FollowerDetail = () => {
                 Redeemed
               </div>
               <div className="fs-22 fw-500">
-                {followerDetailsSelector?.data?.data?.nudge?.redeemedNudge}
+                {followerDetailsSelector?.data?.data?.nudge?.redeemedNudge||"-"}
               </div>
             </div>
             <div
@@ -177,7 +183,7 @@ const FollowerDetail = () => {
               }
               onClick={() => {
                 handleCardClick("Accepted");
-                setActiveTab(false);
+                setActiveTab(true);
               }}
             >
               <div className="grey mb-10 fs-16 fw-500">
@@ -207,7 +213,7 @@ const FollowerDetail = () => {
               }
               onClick={() => {
                 handleCardClick("Denied");
-                setActiveTab(false);
+                setActiveTab(true);
               }}
             >
               <div className="grey mb-10 fs-16 fw-500">
@@ -239,7 +245,7 @@ const FollowerDetail = () => {
             <div
               onClick={() => {
                 handleCardClick("NoAnswer");
-                setActiveTab(false);
+                setActiveTab(true);
               }}
               className={
                 activeNudgeClass === "NoAnswer" ? "card activeNudge" : "card"
@@ -294,7 +300,8 @@ const FollowerDetail = () => {
               NoAnswer: "Nudges with no action",
             }[activeNudgeClass] || ""}
           </div>
-          {activeNudgeClass === "Received" && (
+          {/* Active And Inactive Tab */}
+          {/* {activeNudgeClass === "Received" && ( */}
             <div className="tabs-container tab3 tabing mb-20">
               <div className="tabs">
                 <button
@@ -313,9 +320,9 @@ const FollowerDetail = () => {
                 </button>
               </div>
             </div>
-          )}
+          {/* )} */}
 
-          <div className="grid2 gap-20">
+          <div className="grid2 gap-20 mb-20">
             {listByUserIdSelector?.data?.data?.records?.length > 0 ? (
               listByUserIdSelector?.data?.data?.records?.map((item, index) => {
                 return (
@@ -339,6 +346,20 @@ const FollowerDetail = () => {
               <div className="noDataFound">No Data Available</div>
             )}
           </div>
+          {listByUserIdSelector?.data?.data?.records?.length > 0 && (
+            <div className="d-flex align-center justify-between flexPagination">
+              <div className="fs-16">
+                Showing {pagination?.page} to {pagination?.limit} of{" "}
+                {listByUserIdSelector?.data?.data?.recordsCount} Nudges
+              </div>
+              <Pagination
+                current={pagination?.page}
+                pageSize={pagination?.limit}
+                total={listByUserIdSelector?.data?.data?.recordsCount}
+                onChange={handlePaginationChange}
+              />
+            </div>
+          )}
           {/* <div className="grid2 gap-20">
               <div className="card16 d-flex align-center gap-16">
                 <div className="image80">
@@ -449,24 +470,24 @@ const FollowerDetail = () => {
         </div>
         <div className="tabPadding mb-30">
           <div className="fs-20 fw-700 mb-20">Preferences</div>
-          {/* <div className="flexTagFull"> */}
           {/* <div>Casual Dining</div>
               <div>Weight Watchers</div>
               <div>Drinks</div>
               <div>Steak, Bar</div>
               <div>Wine</div> */}
           {followerDetailsSelector?.data?.data?.customerPreferenceData
-            ?.personalPreference?.length > 0 ? (
-            followerDetailsSelector?.data?.data?.customerPreferenceData?.personalPreference.map(
-              (item, index) => {
-                return <div key={index}>{item}</div>;
-              }
-            )
+            ?.filterData?.length > 0 ? (
+            <div className="flexTagFull">
+              {followerDetailsSelector?.data?.data?.customerPreferenceData?.filterData?.map(
+                (item, index) => (
+                  <div key={index}>{item}</div>
+                )
+              )}
+            </div>
           ) : (
             <div className="d-flex gap-30 flexWrap">No data found</div>
           )}
-          {/* </div> */}
-        </div>
+          </div>
         <div className="tabPadding mb-30">
           <div className="fs-20 fw-700 mb-20">Dine Savvy Application Usage</div>
           <div className="d-flex gap-30 flexWrap">

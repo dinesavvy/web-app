@@ -6,7 +6,7 @@ import datePicker from "../../../../assets/images/datePicker.svg";
 import closeIcon from "../../../../assets/images/closeIcon.svg";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
-import { DatePicker, TimePicker } from "antd";
+import { DatePicker, Spin, TimePicker } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 // import { merchantsListHandler } from "../../../../redux/action/merchantsList";
@@ -37,7 +37,8 @@ import {
 } from "../../../../redux/action/supplierActions/addSupplierPromotion";
 import { brandListDistributorHandler } from "../../../../redux/action/distributorsAction/brandListDistributor";
 import { distributorMerchantListHandler } from "../../../../redux/action/distributorsAction/distributorMerchantList";
-import { handleKeyPressSpace } from "../../../../common/commonFunctions/CommonFunctions";
+import { handleKeyPressSpace, handleNumberFieldLength } from "../../../../common/commonFunctions/CommonFunctions";
+import InfiniteScroll from "react-infinite-scroll-component";
 
 const AddDistributorPromotion = () => {
   const [promotionTitle, setPromotionTitle] = useState("");
@@ -45,6 +46,10 @@ const AddDistributorPromotion = () => {
   const [searchStringMerchant, setSearchStringMerchant] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
+  const [merchantsData, setMerchantsData] = useState([]);
+  const [merchantItemMain, setMerchantItemMain] = useState(null);
+  const [hasMore, setHasMore] = useState(true);
+  const [page, setPage] = useState(1);
   const [errors, setErrors] = useState({
     fromDate: "",
     toDate: "",
@@ -58,6 +63,9 @@ const AddDistributorPromotion = () => {
   const [droppedBrand, setDroppedBrand] = useState(null);
   const [draggingItem, setDraggingItem] = useState(null);
   const [brands, setBrands] = useState([{}]);
+  const [brandsPage, setBrandsPage] = useState(1);
+  const [brandsHasMore, setBrandsHasMore] = useState(true);
+  const [brandsData, setBrandsData] = useState([]);
 
   const messageApi = useCommonMessage();
   const navigate = useNavigate();
@@ -92,6 +100,9 @@ const AddDistributorPromotion = () => {
     setSelectedMerchants((prevSelected) =>
       prevSelected.includes(itemId) ? [] : [itemId]
     );
+    // Find the merchant item that was checked/unchecked
+    const merchantItem = merchantsData?.find(item => item._id === itemId);
+    setMerchantItemMain(merchantItem);
   };
 
   const handleDragStartMerchant = () => {
@@ -149,17 +160,17 @@ const AddDistributorPromotion = () => {
 
   useEffect(() => {
     let payload = {
-      page: 1,
+      page: brandsPage,
       limit: 10,
       searchString: searchString,
     };
     dispatch(brandListDistributorHandler(payload));
-  }, [searchString]);
+  }, [searchString,brandsPage]);
 
   useEffect(() => {
     const fetchMerchants = () => {
       const payload = {
-        page: 1,
+        page: page,
         limit: 10,
         timeFrame: "today",
         searchString: searchStringMerchant,
@@ -169,7 +180,50 @@ const AddDistributorPromotion = () => {
     };
 
     fetchMerchants();
-  }, [searchStringMerchant]);
+  }, [searchStringMerchant,page]);
+
+
+
+  useEffect(() => {
+    if (merchantsListSelector?.data?.data?.records) {
+      if (page === 1) {
+        setMerchantsData(merchantsListSelector?.data?.data?.records);
+      } else {
+        setMerchantsData((prev) => [
+          ...prev,
+          ...merchantsListSelector?.data?.data?.records,
+        ]);
+      }
+      // Check if we have more data to load
+      setHasMore(merchantsListSelector?.data?.data?.records?.length === 10);
+    }
+  }, [merchantsListSelector?.data?.data?.records]);
+
+  useEffect(() => {
+    if (brandListSelector?.data?.data?.records) {
+      if (brandsPage === 1) {
+        setBrandsData(brandListSelector.data.data.records);
+      } else {
+        setBrandsData((prev) => [
+          ...prev,
+          ...brandListSelector.data.data.records,
+        ]);
+      }
+      setBrandsHasMore(brandListSelector?.data?.data?.records?.length === 10);
+    }
+  }, [brandListSelector?.data?.data?.records]);
+
+  const fetchMoreData = () => {
+    if (hasMore) {
+      setPage((prev) => prev + 1);
+    }
+  };
+
+  const fetchMoreBrands = () => {
+    if (brandsHasMore) {
+      setBrandsPage((prev) => prev + 1);
+    }
+  };
 
   const handleBrandDrop = (draggedItem) => {
     if (!droppedBrand) {
@@ -178,12 +232,12 @@ const AddDistributorPromotion = () => {
     }
   };
 
-  const handleBrandClick = (item) => {
-    if (!droppedBrand) {
-      setBrands((prevBrands) => prevBrands.filter((i) => i?._id !== item?._id));
-      setDroppedBrand(item);
-    }
-  };
+  // const handleBrandClick = (item) => {
+  //   if (!droppedBrand) {
+  //     setBrands((prevBrands) => prevBrands.filter((i) => i?._id !== item?._id));
+  //     setDroppedBrand(item);
+  //   }
+  // };
 
   const handleDragStart = (item) => {
     if (!droppedBrand) {
@@ -225,7 +279,7 @@ const AddDistributorPromotion = () => {
 
   return (
     <>
-      {(brandListSelector?.isLoading || createPromotionSelector?.isLoading) && (
+      {createPromotionSelector?.isLoading && (
         <Loader />
       )}
       <div className="dashboard">
@@ -252,7 +306,7 @@ const AddDistributorPromotion = () => {
                       </div>
                       <div
                         className="btn btnSecondary addPlus"
-                        onClick={() => navigate("/admin/brands/add")}
+                        onClick={() => navigate("/distributors/add-distributor-brands")}
                       >
                         <img src={addPlusIcon} alt="addPlusIcon" />
                         Add
@@ -261,10 +315,18 @@ const AddDistributorPromotion = () => {
                   </div>
                 </div>
                 <div className="paddingb20">
+                <InfiniteScroll
+                    dataLength={brandsData?.length}
+                    next={fetchMoreBrands}
+                    hasMore={brandsHasMore}
+                    loader={<div className="text-center"><Spin /></div>}
+                    scrollableTarget="selectBrands"
+                    height={280}
+                  >
                   <div className="selectGrid3">
-                    {brandListSelector?.data?.data?.records?.length > 0 ? (
+                    {brandsData?.length > 0 ? (
                       <>
-                        {brandListSelector?.data?.data?.records?.map(
+                        {brandsData?.map(
                           (item, index) => {
                             return (
                               <>
@@ -298,6 +360,7 @@ const AddDistributorPromotion = () => {
                       <div className="noDataFound">No data available</div>
                     )}
                   </div>
+                  </InfiniteScroll>
                 </div>
               </div>
               <div className="mb-20 ">
@@ -334,10 +397,18 @@ const AddDistributorPromotion = () => {
                 </div>
 
                 <div className="paddingb20">
+                <InfiniteScroll
+                    dataLength={merchantsData?.length}
+                    next={fetchMoreData}
+                    hasMore={hasMore}
+                    loader={<div className="text-center"><Spin /></div>}
+                    scrollableTarget="selectMerchant"
+                    height={280}
+                  >
                   <div className="selectMerchant">
-                    {merchantsListSelector?.data?.data?.records?.length > 0 ? (
-                      <>
-                        {merchantsListSelector?.data?.data?.records?.map(
+                    {/* {merchantsListSelector?.data?.data?.records?.length > 0 ? ( */}
+                       <>
+                        {merchantsData?.map(
                           (item, index) => {
                             return (
                               <>
@@ -374,17 +445,18 @@ const AddDistributorPromotion = () => {
                                     />
                                   </div>
                                   <div className="divider2"></div>
-                                  <CustomDragLayer merchants={mercahnts} />
+                                  <CustomDragLayer merchants={mercahnts} merchantItemMain={merchantItemMain}/>
                                 </div>
                               </>
                             );
                           }
                         )}
                       </>
-                    ) : (
-                      <div className="noDataFound">No data available</div>
-                    )}
                   </div>
+                      </InfiniteScroll>
+                    {/* ) : ( */}
+                      {/* <div className="noDataFound">No data available</div> */}
+                    {/* )} */}
                 </div>
               </div>
             </div>
@@ -891,6 +963,18 @@ const AddDistributorPromotion = () => {
                                                 placeholder="Enter Price"
                                                 autoComplete="off"
                                                 maxLength={5}
+                                                onKeyPress={handleKeyPressSpace}
+                                                onInput={
+                                                  handleNumberFieldLength
+                                                }
+                                                onKeyDown={(event) => {
+                                                  if (
+                                                    event.key === "ArrowUp" ||
+                                                    event.key === "ArrowDown"
+                                                  ) {
+                                                    event.preventDefault();
+                                                  }
+                                                }}
                                                 onChange={(e) => {
                                                   let priceForReimbursement =
                                                     parseFloat(

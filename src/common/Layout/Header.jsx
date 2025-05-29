@@ -75,7 +75,8 @@ const Header = ({ handleTrigger }) => {
   const pageTitles = {
     "/admin/merchant/list": "Merchants",
     "/admin/merchant/dashboard": "Dashboard",
-    "/admin/merchant/followers": "Followers",
+    "/admin/dashboard": "Dashboard",
+    "/admin/followers": "Followers",
     "/admin/nudges": "Nudges",
     "/admin/suppliers": "Suppliers",
     "/admin/distributors": "Distributors",

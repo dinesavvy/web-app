@@ -16,6 +16,7 @@ import deleteMember from "../../../../assets/images/deleteMember.svg";
 import CommonModal from "../CommonModal";
 import deleteModal from "../../../../assets/images/deleteModal.svg";
 import SearchSelect from "../SearchSelect";
+import useScrollToTop from "../../../../hooks/useScrollToTop";
 
 const Suppliers = () => {
   const [modal2Open, setModal2Open] = useState(false);
@@ -34,6 +35,9 @@ const Suppliers = () => {
   );
 
   const dispatch = useDispatch();
+
+  // Scroll to top when the component mounts
+  useScrollToTop([pagination?.page]);
 
   const handlePaginationChange = (page, pageSize) => {
     setPagination({ page, limit: pageSize });
@@ -121,8 +125,8 @@ const Suppliers = () => {
                           </div>
                           <div className="fs-16 fw-700 mb-10 singleLine">
                             {item?.supplierName
-                              ? item.supplierName.charAt(0).toUpperCase() +
-                                item.supplierName.slice(1)
+                              ? item?.supplierName.charAt(0).toUpperCase() +
+                                item?.supplierName.slice(1)
                               : ""}
                           </div>
                         </div>
@@ -132,8 +136,8 @@ const Suppliers = () => {
                             <div className="d-flex align-center gap-12 fs-14">
                               <img src={userCard} className="h30" alt="User" />
                               {item?.contactName
-                              ? item.contactName.charAt(0).toUpperCase() +
-                                item.contactName.slice(1)
+                              ? item?.contactName.charAt(0).toUpperCase() +
+                                item?.contactName.slice(1)
                               : ""}
                             </div>
                             <div className="d-flex align-center gap-12 fs-14">
@@ -143,8 +147,8 @@ const Suppliers = () => {
                                 alt="Inventory"
                               />
                               {item?.contactPosition
-                              ? item.contactPosition.charAt(0).toUpperCase() +
-                                item.contactPosition.slice(1)
+                              ? item?.contactPosition.charAt(0).toUpperCase() +
+                                item?.contactPosition.slice(1)
                               : ""}
                             </div>
                             <div className="d-flex align-center gap-12 fs-14">

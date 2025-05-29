@@ -40,7 +40,7 @@ const MerchantNudgecart = ({
       title: values?.title,
       message: values?.description,
       isPublic: false,
-      followerList: state?.selectedItems?.map((item) => item?.userId?._id),
+      followerList: state?.selectedItems?.map((item) => item?.userId?._id)||[],
       photoURL:
         fileuploadSelector?.data?.data?.map((item) => item?.src)?.join("") ??
         nudgesCards?.imageUrl?.[0] ??

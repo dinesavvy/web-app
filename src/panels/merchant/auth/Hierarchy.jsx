@@ -97,26 +97,24 @@ const Hierarchy = () => {
     };
   }, [isMemberPermissions]);
 
+  const getLoginDetails = JSON.parse(localStorage.getItem("loginResponse"));
+
   return (
     <>
       {(businessTeamListSelector?.isLoading || updateTeamBusinessSelector?.isLoading) && <Loader />}
       <div className="dashboard">
         <div className="tabPadding mb-30">
-          <div className="fs-24 fw-600">Hierarchy </div>
+          <div className="fs-24 fw-600">Hierarchy</div>
 
           <div className="divider2"></div>
           <div className="d-flex align-center gap-20 mb-20">
             <div className="profileImage">
-              {JSON.parse(
-                localStorage.getItem("loginResponse")
-              )?.firstName?.charAt(0)}
-              {JSON.parse(
-                localStorage.getItem("loginResponse")
-              )?.lastName?.charAt(0)}
+              {getLoginDetails?.firstName?.charAt(0)}
+              {getLoginDetails.lastName?.charAt(0)}
             </div>
             <div>
               <div className="fs-24 fw-600 mb-10">
-                {JSON.parse(localStorage.getItem("loginResponse")).firstName}
+                {getLoginDetails?.firstName?.charAt(0).toUpperCase() + getLoginDetails?.firstName?.slice(1).toLowerCase()}
               </div>
               <div className="positionTag fs-16 fw-600">
                 {getSelectedBusinessData?.roleTitle}
@@ -158,7 +156,6 @@ const Hierarchy = () => {
                               {/* <div className="fs-14  grey">
                               {item?.status}
                             </div> */}
-
                               <div className="fs-14 fw-300 o5">
                                 {/* {moment(item?.createdAt).format("YYYY")} */}
                                 {item?.roleData?.map(
@@ -247,6 +244,7 @@ const Hierarchy = () => {
           </div>
         </div>
       </div>
+      {/* {isMemberHierarchy && ( */}
       <MemberHierarchy
         isMemberHierarchy={isMemberHierarchy}
         toggleMemberHierarchy={toggleMemberHierarchy}
@@ -256,6 +254,7 @@ const Hierarchy = () => {
         addTeam={addTeam}
         getBusinessTeamSelector={getBusinessTeamSelector}
       />
+      {/* )} */}
       <MemberPermissions
         isMemberPermissions={isMemberPermissions}
         setIsMemberPermissions={setIsMemberPermissions}

@@ -11,6 +11,7 @@ import Loader from "../../../../common/Loader/Loader";
 import { useCommonMessage } from "../../../../common/CommonMessage";
 // import { deleteBrandsAction } from "../../../../redux/action/deleteBrand";
 import noImageFound from "../../../../assets/images/noImageFound.png";
+import useScrollToTop from "../../../../hooks/useScrollToTop";
 
 const Brands = () => {
   const messageApi = useCommonMessage();
@@ -20,6 +21,10 @@ const Brands = () => {
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+
+  // Scroll to top when the component mounts
+  useScrollToTop([pagination?.page]);
 
   const getBrandListSelector = useSelector((state) => state?.brandList);
   const deleteBrandSelector = useSelector((state) => state?.deleteBrand);

@@ -12,7 +12,7 @@ const NotFound = () => {
 
   const navigateToPage = () => {
     if (getAdminLogin && getToken) {
-      navigate("/admin/merchant/dashboard");
+      navigate("/admin/dashboard");
     } else if (supplierLogin && getToken) {
       navigate("/supplier/dashboard");
     } else if (distributorLogin && getToken) {

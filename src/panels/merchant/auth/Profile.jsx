@@ -25,6 +25,7 @@ import {
   addImageHandler,
 } from "../../../redux/action/businessAction/addImage";
 import qrCode from "../../../assets/images/qrcode.png"
+import { fileUploadAction } from "../../../redux/action/fileUpload";
 
 const Profile = () => {
   const [openIndex, setOpenIndex] = useState(null);
@@ -38,6 +39,7 @@ const Profile = () => {
   const [isSpecial, setIsSpecial] = useState(false);
 
   const fileuploadSelector = useSelector((state) => state?.businessFileUpload);
+  console.log(fileuploadSelector,"fileuploadSelector")
 
   const dispatch = useDispatch();
   const messageApi = useCommonMessage();
@@ -83,7 +85,7 @@ const Profile = () => {
       reader.readAsDataURL(file);
     }
   };
-
+console.log(fileuploadSelector,"fileuploadSelector")
   useEffect(() => {
     const uploadFile = async () => {
       if (fileuploadSelector?.data?.statusCode === 200) {
@@ -150,7 +152,7 @@ const Profile = () => {
     setModalOpen(false);
     dispatch(addImageHandler(payload));
   };
-
+console.log(addImageDataSelector,"addImageDataSelector")
   useEffect(() => {
     if (addImageDataSelector?.message) {
       messageApi.open({
@@ -165,6 +167,7 @@ const Profile = () => {
       });
       setImagePreview(null)
       dispatch(addImageAction.addImageReset());
+      dispatch(businessFileUploadAction.businessFileUploadReset())
     }
   }, [addImageDataSelector]);
 
@@ -376,6 +379,7 @@ const [qrCodeModal,setQrCodeModal] = useState(false)
               onClick={() => {
                 setModalOpen(false);
                 setImagePreview(null);
+                dispatch(businessFileUploadAction.businessFileUploadReset())
               }}
             >
               <img src={closeRightSidebar} alt="closeRightSidebar" />

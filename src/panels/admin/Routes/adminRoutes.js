@@ -27,7 +27,7 @@ import CreateSavvyNudge from "../Components/SavvyNudge/CreateSavvyNudge";
 
 const adminRoutes = [
   {
-    path: "/admin/merchant/dashboard",
+    path: "/admin/dashboard",
     element: AdminDashboard,
     isPrivate: false,
     isLayout: true,
@@ -51,7 +51,7 @@ const adminRoutes = [
     isLayout: true,
   },
   {
-    path: "/admin/merchant/followers",
+    path: "/admin/followers",
     element: Followers,
     isPrivate: false,
     isLayout: true,

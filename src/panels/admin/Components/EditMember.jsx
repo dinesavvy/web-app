@@ -21,6 +21,7 @@ import {
   resendInviteLinkHandler,
 } from "../../../redux/action/resendInviteLink";
 import { useCommonMessage } from "../../../common/CommonMessage";
+import { handleKeyPressSpace } from "../../../common/commonFunctions/CommonFunctions";
 
 const EditMember = () => {
   const validationSchema = Yup.object().shape({
@@ -152,6 +153,7 @@ const EditMember = () => {
                       src={backButton}
                       alt="backButton"
                       className="cursor-pointer backButton"
+                      onClick={() => navigate("/admin/merchant/details")}
                     />
                     <div>
                       <div className="fs-24 fw-600 mb-4">
@@ -201,6 +203,7 @@ const EditMember = () => {
                         name="name"
                         placeholder="Enter your name"
                         id="name"
+                        onKeyDown={handleKeyPressSpace}
                       />
                       <ErrorMessage
                         name="name"
@@ -221,6 +224,7 @@ const EditMember = () => {
                         placeholder="Enter your phone number"
                         id="phone_number"
                         className="input"
+                        onKeyDown={handleKeyPressSpace}
                       />
                       <ErrorMessage
                         name="phone_number"
@@ -301,6 +305,7 @@ const EditMember = () => {
                           // placeholder="Enter your phone number"
                           id="invitedDate"
                           className="input"
+                          disabled
                         />
                         {/* {state?.item?.status === "pending" && ( */}
                         <div

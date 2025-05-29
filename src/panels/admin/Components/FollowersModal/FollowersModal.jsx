@@ -26,19 +26,40 @@ const FollowersModal = ({
   setSelectMerchantList,
   selectedItems,
   setSelectedItems,
+  state,
+  onConfirm,
 }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const [searchString, setSearchString] = useState("");
   const [pagination, setPagination] = useState({ page: 1, limit: 12 });
+  const followerListSelector = useSelector((state) => state?.followeList);
+
   const [checkedItems, setCheckedItems] = useState({});
+  useEffect(() => {
+    if (state?.selectedItems?.length > 0 && followerListSelector?.data?.data?.records) {
+      const initialCheckedItems = {};
+      followerListSelector.data.data.records.forEach((item, index) => {
+        if (state.selectedItems.some(selectedItem => selectedItem.userInfo?.customerId === item.userInfo?.customerId)) {
+          initialCheckedItems[index] = true;
+        }
+      });
+      setCheckedItems(initialCheckedItems);
+      setSelectedItems(state.selectedItems);
+    } else {
+      // Reset states when no selected items
+      setCheckedItems({});
+      setSelectedItems([]);
+    }
+  }, [state?.selectedItems, followerListSelector?.data?.data?.records]);
+
+
   const [searchArea, setSearchArea] = useState([]);
 
   const followerArchiveSelector = useSelector(
     (state) => state?.followerArchive
   );
-  const followerListSelector = useSelector((state) => state?.followeList);
 
   const handleDelete = () => {
     const updatedCheckedItems = { ...checkedItems };
@@ -92,14 +113,16 @@ const FollowersModal = ({
     }));
 
     if (isChecked) {
-      setSelectedItems((prev) =>
-        prev.some((selectedItem) => selectedItem?._id === item?._id)
-          ? prev
-          : [...prev, item]
-      );
+      setSelectedItems((prev) => {
+        const exists = prev.some(selectedItem => selectedItem.userInfo?.customerId === item.userInfo?.customerId);
+        if (!exists) {
+          return [...prev, item];
+        }
+        return prev;
+      });
     } else {
-      setSelectedItems((prev) =>
-        prev.filter((selectedItem) => selectedItem?._id !== item?._id)
+      setSelectedItems((prev) => 
+        prev.filter(selectedItem => selectedItem.userInfo?.customerId !== item.userInfo?.customerId)
       );
     }
   };
@@ -294,14 +317,14 @@ const FollowersModal = ({
                       <div>
                         <div className="fw-700">
                           {item?.userInfo?.displayName &&
-                            item.userInfo.displayName.charAt(0).toUpperCase() +
-                              item.userInfo.displayName.slice(1)}
+                            item?.userInfo?.displayName.charAt(0).toUpperCase() +
+                              item?.userInfo?.displayName.slice(1)}
                         </div>
                           <div className="fs-14 fw-300 o5 ">
                           {item?.userInfo?.email.length > 0 ? item?.userInfo?.email : "-"}
                           </div>
                         <div className="fs-14 fw-300 o5">
-                          {moment(item?.createdAt).format("MMMM, YYYY")}
+                          {moment(item?.userInfo?.createdAt).format("MMMM, YYYY")}
                         </div>
                       </div>
                     </div>
@@ -354,12 +377,12 @@ const FollowersModal = ({
                     >
                       Archive
                     </div>
-                    <div
+                    {/* <div
                       className="btnSecondary w-100 btn"
                       onClick={() => viewDetails(item)}
                     >
                       View Details
-                    </div>
+                    </div> */}
                   </div>
                 </div>
               ))
@@ -382,8 +405,8 @@ const FollowersModal = ({
                 })()}
               </div>
               <Pagination
-                current={pagination.page}
-                pageSize={pagination.limit}
+                current={pagination?.page}
+                pageSize={pagination?.limit}
                 total={followerListSelector?.data?.data?.recordsCount}
                 onChange={handlePaginationChange}
               />
@@ -393,13 +416,7 @@ const FollowersModal = ({
             <div className="floatAdd">
               <div
                 className="btn fs-16"
-                // onClick={() =>
-                //   navigate("/admin/nudges/template", {
-                //     state: {  selectedItems:selectedItems },
-                //   })
-                // }
-
-                onClick={() => setSelectMerchantList(false)}
+                onClick={onConfirm}
               >
                 <img src={createAdd} alt="image" />
                 <div>Create nudge</div>

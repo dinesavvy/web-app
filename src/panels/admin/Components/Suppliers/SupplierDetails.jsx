@@ -133,7 +133,7 @@ const SupplierDetails = ({
         supplierName: values?.supplierName,
         contactName: values?.supplierContactName,
         contactPosition: values?.supplierPosition,
-        contactEmail: values?.supplierEmail,
+        contactEmail: values?.supplierEmail.toLowerCase(),
         contactPhoneNumber: values?.supplierContactNumber,
         logoUrl,
       };
@@ -153,7 +153,7 @@ const SupplierDetails = ({
         supplierName: values?.supplierName,
         contactName: values?.supplierContactName,
         contactPosition: values?.supplierPosition,
-        contactEmail: values?.supplierEmail,
+        contactEmail: values?.supplierEmail.toLowerCase(),
         contactPhoneNumber: values?.supplierContactNumber,
         logoUrl,
         supplierId: selectedSupplier?._id,
@@ -168,7 +168,7 @@ const SupplierDetails = ({
         type: "error",
         content: createSuplierSelector?.message,
       });
-      dispatch(fileUploadAction.fileuploadReset());
+      // dispatch(fileUploadAction.fileuploadReset());
       dispatch(createSupplierAction.createSuplierReset());
     } else if (createSuplierSelector?.data?.statusCode === 200) {
       messageApi.open({

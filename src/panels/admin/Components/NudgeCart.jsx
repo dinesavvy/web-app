@@ -34,9 +34,7 @@ const NudgeCart = ({
       title: values?.title,
       message: values?.description,
       isPublic: false,
-      followerList: state?.selectedItems?.map(
-        (item) => item?.userInfo?.customerId
-      ) || selectedItems?.map(
+      followerList:  selectedItems?.map(
         (item) => item?.userInfo?.customerId
       ),
       photoURL:
@@ -48,6 +46,7 @@ const NudgeCart = ({
       totalQuantity: Number(values?.quantity),
     };
     dispatch(createNudgeHandler(payload));
+    // console.log(payload,"payload")
   };
 
   useEffect(() => {

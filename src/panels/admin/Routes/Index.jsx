@@ -28,6 +28,7 @@ const AppRoutes = () => {
       document.body.classList.remove("overflowHidden");
     };
   }, [isOpen]);
+  
   return (
     <>
       <CommonMessageProvider>

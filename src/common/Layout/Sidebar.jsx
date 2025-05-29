@@ -99,7 +99,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
             iconFull: dashboardFull,
             navigate: getLoggedInDetails
               ? "/merchant/dashboard"
-              : "/admin/merchant/dashboard",
+              : "/admin/dashboard",
           },
           ...(getLoggedInDetails
             ? []
@@ -138,7 +138,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
             iconFull: consumersFull,
             navigate: getLoggedInDetails
               ? "/merchant/followers"
-              : "/admin/merchant/followers",
+              : "/admin/followers",
             disabled: "",
           },
           {
@@ -243,7 +243,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
           onClick={() => {
             getLoggedInDetails
               ? navigate("/merchant/dashboard")
-              : navigate("/admin/merchant/dashboard");
+              : navigate("/admin/dashboard");
           }}
         >
           <img src={logo} alt="Logo" />
@@ -258,7 +258,10 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                 } ${isOpen ? "" : "tooltip-container"} ${
                   link?.disabled ? "disabled" : ""
                 }`}
-                onClick={() => onNavigate(link.navigate)}
+                onClick={() => {
+                    localStorage.removeItem("nudgeQuantity");
+                  onNavigate(link.navigate);
+                }}
                 data-tooltip-id={isOpen ? "sidebar-tooltip" : undefined}
                 data-tooltip-content={isOpen ? link.name : undefined}
               >

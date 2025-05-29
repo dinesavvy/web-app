@@ -495,7 +495,11 @@
   margin-right: 16px;
   border-right: 1px solid #D9D9D9;
 }
-
+.absoluteError{
+  position: absolute;
+  top: calc(100% + 0px);
+  left: 0;
+}
 .noDataFound {
   grid-column: span 4;
   text-align: center;

@@ -11,13 +11,18 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import { fileUploadHandler } from "../../../redux/action/fileUpload";
-import closeRightSidebar from "../../../assets/images/closeRightSidebar.svg";
-import rightactive from "../../../assets/images/rightactive.svg";
+// import closeRightSidebar from "../../../assets/images/closeRightSidebar.svg";
+// import rightactive from "../../../assets/images/rightactive.svg";
 import { Modal } from "antd";
 import FollowersModal from "./FollowersModal/FollowersModal";
+import {
+  handleKeyPressSpace,
+  handleNumberFieldLength,
+} from "../../../common/commonFunctions/CommonFunctions";
 
 const NudgeTemplate = () => {
   const [selectedItems, setSelectedItems] = useState([]);
+  const [tempSelectedItems, setTempSelectedItems] = useState([]);
   const dispatch = useDispatch();
   const { state } = useLocation();
   const [archive, setArchive] = useState("");
@@ -31,7 +36,13 @@ const NudgeTemplate = () => {
   const fileuploadSelector = useSelector((state) => state?.fileupload);
 
   useEffect(() => {
-    if (state?.locationId?.nudgePrev) {
+    if (state?.selectedItems) {
+      setSelectedItems(state?.selectedItems);
+    }
+  }, [state?.selectedItems]);
+
+  useEffect(() => {
+    if (state?.selectedItems?.length > 0) {
       setNudgesCard(state?.locationId?.nudgePrev);
     }
   }, [state]);
@@ -93,7 +104,7 @@ const NudgeTemplate = () => {
 
   const handleButtonClick = () => {
     if (fileInputRef.current) {
-      fileInputRef.current.click(); 
+      fileInputRef.current.click();
     }
   };
 
@@ -109,6 +120,7 @@ const NudgeTemplate = () => {
                 src={backButton}
                 alt="backButton"
                 className="cursor-pointer backButton"
+                onClick={() => navigate("/admin/nudges")}
               />
               <div>
                 <div className="fs-24 fw-600">Nudges Template</div>
@@ -137,6 +149,7 @@ const NudgeTemplate = () => {
               )}
             </div>
           </div>
+          {console.log(selectedItems,"selectedItems")}
           <Formik
             enableReinitialize
             initialValues={{
@@ -149,14 +162,15 @@ const NudgeTemplate = () => {
               quantity:
                 nudgesCards?.quantity ||
                 state?.locationId?.nudgePrev?.quantity ||
+                localStorage.getItem("nudgeQuantity") ||
                 "",
             }}
             validationSchema={validationSchema}
             onSubmit={handleSubmit}
           >
-            {({ errors, touched, values, isValid }) => (
+            {({ errors, touched, values, setFieldValue }) => (
               <Form>
-                {(nudgesCards || state?.locationId?.nudgePrev) && (
+                {nudgesCards && (
                   <>
                     <div className="tabPadding mb-20">
                       <div className="fs-24 fw-600">
@@ -220,13 +234,29 @@ const NudgeTemplate = () => {
                           <Field
                             id="quantity"
                             name="quantity"
-                            type="text"
-                            placeholder="Free appetizer on Happy Hours! From 07:00 PM to 08:00 PM"
+                            type="number"
+                            autoComplete="off"
+                            placeholder="Enter quantity"
                             className={
                               errors.quantity && touched.quantity
                                 ? "input-error"
                                 : ""
                             }
+                            onKeyPress={handleKeyPressSpace}
+                            onInput={handleNumberFieldLength}
+                            onChange={(e) => {
+                              const value = e.target.value;
+                              localStorage.setItem("nudgeQuantity", value);
+                              setFieldValue("quantity", value);
+                            }}
+                            onKeyDown={(event) => {
+                              if (
+                                event.key === "ArrowUp" ||
+                                event.key === "ArrowDown"
+                              ) {
+                                event.preventDefault();
+                              }
+                            }}
                           />
                           {errors.quantity && touched.quantity && (
                             <div className="mt-10 fw-500 fs-14 error">
@@ -263,15 +293,17 @@ const NudgeTemplate = () => {
                     </div>
                     <div
                       className="tabPadding mb-20 cursor-pointer"
-                      onClick={() => {
-                        if (!state?.dineSavvyNudge) {
-                          navigate("/admin/merchant/details", {
-                            state: { statePrev: state, nudgePrev: nudgesCards },
-                          });
-                        } else if (state?.dineSavvyNudge) {
-                          setSelectMerchantList(true);
-                        }
-                      }}
+                      // onClick={() => {
+                      //   if (!state?.dineSavvyNudge) {
+                      //     navigate("/admin/merchant/details", {
+                      //       state: { statePrev: state, nudgePrev: nudgesCards,fromSelectAudience:true,quantity:values },
+                      //     });
+                      //   } else if (state?.dineSavvyNudge) {
+                      //     setSelectMerchantList(true);
+                      //   }
+                      // }}
+
+                      onClick={() => setSelectMerchantList(true)}
                     >
                       <div className="d-flex justify-between align-center gap-20 w-100">
                         <div>
@@ -293,20 +325,46 @@ const NudgeTemplate = () => {
                                 Nudge.
                               </div>
                             )} */}
-                            {(state?.selectedItems?.length > 0 || selectedItems?.length > 0) ? (
-  <div className="flexTagFull">
-    {(selectedItems || []).concat(state?.selectedItems || []).map((item, index) => (
-      <div key={index}>
-        {item?.userInfo?.displayName}
-      </div>
-    ))}
-  </div>
-) : (
-  <div>
-    By default all your followers will be sent this Nudge.
-  </div>
-)}
+                            
+                            {/* {state?.selectedItems?.length > 0 ||
+                            selectedItems?.length > 0 ? (
+                              <div className="flexTagFull">
+                                {(selectedItems || [])
+                                  .concat(state?.selectedItems || [])
+                                  .map((item, index) => (
+                                    <div key={index}>
+                                      {item?.userInfo?.displayName}
+                                    </div>
+                                  ))}
+                              </div>
+                            ) : (
+                              <div>
+                                By default all your followers will be sent this
+                                Nudge.
+                              </div>
+                            )} */}
 
+                            {selectedItems?.length > 0 ? (
+                              <div className="flexTagFull">
+                                {/* {(selectedItems || [])
+                                  .concat(state?.selectedItems || [])
+                                  .map((item, index) => (
+                                    <div key={index}>
+                                      {item?.userInfo?.displayName}
+                                    </div>
+                                  ))} */}
+                                {selectedItems?.map((item, index) => (
+                                  <div key={index}>
+                                    {item?.userInfo?.displayName}
+                                  </div>
+                                ))}
+                              </div>
+                            ) : (
+                              <div>
+                                By default all your followers will be sent this
+                                Nudge.
+                              </div>
+                            )}
                           </div>
                         </div>
                         <div>
@@ -372,7 +430,7 @@ const NudgeTemplate = () => {
                       state={state}
                       fileuploadSelector={fileuploadSelector}
                       setIsCartOpen={setIsCartOpen}
-                      selectedItems = {selectedItems}
+                      selectedItems={selectedItems}
                     />
                   </>
                 )}
@@ -398,7 +456,19 @@ const NudgeTemplate = () => {
             </div> */}
             {/* List of items */}
             {/* <div className="padding30"> */}
-              <FollowersModal archive = {archive} setArchive = {setArchive} selectMerchantList = {selectMerchantList} setSelectMerchantList = {setSelectMerchantList} setSelectedItems = {setSelectedItems} selectedItems= {selectedItems}/>
+            <FollowersModal
+              archive={archive}
+              setArchive={setArchive}
+              selectMerchantList={selectMerchantList}
+              setSelectMerchantList={setSelectMerchantList}
+              setSelectedItems={setTempSelectedItems}
+              selectedItems={tempSelectedItems}
+              state={state}
+              onConfirm={() => {
+                setSelectedItems(tempSelectedItems);
+                setSelectMerchantList(false);
+              }}
+            />
             {/* </div> */}
           </div>
         </Modal>

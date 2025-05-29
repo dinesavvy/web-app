@@ -13,14 +13,20 @@ import { businessNudgesTemplateHandler } from "../../../redux/action/businessAct
 import MerchantNudgecart from "./MerchantNudgeCart";
 import { businessFileUploadHandler } from "../../../redux/action/businessAction/businessFileUpload";
 import { useCommonMessage } from "../../../common/CommonMessage";
+import { Modal } from "antd";
+import FollowersModal from "../../admin/Components/FollowersModal/FollowersModal";
+import MerchantFollowerModal from "../../../common/merchantFollowerModal/MerchantFollowerModal";
+import { handleKeyPressSpace, handleNumberFieldLength } from "../../../common/commonFunctions/CommonFunctions";
 
 const NudgeTemplateMerchant = () => {
   const [uploadedImage, setUploadedImage] = useState(nudgesCards?.imageUrl[0]);
+  const [showFollowersModal, setShowFollowersModal] = useState(false);
   const messageApi = useCommonMessage();
   const [imagePreview, setImagePreview] = useState(
     nudgesCards?.imageUrl[0] || null
   );
   const [fileObject, setFileObject] = useState();
+  const [selectMerchantList, setSelectMerchantList] = useState(false);
   const dispatch = useDispatch();
   const { state } = useLocation();
 
@@ -195,13 +201,13 @@ const NudgeTemplateMerchant = () => {
                 "",
               quantity:
                 nudgesCards?.quantity ||
-                state?.locationId?.statePrev?.quantity ||
+                state?.locationId?.statePrev?.quantity ||localStorage.getItem("nudgeQuantity")||
                 "",
             }}
             validationSchema={validationSchema}
             onSubmit={handleSubmit}
           >
-            {({ errors, touched, values, isValid }) => (
+            {({ errors, touched, values, isValid,setFieldValue }) => (
               <Form>
                 {(nudgesCards || state?.locationId?.statePrev || getPromotionNudge) && (
                   <>
@@ -269,6 +275,12 @@ const NudgeTemplateMerchant = () => {
                             id="quantity"
                             name="quantity"
                             type="text"
+                            onKeyPress={handleKeyPressSpace}
+                            onInput={handleNumberFieldLength}
+                            onChange={(e) => {
+                              setFieldValue('quantity', e.target.value);
+                              localStorage.setItem('nudgeQuantity', e.target.value);
+                            }}
                             placeholder="Free appetizer on Happy Hours! From 07:00 PM to 08:00 PM"
                             className={
                               errors.quantity && touched.quantity
@@ -318,9 +330,10 @@ const NudgeTemplateMerchant = () => {
                       // }}
                       onClick={() =>
                         navigate("/merchant/followers", {
-                          state: { statePrev: state },
+                          state: { statePrev: state, nudgePrev: nudgesCards },
                         })
                       }
+                      // onClick={() => setShowFollowersModal(true)}
                     >
                       <div className="d-flex justify-between align-center gap-20 w-100">
                         <div>
@@ -416,6 +429,15 @@ const NudgeTemplateMerchant = () => {
             )}
           </Formik>
         </div>
+        {/* <Modal
+        className="selecModalFollowerList"
+          centered
+          visible={showFollowersModal}
+          onCancel={() => setShowFollowersModal(false)}
+          footer={false}
+        >
+          <MerchantFollowerModal />
+        </Modal> */}
       </>
     </>
   );

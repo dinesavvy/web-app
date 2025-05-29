@@ -195,6 +195,7 @@ const Nudges = () => {
                 <div className="no-restaurants-found">No restaurant found</div>
               )}
             </div>
+          </div>
             {merchantsListSelector?.data?.data?.records?.length > 0 && (
               <div className="d-flex align-center justify-between flexPagination mt-20">
                 <div className="fs-16">
@@ -219,7 +220,6 @@ const Nudges = () => {
                 />
               </div>
             )}
-          </div>
         </div>
 
         {selectedValue && (

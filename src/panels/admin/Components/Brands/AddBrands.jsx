@@ -257,7 +257,7 @@ const AddBrands = () => {
                     onChange={handleFileChange}
                   />
                 </div>
-                <div className="inputGrid gap-20">
+                <div className="inputGrid gap-30 position-relative">
                   <div>
                     <label htmlFor="name" className="grey mb-10 fs-16 fw-500">
                       Brand Name*
@@ -274,7 +274,7 @@ const AddBrands = () => {
                     <ErrorMessage
                       name="brandName"
                       component="div"
-                      className="mt-10 fw-500 fs-14 error"
+                      className="fw-500 fs-14 error "
                     />
                   </div>
                 </div>
@@ -285,8 +285,8 @@ const AddBrands = () => {
                     {values?.SKUs?.map((item, index) => {
                       return (
                         <div className="tabPadding mb-30" key={index}>
-                          <div className="inputGrid gap-20">
-                            <div className="w-100 d-flex flexDirection h-100 justify-between">
+                          <div className="inputGrid gap-30">
+                            <div className="w-100 d-flex flexDirection h-100 justify-between position-relative">
                               <label className="grey mb-10 fs-16 fw-500">
                                 MSRP (Manufacturer’s Suggested Retail Price)*
                               </label>
@@ -323,11 +323,11 @@ const AddBrands = () => {
                               <ErrorMessage
                                 name={`SKUs[${index}].msrp`}
                                 component="div"
-                                className="mt-10 fw-500 fs-14 error"
+                                className="fw-500 fs-14 error absoluteError"
                               />
                             </div>
 
-                            <div className="w-160 d-flex flexDirection h-100 justify-between">
+                            <div className="w-160 d-flex flexDirection h-100 justify-between position-relative">
                               <label className="grey mb-10 fs-16 fw-500">
                                 Unit*
                               </label>
@@ -351,11 +351,11 @@ const AddBrands = () => {
                               {/* <ErrorMessage
                                 name={`SKUs[${index}].unit`}
                                 component="div"
-                                className="mt-10 fw-500 fs-14 error"
+                                className="fw-500 fs-14 error absoluteError"
                               /> */}
                             </div>
 
-                            <div className="w-100 d-flex flexDirection h-100 justify-between">
+                            <div className="w-100 d-flex flexDirection h-100 justify-between position-relative">
                               <label className="grey mb-10 fs-16 fw-500">
                                 SKUs*
                               </label>
@@ -370,10 +370,10 @@ const AddBrands = () => {
                               <ErrorMessage
                                 name={`SKUs[${index}].sku`}
                                 component="div"
-                                className="mt-10 fw-500 fs-14 error"
+                                className="fw-500 fs-14 error absoluteError"
                               />
                             </div>
-                            <div className="">
+                            <div className="position-relative">
                               <label className="grey mb-10 fs-16 fw-500">
                                 Description*
                               </label>
@@ -389,10 +389,10 @@ const AddBrands = () => {
                               <ErrorMessage
                                 name={`SKUs[${index}].description`}
                                 component="div"
-                                className="mt-10 fw-500 fs-14 error"
+                                className="fw-500 fs-14 error absoluteError"
                               />
                             </div>
-                            <div className="">
+                            <div className="position-relative">
                               <label className="grey mb-10 fs-16 fw-500">
                                 Quantity*
                               </label>
@@ -421,12 +421,12 @@ const AddBrands = () => {
                               <ErrorMessage
                                 name={`SKUs[${index}].quantity`}
                                 component="div"
-                                className="mt-10 fw-500 fs-14 error"
+                                className="fw-500 fs-14 error "
                               />
                             </div>
                           </div>
 
-                          <div className="divider2"></div>
+                          {/* <div className="divider2"></div> */}
                           {index > 0 && (
                             <div className="d-flex justify-end">
                               <div

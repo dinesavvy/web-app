@@ -15,6 +15,7 @@ import {
   brandLlistDistributorHandler,
 } from "../../../../redux/action/distributorsAction/brandListDistributor";
 import { deleteDistributorBrandAction } from "../../../../redux/action/distributorsAction/deleteDistributorBrand";
+import useScrollToTop from "../../../../hooks/useScrollToTop";
 
 const BrandsListDistributor = () => {
   const messageApi = useCommonMessage();
@@ -24,6 +25,10 @@ const BrandsListDistributor = () => {
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  // Scroll to top when the component mounts
+  useScrollToTop([pagination?.page]);
+
 
   const getBrandListSelector = useSelector(
     (state) => state?.brandListDistributor
