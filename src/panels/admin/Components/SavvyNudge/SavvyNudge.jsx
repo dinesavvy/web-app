@@ -8,15 +8,26 @@ import playbtn from "../../../../assets/images/playbtn.svg";
 import { Modal } from "antd";
 import SavvyNudgeDetail from "./SavvyNudgeDetail";
 import MerchantViewAll from "./MerchantViewAll";
+import { useDispatch, useSelector } from "react-redux";
+import { savvyNudgesListHandler } from "../../../../redux/action/savvyNudgesList";
+import Loader from "../../../../common/Loader/Loader";
+import moment from "moment";
+import { Pagination } from "antd";
+
+
 const getYoutubeId = (url) => {
   const regExp =
     /(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([\w-]{11})/;
   const match = url.match(regExp);
   return match ? match[1] : null;
 };
+
 const SavvyNudge = () => {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState(true);
+  const [pagination, setPagination] = useState({ page: 1, limit: 10 });
+  const [searchString, setSearchString] = useState("");
+
   const handleTabClick = (tab) => {
     setActiveTab(tab); // Update the active tab
   };
@@ -25,7 +36,17 @@ const SavvyNudge = () => {
   const toggleSidebar = () => {
     setIsSidebarOpen((prevState) => !prevState);
   };
-   useEffect(() => {
+
+  const handleSearchChange = (value) => {
+    setSearchString(value);
+    setPagination((prev) => ({ ...prev, page: 1 })); // Reset to the first page on search
+  };
+
+  const handlePaginationChange = (page, pageSize) => {
+    setPagination({ page, limit: pageSize });
+  };
+
+  useEffect(() => {
     if (isSidebarOpen) {
       document.body.classList.add("overflow-Hidden");
     } else {
@@ -37,11 +58,12 @@ const SavvyNudge = () => {
     };
   }, [isSidebarOpen]);
 
-  const [isSidebarOpenMerchantViewAll, setIsSidebarOpenMerchantViewAll] = useState(false);
+  const [isSidebarOpenMerchantViewAll, setIsSidebarOpenMerchantViewAll] =
+    useState(false);
   const toggleSidebarMerchantViewAll = () => {
     setIsSidebarOpenMerchantViewAll((prevState) => !prevState);
   };
-   useEffect(() => {
+  useEffect(() => {
     if (isSidebarOpenMerchantViewAll) {
       document.body.classList.add("overflow-Hidden");
     } else {
@@ -58,137 +80,243 @@ const SavvyNudge = () => {
     "https://youtu.be/3JZ_D3ELwOQ",
     "https://www.youtube.com/embed/tgbNymZ7vqY",
   ];
+
+  const dispatch = useDispatch();
+  const savvyNudgesListSelector = useSelector(
+    (state) => state?.savvyNudgesList
+  );
+  console.log(savvyNudgesListSelector, "savvyNudgesListSelector");
+
+  useEffect(() => {
+    let payload = {
+      page: pagination?.page,
+      limit: pagination?.limit,
+      searchString: "",
+      isActive: activeTab,
+    };
+    dispatch(savvyNudgesListHandler(payload));
+  }, [pagination, activeTab]);
+
   return (
     <>
+      {savvyNudgesListSelector?.isLoading && <Loader />}
       <div className="dashboard">
         <div className="tabPadding">
           <div className="d-flex justify-between align-center mb-20 gap-10 flexsm">
             <div className="fs-24 fw-600">Savvy Nudges</div>
             <div className="position-relative d-flex align-center gap-10">
-              <div className="gap-8 btnSecondary p16 btn z1" onClick={()=>navigate("/admin/create-savvy-nudge")}>
+              <div
+                className="gap-8 btnSecondary p16 btn z1"
+                onClick={() => navigate("/admin/create-savvy-nudge")}
+              >
                 <img src={addCredits} alt="addCredits" />
                 Create Savvy Nudge
               </div>
             </div>
           </div>
+
           <div className="tabs-container tab3 tabing mb-20">
             <div className="tabs">
-              <button
-                className={`tab-button ${activeTab === true ? "active" : ""}`}
-                onClick={() => handleTabClick(true)}
-              >
-                Active
-              </button>
-              <button
-                className={`tab-button ${activeTab === false ? "active" : ""}`}
-                onClick={() => handleTabClick(false)}
-              >
-                Inactive
-              </button>
+              {["Active", "Inactive"].map((label, index) => {
+                const isActive = index === 0;
+                return (
+                  <button
+                    key={label}
+                    className={`tab-button ${
+                      activeTab === isActive ? "active" : ""
+                    }`}
+                    onClick={() => handleTabClick(isActive)}
+                  >
+                    {label}
+                  </button>
+                );
+              })}
             </div>
           </div>
+
           <div className="merchantGrid mb-20">
-            {videoLinks.map((url) => {
-              const videoId = getYoutubeId(url);
-              const thumbnail = `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
+            {savvyNudgesListSelector?.data?.data?.records?.length > 0 ? (
+              <>
+                {savvyNudgesListSelector?.data?.data?.records?.map(
+                  (item, index) => {
+                    console.log(item,"ddsdsd")
+                    const videoId = getYoutubeId(item?.youtubeUrl);
+                    const thumbnail = `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
+                    return (
+                      <>
+                        <div
+                          className="merchantCard bb position-relative"
+                          key={index}
+                        >
+                          <div className="pt-30 d-flex flexColumn h-100">
+                            <div className="nailedIt active fs-14">
+                              <img
+                                src={remainTime}
+                                className="remainTime"
+                                alt=""
+                              />
+                              {/* Expires in 5 days */}
+                              {moment(item?.expireDate).format('MMMM Do YYYY')}
+                            </div>
 
-              return (
-                <div className="merchantCard bb position-relative">
-                  <div className="pt-30 d-flex flexColumn h-100">
-                    {/* successNailedIt */}
-                    <div className="nailedIt  active fs-14 ">
-                      <img src={remainTime} className="remainTime" alt="" />{" "}
-                      Expires in 5 days
-                    </div>
+                            <div
+                              className="text-center minsavvynudgevideo"
+                              onClick={() =>
+                                setActiveVideoUrl(item?.youtubeUrl)
+                              }
+                            >
+                              <img src={playbtn} className="playbtn" alt="" />
+                              <img
+                                src={thumbnail}
+                                alt="Video thumbnail"
+                                className="w-100 h-100"
+                              />
+                              <img
+                                src={savvynudge}
+                                className="savvynudge"
+                                alt=""
+                              />
+                            </div>
 
-                    <div
-                      className="text-center minsavvynudgevideo"
-                      onClick={() => setActiveVideoUrl(url)}
-                    >
-                      <img src={playbtn} className="playbtn" alt="" />
-                      <img
-                        src={thumbnail}
-                        alt="Video thumbnail"
-                        className="w-100 h-100"
-                      />
-                      <img src={savvynudge} className="savvynudge" alt="" />
-                    </div>
-                    <div className="bottomPadding d-flex flexColumn  flex1 gap-20 justify-between">
-                      <div>
-                        <div className="fs-16 fw-700">Title</div>
-                        <div className="fs-14">
-                          Get 20% off on all large pizzas today! Limited time
-                          offer.
-                        </div>
-                        <div className="divider16"></div>
-                        <div className="mb-16">
-                          <div className="fs-14 mb-4">Time Frame</div>
-                          <div className="fs-14 fw-600">
-                            10/05/2025 - 15/05/2025
-                          </div>
-                        </div>
-                        <div className="mb-16">
-                          <div className="fs-14 mb-4">Audience Targeting</div>
-                          <div className="fs-14 fw-600">
-                            All followers and everyone within 25 mi
-                          </div>
-                        </div>
-                        <div className="mb-16">
-                          <div className="fs-14 mb-4">Merchants</div>
-                          <div className="d-flex gap-8 align-center">
-                            <div className="position-relative d-flex borderImageCollaps">
-                              <div className="imageCollaps">
-                                <img src={coke} className="w-100 h-100" />
+                            <div className="bottomPadding d-flex flexColumn flex1 gap-20 justify-between">
+                              <div>
+                                <div className="fs-16 fw-700">
+                                  {item?.title || "-"}
+                                </div>
+                                <div className="fs-14">
+                                  {/* Get 20% off on all large pizzas today! Limited
+                              time offer. */}
+                                  {item?.description || "-"}
+                                </div>
+                                <div className="divider16"></div>
+
+                                <div className="mb-16">
+                                  <div className="fs-14 mb-4">Time Frame</div>
+                                  <div className="fs-14 fw-600">
+                                    {moment(item?.createdAt).format(
+                                      "DD/MM/YYYY"
+                                    )}{" "}
+                                    -{" "}
+                                    {moment(item?.expireDate).format(
+                                      "DD/MM/YYYY"
+                                    )}
+                                  </div>
+                                </div>
+
+                                <div className="mb-16">
+                                  <div className="fs-14 mb-4">
+                                    Audience Targeting
+                                  </div>
+                                  <div className="fs-14 fw-600">
+                                    {/* All followers and everyone within 25 mi */}
+                                    {item?.audience || "-"}
+                                  </div>
+                                </div>
+
+                                <div className="mb-16">
+                                  <div className="fs-14 mb-4">Merchants</div>
+                                  <div className="d-flex gap-8 align-center">
+                                    <div className="position-relative d-flex borderImageCollaps">
+                                      {item?.merchants?.slice(0,5)?.map((_, i) => (
+                                        <div key={i} className="imageCollaps">
+                                          <img
+                                            src={coke}
+                                            className="w-100 h-100"
+                                            alt={item?.title}
+                                          />
+                                        </div>
+                                      ))}
+                                    </div>
+                                    {item?.merchants?.length >5 && (
+                                    <div
+                                      className="cursor-pointer fs-14 fw-600"
+                                      onClick={toggleSidebarMerchantViewAll}
+                                    >
+                                      +{item?.merchants?.length-5} more
+                                    </div>
+                                    )}
+                                  </div>
+                                </div>
+
+                                <div>
+                                  <div className="fs-14 mb-4">
+                                    Buy it from here
+                                  </div>
+                                  <div className="d-flex align-center fs-14 fw-600">
+                                    <a
+                                      href={item?.foodSupplierLink}
+                                      target="_blank"
+                                      className="anchorBlue"
+                                    >
+                                      Food Link
+                                    </a>
+                                    <div className="dot"></div>
+                                    <a
+                                      href={item?.beverageSupplierLink}
+                                      target="_blank"
+                                      className="anchorBlue"
+                                    >
+                                      Beverage Link
+                                    </a>
+                                  </div>
+                                </div>
+
+                                <div className="divider16"></div>
+                                <div className="d-flex align-center fs-12 justify-between gap-8">
+                                  <div className="anchorBlue">
+                                    View Ingredients
+                                  </div>
+                                  <div className="anchorBlue">
+                                    Preparation instructions
+                                  </div>
+                                </div>
                               </div>
-                              <div className="imageCollaps">
-                                <img src={coke} className="w-100 h-100" />
-                              </div>
-                              <div className="imageCollaps">
-                                <img src={coke} className="w-100 h-100" />
-                              </div>
-                              <div className="imageCollaps">
-                                <img src={coke} className="w-100 h-100" />
-                              </div>
-                              <div className="imageCollaps">
-                                <img src={coke} className="w-100 h-100" />
+
+                              <div
+                                className="btn btnSecondary"
+                                onClick={toggleSidebar}
+                              >
+                                View Details
                               </div>
                             </div>
-                            <div className="cursor-pointer fs-14 fw-600" onClick={()=>toggleSidebarMerchantViewAll()}>
-                              +10 more
-                            </div>
                           </div>
                         </div>
-                        <div className="">
-                          <div className="fs-14 mb-4">Buy it from here</div>
-                          <div className="d-flex align-center fs-14 fw-600">
-                            <a href="#" target="_blank" className="anchorBlue">
-                              Food Link
-                            </a>
-                            <div className="dot"></div>
-                            <a href="#" target="_blank" className="anchorBlue">
-                              Beverage Link
-                            </a>
-                          </div>
-                        </div>
-                        <div className="divider16"></div>
-                        <div className="d-flex align-center fs-12 justify-between gap-8">
-                          <div className="anchorBlue">View Ingredients</div>
-                          <div className="anchorBlue">
-                            Preparation instructions
-                          </div>
-                        </div>
-                      </div>
-                      <div className="btn btnSecondary" onClick={()=>toggleSidebar()}>View Details</div>
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
+                      </>
+                    );
+                  }
+                )}
+              </>
+            ) : (
+              <div className="noDataFound">No data found</div>
+            )}
           </div>
+          {savvyNudgesListSelector?.data?.data?.records?.length > 0 && (
+            <div className="d-flex align-center justify-between flexPagination">
+              <div className="fs-16">
+                {(() => {
+                  const start = (pagination.page - 1) * pagination.limit + 1;
+                  const end = Math.min(
+                    start +
+                      savvyNudgesListSelector?.data?.data?.records?.length -
+                      1,
+                    savvyNudgesListSelector?.data?.data?.recordsCount
+                  );
+                  return `Showing ${start} to ${end} of ${savvyNudgesListSelector?.data?.data?.recordsCount} Suppliers`;
+                })()}
+              </div>
+              <Pagination
+                current={pagination?.page}
+                pageSize={pagination?.limit}
+                total={savvyNudgesListSelector?.data?.data?.recordsCount}
+                onChange={handlePaginationChange}
+              />
+            </div>
+          )}
         </div>
       </div>
+
+      {/* Modals and Sidebars */}
       <div className="p-6 flex flex-wrap gap-4">
-        {/* Ant Design Modal for Playing Video */}
         <Modal
           open={!!activeVideoUrl}
           onCancel={() => setActiveVideoUrl(null)}
@@ -213,8 +341,17 @@ const SavvyNudge = () => {
             </div>
           )}
         </Modal>
-        <SavvyNudgeDetail isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} videoUrl="https://www.youtube.com/watch?v=dQw4w9WgXcQ" />
-        <MerchantViewAll isOpenMerchantViewAll={isSidebarOpenMerchantViewAll} toggleSidebarMerchantViewAll={toggleSidebarMerchantViewAll} />
+
+        <SavvyNudgeDetail
+          isOpen={isSidebarOpen}
+          toggleSidebar={toggleSidebar}
+          videoUrl="https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+        />
+
+        <MerchantViewAll
+          isOpenMerchantViewAll={isSidebarOpenMerchantViewAll}
+          toggleSidebarMerchantViewAll={toggleSidebarMerchantViewAll}
+        />
       </div>
     </>
   );

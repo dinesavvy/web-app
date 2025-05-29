@@ -2401,6 +2401,9 @@ textarea{
   .oneLine{
     width: 190px;
   }
+  .addMerchantGrid .oneLine {
+    width: 160px;
+  }
   .overviewCard{
     padding: 12px;
   }

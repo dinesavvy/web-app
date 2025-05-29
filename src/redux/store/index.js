@@ -47,6 +47,7 @@ import addBusinessSlice from "../action/addBusinessAdminSlice"
 import placeDetailsSlice from "../action/placeDetailsSlice"
 import createVersionSlice from "../action/createVersion";
 import settingListSlice from "../action/settingList";
+import savvyNudgesSlice from "../action/savvyNudgesList"
 
 const store = configureStore({
   reducer: {
@@ -98,7 +99,8 @@ const store = configureStore({
     addBusiness:addBusinessSlice,
     placeDetails:placeDetailsSlice,
     createVersion:createVersionSlice,
-    settingList:settingListSlice
+    settingList:settingListSlice,
+    savvyNudgesList:savvyNudgesSlice
   },
 });
 

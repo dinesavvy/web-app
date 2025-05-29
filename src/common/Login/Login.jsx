@@ -75,7 +75,6 @@ const Login = () => {
             >
               {({
                 isSubmitting,
-                /* and other goodies */
               }) => (
                 <Form>
                   <div className="mb-30">

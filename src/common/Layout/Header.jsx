@@ -114,6 +114,7 @@ const Header = ({ handleTrigger }) => {
     "/admin/edit-support" : "Verify Business",
     "/admin/settings" : "Settings",
     "/admin/savvy-nudge" : "Savvy Nudges",
+    "/admin/create-savvy-nudge":"Savvy Nudges"
   };
 
   return (

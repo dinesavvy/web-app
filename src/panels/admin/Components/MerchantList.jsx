@@ -36,8 +36,6 @@ const MerchantList = () => {
     setPagination((prev) => ({ ...prev, page: 1 })); // Reset to the first page on search
   };
 
-  
-
   const handleSearchAreaChange = (selectedAreas) => {
     setSearchArea(selectedAreas);
   };

@@ -15,7 +15,7 @@ import { businessFileUploadHandler } from "../../../redux/action/businessAction/
 import { useCommonMessage } from "../../../common/CommonMessage";
 import { Modal } from "antd";
 import FollowersModal from "../../admin/Components/FollowersModal/FollowersModal";
-import MerchantFollowerModal from "../../../common/merchantFollowerModal/MerchantFollowerModal";
+// import MerchantFollowerModal from "../../../common/merchantFollowerModal/MerchantFollowerModal";
 import { handleKeyPressSpace, handleNumberFieldLength } from "../../../common/commonFunctions/CommonFunctions";
 
 const NudgeTemplateMerchant = () => {
