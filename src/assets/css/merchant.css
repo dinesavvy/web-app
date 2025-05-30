@@ -947,6 +947,9 @@
 input[type="radio"] {
   display: none;
 }
+.custom-label input[type="checkbox"] {
+  display: none;
+}
 
 .custom-label {
   border: 1px solid #EEF0F2;
@@ -975,6 +978,9 @@ input[type="radio"] {
 }
 
 input[type="radio"]:checked+.custom-radio-button {
+  display: flex;
+}
+input[type="checkbox"]:checked+.custom-radio-button {
   display: flex;
 }
 
@@ -2258,9 +2264,15 @@ textarea{
 .wordWrapNone {
   white-space: nowrap;
 }
+.overflowGrid{
+    max-height: 400px;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+}
 .addMerchantGrid{
   display: grid;
   grid-template-columns: repeat(4,1fr);
+
 }
 .customItemAccordian{
   padding: 0 !important; 

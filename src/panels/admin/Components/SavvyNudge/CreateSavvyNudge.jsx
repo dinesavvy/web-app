@@ -6,7 +6,7 @@ import closeRightSidebar from "../../../../assets/images/closeRightSidebar.svg";
 // import dish2 from "../../../../assets/images/dish2.png";
 import pairingImg from "../../../../assets/images/pairingImg.png";
 import destinationImg from "../../../../assets/images/destination.png";
-import { DatePicker } from "antd";
+import { DatePicker, Space } from "antd";
 import addPlusIcon from "../../../../assets/images/addPlusIcon.svg";
 import merchantMilesSelected from "../../../../assets/images/merchantMilesSelected.svg";
 import playbtn from "../../../../assets/images/playbtn.svg";
@@ -20,12 +20,25 @@ import MerchantViewAll from "./MerchantViewAll";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import { validationSchema } from "./savvyNudgeValidation";
 import MerchantListModal from "./MerchantListModal";
+import moment from "moment";
+import {
+  createSavvyNudgeAction,
+  createSavvyNudgeHandler,
+} from "../../../../redux/action/createSavvyNudge";
+import { useDispatch, useSelector } from "react-redux";
+import Loader from "../../../../common/Loader/Loader";
+import { useCommonMessage } from "../../../../common/CommonMessage";
 
 const CreateSavvyNudge = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [selectMerchantList, setSelectMerchantList] = useState(false);
   const todayPlus3 = dayjs().add(3, "day").startOf("day");
+  const messageApi = useCommonMessage();
+  const createSavvyNudgeSelector = useSelector(
+    (state) => state?.createSavvyNudge
+  );
 
   const handleKeyPress = (e) => {
     const regex = /[0-9/]/;
@@ -69,27 +82,62 @@ const CreateSavvyNudge = () => {
 
   const embeddedUrl = videoId ? `https://www.youtube.com/embed/${videoId}` : "";
 
+  const [selectedMerchants, setSelectedMerchants] = useState([]);
+
   const options = ["25", "50", "100", "250", "National"];
   const [selected, setSelected] = useState("25");
 
   const handleFormSubmit = (values) => {
-    console.log(values, "values");
+    let payload = {
+      title: values?.title.trim(),
+      description: values?.description.trim(),
+      launchDate: values?.launchDate,
+      duration: 5,
+      youtubeUrl: youtubeUrl,
+      merchants: selectedMerchants.map((item) => ({ id: item?._id })),
+      targetRadius: selected,
+      requiredIngredients: values?.requiredIngredients.trim(),
+      preparationInstructions: values?.preparationInstructions.trim(),
+      foodSupplierLink: values?.foodSupplierLink,
+      beverageSupplierLink: values?.beverageSupplierLink,
+    };
+    console.log(payload, "payload");
+    dispatch(createSavvyNudgeHandler(payload));
   };
 
   const [selectedDuration, setSelectedDuration] = useState("");
 
-  const durationOptions = ["5 days", "10 days", "15 days", "30 days"];
+  const durationOptions = ["5", "10", "15", "30"];
 
-  const filteredOptions = selectedIndex === 0 ? ["5 days"] : durationOptions;
+  const filteredOptions = selectedIndex === 0 ? ["5"] : durationOptions;
 
   const handleDurationChange = (value) => {
     setSelectedDuration(value);
   };
 
-  console.log(selectedDuration, "selectedDuration");
+  const handleMerchantSelectionChange = (selected) => {
+    setSelectedMerchants(selected);
+  };
+  useEffect(() => {
+    if (createSavvyNudgeSelector?.message?.statusCode === 400) {
+      messageApi.open({
+        type: "error",
+        content: createSavvyNudgeSelector?.message?.message,
+      });
+      dispatch(createSavvyNudgeAction.createSavvyNudgeReset());
+    } else if (createSavvyNudgeSelector?.data?.statusCode === 200) {
+      messageApi.open({
+        type: "success",
+        content: createSavvyNudgeSelector?.message?.message,
+      });
+      dispatch(createSavvyNudgeAction.createSavvyNudgeReset());
+      navigate("/admin/savvy-nudge");
+    }
+  }, [createSavvyNudgeSelector]);
 
   return (
     <>
+      {createSavvyNudgeSelector?.isLoading && <Loader />}
       <Formik
         initialValues={{
           title: "",
@@ -97,6 +145,9 @@ const CreateSavvyNudge = () => {
           launchDate: null,
           requiredIngredients: "",
           preparationInstructions: "",
+          foodSupplierLink: "",
+          beverageSupplierLink: "",
+          youtubeUrl: "",
         }}
         validationSchema={validationSchema}
         onSubmit={(values, formikBag) => {
@@ -120,7 +171,7 @@ const CreateSavvyNudge = () => {
                 </div>
                 <div className="divider2"></div>
                 <div className="savvyGrid">
-                  {images.map((item, index) => (
+                  {images?.map((item, index) => (
                     <div
                       key={index}
                       className={`savvyImageSelect ${
@@ -129,9 +180,9 @@ const CreateSavvyNudge = () => {
                       onClick={() => setSelectedIndex(index)}
                     >
                       <div className="gradiant"></div>
-                      <div className="fs-18 fw-600 savvyname">{item.name}</div>
+                      <div className="fs-18 fw-600 savvyname">{item?.name}</div>
                       <img
-                        src={item.src}
+                        src={item?.src}
                         alt={`Dish ${index}`}
                         className="w-100 h-100"
                       />
@@ -193,7 +244,7 @@ const CreateSavvyNudge = () => {
                           >
                             Savvy Nudge Launch Date
                           </label>
-                          <DatePicker
+                          {/* <DatePicker
                             needConfirm
                             placeholder="Set merchant availability period"
                             suffixIcon={
@@ -209,16 +260,43 @@ const CreateSavvyNudge = () => {
                             disabledDate={disableBeforeThreeDays}
                             onKeyPress={handleKeyPress}
                             value={field.value} // Binds to Formik value
-                            onChange={(date) =>
-                              form.setFieldValue("launchDate", date)
-                            } // Updates Formik
+                            // onChange={(date) =>
+                            //   form.setFieldValue("launchDate", date)
+                            // } // Updates Formik
+
+                            onChange={(date, dateString) => {
+                              // form.setFieldValue("launchDate", date || today); // fallback to today
+                              form.setFieldValue("launchDate", dateString);
+                            }}
+                          /> */}
+
+                          {/* <Space direction="vertical"> */}
+                          <DatePicker
+                            placeholder="Set merchant availability period"
+                            onKeyPress={handleKeyPress}
+                            disabledDate={disableBeforeThreeDays}
+                            className="w-100 datePickerinput"
+                            // placeholder="YYYY-MM-DD"
+                            suffixIcon={
+                              <img
+                                src={calender}
+                                className="calenderIcon"
+                                alt=""
+                              />
+                            }
+                            format="YYYY-MM-DD"
+                            onChange={(date, dateString) => {
+                              form.setFieldValue("launchDate", dateString);
+                            }}
+                            allowClear={false}
                           />
-                          {form?.touched?.launchDate &&
+                          {/* </Space> */}
+                          {/* {form?.touched?.launchDate &&
                             form?.errors?.launchDate && (
                               <div className="mt-10 fw-500 fs-14 error">
                                 {form?.errors?.launchDate}
                               </div>
-                            )}
+                            )} */}
                         </div>
                       )}
                     </Field>
@@ -254,12 +332,13 @@ const CreateSavvyNudge = () => {
                     <label htmlFor="name" className=" mb-10 fs-16 fw-500">
                       Youtube Video Link
                     </label>
-                    <input
+                    <Field
                       type="text"
                       className="input"
                       placeholder="https://www.youtube.com/embed/tgbNymZ7vqY"
                       value={youtubeUrl}
                       onChange={handleUrlChange}
+                      name="youtubeUrl"
                     />
                   </div>
                   {videoId && (
@@ -295,6 +374,14 @@ const CreateSavvyNudge = () => {
                 <div className="fs-20 fw-700 mb-10">Merchant</div>
                 <div className="d-flex flex-wrap mb-20 align-center gap-10">
                   {/* <div className="merchantSelectList fs-14">Starbucks</div> */}
+                  {/* selectedMerchants */}
+                  {selectedMerchants?.map((item) => {
+                    return (
+                      <div className="merchantSelectList fs-14" key={item?._id}>
+                        {item?.businessName}
+                      </div>
+                    );
+                  })}
                   <div
                     className="merchantAddList fs-14 cursor-pointer"
                     onClick={() => setSelectMerchantList(true)}
@@ -377,20 +464,22 @@ const CreateSavvyNudge = () => {
                 <div className="inputGrid gap-20">
                   <div className="">
                     <label className=" mb-10 fs-16 fw-500">Food Ordering</label>
-                    <input
+                    <Field
                       type="text"
                       className="input"
                       placeholder="Link to the Supplier/Distributor that provides the food ingredients"
+                      name="foodSupplierLink"
                     />
                   </div>
                   <div className="">
                     <label className=" mb-10 fs-16 fw-500">
                       Beverage Ordering
                     </label>
-                    <input
+                    <Field
                       type="text"
                       className="input"
                       placeholder="Link to the Supplier/Distributor that provides the beverage"
+                      name="beverageSupplierLink"
                     />
                   </div>
                 </div>
@@ -466,8 +555,13 @@ const CreateSavvyNudge = () => {
       {/* MerchantList Modal */}
       {selectMerchantList && (
         <MerchantListModal
+          // selectMerchantList={selectMerchantList}
+          // setSelectMerchantList={setSelectMerchantList}
           selectMerchantList={selectMerchantList}
           setSelectMerchantList={setSelectMerchantList}
+          onSelectionChange={handleMerchantSelectionChange}
+          setSelectedMerchants={setSelectedMerchants}
+          selectedMerchants={selectedMerchants}
         />
       )}
     </>

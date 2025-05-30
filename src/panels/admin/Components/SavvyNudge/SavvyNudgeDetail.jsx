@@ -7,12 +7,21 @@ import arrowUp from "../../../../assets/images/arrow-up.svg";
 import noImageFound from "../../../../assets/images/noImageFound.png";
 import MerchantViewAll from "./MerchantViewAll";
 import { Modal } from "antd";
-const SavvyNudgeDetail = ({ isOpen, toggleSidebar, videoUrl }) => {
+import moment from "moment";
+
+const SavvyNudgeDetail = ({
+  isOpen,
+  toggleSidebar,
+  videoUrl,
+  savvyNudgeDetailsSelector,
+}) => {
   const getYouTubeVideoId = (url) => {
     const match = url.match(/(?:youtube\.com\/.*v=|youtu\.be\/)([^&\n?#]+)/);
     return match ? match[1] : null;
   };
-  const videoId = getYouTubeVideoId(videoUrl);
+  const videoId = getYouTubeVideoId(
+    savvyNudgeDetailsSelector?.data?.data?.youtubeUrl
+  );
   const thumbnailUrl = videoId
     ? `https://img.youtube.com/vi/${videoId}/0.jpg`
     : noImageFound;
@@ -36,43 +45,43 @@ const SavvyNudgeDetail = ({ isOpen, toggleSidebar, videoUrl }) => {
     };
   }, [isSidebarOpenMerchantViewAll]);
 
-  const staticData = [
-    {
-      businessName: "Olive Garden",
-      logoUrl: noImageFound,
-      promotionStatus: "Accepted",
-      sent: 120,
-      accepted: 15.99,
-      declined: 12.99,
-      redeemed: 500,
-    },
-    {
-      businessName: "Taco Bell",
-      logoUrl: noImageFound,
-      promotionStatus: "Accepted",
-      sent: 80,
-      accepted: 10.0,
-      declined: 8.0,
-      redeemed: 300,
-    },
-    {
-      businessName: "Pizza Hut",
-      logoUrl: noImageFound,
-      promotionStatus: "Rejected",
-      sent: 200,
-      accepted: 20.0,
-      declined: 15.5,
-      redeemed: 750,
-    },
-  ];
+  // const staticData = [
+  //   {
+  //     businessName: "Olive Garden",
+  //     logoUrl: noImageFound,
+  //     promotionStatus: "Accepted",
+  //     sent: 120,
+  //     accepted: 15.99,
+  //     declined: 12.99,
+  //     redeemed: 500,
+  //   },
+  //   {
+  //     businessName: "Taco Bell",
+  //     logoUrl: noImageFound,
+  //     promotionStatus: "Accepted",
+  //     sent: 80,
+  //     accepted: 10.0,
+  //     declined: 8.0,
+  //     redeemed: 300,
+  //   },
+  //   {
+  //     businessName: "Pizza Hut",
+  //     logoUrl: noImageFound,
+  //     promotionStatus: "Rejected",
+  //     sent: 200,
+  //     accepted: 20.0,
+  //     declined: 15.5,
+  //     redeemed: 750,
+  //   },
+  // ];
   const staticData2 = [
     {
-      businessName: "Pizza Dough Ingredients",
-      text:"Lorem ipsum dolor sit amet consectetur adipisicing elit. Officiis, tempore suscipit laborum placeat, assumenda voluptas delectus nostrum repellat possimus nisi inventore quis alias temporibus, soluta atque quas nihil pariatur laboriosam?"
+      businessName: "Ingredients",
+      text: savvyNudgeDetailsSelector?.data?.data?.requiredIngredients,
     },
     {
-        businessName: "Preparation instructions",
-        text:"Lorem ipsum dolor sit amet consectetur adipisicing elit. Officiis, tempore suscipit laborum placeat, assumenda voluptas delectus nostrum repellat possimus nisi inventore quis alias temporibus, soluta atque quas nihil pariatur laboriosam?"
+      businessName: "Preparation instructions",
+      text: savvyNudgeDetailsSelector?.data?.data?.preparationInstructions,
     },
   ];
   return (
@@ -94,13 +103,19 @@ const SavvyNudgeDetail = ({ isOpen, toggleSidebar, videoUrl }) => {
               {/* successNailedIt */}
               <div className="br10 mb-20 sidebarSavvynudge">
                 <div className="nailedIt  active fs-14 ">
-                  <img src={remainTime} className="remainTime" alt="" /> Expires
-                  in 5 days
+                  <img src={remainTime} className="remainTime" alt="" />{" "}
+                  {moment(
+                    savvyNudgeDetailsSelector?.data?.data?.expireDate
+                  ).format("MMMM Do YYYY")}
                 </div>
 
                 <div
                   className="text-center minsavvynudgevideo "
-                  onClick={() => setActiveVideoUrl(videoUrl)}
+                  onClick={() =>
+                    setActiveVideoUrl(
+                      savvyNudgeDetailsSelector?.data?.data?.youtubeUrl
+                    )
+                  }
                 >
                   <img src={playbtn} className="playbtn" alt="" />
                   <img
@@ -113,30 +128,56 @@ const SavvyNudgeDetail = ({ isOpen, toggleSidebar, videoUrl }) => {
               </div>
               <div className=" d-flex flexColumn  flex1 gap-20 justify-between">
                 <div>
-                  <div className="fs-16 fw-700">Title</div>
+                  <div className="fs-16 fw-700">
+                    {savvyNudgeDetailsSelector?.data?.data?.title}
+                  </div>
                   <div className="fs-14">
-                    Get 20% off on all large pizzas today! Limited time offer.
+                    {/* Get 20% off on all large pizzas today! Limited time offer. */}
+                    {savvyNudgeDetailsSelector?.data?.data?.description}
                   </div>
                   <div className="divider16"></div>
                   <div className="mb-16">
                     <div className="fs-14 mb-4">Time Frame</div>
-                    <div className="fs-14 fw-600">10/05/2025 - 15/05/2025</div>
+                    <div className="fs-14 fw-600">
+                      {moment(
+                        savvyNudgeDetailsSelector?.data?.data?.createdAt
+                      ).format("DD/MM/YYYY")}{" "}
+                      -{" "}
+                      {moment(
+                        savvyNudgeDetailsSelector?.data?.data?.expireDate
+                      ).format("DD/MM/YYYY")}
+                    </div>
                   </div>
                   <div className="mb-16">
                     <div className="fs-14 mb-4">Audience Targeting</div>
                     <div className="fs-14 fw-600">
-                      All followers and everyone within 25 mi
+                      {/* All followers and everyone within 25 mi */}
+                      {savvyNudgeDetailsSelector?.data?.data?.audience || "-"}
                     </div>
                   </div>
 
                   <div className="">
                     <div className="fs-14 mb-4">Buy it from here</div>
                     <div className="d-flex align-center fs-14 fw-600">
-                      <a href="#" target="_blank" className="anchorBlue">
+                      <a
+                        href={
+                          savvyNudgeDetailsSelector?.data?.data
+                            ?.foodSupplierLink
+                        }
+                        target="_blank"
+                        className="anchorBlue"
+                      >
                         Food Link
                       </a>
                       <div className="dot"></div>
-                      <a href="#" target="_blank" className="anchorBlue">
+                      <a
+                        href={
+                          savvyNudgeDetailsSelector?.data?.data
+                            ?.beverageSupplierLink
+                        }
+                        target="_blank"
+                        className="anchorBlue"
+                      >
                         Beverage Link
                       </a>
                     </div>
@@ -145,121 +186,133 @@ const SavvyNudgeDetail = ({ isOpen, toggleSidebar, videoUrl }) => {
                   <div className="accordionCustom accordion-custom">
                     {staticData2.map((item, index) => (
                       <>
-                      <div className="accordion-item accordionItem customItemAccordian" key={index}>
                         <div
-                          className="accordionHeader  fs-22 fw-700"
-                          onClick={() =>
-                            setOpenIndex2(openIndex2 === index ? null : index)
-                          }
+                          className="accordion-item accordionItem customItemAccordian"
+                          key={index}
                         >
-                          <div>{item.businessName}</div>
-                          <div className="d-flex align-center gap-16">
-                           
-                            <div
-                              className={`arrow ${
-                                openIndex2 === index ? "open" : ""
-                              }`}
-                            >
-                              <img
-                                src={arrowUp}
-                                alt="arrowUp"
-                                className="arrowUp"
-                              />
+                          <div
+                            className="accordionHeader  fs-22 fw-700"
+                            onClick={() =>
+                              setOpenIndex2(openIndex2 === index ? null : index)
+                            }
+                          >
+                            <div>{item.businessName}</div>
+                            <div className="d-flex align-center gap-16">
+                              <div
+                                className={`arrow ${
+                                  openIndex2 === index ? "open" : ""
+                                }`}
+                              >
+                                <img
+                                  src={arrowUp}
+                                  alt="arrowUp"
+                                  className="arrowUp"
+                                />
+                              </div>
                             </div>
                           </div>
-                        </div>
 
-                        <div
-                          className={`accordion-content customContentAccordian ${
-                            openIndex2 === index ? "open" : ""
-                          }`}
-                        >
-                          <p className="fs-14">
-                            {item.text}
-                          </p>
+                          <div
+                            className={`accordion-content customContentAccordian ${
+                              openIndex2 === index ? "open" : ""
+                            }`}
+                          >
+                            <p className="fs-14">{item.text}</p>
+                          </div>
                         </div>
-                      </div>
-                      <div className="divider2"></div></>
+                        <div className="divider2"></div>
+                      </>
                     ))}
                   </div>
+
                   <div className="d-flex align-center justify-between gap-10 mb-20">
                     <div className="fs-22 fw-700">Merchants</div>
+                    {savvyNudgeDetailsSelector?.data?.data?.merchants?.length>=5 && (
                     <div
                       className="pc fs-14 fw-600 cursor-pointer"
                       onClick={() => toggleSidebarMerchantViewAll()}
                     >
                       View All
                     </div>
+                    )}
                   </div>
                   <div className="accordionCustom">
-                    {staticData.map((item, index) => (
-                      <div className="accordion-item" key={index}>
-                        <div
-                          className="accordionHeader fs-16 fw-700"
-                          onClick={() =>
-                            setOpenIndex(openIndex === index ? null : index)
-                          }
-                        >
-                          <div>{item.businessName}</div>
-                          <div className="d-flex align-center gap-16">
-                            <div className="fs-16 fw-600 roi brandred">
-                              {/* red , grren , brandred */}
-                              {item.promotionStatus}
+                    {savvyNudgeDetailsSelector?.data?.data?.merchants?.map(
+                      (item, index) => (
+                        <div className="accordion-item" key={index}>
+                          <div
+                            className="accordionHeader fs-16 fw-700"
+                            onClick={() =>
+                              setOpenIndex(openIndex === index ? null : index)
+                            }
+                          >
+                            <div>{item.businessName}</div>
+                            <div className="d-flex align-center gap-16">
+                              <div
+                                className={`fs-16 fw-600 roi ${
+                                  item?.status === "pending"
+                                    ? "brandred"
+                                    : "green"
+                                }`}
+                              >
+                                {item?.status?.charAt(0).toUpperCase() + item?.status?.slice(1)}
+                              </div>
+
+                              <div
+                                className={`arrow ${
+                                  openIndex === index ? "open" : ""
+                                }`}
+                              >
+                                <img
+                                  src={arrowUp}
+                                  alt="arrowUp"
+                                  className="arrowUp"
+                                />
+                              </div>
                             </div>
-                            <div
-                              className={`arrow ${
-                                openIndex === index ? "open" : ""
-                              }`}
-                            >
+                          </div>
+
+                          <div
+                            className={`accordion-content ${
+                              openIndex === index ? "open" : ""
+                            }`}
+                          >
+                            <div className="imageAccorddian mb-20">
                               <img
-                                src={arrowUp}
-                                alt="arrowUp"
-                                className="arrowUp"
+                                src={noImageFound}
+                                alt="logo"
+                                className="h-100 object-cover"
                               />
                             </div>
-                          </div>
-                        </div>
 
-                        <div
-                          className={`accordion-content ${
-                            openIndex === index ? "open" : ""
-                          }`}
-                        >
-                          <div className="imageAccorddian mb-20">
-                            <img
-                              src={item.logoUrl}
-                              alt="logo"
-                              className="h-100 object-cover"
-                            />
-                          </div>
-
-                          <div className="grid2 ">
-                            <div>
-                              <div className="fs-14 mb-4">Sent</div>
-                              <div className="fs-14 fw-600">{item.sent}</div>
-                            </div>
-                            <div>
-                              <div className="fs-14 mb-4">Accepted:</div>
-                              <div className="fs-14 fw-600 greenText">
-                                ${item.accepted}
+                            <div className="grid2 ">
+                              <div>
+                                <div className="fs-14 mb-4">Sent</div>
+                                <div className="fs-14 fw-600">{item?.sent}</div>
                               </div>
-                            </div>
-                            <div>
-                              <div className="fs-14 mb-4">Declined:</div>
-                              <div className="fs-14 fw-600 brandRed">
-                                ${item.declined}
+                              <div>
+                                <div className="fs-14 mb-4">Accepted:</div>
+                                <div className="fs-14 fw-600 greenText">
+                                  ${item.accepted}
+                                </div>
                               </div>
-                            </div>
-                            <div>
-                              <div className="fs-14 mb-4">Redeemed</div>
-                              <div className="fs-14 fw-600 greyColor">
-                                ${item.redeemed}
+                              <div>
+                                <div className="fs-14 mb-4">Declined:</div>
+                                <div className="fs-14 fw-600 brandRed">
+                                  ${item.declined}
+                                </div>
+                              </div>
+                              <div>
+                                <div className="fs-14 mb-4">Redeemed</div>
+                                <div className="fs-14 fw-600 greyColor">
+                                  ${item.redeemed}
+                                </div>
                               </div>
                             </div>
                           </div>
                         </div>
-                      </div>
-                    ))}
+                      )
+                    )}
                   </div>
                 </div>
               </div>

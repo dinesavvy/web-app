@@ -48,6 +48,8 @@ import placeDetailsSlice from "../action/placeDetailsSlice"
 import createVersionSlice from "../action/createVersion";
 import settingListSlice from "../action/settingList";
 import savvyNudgesSlice from "../action/savvyNudgesList"
+import createSavvyNudgeSlice from "../action/createSavvyNudge"
+import savvyNudgeDetailsSlice from "../action/savvyNudgeDetails"
 
 const store = configureStore({
   reducer: {
@@ -100,7 +102,9 @@ const store = configureStore({
     placeDetails:placeDetailsSlice,
     createVersion:createVersionSlice,
     settingList:settingListSlice,
-    savvyNudgesList:savvyNudgesSlice
+    savvyNudgesList:savvyNudgesSlice,
+    createSavvyNudge:createSavvyNudgeSlice,
+    savvyNudgeDetails:savvyNudgeDetailsSlice
   },
 });
 

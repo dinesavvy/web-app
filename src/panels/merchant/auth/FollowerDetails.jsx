@@ -140,7 +140,6 @@ const FollowerDetails = ({
                 <div key={index}>No data available</div>
               );
             })} */}
-            {console.log(followerDetails?.customerPreferenceData?.filterData,"followerDetails?.customerPreferenceData?.personalPreference")}
             {followerDetails?.customerPreferenceData?.personalPreference
               ?.length > 0 ? (
               <>

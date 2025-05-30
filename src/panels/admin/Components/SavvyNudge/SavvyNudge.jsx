@@ -13,7 +13,7 @@ import { savvyNudgesListHandler } from "../../../../redux/action/savvyNudgesList
 import Loader from "../../../../common/Loader/Loader";
 import moment from "moment";
 import { Pagination } from "antd";
-
+import { savvyNudgeDetailsHandler } from "../../../../redux/action/savvyNudgeDetails";
 
 const getYoutubeId = (url) => {
   const regExp =
@@ -33,14 +33,30 @@ const SavvyNudge = () => {
   };
   const [activeVideoUrl, setActiveVideoUrl] = useState(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const toggleSidebar = () => {
-    setIsSidebarOpen((prevState) => !prevState);
-  };
 
-  const handleSearchChange = (value) => {
-    setSearchString(value);
-    setPagination((prev) => ({ ...prev, page: 1 })); // Reset to the first page on search
+  const savvyNudgeDetailsSelector = useSelector(
+    (state) => state?.savvyNudgeDetails
+  );
+
+  const toggleSidebar = (item) => {
+    // If sidebar is already open, just close it without calling API
+    if (isSidebarOpen) {
+      setIsSidebarOpen(false);
+      return;
+    }
+
+    // Only dispatch API call when opening
+    let payload = {
+      savvyNudgeId: item?._id,
+    };
+    dispatch(savvyNudgeDetailsHandler(payload));
   };
+  useEffect(() => {
+    if (savvyNudgeDetailsSelector?.data?.statusCode === 200) {
+      // setIsSidebarOpen((prevState) => !prevState);
+      setIsSidebarOpen(true);
+    }
+  }, [savvyNudgeDetailsSelector]);
 
   const handlePaginationChange = (page, pageSize) => {
     setPagination({ page, limit: pageSize });
@@ -75,17 +91,16 @@ const SavvyNudge = () => {
     };
   }, [isSidebarOpenMerchantViewAll]);
 
-  const videoLinks = [
-    "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-    "https://youtu.be/3JZ_D3ELwOQ",
-    "https://www.youtube.com/embed/tgbNymZ7vqY",
-  ];
+  // const videoLinks = [
+  //   "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+  //   "https://youtu.be/3JZ_D3ELwOQ",
+  //   "https://www.youtube.com/embed/tgbNymZ7vqY",
+  // ];
 
   const dispatch = useDispatch();
   const savvyNudgesListSelector = useSelector(
     (state) => state?.savvyNudgesList
   );
-  console.log(savvyNudgesListSelector, "savvyNudgesListSelector");
 
   useEffect(() => {
     let payload = {
@@ -95,11 +110,12 @@ const SavvyNudge = () => {
       isActive: activeTab,
     };
     dispatch(savvyNudgesListHandler(payload));
-  }, [pagination, activeTab]);
+  }, [pagination, activeTab, searchString]);
 
   return (
     <>
-      {savvyNudgesListSelector?.isLoading && <Loader />}
+      {(savvyNudgesListSelector?.isLoading ||
+        savvyNudgeDetailsSelector?.isLoading) && <Loader />}
       <div className="dashboard">
         <div className="tabPadding">
           <div className="d-flex justify-between align-center mb-20 gap-10 flexsm">
@@ -139,7 +155,6 @@ const SavvyNudge = () => {
               <>
                 {savvyNudgesListSelector?.data?.data?.records?.map(
                   (item, index) => {
-                    console.log(item,"ddsdsd")
                     const videoId = getYoutubeId(item?.youtubeUrl);
                     const thumbnail = `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
                     return (
@@ -156,7 +171,7 @@ const SavvyNudge = () => {
                                 alt=""
                               />
                               {/* Expires in 5 days */}
-                              {moment(item?.expireDate).format('MMMM Do YYYY')}
+                              {moment(item?.expireDate).format("MMMM Do YYYY")}
                             </div>
 
                             <div
@@ -217,23 +232,25 @@ const SavvyNudge = () => {
                                   <div className="fs-14 mb-4">Merchants</div>
                                   <div className="d-flex gap-8 align-center">
                                     <div className="position-relative d-flex borderImageCollaps">
-                                      {item?.merchants?.slice(0,5)?.map((_, i) => (
-                                        <div key={i} className="imageCollaps">
-                                          <img
-                                            src={coke}
-                                            className="w-100 h-100"
-                                            alt={item?.title}
-                                          />
-                                        </div>
-                                      ))}
+                                      {item?.merchants
+                                        ?.slice(0, 5)
+                                        ?.map((_, i) => (
+                                          <div key={i} className="imageCollaps">
+                                            <img
+                                              src={coke}
+                                              className="w-100 h-100"
+                                              alt={item?.title}
+                                            />
+                                          </div>
+                                        ))}
                                     </div>
-                                    {item?.merchants?.length >5 && (
-                                    <div
-                                      className="cursor-pointer fs-14 fw-600"
-                                      onClick={toggleSidebarMerchantViewAll}
-                                    >
-                                      +{item?.merchants?.length-5} more
-                                    </div>
+                                    {item?.merchants?.length > 5 && (
+                                      <div
+                                        className="cursor-pointer fs-14 fw-600"
+                                        onClick={toggleSidebarMerchantViewAll}
+                                      >
+                                        +{item?.merchants?.length - 5} more
+                                      </div>
                                     )}
                                   </div>
                                 </div>
@@ -274,7 +291,7 @@ const SavvyNudge = () => {
 
                               <div
                                 className="btn btnSecondary"
-                                onClick={toggleSidebar}
+                                onClick={() => toggleSidebar(item)}
                               >
                                 View Details
                               </div>
@@ -341,12 +358,14 @@ const SavvyNudge = () => {
             </div>
           )}
         </Modal>
-
-        <SavvyNudgeDetail
-          isOpen={isSidebarOpen}
-          toggleSidebar={toggleSidebar}
-          videoUrl="https://www.youtube.com/watch?v=dQw4w9WgXcQ"
-        />
+        {savvyNudgeDetailsSelector?.data?.statusCode === 200 && (
+          <SavvyNudgeDetail
+            isOpen={isSidebarOpen}
+            toggleSidebar={toggleSidebar}
+            savvyNudgeDetailsSelector={savvyNudgeDetailsSelector}
+            // videoUrl="https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+          />
+        )}
 
         <MerchantViewAll
           isOpenMerchantViewAll={isSidebarOpenMerchantViewAll}

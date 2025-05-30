@@ -3,7 +3,6 @@ import { useDragLayer } from "react-dnd";
 import noImageFound from "../../../assets/images/noImageFound.png";
 
 const CustomDragLayer = ({ merchants, items, merchantItemMain }) => {
-  console.log(merchantItemMain, "merchantItemMain");
   const { isDragging, item, currentOffset } = useDragLayer((monitor) => ({
     isDragging: monitor.isDragging(),
     item: monitor.getItem(),

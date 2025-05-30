@@ -149,7 +149,6 @@ const NudgeTemplate = () => {
               )}
             </div>
           </div>
-          {console.log(selectedItems,"selectedItems")}
           <Formik
             enableReinitialize
             initialValues={{

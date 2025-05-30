@@ -46,7 +46,6 @@ const NudgeCart = ({
       totalQuantity: Number(values?.quantity),
     };
     dispatch(createNudgeHandler(payload));
-    // console.log(payload,"payload")
   };
 
   useEffect(() => {

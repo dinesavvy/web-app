@@ -39,7 +39,6 @@ const Profile = () => {
   const [isSpecial, setIsSpecial] = useState(false);
 
   const fileuploadSelector = useSelector((state) => state?.businessFileUpload);
-  console.log(fileuploadSelector,"fileuploadSelector")
 
   const dispatch = useDispatch();
   const messageApi = useCommonMessage();
@@ -85,7 +84,6 @@ const Profile = () => {
       reader.readAsDataURL(file);
     }
   };
-console.log(fileuploadSelector,"fileuploadSelector")
   useEffect(() => {
     const uploadFile = async () => {
       if (fileuploadSelector?.data?.statusCode === 200) {
@@ -152,7 +150,6 @@ console.log(fileuploadSelector,"fileuploadSelector")
     setModalOpen(false);
     dispatch(addImageHandler(payload));
   };
-console.log(addImageDataSelector,"addImageDataSelector")
   useEffect(() => {
     if (addImageDataSelector?.message) {
       messageApi.open({

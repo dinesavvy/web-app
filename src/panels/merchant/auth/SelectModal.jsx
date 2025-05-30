@@ -84,7 +84,6 @@ const SelectModal = ({
             </div>
           </div>
           {/* List of items */}
-          {console.log(businessListSelector,"businessListSelector")}
           <div className="padding30 overflow-Y">
             {businessListSelector?.data?.data?.records?.length > 0 ? (
               <>

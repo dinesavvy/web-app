@@ -49,7 +49,6 @@ const MerchantDetails = () => {
   const [selectedItems, setSelectedItems] = useState([]);
   const [addNudgeCredit, setAddNudgeCredit] = useState(false);
   const [numberOfCredits, setNumberOfCredits] = useState("");
-console.log(activeTab3,"activeTab3")
   const addCreditSelector = useSelector((state) => state?.addCredit);
   const listByUserIdSelector = useSelector((state) => state?.listByUserId);
   const followerListSelector = useSelector((state) => state?.followeList);
@@ -72,7 +71,6 @@ console.log(activeTab3,"activeTab3")
   const addCreditsFuntion = () => {
     setAddNudgeCredit(true);
   };
-console.log(state,"state?.statePrev?.selectedItems")
   useEffect(() => {
     if (
       (state?.fromSelectAudience)

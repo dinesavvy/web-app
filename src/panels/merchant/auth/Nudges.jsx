@@ -336,7 +336,6 @@ const Nudges = () => {
             <div className="fs-18 fw-600">Nudges Expected This Week</div>
             <div className="fw-700 fs-20">124</div>
           </div> */}
-          {/* {console.log(nudgeAnalyticSelector,"nudgeAnalyticSelector")} */}
               <div className="card mb-20">
                 <div className="fs-20 fw-700 d-flex gap-20 align-center justify-between">
                   <div>Nudge Credits</div>

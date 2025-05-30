@@ -7,11 +7,22 @@ import { merchantsListHandler } from "../../../../redux/action/merchantsList";
 import Loader from "../../../../common/Loader/Loader";
 import noImageFound from "../../../../assets/images/noImageFound.png";
 import radioSelectedImage from "../../../../assets/images/radioSelected.svg";
+import InfiniteScroll from "react-infinite-scroll-component";
 
-const MerchantListModal = ({ selectMerchantList, setSelectMerchantList }) => {
+const MerchantListModal = ({
+  selectMerchantList,
+  setSelectMerchantList,
+  onSelectionChange,
+  setSelectedMerchants,
+  selectedMerchants
+}) => {
   const [searchString, setSearchString] = useState("");
+  // const [selectedMerchants, setSelectedMerchants] = useState([]);
   const merchantsListSelector = useSelector((state) => state?.merchantsList);
-  console.log(merchantsListSelector, "merchantsListSelector");
+
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+  const [merchantsData, setMerchantsData] = useState([]);
 
   const dispatch = useDispatch();
 
@@ -23,36 +34,81 @@ const MerchantListModal = ({ selectMerchantList, setSelectMerchantList }) => {
   useEffect(() => {
     const fetchMerchants = () => {
       const payload = {
-        page: 1,
+        page: page,
         limit: 10,
         timeFrame: "today",
-        searchString,
+        searchString: searchString,
         searchArea: [],
       };
       dispatch(merchantsListHandler(payload));
     };
 
     fetchMerchants();
-  }, [searchString]);
+  }, [searchString, page]);
 
-  const [selectedMerchants, setSelectedMerchants] = useState([]);
-const allMerchants = merchantsListSelector?.data?.data?.records || [];
 
-const handleSelectAll = () => {
-  const allIds = allMerchants.map((item) => item.id);
-  setSelectedMerchants(allIds);
-};
+  // Select all working functionality
+  // const handleSelectAllToggle = () => {
+  //   const allMerchants = merchantsListSelector?.data?.data?.records || [];
 
-const handleCheckboxChange = (id) => {
-  if (selectedMerchants.includes(id)) {
-    // Deselect if already selected
-    setSelectedMerchants(selectedMerchants.filter((item) => item !== id));
+  //   if (selectedMerchants.length) {
+  //     // Clear all
+  //     setSelectedMerchants([]);
+  //     onSelectionChange([]);
+  //   } else {
+  //     // Select all (store full objects)
+  //     setSelectedMerchants(allMerchants);
+  //     onSelectionChange(allMerchants);
+  //   }
+  // };
+
+  const handleSelectAllToggle = () => {
+  if (selectedMerchants?.length) {
+    // Clear all
+    setSelectedMerchants([]);
+    onSelectionChange([]);
   } else {
-    // Add to selected list
-    setSelectedMerchants([...selectedMerchants, id]);
+    // Select all loaded so far
+    setSelectedMerchants(merchantsData);
+    onSelectionChange(merchantsData);
   }
 };
 
+
+  const handleCheckboxToggle = (merchant) => {
+    setSelectedMerchants((prevSelected) => {
+      const exists = prevSelected.find((m) => m._id === merchant._id);
+
+      if (exists) {
+        // Remove merchant
+        return prevSelected.filter((m) => m._id !== merchant._id);
+      } else {
+        // Add merchant
+        return [...prevSelected, merchant];
+      }
+    });
+  };
+
+  const fetchMoreData = () => {
+    if (hasMore) {
+      setPage((prev) => prev + 1);
+    }
+  };
+
+  useEffect(() => {
+    if (merchantsListSelector?.data?.data?.records) {
+      if (page === 1) {
+        setMerchantsData(merchantsListSelector?.data?.data?.records);
+      } else {
+        setMerchantsData((prev) => [
+          ...prev,
+          ...merchantsListSelector?.data?.data?.records,
+        ]);
+      }
+      // Check if we have more data to load
+      setHasMore(merchantsListSelector?.data?.data?.records?.length === 10);
+    }
+  }, [merchantsListSelector?.data?.data?.records]);
 
   return (
     <>
@@ -60,9 +116,8 @@ const handleCheckboxChange = (id) => {
       <div>
         <Modal
           centered
-          visible={selectMerchantList} // Control the visibility of the modal  // Handle close
-          footer={null} // Hide the footer (buttons)
-          // closable={false}
+          visible={selectMerchantList}
+          footer={null}
           className="selecModalFollowerList"
           onOk={() => setSelectMerchantList(false)}
           onCancel={() => setSelectMerchantList(false)}
@@ -81,73 +136,85 @@ const handleCheckboxChange = (id) => {
             <SearchSelect onSearchChange={handleSearchChange} />
             <div
               className="fs-16 fw-600 pc wordWrapNone cursor-pointer"
-              onClick={handleSelectAll}
+              onClick={handleSelectAllToggle}
             >
-              Select All
+              {/* {selectedMerchants.length ===
+              merchantsListSelector?.data?.data?.records?.length
+                ? "Clear All"
+                : "Select All"} */}
+              {selectedMerchants?.length > 0 ? "Clear All" : "Select All"}
             </div>
           </div>
-          <div className="addMerchantGrid gap-20 mb-20">
-            {merchantsListSelector?.data?.data?.records?.length > 0 ? (
-              <>
-                {merchantsListSelector?.data?.data?.records?.map(
-                  (item, index) => {
-                    return (
-                      <label class="custom-label w-100" key={index}>
-                        <input
-                          autoComplete="off"
-                          type="radio"
-                          name="option"
-                          onChange={() => {
-                            setIsSelectAll(false); 
-                          }}
-                        />
-                        <div class="custom-radio-button">
-                          <img
-                            src={radioSelectedImage}
-                            alt={item?.businessName}
-                          />
+          <InfiniteScroll
+            className="overflowGrid"
+            dataLength={merchantsData?.length}
+            next={fetchMoreData}
+            hasMore={hasMore}
+            scrollableTarget="selectMerchant"
+            height={280}
+          >
+            <div className="addMerchantGrid gap-20 mb-20">
+              {merchantsData?.map((item, index) => {
+                return (
+                  <label className="custom-label w-100" key={index}>
+                    <input
+                      autoComplete="off"
+                      type="checkbox"
+                      name="option"
+                      checked={selectedMerchants.some(
+                        (merchant) => merchant._id === item._id
+                      )}
+                      onChange={() => handleCheckboxToggle(item)}
+                    />
+                    <div className="custom-radio-button">
+                      <img src={radioSelectedImage} alt={item?.businessName} />
+                    </div>
+                    <div className="radioImage">
+                      <img
+                        alt={item?.businessName}
+                        src={item?.logoUrl || noImageFound}
+                      />
+                    </div>
+                    <div className="radioCafeName">
+                      <div>
+                        <div className="pc fs-14 fw-500 oneLine">
+                          {item?.businessName &&
+                            item?.businessName.charAt(0).toUpperCase() +
+                              item?.businessName.slice(1)}
                         </div>
-                        <div class="radioImage">
-                          <img
-                            alt={item?.businessName}
-                            src={item?.logoUrl || noImageFound}
-                          />
+                        <div className="fs-12 oneLine">
+                          {" "}
+                          {[
+                            item?.address?.administrativeDistrictLevel1,
+                            item?.address?.country,
+                            item?.address?.locality,
+                            item?.address?.postalCode,
+                          ]
+                            .filter(Boolean)
+                            .join(", ")}
                         </div>
-                        <div class="radioCafeName">
-                          <div>
-                            <div class="pc fs-14 fw-500 oneLine">
-                              {item?.businessName &&
-                                item?.businessName.charAt(0).toUpperCase() +
-                                  item?.businessName.slice(1)}
-                            </div>
-                            <div class="fs-12 oneLine">
-                              {" "}
-                              {[
-                                item?.address?.administrativeDistrictLevel1,
-                                item?.address?.country,
-                                item?.address?.locality,
-                                item?.address?.postalCode,
-                              ]
-                                .filter(Boolean)
-                                .join(", ")}
-                            </div>
-                          </div>
-                        </div>
-                      </label>
-                    );
-                  }
-                )}
-              </>
-            ) : (
-              <div className="noDataFound">No data found</div>
-            )}
-          </div>
+                      </div>
+                    </div>
+                  </label>
+                );
+              })}
+            </div>
+          </InfiniteScroll>
           {merchantsListSelector?.data?.data?.records?.length > 0 && (
             <>
-              <div className="pc text-center cursor-pointer">View More</div>
-              <div className="divider2"></div>
+              {/* <div className="pc text-center cursor-pointer">View More</div> */}
+              {/* <div className="divider2"></div> */}
               <div className="d-flex justify-end">
-                <div className="btn p32">Add</div>
+                <button
+                  type="submit"
+                  className="btn p32"
+                  onClick={() => {
+                    onSelectionChange(selectedMerchants);
+                    setSelectMerchantList(false); // close modal
+                  }}
+                >
+                  Add
+                </button>
               </div>
             </>
           )}

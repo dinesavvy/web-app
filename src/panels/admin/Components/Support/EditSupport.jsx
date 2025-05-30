@@ -384,9 +384,7 @@ const EditSupport = () => {
         otherImages: [],
       },
     };
-    // console.log("payload",payload)
     dispatch(addBusinessHandler(payload));
-    // Handle form submission here
     // setEditDetail(false);
     // setSubmitting(false);
   };
