@@ -5,12 +5,14 @@ import savvynudge from "../../../../assets/images/savvynudge.svg";
 import playbtn from "../../../../assets/images/playbtn.svg";
 import arrowUp from "../../../../assets/images/arrow-up.svg";
 import noImageFound from "../../../../assets/images/noImageFound.png";
+
 const MerchantViewAll = ({
   isOpenMerchantViewAll,
   toggleSidebarMerchantViewAll,
+  merchantInnerDrawer,
 }) => {
-  const [openIndex, setOpenIndex] = useState(null);
 
+  const [openIndex, setOpenIndex] = useState(null);
   const staticData = [
     {
       businessName: "Olive Garden",
@@ -54,22 +56,27 @@ const MerchantViewAll = ({
             <img src={closeRightSidebar} alt="closeRightSidebar" />
           </div>
         </div>
-        
+
         <div className="divider2"></div>
         <div className="overflowSidebar">
           <div className="accordionCustom">
-            {staticData.map((item, index) => (
+            {merchantInnerDrawer?.merchants?.map((item, index) => (
               <div
                 className="accordion-item cursor-pointer"
                 key={index}
                 onClick={() => setOpenIndex(openIndex === index ? null : index)}
               >
                 <div className="accordionHeader fs-16 fw-700">
-                  <div>{item.businessName}</div>
+                  <div>{item.details?.businessName}</div>
                   <div className="d-flex align-center gap-16">
-                    <div className="fs-16 fw-600 roi brandred">
+                    <div
+                      className={`fs-16 fw-600 roi ${
+                        item?.status === "pending" ? "brandred" : "green"
+                      }`}
+                    >
                       {/* red , grren , brandred */}
-                      {item.promotionStatus}
+                      {item?.status?.charAt(0).toUpperCase() +
+                        item?.status?.slice(1)}
                     </div>
                     <div
                       className={`arrow ${openIndex === index ? "open" : ""}`}
@@ -86,7 +93,7 @@ const MerchantViewAll = ({
                 >
                   <div className="imageAccorddian mb-20">
                     <img
-                      src={item.logoUrl}
+                      src={item?.details?.logoUrl ||noImageFound}
                       alt="logo"
                       className="h-100 object-cover"
                     />
@@ -95,24 +102,27 @@ const MerchantViewAll = ({
                   <div className="grid2 ">
                     <div>
                       <div className="fs-14 mb-4">Sent</div>
-                      <div className="fs-14 fw-600">{item.sent}</div>
+                      <div className="fs-14 fw-600">200</div>
                     </div>
                     <div>
                       <div className="fs-14 mb-4">Accepted:</div>
                       <div className="fs-14 fw-600 greenText">
-                        ${item.accepted}
+                        {/* ${item.accepted} */}
+                        150/75%
                       </div>
                     </div>
                     <div>
                       <div className="fs-14 mb-4">Declined:</div>
                       <div className="fs-14 fw-600 brandRed">
-                        ${item.declined}
+                        {/* ${item.declined} */}
+                        30/15%
                       </div>
                     </div>
                     <div>
                       <div className="fs-14 mb-4">Redeemed</div>
                       <div className="fs-14 fw-600 greyColor">
-                        ${item.redeemed}
+                        {/* ${item.redeemed} */}
+                        20/10%
                       </div>
                     </div>
                   </div>

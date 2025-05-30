@@ -30,7 +30,10 @@ const SavvyNudgeDetail = ({
   const [isSidebarOpenMerchantViewAll, setIsSidebarOpenMerchantViewAll] =
     useState(false);
   const [activeVideoUrl, setActiveVideoUrl] = useState(null);
-  const toggleSidebarMerchantViewAll = () => {
+const [merchantInnerDrawer,setMerchantInnerDrawer] = useState([])
+
+  const toggleSidebarMerchantViewAll = (savvyNudgeDetailsSelector) => {
+    setMerchantInnerDrawer(savvyNudgeDetailsSelector?.data?.data)
     setIsSidebarOpenMerchantViewAll((prevState) => !prevState);
   };
   useEffect(() => {
@@ -84,6 +87,30 @@ const SavvyNudgeDetail = ({
       text: savvyNudgeDetailsSelector?.data?.data?.preparationInstructions,
     },
   ];
+
+
+const foodSupplierLink = (item) => {
+    if (item?.foodSupplierLink) {
+      window.open(item?.foodSupplierLink, "_blank");
+    } else {
+      messageApi.open({
+        type: "error",
+        content: "No food link Found",
+      });
+    }
+  };
+
+  const beverageLink = (item) => {
+    if (item?.beverageSupplierLink) {
+      window.open(item?.beverageSupplierLink, "_blank");
+    } else {
+      messageApi.open({
+        type: "error",
+        content: "No beverage link found",
+      });
+    }
+  };
+
   return (
     <>
       {isOpen && <div className="overlay2" onClick={toggleSidebar}></div>}
@@ -160,22 +187,24 @@ const SavvyNudgeDetail = ({
                     <div className="fs-14 mb-4">Buy it from here</div>
                     <div className="d-flex align-center fs-14 fw-600">
                       <a
-                        href={
-                          savvyNudgeDetailsSelector?.data?.data
-                            ?.foodSupplierLink
-                        }
-                        target="_blank"
+                        // href={
+                        //   savvyNudgeDetailsSelector?.data?.data
+                        //     ?.foodSupplierLink
+                        // }
+                        // target="_blank"
+                        onClick={() => foodSupplierLink(savvyNudgeDetailsSelector?.data?.data)}
                         className="anchorBlue"
                       >
                         Food Link
                       </a>
                       <div className="dot"></div>
                       <a
-                        href={
-                          savvyNudgeDetailsSelector?.data?.data
-                            ?.beverageSupplierLink
-                        }
-                        target="_blank"
+                        // href={
+                        //   savvyNudgeDetailsSelector?.data?.data
+                        //     ?.beverageSupplierLink
+                        // }
+                        // target="_blank"
+                        onClick={() => beverageLink(savvyNudgeDetailsSelector?.data?.data)}
                         className="anchorBlue"
                       >
                         Beverage Link
@@ -217,7 +246,7 @@ const SavvyNudgeDetail = ({
                               openIndex2 === index ? "open" : ""
                             }`}
                           >
-                            <p className="fs-14">{item.text}</p>
+                            <p className="fs-14">{item?.text}</p>
                           </div>
                         </div>
                         <div className="divider2"></div>
@@ -230,14 +259,14 @@ const SavvyNudgeDetail = ({
                     {savvyNudgeDetailsSelector?.data?.data?.merchants?.length>=5 && (
                     <div
                       className="pc fs-14 fw-600 cursor-pointer"
-                      onClick={() => toggleSidebarMerchantViewAll()}
+                      onClick={() => toggleSidebarMerchantViewAll(savvyNudgeDetailsSelector)}
                     >
                       View All
                     </div>
                     )}
                   </div>
                   <div className="accordionCustom">
-                    {savvyNudgeDetailsSelector?.data?.data?.merchants?.map(
+                    {savvyNudgeDetailsSelector?.data?.data?.merchants.slice(0,5)?.map(
                       (item, index) => (
                         <div className="accordion-item" key={index}>
                           <div
@@ -246,7 +275,7 @@ const SavvyNudgeDetail = ({
                               setOpenIndex(openIndex === index ? null : index)
                             }
                           >
-                            <div>{item.businessName}</div>
+                            <div>{item?.details?.businessName}</div>
                             <div className="d-flex align-center gap-16">
                               <div
                                 className={`fs-16 fw-600 roi ${
@@ -279,7 +308,7 @@ const SavvyNudgeDetail = ({
                           >
                             <div className="imageAccorddian mb-20">
                               <img
-                                src={noImageFound}
+                                src={item?.details?.logoUrl ||noImageFound}
                                 alt="logo"
                                 className="h-100 object-cover"
                               />
@@ -288,24 +317,27 @@ const SavvyNudgeDetail = ({
                             <div className="grid2 ">
                               <div>
                                 <div className="fs-14 mb-4">Sent</div>
-                                <div className="fs-14 fw-600">{item?.sent}</div>
+                                <div className="fs-14 fw-600">200</div>
                               </div>
                               <div>
                                 <div className="fs-14 mb-4">Accepted:</div>
                                 <div className="fs-14 fw-600 greenText">
-                                  ${item.accepted}
+                                  {/* ${item.accepted} */}
+                                  150/75%
                                 </div>
                               </div>
                               <div>
                                 <div className="fs-14 mb-4">Declined:</div>
                                 <div className="fs-14 fw-600 brandRed">
-                                  ${item.declined}
+                                  {/* ${item.declined} */}
+                                  30/15%
                                 </div>
                               </div>
                               <div>
                                 <div className="fs-14 mb-4">Redeemed</div>
                                 <div className="fs-14 fw-600 greyColor">
-                                  ${item.redeemed}
+                                  {/* ${item.redeemed} */}
+                                  20/10%
                                 </div>
                               </div>
                             </div>
@@ -344,6 +376,7 @@ const SavvyNudgeDetail = ({
       <MerchantViewAll
         isOpenMerchantViewAll={isSidebarOpenMerchantViewAll}
         toggleSidebarMerchantViewAll={toggleSidebarMerchantViewAll}
+        merchantInnerDrawer={merchantInnerDrawer}
       />
     </>
   );

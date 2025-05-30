@@ -28,6 +28,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import Loader from "../../../../common/Loader/Loader";
 import { useCommonMessage } from "../../../../common/CommonMessage";
+import useScrollToTop from "../../../../hooks/useScrollToTop";
 
 const CreateSavvyNudge = () => {
   const navigate = useNavigate();
@@ -88,7 +89,17 @@ const CreateSavvyNudge = () => {
   const [selectedDuration, setSelectedDuration] = useState("5");
   const [selected, setSelected] = useState("25");
 
+  // // Scroll to top when the component mounts
+  // useScrollToTop([pagination?.page]);
+
   const handleFormSubmit = (values) => {
+    if (selectedMerchants?.length === 0) {
+      messageApi.open({
+        type: "error",
+        content: "Please select at least 1 merchant",
+      });
+      return;
+    }
     let payload = {
       title: values?.title.trim(),
       description: values?.description.trim(),
@@ -102,7 +113,6 @@ const CreateSavvyNudge = () => {
       foodSupplierLink: values?.foodSupplierLink,
       beverageSupplierLink: values?.beverageSupplierLink,
     };
-    console.log(payload, "payload");
     dispatch(createSavvyNudgeHandler(payload));
   };
 
@@ -118,7 +128,6 @@ const CreateSavvyNudge = () => {
     setSelectedMerchants(selected);
   };
 
-  console.log(createSavvyNudgeSelector, "createSavvyNudgeSelector");
   useEffect(() => {
     if (createSavvyNudgeSelector?.message?.statusCode === 400) {
       messageApi.open({
@@ -135,6 +144,18 @@ const CreateSavvyNudge = () => {
       navigate("/admin/savvy-nudge");
     }
   }, [createSavvyNudgeSelector]);
+
+  const resetFormState = () => {
+    setSelectedDuration(selectedIndex === 0 ? "5" : "5");
+    setSelected("25");
+    setVideoId(null);
+    setActiveVideoUrl(null);
+    setSelectedMerchants([]);
+  };
+
+  useEffect(() => {
+    resetFormState();
+  }, [selectedIndex]);
 
   return (
     <>
@@ -181,6 +202,7 @@ const CreateSavvyNudge = () => {
                       onClick={() => {
                         setSelectedIndex(index);
                         resetForm();
+                        setSelectedMerchants([]);
                       }}
                     >
                       <div className="gradiant"></div>
@@ -289,6 +311,7 @@ const CreateSavvyNudge = () => {
                     </label>
 
                     <CustomSelect
+                      key={selectedIndex}
                       options={filteredOptions}
                       value={selectedDuration}
                       onChange={handleDurationChange}

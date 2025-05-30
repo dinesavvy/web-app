@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { savvyNudgesListHandler } from "../../../../redux/action/savvyNudgesList";
 import Loader from "../../../../common/Loader/Loader";
 import moment from "moment";
+import noImageFound from "../../../../assets/images/noImageFound.png";
 import { Pagination } from "antd";
 import {
   savvyNudgeDetailsAction,
@@ -83,9 +84,15 @@ const SavvyNudge = () => {
 
   const [isSidebarOpenMerchantViewAll, setIsSidebarOpenMerchantViewAll] =
     useState(false);
-  const toggleSidebarMerchantViewAll = () => {
+
+    const [merchantInnerDrawer,setMerchantInnerDrawer] = useState([])
+
+  const toggleSidebarMerchantViewAll = (item) => {
+    setMerchantInnerDrawer(item)
     setIsSidebarOpenMerchantViewAll((prevState) => !prevState);
   };
+
+
   useEffect(() => {
     if (isSidebarOpenMerchantViewAll) {
       document.body.classList.add("overflow-Hidden");
@@ -140,7 +147,6 @@ const SavvyNudge = () => {
       });
     }
   };
-console.log(savvyNudgesListSelector,"savvyNudgesListSelector")
   return (
     <>
       {(savvyNudgesListSelector?.isLoading ||
@@ -178,11 +184,10 @@ console.log(savvyNudgesListSelector,"savvyNudgesListSelector")
               })}
             </div>
           </div>
-
           <div className="merchantGrid mb-20">
-            {savvyNudgesListSelector?.data?.data?.length > 0 ? (
+            {savvyNudgesListSelector?.data?.data?.result?.length > 0 ? (
               <>
-                {savvyNudgesListSelector?.data?.data?.map(
+                {savvyNudgesListSelector?.data?.data?.result?.map(
                   (item, index) => {
                     const videoId = getYoutubeId(item?.youtubeUrl);
                     const thumbnail = `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
@@ -258,16 +263,16 @@ console.log(savvyNudgesListSelector,"savvyNudgesListSelector")
                                   </div>
                                 </div>
 
-                                <div className="mb-16">
+                                {/* <div className="mb-16">
                                   <div className="fs-14 mb-4">Merchants</div>
                                   <div className="d-flex gap-8 align-center">
                                     <div className="position-relative d-flex borderImageCollaps">
                                       {item?.merchants
                                         ?.slice(0, 5)
-                                        ?.map((_, i) => (
+                                        ?.map((itemMerchant, i) => (
                                           <div key={i} className="imageCollaps">
                                             <img
-                                              src={coke}
+                                              src={item?.details?.logoUrl || noImageFound}
                                               className="w-100 h-100"
                                               alt={item?.title}
                                             />
@@ -283,7 +288,41 @@ console.log(savvyNudgesListSelector,"savvyNudgesListSelector")
                                       </div>
                                     )}
                                   </div>
-                                </div>
+                                </div> */}
+                                {item?.merchants?.length > 0 && (
+                                  <div className="mb-16">
+                                    <div className="fs-14 mb-4">Merchants</div>
+                                    <div className="d-flex gap-8 align-center">
+                                      <div className="position-relative d-flex borderImageCollaps">
+                                        {item?.merchants
+                                          ?.slice(0, 5)
+                                          ?.map((itemMerchant, i) => (
+                                            <div
+                                              key={i}
+                                              className="imageCollaps"
+                                            >
+                                              <img
+                                                src={
+                                                  item?.details?.logoUrl ||
+                                                  noImageFound
+                                                }
+                                                className="w-100 h-100"
+                                                alt={item?.title}
+                                              />
+                                            </div>
+                                          ))}
+                                      </div>
+                                      {item?.merchants?.length > 5 && (
+                                        <div
+                                          className="cursor-pointer fs-14 fw-600"
+                                          onClick={()=>toggleSidebarMerchantViewAll(item)}
+                                        >
+                                          +{item?.merchants?.length - 5} more
+                                        </div>
+                                      )}
+                                    </div>
+                                  </div>
+                                )}
 
                                 <div>
                                   <div className="fs-14 mb-4">
@@ -312,10 +351,16 @@ console.log(savvyNudgesListSelector,"savvyNudgesListSelector")
 
                                 <div className="divider16"></div>
                                 <div className="d-flex align-center fs-12 justify-between gap-8">
-                                  <div className="anchorBlue">
+                                  <div
+                                    className="anchorBlue"
+                                    onClick={() => toggleSidebar(item)}
+                                  >
                                     View Ingredients
                                   </div>
-                                  <div className="anchorBlue">
+                                  <div
+                                    className="anchorBlue"
+                                    onClick={() => toggleSidebar(item)}
+                                  >
                                     Preparation instructions
                                   </div>
                                 </div>
@@ -339,18 +384,18 @@ console.log(savvyNudgesListSelector,"savvyNudgesListSelector")
               <div className="noDataFound">No data found</div>
             )}
           </div>
-          {savvyNudgesListSelector?.data?.data?.records?.length > 0 && (
+          {savvyNudgesListSelector?.data?.data?.result?.length > 0 && (
             <div className="d-flex align-center justify-between flexPagination">
               <div className="fs-16">
                 {(() => {
                   const start = (pagination.page - 1) * pagination.limit + 1;
                   const end = Math.min(
                     start +
-                      savvyNudgesListSelector?.data?.data?.records?.length -
+                      savvyNudgesListSelector?.data?.data?.result?.length -
                       1,
                     savvyNudgesListSelector?.data?.data?.recordsCount
                   );
-                  return `Showing ${start} to ${end} of ${savvyNudgesListSelector?.data?.data?.recordsCount} Suppliers`;
+                  return `Showing ${start} to ${end} of ${savvyNudgesListSelector?.data?.data?.recordsCount} Savvy Nudge`;
                 })()}
               </div>
               <Pagination
@@ -402,6 +447,7 @@ console.log(savvyNudgesListSelector,"savvyNudgesListSelector")
         <MerchantViewAll
           isOpenMerchantViewAll={isSidebarOpenMerchantViewAll}
           toggleSidebarMerchantViewAll={toggleSidebarMerchantViewAll}
+          merchantInnerDrawer={merchantInnerDrawer}
         />
       </div>
     </>
