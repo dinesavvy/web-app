@@ -254,7 +254,11 @@ const CreateSavvyNudge = () => {
                             onKeyPress={handleKeyPress}
                             disabledDate={disableBeforeThreeDays}
                             className="w-100 datePickerinput"
-                            value={field.value ? dayjs(field.value, "YYYY-MM-DD") : null} 
+                            value={
+                              field.value
+                                ? dayjs(field.value, "YYYY-MM-DD")
+                                : null
+                            }
                             // placeholder="YYYY-MM-DD"
                             suffixIcon={
                               <img
