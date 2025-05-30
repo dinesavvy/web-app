@@ -269,7 +269,6 @@ const EditSupport = () => {
 
   // Update handleSubmit function
   const handleSubmit = (values, { setSubmitting }) => {
-    console.log("Form values:", values);
     // setEditDetail(false)
 
     // Transform operating hours into the required format

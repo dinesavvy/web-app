@@ -58,7 +58,7 @@ const CreateSavvyNudge = () => {
   ];
 
   // Video
-  const [youtubeUrl, setYoutubeUrl] = useState("");
+  // const [youtubeUrl, setYoutubeUrl] = useState("");
   const [videoId, setVideoId] = useState(null);
   const [activeVideoUrl, setActiveVideoUrl] = useState(null);
 
@@ -69,12 +69,12 @@ const CreateSavvyNudge = () => {
     return match && match[1].length === 11 ? match[1] : null;
   };
 
-  const handleUrlChange = (e) => {
-    const value = e.target.value;
-    setYoutubeUrl(value);
-    const id = extractVideoId(value);
-    setVideoId(id);
-  };
+  // const handleUrlChange = (e) => {
+  //   const value = e.target.value;
+  //   // setYoutubeUrl(value);
+  //   const id = extractVideoId(value);
+  //   setVideoId(id);
+  // };
 
   const thumbnail = videoId
     ? `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`
@@ -85,6 +85,7 @@ const CreateSavvyNudge = () => {
   const [selectedMerchants, setSelectedMerchants] = useState([]);
 
   const options = ["25", "50", "100", "250", "National"];
+  const [selectedDuration, setSelectedDuration] = useState("5");
   const [selected, setSelected] = useState("25");
 
   const handleFormSubmit = (values) => {
@@ -92,8 +93,8 @@ const CreateSavvyNudge = () => {
       title: values?.title.trim(),
       description: values?.description.trim(),
       launchDate: values?.launchDate,
-      duration: 5,
-      youtubeUrl: youtubeUrl,
+      duration: selectedDuration,
+      youtubeUrl: values?.youtubeUrl,
       merchants: selectedMerchants.map((item) => ({ id: item?._id })),
       targetRadius: selected,
       requiredIngredients: values?.requiredIngredients.trim(),
@@ -104,8 +105,6 @@ const CreateSavvyNudge = () => {
     console.log(payload, "payload");
     dispatch(createSavvyNudgeHandler(payload));
   };
-
-  const [selectedDuration, setSelectedDuration] = useState("");
 
   const durationOptions = ["5", "10", "15", "30"];
 
@@ -118,6 +117,8 @@ const CreateSavvyNudge = () => {
   const handleMerchantSelectionChange = (selected) => {
     setSelectedMerchants(selected);
   };
+
+  console.log(createSavvyNudgeSelector, "createSavvyNudgeSelector");
   useEffect(() => {
     if (createSavvyNudgeSelector?.message?.statusCode === 400) {
       messageApi.open({
@@ -128,7 +129,7 @@ const CreateSavvyNudge = () => {
     } else if (createSavvyNudgeSelector?.data?.statusCode === 200) {
       messageApi.open({
         type: "success",
-        content: createSavvyNudgeSelector?.message?.message,
+        content: createSavvyNudgeSelector?.data?.message,
       });
       dispatch(createSavvyNudgeAction.createSavvyNudgeReset());
       navigate("/admin/savvy-nudge");
@@ -154,7 +155,7 @@ const CreateSavvyNudge = () => {
           handleFormSubmit(values, formikBag);
         }}
       >
-        {({ isSubmitting, values }) => (
+        {({ isSubmitting, values, setFieldValue, resetForm }) => (
           <Form>
             <div className="dashboard">
               <div className="tabPadding mb-20">
@@ -177,7 +178,10 @@ const CreateSavvyNudge = () => {
                       className={`savvyImageSelect ${
                         selectedIndex === index ? "selectedBorder" : ""
                       }`}
-                      onClick={() => setSelectedIndex(index)}
+                      onClick={() => {
+                        setSelectedIndex(index);
+                        resetForm();
+                      }}
                     >
                       <div className="gradiant"></div>
                       <div className="fs-18 fw-600 savvyname">{item?.name}</div>
@@ -208,6 +212,7 @@ const CreateSavvyNudge = () => {
                       name="title"
                       className="input"
                       placeholder="Free appetizer"
+                      maxLength={20}
                     />
                     <ErrorMessage
                       name="title"
@@ -242,40 +247,14 @@ const CreateSavvyNudge = () => {
                             htmlFor="launchDate"
                             className="mb-10 fs-16 fw-500"
                           >
-                            Savvy Nudge Launch Date
+                            Savvy Nudge Launch Date*
                           </label>
-                          {/* <DatePicker
-                            needConfirm
-                            placeholder="Set merchant availability period"
-                            suffixIcon={
-                              <img
-                                src={calender}
-                                className="calenderIcon"
-                                alt=""
-                              />
-                            }
-                            format="DD/MM/YYYY"
-                            allowClear={false}
-                            className="w-100 datePickerinput"
-                            disabledDate={disableBeforeThreeDays}
-                            onKeyPress={handleKeyPress}
-                            value={field.value} // Binds to Formik value
-                            // onChange={(date) =>
-                            //   form.setFieldValue("launchDate", date)
-                            // } // Updates Formik
-
-                            onChange={(date, dateString) => {
-                              // form.setFieldValue("launchDate", date || today); // fallback to today
-                              form.setFieldValue("launchDate", dateString);
-                            }}
-                          /> */}
-
-                          {/* <Space direction="vertical"> */}
                           <DatePicker
                             placeholder="Set merchant availability period"
                             onKeyPress={handleKeyPress}
                             disabledDate={disableBeforeThreeDays}
                             className="w-100 datePickerinput"
+                            value={field.value ? dayjs(field.value, "YYYY-MM-DD") : null} 
                             // placeholder="YYYY-MM-DD"
                             suffixIcon={
                               <img
@@ -290,13 +269,12 @@ const CreateSavvyNudge = () => {
                             }}
                             allowClear={false}
                           />
-                          {/* </Space> */}
-                          {/* {form?.touched?.launchDate &&
+                          {form?.touched?.launchDate &&
                             form?.errors?.launchDate && (
                               <div className="mt-10 fw-500 fs-14 error">
                                 {form?.errors?.launchDate}
                               </div>
-                            )} */}
+                            )}
                         </div>
                       )}
                     </Field>
@@ -330,15 +308,23 @@ const CreateSavvyNudge = () => {
                 <div className="inputGrid gap-20">
                   <div className="">
                     <label htmlFor="name" className=" mb-10 fs-16 fw-500">
-                      Youtube Video Link
+                      Youtube Video Link*
                     </label>
                     <Field
                       type="text"
                       className="input"
                       placeholder="https://www.youtube.com/embed/tgbNymZ7vqY"
-                      value={youtubeUrl}
-                      onChange={handleUrlChange}
+                      onChange={(e) => {
+                        setFieldValue("youtubeUrl", e.target.value);
+                        const id = extractVideoId(e.target.value);
+                        setVideoId(id);
+                      }}
                       name="youtubeUrl"
+                    />
+                    <ErrorMessage
+                      name="youtubeUrl"
+                      component="div"
+                      className="mt-10 fw-500 fs-14 error"
                     />
                   </div>
                   {videoId && (
@@ -430,6 +416,7 @@ const CreateSavvyNudge = () => {
                       as="textarea"
                       name="requiredIngredients"
                       placeholder="Required ingredients"
+                      // maxLength={750}
                     />
                     <ErrorMessage
                       name="requiredIngredients"
@@ -448,6 +435,7 @@ const CreateSavvyNudge = () => {
                       as="textarea"
                       name="preparationInstructions"
                       placeholder="Preparation instructions"
+                      // maxLength={750}
                     />
 
                     <ErrorMessage

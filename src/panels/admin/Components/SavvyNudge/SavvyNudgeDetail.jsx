@@ -129,7 +129,7 @@ const SavvyNudgeDetail = ({
               <div className=" d-flex flexColumn  flex1 gap-20 justify-between">
                 <div>
                   <div className="fs-16 fw-700">
-                    {savvyNudgeDetailsSelector?.data?.data?.title}
+                    {savvyNudgeDetailsSelector?.data?.data?.title.charAt(0).toUpperCase() + savvyNudgeDetailsSelector?.data?.data?.title.slice(1).toLowerCase() || "-"}
                   </div>
                   <div className="fs-14">
                     {/* Get 20% off on all large pizzas today! Limited time offer. */}

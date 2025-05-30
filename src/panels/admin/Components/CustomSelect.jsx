@@ -3,7 +3,7 @@ import dropdownArrow from "../../../assets/images/dropdownArrow.svg"
 
 const CustomSelect = ({ options, onChange,value }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedOption, setSelectedOption] = useState(null);
+  const [selectedOption, setSelectedOption] = useState(5);
   const selectRef = useRef(null);
 
   // Handle clicks outside of the component

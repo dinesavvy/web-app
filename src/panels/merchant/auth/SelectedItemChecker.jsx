@@ -28,17 +28,17 @@ const SelectedItemChecker = () => {
 
     if (hasValidStructure) {
       // Log specific details for verification
-      console.log('Selected Item Details:', {
-        id: item._id,
-        followerCount: item.followerCount,
-        nudgeCount: item.nudgeCount,
-        preferences: item.customerPreferencesData.personalPreference,
-        userInfo: {
-          displayName: item.userInfo.displayName,
-          email: item.userInfo.email,
-          status: item.userInfo.status
-        }
-      });
+      // console.log('Selected Item Details:', {
+      //   id: item._id,
+      //   followerCount: item.followerCount,
+      //   nudgeCount: item.nudgeCount,
+      //   preferences: item.customerPreferencesData.personalPreference,
+      //   userInfo: {
+      //     displayName: item.userInfo.displayName,
+      //     email: item.userInfo.email,
+      //     status: item.userInfo.status
+      //   }
+      // });
     }
   };
 

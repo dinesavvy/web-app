@@ -134,7 +134,7 @@ const Promotions = () => {
                 className={`tab-button ${
                   activeTab === "active" ? "active" : ""
                 }`}
-                onClick={() => setActiveTab("active")}
+                onClick={() => {setActiveTab("active");setPagination((prev) => ({ ...prev, page: 1 })); }}
               >
                 Active
               </button>
@@ -142,7 +142,7 @@ const Promotions = () => {
                 className={`tab-button ${
                   activeTab === "Inactive" ? "active" : ""
                 }`}
-                onClick={() => setActiveTab("Inactive")}
+                onClick={() => {setActiveTab("Inactive");setPagination((prev) => ({ ...prev, page: 1 })); }}
               >
                 Inactive
               </button>

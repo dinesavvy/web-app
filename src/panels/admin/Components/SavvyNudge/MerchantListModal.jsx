@@ -17,12 +17,14 @@ const MerchantListModal = ({
   selectedMerchants
 }) => {
   const [searchString, setSearchString] = useState("");
-  // const [selectedMerchants, setSelectedMerchants] = useState([]);
   const merchantsListSelector = useSelector((state) => state?.merchantsList);
 
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [merchantsData, setMerchantsData] = useState([]);
+  const [localSelectedMerchants, setLocalSelectedMerchants] = useState(selectedMerchants || []);
+
+
 
   const dispatch = useDispatch();
 
@@ -62,31 +64,54 @@ const MerchantListModal = ({
   //   }
   // };
 
-  const handleSelectAllToggle = () => {
-  if (selectedMerchants?.length) {
-    // Clear all
-    setSelectedMerchants([]);
-    onSelectionChange([]);
-  } else {
-    // Select all loaded so far
-    setSelectedMerchants(merchantsData);
-    onSelectionChange(merchantsData);
-  }
-};
+//   const handleSelectAllToggle = () => {
+//   if (selectedMerchants?.length) {
+//     // Clear all
+//     setSelectedMerchants([]);
+//     onSelectionChange([]);
+//   } else {
+//     // Select all loaded so far
+//     setSelectedMerchants(merchantsData);
+//     onSelectionChange(merchantsData);
+//   }
+// };
+
+
+//   const handleCheckboxToggle = (merchant) => {
+//     setSelectedMerchants((prevSelected) => {
+//       const exists = prevSelected.find((m) => m._id === merchant._id);
+
+//       if (exists) {
+//         // Remove merchant
+//         return prevSelected.filter((m) => m._id !== merchant._id);
+//       } else {
+//         // Add merchant
+//         return [...prevSelected, merchant];
+//       }
+//     });
+//   };
 
 
   const handleCheckboxToggle = (merchant) => {
-    setSelectedMerchants((prevSelected) => {
-      const exists = prevSelected.find((m) => m._id === merchant._id);
-
-      if (exists) {
-        // Remove merchant
-        return prevSelected.filter((m) => m._id !== merchant._id);
-      } else {
-        // Add merchant
-        return [...prevSelected, merchant];
-      }
+    setLocalSelectedMerchants((prev) => {
+      const exists = prev.find((m) => m._id === merchant._id);
+      return exists
+        ? prev.filter((m) => m._id !== merchant._id)
+        : [...prev, merchant];
     });
+  };
+
+  const handleSelectAllToggle = () => {
+    if (localSelectedMerchants.length === merchantsData.length) {
+      setLocalSelectedMerchants([]);
+    } else {
+      setLocalSelectedMerchants(merchantsData);
+    }
+  };
+
+  const handleAdd = () => {
+    onSelectionChange(localSelectedMerchants);
+    setSelectMerchantList(false); // Close modal
   };
 
   const fetchMoreData = () => {
@@ -161,9 +186,11 @@ const MerchantListModal = ({
                       autoComplete="off"
                       type="checkbox"
                       name="option"
-                      checked={selectedMerchants.some(
-                        (merchant) => merchant._id === item._id
-                      )}
+                      // checked={selectedMerchants.some(
+                      //   (merchant) => merchant._id === item._id
+                      // )}
+                      checked={!!localSelectedMerchants.find((m) => m._id === item._id)}
+
                       onChange={() => handleCheckboxToggle(item)}
                     />
                     <div className="custom-radio-button">
@@ -208,10 +235,11 @@ const MerchantListModal = ({
                 <button
                   type="submit"
                   className="btn p32"
-                  onClick={() => {
-                    onSelectionChange(selectedMerchants);
-                    setSelectMerchantList(false); // close modal
-                  }}
+                  // onClick={() => {
+                  //   onSelectionChange(selectedMerchants);
+                  //   setSelectMerchantList(false); // close modal
+                  // }}
+                  onClick={handleAdd}
                 >
                   Add
                 </button>

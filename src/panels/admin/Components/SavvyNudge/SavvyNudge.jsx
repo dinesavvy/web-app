@@ -13,7 +13,11 @@ import { savvyNudgesListHandler } from "../../../../redux/action/savvyNudgesList
 import Loader from "../../../../common/Loader/Loader";
 import moment from "moment";
 import { Pagination } from "antd";
-import { savvyNudgeDetailsHandler } from "../../../../redux/action/savvyNudgeDetails";
+import {
+  savvyNudgeDetailsAction,
+  savvyNudgeDetailsHandler,
+} from "../../../../redux/action/savvyNudgeDetails";
+import { useCommonMessage } from "../../../../common/CommonMessage";
 
 const getYoutubeId = (url) => {
   const regExp =
@@ -24,6 +28,7 @@ const getYoutubeId = (url) => {
 
 const SavvyNudge = () => {
   const navigate = useNavigate();
+  const messageApi = useCommonMessage();
   const [activeTab, setActiveTab] = useState(true);
   const [pagination, setPagination] = useState({ page: 1, limit: 10 });
   const [searchString, setSearchString] = useState("");
@@ -42,6 +47,7 @@ const SavvyNudge = () => {
     // If sidebar is already open, just close it without calling API
     if (isSidebarOpen) {
       setIsSidebarOpen(false);
+      dispatch(savvyNudgeDetailsAction.savvyNudgeDetailsReset());
       return;
     }
 
@@ -55,6 +61,7 @@ const SavvyNudge = () => {
     if (savvyNudgeDetailsSelector?.data?.statusCode === 200) {
       // setIsSidebarOpen((prevState) => !prevState);
       setIsSidebarOpen(true);
+      // dispatch(savvyNudgeDetailsAction.savvyNudgeDetailsReset())
     }
   }, [savvyNudgeDetailsSelector]);
 
@@ -112,6 +119,28 @@ const SavvyNudge = () => {
     dispatch(savvyNudgesListHandler(payload));
   }, [pagination, activeTab, searchString]);
 
+  const foodSupplierLink = (item) => {
+    if (item?.foodSupplierLink) {
+      window.open(item?.foodSupplierLink, "_blank");
+    } else {
+      messageApi.open({
+        type: "error",
+        content: "No food link Found",
+      });
+    }
+  };
+
+  const beverageLink = (item) => {
+    if (item?.beverageSupplierLink) {
+      window.open(item?.beverageSupplierLink, "_blank");
+    } else {
+      messageApi.open({
+        type: "error",
+        content: "No beverage link found",
+      });
+    }
+  };
+console.log(savvyNudgesListSelector,"savvyNudgesListSelector")
   return (
     <>
       {(savvyNudgesListSelector?.isLoading ||
@@ -151,9 +180,9 @@ const SavvyNudge = () => {
           </div>
 
           <div className="merchantGrid mb-20">
-            {savvyNudgesListSelector?.data?.data?.records?.length > 0 ? (
+            {savvyNudgesListSelector?.data?.data?.length > 0 ? (
               <>
-                {savvyNudgesListSelector?.data?.data?.records?.map(
+                {savvyNudgesListSelector?.data?.data?.map(
                   (item, index) => {
                     const videoId = getYoutubeId(item?.youtubeUrl);
                     const thumbnail = `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
@@ -196,7 +225,8 @@ const SavvyNudge = () => {
                             <div className="bottomPadding d-flex flexColumn flex1 gap-20 justify-between">
                               <div>
                                 <div className="fs-16 fw-700">
-                                  {item?.title || "-"}
+                                  {item?.title.charAt(0).toUpperCase() +
+                                    item?.title.slice(1).toLowerCase() || "-"}
                                 </div>
                                 <div className="fs-14">
                                   {/* Get 20% off on all large pizzas today! Limited
@@ -261,16 +291,18 @@ const SavvyNudge = () => {
                                   </div>
                                   <div className="d-flex align-center fs-14 fw-600">
                                     <a
-                                      href={item?.foodSupplierLink}
-                                      target="_blank"
+                                      // href={item?.foodSupplierLink}
+                                      onClick={() => foodSupplierLink(item)}
+                                      // target="_blank"
                                       className="anchorBlue"
                                     >
                                       Food Link
                                     </a>
                                     <div className="dot"></div>
                                     <a
-                                      href={item?.beverageSupplierLink}
-                                      target="_blank"
+                                      // href={item?.beverageSupplierLink}
+                                      // target="_blank"
+                                      onClick={() => beverageLink(item)}
                                       className="anchorBlue"
                                     >
                                       Beverage Link
