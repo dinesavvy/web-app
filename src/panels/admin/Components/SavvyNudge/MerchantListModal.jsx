@@ -14,40 +14,38 @@ const MerchantListModal = ({
   setSelectMerchantList,
   onSelectionChange,
   setSelectedMerchants,
-  selectedMerchants
+  selectedMerchants,
 }) => {
   const [searchString, setSearchString] = useState("");
   const merchantsListSelector = useSelector((state) => state?.merchantsList);
-
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [merchantsData, setMerchantsData] = useState([]);
-  const [localSelectedMerchants, setLocalSelectedMerchants] = useState(selectedMerchants || []);
-
-
+  const [localSelectedMerchants, setLocalSelectedMerchants] = useState(
+    selectedMerchants || []
+  );
 
   const dispatch = useDispatch();
 
   const handleSearchChange = (value) => {
     setSearchString(value);
-    // setPagination((prev) => ({ ...prev, page: 1 })); // Reset to the first page on search
+    // setPagination((prev) => ({ ...prev, page: 1 })); 
   };
 
   useEffect(() => {
     const fetchMerchants = () => {
       const payload = {
-        page: page,
-        limit: 10,
+        // page: 1,
+        // limit: undefined,
         timeFrame: "today",
         searchString: searchString,
         searchArea: [],
       };
+      console.log(payload,"payload")
       dispatch(merchantsListHandler(payload));
     };
-
     fetchMerchants();
-  }, [searchString, page]);
-
+  }, [searchString]);
 
   // Select all working functionality
   // const handleSelectAllToggle = () => {
@@ -64,33 +62,31 @@ const MerchantListModal = ({
   //   }
   // };
 
-//   const handleSelectAllToggle = () => {
-//   if (selectedMerchants?.length) {
-//     // Clear all
-//     setSelectedMerchants([]);
-//     onSelectionChange([]);
-//   } else {
-//     // Select all loaded so far
-//     setSelectedMerchants(merchantsData);
-//     onSelectionChange(merchantsData);
-//   }
-// };
+  //   const handleSelectAllToggle = () => {
+  //   if (selectedMerchants?.length) {
+  //     // Clear all
+  //     setSelectedMerchants([]);
+  //     onSelectionChange([]);
+  //   } else {
+  //     // Select all loaded so far
+  //     setSelectedMerchants(merchantsData);
+  //     onSelectionChange(merchantsData);
+  //   }
+  // };
 
+  //   const handleCheckboxToggle = (merchant) => {
+  //     setSelectedMerchants((prevSelected) => {
+  //       const exists = prevSelected.find((m) => m._id === merchant._id);
 
-//   const handleCheckboxToggle = (merchant) => {
-//     setSelectedMerchants((prevSelected) => {
-//       const exists = prevSelected.find((m) => m._id === merchant._id);
-
-//       if (exists) {
-//         // Remove merchant
-//         return prevSelected.filter((m) => m._id !== merchant._id);
-//       } else {
-//         // Add merchant
-//         return [...prevSelected, merchant];
-//       }
-//     });
-//   };
-
+  //       if (exists) {
+  //         // Remove merchant
+  //         return prevSelected.filter((m) => m._id !== merchant._id);
+  //       } else {
+  //         // Add merchant
+  //         return [...prevSelected, merchant];
+  //       }
+  //     });
+  //   };
 
   const handleCheckboxToggle = (merchant) => {
     setLocalSelectedMerchants((prev) => {
@@ -101,26 +97,26 @@ const MerchantListModal = ({
     });
   };
 
-const handleSelectAllToggle = () => {
-  if (localSelectedMerchants.length > 0) {
-    // Clear all when anything is selected
-    setLocalSelectedMerchants([]);
-  } else {
-    // Select all when nothing is selected
-    setLocalSelectedMerchants(merchantsData);
-  }
-};
+  const handleSelectAllToggle = () => {
+    if (localSelectedMerchants?.length > 0) {
+      // Clear all when anything is selected
+      setLocalSelectedMerchants([]);
+    } else {
+      // Select all when nothing is selected
+      setLocalSelectedMerchants(merchantsData);
+    }
+  };
 
   const handleAdd = () => {
     onSelectionChange(localSelectedMerchants);
     setSelectMerchantList(false); // Close modal
   };
 
-  const fetchMoreData = () => {
-    if (hasMore) {
-      setPage((prev) => prev + 1);
-    }
-  };
+  // const fetchMoreData = () => {
+  //   if (hasMore) {
+  //     setPage((prev) => prev + 1);
+  //   }
+  // };
 
   useEffect(() => {
     if (merchantsListSelector?.data?.data?.records) {
@@ -174,64 +170,67 @@ const handleSelectAllToggle = () => {
               {localSelectedMerchants?.length > 0 ? "Clear All" : "Select All"}
             </div>
           </div>
-          <InfiniteScroll
-            className="overflowGrid"
-            dataLength={merchantsData?.length}
-            next={fetchMoreData}
-            hasMore={hasMore}
-            scrollableTarget="selectMerchant"
-            height={280}
-          >
-            <div className="addMerchantGrid gap-20 mb-20">
-              {merchantsData?.map((item, index) => {
-                return (
-                  <label className="custom-label w-100" key={index}>
-                    <input
-                      autoComplete="off"
-                      type="checkbox"
-                      name="option"
-                      // checked={selectedMerchants.some(
-                      //   (merchant) => merchant._id === item._id
-                      // )}
-                      // checked={!!localSelectedMerchants.find((m) => m._id === item._id)}
-                      checked={localSelectedMerchants?.some((m) => m?._id === item?._id)}
-
-                      onChange={() => handleCheckboxToggle(item)}
-                    />
-                    <div className="custom-radio-button">
-                      <img src={radioSelectedImage} alt={item?.businessName} />
-                    </div>
-                    <div className="radioImage">
-                      <img
-                        alt={item?.businessName}
-                        src={item?.logoUrl || noImageFound}
-                      />
-                    </div>
-                    <div className="radioCafeName">
-                      <div>
-                        <div className="pc fs-14 fw-500 oneLine">
-                          {item?.businessName &&
-                            item?.businessName.charAt(0).toUpperCase() +
-                              item?.businessName.slice(1)}
+          <div className="overflowGrid">
+            {merchantsData?.length > 0 ? (
+              <>
+                <div className="addMerchantGrid gap-20 mb-20">
+                  {merchantsData?.map((item, index) => {
+                    return (
+                      <label className="custom-label w-100" key={index}>
+                        <input
+                          autoComplete="off"
+                          type="checkbox"
+                          name="option"
+                          // checked={selectedMerchants.some(
+                          //   (merchant) => merchant._id === item._id
+                          // )}
+                          // checked={!!localSelectedMerchants.find((m) => m._id === item._id)}
+                          checked={localSelectedMerchants?.some(
+                            (m) => m?._id === item?._id
+                          )}
+                          onChange={() => handleCheckboxToggle(item)}
+                        />
+                        <div className="custom-radio-button">
+                          <img
+                            src={radioSelectedImage}
+                            alt={item?.businessName}
+                          />
                         </div>
-                        <div className="fs-12 oneLine">
-                          {" "}
-                          {[
-                            item?.address?.administrativeDistrictLevel1,
-                            item?.address?.country,
-                            item?.address?.locality,
-                            item?.address?.postalCode,
-                          ]
-                            .filter(Boolean)
-                            .join(", ")}
+                        <div className="radioImage">
+                          <img
+                            alt={item?.businessName}
+                            src={item?.logoUrl || noImageFound}
+                          />
                         </div>
-                      </div>
-                    </div>
-                  </label>
-                );
-              })}
-            </div>
-          </InfiniteScroll>
+                        <div className="radioCafeName">
+                          <div>
+                            <div className="pc fs-14 fw-500 oneLine">
+                              {item?.businessName &&
+                                item?.businessName.charAt(0).toUpperCase() +
+                                  item?.businessName.slice(1)}
+                            </div>
+                            <div className="fs-12 oneLine">
+                              {" "}
+                              {[
+                                item?.address?.administrativeDistrictLevel1,
+                                item?.address?.country,
+                                item?.address?.locality,
+                                item?.address?.postalCode,
+                              ]
+                                .filter(Boolean)
+                                .join(", ")}
+                            </div>
+                          </div>
+                        </div>
+                      </label>
+                    );
+                  })}
+                </div>
+              </>
+            ) : (
+              <div className="noDataFound"> No data Found</div>
+            )}
+          </div>
           {merchantsListSelector?.data?.data?.records?.length > 0 && (
             <>
               {/* <div className="pc text-center cursor-pointer">View More</div> */}

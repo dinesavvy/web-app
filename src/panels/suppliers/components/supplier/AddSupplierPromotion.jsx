@@ -163,8 +163,8 @@ const AddSupplierPromotion = () => {
   useEffect(() => {
     const fetchMerchants = () => {
       const payload = {
-        page: page,
-        limit: 10,
+        // page: page,
+        // limit: 10,
         timeFrame: "today",
         searchString: searchStringMerchant,
         searchArea: [],
@@ -279,7 +279,7 @@ const AddSupplierPromotion = () => {
 
   return (
     <>
-      {createPromotionSelector?.isLoading && (
+      {createPromotionSelector?.isLoading||merchantsListSelector?.isLoading && (
         <Loader />
       )}
       <div className="dashboard">
@@ -393,7 +393,7 @@ const AddSupplierPromotion = () => {
                 </div>
 
                 <div className="paddingb20">
-                  <InfiniteScroll
+                  {/* <InfiniteScroll
                     dataLength={merchantsData?.length}
                     next={fetchMoreData}
                     hasMore={hasMore}
@@ -404,9 +404,11 @@ const AddSupplierPromotion = () => {
                     }
                     scrollableTarget="selectMerchant"
                     height={280}
-                  >
+                  > */}
                     {/* <div className="selectMerchant"> */}
                     {/* {merchantsListSelector?.data?.data?.records?.length > 0 ? ( */}
+                    {merchantsData?.length>0 ?(
+
                     <div className="selectMerchant">
                       {merchantsData?.map((item, index) => {
                         return (
@@ -450,7 +452,10 @@ const AddSupplierPromotion = () => {
                         );
                       })}
                     </div>
-                  </InfiniteScroll>
+                    ):(
+                       <div className="noDataFound">No data available</div>
+                    )}
+                  {/* </InfiniteScroll> */}
                   {/* ) : (
                       <div className="noDataFound">No data available</div>
                     )} */}

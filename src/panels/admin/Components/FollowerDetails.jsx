@@ -82,10 +82,10 @@ const FollowerDetail = () => {
                   className="cursor-pointer"
                   separator={<img src={breadCrumbIcon} />}
                   items={[
-                    {
-                      title: "Merchants",
-                      onClick: () => navigate("/admin/merchant/list"),
-                    },
+                    // {
+                    //   title: "Merchants",
+                    //   onClick: () => navigate("/admin/merchant/list"),
+                    // },
                     {
                       title: "Followers",
                       onClick: () => navigate("/admin/followers"),

@@ -166,8 +166,8 @@ const AddPromotion = () => {
   useEffect(() => {
     const fetchMerchants = () => {
       const payload = {
-        page: page,
-        limit: 10,
+        // page: page,
+        // limit: 10,
         timeFrame: "today",
         searchString: searchStringMerchant,
         searchArea: [],
@@ -176,7 +176,7 @@ const AddPromotion = () => {
     };
 
     fetchMerchants();
-  }, [searchStringMerchant, page]);
+  }, [searchStringMerchant]);
 
   useEffect(() => {
     if (merchantsListSelector?.data?.data?.records) {
@@ -207,11 +207,11 @@ const AddPromotion = () => {
     }
   }, [brandListSelector?.data?.data?.records]);
 
-  const fetchMoreData = () => {
-    if (hasMore) {
-      setPage((prev) => prev + 1);
-    }
-  };
+  // const fetchMoreData = () => {
+  //   if (hasMore) {
+  //     setPage((prev) => prev + 1);
+  //   }
+  // };
 
   const fetchMoreBrands = () => {
     if (brandsHasMore) {
@@ -276,7 +276,7 @@ const AddPromotion = () => {
 
   return (
     <>
-      {createPromotionSelector?.isLoading && <Loader />}
+      {createPromotionSelector?.isLoading ||merchantsListSelector?.isLoading && <Loader />}
       <div className="dashboard">
         <DndProvider backend={HTML5Backend}>
           <div className="d-flex gap-20 position-relative">
@@ -388,7 +388,7 @@ const AddPromotion = () => {
 
                 <div className="paddingb20">
                 <div className="paddingb20">
-                  <InfiniteScroll
+                  {/* <InfiniteScroll
                     dataLength={merchantsData?.length}
                     next={fetchMoreData}
                     hasMore={hasMore}
@@ -399,9 +399,11 @@ const AddPromotion = () => {
                     }
                     scrollableTarget="selectMerchant"
                     height={280}
-                  >
+                  > */}
                     {/* <div className="selectMerchant"> */}
                     {/* {merchantsListSelector?.data?.data?.records?.length > 0 ? ( */}
+                    {merchantsData?.length >0 ?(
+
                     <div className="selectMerchant">
                       {merchantsData?.map((item, index) => {
                         return (
@@ -444,7 +446,10 @@ const AddPromotion = () => {
                         );
                       })}
                     </div>
-                  </InfiniteScroll>
+                    ):(
+                      <div className="noDataFound">No data found</div>
+                    )}
+                  {/* </InfiniteScroll> */}
 
                       <CustomDragLayer merchants={mercahnts} merchantItemMain={merchantItemMain} />
                   {/* ) : (

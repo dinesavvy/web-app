@@ -170,8 +170,8 @@ const AddDistributorPromotion = () => {
   useEffect(() => {
     const fetchMerchants = () => {
       const payload = {
-        page: page,
-        limit: 10,
+        // page: page,
+        // limit: 10,
         timeFrame: "today",
         searchString: searchStringMerchant,
         searchArea: [],
@@ -279,7 +279,7 @@ const AddDistributorPromotion = () => {
 
   return (
     <>
-      {createPromotionSelector?.isLoading && (
+      {createPromotionSelector?.isLoading ||merchantsListSelector?.isLoading && (
         <Loader />
       )}
       <div className="dashboard">
@@ -397,14 +397,16 @@ const AddDistributorPromotion = () => {
                 </div>
 
                 <div className="paddingb20">
-                <InfiniteScroll
+                {/* <InfiniteScroll
                     dataLength={merchantsData?.length}
                     next={fetchMoreData}
                     hasMore={hasMore}
                     loader={<div className="text-center"><Spin /></div>}
                     scrollableTarget="selectMerchant"
                     height={280}
-                  >
+                  > */}
+                  {merchantsData?.length>0 ?(
+
                   <div className="selectMerchant">
                     {/* {merchantsListSelector?.data?.data?.records?.length > 0 ? ( */}
                        <>
@@ -453,9 +455,12 @@ const AddDistributorPromotion = () => {
                         )}
                       </>
                   </div>
-                      </InfiniteScroll>
+                  ):(
+                    <div className="noDataFound">No data available</div>
+                  )}
+                      {/* </InfiniteScroll> */}
                     {/* ) : ( */}
-                      {/* <div className="noDataFound">No data available</div> */}
+                  {/* <div className="noDataFound">No data available</div> */}
                     {/* )} */}
                 </div>
               </div>
