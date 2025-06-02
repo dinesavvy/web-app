@@ -101,13 +101,15 @@ const MerchantListModal = ({
     });
   };
 
-  const handleSelectAllToggle = () => {
-    if (localSelectedMerchants.length === merchantsData.length) {
-      setLocalSelectedMerchants([]);
-    } else {
-      setLocalSelectedMerchants(merchantsData);
-    }
-  };
+const handleSelectAllToggle = () => {
+  if (localSelectedMerchants.length > 0) {
+    // Clear all when anything is selected
+    setLocalSelectedMerchants([]);
+  } else {
+    // Select all when nothing is selected
+    setLocalSelectedMerchants(merchantsData);
+  }
+};
 
   const handleAdd = () => {
     onSelectionChange(localSelectedMerchants);
@@ -167,7 +169,9 @@ const MerchantListModal = ({
               merchantsListSelector?.data?.data?.records?.length
                 ? "Clear All"
                 : "Select All"} */}
-              {selectedMerchants?.length > 0 ? "Clear All" : "Select All"}
+              {/* {localSelectedMerchants?.length > 0 ? "Clear All" : "Select All"} */}
+              {/* {localSelectedMerchants.length === merchantsData.length ? "Clear All" : "Select All"} */}
+              {localSelectedMerchants?.length > 0 ? "Clear All" : "Select All"}
             </div>
           </div>
           <InfiniteScroll
@@ -189,7 +193,8 @@ const MerchantListModal = ({
                       // checked={selectedMerchants.some(
                       //   (merchant) => merchant._id === item._id
                       // )}
-                      checked={!!localSelectedMerchants.find((m) => m._id === item._id)}
+                      // checked={!!localSelectedMerchants.find((m) => m._id === item._id)}
+                      checked={localSelectedMerchants?.some((m) => m?._id === item?._id)}
 
                       onChange={() => handleCheckboxToggle(item)}
                     />

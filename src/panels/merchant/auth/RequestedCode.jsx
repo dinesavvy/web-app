@@ -138,17 +138,18 @@ const RequestedCode = ({ loginValue,requestLogin,setRequestLogin,countryCode,pho
 
   useEffect(() => {
     if (businessSendOtpSelector?.data?.statusCode === 200) {
-      messageApi.open({
-        type: "success",
-        content: businessSendOtpSelector?.data?.message,
-      });
+      // messageApi.open({
+      //   type: "success",
+      //   content: businessSendOtpSelector?.data?.message,
+      // });
+      setSeconds(59);
       dispatch(businessSendOtpAction.businessSendOtpSliceReset());
     } else if (businessSendOtpSelector?.data?.statusCode === 400) {
-      messageApi.open({
-        type: "error",
-        content: businessSendOtpSelector?.message?.message,
-      });
-      dispatch(businessSendOtpAction.businessSendOtpSliceReset());
+      // messageApi.open({
+      //   type: "error",
+      //   content: businessSendOtpSelector?.message?.message,
+      // });
+      // dispatch(businessSendOtpAction.businessSendOtpSliceReset());
     }
   }, [businessSendOtpSelector]);
 
