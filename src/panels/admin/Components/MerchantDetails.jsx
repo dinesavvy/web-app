@@ -1438,6 +1438,7 @@ const MerchantDetails = () => {
                           pageSize={pagination?.limit}
                           total={listByUserIdSelector?.data?.data?.recordsCount}
                           onChange={handlePaginationChange}
+                          pageSizeOptions={["12" ,'20', '50', '100']} 
                         />
                       </div>
                     )}
@@ -1665,7 +1666,7 @@ const MerchantDetails = () => {
                         <div className="fs-16">
                           {(() => {
                             const start =
-                              (pagination.page - 1) * pagination.limit + 1;
+                              (pagination?.page - 1) * pagination?.limit + 1;
                             const end = Math.min(
                               start +
                                 followerListSelector?.data?.data?.records
@@ -1677,10 +1678,11 @@ const MerchantDetails = () => {
                           })()}
                         </div>
                         <Pagination
-                          current={pagination.page}
-                          pageSize={pagination.limit}
+                          current={pagination?.page}
+                          pageSize={pagination?.limit}
                           total={followerListSelector?.data?.data?.recordsCount}
                           onChange={handlePaginationChange}
+                          pageSizeOptions={["12" ,'20', '50', '100']} 
                         />
                       </div>
                     )}
@@ -2058,6 +2060,7 @@ const MerchantDetails = () => {
                       pageSize={pagination?.limit}
                       total={nudgesListSelector?.data?.data?.recordsCount}
                       onChange={handlePaginationChange}
+                      pageSizeOptions={["12" ,'20', '50', '100']} 
                     />
                   </div>
                 )}

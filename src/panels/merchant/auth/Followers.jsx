@@ -32,7 +32,7 @@ const Followers = () => {
 
 
 // Scroll to top when the component mounts
-useScrollToTop([pagination?.page]);
+useScrollToTop([pagination?.page,pagination?.limit]);
   
   const { state } = useLocation();
 
@@ -180,13 +180,13 @@ useScrollToTop([pagination?.page]);
 
   useEffect(() => {
     let payload = {
-      page: pagination.page,
-      limit: pagination.limit,
+      page: pagination?.page,
+      limit: pagination?.limit,
       locationId: getMerchantBusinessSelector?.locationId,
       searchString: searchQuery,
     };
     dispatch(businessFollowerListHandler(payload));
-  }, [searchQuery]);
+  }, [searchQuery,pagination?.page,pagination?.limit]);
 
   const redeemedNudgeFn = () => {
     setRedeemedNudges(true);
@@ -284,14 +284,14 @@ useScrollToTop([pagination?.page]);
               <img src={searchIcon} alt="" className="absoluteImage" />
             </div>
             <div className="merchantGrid mb-30">
-              {filteredFollowers && filteredFollowers?.length > 0 ? (
-                filteredFollowers?.map((item, index) => {
+              {businessListFollowerListSelector?.data?.data?.records?.length > 0 ? (
+                businessListFollowerListSelector?.data?.data?.records?.map((item, index) => {
                   return (
                     <div className="cardFollow" key={index}>
                       <div className="d-flex justify-between gap-12">
                         <div className="d-flex align-center gap-12">
                           <div className="initialName">
-                            {item.userId.displayName
+                            {item?.userId?.displayName
                               .split(" ")
                               .map((word) => word.charAt(0).toUpperCase())
                               .join("")
@@ -359,22 +359,24 @@ useScrollToTop([pagination?.page]);
                 <div className="noDataFound">No Data Found</div>
               )}
             </div>
-            {filteredFollowers?.length > 0 && (
+            {businessListFollowerListSelector?.data?.data?.records?.length > 0 && (
               <div className="d-flex align-center justify-between flexPagination">
                 {/* <div className="fs-16">Showing 1 to 5 of 10 Restaurants</div> */}
                 <div className="fs-16">
-                  Showing {pagination.page} to {pagination.limit} of{" "}
+                  Showing {pagination?.page} to {pagination?.limit} of{" "}
                   {businessListFollowerListSelector?.data?.data?.recordsCount}{" "}
                   followers
                 </div>
                 {/* <Pagination defaultCurrent={1} total={50} /> */}
                 <Pagination
-                  current={pagination.page}
-                  pageSize={pagination.limit}
+                  current={pagination?.page}
+                  pageSize={pagination?.limit}
                   total={
                     businessListFollowerListSelector?.data?.data?.recordsCount
                   }
                   onChange={handlePaginationChange}
+                  pageSizeOptions={["12" ,'20', '50', '100']} 
+                  showSizeChanger={true}
                 />
               </div>
             )}

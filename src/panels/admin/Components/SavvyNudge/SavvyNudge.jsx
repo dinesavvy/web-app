@@ -19,6 +19,7 @@ import {
   savvyNudgeDetailsHandler,
 } from "../../../../redux/action/savvyNudgeDetails";
 import { useCommonMessage } from "../../../../common/CommonMessage";
+import useScrollToTop from "../../../../hooks/useScrollToTop";
 
 const getYoutubeId = (url) => {
   const regExp =
@@ -31,8 +32,12 @@ const SavvyNudge = () => {
   const navigate = useNavigate();
   const messageApi = useCommonMessage();
   const [activeTab, setActiveTab] = useState(true);
-  const [pagination, setPagination] = useState({ page: 1, limit: 10 });
+  const [pagination, setPagination] = useState({ page: 1, limit: 12 });
   const [searchString, setSearchString] = useState("");
+
+
+// Scroll to top when the component mounts
+  useScrollToTop([pagination?.page,pagination?.limit]);
 
   const handleTabClick = (tab) => {
     setActiveTab(tab); // Update the active tab
@@ -85,13 +90,12 @@ const SavvyNudge = () => {
   const [isSidebarOpenMerchantViewAll, setIsSidebarOpenMerchantViewAll] =
     useState(false);
 
-    const [merchantInnerDrawer,setMerchantInnerDrawer] = useState([])
+  const [merchantInnerDrawer, setMerchantInnerDrawer] = useState([]);
 
   const toggleSidebarMerchantViewAll = (item) => {
-    setMerchantInnerDrawer(item)
+    setMerchantInnerDrawer(item);
     setIsSidebarOpenMerchantViewAll((prevState) => !prevState);
   };
-
 
   useEffect(() => {
     if (isSidebarOpenMerchantViewAll) {
@@ -124,7 +128,7 @@ const SavvyNudge = () => {
       isActive: activeTab,
     };
     dispatch(savvyNudgesListHandler(payload));
-  }, [pagination, activeTab, searchString]);
+  }, [pagination, activeTab]);
 
   const foodSupplierLink = (item) => {
     if (item?.foodSupplierLink) {
@@ -315,7 +319,9 @@ const SavvyNudge = () => {
                                       {item?.merchants?.length > 5 && (
                                         <div
                                           className="cursor-pointer fs-14 fw-600"
-                                          onClick={()=>toggleSidebarMerchantViewAll(item)}
+                                          onClick={() =>
+                                            toggleSidebarMerchantViewAll(item)
+                                          }
                                         >
                                           +{item?.merchants?.length - 5} more
                                         </div>
@@ -388,7 +394,7 @@ const SavvyNudge = () => {
             <div className="d-flex align-center justify-between flexPagination">
               <div className="fs-16">
                 {(() => {
-                  const start = (pagination.page - 1) * pagination.limit + 1;
+                  const start = (pagination?.page - 1) * pagination?.limit + 1;
                   const end = Math.min(
                     start +
                       savvyNudgesListSelector?.data?.data?.result?.length -
@@ -403,10 +409,12 @@ const SavvyNudge = () => {
                 pageSize={pagination?.limit}
                 total={savvyNudgesListSelector?.data?.data?.recordsCount}
                 onChange={handlePaginationChange}
+                pageSizeOptions={["12", "20", "50", "100"]}
+                showSizeChanger={true}
               />
             </div>
           )}
-        </div>
+      </div>
       </div>
 
       {/* Modals and Sidebars */}

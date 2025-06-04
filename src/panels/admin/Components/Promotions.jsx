@@ -14,7 +14,7 @@ import useScrollToTop from "../../../hooks/useScrollToTop";
 
 const Promotions = () => {
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
-  const [pagination, setPagination] = useState({ page: 1, limit: 10 });
+  const [pagination, setPagination] = useState({ page: 1, limit: 12 });
   const [searchString, setSearchString] = useState("");
   const [activeTab, setActiveTab] = useState("active");
   const [isOpen, setIsOpen] = useState(false);
@@ -28,7 +28,7 @@ const Promotions = () => {
 
 
   // Scroll to top when the component mounts
-  useScrollToTop([pagination?.page]);
+  useScrollToTop([pagination?.page,pagination?.limit]);
 
   const adminPromotionList = useSelector((state) => state?.adminPromotion);
   const adminEndPromotionSelector = useSelector(
@@ -386,6 +386,8 @@ const Promotions = () => {
                 pageSize={pagination?.limit}
                 total={adminPromotionList?.data?.data?.recordsCount}
                 onChange={handlePaginationChange}
+                pageSizeOptions={["12" ,'20', '50', '100']} 
+                showSizeChanger
               />
             </div>
           )}

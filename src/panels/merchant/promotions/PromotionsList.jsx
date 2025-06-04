@@ -576,6 +576,7 @@ const PromotionsList = () => {
                   pageSize={pagination?.limit}
                   total={activePromotionListSelector?.data?.data?.recordsCount}
                   onChange={handlePaginationChange}
+                  pageSizeOptions={["12" ,'20', '50', '100']} 
                 />
               </div>
             )}
@@ -812,6 +813,8 @@ const PromotionsList = () => {
                   pageSize={pagination?.limit}
                   total={archivePromotionListSelector?.data?.data?.recordsCount}
                   onChange={handlePaginationChange}
+                  pageSizeOptions={["12" ,'20', '50', '100']} 
+                  showSizeChanger
                 />
               </div>
             )}

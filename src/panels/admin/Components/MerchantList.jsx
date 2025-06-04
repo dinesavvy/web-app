@@ -17,7 +17,7 @@ import useScrollToTop from "../../../hooks/useScrollToTop";
 
 
 const MerchantList = () => {
-  const [pagination, setPagination] = useState({ page: 1, limit: 10 });
+  const [pagination, setPagination] = useState({ page: 1, limit: 12 });
   const [searchString, setSearchString] = useState("");
   const [searchArea, setSearchArea] = useState([]);
   const [activeTab2, setActiveTab2] = useState("today");
@@ -74,7 +74,7 @@ const MerchantList = () => {
   }, [pagination, activeTab2, searchString, searchArea]);
 
   // Scroll to top when the component mounts
-  useScrollToTop([activeTab, activeTab2, pagination?.page]);
+  useScrollToTop([activeTab, activeTab2, pagination?.page,pagination?.limit]);
 
   const tabs = [
     {
@@ -308,7 +308,7 @@ const MerchantList = () => {
                   <div className="fs-16">
                     {(() => {
                       const start =
-                        (pagination.page - 1) * pagination.limit + 1;
+                        (pagination?.page - 1) * pagination?.limit + 1;
                       const end = Math.min(
                         start +
                           merchantListSelector?.data?.data?.records?.length -
@@ -319,10 +319,11 @@ const MerchantList = () => {
                     })()}
                   </div>
                   <Pagination
-                    current={pagination.page}
-                    pageSize={pagination.limit}
+                    current={pagination?.page}
+                    pageSize={pagination?.limit}
                     total={merchantListSelector?.data?.data?.recordsCount}
                     onChange={handlePaginationChange}
+                    pageSizeOptions={["12" ,'20', '50', '100']} 
                   />
                 </div>
               )}

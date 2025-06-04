@@ -64,7 +64,7 @@ const Nudges = () => {
 
   const navigate = useNavigate();
   const messageApi = useCommonMessage();
-  const nudges = [5, 10, 15, 20, 25, 100,110];
+  const nudges = [5, 10, 15, 20, 25, 100, 110];
   const businessAddNudgeCreditSelector = useSelector(
     (state) => state?.businessAddNudgeCredit
   );
@@ -368,10 +368,7 @@ const Nudges = () => {
                     Followers activity today
                   </div>
                   <div className="gc fs-20 fw-700">
-                    {
-                      nudgeAnalyticSelector?.data?.data
-                        ?.followerAddedToday
-                    }
+                    {nudgeAnalyticSelector?.data?.data?.followerAddedToday}
                   </div>
                 </div>
 
@@ -519,36 +516,21 @@ const Nudges = () => {
               )}
             </div>
             <div className="tabAfter">
-            <div className="tabs-container tab3 tabFull ">
-              <div className="tabs">
-                <button
-                  className={`tab-button ${
-                    activeTab === "active" ? "active" : ""
-                  }`}
-                  onClick={() => handleTabClick("active")}
-                >
-                  Active Nudges
-                </button>
-                <button
-                  className={`tab-button ${
-                    activeTab === "inactive" ? "active" : ""
-                  }`}
-                  onClick={() => handleTabClick("inactive")}
-                >
-                  Inactive Nudges
-                </button>
-                <button
-                  className={`tab-button ${
-                    activeTab === "reverse" ? "active" : ""
-                  }`}
-                  // className="tab-button disabled"
-                  // className="tab-button"
-                  onClick={() => handleTabClick("reverse")}
-                >
-                  Reverse Nudges
-                </button>
+              <div className="tabs-container tab3 tabFull ">
+                <div className="tabs">
+                  {["active", "inactive", "reverse"].map((tab) => (
+                    <button
+                      key={tab}
+                      className={`tab-button ${
+                        activeTab === tab ? "active" : ""
+                      }`}
+                      onClick={() => handleTabClick(tab)}
+                    >
+                      {tab.charAt(0).toUpperCase() + tab.slice(1)} Nudges
+                    </button>
+                  ))}
+                </div>
               </div>
-            </div>
             </div>
             <div className="tabPadding">
               <div className="merchantGrid mb-20">
@@ -633,7 +615,7 @@ const Nudges = () => {
                               {/* ) : (
                                 <div className="mb-20 imageCollapsh32"></div>
                               )} */}
-                              
+
                               <div className="d-flex gap-10">
                                 <div
                                   className="btn btnSecondary w-100"
@@ -667,33 +649,6 @@ const Nudges = () => {
                     ) : (
                       <div className="noDataFound">No data available</div>
                     )}
-                    {/* {businessNudgesListSelector?.data?.data?.length > 0 && (
-                      <div className="d-flex align-center justify-between flexPagination mt-20">
-                        <div className="fs-16">
-                          {(() => {
-                            const start =
-                              (pagination.page - 1) * pagination.limit + 1;
-                            const end = Math.min(
-                              start +
-                                businessNudgesListSelector?.data?.data?.records
-                                  ?.length -
-                                1,
-                              businessNudgesListSelector?.data?.data
-                                ?.recordsCount
-                            );
-                            return `Showing ${start} to ${end} of ${businessNudgesListSelector?.data?.data?.recordsCount} Restaurants`;
-                          })()}
-                        </div>
-                        <Pagination
-                          current={pagination.page}
-                          pageSize={pagination.limit}
-                          total={
-                            businessNudgesListSelector?.data?.data?.recordsCount
-                          }
-                          onChange={handlePaginationChange}
-                        />
-                      </div>
-                    )} */}
                   </>
                 ) : (
                   <>

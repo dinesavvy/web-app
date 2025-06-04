@@ -14,7 +14,7 @@ import {
   brandListDistributorHandler,
   brandLlistDistributorHandler,
 } from "../../../../redux/action/distributorsAction/brandListDistributor";
-import { deleteDistributorBrandAction } from "../../../../redux/action/distributorsAction/deleteDistributorBrand";
+// import { deleteDistributorBrandAction } from "../../../../redux/action/distributorsAction/deleteDistributorBrand";
 import useScrollToTop from "../../../../hooks/useScrollToTop";
 
 const BrandsListDistributor = () => {
@@ -27,7 +27,7 @@ const BrandsListDistributor = () => {
   const dispatch = useDispatch();
 
   // Scroll to top when the component mounts
-  useScrollToTop([pagination?.page]);
+  useScrollToTop([pagination?.page,pagination?.limit]);
 
 
   const getBrandListSelector = useSelector(
@@ -175,6 +175,8 @@ const BrandsListDistributor = () => {
                 pageSize={pagination?.limit}
                 total={getBrandListSelector?.data?.data?.recordsCount}
                 onChange={handlePaginationChange}
+                pageSizeOptions={["12" ,'20', '50', '100']} 
+                showSizeChanger={true}
               />
             </div>
           )}

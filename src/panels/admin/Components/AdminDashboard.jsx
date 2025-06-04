@@ -24,6 +24,7 @@ import { merchantPerformanceAnalyticsDetailsHandler } from "../../../redux/actio
 import BarChartProtion from "../../../common/charts/BarChartPromotion";
 import ChartComponent from "./Chart/Chart";
 import { loyaltyGraphHandler } from "../../../redux/action/loyaltyGraph";
+import useScrollToTop from "../../../hooks/useScrollToTop";
 
 const AdminDashboard = () => {
   const [pagination, setPagination] = useState({ page: 1, limit: 12 });
@@ -39,6 +40,10 @@ const AdminDashboard = () => {
   const merchantPerformanceAnalyticsDetailsSelector = useSelector(
     (state) => state?.merchantPerformanceAnalyticsDetails
   );
+
+
+  // Scroll to top when the component mounts
+  useScrollToTop([pagination?.page,pagination?.limit]);
 
   const data = {
     labels: ["Progress", "Remaining"],
@@ -548,7 +553,7 @@ const AdminDashboard = () => {
           </div>
           <div className="d-flex align-center justify-between flexPagination">
             <div className="fs-16">
-              Showing {pagination.page} to{" "}
+              Showing {pagination?.page} to{" "}
               {merchantPerformanceAnalyticsListSelector?.data?.data?.limit} of{" "}
               {
                 merchantPerformanceAnalyticsListSelector?.data?.data
@@ -558,13 +563,14 @@ const AdminDashboard = () => {
             </div>
             <Pagination
               defaultCurrent={1}
-              current={pagination.page}
-              pageSize={pagination.limit}
+              current={pagination?.page}
+              pageSize={pagination?.limit}
               total={
                 merchantPerformanceAnalyticsListSelector?.data?.data
                   ?.recordsCount
               }
               onChange={handlePaginationChange}
+              pageSizeOptions={["12" ,'20', '50', '100']} 
             />
           </div>
         </div>

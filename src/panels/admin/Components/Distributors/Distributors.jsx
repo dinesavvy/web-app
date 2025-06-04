@@ -26,7 +26,7 @@ const Distributors = () => {
   const [searchString, setSearchString] = useState("");
   const [searchArea, setSearchArea] = useState([]);
   const [removeDistributor, setRemoveDistributor] = useState({});
-  const [pagination, setPagination] = useState({ page: 1, limit: 10 });
+  const [pagination, setPagination] = useState({ page: 1, limit: 12 });
   const createDistributorSelector = useSelector(
     (state) => state?.createDistributor
   );
@@ -41,7 +41,7 @@ const Distributors = () => {
   const dispatch = useDispatch();
 
   // Scroll to top when the component mounts
-  useScrollToTop([pagination?.page]);
+  useScrollToTop([pagination?.page,pagination?.limit]);
 
   const getDistributorListSelector = useSelector(
     (state) => state?.distributorsList
@@ -218,6 +218,8 @@ const Distributors = () => {
                 pageSize={pagination?.limit}
                 total={getDistributorListSelector?.data?.data?.recordsCount}
                 onChange={handlePaginationChange}
+                pageSizeOptions={['12' ,'20', '50', '100']} 
+                showSizeChanger={true}
               />
             </div>
           )}

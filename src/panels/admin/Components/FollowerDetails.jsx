@@ -17,7 +17,7 @@ const FollowerDetail = () => {
   const [activeTab, setActiveTab] = useState(true);
   const { state } = useLocation();
   const navigate = useNavigate();
-  const [pagination, setPagination] = useState({ page: 1, limit: 10 });
+  const [pagination, setPagination] = useState({ page: 1, limit: 12 });
 
   const dispatch = useDispatch();
   const followerDetailsSelector = useSelector(
@@ -357,6 +357,7 @@ const FollowerDetail = () => {
                 pageSize={pagination?.limit}
                 total={listByUserIdSelector?.data?.data?.recordsCount}
                 onChange={handlePaginationChange}
+                pageSizeOptions={["12" ,'20', '50', '100']} 
               />
             </div>
           )}

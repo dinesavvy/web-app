@@ -15,7 +15,7 @@ import useScrollToTop from "../../../../hooks/useScrollToTop";
 const Support = () => {
   const [resolveModal, setResolveModal] = useState(false);
   const [activeTab, setActiveTab] = useState("Active");
-  const [pagination, setPagination] = useState({ page: 1, limit: 10 });
+  const [pagination, setPagination] = useState({ page: 1, limit: 12 });
   const [supportItem, setSupportItem] = useState({});
   const [resolveModalItem, setResolveModalItem] = useState();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -25,7 +25,7 @@ const Support = () => {
   const messageApi = useCommonMessage();
 
   // Scroll to top when the component mounts
-  useScrollToTop([pagination?.page]);
+  useScrollToTop([pagination?.page,pagination?.limit]);
 
   const handleTabClick = (tab) => {
     setActiveTab(tab); // Update the active tab
@@ -244,6 +244,8 @@ const Support = () => {
                 pageSize={pagination?.limit}
                 total={supportListSelector?.data?.data?.recordsCount}
                 onChange={handlePaginationChange}
+                pageSizeOptions={["12" ,'20', '50', '100']} 
+                showSizeChanger
               />
             </div>
           )}

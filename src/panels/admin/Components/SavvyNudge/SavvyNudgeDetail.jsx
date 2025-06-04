@@ -30,10 +30,10 @@ const SavvyNudgeDetail = ({
   const [isSidebarOpenMerchantViewAll, setIsSidebarOpenMerchantViewAll] =
     useState(false);
   const [activeVideoUrl, setActiveVideoUrl] = useState(null);
-const [merchantInnerDrawer,setMerchantInnerDrawer] = useState([])
+  const [merchantInnerDrawer, setMerchantInnerDrawer] = useState([]);
 
   const toggleSidebarMerchantViewAll = (savvyNudgeDetailsSelector) => {
-    setMerchantInnerDrawer(savvyNudgeDetailsSelector?.data?.data)
+    setMerchantInnerDrawer(savvyNudgeDetailsSelector?.data?.data);
     setIsSidebarOpenMerchantViewAll((prevState) => !prevState);
   };
   useEffect(() => {
@@ -88,8 +88,7 @@ const [merchantInnerDrawer,setMerchantInnerDrawer] = useState([])
     },
   ];
 
-
-const foodSupplierLink = (item) => {
+  const foodSupplierLink = (item) => {
     if (item?.foodSupplierLink) {
       window.open(item?.foodSupplierLink, "_blank");
     } else {
@@ -156,7 +155,12 @@ const foodSupplierLink = (item) => {
               <div className=" d-flex flexColumn  flex1 gap-20 justify-between">
                 <div>
                   <div className="fs-16 fw-700">
-                    {savvyNudgeDetailsSelector?.data?.data?.title.charAt(0).toUpperCase() + savvyNudgeDetailsSelector?.data?.data?.title.slice(1).toLowerCase() || "-"}
+                    {savvyNudgeDetailsSelector?.data?.data?.title
+                      .charAt(0)
+                      .toUpperCase() +
+                      savvyNudgeDetailsSelector?.data?.data?.title
+                        .slice(1)
+                        .toLowerCase() || "-"}
                   </div>
                   <div className="fs-14">
                     {/* Get 20% off on all large pizzas today! Limited time offer. */}
@@ -192,7 +196,11 @@ const foodSupplierLink = (item) => {
                         //     ?.foodSupplierLink
                         // }
                         // target="_blank"
-                        onClick={() => foodSupplierLink(savvyNudgeDetailsSelector?.data?.data)}
+                        onClick={() =>
+                          foodSupplierLink(
+                            savvyNudgeDetailsSelector?.data?.data
+                          )
+                        }
                         className="anchorBlue"
                       >
                         Food Link
@@ -204,7 +212,9 @@ const foodSupplierLink = (item) => {
                         //     ?.beverageSupplierLink
                         // }
                         // target="_blank"
-                        onClick={() => beverageLink(savvyNudgeDetailsSelector?.data?.data)}
+                        onClick={() =>
+                          beverageLink(savvyNudgeDetailsSelector?.data?.data)
+                        }
                         className="anchorBlue"
                       >
                         Beverage Link
@@ -256,18 +266,24 @@ const foodSupplierLink = (item) => {
 
                   <div className="d-flex align-center justify-between gap-10 mb-20">
                     <div className="fs-22 fw-700">Merchants</div>
-                    {savvyNudgeDetailsSelector?.data?.data?.merchants?.length>=5 && (
-                    <div
-                      className="pc fs-14 fw-600 cursor-pointer"
-                      onClick={() => toggleSidebarMerchantViewAll(savvyNudgeDetailsSelector)}
-                    >
-                      View All
-                    </div>
+                    {savvyNudgeDetailsSelector?.data?.data?.merchants?.length >=
+                      5 && (
+                      <div
+                        className="pc fs-14 fw-600 cursor-pointer"
+                        onClick={() =>
+                          toggleSidebarMerchantViewAll(
+                            savvyNudgeDetailsSelector
+                          )
+                        }
+                      >
+                        View All
+                      </div>
                     )}
                   </div>
                   <div className="accordionCustom">
-                    {savvyNudgeDetailsSelector?.data?.data?.merchants.slice(0,5)?.map(
-                      (item, index) => (
+                    {savvyNudgeDetailsSelector?.data?.data?.merchants
+                      .slice(0, 5)
+                      ?.map((item, index) => (
                         <div className="accordion-item" key={index}>
                           <div
                             className="accordionHeader fs-16 fw-700"
@@ -284,7 +300,8 @@ const foodSupplierLink = (item) => {
                                     : "green"
                                 }`}
                               >
-                                {item?.status?.charAt(0).toUpperCase() + item?.status?.slice(1)}
+                                {item?.status?.charAt(0).toUpperCase() +
+                                  item?.status?.slice(1)}
                               </div>
 
                               <div
@@ -300,7 +317,6 @@ const foodSupplierLink = (item) => {
                               </div>
                             </div>
                           </div>
-
                           <div
                             className={`accordion-content ${
                               openIndex === index ? "open" : ""
@@ -308,7 +324,7 @@ const foodSupplierLink = (item) => {
                           >
                             <div className="imageAccorddian mb-20">
                               <img
-                                src={item?.details?.logoUrl ||noImageFound}
+                                src={item?.details?.logoUrl || noImageFound}
                                 alt="logo"
                                 className="h-100 object-cover"
                               />
@@ -317,34 +333,64 @@ const foodSupplierLink = (item) => {
                             <div className="grid2 ">
                               <div>
                                 <div className="fs-14 mb-4">Sent</div>
-                                <div className="fs-14 fw-600">200</div>
+                                <div className="fs-14 fw-600">
+                                  {item?.savvyNudgeSent}
+                                </div>
                               </div>
                               <div>
                                 <div className="fs-14 mb-4">Accepted:</div>
                                 <div className="fs-14 fw-600 greenText">
                                   {/* ${item.accepted} */}
-                                  150/75%
+                                  {/* 150/75% */}
+                                  {item?.savvyNudgeSent
+                                    ? `${item?.savvyNudgeaccepted || 0}/${
+                                        item?.savvyNudgeSent
+                                      } (${(
+                                        (item?.savvyNudgeaccepted /
+                                          item?.savvyNudgeSent) *
+                                        100
+                                      ).toFixed(2)}%)`
+                                    : 0}
                                 </div>
                               </div>
                               <div>
                                 <div className="fs-14 mb-4">Declined:</div>
                                 <div className="fs-14 fw-600 brandRed">
                                   {/* ${item.declined} */}
-                                  30/15%
+                                  {/* 30/15% */}
+                                  {item?.savvyNudgeSent > 0
+                                    ? `${item?.savvyNudgedeclined || 0}/${(
+                                        (item?.savvyNudgedeclined /
+                                          item?.savvyNudgeSent) *
+                                        100
+                                      ).toFixed(2)}%`
+                                    : 0}
                                 </div>
                               </div>
                               <div>
                                 <div className="fs-14 mb-4">Redeemed</div>
                                 <div className="fs-14 fw-600 greyColor">
                                   {/* ${item.redeemed} */}
-                                  20/10%
+                                  {/* 20/10% */}
+                                  {item?.savvyNudgeSent > 0
+                                    ? `${
+                                        item?.savvyNudgeSent -
+                                        ((item?.savvyNudgeaccepted || 0) +
+                                          (item?.savvyNudgedeclined || 0))
+                                      }/${(
+                                        ((item?.savvyNudgeSent -
+                                          ((item?.savvyNudgeaccepted || 0) +
+                                            (item?.savvyNudgedeclined || 0))) /
+                                          item?.savvyNudgeSent) *
+                                        100
+                                      ).toFixed(2)}%`
+                                    : 0}
                                 </div>
                               </div>
                             </div>
                           </div>
                         </div>
-                      )
-                    )}
+                      ))}
                   </div>
                 </div>
               </div>

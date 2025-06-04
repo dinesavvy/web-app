@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import coke from "../../../assets/images/coke.svg";
 import pepsi from "../../../assets/images/pepsi.svg";
 import searchIcon from "../../../assets/images/searchIcon.svg";
@@ -35,6 +35,7 @@ import {
   handleNumberFieldLength,
 } from "../../../common/commonFunctions/CommonFunctions";
 import InfiniteScroll from "react-infinite-scroll-component";
+import { scrollToTop } from "../../../common/autoScroll/ScrollTotopError";
 
 const AddPromotion = () => {
   const [promotionTitle, setPromotionTitle] = useState("");
@@ -76,22 +77,27 @@ const AddPromotion = () => {
     (state) => state?.createPromotion
   );
 
+  const promoTitleRef = useRef(null);
+  const fromDateRef = useRef(null)
+  const toDateRef = useRef(null)
+
   const validateDates = () => {
-    let newErrors = { fromDate: "", toDate: "", promotionTitle: "" };
+  let newErrors = { fromDate: "", toDate: "", promotionTitle: "" };
 
-    if (!startDate) {
-      newErrors.fromDate = "From date is required";
-    }
-    if (!endDate) {
-      newErrors.toDate = "To date is required";
-    }
+  if (!startDate) {
+    newErrors.fromDate = "From date is required";
+  }
+  if (!endDate) {
+    newErrors.toDate = "To date is required";
+  }
 
-    if (!promotionTitle) {
-      newErrors.promotionTitle = "Promotion title is required";
-    }
-    setErrors(newErrors);
-    return Object.values(newErrors).every((err) => err === "");
-  };
+  if (!promotionTitle) {
+    newErrors.promotionTitle = "Promotion title is required";
+  }
+  setErrors(newErrors);
+  scrollToTop(newErrors, { promoTitleRef, fromDateRef, toDateRef });
+  return Object.values(newErrors).every((err) => err === "");
+};
 
   const handleCheckboxChange = (itemId) => {
     setSelectedMerchants((prevSelected) =>
@@ -246,7 +252,6 @@ const AddPromotion = () => {
       setDroppedBrand(null);
     }
   };
-
   const handleSubmit = (values) => {
     if (validateDates() && !errorMessage) {
       let payload = {
@@ -276,7 +281,7 @@ const AddPromotion = () => {
 
   return (
     <>
-      {createPromotionSelector?.isLoading ||merchantsListSelector?.isLoading && <Loader />}
+      {(createPromotionSelector?.isLoading ||merchantsListSelector?.isLoading) && <Loader />}
       <div className="dashboard">
         <DndProvider backend={HTML5Backend}>
           <div className="d-flex gap-20 position-relative">
@@ -463,7 +468,8 @@ const AddPromotion = () => {
 
             {/* Drop Area */}
             <div className="w-100 positionSticky">
-              <div className="tabPadding mb-20">
+              <div className="mb-20">
+                <div className="tabPadding">
                 <input
                   type="text"
                   name="addTitleInput"
@@ -473,6 +479,7 @@ const AddPromotion = () => {
                   autoComplete="off"
                   onKeyDown={handleKeyPressSpace}
                   maxLength={50}
+                  ref={promoTitleRef}
                   onChange={(e) => {
                     setPromotionTitle(e.target.value);
                     setErrors((prev) => ({ ...prev, promotionTitle: "" }));
@@ -480,10 +487,11 @@ const AddPromotion = () => {
                 />
               </div>
               {errors?.promotionTitle && (
-                <p className="mt-10 fw-500 fs-14 error">
+                <div className="fw-500 fs-14 error">
                   {errors.promotionTitle}
-                </p>
+                </div>
               )}
+              </div>
               <div className="tabPadding mb-20">
                 <div className="fs-18 fw-700">Add Brand</div>
                 <div className="divider2"></div>
@@ -549,12 +557,12 @@ const AddPromotion = () => {
               <div className="tabPadding mb-20">
                 <div className="fs-18 fw-700"> Promotion timeframe</div>
                 <div className="divider2"></div>
-                <div className=" d-flex align-end gap-10">
+                <div className=" d-flex gap-10">
                   <div className="w-100">
                     <label htmlFor="" className="fs-14 fw-500 mb-10">
                       From
                     </label>
-                    <div className="position-relative">
+                    <div className="position-relative" ref={fromDateRef}>
                       <DatePicker
                         className="customTime input"
                         format="YYYY-MM-DD"
@@ -572,17 +580,17 @@ const AddPromotion = () => {
                         className="datePickerImg"
                       />
                     </div>
-                    {errors.fromDate && (
-                      <p className="mt-10 fw-500 fs-14 error">
-                        {errors.fromDate}
-                      </p>
+                    {errors?.fromDate && (
+                      <div className="mt-10 fw-500 fs-14 error">
+                        {errors?.fromDate}
+                      </div>
                     )}
                   </div>
                   <div className="w-100">
                     <label htmlFor="" className="fs-14 fw-500 mb-10">
                       to
                     </label>
-                    <div className="position-relative">
+                    <div className="position-relative"ref={toDateRef}>
                       <DatePicker
                         className="customTime input"
                         format="YYYY-MM-DD"
@@ -608,9 +616,9 @@ const AddPromotion = () => {
                       />
                     </div>
                     {errors.toDate && (
-                      <p className="mt-10 fw-500 fs-14 error">
+                      <div className="mt-10 fw-500 fs-14 error">
                         {errors.toDate}
-                      </p>
+                      </div>
                     )}
                   </div>
                 </div>

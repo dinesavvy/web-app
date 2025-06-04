@@ -16,7 +16,7 @@ import useScrollToTop from "../../../../hooks/useScrollToTop";
 const Brands = () => {
   const messageApi = useCommonMessage();
   const [searchString, setSearchString] = useState("");
-  const [pagination, setPagination] = useState({ page: 1, limit: 10 });
+  const [pagination, setPagination] = useState({ page: 1, limit: 12 });
   const [brandDetails, setBrandDetails] = useState({});
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
   const navigate = useNavigate();
@@ -24,7 +24,7 @@ const Brands = () => {
 
 
   // Scroll to top when the component mounts
-  useScrollToTop([pagination?.page]);
+  useScrollToTop([pagination?.page,pagination?.limit]);
 
   const getBrandListSelector = useSelector((state) => state?.brandList);
   const deleteBrandSelector = useSelector((state) => state?.deleteBrand);
@@ -149,7 +149,7 @@ const Brands = () => {
             <div className="d-flex align-center justify-between flexPagination">
               <div className="fs-16">
                 {(() => {
-                  const start = (pagination.page - 1) * pagination.limit + 1;
+                  const start = (pagination?.page - 1) * pagination?.limit + 1;
                   const end = Math.min(
                     start +
                       getBrandListSelector?.data?.data?.records?.length -
@@ -164,6 +164,8 @@ const Brands = () => {
                 pageSize={pagination?.limit}
                 total={getBrandListSelector?.data?.data?.recordsCount}
                 onChange={handlePaginationChange}
+                pageSizeOptions={["12" ,'20', '50', '100']} 
+                showSizeChanger
               />
             </div>
           )}

@@ -251,7 +251,7 @@ const DistributorPromotionList = () => {
             <div className="d-flex align-center justify-between flexPagination">
               <div className="fs-16">
                 {(() => {
-                  const start = (pagination.page - 1) * pagination.limit + 1;
+                  const start = (pagination?.page - 1) * pagination?.limit + 1;
                   const end = Math.min(
                     start +
                       distributorPromotionList?.data?.data?.records?.length -
@@ -266,6 +266,8 @@ const DistributorPromotionList = () => {
                 pageSize={pagination?.limit}
                 total={distributorPromotionList?.data?.data?.recordsCount}
                 onChange={handlePaginationChange}
+                pageSizeOptions={["12" ,'20', '50', '100']} 
+                showSizeChanger={true}
               />
             </div>
           )}

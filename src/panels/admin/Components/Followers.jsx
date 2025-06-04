@@ -22,7 +22,7 @@ import useScrollToTop from "../../../hooks/useScrollToTop";
 const Followers = () => {
   const [archive, setArchive] = useState(false);
   const [arr, setArr] = useState([]);
-  const [pagination, setPagination] = useState({ page: 1, limit: 10 });
+  const [pagination, setPagination] = useState({ page: 1, limit: 12 });
   const [searchString, setSearchString] = useState("");
   const [searchArea, setSearchArea] = useState([]);
 
@@ -32,7 +32,7 @@ const Followers = () => {
   const navigate = useNavigate();
 
   // Scroll to top when the component mounts
-  useScrollToTop([pagination?.page]);
+  useScrollToTop([pagination?.page,pagination?.limit]);
 
   const handlePaginationChange = (page, pageSize) => {
     setPagination({ page, limit: pageSize });
@@ -387,14 +387,16 @@ const Followers = () => {
           {followerListSelector?.data?.data?.records?.length > 0 && (
             <div className="d-flex align-center justify-between flexPagination">
               <div className="fs-16">
-                Showing {pagination.page} to {pagination.limit} of{" "}
+                Showing {pagination?.page} to {pagination?.limit} of{" "}
                 {followerListSelector?.data?.data?.recordsCount} Followers
               </div>
               <Pagination
-                current={pagination.page}
-                pageSize={pagination.limit}
+                current={pagination?.page}
+                pageSize={pagination?.limit}
                 total={followerListSelector?.data?.data?.recordsCount}
                 onChange={handlePaginationChange}
+                pageSizeOptions={["12" ,'20', '50', '100']} 
+                showSizeChanger ={true}
               />
             </div>
           )}

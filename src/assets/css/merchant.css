@@ -1684,7 +1684,7 @@ margin: 20px 0;
 }
 
 input.addTitleInput::placeholder {
-  color: #005CDE;
+  color: #005CDE !important;
 }
 .addTitleInput:focus::placeholder{
   color: #777;

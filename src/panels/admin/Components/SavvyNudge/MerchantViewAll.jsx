@@ -11,7 +11,6 @@ const MerchantViewAll = ({
   toggleSidebarMerchantViewAll,
   merchantInnerDrawer,
 }) => {
-
   const [openIndex, setOpenIndex] = useState(null);
   const staticData = [
     {
@@ -93,36 +92,64 @@ const MerchantViewAll = ({
                 >
                   <div className="imageAccorddian mb-20">
                     <img
-                      src={item?.details?.logoUrl ||noImageFound}
+                      src={item?.details?.logoUrl || noImageFound}
                       alt="logo"
                       className="h-100 object-cover"
                     />
                   </div>
-
                   <div className="grid2 ">
                     <div>
                       <div className="fs-14 mb-4">Sent</div>
-                      <div className="fs-14 fw-600">200</div>
+                      <div className="fs-14 fw-600">{item?.savvyNudgeSent||0}</div>
                     </div>
                     <div>
                       <div className="fs-14 mb-4">Accepted:</div>
                       <div className="fs-14 fw-600 greenText">
                         {/* ${item.accepted} */}
-                        150/75%
+                        {/* 150/75% */}
+                        {item?.savvyNudgeSent
+                          ? `${item?.savvyNudgeaccepted || 0}/${
+                              item?.savvyNudgeSent
+                            } (${(
+                              (item?.savvyNudgeaccepted /
+                                item?.savvyNudgeSent) *
+                              100
+                            ).toFixed(2)}%)`
+                          : 0}
                       </div>
                     </div>
                     <div>
                       <div className="fs-14 mb-4">Declined:</div>
                       <div className="fs-14 fw-600 brandRed">
                         {/* ${item.declined} */}
-                        30/15%
+                        {/* 30/15% */}
+                        {item?.savvyNudgeSent > 0
+                          ? `${item?.savvyNudgedeclined || 0}/${(
+                              (item?.savvyNudgedeclined /
+                                item?.savvyNudgeSent) *
+                              100
+                            ).toFixed(2)}%`
+                          : 0}
                       </div>
                     </div>
                     <div>
                       <div className="fs-14 mb-4">Redeemed</div>
                       <div className="fs-14 fw-600 greyColor">
                         {/* ${item.redeemed} */}
-                        20/10%
+                        {/* 20/10% */}
+                        {item?.savvyNudgeSent > 0
+                          ? `${
+                              item?.savvyNudgeSent -
+                              ((item?.savvyNudgeaccepted || 0) +
+                                (item?.savvyNudgedeclined || 0))
+                            }/${(
+                              ((item?.savvyNudgeSent -
+                                ((item?.savvyNudgeaccepted || 0) +
+                                  (item?.savvyNudgedeclined || 0))) /
+                                item?.savvyNudgeSent) *
+                              100
+                            ).toFixed(2)}%`
+                          : 0}
                       </div>
                     </div>
                   </div>

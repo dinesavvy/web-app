@@ -14,13 +14,14 @@ import moment from "moment";
 import { nudgesDetailsHandler } from "../../../redux/action/nudgeDetails";
 import noImageFound from "../../../assets/images/noImageFound.png";
 import { useNavigate } from "react-router-dom";
+import useScrollToTop from "../../../hooks/useScrollToTop";
 
 const Nudges = () => {
   const navigate = useNavigate();
-  const [pagination, setPagination] = useState({ page: 1, limit: 10 });
-  const [merchantPagination, setMerchantPagination] = useState({
+  const [pagination, setPagination] = useState({ page: 1, limit: 12 });
+  const [nudgePagination, setNudgePagination] = useState({
     page: 1,
-    limit: 10,
+    limit: 12,
   });
   const [activeTab, setActiveTab] = useState(true);
   const [nudgeId, setNudgeId] = useState("");
@@ -32,6 +33,10 @@ const Nudges = () => {
   const nudgeDetailsMainSelector = useSelector(
     (state) => state?.nudgeDetailsMain
   );
+
+
+  // Scroll to top when the component mounts
+    useScrollToTop([nudgePagination?.page,nudgePagination?.limit]);
 
   const dispatch = useDispatch();
   const [page, setPage] = useState(1);
@@ -51,8 +56,8 @@ const Nudges = () => {
   };
 
   const handleMerchantPageChange = (page, pageSize) => {
-    // setMerchantPagination((prev) => ({ ...prev, page: newPage }));
-    setMerchantPagination({ page, limit: pageSize });
+    // setNudgePagination((prev) => ({ ...prev, page: newPage }));
+    setNudgePagination({ page, limit: pageSize });
   };
 
   const handleSearchChange = (value) => {
@@ -84,8 +89,8 @@ const Nudges = () => {
       const fetchNudgesList = () => {
         const payload = {
           locationId: selectedValue?._id,
-          page: merchantPagination?.page,
-          limit: merchantPagination?.limit,
+          page: nudgePagination?.page,
+          limit: nudgePagination?.limit,
           searchString:searchString1,
           isActive: activeTab,
         };
@@ -93,7 +98,7 @@ const Nudges = () => {
       };
       fetchNudgesList();
     // }
-  }, [merchantPagination, searchString1, activeTab,selectedValue]);
+  }, [nudgePagination, searchString1, activeTab,selectedValue]);
 
   useEffect(() => {
     const fetchMerchants = () => {
@@ -202,7 +207,7 @@ const Nudges = () => {
                   {/* Showing {pagination.page} to {pagination.limit} of{" "}
                   {merchantsListSelector?.data?.data?.recordsCount} Restaurants */}
                   {(() => {
-                    const start = (pagination.page - 1) * pagination.limit + 1;
+                    const start = (pagination?.page - 1) * pagination?.limit + 1;
                     const end = Math.min(
                       start +
                         merchantsListSelector?.data?.data?.records?.length -
@@ -213,10 +218,11 @@ const Nudges = () => {
                   })()}
                 </div>
                 <Pagination
-                  current={pagination.page}
-                  pageSize={pagination.limit}
+                  current={pagination?.page}
+                  pageSize={pagination?.limit}
                   total={merchantsListSelector?.data?.data?.recordsCount}
                   onChange={handlePaginationChange}
+                  pageSizeOptions={["12" ,'20', '50', '100']} 
                 />
               </div>
             )}
@@ -446,7 +452,7 @@ const Nudges = () => {
                     <div className="fs-16">
                       {(() => {
                         const start =
-                          (pagination.page - 1) * pagination.limit + 1;
+                          (pagination?.page - 1) * pagination?.limit + 1;
                         const end = Math.min(
                           start +
                             merchantsListSelector?.data?.data?.records?.length -
@@ -457,10 +463,12 @@ const Nudges = () => {
                       })()}
                     </div>
                     <Pagination
-                      current={pagination.page}
-                      pageSize={pagination.limit}
+                      current={pagination?.page}
+                      pageSize={pagination?.limit}
                       total={merchantsListSelector?.data?.data?.recordsCount}
                       onChange={handlePaginationChange}
+                      pageSizeOptions={["12" ,'20', '50', '100']} 
+                      showSizeChanger
                     />
                   </div>
                 )}
@@ -471,8 +479,8 @@ const Nudges = () => {
                     <div className="fs-16">
                       {(() => {
                         const start =
-                          (merchantPagination.page - 1) *
-                            merchantPagination.limit +
+                          (nudgePagination?.page - 1) *
+                            nudgePagination?.limit +
                           1;
                         const end = Math.min(
                           start +
@@ -484,10 +492,12 @@ const Nudges = () => {
                       })()}
                     </div>
                     <Pagination
-                      current={merchantPagination.page}
-                      pageSize={merchantPagination.limit}
+                      current={nudgePagination?.page}
+                      pageSize={nudgePagination?.limit}
                       total={nudgesListSelector?.data?.data?.recordsCount}
                       onChange={handleMerchantPageChange}
+                      pageSizeOptions={["12" ,'20', '50', '100']} 
+                      showSizeChanger={true}
                     />
                   </div>
                 )}

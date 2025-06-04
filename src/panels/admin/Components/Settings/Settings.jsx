@@ -15,7 +15,7 @@ import { handleKeyPressSpace } from "../../../../common/commonFunctions/CommonFu
 const Settings = () => {
   const [environment, setEnvironment] = useState("Stage");
   const [application, setApplication] = useState("");
-  const [pagination, setPagination] = useState({ page: 1, limit: 10 });
+  const [pagination, setPagination] = useState({ page: 1, limit: 12 });
   const [ios, setIos] = useState({ version: "", build: "", minForce: "" });
   const [searchString, setSearchString] = useState("");
   const [android, setAndroid] = useState({
@@ -468,6 +468,8 @@ const Settings = () => {
               pageSize={pagination?.limit}
               total={settingList?.data?.data?.recordsCount}
               onChange={handlePaginationChange}
+              pageSizeOptions={["12" ,'20', '50', '100']} 
+              showSizeChanger
             />
           </div>
         </div>

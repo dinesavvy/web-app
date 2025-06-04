@@ -21,7 +21,7 @@ import useScrollToTop from "../../../../hooks/useScrollToTop";
 const Suppliers = () => {
   const [modal2Open, setModal2Open] = useState(false);
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
-  const [pagination, setPagination] = useState({ page: 1, limit: 10 });
+  const [pagination, setPagination] = useState({ page: 1, limit: 12 });
   const [removeSupplier, setRemoveSupplier] = useState({});
   const removeSupplierSelector = useSelector((state) => state?.removeSupplier);
   const [selectedSupplier, setSelectedSupplier] = useState(null);
@@ -219,6 +219,8 @@ const Suppliers = () => {
                 pageSize={pagination?.limit}
                 total={getSuppliersListSelector?.data?.data?.recordsCount}
                 onChange={handlePaginationChange}
+                pageSizeOptions={["12" ,'20', '50', '100']} 
+                showSizeChanger={true}
               />
             </div>
           )}

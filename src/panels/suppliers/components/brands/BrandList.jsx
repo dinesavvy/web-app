@@ -24,7 +24,7 @@ const Brands = () => {
   const dispatch = useDispatch();
 
   // Scroll to top when the component mounts
-  useScrollToTop([pagination?.page]);
+  useScrollToTop([pagination?.page,pagination?.limit]);
 
 
   const getBrandListSelector = useSelector((state) => state?.supplierBrandList);
@@ -172,6 +172,8 @@ const Brands = () => {
                 pageSize={pagination?.limit}
                 total={getBrandListSelector?.data?.data?.recordsCount}
                 onChange={handlePaginationChange}
+                pageSizeOptions={["12" ,'20', '50', '100']} 
+                showSizeChanger
               />
             </div>
           )}

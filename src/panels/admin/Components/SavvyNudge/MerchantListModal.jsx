@@ -41,7 +41,6 @@ const MerchantListModal = ({
         searchString: searchString,
         searchArea: [],
       };
-      console.log(payload,"payload")
       dispatch(merchantsListHandler(payload));
     };
     fetchMerchants();
