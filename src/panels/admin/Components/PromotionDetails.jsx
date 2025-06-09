@@ -69,12 +69,26 @@ const PromotionDetails = ({
     <>
       {(promotionDetailsSelector?.isLoading ||
         adminEndPromotionSelector?.isLoading) && <Loader />}
-      {isOpen && <div className="overlay2" onClick={toggleDetails}></div>}
+      {isOpen && (
+        <div
+          className="overlay2"
+          onClick={() => {
+            toggleDetails();
+            setOpenIndex(false);
+          }}
+        ></div>
+      )}
 
       <div className={`rightSidebar rightSidebar2 ${isOpen ? "open" : ""}`}>
         <div className="d-flex justify-between align-center">
           <div className="fs-20 fw-600">Promotion Details</div>
-          <div className="closeSidebar" onClick={toggleDetails}>
+          <div
+            className="closeSidebar"
+            onClick={() => {
+              toggleDetails();
+              setOpenIndex(false);
+            }}
+          >
             <img src={closeRightSidebar} alt="closeRightSidebar" />
           </div>
         </div>
@@ -192,11 +206,17 @@ const PromotionDetails = ({
                         promotionDetailsSelector?.data?.data?.locationDetails?.businessName?.slice(
                           1
                         )
-                      : ""}
+                      : "-"}
                   </div>
-
                   <div className="d-flex align-center gap-16">
-                    <div className="fs-16 fw-600 roi blue">
+                    <div
+                      className={`fs-16 fw-600 roi ${
+                        promotionDetailsSelector?.data?.data
+                          ?.promotionStatus === "Pending"
+                          ? "brandred"
+                          : "green"
+                      }`}
+                    >
                       {promotionDetailsSelector?.data?.data?.promotionStatus ||
                         "-"}
                     </div>
@@ -332,7 +352,6 @@ const PromotionDetails = ({
             promotionDetailsSelector?.data?.data?.promotionStatus ===
               "Pending" && (
               <>
-                {/* <div className="divider2"></div> */}
                 <div className="deleteBtnfull btn" onClick={endPromotion}>
                   Close Promotion
                 </div>

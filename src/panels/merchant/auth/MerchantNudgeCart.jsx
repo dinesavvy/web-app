@@ -54,7 +54,7 @@ const promotionNudgeItem = JSON.parse(
       deactivateAt: Date.now() + 24 * 60 * 60 * 1000,
       imageId: "",
       totalQuantity: Number(values?.quantity),
-      promotionId:promotionNudgeItem?._id
+      promotionId:promotionNudgeItem?promotionNudgeItem?._id:undefined
     };
     dispatch(businessCreateNudgeHandler(payload));
   };

@@ -350,7 +350,7 @@ const EditMember = () => {
                         >
                           Date Joined
                         </label>
-                        <div className="fixedDate input  position-relative">
+                        <div className="fixedDate input position-relative">
                           Pending
                         </div>
                       </div>

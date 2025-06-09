@@ -30,6 +30,7 @@ import TeamMember from "./TeamMember";
 import { nudgeAnalyticHandler } from "../../../redux/action/nudgeAnalytic";
 import { tabs3 } from "./merchant/merchantCommon";
 import AddNudgeCreditDrawer from "./merchant/AddCreditDrawer";
+import CommonPagination from "../../../common/pagination/CommonPagination";
 
 const MerchantDetails = () => {
   const { state } = useLocation();
@@ -72,9 +73,7 @@ const MerchantDetails = () => {
     setAddNudgeCredit(true);
   };
   useEffect(() => {
-    if (
-      (state?.fromSelectAudience)
-    ) {
+    if (state?.fromSelectAudience) {
       setActiveTab3("3");
       const updatedCheckedItems = {};
 
@@ -266,7 +265,8 @@ const MerchantDetails = () => {
 
   const nudgeGoal = nudgeAnalyticSelector?.data?.data?.nudgeGoal || 0;
   const nudgeSent = nudgeAnalyticSelector?.data?.data?.nudgeSent || 0;
-  const percentage = nudgeGoal > 0 ? Math.round((nudgeSent / nudgeGoal) * 100) : 0;
+  const percentage =
+    nudgeGoal > 0 ? Math.round((nudgeSent / nudgeGoal) * 100) : 0;
 
   return (
     <>
@@ -278,25 +278,25 @@ const MerchantDetails = () => {
       ) : (
         <div className="dashboard">
           <div className="tabAfter">
-          <div className="tabs-container tab3 tabFull">
-            <div className="tabs">
-              {tabs3?.map((tab) => (
-                <button
-                  key={tab.id}
-                  className={`tab-button ${
-                    activeTab3 === tab.id ? "active" : ""
-                  }`}
-                  onClick={() => {
-                    setActiveTab3(tab.id);
-                    setViewDetail(false);
-                    setCheckedItems({});
-                  }}
-                >
-                  {tab.label}
-                </button>
-              ))}
+            <div className="tabs-container tab3 tabFull">
+              <div className="tabs">
+                {tabs3?.map((tab) => (
+                  <button
+                    key={tab.id}
+                    className={`tab-button ${
+                      activeTab3 === tab.id ? "active" : ""
+                    }`}
+                    onClick={() => {
+                      setActiveTab3(tab.id);
+                      setViewDetail(false);
+                      setCheckedItems({});
+                    }}
+                  >
+                    {tab.label}
+                  </button>
+                ))}
+              </div>
             </div>
-          </div>
           </div>
           {activeTab3 === "1" ? (
             <>
@@ -422,37 +422,36 @@ const MerchantDetails = () => {
                         />
                       ) : (
                         <a className="anchor fs-18" href="tel:+911234567890">
-                          {merchantDetailsSelector?.data?.data?.ownerDetails?.phoneNumber||"N/A"}
+                          {merchantDetailsSelector?.data?.data?.ownerDetails
+                            ?.phoneNumber || "N/A"}
                         </a>
                       )}
-                      </div>
-                      {/* )} */}
+                    </div>
+                    {/* )} */}
 
                     <div>
                       {/* {merchantDetailsSelector?.data?.data?.ownerDetails
                         ?.email && (
                         <> */}
-                          <label
-                            htmlFor="name"
-                            className="grey mb-10 fs-16 fw-500"
-                          >
-                            Email
-                          </label>
-                          <a
-                            className="anchor fs-18"
-                            href={
-                              merchantDetailsSelector?.data?.data?.ownerDetails
-                                ?.email
-                                ? `mailto:${merchantDetailsSelector.data.data.ownerDetails.email||undefined}`
-                                : "#"
-                            }
-                          >
-                            {
-                              merchantDetailsSelector?.data?.data?.ownerDetails
-                                ?.email||"N/A"
-                            }
-                          </a>
-                        {/* </>
+                      <label htmlFor="name" className="grey mb-10 fs-16 fw-500">
+                        Email
+                      </label>
+                      <a
+                        className="anchor fs-18"
+                        href={
+                          merchantDetailsSelector?.data?.data?.ownerDetails
+                            ?.email
+                            ? `mailto:${
+                                merchantDetailsSelector.data.data.ownerDetails
+                                  .email || undefined
+                              }`
+                            : "#"
+                        }
+                      >
+                        {merchantDetailsSelector?.data?.data?.ownerDetails
+                          ?.email || "N/A"}
+                      </a>
+                      {/* </>
                       )} */}
                       {/* )} */}
                     </div>
@@ -470,10 +469,14 @@ const MerchantDetails = () => {
                       ) : (
                         <a
                           className="anchor fs-18"
-                          href={merchantDetailsSelector?.data?.data?.websiteUrl||undefined}
+                          href={
+                            merchantDetailsSelector?.data?.data?.websiteUrl ||
+                            undefined
+                          }
                           target="_blank"
                         >
-                          {merchantDetailsSelector?.data?.data?.websiteUrl || "N/A"}
+                          {merchantDetailsSelector?.data?.data?.websiteUrl ||
+                            "N/A"}
                         </a>
                       )}
                     </div>
@@ -624,26 +627,31 @@ const MerchantDetails = () => {
                     </div>
                   )}
                 </div>
-                  {merchantDetailsSelector?.data?.data?.businessHours?.periods?.length>0 && (
+                {merchantDetailsSelector?.data?.data?.businessHours?.periods
+                  ?.length > 0 && (
+                  <div className="card">
+                    <div className="d-flex align-center justify-between gap-20 mb-20 flexmd">
+                      <div className="fs-20 fw-700">Hours of operation</div>
+                    </div>
 
-                <div className="card">
-                  <div className="d-flex align-center justify-between gap-20 mb-20 flexmd">
-                    <div className="fs-20 fw-700">Hours of operation</div>
-                  </div>
-                 
-                      {!editInput && (
-                        <div>
-                          {(() => {
-                            // Group periods by day
-                            const groupedPeriods = merchantDetailsSelector?.data?.data?.businessHours?.periods?.reduce((acc, period) => {
-                              if (!acc[period.dayOfWeek]) {
-                                acc[period.dayOfWeek] = [];
-                              }
-                              acc[period.dayOfWeek].push(period);
-                              return acc;
-                            }, {});
+                    {!editInput && (
+                      <div>
+                        {(() => {
+                          // Group periods by day
+                          const groupedPeriods =
+                            merchantDetailsSelector?.data?.data?.businessHours?.periods?.reduce(
+                              (acc, period) => {
+                                if (!acc[period.dayOfWeek]) {
+                                  acc[period.dayOfWeek] = [];
+                                }
+                                acc[period.dayOfWeek].push(period);
+                                return acc;
+                              },
+                              {}
+                            );
 
-                            return Object.entries(groupedPeriods || {}).map(([day, periods], index) => (
+                          return Object.entries(groupedPeriods || {}).map(
+                            ([day, periods], index) => (
                               <React.Fragment key={day}>
                                 <div className="divider2"></div>
                                 <div className="d-flex align-center justify-between">
@@ -652,392 +660,395 @@ const MerchantDetails = () => {
                                     {periods.map((period, i) => (
                                       <React.Fragment key={i}>
                                         {i > 0 && <br />}
-                                        {period.startLocalTime + " to " + period.endLocalTime}
+                                        {period.startLocalTime +
+                                          " to " +
+                                          period.endLocalTime}
                                       </React.Fragment>
                                     ))}
                                   </div>
                                 </div>
                               </React.Fragment>
-                            ));
-                          })()}
-                        </div>
-                      )}
-                    
-                  {editInput && (
-                    <>
-                      <div className="overflow">
-                        <div className="minw">
-                          <div className="d-flex align-center justify-between">
-                            <div className="grey fs-16">Sunday</div>
-                            <div className="d-flex align-center gap-16">
-                              <CustomSwitch
-                                isOn={switchState}
-                                onToggle={handleToggle}
-                              />
-                              <div>Closed</div>
+                            )
+                          );
+                        })()}
+                      </div>
+                    )}
+
+                    {editInput && (
+                      <>
+                        <div className="overflow">
+                          <div className="minw">
+                            <div className="d-flex align-center justify-between">
+                              <div className="grey fs-16">Sunday</div>
+                              <div className="d-flex align-center gap-16">
+                                <CustomSwitch
+                                  isOn={switchState}
+                                  onToggle={handleToggle}
+                                />
+                                <div>Closed</div>
+                              </div>
                             </div>
+                            {switchState && (
+                              <div className="mt-10 d-flex align-end gap-10">
+                                <div className="w-100">
+                                  <label
+                                    htmlFor=""
+                                    className="fs-14 fw-500 mb-10"
+                                  >
+                                    From
+                                  </label>
+                                  <TimePicker
+                                    className="customTime input"
+                                    showOk={false}
+                                  />
+                                </div>
+                                <div className="w-100">
+                                  <label
+                                    htmlFor=""
+                                    className="fs-14 fw-500 mb-10"
+                                  >
+                                    to
+                                  </label>
+                                  <TimePicker
+                                    className="customTime input"
+                                    showOk={false}
+                                  />
+                                </div>
+                                <div className="addTime">
+                                  <img src={addTime} alt="" />
+                                </div>
+                              </div>
+                            )}
                           </div>
-                          {switchState && (
-                            <div className="mt-10 d-flex align-end gap-10">
-                              <div className="w-100">
-                                <label
-                                  htmlFor=""
-                                  className="fs-14 fw-500 mb-10"
-                                >
-                                  From
-                                </label>
-                                <TimePicker
-                                  className="customTime input"
-                                  showOk={false}
+                          <div className="divider2"></div>
+                          <div className="minw">
+                            <div className="d-flex align-center justify-between">
+                              <div className="grey fs-16">Sunday</div>
+                              <div className="d-flex align-center gap-16">
+                                <CustomSwitch
+                                  isOn={switchState}
+                                  onToggle={handleToggle}
                                 />
-                              </div>
-                              <div className="w-100">
-                                <label
-                                  htmlFor=""
-                                  className="fs-14 fw-500 mb-10"
-                                >
-                                  to
-                                </label>
-                                <TimePicker
-                                  className="customTime input"
-                                  showOk={false}
-                                />
-                              </div>
-                              <div className="addTime">
-                                <img src={addTime} alt="" />
+                                <div>Closed</div>
                               </div>
                             </div>
-                          )}
-                        </div>
-                        <div className="divider2"></div>
-                        <div className="minw">
-                          <div className="d-flex align-center justify-between">
-                            <div className="grey fs-16">Sunday</div>
-                            <div className="d-flex align-center gap-16">
-                              <CustomSwitch
-                                isOn={switchState}
-                                onToggle={handleToggle}
-                              />
-                              <div>Closed</div>
-                            </div>
+                            {switchState && (
+                              <div className="mt-10 d-flex align-end gap-10">
+                                <div className="w-100">
+                                  <label
+                                    htmlFor=""
+                                    className="fs-14 fw-500 mb-10"
+                                  >
+                                    From
+                                  </label>
+                                  <TimePicker
+                                    className="customTime input"
+                                    showOk={false}
+                                  />
+                                </div>
+                                <div className="w-100">
+                                  <label
+                                    htmlFor=""
+                                    className="fs-14 fw-500 mb-10"
+                                  >
+                                    to
+                                  </label>
+                                  <TimePicker
+                                    className="customTime input"
+                                    showOk={false}
+                                  />
+                                </div>
+                                <div className="addTime">
+                                  <img src={addTime} alt="" />
+                                </div>
+                              </div>
+                            )}
                           </div>
-                          {switchState && (
-                            <div className="mt-10 d-flex align-end gap-10">
-                              <div className="w-100">
-                                <label
-                                  htmlFor=""
-                                  className="fs-14 fw-500 mb-10"
-                                >
-                                  From
-                                </label>
-                                <TimePicker
-                                  className="customTime input"
-                                  showOk={false}
+                          <div className="divider2"></div>
+                          <div className="minw">
+                            <div className="d-flex align-center justify-between">
+                              <div className="grey fs-16">Sunday</div>
+                              <div className="d-flex align-center gap-16">
+                                <CustomSwitch
+                                  isOn={switchState}
+                                  onToggle={handleToggle}
                                 />
-                              </div>
-                              <div className="w-100">
-                                <label
-                                  htmlFor=""
-                                  className="fs-14 fw-500 mb-10"
-                                >
-                                  to
-                                </label>
-                                <TimePicker
-                                  className="customTime input"
-                                  showOk={false}
-                                />
-                              </div>
-                              <div className="addTime">
-                                <img src={addTime} alt="" />
+                                <div>Closed</div>
                               </div>
                             </div>
-                          )}
-                        </div>
-                        <div className="divider2"></div>
-                        <div className="minw">
-                          <div className="d-flex align-center justify-between">
-                            <div className="grey fs-16">Sunday</div>
-                            <div className="d-flex align-center gap-16">
-                              <CustomSwitch
-                                isOn={switchState}
-                                onToggle={handleToggle}
-                              />
-                              <div>Closed</div>
-                            </div>
+                            {switchState && (
+                              <div className="mt-10 d-flex align-end gap-10">
+                                <div className="w-100">
+                                  <label
+                                    htmlFor=""
+                                    className="fs-14 fw-500 mb-10"
+                                  >
+                                    From
+                                  </label>
+                                  <TimePicker
+                                    className="customTime input"
+                                    showOk={false}
+                                  />
+                                </div>
+                                <div className="w-100">
+                                  <label
+                                    htmlFor=""
+                                    className="fs-14 fw-500 mb-10"
+                                  >
+                                    to
+                                  </label>
+                                  <TimePicker
+                                    className="customTime input"
+                                    showOk={false}
+                                  />
+                                </div>
+                                <div className="addTime">
+                                  <img src={addTime} alt="" />
+                                </div>
+                              </div>
+                            )}
                           </div>
-                          {switchState && (
-                            <div className="mt-10 d-flex align-end gap-10">
-                              <div className="w-100">
-                                <label
-                                  htmlFor=""
-                                  className="fs-14 fw-500 mb-10"
-                                >
-                                  From
-                                </label>
-                                <TimePicker
-                                  className="customTime input"
-                                  showOk={false}
+                          <div className="divider2"></div>
+                          <div className="minw">
+                            <div className="d-flex align-center justify-between">
+                              <div className="grey fs-16">Sunday</div>
+                              <div className="d-flex align-center gap-16">
+                                <CustomSwitch
+                                  isOn={switchState}
+                                  onToggle={handleToggle}
                                 />
-                              </div>
-                              <div className="w-100">
-                                <label
-                                  htmlFor=""
-                                  className="fs-14 fw-500 mb-10"
-                                >
-                                  to
-                                </label>
-                                <TimePicker
-                                  className="customTime input"
-                                  showOk={false}
-                                />
-                              </div>
-                              <div className="addTime">
-                                <img src={addTime} alt="" />
+                                <div>Closed</div>
                               </div>
                             </div>
-                          )}
-                        </div>
-                        <div className="divider2"></div>
-                        <div className="minw">
-                          <div className="d-flex align-center justify-between">
-                            <div className="grey fs-16">Sunday</div>
-                            <div className="d-flex align-center gap-16">
-                              <CustomSwitch
-                                isOn={switchState}
-                                onToggle={handleToggle}
-                              />
-                              <div>Closed</div>
-                            </div>
+                            {switchState && (
+                              <div className="mt-10 d-flex align-end gap-10">
+                                <div className="w-100">
+                                  <label
+                                    htmlFor=""
+                                    className="fs-14 fw-500 mb-10"
+                                  >
+                                    From
+                                  </label>
+                                  <TimePicker
+                                    className="customTime input"
+                                    showOk={false}
+                                  />
+                                </div>
+                                <div className="w-100">
+                                  <label
+                                    htmlFor=""
+                                    className="fs-14 fw-500 mb-10"
+                                  >
+                                    to
+                                  </label>
+                                  <TimePicker
+                                    className="customTime input"
+                                    showOk={false}
+                                  />
+                                </div>
+                                <div className="addTime">
+                                  <img src={addTime} alt="" />
+                                </div>
+                              </div>
+                            )}
                           </div>
-                          {switchState && (
-                            <div className="mt-10 d-flex align-end gap-10">
-                              <div className="w-100">
-                                <label
-                                  htmlFor=""
-                                  className="fs-14 fw-500 mb-10"
-                                >
-                                  From
-                                </label>
-                                <TimePicker
-                                  className="customTime input"
-                                  showOk={false}
+                          <div className="divider2"></div>
+                          <div className="minw">
+                            <div className="d-flex align-center justify-between">
+                              <div className="grey fs-16">Sunday</div>
+                              <div className="d-flex align-center gap-16">
+                                <CustomSwitch
+                                  isOn={switchState}
+                                  onToggle={handleToggle}
                                 />
-                              </div>
-                              <div className="w-100">
-                                <label
-                                  htmlFor=""
-                                  className="fs-14 fw-500 mb-10"
-                                >
-                                  to
-                                </label>
-                                <TimePicker
-                                  className="customTime input"
-                                  showOk={false}
-                                />
-                              </div>
-                              <div className="addTime">
-                                <img src={addTime} alt="" />
+                                <div>Closed</div>
                               </div>
                             </div>
-                          )}
-                        </div>
-                        <div className="divider2"></div>
-                        <div className="minw">
-                          <div className="d-flex align-center justify-between">
-                            <div className="grey fs-16">Sunday</div>
-                            <div className="d-flex align-center gap-16">
-                              <CustomSwitch
-                                isOn={switchState}
-                                onToggle={handleToggle}
-                              />
-                              <div>Closed</div>
-                            </div>
+                            {switchState && (
+                              <div className="mt-10 d-flex align-end gap-10">
+                                <div className="w-100">
+                                  <label
+                                    htmlFor=""
+                                    className="fs-14 fw-500 mb-10"
+                                  >
+                                    From
+                                  </label>
+                                  <TimePicker
+                                    className="customTime input"
+                                    showOk={false}
+                                  />
+                                </div>
+                                <div className="w-100">
+                                  <label
+                                    htmlFor=""
+                                    className="fs-14 fw-500 mb-10"
+                                  >
+                                    to
+                                  </label>
+                                  <TimePicker
+                                    className="customTime input"
+                                    showOk={false}
+                                  />
+                                </div>
+                                <div className="addTime">
+                                  <img src={addTime} alt="" />
+                                </div>
+                              </div>
+                            )}
                           </div>
-                          {switchState && (
-                            <div className="mt-10 d-flex align-end gap-10">
-                              <div className="w-100">
-                                <label
-                                  htmlFor=""
-                                  className="fs-14 fw-500 mb-10"
-                                >
-                                  From
-                                </label>
-                                <TimePicker
-                                  className="customTime input"
-                                  showOk={false}
+                          <div className="divider2"></div>
+                          <div className="minw">
+                            <div className="d-flex align-center justify-between">
+                              <div className="grey fs-16">Sunday</div>
+                              <div className="d-flex align-center gap-16">
+                                <CustomSwitch
+                                  isOn={switchState}
+                                  onToggle={handleToggle}
                                 />
-                              </div>
-                              <div className="w-100">
-                                <label
-                                  htmlFor=""
-                                  className="fs-14 fw-500 mb-10"
-                                >
-                                  to
-                                </label>
-                                <TimePicker
-                                  className="customTime input"
-                                  showOk={false}
-                                />
-                              </div>
-                              <div className="addTime">
-                                <img src={addTime} alt="" />
+                                <div>Closed</div>
                               </div>
                             </div>
-                          )}
-                        </div>
-                        <div className="divider2"></div>
-                        <div className="minw">
-                          <div className="d-flex align-center justify-between">
-                            <div className="grey fs-16">Sunday</div>
-                            <div className="d-flex align-center gap-16">
-                              <CustomSwitch
-                                isOn={switchState}
-                                onToggle={handleToggle}
-                              />
-                              <div>Closed</div>
-                            </div>
+                            {switchState && (
+                              <div className="mt-10 d-flex align-end gap-10">
+                                <div className="w-100">
+                                  <label
+                                    htmlFor=""
+                                    className="fs-14 fw-500 mb-10"
+                                  >
+                                    From
+                                  </label>
+                                  <TimePicker
+                                    className="customTime input"
+                                    showOk={false}
+                                  />
+                                </div>
+                                <div className="w-100">
+                                  <label
+                                    htmlFor=""
+                                    className="fs-14 fw-500 mb-10"
+                                  >
+                                    to
+                                  </label>
+                                  <TimePicker
+                                    className="customTime input"
+                                    showOk={false}
+                                  />
+                                </div>
+                                <div className="addTime">
+                                  <img src={addTime} alt="" />
+                                </div>
+                              </div>
+                            )}
                           </div>
-                          {switchState && (
-                            <div className="mt-10 d-flex align-end gap-10">
-                              <div className="w-100">
-                                <label
-                                  htmlFor=""
-                                  className="fs-14 fw-500 mb-10"
-                                >
-                                  From
-                                </label>
-                                <TimePicker
-                                  className="customTime input"
-                                  showOk={false}
+                          <div className="divider2"></div>
+                          <div className="minw">
+                            <div className="d-flex align-center justify-between">
+                              <div className="grey fs-16">Sunday</div>
+                              <div className="d-flex align-center gap-16">
+                                <CustomSwitch
+                                  isOn={switchState}
+                                  onToggle={handleToggle}
                                 />
-                              </div>
-                              <div className="w-100">
-                                <label
-                                  htmlFor=""
-                                  className="fs-14 fw-500 mb-10"
-                                >
-                                  to
-                                </label>
-                                <TimePicker
-                                  className="customTime input"
-                                  showOk={false}
-                                />
-                              </div>
-                              <div className="addTime">
-                                <img src={addTime} alt="" />
+                                <div>Closed</div>
                               </div>
                             </div>
-                          )}
-                        </div>
-                        <div className="divider2"></div>
-                        <div className="minw">
-                          <div className="d-flex align-center justify-between">
-                            <div className="grey fs-16">Sunday</div>
-                            <div className="d-flex align-center gap-16">
-                              <CustomSwitch
-                                isOn={switchState}
-                                onToggle={handleToggle}
-                              />
-                              <div>Closed</div>
-                            </div>
+                            {switchState && (
+                              <div className="mt-10 d-flex align-end gap-10">
+                                <div className="w-100">
+                                  <label
+                                    htmlFor=""
+                                    className="fs-14 fw-500 mb-10"
+                                  >
+                                    From
+                                  </label>
+                                  <TimePicker
+                                    className="customTime input"
+                                    showOk={false}
+                                  />
+                                </div>
+                                <div className="w-100">
+                                  <label
+                                    htmlFor=""
+                                    className="fs-14 fw-500 mb-10"
+                                  >
+                                    to
+                                  </label>
+                                  <TimePicker
+                                    className="customTime input"
+                                    showOk={false}
+                                  />
+                                </div>
+                                <div className="addTime">
+                                  <img src={addTime} alt="" />
+                                </div>
+                              </div>
+                            )}
                           </div>
-                          {switchState && (
-                            <div className="mt-10 d-flex align-end gap-10">
-                              <div className="w-100">
-                                <label
-                                  htmlFor=""
-                                  className="fs-14 fw-500 mb-10"
-                                >
-                                  From
-                                </label>
-                                <TimePicker
-                                  className="customTime input"
-                                  showOk={false}
+                          <div className="divider2"></div>
+                          <div className="minw">
+                            <div className="d-flex align-center justify-between">
+                              <div className="grey fs-16">Sunday</div>
+                              <div className="d-flex align-center gap-16">
+                                <CustomSwitch
+                                  isOn={switchState}
+                                  onToggle={handleToggle}
                                 />
-                              </div>
-                              <div className="w-100">
-                                <label
-                                  htmlFor=""
-                                  className="fs-14 fw-500 mb-10"
-                                >
-                                  to
-                                </label>
-                                <TimePicker
-                                  className="customTime input"
-                                  showOk={false}
-                                />
-                              </div>
-                              <div className="addTime">
-                                <img src={addTime} alt="" />
+                                <div>Closed</div>
                               </div>
                             </div>
-                          )}
-                        </div>
-                        <div className="divider2"></div>
-                        <div className="minw">
-                          <div className="d-flex align-center justify-between">
-                            <div className="grey fs-16">Sunday</div>
-                            <div className="d-flex align-center gap-16">
-                              <CustomSwitch
-                                isOn={switchState}
-                                onToggle={handleToggle}
-                              />
-                              <div>Closed</div>
-                            </div>
+                            {switchState && (
+                              <div className="mt-10 d-flex align-end gap-10">
+                                <div className="w-100">
+                                  <label
+                                    htmlFor=""
+                                    className="fs-14 fw-500 mb-10"
+                                  >
+                                    From
+                                  </label>
+                                  <TimePicker
+                                    className="customTime input"
+                                    showOk={false}
+                                  />
+                                </div>
+                                <div className="w-100">
+                                  <label
+                                    htmlFor=""
+                                    className="fs-14 fw-500 mb-10"
+                                  >
+                                    to
+                                  </label>
+                                  <TimePicker
+                                    className="customTime input"
+                                    showOk={false}
+                                  />
+                                </div>
+                                <div className="addTime">
+                                  <img src={addTime} alt="" />
+                                </div>
+                              </div>
+                            )}
                           </div>
-                          {switchState && (
-                            <div className="mt-10 d-flex align-end gap-10">
-                              <div className="w-100">
-                                <label
-                                  htmlFor=""
-                                  className="fs-14 fw-500 mb-10"
-                                >
-                                  From
-                                </label>
-                                <TimePicker
-                                  className="customTime input"
-                                  showOk={false}
-                                />
-                              </div>
-                              <div className="w-100">
-                                <label
-                                  htmlFor=""
-                                  className="fs-14 fw-500 mb-10"
-                                >
-                                  to
-                                </label>
-                                <TimePicker
-                                  className="customTime input"
-                                  showOk={false}
-                                />
-                              </div>
-                              <div className="addTime">
-                                <img src={addTime} alt="" />
-                              </div>
-                            </div>
-                          )}
+                        </div>
+                      </>
+                    )}
+                    {editInput && (
+                      <div className="d-flex gap-20 mt-20 justify-end flexBtn">
+                        <div
+                          className="btnSecondary saveBtn btn"
+                          onClick={() => setEditInput(false)}
+                        >
+                          Cancel
+                        </div>
+                        <div
+                          className="saveBtn btn"
+                          onClick={() => setEditInput(false)}
+                        >
+                          Save
                         </div>
                       </div>
-                    </>
-                  )}
-                  {editInput && (
-                    <div className="d-flex gap-20 mt-20 justify-end flexBtn">
-                      <div
-                        className="btnSecondary saveBtn btn"
-                        onClick={() => setEditInput(false)}
-                      >
-                        Cancel
-                      </div>
-                      <div
-                        className="saveBtn btn"
-                        onClick={() => setEditInput(false)}
-                      >
-                        Save
-                      </div>
-                    </div>
-                  )}
-                </div>
-                  )}
+                    )}
+                  </div>
+                )}
               </div>
             </>
           ) : activeTab3 === "2" ? (
@@ -1154,10 +1165,8 @@ const MerchantDetails = () => {
                           Follower name
                         </label>
                         <div className="fs-20">
-                          {
-                            followerDetailsSelector?.data?.data?.userInfo
-                              ?.displayName||"-"
-                          }
+                          {followerDetailsSelector?.data?.data?.userInfo
+                            ?.displayName || "-"}
                         </div>
                       </div>
                       <div>
@@ -1169,7 +1178,8 @@ const MerchantDetails = () => {
                         </label>
                         <div className="fs-20">
                           {moment(
-                            followerDetailsSelector?.data?.data?.userInfo?.createdAt
+                            followerDetailsSelector?.data?.data?.userInfo
+                              ?.createdAt
                           ).format("MMMM,YYYY")}
                         </div>
                       </div>
@@ -1181,10 +1191,8 @@ const MerchantDetails = () => {
                           Restaurants following
                         </label>
                         <div className="fs-20">
-                          {
-                            followerDetailsSelector?.data?.data
-                              ?.totalFollowingCount || "-"
-                          }
+                          {followerDetailsSelector?.data?.data
+                            ?.totalFollowingCount || "-"}
                         </div>
                       </div>
                       <div>
@@ -1195,7 +1203,8 @@ const MerchantDetails = () => {
                           Email address
                         </label>
                         <div className="fs-20">
-                          {followerDetailsSelector?.data?.data?.userInfo?.email||"-"}
+                          {followerDetailsSelector?.data?.data?.userInfo
+                            ?.email || "-"}
                         </div>
                       </div>
                     </div>
@@ -1209,7 +1218,10 @@ const MerchantDetails = () => {
                             ? "card activeNudge"
                             : "card"
                         }
-                        onClick={() => {handleCardClick("Received");setActiveTab(true);}}
+                        onClick={() => {
+                          handleCardClick("Received");
+                          setActiveTab(true);
+                        }}
                       >
                         <div className="grey mb-10 fs-16 fw-500">
                           Nudges <br />
@@ -1364,26 +1376,26 @@ const MerchantDetails = () => {
                     </div>
                     {/* Active And Inactive Tab */}
                     {/* {activeNudgeClass === "Received" && ( */}
-                      <div className="tabs-container tab3 tabing mb-20">
-                        <div className="tabs">
-                          <button
-                            className={`tab-button ${
-                              activeTab === true ? "active" : ""
-                            }`}
-                            onClick={() => handleTabClick(true)}
-                          >
-                            Active
-                          </button>
-                          <button
-                            className={`tab-button ${
-                              activeTab === false ? "active" : ""
-                            }`}
-                            onClick={() => handleTabClick(false)}
-                          >
-                            Inactive
-                          </button>
-                        </div>
+                    <div className="tabs-container tab3 tabing mb-20">
+                      <div className="tabs">
+                        <button
+                          className={`tab-button ${
+                            activeTab === true ? "active" : ""
+                          }`}
+                          onClick={() => handleTabClick(true)}
+                        >
+                          Active
+                        </button>
+                        <button
+                          className={`tab-button ${
+                            activeTab === false ? "active" : ""
+                          }`}
+                          onClick={() => handleTabClick(false)}
+                        >
+                          Inactive
+                        </button>
                       </div>
+                    </div>
                     {/* )} */}
                     <div className="grid2 gap-20 mb-20">
                       {listByUserIdSelector?.data?.data?.records?.length > 0 ? (
@@ -1418,29 +1430,18 @@ const MerchantDetails = () => {
                     </div>
 
                     {listByUserIdSelector?.data?.data?.records?.length > 0 && (
-                      <div className="d-flex align-center justify-between flexPagination">
-                        <div className="fs-16">
-                          {(() => {
-                            const start =
-                              (pagination.page - 1) * pagination.limit + 1;
-                            const end = Math.min(
-                              start +
-                                listByUserIdSelector?.data?.data?.records
-                                  ?.length -
-                                1,
-                              listByUserIdSelector?.data?.data?.recordsCount
-                            );
-                            return `Showing ${start} to ${end} of ${listByUserIdSelector?.data?.data?.recordsCount} Nudges`;
-                          })()}
-                        </div>
-                        <Pagination
-                          current={pagination?.page}
-                          pageSize={pagination?.limit}
-                          total={listByUserIdSelector?.data?.data?.recordsCount}
-                          onChange={handlePaginationChange}
-                          pageSizeOptions={["12" ,'20', '50', '100']} 
-                        />
-                      </div>
+                      <CommonPagination
+                        currentPage={pagination?.page}
+                        pageSize={pagination?.limit}
+                        totalCount={
+                          listByUserIdSelector?.data?.data?.recordsCount
+                        }
+                        currentCount={
+                          listByUserIdSelector?.data?.data?.records?.length
+                        }
+                        onPageChange={handlePaginationChange}
+                        label="Nudges"
+                      />
                     )}
                   </div>
                   <div className="tabPadding mb-30">
@@ -1473,15 +1474,16 @@ const MerchantDetails = () => {
                   <div className="tabPadding mb-30">
                     <div className="fs-20 fw-700 mb-20">Items favorited</div>
                     <div className="flexTagFull">
-                      {followerDetailsSelector?.data?.data
-                        ?.customerPreferenceData?.filterData
-                        ?.filter(data => data?.trim() !== '')
-                        ?.length > 0 ? (
+                      {followerDetailsSelector?.data?.data?.customerPreferenceData?.filterData?.filter(
+                        (data) => data?.trim() !== ""
+                      )?.length > 0 ? (
                         followerDetailsSelector?.data?.data?.customerPreferenceData?.filterData
-                          ?.filter(data => data?.trim() !== '')
-                          ?.map(
-                          (item, index) => <div key={index} className="">{item}</div>
-                        )
+                          ?.filter((data) => data?.trim() !== "")
+                          ?.map((item, index) => (
+                            <div key={index} className="">
+                              {item}
+                            </div>
+                          ))
                       ) : (
                         <span>No data found</span>
                       )}
@@ -1494,7 +1496,11 @@ const MerchantDetails = () => {
                         ?.customerPreferenceData?.personalPreference?.length >
                       0 ? (
                         followerDetailsSelector.data.data.customerPreferenceData.personalPreference.map(
-                          (item, index) => <div key={index} className="flexTagFull">{item}</div>
+                          (item, index) => (
+                            <div key={index} className="flexTagFull">
+                              {item}
+                            </div>
+                          )
                         )
                       ) : (
                         <span>No data found</span>
@@ -1636,17 +1642,19 @@ const MerchantDetails = () => {
                                 ) : (
                                   <div>No preferences available</div>
                                 )} */}
-                                {item?.customerPreferencesData?.filterData
-                            ?.filter(data => data?.trim() !== '')
-                            ?.length > 0 ? (
-                            item?.customerPreferencesData?.filterData
-                              ?.filter(data => data?.trim() !== '')
-                              ?.map(
-                              (preference, index) => <div key={index} className="flexTagFull">{preference}</div>
-                            )
-                          ) : (
-                            <div>No data available</div>
-                          )}
+                                {item?.customerPreferencesData?.filterData?.filter(
+                                  (data) => data?.trim() !== ""
+                                )?.length > 0 ? (
+                                  item?.customerPreferencesData?.filterData
+                                    ?.filter((data) => data?.trim() !== "")
+                                    ?.map((preference, index) => (
+                                      <div key={index} className="flexTagFull">
+                                        {preference}
+                                      </div>
+                                    ))
+                                ) : (
+                                  <div>No data available</div>
+                                )}
                               </div>
                               <div
                                 className="btn btnSecondary"
@@ -1682,7 +1690,7 @@ const MerchantDetails = () => {
                           pageSize={pagination?.limit}
                           total={followerListSelector?.data?.data?.recordsCount}
                           onChange={handlePaginationChange}
-                          pageSizeOptions={["12" ,'20', '50', '100']} 
+                          pageSizeOptions={["12", "20", "50", "100"]}
                         />
                       </div>
                     )}
@@ -1715,7 +1723,11 @@ const MerchantDetails = () => {
                         className="btn fs-16"
                         onClick={() =>
                           navigate("/admin/nudges/template", {
-                            state: { locationId: state, selectedItems ,quantity:state?.quantity},
+                            state: {
+                              locationId: state,
+                              selectedItems,
+                              quantity: state?.quantity,
+                            },
                           })
                         }
                       >
@@ -2060,7 +2072,7 @@ const MerchantDetails = () => {
                       pageSize={pagination?.limit}
                       total={nudgesListSelector?.data?.data?.recordsCount}
                       onChange={handlePaginationChange}
-                      pageSizeOptions={["12" ,'20', '50', '100']} 
+                      pageSizeOptions={["12", "20", "50", "100"]}
                     />
                   </div>
                 )}
