@@ -59,7 +59,7 @@ const FollowerDetail = () => {
 
       dispatch(listByUserIdHandler(payload));
     }
-  }, [activeNudgeClass, followerDetailsSelector, activeTab,pagination]);
+  }, [activeNudgeClass, followerDetailsSelector, activeTab, pagination]);
 
   return (
     <>
@@ -70,7 +70,7 @@ const FollowerDetail = () => {
           <div className="d-flex align-center justify-between gap-20 mb-30 flexrightsm">
             <div className="d-flex align-center gap-20 w-100">
               <img
-              className="cursor-pointer backButton"
+                className="cursor-pointer backButton"
                 src={backButton}
                 alt=""
                 // onClick={() => setViewDetail(false)}
@@ -106,11 +106,13 @@ const FollowerDetail = () => {
               <div className="fs-20">
                 {/* {followerDetailsSelector?.data?.data?.userInfo?.displayName} */}
                 {followerDetailsSelector?.data?.data?.userInfo?.displayName
-      ? followerDetailsSelector.data.data.userInfo.displayName
-          .charAt(0)
-          .toUpperCase() + 
-        followerDetailsSelector.data.data.userInfo.displayName.slice(1)
-      : "N/A"}
+                  ? followerDetailsSelector.data.data.userInfo.displayName
+                      .charAt(0)
+                      .toUpperCase() +
+                    followerDetailsSelector.data.data.userInfo.displayName.slice(
+                      1
+                    )
+                  : "-"}
               </div>
             </div>
             <div>
@@ -118,9 +120,9 @@ const FollowerDetail = () => {
                 Began following
               </label>
               <div className="fs-20">
-                {moment(followerDetailsSelector?.data?.data?.userInfo?.createdAt).format(
-                  "MMMM,YYYY"
-                )}
+                {followerDetailsSelector?.data?.data?.userInfo?.createdAt
+    ? moment(followerDetailsSelector.data.data.userInfo.createdAt).format("MMMM, YYYY")
+    : "-"}
               </div>
             </div>
             <div>
@@ -128,7 +130,8 @@ const FollowerDetail = () => {
                 Restaurants following
               </label>
               <div className="fs-20">
-                {followerDetailsSelector?.data?.data?.totalFollowingCount || "-"}
+                {followerDetailsSelector?.data?.data?.totalFollowingCount ||
+                  "-"}
               </div>
             </div>
             {/* {followerDetailsSelector?.data?.data?.userInfo?.email &&( */}
@@ -150,7 +153,10 @@ const FollowerDetail = () => {
               className={
                 activeNudgeClass === "Received" ? "card activeNudge" : "card"
               }
-              onClick={() => {handleCardClick("Received");setActiveTab(true);}}
+              onClick={() => {
+                handleCardClick("Received");
+                setActiveTab(true);
+              }}
             >
               <div className="grey mb-10 fs-16 fw-500">
                 Nudges <br />
@@ -174,7 +180,8 @@ const FollowerDetail = () => {
                 Redeemed
               </div>
               <div className="fs-22 fw-500">
-                {followerDetailsSelector?.data?.data?.nudge?.redeemedNudge||"-"}
+                {followerDetailsSelector?.data?.data?.nudge?.redeemedNudge ||
+                  "-"}
               </div>
             </div>
             <div
@@ -302,24 +309,22 @@ const FollowerDetail = () => {
           </div>
           {/* Active And Inactive Tab */}
           {/* {activeNudgeClass === "Received" && ( */}
-            <div className="tabs-container tab3 tabing mb-20">
-              <div className="tabs">
-                <button
-                  className={`tab-button ${activeTab === true ? "active" : ""}`}
-                  onClick={() => handleTabClick(true)}
-                >
-                  Active
-                </button>
-                <button
-                  className={`tab-button ${
-                    activeTab === false ? "active" : ""
-                  }`}
-                  onClick={() => handleTabClick(false)}
-                >
-                  Inactive
-                </button>
-              </div>
+          <div className="tabs-container tab3 tabing mb-20">
+            <div className="tabs">
+              <button
+                className={`tab-button ${activeTab === true ? "active" : ""}`}
+                onClick={() => handleTabClick(true)}
+              >
+                Active
+              </button>
+              <button
+                className={`tab-button ${activeTab === false ? "active" : ""}`}
+                onClick={() => handleTabClick(false)}
+              >
+                Inactive
+              </button>
             </div>
+          </div>
           {/* )} */}
 
           <div className="grid2 gap-20 mb-20">
@@ -357,7 +362,7 @@ const FollowerDetail = () => {
                 pageSize={pagination?.limit}
                 total={listByUserIdSelector?.data?.data?.recordsCount}
                 onChange={handlePaginationChange}
-                pageSizeOptions={["12" ,'20', '50', '100']} 
+                pageSizeOptions={["12", "20", "50", "100"]}
               />
             </div>
           )}
@@ -488,7 +493,7 @@ const FollowerDetail = () => {
           ) : (
             <div className="d-flex gap-30 flexWrap">No data found</div>
           )}
-          </div>
+        </div>
         <div className="tabPadding mb-30">
           <div className="fs-20 fw-700 mb-20">Dine Savvy Application Usage</div>
           <div className="d-flex gap-30 flexWrap">

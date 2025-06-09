@@ -32,7 +32,7 @@ const Followers = () => {
   const navigate = useNavigate();
 
   // Scroll to top when the component mounts
-  useScrollToTop([pagination?.page,pagination?.limit]);
+  useScrollToTop([pagination?.page, pagination?.limit]);
 
   const handlePaginationChange = (page, pageSize) => {
     setPagination({ page, limit: pageSize });
@@ -132,7 +132,10 @@ const Followers = () => {
             <div className="fs-24 fw-600">Followers</div>
             <div
               className="btnSecondary btn  secondarysecond"
-              onClick={() => setArchive(!archive)}
+              onClick={() => {
+                setArchive(!archive);
+                setPagination({ page: 1, limit: 12 });
+              }}
             >
               {archive ? "Back to list" : "Show archive"}
             </div>
@@ -228,19 +231,17 @@ const Followers = () => {
                           <div className="divider2"></div>
                           <div className="fs-14 mb-6">Preferences</div>
                           <div className="flexTag mb-20">
-                            {item?.customerPreferencesData?.filterData
-                              ?.filter(data => data?.trim() !== '')
-                              ?.length > 0 ? (
+                            {item?.customerPreferencesData?.filterData?.filter(
+                              (data) => data?.trim() !== ""
+                            )?.length > 0 ? (
                               item?.customerPreferencesData?.filterData
-                                ?.filter(data => data?.trim() !== '')
-                                ?.map(
-                                (preference, index) => (
+                                ?.filter((data) => data?.trim() !== "")
+                                ?.map((preference, index) => (
                                   <div key={index}>
                                     {preference?.charAt(0).toUpperCase() +
                                       preference?.slice(1)}
                                   </div>
-                                )
-                              )
+                                ))
                             ) : (
                               <div>No data available</div>
                             )}
@@ -343,19 +344,17 @@ const Followers = () => {
                         <div className="divider2"></div>
                         <div className="fs-14 mb-6">Preferences</div>
                         <div className="flexTag mb-20">
-                          {item?.customerPreferencesData?.filterData
-                            ?.filter(data => data?.trim() !== '')
-                            ?.length > 0 ? (
+                          {item?.customerPreferencesData?.filterData?.filter(
+                            (data) => data?.trim() !== ""
+                          )?.length > 0 ? (
                             item?.customerPreferencesData?.filterData
-                              ?.filter(data => data?.trim() !== '')
-                              ?.map(
-                              (preference, index) => (
+                              ?.filter((data) => data?.trim() !== "")
+                              ?.map((preference, index) => (
                                 <div key={index}>
                                   {preference?.charAt(0).toUpperCase() +
                                     preference?.slice(1)}
                                 </div>
-                              )
-                            )
+                              ))
                           ) : (
                             <div>No data available</div>
                           )}
@@ -395,8 +394,8 @@ const Followers = () => {
                 pageSize={pagination?.limit}
                 total={followerListSelector?.data?.data?.recordsCount}
                 onChange={handlePaginationChange}
-                pageSizeOptions={["12" ,'20', '50', '100']} 
-                showSizeChanger ={true}
+                pageSizeOptions={["12", "20", "50", "100"]}
+                showSizeChanger={true}
               />
             </div>
           )}

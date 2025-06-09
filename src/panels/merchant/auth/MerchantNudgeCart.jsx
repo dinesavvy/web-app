@@ -34,6 +34,12 @@ const MerchantNudgecart = ({
   const selectedBusinessSelector = JSON.parse(
     localStorage.getItem("selectedBusiness")
   );
+
+const promotionNudgeItem = JSON.parse(
+    localStorage.getItem("promotionNudgeItem")
+  );
+  console.log(promotionNudgeItem,"promotionNudgeItem")
+
   const sendNudge = () => {
     let payload = {
       locationId: selectedBusinessSelector?._id,
@@ -48,6 +54,7 @@ const MerchantNudgecart = ({
       deactivateAt: Date.now() + 24 * 60 * 60 * 1000,
       imageId: "",
       totalQuantity: Number(values?.quantity),
+      promotionId:promotionNudgeItem?._id
     };
     dispatch(businessCreateNudgeHandler(payload));
   };

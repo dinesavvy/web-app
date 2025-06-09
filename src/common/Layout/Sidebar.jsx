@@ -150,30 +150,29 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
             navigate: getLoggedInDetails ? "/merchant/nudges" : "/admin/nudges",
             disabled: "",
           },
-          // {
-          //   id: 14,
-          //   name: "Savvy Nudges",
-          //   icon: nudge,
-          //   iconFull: nudgeFull,
-          //   // navigate: getLoggedInDetails
-          //   //   ? "/merchant/savvy-nudge"
-          //   //   : "/admin/savvy-nudge",
-          //   navigate:"/admin/savvy-nudge",
-          //   disabled: "",
-          // },
+          {
+            id: 14,
+            name: "Savvy Nudges",
+            icon: nudge,
+            iconFull: nudgeFull,
+            navigate: getLoggedInDetails
+              ? "/merchant/savvy-nudge"
+              : "/admin/savvy-nudge",
+            disabled: "",
+          },
           // Merchant Specific Links
           ...(getLoggedInDetails
             ? [
-              {
-                id: 6,
-                name: "Promotions",
-                icon: promotions,
-                iconFull: promotionsFull,
-                // navigate: getLoggedInDetails ? "/merchant/promotion" : "/admin/nudges",
-                navigate: "/merchant/promotions",
-                disabled: "",
-              },
-              
+                {
+                  id: 6,
+                  name: "Promotions",
+                  icon: promotions,
+                  iconFull: promotionsFull,
+                  // navigate: getLoggedInDetails ? "/merchant/promotion" : "/admin/nudges",
+                  navigate: "/merchant/promotions",
+                  disabled: "",
+                },
+
                 {
                   id: 10,
                   name: "Profile",
@@ -189,24 +188,13 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                   navigate: "/merchant/hierarchy",
                 },
               ]
-            : [ {
-            id: 14,
-            name: "Savvy Nudges",
-            icon: nudge,
-            iconFull: nudgeFull,
-            // navigate: getLoggedInDetails
-            //   ? "/merchant/savvy-nudge"
-            //   : "/admin/savvy-nudge",
-            navigate:"/admin/savvy-nudge",
-            disabled: "",
-          },
+            : [
                 {
                   id: 7,
                   name: "Promotions",
                   icon: promotions,
                   iconFull: promotionsFull,
                   disabled: false,
-                  // tag: "19",
                   navigate: "/admin/promotions",
                 },
                 {
@@ -246,6 +234,8 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
     }
     if (getLoggedInDetails) {
       dispatch(savvyNudgeOfferAction.savvyNudgeOfferReset());
+      // Added because when click to side bar then create nudges flow not reset so remove promotion Nudge item
+      localStorage.removeItem("promotionNudgeItem");
     }
   };
 

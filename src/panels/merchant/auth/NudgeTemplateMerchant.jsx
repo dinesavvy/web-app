@@ -1,14 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
 import backButton from "../../../assets/images/backButton.svg";
 import arrowRight from "../../../assets/images/arrowRight.svg";
-import dish from "../../../assets/images/dish.png";
 import { useDispatch, useSelector } from "react-redux";
-import { getNudgesTemplateHandler } from "../../../redux/action/getNudgesTemplate";
 import Loader from "../../../common/Loader/Loader";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
-import { fileUploadHandler } from "../../../redux/action/fileUpload";
 import { businessNudgesTemplateHandler } from "../../../redux/action/businessAction/businessNudgesTemplate";
 import MerchantNudgecart from "./MerchantNudgeCart";
 import { businessFileUploadHandler } from "../../../redux/action/businessAction/businessFileUpload";
@@ -26,12 +23,16 @@ const NudgeTemplateMerchant = () => {
     nudgesCards?.imageUrl[0] || null
   );
   const [fileObject, setFileObject] = useState();
-  const [selectMerchantList, setSelectMerchantList] = useState(false);
   const dispatch = useDispatch();
   const { state } = useLocation();
 
+  // console.log("state", state);
+
+  const promotionNudgeItemSelector = useSelector((state) => state.promotionNudge.item);
+  console.log(promotionNudgeItemSelector,"promotionNudgeItemSelector")
+
   const getPromotionNudge = JSON.parse(localStorage.getItem("promotionNudgeItem"))
-  const selectedBusiness = JSON.parse(localStorage.getItem("selectedBusiness"));
+  // const selectedBusiness = JSON.parse(localStorage.getItem("selectedBusiness"));
 
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [nudgesCards, setNudgesCard] = useState(null);
@@ -429,15 +430,6 @@ const NudgeTemplateMerchant = () => {
             )}
           </Formik>
         </div>
-        {/* <Modal
-        className="selecModalFollowerList"
-          centered
-          visible={showFollowersModal}
-          onCancel={() => setShowFollowersModal(false)}
-          footer={false}
-        >
-          <MerchantFollowerModal />
-        </Modal> */}
       </>
     </>
   );

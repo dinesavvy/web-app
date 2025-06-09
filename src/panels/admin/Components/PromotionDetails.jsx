@@ -2,19 +2,12 @@ import React, { useEffect, useState } from "react";
 import closeRightSidebar from "../../../assets/images/closeRightSidebar.svg";
 import arrowUp from "../../../assets/images/arrow-up.svg";
 import coke from "../../../assets/images/coke.svg";
-// import olive from "../../../assets/images/olive.png";
-// import restaurantCard from "../../../assets/images/restaurantCard.png";
 import PromotionCart from "./PromotionCart";
 import moment from "moment";
 import { promotionDetailsHandler } from "../../../redux/action/promotionDetails";
 import { useDispatch, useSelector } from "react-redux";
 import Loader from "../../../common/Loader/Loader";
 import noImageFound from "../../../assets/images/noImageFound.png";
-// import {
-//   adminEndPromotionAction,
-//   adminEndPromotionHandler,
-// } from "../../../redux/action/adminEndPromotion";
-// import { useCommonMessage } from "../../../common/CommonMessage";
 import CommonModal from "./CommonModal";
 
 const PromotionDetails = ({
@@ -137,7 +130,7 @@ const PromotionDetails = ({
                     promotionDetailsSelector.data.data.brandDetails.brandName.slice(
                       1
                     )
-                  : ""}
+                  : "-"}
               </div>
             </div>
             <div>
@@ -167,13 +160,16 @@ const PromotionDetails = ({
             <div>
               <div className="fs-14 mb-4">Total Quantity</div>
               <div className="fs-14 fw-600">
-                {promotionDetailsSelector?.data?.data?.merchant?.quantity}
+                {promotionDetailsSelector?.data?.data?.merchant?.quantity ||
+                  "-"}
               </div>
             </div>
             <div>
               <div className="fs-14 mb-4">Promotional Credits</div>
               <div className="fs-14 fw-600">
-                ${promotionDetailsSelector?.data?.data?.merchant?.promotionFund}
+                {promotionDetailsSelector?.data?.data?.merchant?.promotionFund
+                  ? `$${promotionDetailsSelector?.data?.data?.merchant?.promotionFund}`
+                  : "-"}
               </div>
             </div>
           </div>
@@ -190,10 +186,10 @@ const PromotionDetails = ({
                   <div>
                     {promotionDetailsSelector?.data?.data?.locationDetails
                       ?.businessName
-                      ? promotionDetailsSelector.data.data.locationDetails.businessName
+                      ? promotionDetailsSelector?.data?.data?.locationDetails?.businessName
                           .charAt(0)
                           .toUpperCase() +
-                        promotionDetailsSelector.data.data.locationDetails.businessName.slice(
+                        promotionDetailsSelector?.data?.data?.locationDetails?.businessName?.slice(
                           1
                         )
                       : ""}
@@ -201,7 +197,8 @@ const PromotionDetails = ({
 
                   <div className="d-flex align-center gap-16">
                     <div className="fs-16 fw-600 roi blue">
-                      {promotionDetailsSelector?.data?.data?.promotionStatus}
+                      {promotionDetailsSelector?.data?.data?.promotionStatus ||
+                        "-"}
                     </div>
                     <div
                       className={`arrow ${openIndex === true ? "open" : ""}`}
@@ -221,7 +218,10 @@ const PromotionDetails = ({
                         promotionDetailsSelector?.data?.data?.locationDetails
                           ?.logoUrl || noImageFound
                       }
-                      alt="olive"
+                      alt={
+                        promotionDetailsSelector?.data?.data?.locationDetails
+                          ?.businessName || "No Image Found"
+                      }
                       className="h-100 object-cover"
                     />
                   </div>
@@ -328,14 +328,16 @@ const PromotionDetails = ({
             </>
             {/* ))} */}
           </div>
-          {activeTab === "active" && promotionDetailsSelector?.data?.data?.promotionStatus === "Pending" && (
-            <>
-              {/* <div className="divider2"></div> */}
-              <div className="deleteBtnfull btn" onClick={endPromotion}>
-                Close Promotion
-              </div>
-            </>
-          )}
+          {activeTab === "active" &&
+            promotionDetailsSelector?.data?.data?.promotionStatus ===
+              "Pending" && (
+              <>
+                {/* <div className="divider2"></div> */}
+                <div className="deleteBtnfull btn" onClick={endPromotion}>
+                  Close Promotion
+                </div>
+              </>
+            )}
         </div>
       </div>
       <PromotionCart isOpen={isCartOpen} toggleCart={toggleCart} />

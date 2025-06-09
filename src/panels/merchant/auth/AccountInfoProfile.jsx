@@ -11,13 +11,13 @@ const AccountInfoProfile = ({ getProfileDetailsSelector }) => {
           <label htmlFor="name" className="grey mb-10 fs-16 fw-500">
             Nudge credits
           </label>
-          <input type="number" className="input" placeholder="100" defaultValue={getProfileDetailsSelector?.data?.data?.nudgeCreditData}/>
+          <input type="number" className="input" placeholder="100" defaultValue={getProfileDetailsSelector?.data?.data?.nudgeCreditData} disabled={true}/>
         </div>
         <div className=" position-relative">
           <label htmlFor="name" className="grey mb-10 fs-16 fw-500">
             Date joined
           </label>
-          <div className="input">{moment(getProfileDetailsSelector?.data?.data?.createdAt).format("DD/MM/YYYY")}</div>
+          <div className="input disabled" >{moment(getProfileDetailsSelector?.data?.data?.createdAt).format("DD/MM/YYYY")}</div>
         </div>
       </div>
       <div className="divider2"></div>

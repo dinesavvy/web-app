@@ -28,18 +28,25 @@ const getYoutubeId = (url) => {
 const SavvyNudge = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
+  const [activeTab, setActiveTab] = useState("active");
   const [pagination, setPagination] = useState({ page: 1, limit: 12 });
+  const [paginationOffer, setPaginationOffer] = useState({
+    page: 1,
+    limit: 12,
+  });
   const [searchString, setSearchString] = useState("");
-  // const [acceptDeclineModal, setAcceptDeclinedModal] = useState(false);
-  // const [acceptModal, setAcceptModal] = useState(false);
   const [modalState, setModalState] = useState({
     isVisible: false,
     actionType: "",
   });
 
   // Scroll to top when the component mounts
-  useScrollToTop([pagination?.page, pagination?.limit]);
+  useScrollToTop([
+    pagination?.page,
+    pagination?.limit,
+    paginationOffer?.page,
+    paginationOffer?.limit,
+  ]);
 
   const savvyNudgesListSelector = useSelector((state) => state?.savvyNudgeList);
   console.log(savvyNudgesListSelector, "savvyNudgesListSelector");
@@ -47,22 +54,28 @@ const SavvyNudge = () => {
     (state) => state?.savvyNudgeOffer
   );
 
-  const [activeTab, setActiveTab] = useState("active");
-
   const handleTabClick = (tab) => {
     setActiveTab(tab);
     dispatch(savvyNudgeOfferAction.savvyNudgeOfferReset());
-    setPagination({ page: 1, limit: 10 });
+    if (activeTab === "offer") {
+      setPaginationOffer({ page: 1, limit: 12 });
+    } else {
+      setPagination({ page: 1, limit: 12 });
+    }
   };
 
   const tabs = [
     { id: "active", label: "Active" },
-    { id: "offer", label: "Offer", tag: "03" },
+    { id: "offer", label: "Offer" },
     { id: "archive", label: "Archive" },
   ];
 
   const handlePaginationChange = (page, pageSize) => {
-    setPagination({ page, limit: pageSize });
+    if (activeTab === "active" || activeTab === "archive") {
+      setPagination({ page, limit: pageSize });
+    } else {
+      setPaginationOffer({ page, limit: pageSize });
+    }
   };
 
   const [activeVideoUrl, setActiveVideoUrl] = useState(null);
@@ -81,15 +94,7 @@ const SavvyNudge = () => {
       document.body.classList.remove("overflow-Hidden");
     };
   }, [isSidebarOpen]);
-  // savvyNudgeListHandler
 
-  const videoLinks = [
-    "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-    "https://youtu.be/3JZ_D3ELwOQ",
-    "https://www.youtube.com/embed/tgbNymZ7vqY",
-  ];
-
-  console.log(activeTab, "activeTab");
   useEffect(() => {
     if (activeTab === "active" || activeTab === "archive") {
       let payload = {
@@ -101,16 +106,14 @@ const SavvyNudge = () => {
       dispatch(savvyNudgeListHandler(payload));
     } else if (activeTab === "offer") {
       let payload = {
-        page: pagination?.page,
-        limit: pagination?.limit,
+        page: paginationOffer?.page,
+        limit: paginationOffer?.limit,
         searchString: searchString,
         // isActive: false,
       };
       dispatch(savvyNudgeOfferHandler(payload));
     }
-  }, [pagination, activeTab]);
-
-  console.log(savvyNudgeOfferSelector, "savvyNudgeOfferSelector");
+  }, [pagination, activeTab, paginationOffer]);
 
   const messageApi = useCommonMessage();
 
@@ -159,9 +162,9 @@ const SavvyNudge = () => {
                 onClick={() => handleTabClick(id)}
               >
                 {label}
-                {id === "offer" && activeTab === "offer" && (
+                {/* {id === "offer" && activeTab === "offer" && (
                   <div className="tagNumber pc fs-14 fw-500">{tag}</div>
-                )}
+                )} */}
               </button>
             ))}
           </div>

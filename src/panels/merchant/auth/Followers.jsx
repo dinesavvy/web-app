@@ -216,7 +216,8 @@ const Followers = () => {
               </div>
             </div>
             <div className="tabPadding">
-              <div className="fs-24 lh1 fw-600">Nearby</div>
+              {/* <div className="fs-24 lh1 fw-600">Nearby</div> */}
+              <div className="fs-24 lh1 fw-600">Expected</div>
               <div className="divider2"></div>
               <div class="ring-container circleinfo ring100 ringExpand">
                 <div class="ring"></div>
@@ -387,9 +388,12 @@ const Followers = () => {
                 <div
                   className="btn fs-16"
                   onClick={() =>
+                  {
                     navigate("/merchant/create-nudge", {
                       state: { locationId: state, selectedItems },
                     })
+                    // localStorage.removeItem("promotionNudgeItem")
+                  }
                   }
                   // onClick={() =>
                   //   navigate("/merchant/create-nudge", {

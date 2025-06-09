@@ -423,7 +423,7 @@ const CommonModal = ({
                 : getLocationDetails === "/admin/promotions" ||
                   getLocationDetails === "/supplier/promotion" ||
                   getLocationDetails === "/distributors/promotion"
-                ? "End Promotion"
+                ? "End Promotion?"
                 : getLocationDetails === "/admin/support"
                 ? "Resolve Ticket"
                 : "Delete Team Member"}
@@ -523,7 +523,7 @@ ticket as resolved? */}
               Cancel
             </div>
             <div className="btn btnSecondary w-100" onClick={deleteTeam}>
-              {resolveModal?"Resolve":"Delete"}
+              {resolveModal?"Resolve":"End Now"}
             </div>
           </div>
         ) : (

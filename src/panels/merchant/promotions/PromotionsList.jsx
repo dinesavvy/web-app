@@ -12,10 +12,7 @@ import noImageFound from "../../../assets/images/noImageFound.png";
 import remainTime from "../../../assets/images/remainTime.svg";
 import searchIcon from "../../../assets/images/searchIcon.svg";
 import successNailedIt from "../../../assets/images/successNailedIt.svg";
-import {
-  activePromotionListAction,
-  activePromotionListHandler,
-} from "../../../redux/action/businessAction/activePromotionList";
+import { activePromotionListHandler } from "../../../redux/action/businessAction/activePromotionList";
 import {
   archivePromotionHandler,
   archivePromotionListAction,
@@ -25,12 +22,15 @@ import {
   updatePromotionPriceHandler,
 } from "../../../redux/action/businessAction/updateProotionPrice";
 import { useCommonMessage } from "../../../common/CommonMessage";
-// import SearchSelect from "../../admin/Components/SearchSelect";
 import useScrollToTop from "../../../hooks/useScrollToTop";
 
 const PromotionsList = () => {
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
   const [pagination, setPagination] = useState({ page: 1, limit: 12 });
+  const [paginationOffer, setPaginationOffer] = useState({
+    page: 1,
+    limit: 12,
+  });
   const [searchString, setSearchString] = useState("");
   const [activeTab, setActiveTab] = useState("active");
   const [isOpen, setIsOpen] = useState(false);
@@ -41,9 +41,14 @@ const PromotionsList = () => {
   const selectRef = useRef(null);
   const navigate = useNavigate();
 
-
   // Scroll to top when the component mounts
-  useScrollToTop([pagination?.page]);
+  useScrollToTop([
+    pagination?.page,
+    pagination?.limit,
+    activeTab,
+    paginationOffer?.page,
+    paginationOffer?.limit,
+  ]);
 
   const activePromotionListSelector = useSelector(
     (state) => state?.activePromotionList
@@ -74,7 +79,11 @@ const PromotionsList = () => {
   };
 
   const handlePaginationChange = (page, pageSize) => {
-    setPagination({ page, limit: pageSize });
+    if (activeTab === "active" || activeTab === "archive") {
+      setPagination({ page, limit: pageSize });
+    } else {
+      setPaginationOffer({ page, limit: pageSize });
+    }
   };
 
   useEffect(() => {
@@ -109,8 +118,9 @@ const PromotionsList = () => {
 
   useEffect(() => {
     let payload = {
-      page: pagination?.page,
-      limit: pagination?.limit,
+      page: activeTab==="active"? pagination?.page:paginationOffer?.page,
+      limit: activeTab==="active"? pagination?.limit:paginationOffer?.limit,
+      // limit: pagination?.limit,
       // payload.searchString = searchString;
     };
 
@@ -126,8 +136,7 @@ const PromotionsList = () => {
       payload.searchString = searchString;
       dispatch(archivePromotionHandler(payload));
     }
-  }, [pagination, searchString, activeTab, updatePromotionPriceSelector]);
-
+  }, [pagination, searchString, activeTab, updatePromotionPriceSelector,paginationOffer]);
 
   const handleAction = (item, value, index) => {
     let payload = {
@@ -163,41 +172,13 @@ const PromotionsList = () => {
         archivePromotionListSelector?.isLoading ||
         updatePromotionPriceSelector?.isLoading) && <Loader />}
       <div className="dashboard">
-        {/* <div className="tabs-container tab3 tabFull tabing">
-          <div className="tabs">
-            <button
-              className={`tab-button ${activeTab === "active" ? "active" : ""}`}
-              onClick={() => setActiveTab("active")}
-            >
-              Active
-            </button>
-            <button
-              className={`tab-button ${activeTab === "offer" ? "active" : ""}`}
-              onClick={() => setActiveTab("offer")}
-            >
-              <div className="d-flex align-center justify-center gap-8">
-                Offer
-                <div className="tagNumber fs-14 fw-500">3</div>
-              </div>
-            </button>
-            <button
-              className={`tab-button ${
-                activeTab === "archive" ? "active" : ""
-              }`}
-              onClick={() => setActiveTab("archive")}
-            >
-              Archive
-            </button>
-          </div>
-        </div> */}
-
         <div className="tabs-container tab3 tabFull tabing">
           <div className="tabs">
             <button
               className={`tab-button ${activeTab === "active" ? "active" : ""}`}
               onClick={() => {
                 setActiveTab("active");
-                setPagination({ page: 1, limit: 9 });
+                setPagination({ page: 1, limit: 12 });
                 dispatch(
                   archivePromotionListAction.archivePromotionListReset()
                 );
@@ -206,23 +187,25 @@ const PromotionsList = () => {
             >
               Active
             </button>
-
             <button
               className={`tab-button d-flex align-center justify-center gap-8 ${
                 activeTab === "offer" ? "active" : ""
               }`}
               onClick={() => {
                 setActiveTab("offer");
-                setPagination({ page: 1, limit: 9 });
+                setPaginationOffer({ page: 1, limit: 12 });
                 setSearchString("");
+                dispatch(
+                  archivePromotionListAction.archivePromotionListReset()
+                );
               }}
             >
               Offer{" "}
-              {activeTab === "offer" && (
+              {/* {activeTab === "offer" && (
                 <div className="tagNumber pc fs-14 fw-500">
                   {archivePromotionListSelector?.data?.data?.records?.length}
                 </div>
-              )}
+              )} */}
             </button>
             <button
               className={`tab-button ${
@@ -230,7 +213,7 @@ const PromotionsList = () => {
               }`}
               onClick={() => {
                 setActiveTab("archive");
-                setPagination({ page: 1, limit: 9 });
+                setPagination({ page: 1, limit: 12 });
                 setSearchString("");
               }}
             >
@@ -274,51 +257,6 @@ const PromotionsList = () => {
               </div>
             </div> */}
           </div>
-          {/* <div className="tabs-container tab3 tabing mb-20">
-            <div className="tabs">
-              <button
-                className={`tab-button ${
-                  activeTab === "active" ? "active" : ""
-                }`}
-                onClick={() => {
-                  setActiveTab("active");
-                  setPagination({ page: 1, limit: 9 });
-                  dispatch(
-                    archivePromotionListAction.archivePromotionListReset()
-                  );
-                }}
-              >
-                Active
-              </button>
-              <button
-                className={`tab-button ${
-                  activeTab === "offer" ? "active" : ""
-                }`}
-                onClick={() => {
-                  setActiveTab("offer");
-                  setPagination({ page: 1, limit: 9 });
-                }}
-              >
-                Offer{" "}
-                <span className="count">
-                  {activeTab === "offer"
-                    ? archivePromotionListSelector?.data?.data?.records?.length
-                    : ""}
-                </span>
-              </button>
-              <button
-                className={`tab-button ${
-                  activeTab === "archive" ? "active" : ""
-                }`}
-                onClick={() => {
-                  setActiveTab("archive");
-                  setPagination({ page: 1, limit: 9 });
-                }}
-              >
-                Archive
-              </button>
-            </div>
-          </div> */}
           {/* <SearchSelect
             onSearchChange={handleSearchChange}
             onSearchAreaChange={handleSearchAreaChange}
@@ -343,30 +281,26 @@ const PromotionsList = () => {
                 <div className="grid3 gap-20 mb-20">
                   <div className="borderRight">
                     <div className="fs-24 fw-700">
-                      {
-                        activePromotionListSelector?.data?.data
-                          ?.promotionSummary?.activePromotion
-                      }
+                      {activePromotionListSelector?.data?.data?.promotionSummary
+                        ?.activePromotion || "-"}
                     </div>
                     <div className="fs-14 fw-500">Active Promotions</div>
                   </div>
                   <div className="borderRight">
                     <div className="fs-24 fw-700">
-                      $
-                      {
-                        activePromotionListSelector?.data?.data
-                          ?.promotionSummary?.fundAvailable
-                      }
+                      {activePromotionListSelector?.data?.data?.promotionSummary
+                        ?.fundAvailable
+                        ? `$${activePromotionListSelector?.data?.data?.promotionSummary?.fundAvailable}`
+                        : "-"}
                     </div>
                     <div className="fs-14 fw-500">Funds available</div>
                   </div>
                   <div className="borderRight">
                     <div className="fs-24 fw-700">
-                      $
-                      {
-                        activePromotionListSelector?.data?.data
-                          ?.promotionSummary?.totalWithdrawFund
-                      }
+                      {activePromotionListSelector?.data?.data?.promotionSummary
+                        ?.totalWithdrawFund
+                        ? `$${activePromotionListSelector?.data?.data?.promotionSummary?.totalWithdrawFund}`
+                        : "-"}
                     </div>
                     <div className="fs-14 fw-500">Funds withdrawn</div>
                   </div>
@@ -577,7 +511,8 @@ const PromotionsList = () => {
                   pageSize={pagination?.limit}
                   total={activePromotionListSelector?.data?.data?.recordsCount}
                   onChange={handlePaginationChange}
-                  pageSizeOptions={["12" ,'20', '50', '100']} 
+                  pageSizeOptions={["12", "20", "50", "100"]}
+                  showSizeChanger={true}
                 />
               </div>
             )}
@@ -814,8 +749,8 @@ const PromotionsList = () => {
                   pageSize={pagination?.limit}
                   total={archivePromotionListSelector?.data?.data?.recordsCount}
                   onChange={handlePaginationChange}
-                  pageSizeOptions={["12" ,'20', '50', '100']} 
-                  showSizeChanger
+                  pageSizeOptions={["12", "20", "50", "100"]}
+                  showSizeChanger={true}
                 />
               </div>
             )}

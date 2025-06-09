@@ -40,6 +40,9 @@ const Profile = () => {
 
   const fileuploadSelector = useSelector((state) => state?.businessFileUpload);
 
+  const getLoggedInDetails = JSON.parse(localStorage.getItem("loginResponse"))
+  console.log(getLoggedInDetails,"getLoggedInDetails")
+
   const dispatch = useDispatch();
   const messageApi = useCommonMessage();
 
@@ -230,15 +233,11 @@ const [qrCodeModal,setQrCodeModal] = useState(false)
           <div className="divider2"></div>
           <div className="d-flex align-center gap-20">
             <div className="profileImage">
-              {JSON.parse(
-                localStorage.getItem("loginResponse")
-              )?.firstName?.charAt(0)}
-              {JSON.parse(
-                localStorage.getItem("loginResponse")
-              )?.lastName?.charAt(0)}
+              {getLoggedInDetails?.firstName?.charAt(0)}
+              {getLoggedInDetails?.lastName?.charAt(0)}
             </div>
             <div>
-              <div className="fs-24 fw-600 mb-10"></div>
+              <div className="fs-24 fw-600 mb-10">{getLoggedInDetails?.firstName + " " + getLoggedInDetails?.lastName}</div>
               <div className="positionTag fs-16 fw-600">
                 {getSelectedBusinessData?.roleTitle}
               </div>

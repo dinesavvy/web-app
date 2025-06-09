@@ -1,11 +1,13 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, {  useEffect, useState } from "react";
 import searchIcon from "../../../assets/images/searchIcon.svg";
 import addCredits from "../../../assets/images/addCredits.svg";
 import radioSelected from "../../../assets/images/radioSelected.svg";
-import olive from "../../../assets/images/olive.png";
 import restaurantCard from "../../../assets/images/restaurantCard.png";
 import NudgeDetail from "../Components/NudgeDetail";
-import { merchantListAction, merchantsListHandler } from "../../../redux/action/merchantsList";
+import {
+  merchantListAction,
+  merchantsListHandler,
+} from "../../../redux/action/merchantsList";
 import { useDispatch, useSelector } from "react-redux";
 import Loader from "../../../common/Loader/Loader";
 import { nudgesListHandler } from "../../../redux/action/nudgesList";
@@ -15,6 +17,7 @@ import { nudgesDetailsHandler } from "../../../redux/action/nudgeDetails";
 import noImageFound from "../../../assets/images/noImageFound.png";
 import { useNavigate } from "react-router-dom";
 import useScrollToTop from "../../../hooks/useScrollToTop";
+import SearchSelect from "./SearchSelect";
 
 const Nudges = () => {
   const navigate = useNavigate();
@@ -25,6 +28,9 @@ const Nudges = () => {
   });
   const [activeTab, setActiveTab] = useState(true);
   const [nudgeId, setNudgeId] = useState("");
+  const [searchString, setSearchString] = useState("");
+  const [selectedValue, setSelectedValue] = useState("");
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const merchantsListSelector = useSelector((state) => state?.merchantsList);
   const nudgesListSelector = useSelector((state) => state?.nudgesList);
@@ -34,21 +40,14 @@ const Nudges = () => {
     (state) => state?.nudgeDetailsMain
   );
 
-
   // Scroll to top when the component mounts
-    useScrollToTop([nudgePagination?.page,nudgePagination?.limit]);
+  useScrollToTop([nudgePagination?.page, nudgePagination?.limit]);
 
   const dispatch = useDispatch();
-  const [page, setPage] = useState(1);
-  const scrollContainerRef = useRef(null);
-  const [searchString, setSearchString] = useState("");
-  const [searchString1, setSearchString1] = useState("");
-  const [selectedValue, setSelectedValue] = useState("");
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const handleTabClick = (tab) => {
     setActiveTab(tab); // Update the active tab
-    setNudgePagination({ page: 1, limit: 10 })
+    setNudgePagination({ page: 1, limit: 10 });
   };
 
   const handlePaginationChange = (page, pageSize) => {
@@ -57,12 +56,11 @@ const Nudges = () => {
   };
 
   const handleMerchantPageChange = (page, pageSize) => {
-    // setNudgePagination((prev) => ({ ...prev, page: newPage }));
     setNudgePagination({ page, limit: pageSize });
   };
 
   const handleSearchChange = (value) => {
-    setSearchString(value)
+    setSearchString(value);
     // setSearchString1(value);
     // setSearchString1(value);
     // if(!value){
@@ -71,6 +69,7 @@ const Nudges = () => {
     //   setSearchString1(value);
     // }
     setSelectedValue("");
+    setPagination((prev) => ({ ...prev, page: 1 }));
   };
 
   useEffect(() => {
@@ -87,19 +86,19 @@ const Nudges = () => {
 
   useEffect(() => {
     // if (selectedValue) {
-      const fetchNudgesList = () => {
-        const payload = {
-          locationId: selectedValue?._id,
-          page: nudgePagination?.page,
-          limit: nudgePagination?.limit,
-          searchString:searchString1,
-          isActive: activeTab,
-        };
-        dispatch(nudgesListHandler(payload));
+    const fetchNudgesList = () => {
+      const payload = {
+        locationId: selectedValue?._id,
+        page: nudgePagination?.page,
+        limit: nudgePagination?.limit,
+        searchString: "",
+        isActive: activeTab,
       };
-      fetchNudgesList();
+      dispatch(nudgesListHandler(payload));
+    };
+    fetchNudgesList();
     // }
-  }, [nudgePagination, searchString1, activeTab,selectedValue]);
+  }, [nudgePagination, activeTab, selectedValue]);
 
   useEffect(() => {
     const fetchMerchants = () => {
@@ -139,7 +138,7 @@ const Nudges = () => {
         <div className="tabPadding mb-30">
           <div className="fs-24 fw-600">Nudges</div>
           <div className="divider2"></div>
-          <div className="lineSearch w-100 mb-20">
+          {/* <div className="lineSearch w-100 mb-20">
             <input
               type="text"
               name="text"
@@ -148,6 +147,14 @@ const Nudges = () => {
               onChange={(e) => handleSearchChange(e.target.value)}
             />
             <img src={searchIcon} alt="" className="absoluteImage" />
+          </div> */}
+          <div className="mb-20">
+            <div className="lineSearch w-100">
+              <SearchSelect
+                onSearchChange={handleSearchChange}
+                // onSearchAreaChange={handleSearchAreaChange}
+              />
+            </div>
           </div>
           <div className="overflowy">
             <div
@@ -160,11 +167,11 @@ const Nudges = () => {
               {merchantsListSelector?.data?.data?.records?.length > 0 ? (
                 <>
                   {merchantsListSelector?.data?.data?.records?.map((option) => (
-                    <label key={option.value} className="custom-label">
+                    <label key={option?.value} className="custom-label">
                       <input
                         type="radio"
                         name="option"
-                        value={option.value}
+                        value={option?.value}
                         checked={selectedValue?._id === option?._id} // Dynamically toggle based on state
                         onChange={() => handleChange(option)}
                         autoComplete="off"
@@ -179,8 +186,8 @@ const Nudges = () => {
                         <div>
                           <div className="pc fs-14 fw-500 oneLine">
                             {option?.businessName &&
-                              option.businessName.charAt(0).toUpperCase() +
-                                option.businessName.slice(1)}
+                              option?.businessName?.charAt(0).toUpperCase() +
+                                option?.businessName?.slice(1)}
                           </div>
                           <div className="fs-12 oneLine">
                             {`${option?.address?.addressLine1 || ""} ${
@@ -202,31 +209,30 @@ const Nudges = () => {
               )}
             </div>
           </div>
-            {merchantsListSelector?.data?.data?.records?.length > 0 && (
-              <div className="d-flex align-center justify-between flexPagination mt-20">
-                <div className="fs-16">
-                  {/* Showing {pagination.page} to {pagination.limit} of{" "}
-                  {merchantsListSelector?.data?.data?.recordsCount} Restaurants */}
-                  {(() => {
-                    const start = (pagination?.page - 1) * pagination?.limit + 1;
-                    const end = Math.min(
-                      start +
-                        merchantsListSelector?.data?.data?.records?.length -
-                        1,
-                      merchantsListSelector?.data?.data?.recordsCount
-                    );
-                    return `Showing ${start} to ${end} of ${merchantsListSelector?.data?.data?.recordsCount} Restaurants`;
-                  })()}
-                </div>
-                <Pagination
-                  current={pagination?.page}
-                  pageSize={pagination?.limit}
-                  total={merchantsListSelector?.data?.data?.recordsCount}
-                  onChange={handlePaginationChange}
-                  pageSizeOptions={["12" ,'20', '50', '100']} 
-                />
+          {merchantsListSelector?.data?.data?.records?.length > 0 && (
+            <div className="d-flex align-center justify-between flexPagination mt-20">
+              <div className="fs-16">
+                {(() => {
+                  const start = (pagination?.page - 1) * pagination?.limit + 1;
+                  const end = Math.min(
+                    start +
+                      merchantsListSelector?.data?.data?.records?.length -
+                      1,
+                    merchantsListSelector?.data?.data?.recordsCount
+                  );
+                  return `Showing ${start} to ${end} of ${merchantsListSelector?.data?.data?.recordsCount} Restaurants`;
+                })()}
               </div>
-            )}
+              <Pagination
+                current={pagination?.page}
+                pageSize={pagination?.limit}
+                total={merchantsListSelector?.data?.data?.recordsCount}
+                onChange={handlePaginationChange}
+                pageSizeOptions={["12", "20", "50", "100"]}
+                showSizeChanger={true}
+              />
+            </div>
+          )}
         </div>
 
         {selectedValue && (
@@ -468,7 +474,7 @@ const Nudges = () => {
                       pageSize={pagination?.limit}
                       total={merchantsListSelector?.data?.data?.recordsCount}
                       onChange={handlePaginationChange}
-                      pageSizeOptions={["12" ,'20', '50', '100']} 
+                      pageSizeOptions={["12", "20", "50", "100"]}
                       showSizeChanger
                     />
                   </div>
@@ -480,8 +486,7 @@ const Nudges = () => {
                     <div className="fs-16">
                       {(() => {
                         const start =
-                          (nudgePagination?.page - 1) *
-                            nudgePagination?.limit +
+                          (nudgePagination?.page - 1) * nudgePagination?.limit +
                           1;
                         const end = Math.min(
                           start +
@@ -497,7 +502,7 @@ const Nudges = () => {
                       pageSize={nudgePagination?.limit}
                       total={nudgesListSelector?.data?.data?.recordsCount}
                       onChange={handleMerchantPageChange}
-                      pageSizeOptions={["12" ,'20', '50', '100']} 
+                      pageSizeOptions={["12", "20", "50", "100"]}
                       showSizeChanger={true}
                     />
                   </div>

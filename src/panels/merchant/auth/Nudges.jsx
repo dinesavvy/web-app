@@ -214,6 +214,7 @@ const Nudges = () => {
       setIsChecked(true);
     } else {
       navigate("/merchant/create-nudge");
+      localStorage.removeItem("promotionNudgeItem")
     }
   };
 

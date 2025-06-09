@@ -73,12 +73,12 @@ const merchantRoutes = [
     isPrivate: false,
     isLayout: true,
   },
-  // {
-  //   path: "/merchant/savvy-nudge",
-  //   element: SavvyNudge,
-  //   isPrivate: false,
-  //   isLayout: true,
-  // },
+  {
+    path: "/merchant/savvy-nudge",
+    element: SavvyNudge,
+    isPrivate: false,
+    isLayout: true,
+  },
   {
     path: "/admin/no-page-found",
     element: NoPageFound,

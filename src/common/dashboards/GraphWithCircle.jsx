@@ -28,12 +28,12 @@ const GraphWithCircle = ({
               <div className="fs-16">{title}</div>
               <div className="fs-26 fw-700">{value}</div>
             </div>
-            {localStorage.getItem("merchantLogin") && (
+            {/* {localStorage.getItem("merchantLogin") && (
               <div className="p12 mb-15">
                 <div className="fs-16">{title2}</div>
                 <div className="fs-26 fw-700">{value}</div>
               </div>
-            )}
+            )} */}
             {/* Merchant Dashboard */}
             {/* <div className="p12 mb-15">
             <div className="fs-16">{title}</div>
