@@ -150,17 +150,17 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
             navigate: getLoggedInDetails ? "/merchant/nudges" : "/admin/nudges",
             disabled: "",
           },
-          {
-            id: 14,
-            name: "Savvy Nudges",
-            icon: nudge,
-            iconFull: nudgeFull,
-            navigate: getLoggedInDetails
-              ? "/merchant/savvy-nudge"
-              : "/admin/savvy-nudge",
-            disabled: "",
-            // tag: 9,
-          },
+          // {
+          //   id: 14,
+          //   name: "Savvy Nudges",
+          //   icon: nudge,
+          //   iconFull: nudgeFull,
+          //   // navigate: getLoggedInDetails
+          //   //   ? "/merchant/savvy-nudge"
+          //   //   : "/admin/savvy-nudge",
+          //   navigate:"/admin/savvy-nudge",
+          //   disabled: "",
+          // },
           // Merchant Specific Links
           // {
           //   id: 6,
@@ -173,6 +173,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
           // },
           ...(getLoggedInDetails
             ? [
+              
                 {
                   id: 10,
                   name: "Profile",
@@ -188,7 +189,17 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                   navigate: "/merchant/hierarchy",
                 },
               ]
-            : [
+            : [ {
+            id: 14,
+            name: "Savvy Nudges",
+            icon: nudge,
+            iconFull: nudgeFull,
+            // navigate: getLoggedInDetails
+            //   ? "/merchant/savvy-nudge"
+            //   : "/admin/savvy-nudge",
+            navigate:"/admin/savvy-nudge",
+            disabled: "",
+          },
                 {
                   id: 7,
                   name: "Promotions",

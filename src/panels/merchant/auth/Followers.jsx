@@ -24,11 +24,12 @@ const Followers = () => {
   const [checkedItems, setCheckedItems] = useState({});
   const [selectedItems, setSelectedItems] = useState([]);
   const [redeemedNudges, setRedeemedNudges] = useState(false);
+  const [followerDetails, setFollowerDetails] = useState();
+  const [pagination, setPagination] = useState({ page: 1, limit: 12 });
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const navigate = useNavigate();
-  const [pagination, setPagination] = useState({ page: 1, limit: 12 });
   const dispatch = useDispatch();
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   // Scroll to top when the component mounts
   useScrollToTop([pagination?.page, pagination?.limit]);
@@ -51,14 +52,14 @@ const Followers = () => {
     (checked) => checked
   );
 
-  const filteredFollowers =
-    businessListFollowerListSelector?.data?.data?.records?.filter(
-      (item) =>
-        item?.userId?.displayName?.toLowerCase() ||
-        item?.customerPreferenceData?.personalPreference.includes(
-          searchQuery.toLowerCase()
-        )
-    ) || [];
+  // const filteredFollowers =
+  //   businessListFollowerListSelector?.data?.data?.records?.filter(
+  //     (item) =>
+  //       item?.userId?.displayName?.toLowerCase() ||
+  //       item?.customerPreferenceData?.personalPreference.includes(
+  //         searchQuery.toLowerCase()
+  //       )
+  //   ) || [];
 
   // For Ghost Screen
   const { selectedBusiness, setSelectedBusiness } = useBusiness();
@@ -137,7 +138,6 @@ const Followers = () => {
   };
 
   // Delete Selected items
-
   const handleDelete = () => {
     // Remove from checkedItems
     const updatedCheckedItems = { ...checkedItems };
@@ -147,7 +147,6 @@ const Followers = () => {
       }
     });
     setCheckedItems(updatedCheckedItems);
-
     // Remove from selectedItems
     const updatedSelectedItems = selectedItems.filter(
       (item, index) => !checkedItems[index]
@@ -168,12 +167,6 @@ const Followers = () => {
     };
   }, [isSidebarOpen]);
 
-  const [followerDetails, setFollowerDetails] = useState();
-
-  const getSelectedBusiness = JSON.parse(
-    localStorage.getItem("selectedBusiness")
-  );
-
   const toggleSidebar = (item) => {
     setIsSidebarOpen((prevState) => !prevState);
     setFollowerDetails(item);
@@ -192,7 +185,7 @@ const Followers = () => {
   const redeemedNudgeFn = () => {
     setRedeemedNudges(true);
   };
-
+  
   return (
     <>
       {businessListFollowerListSelector?.isLoading && <Loader />}
@@ -267,7 +260,8 @@ const Followers = () => {
               className="w-100 btn btnSecondary gap-8 noborderbtn"
               onClick={() => redeemedNudgeFn()}
             >
-              Redeem Nudges <img src={btnArrowblue} alt="" />
+              {/* Redeem Nudges <img src={btnArrowblue} alt="" /> */}
+              Accepted Nudges <img src={btnArrowblue} alt="" />
             </div>
           </div>
           <div className="tabPadding">

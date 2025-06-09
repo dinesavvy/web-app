@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import burgerMenu from "../../assets/images/burgerMenu.svg";
 import notification from "../../assets/images/notification.svg";
 // import cartIcon from "../../assets/images/cartIcon.svg";
-// import arrowRight from "../../assets/images/arrowRight.svg";
+import arrowRight from "../../assets/images/arrowRight.svg";
 import "../../assets/css/header.css";
 import SelectModal from "../../panels/merchant/auth/SelectModal";
 import { useLocation } from "react-router-dom";

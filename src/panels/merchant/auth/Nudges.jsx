@@ -583,6 +583,9 @@ const Nudges = () => {
                               </div>
                               <div className="fs-14 mb-20">
                                 {item?.description}
+                                {/* {item?.description?.length > 120
+    ? `${item.description.slice(0, 120)}...`
+    : item?.description} */}
                               </div>
                               {/* {item?.acceptedFollowerList?.length > 0 ? ( */}
                               <>
