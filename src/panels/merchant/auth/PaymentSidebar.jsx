@@ -34,7 +34,7 @@ const PaymentSidebar = ({
     let payload = {
       nudgeCredit: activeNudge,
       nudgeAmount: activeNudge,
-      currency: "USD",
+      currency: "usd",
     };
     dispatch(businessAddNudgeCreditHandler(payload));
   };

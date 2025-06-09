@@ -34,6 +34,7 @@ import { useNavigate } from "react-router-dom";
 import CommonModal from "../../panels/admin/Components/CommonModal";
 import { supportListHandler } from "../../redux/action/supportList";
 import { useDispatch, useSelector } from "react-redux";
+import { savvyNudgeOfferAction } from "../../redux/action/businessAction/savvyNudgeOffer";
 
 const Sidebar = ({ isOpen, setIsOpen }) => {
   const [showLogoutModal, setShowLogoutModal] = useState(false);
@@ -154,10 +155,13 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
             name: "Savvy Nudges",
             icon: nudge,
             iconFull: nudgeFull,
-            navigate:getLoggedInDetails ?  "/merchant/savvy-nudge" :"/admin/savvy-nudge",
+            navigate: getLoggedInDetails
+              ? "/merchant/savvy-nudge"
+              : "/admin/savvy-nudge",
             disabled: "",
             // tag: 9,
           },
+          // Merchant Specific Links
           // {
           //   id: 6,
           //   name: "Promotions",
@@ -229,6 +233,9 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
     if (width <= 1024) {
       setIsOpen(false);
     }
+    if (getLoggedInDetails) {
+      dispatch(savvyNudgeOfferAction.savvyNudgeOfferReset());
+    }
   };
 
   return (
@@ -259,7 +266,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                   link?.disabled ? "disabled" : ""
                 }`}
                 onClick={() => {
-                    localStorage.removeItem("nudgeQuantity");
+                  localStorage.removeItem("nudgeQuantity");
                   onNavigate(link.navigate);
                 }}
                 data-tooltip-id={isOpen ? "sidebar-tooltip" : undefined}

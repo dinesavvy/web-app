@@ -257,6 +257,7 @@ const [qrCodeModal,setQrCodeModal] = useState(false)
                 defaultValue={
                   getProfileDetailsSelector?.data?.data?.businessName
                 }
+                disabled={true}
               />
             </div>
             <div>
@@ -270,6 +271,7 @@ const [qrCodeModal,setQrCodeModal] = useState(false)
                 defaultValue={
                   getProfileDetailsSelector?.data?.data?.address?.addressLine1
                 }
+                disabled={true}
               />
             </div>
             <div>
@@ -289,6 +291,7 @@ const [qrCodeModal,setQrCodeModal] = useState(false)
                 ]
                   .filter(Boolean)
                   .join(", ")}
+                  disabled={true}
               />
             </div>
           </div>

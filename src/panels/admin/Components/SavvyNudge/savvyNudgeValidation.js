@@ -1,6 +1,8 @@
 import React from "react";
 import * as Yup from "yup";
 
+export const urlRegex = /^(http:\/\/|https:\/\/)(www\.)?([a-zA-Z0-9.-]+\.(com|org|net|info|edu|biz|co))(:[0-9]{1,5})?(\/\S*)?$/;
+
 export const validationSchema = Yup.object().shape({
   title: Yup.string()
     .required("Title is required"),
@@ -15,4 +17,14 @@ youtubeUrl: Yup.string()
       'Enter a valid HTTPS YouTube URL'
     )
     .required('YouTube URL is required'),
+    foodSupplierLink:Yup.string()
+    .matches(
+      urlRegex,
+      'Enter a valid URL'
+    ),
+    beverageSupplierLink:Yup.string()
+    .matches(
+      urlRegex,
+      'Enter a valid URL'
+    )
 });

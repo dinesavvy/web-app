@@ -336,6 +336,7 @@ const PromotionsList = () => {
             />
             <img src={searchIcon} alt="" className="absoluteImage" />
           </div>
+
           {activeTab === "active" && (
             <>
               <div className="card mb-20">

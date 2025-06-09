@@ -48,6 +48,7 @@ const Nudges = () => {
 
   const handleTabClick = (tab) => {
     setActiveTab(tab); // Update the active tab
+    setNudgePagination({ page: 1, limit: 10 })
   };
 
   const handlePaginationChange = (page, pageSize) => {

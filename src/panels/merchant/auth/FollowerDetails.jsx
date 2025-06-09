@@ -14,13 +14,10 @@ const FollowerDetails = ({
   toggleSidebar,
   followerDetails,
   state,
-  followerDetailsSelector,
+  // followerDetailsSelector,
 }) => {
-  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("Redeemed");
-
   const tabs = ["Redeemed", "Accepted", "Declined", "Ignored"];
-
   const listByUserId = useSelector((state) => state?.businessListByUserId);
 
   const dispatch = useDispatch();
@@ -28,31 +25,29 @@ const FollowerDetails = ({
   useEffect(() => {
     if ((activeTab && followerDetails) || state) {
       let payload = {
-        page: 1,
-        limit: 10,
+        // page: 1,
+        // limit: 10,
         userId: followerDetails?.userId?._id || state?.userId,
-        nudgeType:
-          activeTab === "Redeemed"
-            ? "Redeemed"
-            : activeTab === "Accepted"
-            ? "Accepted"
-            : activeTab === "Declined"
+        nudgeType: ["Redeemed", "Accepted", "Declined"].includes(activeTab)
+          ? activeTab === "Declined"
             ? "Denied"
-            : "Redeemed",
+            : activeTab
+          : "Redeemed",
       };
       dispatch(businessListByUserIdHandler(payload));
     }
   }, [activeTab, followerDetails, state]);
 
+
   return (
     <>
       {listByUserId?.isLoading && <Loader />}
-      {isOpen && <div className="overlay2" onClick={toggleSidebar}></div>}
+      {isOpen && <div className="overlay2" onClick={()=>{toggleSidebar();setActiveTab("Redeemed")}}></div>}
       {/* Sidebar */}
       <div className={`rightSidebar ${isOpen ? "open" : ""}`}>
         <div className="d-flex justify-between align-center">
           <div className="fs-20 fw-600">Follower Details</div>
-          <div className="closeSidebar" onClick={toggleSidebar}>
+          <div className="closeSidebar" onClick={()=>{toggleSidebar();setActiveTab("Redeemed")}}>
             <img src={closeRightSidebar} alt="closeRightSidebar" />
           </div>
         </div>

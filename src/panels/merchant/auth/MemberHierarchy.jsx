@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import closeRightSidebar from "../../../assets/images/closeRightSidebar.svg";
 import phoneEdit from "../../../assets/images/phoneEdit.svg";
-import editMember from "../../../assets/images/editMember.svg";
-import deleteMember from "../../../assets/images/deleteMember.svg";
+// import editMember from "../../../assets/images/editMember.svg";
+// import deleteMember from "../../../assets/images/deleteMember.svg";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { businessListHandler } from "../../../redux/action/businessAction/businessListSlice";
@@ -15,7 +15,7 @@ import {
   createTeamHandler,
 } from "../../../redux/action/businessAction/createTeam";
 import { useCommonMessage } from "../../../common/CommonMessage";
-import { removeTeamMemberHandler } from "../../../redux/action/businessAction/removeTeamMember";
+// import { removeTeamMemberHandler } from "../../../redux/action/businessAction/removeTeamMember";
 import moment from "moment";
 import { businessTeamListHandler } from "../../../redux/action/businessAction/businessTeamList";
 import {
@@ -29,6 +29,7 @@ import {
 import { handleKeyPressSpace } from "../../../common/commonFunctions/CommonFunctions";
 import { getGeoInfo } from "../../../services/geoLocation";
 import Loader from "../../../common/Loader/Loader";
+import { getBusinessTeamAction } from "../../../redux/action/businessAction/getBusinessTeam";
 
 const MemberHierarchy = ({
   isMemberHierarchy,
@@ -44,7 +45,7 @@ const MemberHierarchy = ({
   const dispatch = useDispatch();
   const messageApi = useCommonMessage();
 
-  const businessListSelector = useSelector((state) => state?.businessList);
+  // const businessListSelector = useSelector((state) => state?.businessList);
   const businessRoleListSelector = useSelector(
     (state) => state?.businessRoleList
   );
@@ -62,18 +63,17 @@ const MemberHierarchy = ({
 
   const handlePhoneChange = (value, data) => {
     const dialCode = `${data?.dialCode}`;
-    let number = value.replace(dialCode, "").trim(); 
-  
+    let number = value.replace(dialCode, "").trim();
+
     if (!number) {
       setCountryCode("");
-      return
+      return;
     } else {
       setCountryCode(dialCode);
     }
-    
+
     setPhone(number);
   };
-
 
   // Fetch Geo location
   useEffect(() => {
@@ -89,16 +89,8 @@ const MemberHierarchy = ({
     fetchGeoInfo();
   }, []);
 
-  
   const validationSchema = Yup.object({
     name: Yup.string().required("Name is required"),
-    // phone_number: Yup.string()
-    //   .matches(/^[0-9]{10}$/, "Phone number must be 10 digits")
-    //   .required("Phone number is required"),
-    // location: Yup.string().required("Location is required"),
-    // role: Yup.string().required("Role is required"),
-    // invitedDate: Yup.string(),
-    // joinedDate: Yup.string().required("Joined date is required"),
   });
 
   useEffect(() => {
@@ -150,7 +142,6 @@ const MemberHierarchy = ({
     }
   }, [createTeamSelector]);
 
-
   useEffect(() => {
     if (updateTeamBusinessSelector?.data?.statusCode === 200) {
       messageApi.open({
@@ -160,7 +151,7 @@ const MemberHierarchy = ({
       toggleMemberHierarchy();
       dispatch(businessTeamListHandler());
       dispatch(updateTeamBusinessAction.updateTeamBusinessReset());
-    } else if (updateTeamBusinessSelector?.message?.status===400) {
+    } else if (updateTeamBusinessSelector?.message?.status === 400) {
       messageApi.open({
         type: "error",
         content: updateTeamBusinessSelector?.message?.response?.data?.message,
@@ -196,7 +187,7 @@ const MemberHierarchy = ({
 
   return (
     <>
-    {createTeamSelector?.isLoading && <Loader />}
+      {createTeamSelector?.isLoading && <Loader />}
       {isMemberHierarchy && (
         <div className="overlay2" onClick={toggleMemberHierarchy}></div>
       )}
@@ -209,27 +200,7 @@ const MemberHierarchy = ({
           isMemberHierarchy || addTeamModal ? "open" : ""
         }`}
       >
-        <div className="d-flex justify-between align-center">
-          <div className="fs-20 fw-600">
-            {addTeamModal ? "Add Member" : "Edit Member"}
-          </div>
-
-          <div
-            className="closeSidebar"
-            // onClick={addTeamModal ? addTeam : toggleMemberHierarchy}
-            onClick={() => {
-              // Reset the form
-              // resetForm({});
-              // Toggle the sidebar or close the member hierarchy
-              addTeamModal ? addTeam() : toggleMemberHierarchy();
-            }}
-          >
-            <img src={closeRightSidebar} alt="closeRightSidebar" />
-          </div>
-        </div>
-        <div className="divider2"></div>
         <div className="overflowSidebar">
-          {/* Add and Edit Member */}
           <Formik
             enableReinitialize
             initialValues={{
@@ -246,8 +217,28 @@ const MemberHierarchy = ({
               handleFormSubmit(values);
             }}
           >
-            {({ values,setFieldValue, resetForm }) => (
+            {({ values, setFieldValue, resetForm }) => (
               <Form>
+                <div className="d-flex justify-between align-center">
+                  <div className="fs-20 fw-600">
+                    {addTeamModal ? "Add Member" : "Edit Member"}
+                  </div>
+
+                  <div
+                    className="closeSidebar"
+                    onClick={() => {
+                      // if(addTeamModal){
+                      //   resetForm()
+                      //   dispatch(getBusinessTeamAction.getBusinessTeamReset())
+                      // }
+                      resetForm()
+                      addTeamModal ? addTeam() : toggleMemberHierarchy();
+                    }}
+                  >
+                    <img src={closeRightSidebar} alt="closeRightSidebar" />
+                  </div>
+                </div>
+                <div className="divider2"></div>
                 <div className="mb-40">
                   <div className="mb-20">
                     <label htmlFor="name" className="grey mb-10 fs-16 fw-500">
@@ -289,16 +280,16 @@ const MemberHierarchy = ({
                         }
                       /> */}
                       <div className="">
-                          <PhoneInput
-                            // country={country} // Set country dynamically when user types a code
-                            value={values?.phone_number || countryCode + phone} // Show full value but keep them separate in state
-                            onChange={handlePhoneChange}
-                            disableCountryGuess={false} // Allow auto-detection of typed country code
-                            placeholder="Enter phone number"
-                            className="phoneInput"
-                            name="phone_number"
-                          />
-                        </div>
+                        <PhoneInput
+                          // country={country} // Set country dynamically when user types a code
+                          value={values?.phone_number || countryCode + phone} // Show full value but keep them separate in state
+                          onChange={handlePhoneChange}
+                          disableCountryGuess={false} // Allow auto-detection of typed country code
+                          placeholder="Enter phone number"
+                          className="phoneInput"
+                          name="phone_number"
+                        />
+                      </div>
                       <div className="inputIcon">
                         <img src={phoneEdit} alt="" className="h-100 " />
                       </div>

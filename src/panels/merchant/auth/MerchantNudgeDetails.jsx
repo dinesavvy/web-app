@@ -126,6 +126,7 @@ const MerchantNudgeDetails = ({
               </div>
             </div>
           </div>
+          {/* {console.log(businessNudgeDetailsSelector,"businessNudgeDetailsSelector")} */}
           <div className="divider2"></div>
           <div className="fs-16 fw-700 mb-10">I want it</div>
           <div className="d-flex justify-between align-center gap-10">

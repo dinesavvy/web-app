@@ -1,8 +1,8 @@
-import React, { useContext, useEffect, useState, useRef, useCallback } from "react";
+import React, { useEffect, useState } from "react";
 import burgerMenu from "../../assets/images/burgerMenu.svg";
 import notification from "../../assets/images/notification.svg";
-import cartIcon from "../../assets/images/cartIcon.svg";
-import arrowRight from "../../assets/images/arrowRight.svg";
+// import cartIcon from "../../assets/images/cartIcon.svg";
+// import arrowRight from "../../assets/images/arrowRight.svg";
 import "../../assets/css/header.css";
 import SelectModal from "../../panels/merchant/auth/SelectModal";
 import { useLocation } from "react-router-dom";
@@ -22,7 +22,7 @@ const Header = ({ handleTrigger }) => {
 
   const location = useLocation();
   const getRestaurantName = localStorage.getItem("restaurantName");
-    const getMerchantBusinessSelector = JSON.parse(
+  const getMerchantBusinessSelector = JSON.parse(
     localStorage.getItem("selectedBusiness")
   );
   const businessListSelector = useSelector((state) => state?.businessList);
@@ -52,8 +52,6 @@ const Header = ({ handleTrigger }) => {
     };
   }, [notificationDrawer]);
 
-
-
   useEffect(() => {
     if (getMerchantLogin) {
       let payload = {
@@ -64,10 +62,9 @@ const Header = ({ handleTrigger }) => {
     }
   }, [acceptInviteSelector]);
 
-
   // Handle Selection
   const handleSelect = (item) => {
-    // setSelectedBusiness(item);  
+    // setSelectedBusiness(item);
     window.location.reload();
     setModalOpen(false);
   };
@@ -111,10 +108,11 @@ const Header = ({ handleTrigger }) => {
     "/supplier/dashboard": "Supplier Dashboard",
     "/merchant/reverse-nudge": "Followers",
     "/admin/support": "Support",
-    "/admin/edit-support" : "Verify Business",
-    "/admin/settings" : "Settings",
-    "/admin/savvy-nudge" : "Savvy Nudges",
-    "/admin/create-savvy-nudge":"Savvy Nudges"
+    "/admin/edit-support": "Verify Business",
+    "/admin/settings": "Settings",
+    "/admin/savvy-nudge": "Savvy Nudges",
+    "/admin/create-savvy-nudge": "Savvy Nudges",
+    "/merchant/savvy-nudge": "Savvy Nudges",
   };
 
   return (
@@ -137,7 +135,7 @@ const Header = ({ handleTrigger }) => {
           </div>
         </div> */}
           {/* {getMerchantBusinessSelector!==null && ( */}
-          {/* {businessListSelector?.data?.data?.records?.length > 0 && localStorage.getItem("merchantLogin")===true &&selectedBusiness !==undefined &&  ( */} 
+          {/* {businessListSelector?.data?.data?.records?.length > 0 && localStorage.getItem("merchantLogin")===true &&selectedBusiness !==undefined &&  ( */}
           {/* <div
             className="d-flex selectCommon cursor-pointer align-center gap-6 "
             onClick={toggleModal}

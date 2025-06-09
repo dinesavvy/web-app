@@ -30,10 +30,9 @@ const Followers = () => {
   const dispatch = useDispatch();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
+  // Scroll to top when the component mounts
+  useScrollToTop([pagination?.page, pagination?.limit]);
 
-// Scroll to top when the component mounts
-useScrollToTop([pagination?.page,pagination?.limit]);
-  
   const { state } = useLocation();
 
   // When notification type is 35 then open redeemed redeeme nudge drawer and when refresh then reset navigation state
@@ -53,10 +52,12 @@ useScrollToTop([pagination?.page,pagination?.limit]);
   );
 
   const filteredFollowers =
-    businessListFollowerListSelector?.data?.data?.records?.filter((item) =>
-      item?.userId?.displayName
-        ?.toLowerCase() || item?.customerPreferenceData?.personalPreference
-        .includes(searchQuery.toLowerCase())
+    businessListFollowerListSelector?.data?.data?.records?.filter(
+      (item) =>
+        item?.userId?.displayName?.toLowerCase() ||
+        item?.customerPreferenceData?.personalPreference.includes(
+          searchQuery.toLowerCase()
+        )
     ) || [];
 
   // For Ghost Screen
@@ -186,7 +187,7 @@ useScrollToTop([pagination?.page,pagination?.limit]);
       searchString: searchQuery,
     };
     dispatch(businessFollowerListHandler(payload));
-  }, [searchQuery,pagination?.page,pagination?.limit]);
+  }, [searchQuery, pagination?.page, pagination?.limit]);
 
   const redeemedNudgeFn = () => {
     setRedeemedNudges(true);
@@ -210,51 +211,49 @@ useScrollToTop([pagination?.page,pagination?.limit]);
                 <div class="ring"></div>
                 <div class="ring"></div>
                 <div class="ring"></div>
-                  {/* <img
+                {/* <img
                     src={circleAbsolute2}
                     className="circleAbsolute"
                     alt=""
                   /> */}
-                  <div className="fs-34 fw-700 z1">
-                    {followerAnalyticsSelector?.data?.data?.followerCount}
-                  </div>
-                  <div className="fs-14 z1">to go</div>
-                
+                <div className="fs-34 fw-700 z1">
+                  {followerAnalyticsSelector?.data?.data?.followerCount}
+                </div>
+                <div className="fs-14 z1">to go</div>
               </div>
             </div>
             <div className="tabPadding">
               <div className="fs-24 lh1 fw-600">Nearby</div>
               <div className="divider2"></div>
               <div class="ring-container circleinfo ring100 ringExpand">
-              <div class="ring"></div>
-              <div class="ring"></div>
-              <div class="ring"></div>
-              <div class="ring"></div>
-              <div class="ring"></div>
-                  <div className="fs-34 fw-700 z1">
-                    {followerAnalyticsSelector?.data?.data?.nearByFollowerCount}
-                  </div>
+                <div class="ring"></div>
+                <div class="ring"></div>
+                <div class="ring"></div>
+                <div class="ring"></div>
+                <div class="ring"></div>
+                <div className="fs-34 fw-700 z1">
+                  {/* {followerAnalyticsSelector?.data?.data?.nearByFollowerCount} */}
+                  {
+                    followerAnalyticsSelector?.data?.data
+                      ?.nearByRestaurantFollowerCount
+                  }
                 </div>
-              
+              </div>
             </div>
             <div className="tabPadding">
               <div className="fs-24 lh1 fw-600">Loyalty</div>
               <div className="divider2"></div>
               <div class="ring-container blueRing circleinfo ringExpand">
-              <div class="ring"></div>
-              <div class="ring"></div>
-              <div class="ring"></div>
-              <div class="ring"></div>
-              <div class="ring"></div>
-                  <div className="fs-34 fw-700 z1">
-                    {
-                      followerAnalyticsSelector?.data?.data
-                        ?.loyaltyFollowerCount
-                    }
-                  </div>
-                  <div className="fs-14 z1">to go</div>
+                <div class="ring"></div>
+                <div class="ring"></div>
+                <div class="ring"></div>
+                <div class="ring"></div>
+                <div class="ring"></div>
+                <div className="fs-34 fw-700 z1">
+                  {followerAnalyticsSelector?.data?.data?.loyaltyFollowerCount}
                 </div>
-              
+                <div className="fs-14 z1">to go</div>
+              </div>
             </div>
           </div>
           <div className="d-flex align-center gap-20 mb-30 flex575">
@@ -284,84 +283,93 @@ useScrollToTop([pagination?.page,pagination?.limit]);
               <img src={searchIcon} alt="" className="absoluteImage" />
             </div>
             <div className="merchantGrid mb-30">
-              {businessListFollowerListSelector?.data?.data?.records?.length > 0 ? (
-                businessListFollowerListSelector?.data?.data?.records?.map((item, index) => {
-                  return (
-                    <div className="cardFollow" key={index}>
-                      <div className="d-flex justify-between gap-12">
-                        <div className="d-flex align-center gap-12">
-                          <div className="initialName">
-                            {item?.userId?.displayName
-                              .split(" ")
-                              .map((word) => word.charAt(0).toUpperCase())
-                              .join("")
-                              .slice(0, 2)}
-                          </div>
-                          <div>
-                            <div className="fw-700">
+              {businessListFollowerListSelector?.data?.data?.records?.length >
+              0 ? (
+                businessListFollowerListSelector?.data?.data?.records?.map(
+                  (item, index) => {
+                    return (
+                      <div className="cardFollow" key={index}>
+                        <div className="d-flex justify-between gap-12">
+                          <div className="d-flex align-center gap-12">
+                            <div className="initialName">
                               {item?.userId?.displayName
-                                ?.charAt(0)
-                                .toUpperCase() +
-                                item?.userId?.displayName?.slice(1)}
+                                .split(" ")
+                                .map((word) => word.charAt(0).toUpperCase())
+                                .join("")
+                                .slice(0, 2)}
                             </div>
-                            <div className="fs-14 fw-300 o5">
-                              {moment(item?.createdAt).format("MMMM, YYYY")}
+                            <div>
+                              <div className="fw-700">
+                                {item?.userId?.displayName
+                                  ?.charAt(0)
+                                  .toUpperCase() +
+                                  item?.userId?.displayName?.slice(1)}
+                              </div>
+                              <div className="fs-14 fw-300 o5">
+                                {moment(item?.createdAt).format("MMMM, YYYY")}
+                              </div>
                             </div>
                           </div>
+                          <div className="custom-checkbox">
+                            <label className="checkLabel">
+                              <input
+                                type="checkbox"
+                                checked={checkedItems[index] || false}
+                                onChange={(e) =>
+                                  handleCheckboxChange(
+                                    index,
+                                    e.target.checked,
+                                    item
+                                  )
+                                }
+                              />
+                              <span className="checkmark"></span>
+                            </label>
+                          </div>
                         </div>
-                        <div className="custom-checkbox">
-                          <label className="checkLabel">
-                            <input
-                              type="checkbox"
-                              checked={checkedItems[index] || false}
-                              onChange={(e) =>
-                                handleCheckboxChange(
-                                  index,
-                                  e.target.checked,
-                                  item
-                                )
-                              }
-                            />
-                            <span className="checkmark"></span>
-                          </label>
-                        </div>
-                      </div>
-                      <div className="divider2"></div>
-                      <div className="fs-14 mb-6">Preferences</div>
-                      <div className="flexTag mb-20">
-                        {item?.customerPreferenceData?.filterData?.length > 0 ? (
-                          item?.customerPreferenceData?.filterData?.filter(item => item?.trim()).length > 0 ? (
-                            item?.customerPreferenceData?.filterData?.map((item, index) => {
-                              const trimmedItem = item?.trim();
-                              return trimmedItem ? (
-                                <div key={index}>
-                                  {trimmedItem.charAt(0).toUpperCase() + trimmedItem.slice(1)}
-                                </div>
-                              ) : null;
-                            })
+                        <div className="divider2"></div>
+                        <div className="fs-14 mb-6">Preferences</div>
+                        <div className="flexTag mb-20">
+                          {item?.customerPreferenceData?.filterData?.length >
+                          0 ? (
+                            item?.customerPreferenceData?.filterData?.filter(
+                              (item) => item?.trim()
+                            ).length > 0 ? (
+                              item?.customerPreferenceData?.filterData?.map(
+                                (item, index) => {
+                                  const trimmedItem = item?.trim();
+                                  return trimmedItem ? (
+                                    <div key={index}>
+                                      {trimmedItem.charAt(0).toUpperCase() +
+                                        trimmedItem.slice(1)}
+                                    </div>
+                                  ) : null;
+                                }
+                              )
+                            ) : (
+                              <div>No data available</div>
+                            )
                           ) : (
                             <div>No data available</div>
-                          )
-                        ) : (
-                          <div>No data available</div>
-                        )}
+                          )}
+                        </div>
+                        <div
+                          className="btn btnSecondary"
+                          onClick={() => toggleSidebar(item)}
+                        >
+                          View Details
+                        </div>
                       </div>
-                      <div
-                        className="btn btnSecondary"
-                        onClick={() => toggleSidebar(item)}
-                      >
-                        View Details
-                      </div>
-                    </div>
-                  );
-                })
+                    );
+                  }
+                )
               ) : (
                 <div className="noDataFound">No Data Found</div>
               )}
             </div>
-            {businessListFollowerListSelector?.data?.data?.records?.length > 0 && (
+            {businessListFollowerListSelector?.data?.data?.records?.length >
+              0 && (
               <div className="d-flex align-center justify-between flexPagination">
-                {/* <div className="fs-16">Showing 1 to 5 of 10 Restaurants</div> */}
                 <div className="fs-16">
                   Showing {pagination?.page} to {pagination?.limit} of{" "}
                   {businessListFollowerListSelector?.data?.data?.recordsCount}{" "}
@@ -375,7 +383,7 @@ useScrollToTop([pagination?.page,pagination?.limit]);
                     businessListFollowerListSelector?.data?.data?.recordsCount
                   }
                   onChange={handlePaginationChange}
-                  pageSizeOptions={["12" ,'20', '50', '100']} 
+                  pageSizeOptions={["12", "20", "50", "100"]}
                   showSizeChanger={true}
                 />
               </div>

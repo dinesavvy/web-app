@@ -24,16 +24,15 @@ const Promotions = () => {
   const selectRef = useRef(null);
   const navigate = useNavigate();
 
-  const {state} = useLocation();
-
+  const { state } = useLocation();
 
   // Scroll to top when the component mounts
-  useScrollToTop([pagination?.page,pagination?.limit]);
+  useScrollToTop([pagination?.page, pagination?.limit]);
 
   const adminPromotionList = useSelector((state) => state?.adminPromotion);
   const adminEndPromotionSelector = useSelector(
-      (state) => state?.adminEndPromotion
-    );
+    (state) => state?.adminEndPromotion
+  );
 
   const handleSearchChange = (value) => {
     setSearchString(value);
@@ -87,7 +86,7 @@ const Promotions = () => {
       merchantId: state?._id,
     };
     dispatch(adminPromotionListHandler(payload));
-  }, [pagination, searchString, activeTab,adminEndPromotionSelector]);
+  }, [pagination, searchString, activeTab, adminEndPromotionSelector]);
 
   return (
     <>
@@ -134,7 +133,10 @@ const Promotions = () => {
                 className={`tab-button ${
                   activeTab === "active" ? "active" : ""
                 }`}
-                onClick={() => {setActiveTab("active");setPagination((prev) => ({ ...prev, page: 1 })); }}
+                onClick={() => {
+                  setActiveTab("active");
+                  setPagination((prev) => ({ ...prev, page: 1 }));
+                }}
               >
                 Active
               </button>
@@ -142,7 +144,10 @@ const Promotions = () => {
                 className={`tab-button ${
                   activeTab === "Inactive" ? "active" : ""
                 }`}
-                onClick={() => {setActiveTab("Inactive");setPagination((prev) => ({ ...prev, page: 1 })); }}
+                onClick={() => {
+                  setActiveTab("Inactive");
+                  setPagination((prev) => ({ ...prev, page: 1 }));
+                }}
               >
                 Inactive
               </button>
@@ -386,7 +391,7 @@ const Promotions = () => {
                 pageSize={pagination?.limit}
                 total={adminPromotionList?.data?.data?.recordsCount}
                 onChange={handlePaginationChange}
-                pageSizeOptions={["12" ,'20', '50', '100']} 
+                pageSizeOptions={["12", "20", "50", "100"]}
                 showSizeChanger
               />
             </div>
@@ -397,7 +402,7 @@ const Promotions = () => {
         isOpen={isDetailsOpen}
         toggleDetails={toggleDetails}
         promotionalDetailsData={promotionalDetailsData}
-        setIsDetailsOpen = {setIsDetailsOpen}
+        setIsDetailsOpen={setIsDetailsOpen}
         activeTab={activeTab}
       />
     </>

@@ -6,7 +6,10 @@ import MemberPermissions from "./MemberPermissions";
 import { businessTeamListHandler } from "../../../redux/action/businessAction/businessTeamList";
 import { useDispatch, useSelector } from "react-redux";
 import Loader from "../../../common/Loader/Loader";
-import { getBusinessTeamHandler } from "../../../redux/action/businessAction/getBusinessTeam";
+import {
+  getBusinessTeamAction,
+  getBusinessTeamHandler,
+} from "../../../redux/action/businessAction/getBusinessTeam";
 import editMember from "../../../assets/images/editMember.svg";
 import deleteMember from "../../../assets/images/deleteMember.svg";
 import deleteModal from "../../../assets/images/deleteModal.svg";
@@ -46,6 +49,7 @@ const Hierarchy = () => {
   const toggleMemberHierarchy = (item) => {
     setSelectTeam(item);
     setIsMemberHierarchy((prevState) => !prevState);
+    dispatch(getBusinessTeamAction.getBusinessTeamReset());
   };
 
   useEffect(() => {
@@ -101,7 +105,9 @@ const Hierarchy = () => {
 
   return (
     <>
-      {(businessTeamListSelector?.isLoading || updateTeamBusinessSelector?.isLoading) && <Loader />}
+      {(businessTeamListSelector?.isLoading ||
+        updateTeamBusinessSelector?.isLoading ||
+        getBusinessTeamSelector?.isLoading) && <Loader />}
       <div className="dashboard">
         <div className="tabPadding mb-30">
           <div className="fs-24 fw-600">Hierarchy</div>
@@ -114,7 +120,8 @@ const Hierarchy = () => {
             </div>
             <div>
               <div className="fs-24 fw-600 mb-10">
-                {getLoginDetails?.firstName?.charAt(0).toUpperCase() + getLoginDetails?.firstName?.slice(1).toLowerCase()}
+                {getLoginDetails?.firstName?.charAt(0).toUpperCase() +
+                  getLoginDetails?.firstName?.slice(1).toLowerCase()}
               </div>
               <div className="positionTag fs-16 fw-600">
                 {getSelectedBusinessData?.roleTitle}

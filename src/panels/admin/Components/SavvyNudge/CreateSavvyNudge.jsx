@@ -3,7 +3,6 @@ import backButton from "../../../../assets/images/backButton.svg";
 import selectedImage from "../../../../assets/images/selectedImage.svg";
 import calender from "../../../../assets/images/calender.svg";
 import closeRightSidebar from "../../../../assets/images/closeRightSidebar.svg";
-// import dish2 from "../../../../assets/images/dish2.png";
 import pairingImg from "../../../../assets/images/pairingImg.png";
 import destinationImg from "../../../../assets/images/destination.png";
 import { DatePicker, Space } from "antd";
@@ -28,7 +27,6 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import Loader from "../../../../common/Loader/Loader";
 import { useCommonMessage } from "../../../../common/CommonMessage";
-import useScrollToTop from "../../../../hooks/useScrollToTop";
 
 const CreateSavvyNudge = () => {
   const navigate = useNavigate();
@@ -89,8 +87,6 @@ const CreateSavvyNudge = () => {
   const [selectedDuration, setSelectedDuration] = useState("5");
   const [selected, setSelected] = useState("25");
 
-  // // Scroll to top when the component mounts
-  // useScrollToTop([pagination?.page]);
 
   const handleFormSubmit = (values) => {
     if (selectedMerchants?.length === 0) {
@@ -176,8 +172,9 @@ const CreateSavvyNudge = () => {
           handleFormSubmit(values, formikBag);
         }}
       >
-        {({ isSubmitting, values, setFieldValue, resetForm }) => (
+        {({ isSubmitting, values, setFieldValue, resetForm,errors }) => (
           <Form>
+            {console.log(errors,"errors")}
             <div className="dashboard">
               <div className="tabPadding mb-20">
                 <div className="d-flex align-center gap-20 w-100">
@@ -485,6 +482,11 @@ const CreateSavvyNudge = () => {
                       placeholder="Link to the Supplier/Distributor that provides the food ingredients"
                       name="foodSupplierLink"
                     />
+                    <ErrorMessage
+                      name="foodSupplierLink"
+                      component="div"
+                      className="mt-10 fw-500 fs-14 error"
+                    />
                   </div>
                   <div className="">
                     <label className=" mb-10 fs-16 fw-500">
@@ -495,6 +497,11 @@ const CreateSavvyNudge = () => {
                       className="input"
                       placeholder="Link to the Supplier/Distributor that provides the beverage"
                       name="beverageSupplierLink"
+                    />
+                    <ErrorMessage
+                      name="beverageSupplierLink"
+                      component="div"
+                      className="mt-10 fw-500 fs-14 error"
                     />
                   </div>
                 </div>

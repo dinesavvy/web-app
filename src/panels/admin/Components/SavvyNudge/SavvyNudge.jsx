@@ -33,14 +33,14 @@ const SavvyNudge = () => {
   const messageApi = useCommonMessage();
   const [activeTab, setActiveTab] = useState(true);
   const [pagination, setPagination] = useState({ page: 1, limit: 12 });
-  const [searchString, setSearchString] = useState("");
 
 
-// Scroll to top when the component mounts
-  useScrollToTop([pagination?.page,pagination?.limit]);
+  // Scroll to top when the component mounts
+  useScrollToTop([pagination?.page, pagination?.limit]);
 
   const handleTabClick = (tab) => {
     setActiveTab(tab); // Update the active tab
+    setPagination({page:1, limit: 12}); // Reset pagination to page 1 when tab changes
   };
   const [activeVideoUrl, setActiveVideoUrl] = useState(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -63,11 +63,10 @@ const SavvyNudge = () => {
     };
     dispatch(savvyNudgeDetailsHandler(payload));
   };
+
   useEffect(() => {
     if (savvyNudgeDetailsSelector?.data?.statusCode === 200) {
-      // setIsSidebarOpen((prevState) => !prevState);
       setIsSidebarOpen(true);
-      // dispatch(savvyNudgeDetailsAction.savvyNudgeDetailsReset())
     }
   }, [savvyNudgeDetailsSelector]);
 
@@ -109,11 +108,6 @@ const SavvyNudge = () => {
     };
   }, [isSidebarOpenMerchantViewAll]);
 
-  // const videoLinks = [
-  //   "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-  //   "https://youtu.be/3JZ_D3ELwOQ",
-  //   "https://www.youtube.com/embed/tgbNymZ7vqY",
-  // ];
 
   const dispatch = useDispatch();
   const savvyNudgesListSelector = useSelector(
@@ -151,6 +145,7 @@ const SavvyNudge = () => {
       });
     }
   };
+
   return (
     <>
       {(savvyNudgesListSelector?.isLoading ||
@@ -297,7 +292,12 @@ const SavvyNudge = () => {
                                   <div className="mb-16">
                                     <div className="fs-14 mb-4">Merchants</div>
                                     <div className="d-flex gap-8 align-center">
-                                      <div className="position-relative d-flex borderImageCollaps">
+                                      <div
+                                        className="position-relative d-flex borderImageCollaps cursor-pointer"
+                                        onClick={() =>
+                                          toggleSidebarMerchantViewAll(item)
+                                        }
+                                      >
                                         {item?.merchants
                                           ?.slice(0, 5)
                                           ?.map((itemMerchant, i) => (
@@ -414,7 +414,7 @@ const SavvyNudge = () => {
               />
             </div>
           )}
-      </div>
+        </div>
       </div>
 
       {/* Modals and Sidebars */}

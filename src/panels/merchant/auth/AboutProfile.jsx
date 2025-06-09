@@ -13,6 +13,7 @@ const AboutProfile = ({ getProfileDetailsSelector }) => {
             className="input"
             placeholder="Restaurant"
             defaultValue={"Restaurant"}
+            disabled={true}
           />
         </div>
         <div className="twoSpace position-relative">
@@ -25,6 +26,7 @@ const AboutProfile = ({ getProfileDetailsSelector }) => {
             row="5"
             placeholder="Whether you're joining us for a casual lunch, a special dinner, or a weekend brunch, our elegant yet relaxed atmosphere is perfect for any occasion."
             defaultValue={getProfileDetailsSelector?.data?.data?.description}
+            disabled={true}
           ></textarea>
           <div className="fs-12 textWord">110/750</div>
         </div>
@@ -40,6 +42,7 @@ const AboutProfile = ({ getProfileDetailsSelector }) => {
             className="input"
             placeholder="www.dinesavvy.com"
             defaultValue={getProfileDetailsSelector?.data?.data?.websiteUrl}
+            disabled={true}
           />
         </div>
         <div>
@@ -51,6 +54,7 @@ const AboutProfile = ({ getProfileDetailsSelector }) => {
             className="input"
             placeholder="+1 256 25695s"
             defaultValue={getProfileDetailsSelector?.data?.data?.phoneNumber}
+            disabled={true}
           />
         </div>
       </div>
