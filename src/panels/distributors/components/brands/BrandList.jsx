@@ -12,10 +12,9 @@ import BrandDetails from "./BrandDetails";
 import noImageFound from "../../../../assets/images/noImageFound.png";
 import {
   brandListDistributorHandler,
-  brandLlistDistributorHandler,
 } from "../../../../redux/action/distributorsAction/brandListDistributor";
-// import { deleteDistributorBrandAction } from "../../../../redux/action/distributorsAction/deleteDistributorBrand";
 import useScrollToTop from "../../../../hooks/useScrollToTop";
+import CommonPagination from "../../../../common/pagination/CommonPagination";
 
 const BrandsListDistributor = () => {
   const messageApi = useCommonMessage();
@@ -157,28 +156,14 @@ const BrandsListDistributor = () => {
             )}
           </div>
           {getBrandListSelector?.data?.data?.records?.length > 0 && (
-            <div className="d-flex align-center justify-between flexPagination">
-              <div className="fs-16">
-                {(() => {
-                  const start = (pagination.page - 1) * pagination.limit + 1;
-                  const end = Math.min(
-                    start +
-                      getBrandListSelector?.data?.data?.records?.length -
-                      1,
-                    getBrandListSelector?.data?.data?.recordsCount
-                  );
-                  return `Showing ${start} to ${end} of ${getBrandListSelector?.data?.data?.recordsCount} Brands`;
-                })()}
-              </div>
-              <Pagination
-                current={pagination?.page}
-                pageSize={pagination?.limit}
-                total={getBrandListSelector?.data?.data?.recordsCount}
-                onChange={handlePaginationChange}
-                pageSizeOptions={["12" ,'20', '50', '100']} 
-                showSizeChanger={true}
-              />
-            </div>
+            <CommonPagination
+              currentPage={pagination?.page}
+              pageSize={pagination?.limit}
+              totalCount={getBrandListSelector?.data?.data?.recordsCount}
+              currentCount={getBrandListSelector?.data?.data?.records?.length}
+              onPageChange={handlePaginationChange}
+              label="Brands"
+            />
           )}
         </div>
       </div>

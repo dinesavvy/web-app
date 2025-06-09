@@ -26,7 +26,7 @@ const CustomDragLayer = ({ merchants, items, merchantItemMain }) => {
       }}
       className="custom-drag-preview"
     >
-      {ids.map((id, index) => (
+      {ids?.map((id, index) => (
         <div
           key={id}
           className="custom-drag-item d-flex gap-20"

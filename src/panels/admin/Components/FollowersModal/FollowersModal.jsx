@@ -12,18 +12,14 @@ import moment from "moment";
 import createAdd from "../../../../assets/images/createAdd.svg";
 import deleteList from "../../../../assets/images/deleteList.svg";
 import { useNavigate } from "react-router-dom";
-import closeRightSidebar from "../../../../assets/images/closeRightSidebar.svg";
-
+import CommonPagination from "../../../../common/pagination/CommonPagination";
 import {
-  followerArchiveAction,
   followerArchiveHandler,
 } from "../../../../redux/action/followerArchive";
 
 const FollowersModal = ({
   archive,
   setArchive,
-  selectMerchantList,
-  setSelectMerchantList,
   selectedItems,
   setSelectedItems,
   state,
@@ -38,10 +34,18 @@ const FollowersModal = ({
 
   const [checkedItems, setCheckedItems] = useState({});
   useEffect(() => {
-    if (state?.selectedItems?.length > 0 && followerListSelector?.data?.data?.records) {
+    if (
+      state?.selectedItems?.length > 0 &&
+      followerListSelector?.data?.data?.records
+    ) {
       const initialCheckedItems = {};
       followerListSelector.data.data.records.forEach((item, index) => {
-        if (state.selectedItems.some(selectedItem => selectedItem.userInfo?.customerId === item.userInfo?.customerId)) {
+        if (
+          state.selectedItems.some(
+            (selectedItem) =>
+              selectedItem.userInfo?.customerId === item.userInfo?.customerId
+          )
+        ) {
           initialCheckedItems[index] = true;
         }
       });
@@ -53,7 +57,6 @@ const FollowersModal = ({
       setSelectedItems([]);
     }
   }, [state?.selectedItems, followerListSelector?.data?.data?.records]);
-
 
   const [searchArea, setSearchArea] = useState([]);
 
@@ -114,15 +117,21 @@ const FollowersModal = ({
 
     if (isChecked) {
       setSelectedItems((prev) => {
-        const exists = prev.some(selectedItem => selectedItem.userInfo?.customerId === item.userInfo?.customerId);
+        const exists = prev.some(
+          (selectedItem) =>
+            selectedItem.userInfo?.customerId === item.userInfo?.customerId
+        );
         if (!exists) {
           return [...prev, item];
         }
         return prev;
       });
     } else {
-      setSelectedItems((prev) => 
-        prev.filter(selectedItem => selectedItem.userInfo?.customerId !== item.userInfo?.customerId)
+      setSelectedItems((prev) =>
+        prev.filter(
+          (selectedItem) =>
+            selectedItem.userInfo?.customerId !== item.userInfo?.customerId
+        )
       );
     }
   };
@@ -157,7 +166,10 @@ const FollowersModal = ({
         <div className="fs-24 fw-600">Followers</div>
         <div
           className="btnSecondary btn  secondarysecond"
-          onClick={() => setArchive(!archive)}
+          onClick={() => {
+            setArchive(!archive);
+            setPagination({ page: 1, limit: 12 });
+          }}
         >
           {archive ? "Back to list" : "Show archive"}
         </div>
@@ -196,7 +208,9 @@ const FollowersModal = ({
                                     .toUpperCase() +
                                     item.userInfo.displayName.slice(1)}
                                 <div className="fs-14 fw-300 o5 ">
-                                {item?.userInfo?.email.length > 0 ? item?.userInfo?.email : "-"}
+                                  {item?.userInfo?.email.length > 0
+                                    ? item?.userInfo?.email
+                                    : "-"}
                                 </div>
                               </div>
                               <div className="fs-14 fw-300 o5">
@@ -261,7 +275,7 @@ const FollowersModal = ({
                 )}
               </>
             ) : (
-              <div className="no-data-found">No data found</div>
+              <div className="noDataFound">No data found</div>
             )}
           </div>
         </>
@@ -317,14 +331,20 @@ const FollowersModal = ({
                       <div>
                         <div className="fw-700">
                           {item?.userInfo?.displayName &&
-                            item?.userInfo?.displayName.charAt(0).toUpperCase() +
+                            item?.userInfo?.displayName
+                              .charAt(0)
+                              .toUpperCase() +
                               item?.userInfo?.displayName.slice(1)}
                         </div>
-                          <div className="fs-14 fw-300 o5 ">
-                          {item?.userInfo?.email.length > 0 ? item?.userInfo?.email : "-"}
-                          </div>
+                        <div className="fs-14 fw-300 o5 ">
+                          {item?.userInfo?.email.length > 0
+                            ? item?.userInfo?.email
+                            : "-"}
+                        </div>
                         <div className="fs-14 fw-300 o5">
-                          {moment(item?.userInfo?.createdAt).format("MMMM, YYYY")}
+                          {moment(item?.userInfo?.createdAt).format(
+                            "MMMM, YYYY"
+                          )}
                         </div>
                       </div>
                     </div>
@@ -390,34 +410,10 @@ const FollowersModal = ({
               <div className="noDataFound">No data found</div>
             )}
           </div>
-          {followerListSelector?.data?.data?.records?.length > 0 && (
-            <div className="d-flex align-center justify-between flexPagination">
-              <div className="fs-16">
-                {(() => {
-                  const start = (pagination.page - 1) * pagination.limit + 1;
-                  const end = Math.min(
-                    start +
-                      followerListSelector?.data?.data?.records?.length -
-                      1,
-                    followerListSelector?.data?.data?.recordsCount
-                  );
-                  return `Showing ${start} to ${end} of ${followerListSelector?.data?.data?.recordsCount} Followers`;
-                })()}
-              </div>
-              <Pagination
-                current={pagination?.page}
-                pageSize={pagination?.limit}
-                total={followerListSelector?.data?.data?.recordsCount}
-                onChange={handlePaginationChange}
-              />
-            </div>
-          )}
+
           {isAnyCheckboxChecked && (
             <div className="floatAdd">
-              <div
-                className="btn fs-16"
-                onClick={onConfirm}
-              >
+              <div className="btn fs-16" onClick={onConfirm}>
                 <img src={createAdd} alt="image" />
                 <div>Create nudge</div>
               </div>
@@ -427,6 +423,17 @@ const FollowersModal = ({
             </div>
           )}
         </div>
+      )}
+      {/* Follower Modal Pagination */}
+      {followerListSelector?.data?.data?.records?.length > 0 && (
+        <CommonPagination
+          currentPage={pagination?.page}
+          pageSize={pagination?.limit}
+          totalCount={followerListSelector?.data?.data?.recordsCount}
+          currentCount={followerListSelector?.data?.data?.records?.length}
+          onPageChange={handlePaginationChange}
+          label="Followers"
+        />
       )}
     </>
   );

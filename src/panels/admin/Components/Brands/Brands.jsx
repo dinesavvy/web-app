@@ -12,6 +12,7 @@ import { useCommonMessage } from "../../../../common/CommonMessage";
 // import { deleteBrandsAction } from "../../../../redux/action/deleteBrand";
 import noImageFound from "../../../../assets/images/noImageFound.png";
 import useScrollToTop from "../../../../hooks/useScrollToTop";
+import CommonPagination from "../../../../common/pagination/CommonPagination";
 
 const Brands = () => {
   const messageApi = useCommonMessage();
@@ -22,9 +23,8 @@ const Brands = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-
   // Scroll to top when the component mounts
-  useScrollToTop([pagination?.page,pagination?.limit]);
+  useScrollToTop([pagination?.page, pagination?.limit]);
 
   const getBrandListSelector = useSelector((state) => state?.brandList);
   const deleteBrandSelector = useSelector((state) => state?.deleteBrand);
@@ -115,9 +115,13 @@ const Brands = () => {
                               : ""}
                           </div>
 
-                          <div className={item?.performance > 50
-                              ? "fs-16 fw-600 roi green mb-20"
-                              : "fs-16 fw-600 roi blue mb-20"}>
+                          <div
+                            className={
+                              item?.performance > 50
+                                ? "fs-16 fw-600 roi green mb-20"
+                                : "fs-16 fw-600 roi blue mb-20"
+                            }
+                          >
                             Performance: {item?.performance}%
                           </div>
                           <div className="d-flex align-center gap-10">
@@ -145,29 +149,16 @@ const Brands = () => {
               <div className="noDataFound">No data available</div>
             )}
           </div>
+
           {getBrandListSelector?.data?.data?.records?.length > 0 && (
-            <div className="d-flex align-center justify-between flexPagination">
-              <div className="fs-16">
-                {(() => {
-                  const start = (pagination?.page - 1) * pagination?.limit + 1;
-                  const end = Math.min(
-                    start +
-                      getBrandListSelector?.data?.data?.records?.length -
-                      1,
-                    getBrandListSelector?.data?.data?.recordsCount
-                  );
-                  return `Showing ${start} to ${end} of ${getBrandListSelector?.data?.data?.recordsCount} Brands`;
-                })()}
-              </div>
-              <Pagination
-                current={pagination?.page}
-                pageSize={pagination?.limit}
-                total={getBrandListSelector?.data?.data?.recordsCount}
-                onChange={handlePaginationChange}
-                pageSizeOptions={["12" ,'20', '50', '100']} 
-                showSizeChanger
-              />
-            </div>
+            <CommonPagination
+              currentPage={pagination?.page}
+              pageSize={pagination?.limit}
+              totalCount={getBrandListSelector?.data?.data?.recordsCount}
+              currentCount={getBrandListSelector?.data?.data?.records?.length}
+              onPageChange={handlePaginationChange}
+              label="Brands"
+            />
           )}
         </div>
       </div>

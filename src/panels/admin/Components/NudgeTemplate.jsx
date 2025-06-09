@@ -11,8 +11,6 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import { fileUploadHandler } from "../../../redux/action/fileUpload";
-// import closeRightSidebar from "../../../assets/images/closeRightSidebar.svg";
-// import rightactive from "../../../assets/images/rightactive.svg";
 import { Modal } from "antd";
 import FollowersModal from "./FollowersModal/FollowersModal";
 import {
@@ -272,19 +270,20 @@ const NudgeTemplate = () => {
                             Description*
                           </label>
                           <Field
+                          as="textarea"
                             id="description"
                             name="description"
                             type="text"
                             placeholder="Free appetizer on Happy Hours! From 07:00 PM to 08:00 PM"
                             className={
-                              errors.description && touched.description
+                              errors?.description && touched?.description
                                 ? "input-error"
                                 : ""
                             }
                           />
-                          {errors.description && touched.description && (
+                          {errors?.description && touched?.description && (
                             <div className="mt-10 fw-500 fs-14 error">
-                              {errors.description}
+                              {errors?.description}
                             </div>
                           )}
                         </div>

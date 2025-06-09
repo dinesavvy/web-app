@@ -18,6 +18,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import moment from "moment";
 import useScrollToTop from "../../../hooks/useScrollToTop";
+import CommonPagination from "../../../common/pagination/CommonPagination";
 
 const Followers = () => {
   const [archive, setArchive] = useState(false);
@@ -383,22 +384,19 @@ const Followers = () => {
               )}
             </div>
           )}
+          
           {followerListSelector?.data?.data?.records?.length > 0 && (
-            <div className="d-flex align-center justify-between flexPagination">
-              <div className="fs-16">
-                Showing {pagination?.page} to {pagination?.limit} of{" "}
-                {followerListSelector?.data?.data?.recordsCount} Followers
-              </div>
-              <Pagination
-                current={pagination?.page}
-                pageSize={pagination?.limit}
-                total={followerListSelector?.data?.data?.recordsCount}
-                onChange={handlePaginationChange}
-                pageSizeOptions={["12", "20", "50", "100"]}
-                showSizeChanger={true}
-              />
-            </div>
-          )}
+                <CommonPagination
+                  currentPage={pagination?.page}
+                  pageSize={pagination?.limit}
+                  totalCount={followerListSelector?.data?.data?.recordsCount}
+                  currentCount={
+                    followerListSelector?.data?.data?.records?.length
+                  }
+                  onPageChange={handlePaginationChange}
+                  label="Followers"
+                />
+              )}
         </div>
       </div>
       {arr?.length ? (

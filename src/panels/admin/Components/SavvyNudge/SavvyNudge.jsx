@@ -20,6 +20,7 @@ import {
 } from "../../../../redux/action/savvyNudgeDetails";
 import { useCommonMessage } from "../../../../common/CommonMessage";
 import useScrollToTop from "../../../../hooks/useScrollToTop";
+import CommonPagination from "../../../../common/pagination/CommonPagination";
 
 const getYoutubeId = (url) => {
   const regExp =
@@ -34,13 +35,12 @@ const SavvyNudge = () => {
   const [activeTab, setActiveTab] = useState(true);
   const [pagination, setPagination] = useState({ page: 1, limit: 12 });
 
-
   // Scroll to top when the component mounts
   useScrollToTop([pagination?.page, pagination?.limit]);
 
   const handleTabClick = (tab) => {
     setActiveTab(tab); // Update the active tab
-    setPagination({page:1, limit: 12}); // Reset pagination to page 1 when tab changes
+    setPagination({ page: 1, limit: 12 }); // Reset pagination to page 1 when tab changes
   };
   const [activeVideoUrl, setActiveVideoUrl] = useState(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -107,7 +107,6 @@ const SavvyNudge = () => {
       document.body.classList.remove("overflow-Hidden");
     };
   }, [isSidebarOpenMerchantViewAll]);
-
 
   const dispatch = useDispatch();
   const savvyNudgesListSelector = useSelector(
@@ -390,29 +389,16 @@ const SavvyNudge = () => {
               <div className="noDataFound">No data found</div>
             )}
           </div>
+
           {savvyNudgesListSelector?.data?.data?.result?.length > 0 && (
-            <div className="d-flex align-center justify-between flexPagination">
-              <div className="fs-16">
-                {(() => {
-                  const start = (pagination?.page - 1) * pagination?.limit + 1;
-                  const end = Math.min(
-                    start +
-                      savvyNudgesListSelector?.data?.data?.result?.length -
-                      1,
-                    savvyNudgesListSelector?.data?.data?.recordsCount
-                  );
-                  return `Showing ${start} to ${end} of ${savvyNudgesListSelector?.data?.data?.recordsCount} Savvy Nudge`;
-                })()}
-              </div>
-              <Pagination
-                current={pagination?.page}
-                pageSize={pagination?.limit}
-                total={savvyNudgesListSelector?.data?.data?.recordsCount}
-                onChange={handlePaginationChange}
-                pageSizeOptions={["12", "20", "50", "100"]}
-                showSizeChanger={true}
-              />
-            </div>
+            <CommonPagination
+              currentPage={pagination?.page}
+              pageSize={pagination?.limit}
+              totalCount={savvyNudgesListSelector?.data?.data?.recordsCount}
+              currentCount={savvyNudgesListSelector?.data?.data?.result?.length}
+              onPageChange={handlePaginationChange}
+              label="Savvy Nudges"
+            />
           )}
         </div>
       </div>

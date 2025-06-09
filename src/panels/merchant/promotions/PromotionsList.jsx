@@ -23,6 +23,7 @@ import {
 } from "../../../redux/action/businessAction/updateProotionPrice";
 import { useCommonMessage } from "../../../common/CommonMessage";
 import useScrollToTop from "../../../hooks/useScrollToTop";
+import CommonPagination from "../../../common/pagination/CommonPagination";
 
 const PromotionsList = () => {
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
@@ -118,8 +119,9 @@ const PromotionsList = () => {
 
   useEffect(() => {
     let payload = {
-      page: activeTab==="active"? pagination?.page:paginationOffer?.page,
-      limit: activeTab==="active"? pagination?.limit:paginationOffer?.limit,
+      page: activeTab === "active" ? pagination?.page : paginationOffer?.page,
+      limit:
+        activeTab === "active" ? pagination?.limit : paginationOffer?.limit,
       // limit: pagination?.limit,
       // payload.searchString = searchString;
     };
@@ -136,7 +138,13 @@ const PromotionsList = () => {
       payload.searchString = searchString;
       dispatch(archivePromotionHandler(payload));
     }
-  }, [pagination, searchString, activeTab, updatePromotionPriceSelector,paginationOffer]);
+  }, [
+    pagination,
+    searchString,
+    activeTab,
+    updatePromotionPriceSelector,
+    paginationOffer,
+  ]);
 
   const handleAction = (item, value, index) => {
     let payload = {
@@ -490,31 +498,21 @@ const PromotionsList = () => {
               <div className="noDataFound">No data available</div>
             ) : null}
           </div>
+
           {activePromotionListSelector?.data?.data?.records?.length > 0 &&
             activeTab === "active" && (
-              <div className="d-flex align-center justify-between flexPagination">
-                <div className="fs-16">
-                  {(() => {
-                    const start = (pagination.page - 1) * pagination.limit + 1;
-                    const end = Math.min(
-                      start +
-                        activePromotionListSelector?.data?.data?.records
-                          ?.length -
-                        1,
-                      activePromotionListSelector?.data?.data?.recordsCount
-                    );
-                    return `Showing ${start} to ${end} of ${activePromotionListSelector?.data?.data?.recordsCount} Promotions`;
-                  })()}
-                </div>
-                <Pagination
-                  current={pagination?.page}
-                  pageSize={pagination?.limit}
-                  total={activePromotionListSelector?.data?.data?.recordsCount}
-                  onChange={handlePaginationChange}
-                  pageSizeOptions={["12", "20", "50", "100"]}
-                  showSizeChanger={true}
-                />
-              </div>
+              <CommonPagination
+                currentPage={pagination?.page}
+                pageSize={pagination?.limit}
+                totalCount={
+                  activePromotionListSelector?.data?.data?.recordsCount
+                }
+                currentCount={
+                  activePromotionListSelector?.data?.data?.records?.length
+                }
+                onPageChange={handlePaginationChange}
+                label="Promotions"
+              />
             )}
           {/* Archive List */}
           <div className="merchantGrid mb-20">

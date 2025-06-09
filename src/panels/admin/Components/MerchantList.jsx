@@ -14,7 +14,7 @@ import moment from "moment";
 import Loader from "../../../common/Loader/Loader";
 import GroupList from "./GroupList";
 import useScrollToTop from "../../../hooks/useScrollToTop";
-
+import CommonPagination from "../../../common/pagination/CommonPagination";
 
 const MerchantList = () => {
   const [pagination, setPagination] = useState({ page: 1, limit: 12 });
@@ -74,7 +74,7 @@ const MerchantList = () => {
   }, [pagination, activeTab2, searchString, searchArea]);
 
   // Scroll to top when the component mounts
-  useScrollToTop([activeTab, activeTab2, pagination?.page,pagination?.limit]);
+  useScrollToTop([activeTab, activeTab2, pagination?.page, pagination?.limit]);
 
   const tabs = [
     {
@@ -86,7 +86,7 @@ const MerchantList = () => {
       label: "groups",
     },
   ];
-  
+
   return (
     <>
       {merchantListSelector?.isLoading && <Loader />}
@@ -100,7 +100,7 @@ const MerchantList = () => {
                   activeTab === tab.label ? "active" : "disabled"
                 }`}
                 onClick={() => {
-                  if(activeTab === tab.label){
+                  if (activeTab === tab.label) {
                     setActiveTab("merchant");
                   }
                 }}
@@ -116,21 +116,21 @@ const MerchantList = () => {
               <div className="d-flex align-center justify-between mb-20 flexWraplg">
                 <div className="fs-24 fw-600">Merchants</div>
                 <div className="tabAfter">
-                <div className="tabs-container tab2">
-                  <div className="tabs">
-                    {tabs2.map((tab) => (
-                      <button
-                        key={tab.id}
-                        className={`tab-button ${
-                          activeTab2  === tab.value ? "active" : ""
-                        }`}
-                        onClick={() => setActiveTab2(tab.value)}
-                      >
-                        {tab.label}
-                      </button>
-                    ))}
+                  <div className="tabs-container tab2">
+                    <div className="tabs">
+                      {tabs2.map((tab) => (
+                        <button
+                          key={tab.id}
+                          className={`tab-button ${
+                            activeTab2 === tab.value ? "active" : ""
+                          }`}
+                          onClick={() => setActiveTab2(tab.value)}
+                        >
+                          {tab.label}
+                        </button>
+                      ))}
+                    </div>
                   </div>
-                </div>
                 </div>
               </div>
               <SearchSelect
@@ -213,8 +213,7 @@ const MerchantList = () => {
                                     Depletions Potential
                                   </div>
                                   <div className="fs-14 fw-600">
-                                    {/* {item?.nudge?.nudgeCredit} */}
-                                    0
+                                    {/* {item?.nudge?.nudgeCredit} */}0
                                   </div>
                                 </div>
                                 <div>
@@ -262,7 +261,11 @@ const MerchantList = () => {
                                   //   localStorage.setItem("merchantId", item?._id);
                                   // }}
 
-                                  onClick={()=>navigate("/admin/promotions",{state:item})}
+                                  onClick={() =>
+                                    navigate("/admin/promotions", {
+                                      state: item,
+                                    })
+                                  }
                                 >
                                   Promote
                                 </div>
@@ -304,28 +307,16 @@ const MerchantList = () => {
                 )}
               </div>
               {merchantListSelector?.data?.data?.records?.length > 0 && (
-                <div className="d-flex align-center justify-between flexPagination">
-                  <div className="fs-16">
-                    {(() => {
-                      const start =
-                        (pagination?.page - 1) * pagination?.limit + 1;
-                      const end = Math.min(
-                        start +
-                          merchantListSelector?.data?.data?.records?.length -
-                          1,
-                        merchantListSelector?.data?.data?.recordsCount
-                      );
-                      return `Showing ${start} to ${end} of ${merchantListSelector?.data?.data?.recordsCount} Restaurants`;
-                    })()}
-                  </div>
-                  <Pagination
-                    current={pagination?.page}
-                    pageSize={pagination?.limit}
-                    total={merchantListSelector?.data?.data?.recordsCount}
-                    onChange={handlePaginationChange}
-                    pageSizeOptions={["12" ,'20', '50', '100']} 
-                  />
-                </div>
+                <CommonPagination
+                  currentPage={pagination?.page}
+                  pageSize={pagination?.limit}
+                  totalCount={merchantListSelector?.data?.data?.recordsCount}
+                  currentCount={
+                    merchantListSelector?.data?.data?.records?.length
+                  }
+                  onPageChange={handlePaginationChange}
+                  label="Merchants"
+                />
               )}
             </div>
           </>

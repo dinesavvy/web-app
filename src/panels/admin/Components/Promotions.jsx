@@ -11,6 +11,7 @@ import Loader from "../../../common/Loader/Loader";
 import moment from "moment";
 import noImageFound from "../../../assets/images/noImageFound.png";
 import useScrollToTop from "../../../hooks/useScrollToTop";
+import CommonPagination from "../../../common/pagination/CommonPagination";
 
 const Promotions = () => {
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
@@ -135,7 +136,7 @@ const Promotions = () => {
                 }`}
                 onClick={() => {
                   setActiveTab("active");
-                  setPagination((prev) => ({ ...prev, page: 1 }));
+                  setPagination({ page: 1,limit:12 });
                 }}
               >
                 Active
@@ -146,7 +147,7 @@ const Promotions = () => {
                 }`}
                 onClick={() => {
                   setActiveTab("Inactive");
-                  setPagination((prev) => ({ ...prev, page: 1 }));
+                  setPagination({ page: 1,limit:12 });
                 }}
               >
                 Inactive
@@ -375,26 +376,14 @@ const Promotions = () => {
             </div> */}
           </div>
           {adminPromotionList?.data?.data?.records?.length > 0 && (
-            <div className="d-flex align-center justify-between flexPagination">
-              <div className="fs-16">
-                {(() => {
-                  const start = (pagination.page - 1) * pagination.limit + 1;
-                  const end = Math.min(
-                    start + adminPromotionList?.data?.data?.records?.length - 1,
-                    adminPromotionList?.data?.data?.recordsCount
-                  );
-                  return `Showing ${start} to ${end} of ${adminPromotionList?.data?.data?.recordsCount} Promotions`;
-                })()}
-              </div>
-              <Pagination
-                current={pagination?.page}
-                pageSize={pagination?.limit}
-                total={adminPromotionList?.data?.data?.recordsCount}
-                onChange={handlePaginationChange}
-                pageSizeOptions={["12", "20", "50", "100"]}
-                showSizeChanger
-              />
-            </div>
+            <CommonPagination
+              currentPage={pagination?.page}
+              pageSize={pagination?.limit}
+              totalCount={adminPromotionList?.data?.data?.recordsCount}
+              currentCount={adminPromotionList?.data?.data?.records?.length}
+              onPageChange={handlePaginationChange}
+              label="Promotions"
+            />
           )}
         </div>
       </div>

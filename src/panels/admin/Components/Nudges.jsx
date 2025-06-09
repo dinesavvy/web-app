@@ -1,4 +1,4 @@
-import React, {  useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import searchIcon from "../../../assets/images/searchIcon.svg";
 import addCredits from "../../../assets/images/addCredits.svg";
 import radioSelected from "../../../assets/images/radioSelected.svg";
@@ -18,6 +18,7 @@ import noImageFound from "../../../assets/images/noImageFound.png";
 import { useNavigate } from "react-router-dom";
 import useScrollToTop from "../../../hooks/useScrollToTop";
 import SearchSelect from "./SearchSelect";
+import CommonPagination from "../../../common/pagination/CommonPagination";
 
 const Nudges = () => {
   const navigate = useNavigate();
@@ -47,7 +48,7 @@ const Nudges = () => {
 
   const handleTabClick = (tab) => {
     setActiveTab(tab); // Update the active tab
-    setNudgePagination({ page: 1, limit: 10 });
+    setNudgePagination({ page: 1, limit: 12 });
   };
 
   const handlePaginationChange = (page, pageSize) => {
@@ -55,19 +56,12 @@ const Nudges = () => {
     setSelectedValue("");
   };
 
-  const handleMerchantPageChange = (page, pageSize) => {
+  const handleNudgePagination = (page, pageSize) => {
     setNudgePagination({ page, limit: pageSize });
   };
 
   const handleSearchChange = (value) => {
     setSearchString(value);
-    // setSearchString1(value);
-    // setSearchString1(value);
-    // if(!value){
-    //   setSearchString(value);
-    // }else {
-    //   setSearchString1(value);
-    // }
     setSelectedValue("");
     setPagination((prev) => ({ ...prev, page: 1 }));
   };
@@ -173,14 +167,18 @@ const Nudges = () => {
                         name="option"
                         value={option?.value}
                         checked={selectedValue?._id === option?._id} // Dynamically toggle based on state
-                        onChange={() => handleChange(option)}
+                        onChange={() => {
+                          handleChange(option);
+                          setActiveTab(true);
+                          setNudgePagination({ page: 1, limit: 12 });
+                        }}
                         autoComplete="off"
                       />
                       <div className="custom-radio-button">
                         <img src={radioSelected} alt="radioSelected" />
                       </div>
                       <div className="radioImage">
-                        <img src={option.logoUrl || noImageFound} alt="" />
+                        <img src={option?.logoUrl || noImageFound} alt="" />
                       </div>
                       <div className="radioCafeName">
                         <div>
@@ -205,33 +203,20 @@ const Nudges = () => {
                   ))}
                 </>
               ) : (
-                <div className="no-restaurants-found">No restaurant found</div>
+                <div className="noDataFound">No restaurant found</div>
               )}
             </div>
           </div>
-          {merchantsListSelector?.data?.data?.records?.length > 0 && (
-            <div className="d-flex align-center justify-between flexPagination mt-20">
-              <div className="fs-16">
-                {(() => {
-                  const start = (pagination?.page - 1) * pagination?.limit + 1;
-                  const end = Math.min(
-                    start +
-                      merchantsListSelector?.data?.data?.records?.length -
-                      1,
-                    merchantsListSelector?.data?.data?.recordsCount
-                  );
-                  return `Showing ${start} to ${end} of ${merchantsListSelector?.data?.data?.recordsCount} Restaurants`;
-                })()}
-              </div>
-              <Pagination
-                current={pagination?.page}
-                pageSize={pagination?.limit}
-                total={merchantsListSelector?.data?.data?.recordsCount}
-                onChange={handlePaginationChange}
-                pageSizeOptions={["12", "20", "50", "100"]}
-                showSizeChanger={true}
-              />
-            </div>
+          <div className="divider2"></div>
+          {merchantsListSelector?.data?.data?.records?.length && (
+            <CommonPagination
+              currentPage={pagination?.page}
+              pageSize={pagination?.limit}
+              totalCount={merchantsListSelector?.data?.data?.recordsCount}
+              currentCount={merchantsListSelector?.data?.data?.records?.length}
+              onPageChange={handlePaginationChange}
+              label="Merchants"
+            />
           )}
         </div>
 
@@ -257,22 +242,20 @@ const Nudges = () => {
               </div>
               <div className="tabs-container tab3 tabing mb-20">
                 <div className="tabs">
-                  <button
-                    className={`tab-button ${
-                      activeTab === true ? "active" : ""
-                    }`}
-                    onClick={() => handleTabClick(true)}
-                  >
-                    Active
-                  </button>
-                  <button
-                    className={`tab-button ${
-                      activeTab === false ? "active" : ""
-                    }`}
-                    onClick={() => handleTabClick(false)}
-                  >
-                    Inactive
-                  </button>
+                  {["Active", "Inactive"]?.map((label, index) => {
+                    const isActive = index === 0;
+                    return (
+                      <button
+                        key={label}
+                        className={`tab-button ${
+                          activeTab === isActive ? "active" : ""
+                        }`}
+                        onClick={() => handleTabClick(isActive)}
+                      >
+                        {label}
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
 
@@ -311,9 +294,7 @@ const Nudges = () => {
                           <div className="bottomPadding">
                             <div>
                               <div className="lightBlack fs-14 mb-20">
-                                {/* Get 20% off on all large pizzas today! Limited
-                              time offer. */}
-                                {item?.message}
+                                {item?.message || "-"}
                               </div>
                               <div className="d-flex justify-between align-center gap-20 mb-8">
                                 <div className="fs-14 lightBlack ">
@@ -429,83 +410,34 @@ const Nudges = () => {
                   <div className="noDataFound">No Data Found</div>
                 )}
               </div>
-              {/* {nudgesListSelector?.data?.data?.records?.length > 0 && (
-                <div className="d-flex align-center justify-between flexPagination">
-                  <div className="fs-16">
-                    {(() => {
-                      const start =
-                        (pagination?.page - 1) * pagination?.limit + 1;
-                      const end = Math.min(
-                        start +
-                          merchantsListSelector?.data?.data?.records?.length -
-                          1,
-                        merchantsListSelector?.data?.data?.recordsCount
-                      );
-                      return `Showing ${start} to ${end} of ${merchantsListSelector?.data?.data?.recordsCount} Restaurants`;
-                    })()}
-                  </div>
-                  <Pagination
-                    current={pagination?.page}
-                    pageSize={pagination?.limit}
-                    total={merchantsListSelector?.data?.data?.recordsCount}
-                    onChange={handlePaginationChange}
-                  />
-                </div>
-              )} */}
 
-              {!selectedValue &&
+              {/* {!selectedValue &&
                 merchantsListSelector?.data?.data?.records?.length > 0 && (
-                  <div className="d-flex align-center justify-between flexPagination">
-                    <div className="fs-16">
-                      {(() => {
-                        const start =
-                          (pagination?.page - 1) * pagination?.limit + 1;
-                        const end = Math.min(
-                          start +
-                            merchantsListSelector?.data?.data?.records?.length -
-                            1,
-                          merchantsListSelector?.data?.data?.recordsCount
-                        );
-                        return `Showing ${start} to ${end} of ${merchantsListSelector?.data?.data?.recordsCount} Restaurants`;
-                      })()}
-                    </div>
-                    <Pagination
-                      current={pagination?.page}
-                      pageSize={pagination?.limit}
-                      total={merchantsListSelector?.data?.data?.recordsCount}
-                      onChange={handlePaginationChange}
-                      pageSizeOptions={["12", "20", "50", "100"]}
-                      showSizeChanger
-                    />
-                  </div>
-                )}
+                  <CommonPagination
+                    currentPage={pagination?.page}
+                    pageSize={pagination?.limit}
+                    totalCount={merchantsListSelector?.data?.data?.recordsCount}
+                    currentCount={
+                      merchantsListSelector?.data?.data?.records?.length
+                    }
+                    onPageChange={handlePaginationChange}
+                    label="Merchants"
+                  />
+                )} */}
 
+              {/* Nudge Pagination */}
               {selectedValue &&
                 nudgesListSelector?.data?.data?.records?.length > 0 && (
-                  <div className="d-flex align-center justify-between flexPagination">
-                    <div className="fs-16">
-                      {(() => {
-                        const start =
-                          (nudgePagination?.page - 1) * nudgePagination?.limit +
-                          1;
-                        const end = Math.min(
-                          start +
-                            nudgesListSelector?.data?.data?.records?.length -
-                            1,
-                          nudgesListSelector?.data?.data?.recordsCount
-                        );
-                        return `Showing ${start} to ${end} of ${nudgesListSelector?.data?.data?.recordsCount} Restaurants`;
-                      })()}
-                    </div>
-                    <Pagination
-                      current={nudgePagination?.page}
-                      pageSize={nudgePagination?.limit}
-                      total={nudgesListSelector?.data?.data?.recordsCount}
-                      onChange={handleMerchantPageChange}
-                      pageSizeOptions={["12", "20", "50", "100"]}
-                      showSizeChanger={true}
-                    />
-                  </div>
+                  <CommonPagination
+                    currentPage={nudgePagination?.page}
+                    pageSize={nudgePagination?.limit}
+                    totalCount={nudgesListSelector?.data?.data?.recordsCount}
+                    currentCount={
+                      nudgesListSelector?.data?.data?.records?.length
+                    }
+                    onPageChange={handleNudgePagination}
+                    label="Nudges"
+                  />
                 )}
             </div>
           </>

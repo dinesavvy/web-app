@@ -11,6 +11,7 @@ import SearchSelect from "../../../admin/Components/SearchSelect";
 import { supplierPromotionListHandler } from "../../../../redux/action/supplierActions/supplierPromotionList";
 import SupplierPromotionDetails from "./SupplierPromotionDetails";
 import useScrollToTop from "../../../../hooks/useScrollToTop";
+import CommonPagination from "../../../../common/pagination/CommonPagination";
 
 const SupplierPromotionList = () => {
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
@@ -118,7 +119,7 @@ const SupplierPromotionList = () => {
                 className={`tab-button ${
                   activeTab === "active" ? "active" : ""
                 }`}
-                onClick={() => setActiveTab("active")}
+                onClick={() => {setActiveTab("active");setPagination({pageq : 1, limit: 12})}}
               >
                 Active
               </button>
@@ -126,7 +127,7 @@ const SupplierPromotionList = () => {
                 className={`tab-button ${
                   activeTab === "Inactive" ? "active" : ""
                 }`}
-                onClick={() => setActiveTab("Inactive")}
+                onClick={() => {setActiveTab("Inactive");setPagination({pageq : 1, limit: 12})}}
               >
                 Inactive
               </button>
@@ -249,29 +250,16 @@ const SupplierPromotionList = () => {
               <div className="noDataFound">No data available</div>
             )}
           </div>
+          
           {supplierPromotionList?.data?.data?.records?.length > 0 && (
-            <div className="d-flex align-center justify-between flexPagination">
-              <div className="fs-16">
-                {(() => {
-                  const start = (pagination?.page - 1) * pagination?.limit + 1;
-                  const end = Math.min(
-                    start +
-                      supplierPromotionList?.data?.data?.records?.length -
-                      1,
-                    supplierPromotionList?.data?.data?.recordsCount
-                  );
-                  return `Showing ${start} to ${end} of ${supplierPromotionList?.data?.data?.recordsCount} Suppliers`;
-                })()}
-              </div>
-              <Pagination
-                current={pagination?.page}
-                pageSize={pagination?.limit}
-                total={supplierPromotionList?.data?.data?.recordsCount}
-                onChange={handlePaginationChange}
-                pageSizeOptions={["12" ,'20', '50', '100']} 
-                showSizeChanger={true}
-              />
-            </div>
+            <CommonPagination
+              currentPage={pagination?.page}
+              pageSize={pagination?.limit}
+              totalCount={supplierPromotionList?.data?.data?.recordsCount}
+              currentCount={supplierPromotionList?.data?.data?.records?.length}
+              onPageChange={handlePaginationChange}
+              label="Suppliers"
+            />
           )}
         </div>
       </div>

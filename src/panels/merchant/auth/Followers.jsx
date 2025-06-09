@@ -17,6 +17,7 @@ import { useBusiness } from "../../../common/Layout/BusinessContext";
 import AccessDeniedModal from "../accessDeniedModal/accessDeniedModal";
 import RedeemedNudges from "../redeemedNudges/RedeemedNudges";
 import useScrollToTop from "../../../hooks/useScrollToTop";
+import CommonPagination from "../../../common/pagination/CommonPagination";
 
 const Followers = () => {
   const [tempState, setTempState] = useState([]);
@@ -362,27 +363,18 @@ const Followers = () => {
                 <div className="noDataFound">No Data Found</div>
               )}
             </div>
-            {businessListFollowerListSelector?.data?.data?.records?.length >
-              0 && (
-              <div className="d-flex align-center justify-between flexPagination">
-                <div className="fs-16">
-                  Showing {pagination?.page} to {pagination?.limit} of{" "}
-                  {businessListFollowerListSelector?.data?.data?.recordsCount}{" "}
-                  followers
-                </div>
-                {/* <Pagination defaultCurrent={1} total={50} /> */}
-                <Pagination
-                  current={pagination?.page}
+            {businessListFollowerListSelector?.data?.data?.records?.length > 0 && (
+                <CommonPagination
+                  currentPage={pagination?.page}
                   pageSize={pagination?.limit}
-                  total={
-                    businessListFollowerListSelector?.data?.data?.recordsCount
+                  totalCount={businessListFollowerListSelector?.data?.data?.recordsCount}
+                  currentCount={
+                    businessListFollowerListSelector?.data?.data?.records?.length
                   }
-                  onChange={handlePaginationChange}
-                  pageSizeOptions={["12", "20", "50", "100"]}
-                  showSizeChanger={true}
+                  onPageChange={handlePaginationChange}
+                  label="Merchants"
                 />
-              </div>
-            )}
+              )}
             {isAnyCheckboxChecked && !state?.statePrev?.selectedItems && (
               <div className="floatAdd">
                 <div
@@ -392,14 +384,8 @@ const Followers = () => {
                     navigate("/merchant/create-nudge", {
                       state: { locationId: state, selectedItems },
                     })
-                    // localStorage.removeItem("promotionNudgeItem")
                   }
                   }
-                  // onClick={() =>
-                  //   navigate("/merchant/create-nudge", {
-                  //     state: { selectedItems: selectedItems },
-                  //   })
-                  // }
                 >
                   <img src={createAdd} alt="image" />
                   <div>Create nudge</div>

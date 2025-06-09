@@ -4,13 +4,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { supportListHandler } from "../../../../redux/action/supportList";
 import { Pagination } from "antd";
 import Loader from "../../../../common/Loader/Loader";
-import {
-  resolveSupportRequestAction,
-} from "../../../../redux/action/resolveSupportRequest";
+import { resolveSupportRequestAction } from "../../../../redux/action/resolveSupportRequest";
 import { useCommonMessage } from "../../../../common/CommonMessage";
 import CommonModal from "../CommonModal";
 import { useNavigate } from "react-router-dom";
 import useScrollToTop from "../../../../hooks/useScrollToTop";
+import CommonPagination from "../../../../common/pagination/CommonPagination";
 
 const Support = () => {
   const [resolveModal, setResolveModal] = useState(false);
@@ -25,11 +24,11 @@ const Support = () => {
   const messageApi = useCommonMessage();
 
   // Scroll to top when the component mounts
-  useScrollToTop([pagination?.page,pagination?.limit]);
+  useScrollToTop([pagination?.page, pagination?.limit]);
 
   const handleTabClick = (tab) => {
     setActiveTab(tab); // Update the active tab
-    setPagination({ page: 1, limit: 10 })
+    setPagination({ page: 1, limit: 10 });
   };
 
   const toggleSidebar = async (item) => {
@@ -147,9 +146,10 @@ const Support = () => {
                               <div>
                                 <div className="d-flex align-center gap-12">
                                   <div className="initialName">
-                                    {(item?.requestStatus === "Imported" 
-                                      ? item?.businessDetails?.businessName 
-                                      : item?.businessName)
+                                    {(item?.requestStatus === "Imported"
+                                      ? item?.businessDetails?.businessName
+                                      : item?.businessName
+                                    )
                                       ?.split(" ")
                                       .map((word) => word[0])
                                       .join("")
@@ -158,12 +158,14 @@ const Support = () => {
                                   </div>
                                   <div>
                                     <div className="fw-700">
-                                      {item?.requestStatus === "Imported" ? item?.businessDetails?.businessName : item?.businessName
-                                        .charAt(0)
-                                        .toUpperCase() +
-                                        item?.businessName
-                                          .slice(1)
-                                          .toLowerCase() || "-"}
+                                      {item?.requestStatus === "Imported"
+                                        ? item?.businessDetails?.businessName
+                                        : item?.businessName
+                                            .charAt(0)
+                                            .toUpperCase() +
+                                            item?.businessName
+                                              .slice(1)
+                                              .toLowerCase() || "-"}
                                     </div>
                                   </div>
                                 </div>
@@ -173,9 +175,11 @@ const Support = () => {
                                     <div className="lightBlack mb-4">
                                       Business name
                                     </div>
-                                    
+
                                     <div className="fw-600">
-                                      {item?.requestStatus === "Imported" ?item?.businessDetails?.businessName : item?.businessName || "N/A"}
+                                      {item?.requestStatus === "Imported"
+                                        ? item?.businessDetails?.businessName
+                                        : item?.businessName || "N/A"}
                                     </div>
                                   </div>
                                   <div className="fs-14  mb-16">
@@ -183,7 +187,9 @@ const Support = () => {
                                       Phone number
                                     </div>
                                     <div className="fw-600">
-                                      {item?.requestStatus === "Imported" ?item?.businessDetails?.phoneNumber : item?.phoneNumber || "N/A"}
+                                      {item?.requestStatus === "Imported"
+                                        ? item?.businessDetails?.phoneNumber
+                                        : item?.phoneNumber || "N/A"}
                                     </div>
                                   </div>
                                   <div className="fs-14  mb-16">
@@ -233,21 +239,14 @@ const Support = () => {
             </div>
           </div>
           {supportListSelector?.data?.data?.records?.length > 0 && (
-            <div className="d-flex align-center justify-between flexPagination mt-10">
-              <div className="fs-16">
-                Showing {pagination?.page} to {pagination?.limit} of{" "}
-                {supportListSelector?.data?.data?.recordsCount} support
-              </div>
-              {/* <Pagination defaultCurrent={1} total={50} /> */}
-              <Pagination
-                current={pagination?.page}
-                pageSize={pagination?.limit}
-                total={supportListSelector?.data?.data?.recordsCount}
-                onChange={handlePaginationChange}
-                pageSizeOptions={["12" ,'20', '50', '100']} 
-                showSizeChanger
-              />
-            </div>
+            <CommonPagination
+              currentPage={pagination?.page}
+              pageSize={pagination?.limit}
+              totalCount={supportListSelector?.data?.data?.recordsCount}
+              currentCount={supportListSelector?.data?.data?.records?.length}
+              onPageChange={handlePaginationChange}
+              label="Merchants"
+            />
           )}
         </div>
       </div>

@@ -18,6 +18,7 @@ import deleteMember from "../../../../assets/images/deleteMember.svg";
 import deleteModal from "../../../../assets/images/deleteModal.svg";
 import SearchSelect from "../SearchSelect";
 import useScrollToTop from "../../../../hooks/useScrollToTop";
+import CommonPagination from "../../../../common/pagination/CommonPagination";
 
 const Distributors = () => {
   const [modal2Open, setModal2Open] = useState(false);
@@ -200,29 +201,17 @@ const Distributors = () => {
           </div>
           <div className="divider2"></div>
           {getDistributorListSelector?.data?.data?.records?.length > 0 && (
-            <div className="d-flex align-center justify-between flexPagination">
-              <div className="fs-16">
-                {(() => {
-                  const start = (pagination.page - 1) * pagination.limit + 1;
-                  const end = Math.min(
-                    start +
-                      getDistributorListSelector?.data?.data?.records?.length -
-                      1,
-                    getDistributorListSelector?.data?.data?.recordsCount
-                  );
-                  return `Showing ${start} to ${end} of ${getDistributorListSelector?.data?.data?.recordsCount} Distributors`;
-                })()}
-              </div>
-              <Pagination
-                current={pagination?.page}
-                pageSize={pagination?.limit}
-                total={getDistributorListSelector?.data?.data?.recordsCount}
-                onChange={handlePaginationChange}
-                pageSizeOptions={['12' ,'20', '50', '100']} 
-                showSizeChanger={true}
-              />
-            </div>
-          )}
+                <CommonPagination
+                  currentPage={pagination?.page}
+                  pageSize={pagination?.limit}
+                  totalCount={getDistributorListSelector?.data?.data?.recordsCount}
+                  currentCount={
+                    getDistributorListSelector?.data?.data?.records?.length
+                  }
+                  onPageChange={handlePaginationChange}
+                  label="Distributors"
+                />
+              )}
         </div>
       </div>
       {isDetailsOpen && (

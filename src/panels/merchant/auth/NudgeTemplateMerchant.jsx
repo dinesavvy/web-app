@@ -17,7 +17,6 @@ import { handleKeyPressSpace, handleNumberFieldLength } from "../../../common/co
 
 const NudgeTemplateMerchant = () => {
   const [uploadedImage, setUploadedImage] = useState(nudgesCards?.imageUrl[0]);
-  const [showFollowersModal, setShowFollowersModal] = useState(false);
   const messageApi = useCommonMessage();
   const [imagePreview, setImagePreview] = useState(
     nudgesCards?.imageUrl[0] || null
@@ -26,13 +25,7 @@ const NudgeTemplateMerchant = () => {
   const dispatch = useDispatch();
   const { state } = useLocation();
 
-  // console.log("state", state);
-
-  const promotionNudgeItemSelector = useSelector((state) => state.promotionNudge.item);
-  console.log(promotionNudgeItemSelector,"promotionNudgeItemSelector")
-
   const getPromotionNudge = JSON.parse(localStorage.getItem("promotionNudgeItem"))
-  // const selectedBusiness = JSON.parse(localStorage.getItem("selectedBusiness"));
 
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [nudgesCards, setNudgesCard] = useState(null);
@@ -174,7 +167,7 @@ const NudgeTemplateMerchant = () => {
                       onClick={() => setNudgesCard(item)}
                     >
                       <img
-                        src={item?.imageUrl[0]}
+                        src={item?.imageUrl?.[0]}
                         alt={item?.title}
                         className="cursor-pointer"
                       />

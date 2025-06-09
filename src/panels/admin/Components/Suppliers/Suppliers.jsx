@@ -17,6 +17,7 @@ import CommonModal from "../CommonModal";
 import deleteModal from "../../../../assets/images/deleteModal.svg";
 import SearchSelect from "../SearchSelect";
 import useScrollToTop from "../../../../hooks/useScrollToTop";
+import CommonPagination from "../../../../common/pagination/CommonPagination";
 
 const Suppliers = () => {
   const [modal2Open, setModal2Open] = useState(false);
@@ -37,7 +38,7 @@ const Suppliers = () => {
   const dispatch = useDispatch();
 
   // Scroll to top when the component mounts
-  useScrollToTop([pagination?.page]);
+  useScrollToTop([pagination?.page,pagination?.limit]);
 
   const handlePaginationChange = (page, pageSize) => {
     setPagination({ page, limit: pageSize });
@@ -45,12 +46,12 @@ const Suppliers = () => {
 
   const handleSearchChange = (value) => {
     setSearchString(value);
-    setPagination((prev) => ({ ...prev, page: 1 })); 
+    setPagination((prev) => ({ ...prev, page: 1 }));
   };
 
-  const handleSearchAreaChange = (selectedAreas) => {
-    setSearchArea(selectedAreas);
-  };
+  // const handleSearchAreaChange = (selectedAreas) => {
+  //   setSearchArea(selectedAreas);
+  // };
 
   useEffect(() => {
     if (isDetailsOpen) {
@@ -103,7 +104,7 @@ const Suppliers = () => {
           <div className="lineSearch w-100 mb-20">
             <SearchSelect
               onSearchChange={handleSearchChange}
-              onSearchAreaChange={handleSearchAreaChange}
+              // onSearchAreaChange={handleSearchAreaChange}
             />
           </div>
           <div className="merchantGrid">
@@ -136,9 +137,9 @@ const Suppliers = () => {
                             <div className="d-flex align-center gap-12 fs-14">
                               <img src={userCard} className="h30" alt="User" />
                               {item?.contactName
-                              ? item?.contactName.charAt(0).toUpperCase() +
-                                item?.contactName.slice(1)
-                              : ""}
+                                ? item?.contactName.charAt(0).toUpperCase() +
+                                  item?.contactName.slice(1)
+                                : ""}
                             </div>
                             <div className="d-flex align-center gap-12 fs-14">
                               <img
@@ -147,9 +148,11 @@ const Suppliers = () => {
                                 alt="Inventory"
                               />
                               {item?.contactPosition
-                              ? item?.contactPosition.charAt(0).toUpperCase() +
-                                item?.contactPosition.slice(1)
-                              : ""}
+                                ? item?.contactPosition
+                                    .charAt(0)
+                                    .toUpperCase() +
+                                  item?.contactPosition.slice(1)
+                                : ""}
                             </div>
                             <div className="d-flex align-center gap-12 fs-14">
                               <img
@@ -201,28 +204,16 @@ const Suppliers = () => {
           </div>
           <div className="divider2"></div>
           {getSuppliersListSelector?.data?.data?.records?.length > 0 && (
-            <div className="d-flex align-center justify-between flexPagination">
-              <div className="fs-16">
-                {(() => {
-                  const start = (pagination.page - 1) * pagination.limit + 1;
-                  const end = Math.min(
-                    start +
-                      getSuppliersListSelector?.data?.data?.records?.length -
-                      1,
-                    getSuppliersListSelector?.data?.data?.recordsCount
-                  );
-                  return `Showing ${start} to ${end} of ${getSuppliersListSelector?.data?.data?.recordsCount} Suppliers`;
-                })()}
-              </div>
-              <Pagination
-                current={pagination?.page}
-                pageSize={pagination?.limit}
-                total={getSuppliersListSelector?.data?.data?.recordsCount}
-                onChange={handlePaginationChange}
-                pageSizeOptions={["12" ,'20', '50', '100']} 
-                showSizeChanger={true}
-              />
-            </div>
+            <CommonPagination
+              currentPage={pagination?.page}
+              pageSize={pagination?.limit}
+              totalCount={getSuppliersListSelector?.data?.data?.recordsCount}
+              currentCount={
+                getSuppliersListSelector?.data?.data?.records?.length
+              }
+              onPageChange={handlePaginationChange}
+              label="Suppliers"
+            />
           )}
         </div>
       </div>

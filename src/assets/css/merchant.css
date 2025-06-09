@@ -1857,7 +1857,6 @@ input.addTitleInput::placeholder {
   position: fixed;
   z-index: 1000;
   width: fit-content;
- 
   white-space: nowrap;
 }
 .selectMerchant .brandItem img{

@@ -11,6 +11,8 @@ import { useCommonMessage } from "../../../../common/CommonMessage";
 import Loader from "../../../../common/Loader/Loader";
 import { settingListHandler } from "../../../../redux/action/settingList";
 import { handleKeyPressSpace } from "../../../../common/commonFunctions/CommonFunctions";
+import CommonPagination from "../../../../common/pagination/CommonPagination";
+import useScrollToTop from "../../../../hooks/useScrollToTop";
 
 const Settings = () => {
   const [environment, setEnvironment] = useState("Stage");
@@ -31,6 +33,9 @@ const Settings = () => {
   const handlePaginationChange = (page, pageSize) => {
     setPagination({ page, limit: pageSize });
   };
+
+  // Scroll to top when the component mounts
+  useScrollToTop([pagination?.page, pagination?.limit]);
 
   const selectVersion = useSelector((state) => state.createVersion);
 
@@ -452,26 +457,19 @@ const Settings = () => {
               })}
             </table>
           </div>
-          <div className="d-flex align-center gap-10 justify-between flexmd">
-            <div className="fs-16">
-              {(() => {
-                const start = (pagination.page - 1) * pagination.limit + 1;
-                const end = Math.min(
-                  start + settingList?.data?.data?.records?.length - 1,
-                  settingList?.data?.data?.recordsCount
-                );
-                return `Showing ${start} to ${end} of ${settingList?.data?.data?.recordsCount} Setting`;
-              })()}
-            </div>
-            <Pagination
-              current={pagination?.page}
-              pageSize={pagination?.limit}
-              total={settingList?.data?.data?.recordsCount}
-              onChange={handlePaginationChange}
-              pageSizeOptions={["12" ,'20', '50', '100']} 
-              showSizeChanger
-            />
-          </div>
+      
+          {settingList?.data?.data?.records?.length > 0 && (
+                <CommonPagination
+                  currentPage={pagination?.page}
+                  pageSize={pagination?.limit}
+                  totalCount={settingList?.data?.data?.recordsCount}
+                  currentCount={
+                    settingList?.data?.data?.records?.length
+                  }
+                  onPageChange={handlePaginationChange}
+                  label="Settings"
+                />
+              )}
         </div>
       </div>
     </>

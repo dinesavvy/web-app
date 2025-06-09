@@ -11,6 +11,7 @@ import { supplierPromotionListHandler } from "../../../../redux/action/supplierA
 import { distributorPromotionListHandler } from "../../../../redux/action/distributorsAction/distributorPromotionList";
 import DistributorPromotionDetails from "./DistributorPromotionDetails";
 import useScrollToTop from "../../../../hooks/useScrollToTop";
+import CommonPagination from "../../../../common/pagination/CommonPagination";
 // import SupplierPromotionDetails from "./SupplierPromotionDetails";
 
 const DistributorPromotionList = () => {
@@ -21,8 +22,8 @@ const DistributorPromotionList = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [promotionalDetailsData, setPromotionalDetailsData] = useState();
   const distributorEndPromotion = useSelector(
-        (state) => state?.distributorEndPromotion
-      );
+    (state) => state?.distributorEndPromotion
+  );
 
   const dispatch = useDispatch();
   const selectRef = useRef(null);
@@ -85,8 +86,7 @@ const DistributorPromotionList = () => {
       isActive: activeTab !== "active" ? false : true,
     };
     dispatch(distributorPromotionListHandler(payload));
-  }, [pagination, searchString, activeTab,distributorEndPromotion]);
-
+  }, [pagination, searchString, activeTab, distributorEndPromotion]);
 
   return (
     <>
@@ -116,7 +116,10 @@ const DistributorPromotionList = () => {
                 className={`tab-button ${
                   activeTab === "active" ? "active" : ""
                 }`}
-                onClick={() => setActiveTab("active")}
+                onClick={() => {
+                  setActiveTab("active");
+                  setPagination({ page: 1, limit: 12 });
+                }}
               >
                 Active
               </button>
@@ -124,7 +127,10 @@ const DistributorPromotionList = () => {
                 className={`tab-button ${
                   activeTab === "Inactive" ? "active" : ""
                 }`}
-                onClick={() => setActiveTab("Inactive")}
+                onClick={() => {
+                  setActiveTab("Inactive");
+                  setPagination({ page: 1, limit: 12 });
+                }}
               >
                 Inactive
               </button>
@@ -197,12 +203,12 @@ const DistributorPromotionList = () => {
                             <div>
                               <div className="fs-14 mb-4">Brand / Product</div>
                               <div className="fs-14 fw-600">
-                              {item?.brandDetails?.brandName
-                                ? item?.brandDetails?.brandName
-                                    .charAt(0)
-                                    .toUpperCase() +
-                                  item.brandDetails.brandName.slice(1)
-                                : ""}{" "}
+                                {item?.brandDetails?.brandName
+                                  ? item?.brandDetails?.brandName
+                                      .charAt(0)
+                                      .toUpperCase() +
+                                    item.brandDetails.brandName.slice(1)
+                                  : ""}{" "}
                               </div>
                             </div>
                             <div>
@@ -248,28 +254,16 @@ const DistributorPromotionList = () => {
             )}
           </div>
           {distributorPromotionList?.data?.data?.records?.length > 0 && (
-            <div className="d-flex align-center justify-between flexPagination">
-              <div className="fs-16">
-                {(() => {
-                  const start = (pagination?.page - 1) * pagination?.limit + 1;
-                  const end = Math.min(
-                    start +
-                      distributorPromotionList?.data?.data?.records?.length -
-                      1,
-                    distributorPromotionList?.data?.data?.recordsCount
-                  );
-                  return `Showing ${start} to ${end} of ${distributorPromotionList?.data?.data?.recordsCount} Suppliers`;
-                })()}
-              </div>
-              <Pagination
-                current={pagination?.page}
-                pageSize={pagination?.limit}
-                total={distributorPromotionList?.data?.data?.recordsCount}
-                onChange={handlePaginationChange}
-                pageSizeOptions={["12" ,'20', '50', '100']} 
-                showSizeChanger={true}
-              />
-            </div>
+            <CommonPagination
+              currentPage={pagination?.page}
+              pageSize={pagination?.limit}
+              totalCount={distributorPromotionList?.data?.data?.recordsCount}
+              currentCount={
+                distributorPromotionList?.data?.data?.records?.length
+              }
+              onPageChange={handlePaginationChange}
+              label="Promotions"
+            />
           )}
         </div>
       </div>
