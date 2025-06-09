@@ -162,18 +162,17 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
           //   disabled: "",
           // },
           // Merchant Specific Links
-          // {
-          //   id: 6,
-          //   name: "Promotions",
-          //   icon: promotions,
-          //   iconFull: promotionsFull,
-          //   // navigate: getLoggedInDetails ? "/merchant/promotion" : "/admin/nudges",
-          //   navigate: "/merchant/promotions",
-          //   disabled: "",
-          // },
           ...(getLoggedInDetails
             ? [
-              
+              {
+                id: 6,
+                name: "Promotions",
+                icon: promotions,
+                iconFull: promotionsFull,
+                // navigate: getLoggedInDetails ? "/merchant/promotion" : "/admin/nudges",
+                navigate: "/merchant/promotions",
+                disabled: "",
+              },
                 {
                   id: 10,
                   name: "Profile",
