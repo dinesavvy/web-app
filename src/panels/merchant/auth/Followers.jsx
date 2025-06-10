@@ -372,7 +372,7 @@ const Followers = () => {
                     businessListFollowerListSelector?.data?.data?.records?.length
                   }
                   onPageChange={handlePaginationChange}
-                  label="Merchants"
+                  label="Followers"
                 />
               )}
             {isAnyCheckboxChecked && !state?.statePrev?.selectedItems && (
