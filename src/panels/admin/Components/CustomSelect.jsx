@@ -1,9 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import dropdownArrow from "../../../assets/images/dropdownArrow.svg"
 
-const CustomSelect = ({ options, onChange,value }) => {
+const CustomSelect = ({ options, onChange, value }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedOption, setSelectedOption] = useState(5);
   const selectRef = useRef(null);
 
   // Handle clicks outside of the component
@@ -25,18 +24,17 @@ const CustomSelect = ({ options, onChange,value }) => {
   };
 
   const handleOptionClick = (option) => {
-    setSelectedOption(option);
-    setIsOpen(false); 
     onChange(option);
+    setIsOpen(false);
   };
 
   return (
-    <div className={`custom-select ${isOpen ? "rotate": ""} `}ref={selectRef}>
+    <div className={`custom-select ${isOpen ? "rotate": ""} `} ref={selectRef}>
       <div
         className="select-header input"
         onClick={toggleDropdown}
       >
-        {selectedOption || 'Select an option'}
+        {value || 'Select an option'}
         <img src={dropdownArrow} className="dropdownArrow" alt="" />
       </div>
       {isOpen && (
@@ -47,7 +45,7 @@ const CustomSelect = ({ options, onChange,value }) => {
             <div
               key={index}
               onClick={() => handleOptionClick(option)}
-              className={selectedOption === option ? 'options active' : 'options'}
+              className={value === option ? 'options active' : 'options'}
             >
               {option}
             </div>

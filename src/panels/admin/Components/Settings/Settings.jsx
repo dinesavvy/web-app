@@ -16,7 +16,7 @@ import useScrollToTop from "../../../../hooks/useScrollToTop";
 
 const Settings = () => {
   const [environment, setEnvironment] = useState("Stage");
-  const [application, setApplication] = useState("");
+  const [application, setApplication] = useState("Customer");
   const [pagination, setPagination] = useState({ page: 1, limit: 12 });
   const [ios, setIos] = useState({ version: "", build: "", minForce: "" });
   const [searchString, setSearchString] = useState("");
@@ -234,6 +234,7 @@ const Settings = () => {
                 <label className=" mb-10 fs-14 fw-500">Environment</label>
                 <CustomSelect
                   options={["Stage", "Dev"]}
+                  value={environment}
                   onChange={(value) => setEnvironment(value)}
                 />
               </div>

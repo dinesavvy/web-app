@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import backButton from "../../../../assets/images/backButton.svg";
 import selectedImage from "../../../../assets/images/selectedImage.svg";
 import calender from "../../../../assets/images/calender.svg";
@@ -38,6 +38,7 @@ const CreateSavvyNudge = () => {
   const createSavvyNudgeSelector = useSelector(
     (state) => state?.createSavvyNudge
   );
+  const firstErrorFieldRef = useRef(null);
 
   const handleKeyPress = (e) => {
     const regex = /[0-9/]/;
@@ -87,8 +88,19 @@ const CreateSavvyNudge = () => {
   const [selectedDuration, setSelectedDuration] = useState("5");
   const [selected, setSelected] = useState("25");
 
+  // Define field hierarchy order
+  const fieldHierarchy = [
+    'title',
+    'description',
+    'launchDate',
+    'youtubeUrl',
+    'requiredIngredients',
+    'preparationInstructions',
+    'foodSupplierLink',
+    'beverageSupplierLink'
+  ];
 
-  const handleFormSubmit = (values) => {
+  const handleFormSubmit = (values, formikBag) => {
     if (selectedMerchants?.length === 0) {
       messageApi.open({
         type: "error",
@@ -96,6 +108,16 @@ const CreateSavvyNudge = () => {
       });
       return;
     }
+
+    // Check if title is empty
+    if (!values.title.trim()) {
+      messageApi.open({
+        type: "error",
+        content: "Title is required",
+      });
+      return;
+    }
+
     let payload = {
       title: values?.title.trim(),
       description: values?.description.trim(),
@@ -153,6 +175,68 @@ const CreateSavvyNudge = () => {
     resetFormState();
   }, [selectedIndex]);
 
+  // Function to handle error field focus
+  const handleErrorFieldFocus = (errors, touched) => {
+    // Find all fields with errors
+    const errorFields = Object.keys(errors).filter(field => touched[field]);
+    
+    if (errorFields.length > 0) {
+      // Find the first error field based on hierarchy
+      const firstErrorField = fieldHierarchy.find(field => errorFields.includes(field));
+      
+      if (firstErrorField) {
+        // Find the corresponding DOM element
+        let errorElement;
+        
+        // Special handling for different field types
+        if (firstErrorField === 'youtubeUrl') {
+          errorElement = document.querySelector('input[name="youtubeUrl"]');
+        } else if (firstErrorField === 'launchDate') {
+          // For DatePicker, we need to find the input element inside the ant-picker
+          errorElement = document.querySelector('.ant-picker-input > input');
+        } else {
+          errorElement = document.querySelector(`[name="${firstErrorField}"]`);
+        }
+
+        if (errorElement) {
+          // First scroll to the element
+          setTimeout(() => {
+            errorElement.scrollIntoView({ 
+              behavior: 'smooth', 
+              block: 'center',
+              inline: 'nearest'
+            });
+            
+            // Then focus after a small delay
+            setTimeout(() => {
+              errorElement.focus();
+            }, 300);
+          }, 100);
+        }
+      }
+    }
+  };
+
+  // Helper function to set error field ref
+  const setErrorFieldRef = (el, fieldName, errors, touched) => {
+    // Only set the ref if this field has an error and is touched
+    if (errors[fieldName] && touched[fieldName]) {
+      // If no error field is set yet, or if this field comes before the current error field
+      if (!firstErrorFieldRef.current) {
+        firstErrorFieldRef.current = el;
+      }
+    }
+  };
+
+  // Function to find the first field with an error
+  const findFirstErrorField = (errors, touched) => {
+    const errorFields = Object.keys(errors).filter(field => touched[field]);
+    if (errorFields.length > 0) {
+      return errorFields[0];
+    }
+    return null;
+  };
+
   return (
     <>
       {createSavvyNudgeSelector?.isLoading && <Loader />}
@@ -171,8 +255,9 @@ const CreateSavvyNudge = () => {
         onSubmit={(values, formikBag) => {
           handleFormSubmit(values, formikBag);
         }}
+        validateOnMount={true}
       >
-        {({ isSubmitting, values, setFieldValue, resetForm,errors }) => (
+        {({ isSubmitting, values, setFieldValue, resetForm, errors, touched, submitForm, setTouched }) => (
           <Form>
             {console.log(errors,"errors")}
             <div className="dashboard">
@@ -232,6 +317,7 @@ const CreateSavvyNudge = () => {
                       className="input"
                       placeholder="Free appetizer"
                       maxLength={20}
+                      innerRef={(el) => setErrorFieldRef(el, 'title', errors, touched)}
                     />
                     <ErrorMessage
                       name="title"
@@ -248,6 +334,7 @@ const CreateSavvyNudge = () => {
                       name="description"
                       placeholder="Free appetizer on Happy Hours! From 07:00 PM to 08:00 PM"
                       maxLength={750}
+                      innerRef={(el) => setErrorFieldRef(el, 'description', errors, touched)}
                     />
                     <div className="fs-12 textWord">
                       {values?.description?.length}/750
@@ -278,7 +365,6 @@ const CreateSavvyNudge = () => {
                                 ? dayjs(field.value, "YYYY-MM-DD")
                                 : null
                             }
-                            // placeholder="YYYY-MM-DD"
                             suffixIcon={
                               <img
                                 src={calender}
@@ -291,6 +377,7 @@ const CreateSavvyNudge = () => {
                               form.setFieldValue("launchDate", dateString);
                             }}
                             allowClear={false}
+                            id="launchDate"
                           />
                           {form?.touched?.launchDate &&
                             form?.errors?.launchDate && (
@@ -331,7 +418,7 @@ const CreateSavvyNudge = () => {
                 <div className="divider2"></div>
                 <div className="inputGrid gap-20">
                   <div className="">
-                    <label htmlFor="name" className=" mb-10 fs-16 fw-500">
+                    <label htmlFor="youtubeUrl" className=" mb-10 fs-16 fw-500">
                       Youtube Video Link*
                     </label>
                     <Field
@@ -344,6 +431,7 @@ const CreateSavvyNudge = () => {
                         setVideoId(id);
                       }}
                       name="youtubeUrl"
+                      id="youtubeUrl"
                     />
                     <ErrorMessage
                       name="youtubeUrl"
@@ -441,6 +529,7 @@ const CreateSavvyNudge = () => {
                       name="requiredIngredients"
                       placeholder="Required ingredients"
                       // maxLength={750}
+                      innerRef={(el) => setErrorFieldRef(el, 'requiredIngredients', errors, touched)}
                     />
                     <ErrorMessage
                       name="requiredIngredients"
@@ -460,6 +549,7 @@ const CreateSavvyNudge = () => {
                       name="preparationInstructions"
                       placeholder="Preparation instructions"
                       // maxLength={750}
+                      innerRef={(el) => setErrorFieldRef(el, 'preparationInstructions', errors, touched)}
                     />
 
                     <ErrorMessage
@@ -481,6 +571,7 @@ const CreateSavvyNudge = () => {
                       className="input"
                       placeholder="Link to the Supplier/Distributor that provides the food ingredients"
                       name="foodSupplierLink"
+                      innerRef={(el) => setErrorFieldRef(el, 'foodSupplierLink', errors, touched)}
                     />
                     <ErrorMessage
                       name="foodSupplierLink"
@@ -497,6 +588,7 @@ const CreateSavvyNudge = () => {
                       className="input"
                       placeholder="Link to the Supplier/Distributor that provides the beverage"
                       name="beverageSupplierLink"
+                      innerRef={(el) => setErrorFieldRef(el, 'beverageSupplierLink', errors, touched)}
                     />
                     <ErrorMessage
                       name="beverageSupplierLink"
@@ -544,7 +636,33 @@ const CreateSavvyNudge = () => {
                 </div>
               )}
               <div className="d-flex justify-end">
-                <button className="btn p32" type="submit">
+                <button 
+                  className="btn p32" 
+                  type="submit"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    
+                    // Mark all fields as touched to trigger validation
+                    const allFieldsTouched = {
+                      title: true,
+                      description: true,
+                      launchDate: true,
+                      requiredIngredients: true,
+                      preparationInstructions: true,
+                      foodSupplierLink: true,
+                      beverageSupplierLink: true,
+                      youtubeUrl: true
+                    };
+                    
+                    setTouched(allFieldsTouched);
+                    
+                    submitForm().then(() => {
+                      if (Object.keys(errors).length > 0) {
+                        handleErrorFieldFocus(errors, allFieldsTouched);
+                      }
+                    });
+                  }}
+                >
                   Publish Savvy Nudge
                 </button>
               </div>
