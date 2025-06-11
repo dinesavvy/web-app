@@ -327,7 +327,7 @@ const PromotionsList = () => {
                   (item, index) => {
                     return (
                       <div
-                        className="merchantCard position-relative"
+                        className="merchantCard position-relative flexColumn d-flex"
                         key={index}
                       >
                         <div className="p-10">
@@ -389,29 +389,32 @@ const PromotionsList = () => {
                           </div>
                         </div>
                         <div className="divider m-0 "></div>
-                        <div className="bottomPadding">
-                          <div className="mb-16">
-                            <div className="fs-14 mb-4">Promoter</div>
-                            {/* <div className="fs-14 fw-600">
+                        <div className="bottomPadding d-flex flexColumn flex1 gap-20 justify-between">
+                          <div>
+                            <div className="mb-16">
+                              <div className="fs-14 mb-4">Promoter</div>
+                              {/* <div className="fs-14 fw-600">
                             {item?.promotionTitle}{" "}
                           </div> */}
-                            <div className="fs-14 fw-600">
-                              {item?.promotionTitle
-                                ? item?.promotionTitle.charAt(0).toUpperCase() +
-                                  item?.promotionTitle.slice(1)
-                                : ""}
+                              <div className="fs-14 fw-600">
+                                {item?.promotionTitle
+                                  ? item?.promotionTitle
+                                      .charAt(0)
+                                      .toUpperCase() +
+                                    item?.promotionTitle.slice(1)
+                                  : ""}
+                              </div>
                             </div>
-                          </div>
-                          <div>
-                            <div className="fs-14 mb-4">SKUs</div>
-                            <div className="fs-14 fw-600">
-                              {/* {item?.brandDetails?.brandItem?.map(
+                            <div>
+                              <div className="fs-14 mb-4">SKUs</div>
+                              <div className="fs-14 fw-600">
+                                {/* {item?.brandDetails?.brandItem?.map(
                                 (item) => item?.sku
                               )} */}
-                              ${item?.merchant?.retailPrice}
+                                ${item?.merchant?.retailPrice}
+                              </div>
                             </div>
-                          </div>
-                          {/* <div className="d-flex justify-between align-center gap-10">
+                            {/* <div className="d-flex justify-between align-center gap-10">
                             <div className="fs-14 mb-4">Item Quantity</div>
                             <div className="fs-14 fw-600">
                               {item?.merchant?.quantity}
@@ -423,59 +426,62 @@ const PromotionsList = () => {
                               {item?.nudgeRedeemedCount}
                                 </div>
                           </div> */}
-                          <div className="divider2 m10"></div>
-                          <div className="fs-14 mb-10">Depletion progress</div>
-                          <div className="range mb-5 pc">
-                            <div
-                              className="rangePercentage"
-                              style={{ width: `${item?.nudgeGoal || 0}%` }}
-                            ></div>
-                          </div>
-                          <div className="fs-12 fw-500 mb-10 pc">
-                            {item?.nudgeGoal}%
-                          </div>
-                          <div className="d-flex mb-6 justify-between align-center gap-10">
-                            <div className="fs-12  grey">Retail Price</div>
-                            <div className="fs-16 pc fw-500">
-                              {/* {item?.brandDetails?.brandItem?.map(
+                            <div className="divider2 m10"></div>
+                            <div className="fs-14 mb-10">
+                              Depletion progress
+                            </div>
+                            <div className="range mb-5 pc">
+                              <div
+                                className="rangePercentage"
+                                style={{ width: `${item?.nudgeGoal || 0}%` }}
+                              ></div>
+                            </div>
+                            <div className="fs-12 fw-500 mb-10 pc">
+                              {item?.nudgeGoal}%
+                            </div>
+                            <div className="d-flex mb-6 justify-between align-center gap-10">
+                              <div className="fs-12  grey">Retail Price</div>
+                              <div className="fs-16 pc fw-500">
+                                {/* {item?.brandDetails?.brandItem?.map(
                                     (item) => item?.sku
                                   )} */}
-                              ${item?.merchant?.retailPrice}
+                                ${item?.merchant?.retailPrice}
+                              </div>
                             </div>
-                          </div>
-                          <div className="d-flex mb-6 justify-between align-center gap-10">
-                            <div className="fs-12  grey">Item Quantity</div>
-                            <div className="fs-16  fw-500">
-                              {/* {item?.brandDetails?.brandItem?.map(
+                            <div className="d-flex mb-6 justify-between align-center gap-10">
+                              <div className="fs-12  grey">Item Quantity</div>
+                              <div className="fs-16  fw-500">
+                                {/* {item?.brandDetails?.brandItem?.map(
                                     (item) => item?.sku
                                   )} */}
-                              {item?.merchant?.quantity}
+                                {item?.merchant?.quantity}
+                              </div>
                             </div>
-                          </div>
-                          <div className="d-flex mb-6 justify-between align-center gap-10">
-                            <div className="fs-12  grey">Nudges Redeemed</div>
-                            <div className="fs-16  fw-500">
-                              {/* {item?.brandDetails?.brandItem?.map(
+                            <div className="d-flex mb-6 justify-between align-center gap-10">
+                              <div className="fs-12  grey">Nudges Redeemed</div>
+                              <div className="fs-16  fw-500">
+                                {/* {item?.brandDetails?.brandItem?.map(
                                     (item) => item?.sku
                                   )} */}
-                              {item?.nudgeRedeemedCount}
+                                {item?.nudgeRedeemedCount}
+                              </div>
                             </div>
-                          </div>
-                          {/* <div className="fs-14 fw-600">
+                            {/* <div className="fs-14 fw-600">
                                   ${item?.remainingWithdrawFund}
                                 </div> */}
-                          <div className="d-flex mb-6 justify-between align-center gap-10">
-                            <div className="fs-12  grey">
-                              Funds Available for pc Withdrawal
-                            </div>
-                            <div className="fs-16 pc fw-500">
-                              {/* {item?.brandDetails?.brandItem?.map(
+                            <div className="d-flex mb-6 justify-between align-center gap-10">
+                              <div className="fs-12  grey">
+                                Funds Available for pc Withdrawal
+                              </div>
+                              <div className="fs-16 pc fw-500">
+                                {/* {item?.brandDetails?.brandItem?.map(
                                       (item) => item?.sku
                                     )} */}
-                              ${item?.remainingWithdrawFund}
+                                ${item?.remainingWithdrawFund}
+                              </div>
                             </div>
+                            <div className="divider2"></div>
                           </div>
-                          <div className="divider2"></div>
                           <div
                             className="btn btnSecondary"
                             onClick={() => {
@@ -520,7 +526,7 @@ const PromotionsList = () => {
               <>
                 {archivePromotionListSelector?.data?.data?.records?.map(
                   (item, index) => (
-                    <div className="merchantCard position-relative" key={index}>
+                    <div className="merchantCard position-relative flexColumn d-flex" key={index}>
                       <div className="p-10">
                         <div className="nailedIt active fs-14">
                           {moment(item?.endDate).isBefore(moment()) ? (
@@ -567,7 +573,9 @@ const PromotionsList = () => {
                         </div>
                       </div>
                       <div className="divider m-0 "></div>
-                      <div className="bottomPadding">
+                      <div className="bottomPadding d-flex flexColumn flex1  justify-between">
+                        <div>
+
                         <div className="mb-16">
                           <div className="fs-14 mb-4">Supplier/Distributor</div>
                           {/* <div className="fs-14 fw-600">
@@ -666,6 +674,7 @@ const PromotionsList = () => {
                             </div>
                           </>
                         )}
+                        </div>
                         {activeTab === "active" ? (
                           <div className="btn btnSecondary">Send Nudges</div>
                         ) : activeTab === "offer" ? (

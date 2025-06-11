@@ -145,7 +145,7 @@ const SupplierPromotionList = () => {
                   (item, index) => {
                     return (
                       <div
-                        className="merchantCard position-relative"
+                        className="merchantCard position-relative flexColumn d-flex"
                         key={index}
                       >
                         <div className="p-10">
@@ -186,7 +186,9 @@ const SupplierPromotionList = () => {
                           </div>
                         </div>
                         <div className="divider m-0"></div>
-                        <div className="bottomPadding">
+                        <div className="bottomPadding d-flex flexColumn flex1 gap-20 justify-between">
+                          <div>
+
                           <div className="mb-16">
                             <div className="fs-14 mb-4">Promotion title</div>
                             <div className="fs-14 fw-600">
@@ -230,6 +232,7 @@ const SupplierPromotionList = () => {
                                 {item?.merchant?.quantity}
                               </div>
                             </div>
+                          </div>
                           </div>
                           <div
                             className="btn btnSecondary"

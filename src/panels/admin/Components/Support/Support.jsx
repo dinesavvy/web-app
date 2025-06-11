@@ -137,13 +137,17 @@ const Support = () => {
                             <div className="d-flex justify-between h-100 flexColumn">
                               {item?.requestStatus === "Imported" && (
                                 <>
-                                  <div className="paddingsupport"></div>
                                   <div className="nailedIt active fs-14">
                                     Merchant Business Imported
                                   </div>
                                 </>
                               )}
                               <div>
+                                {item?.requestStatus === "Imported" && (
+                                  <>
+                                    <div className="paddingsupport"></div>
+                                  </>
+                                )}
                                 <div className="d-flex align-center gap-12">
                                   <div className="initialName">
                                     {(item?.requestStatus === "Imported"

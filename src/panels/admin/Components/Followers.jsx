@@ -156,35 +156,39 @@ const Followers = () => {
                   {followerListSelector?.data?.data?.records?.map(
                     (item, index) => {
                       return (
-                        <div className="cardFollow" key={index}>
-                          <div className="d-flex justify-between gap-12">
-                            <div className="d-flex align-center gap-12">
-                              <div className="initialName">
-                                {item?.userInfo?.displayName.charAt(0) +
-                                  item?.userInfo?.displayName.charAt(1) ||
-                                  "N/A"}
+                        <div
+                          className="cardFollow d-flex justify-between h-100 flexColumn"
+                          key={index}
+                        >
+                          <div>
+                            <div className="d-flex justify-between gap-12">
+                              <div className="d-flex align-center gap-12">
+                                <div className="initialName">
+                                  {item?.userInfo?.displayName.charAt(0) +
+                                    item?.userInfo?.displayName.charAt(1) ||
+                                    "N/A"}
+                                </div>
+                                <div>
+                                  <div className="fw-700">
+                                    {item?.userInfo?.displayName &&
+                                      item.userInfo.displayName
+                                        .charAt(0)
+                                        .toUpperCase() +
+                                        item.userInfo.displayName.slice(1)}
+                                  </div>
+                                  <div className="fs-14 fw-300 o5 ">
+                                    {item?.userInfo?.email.length > 0
+                                      ? item?.userInfo?.email
+                                      : "-"}
+                                  </div>
+                                  <div className="fs-14 fw-300 o5">
+                                    {moment(item?.userInfo?.createdAt).format(
+                                      "MMMM,YYYY"
+                                    )}
+                                  </div>
+                                </div>
                               </div>
-                              <div>
-                                <div className="fw-700">
-                                  {item?.userInfo?.displayName &&
-                                    item.userInfo.displayName
-                                      .charAt(0)
-                                      .toUpperCase() +
-                                      item.userInfo.displayName.slice(1)}
-                                </div>
-                                <div className="fs-14 fw-300 o5 ">
-                                  {item?.userInfo?.email.length > 0
-                                    ? item?.userInfo?.email
-                                    : "-"}
-                                </div>
-                                <div className="fs-14 fw-300 o5">
-                                  {moment(item?.userInfo?.createdAt).format(
-                                    "MMMM,YYYY"
-                                  )}
-                                </div>
-                              </div>
-                            </div>
-                            {/* <div className="custom-checkbox">
+                              {/* <div className="custom-checkbox">
                     <label className="checkLabel">
                       <input
                         type="checkbox"
@@ -195,62 +199,67 @@ const Followers = () => {
                       <span className="checkmark"></span>
                     </label>
                   </div> */}
-                          </div>
-                          <div className="divider2"></div>
-                          {/* {item?.userInfo?.email && ( */}
-                          {/* <div className="d-flex align-center gap-12 mb-10">
+                            </div>
+                            <div className="divider2"></div>
+                            {/* {item?.userInfo?.email && ( */}
+                            {/* <div className="d-flex align-center gap-12 mb-10">
                       <img src={emailCard} alt="" />
                       <div className="fs-14">
                         {item?.userInfo?.email || "-"}
                       </div>
                     </div> */}
-                          {/* )} */}
-                          {/* {item?.userInfo?.phoneNumber !== "" && ( */}
-                          {/* <div className="d-flex align-center gap-12">
+                            {/* )} */}
+                            {/* {item?.userInfo?.phoneNumber !== "" && ( */}
+                            {/* <div className="d-flex align-center gap-12">
                       <img src={phoneCard} alt="" />
                       <div className="fs-14">
                         {item?.userInfo?.phoneNumber || "-"}
                       </div>
                     </div> */}
-                          <div className="d-flex justify-between align-center gap-12 fs-14 mt-10">
-                            <div className="d-flex align-center gap-12">
-                              <img src={resturantIcon} alt="" className="h30" />
-                              Restaurants following:
+                            <div className="d-flex justify-between align-center gap-12 fs-14 mt-10">
+                              <div className="d-flex align-center gap-12">
+                                <img
+                                  src={resturantIcon}
+                                  alt=""
+                                  className="h30"
+                                />
+                                Restaurants following:
+                              </div>
+                              <div className="fw-500">
+                                {item?.followerCount || "-"}
+                              </div>
                             </div>
-                            <div className="fw-500">
-                              {item?.followerCount || "-"}
-                            </div>
-                          </div>
 
-                          <div className="d-flex justify-between align-center gap-12 fs-14 mt-10">
-                            <div className="d-flex align-center gap-12">
-                              <img src={nudgeIcon} alt="" className="h30" />
-                              Nudges shared
+                            <div className="d-flex justify-between align-center gap-12 fs-14 mt-10">
+                              <div className="d-flex align-center gap-12">
+                                <img src={nudgeIcon} alt="" className="h30" />
+                                Nudges shared
+                              </div>
+                              <div className="fw-500">{item?.nudgeCount}</div>
                             </div>
-                            <div className="fw-500">{item?.nudgeCount}</div>
-                          </div>
-                          <div className="divider2"></div>
-                          <div className="fs-14 mb-6">Preferences</div>
-                          <div className="flexTag mb-20">
-                            {item?.customerPreferencesData?.filterData?.filter(
-                              (data) => data?.trim() !== ""
-                            )?.length > 0 ? (
-                              item?.customerPreferencesData?.filterData
-                                ?.filter((data) => data?.trim() !== "")
-                                ?.map((preference, index) => (
-                                  <div key={index}>
-                                    {preference?.charAt(0).toUpperCase() +
-                                      preference?.slice(1)}
-                                  </div>
-                                ))
-                            ) : (
-                              <div>No data available</div>
-                            )}
-                          </div>
+                            <div className="divider2"></div>
+                            <div className="fs-14 mb-6">Preferences</div>
+                            <div className="flexTag mb-20">
+                              {item?.customerPreferencesData?.filterData?.filter(
+                                (data) => data?.trim() !== ""
+                              )?.length > 0 ? (
+                                item?.customerPreferencesData?.filterData
+                                  ?.filter((data) => data?.trim() !== "")
+                                  ?.map((preference, index) => (
+                                    <div key={index}>
+                                      {preference?.charAt(0).toUpperCase() +
+                                        preference?.slice(1)}
+                                    </div>
+                                  ))
+                              ) : (
+                                <div>No data available</div>
+                              )}
+                            </div>
 
-                          {/* )} */}
-                          <div className="divider2"></div>
-                          <div className="d-flex gap-10 mt-20 justify-end flexBtn">
+                            {/* )} */}
+                            <div className="divider2"></div>
+                          </div>
+                          <div className="d-flex gap-10  justify-end flexBtn">
                             <div
                               className="btnSecondary w-100 btn"
                               onClick={() => addToList(item)}
@@ -279,89 +288,95 @@ const Followers = () => {
                 followerListSelector?.data?.data?.records?.map(
                   (item, index) => {
                     return (
-                      <div className="cardFollow" key={index}>
-                        <div className="d-flex justify-between gap-12">
-                          <div className="d-flex align-center gap-12">
-                            <div className="initialName">
-                              {item?.userInfo?.displayName.charAt(0) +
-                                item?.userInfo?.displayName.charAt(1) || "N/A"}
-                            </div>
-                            <div>
-                              <div className="fw-700">
-                                {/* {item?.userInfo?.displayName} */}
-                                {item?.userInfo?.displayName &&
-                                  item.userInfo.displayName
-                                    .charAt(0)
-                                    .toUpperCase() +
-                                    item.userInfo.displayName.slice(1)}
+                      <div
+                        className="cardFollow d-flex justify-between h-100 flexColumn"
+                        key={index}
+                      >
+                        <div>
+                          <div className="d-flex justify-between gap-12">
+                            <div className="d-flex align-center gap-12">
+                              <div className="initialName">
+                                {item?.userInfo?.displayName.charAt(0) +
+                                  item?.userInfo?.displayName.charAt(1) ||
+                                  "N/A"}
                               </div>
-                              <div className="fs-14 fw-300 o5 ">
-                                {" "}
-                                {item?.userInfo?.email.length > 0
-                                  ? item?.userInfo?.email
-                                  : "-"}
-                              </div>
-                              <div className="fs-14 fw-300 o5">
-                                {moment(item?.userInfo?.createdAt).format(
-                                  "MMMM,YYYY"
-                                )}
+                              <div>
+                                <div className="fw-700">
+                                  {/* {item?.userInfo?.displayName} */}
+                                  {item?.userInfo?.displayName &&
+                                    item.userInfo.displayName
+                                      .charAt(0)
+                                      .toUpperCase() +
+                                      item.userInfo.displayName.slice(1)}
+                                </div>
+                                <div className="fs-14 fw-300 o5 ">
+                                  {" "}
+                                  {item?.userInfo?.email.length > 0
+                                    ? item?.userInfo?.email
+                                    : "-"}
+                                </div>
+                                <div className="fs-14 fw-300 o5">
+                                  {moment(item?.userInfo?.createdAt).format(
+                                    "MMMM,YYYY"
+                                  )}
+                                </div>
                               </div>
                             </div>
                           </div>
-                        </div>
-                        <div className="divider2"></div>
-                        {/* {item?.userInfo?.email && ( */}
-                        {/* <div className="d-flex align-center gap-12 mb-10">
+                          <div className="divider2"></div>
+                          {/* {item?.userInfo?.email && ( */}
+                          {/* <div className="d-flex align-center gap-12 mb-10">
                           <img src={emailCard} alt="" />
                           <div className="fs-14">
                             {item?.userInfo?.email || "-"}
                           </div>
                         </div> */}
-                        {/* )} */}
-                        {/* {item?.userInfo?.phoneNumber && ( */}
-                        {/* <div className="d-flex align-center gap-12">
+                          {/* )} */}
+                          {/* {item?.userInfo?.phoneNumber && ( */}
+                          {/* <div className="d-flex align-center gap-12">
                           <img src={phoneCard} alt="" />
                           <div className="fs-14">
                             {item?.userInfo?.phoneNumber || "-"}
                           </div>
                         </div> */}
-                        {/* )} */}
-                        <div className="d-flex justify-between align-center gap-12 fs-14 mt-10">
-                          <div className="d-flex align-center gap-12">
-                            <img src={resturantIcon} className="h30" alt="" />
-                            Restaurants following:
+                          {/* )} */}
+                          <div className="d-flex justify-between align-center gap-12 fs-14 mt-10">
+                            <div className="d-flex align-center gap-12">
+                              <img src={resturantIcon} className="h30" alt="" />
+                              Restaurants following:
+                            </div>
+                            <div className="fw-500">
+                              {item?.followerCount || "-"}
+                            </div>
                           </div>
-                          <div className="fw-500">
-                            {item?.followerCount || "-"}
+                          <div className="d-flex justify-between align-center gap-12 fs-14 mt-10">
+                            <div className="d-flex align-center gap-12">
+                              <img src={nudgeIcon} className="h30" alt="" />
+                              Nudges shared
+                            </div>
+                            <div className="fw-500">{item?.nudgeCount}</div>
                           </div>
-                        </div>
-                        <div className="d-flex justify-between align-center gap-12 fs-14 mt-10">
-                          <div className="d-flex align-center gap-12">
-                            <img src={nudgeIcon} className="h30" alt="" />
-                            Nudges shared
+                          <div className="divider2"></div>
+                          <div className="fs-14 mb-6">Preferences</div>
+                          <div className="flexTag mb-20">
+                            {item?.customerPreferencesData?.filterData?.filter(
+                              (data) => data?.trim() !== ""
+                            )?.length > 0 ? (
+                              item?.customerPreferencesData?.filterData
+                                ?.filter((data) => data?.trim() !== "")
+                                ?.map((preference, index) => (
+                                  <div key={index}>
+                                    {preference?.charAt(0).toUpperCase() +
+                                      preference?.slice(1)}
+                                  </div>
+                                ))
+                            ) : (
+                              <div>No data available</div>
+                            )}
                           </div>
-                          <div className="fw-500">{item?.nudgeCount}</div>
+                          <div className="divider2"></div>
                         </div>
-                        <div className="divider2"></div>
-                        <div className="fs-14 mb-6">Preferences</div>
-                        <div className="flexTag mb-20">
-                          {item?.customerPreferencesData?.filterData?.filter(
-                            (data) => data?.trim() !== ""
-                          )?.length > 0 ? (
-                            item?.customerPreferencesData?.filterData
-                              ?.filter((data) => data?.trim() !== "")
-                              ?.map((preference, index) => (
-                                <div key={index}>
-                                  {preference?.charAt(0).toUpperCase() +
-                                    preference?.slice(1)}
-                                </div>
-                              ))
-                          ) : (
-                            <div>No data available</div>
-                          )}
-                        </div>
-                        <div className="divider2"></div>
-                        <div className="d-flex gap-10 mt-20 justify-end flexBtn">
+                        <div className="d-flex gap-10  justify-end flexBtn">
                           <div
                             className="btnSecondary w-100 btn"
                             onClick={() => addToArchiveFollowers(item)}
@@ -384,19 +399,17 @@ const Followers = () => {
               )}
             </div>
           )}
-          
+
           {followerListSelector?.data?.data?.records?.length > 0 && (
-                <CommonPagination
-                  currentPage={pagination?.page}
-                  pageSize={pagination?.limit}
-                  totalCount={followerListSelector?.data?.data?.recordsCount}
-                  currentCount={
-                    followerListSelector?.data?.data?.records?.length
-                  }
-                  onPageChange={handlePaginationChange}
-                  label="Followers"
-                />
-              )}
+            <CommonPagination
+              currentPage={pagination?.page}
+              pageSize={pagination?.limit}
+              totalCount={followerListSelector?.data?.data?.recordsCount}
+              currentCount={followerListSelector?.data?.data?.records?.length}
+              onPageChange={handlePaginationChange}
+              label="Followers"
+            />
+          )}
         </div>
       </div>
       {arr?.length ? (

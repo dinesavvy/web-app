@@ -193,8 +193,9 @@ const FollowersModal = ({
                 {followerListSelector?.data?.data?.records?.map(
                   (item, index) => {
                     return (
-                      <div className="cardFollow" key={index}>
-                        <div className="d-flex justify-between gap-12">
+                      <div className="cardFollow d-flex justify-between h-100 flexColumn" key={index}>
+                        <div>
+                          <div className="d-flex justify-between gap-12">
                           <div className="d-flex align-center gap-12">
                             <div className="initialName">
                               {item?.userInfo?.displayName.charAt(0) +
@@ -255,7 +256,8 @@ const FollowersModal = ({
                           )}
                         </div>
                         <div className="divider2"></div>
-                        <div className="d-flex gap-10 mt-20 justify-end flexBtn">
+                        </div>
+                        <div className="d-flex gap-10  justify-end flexBtn">
                           <div
                             className="btnSecondary w-100 btn"
                             onClick={() => addToList(item)}
@@ -322,8 +324,9 @@ const FollowersModal = ({
           <div className="merchantGrid mb-30">
             {followerListSelector?.data?.data?.records?.length > 0 ? (
               followerListSelector?.data?.data?.records?.map((item, index) => (
-                <div className="cardFollow" key={index}>
-                  <div className="d-flex justify-between gap-12">
+                <div className="cardFollow d-flex justify-between h-100 flexColumn" key={index}>
+                  <div>
+                    <div className="d-flex justify-between gap-12">
                     <div className="d-flex align-center gap-12">
                       <div className="initialName">
                         {item?.userInfo?.displayName?.slice(0, 2)}
@@ -390,7 +393,8 @@ const FollowersModal = ({
                       <div>No preferences available</div>
                     )}
                   </div>
-                  <div className="d-flex gap-10 mt-20 justify-end flexBtn">
+                  </div>
+                  <div className="d-flex gap-10  justify-end flexBtn">
                     <div
                       className="btnSecondary w-100 btn"
                       onClick={() => addToArchiveFollowers(item)}

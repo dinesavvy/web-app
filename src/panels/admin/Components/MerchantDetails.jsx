@@ -1933,7 +1933,7 @@ const MerchantDetails = () => {
                   {nudgesListSelector?.data?.data?.records?.length > 0 ? (
                     nudgesListSelector?.data?.data?.records?.map(
                       (item, index) => (
-                        <div className="merchantCard" key={index}>
+                        <div className="merchantCard position-relative flexColumn d-flex " key={index}>
                           <div className="position-relative">
                             <img
                               className="w-100 merchantImg"
@@ -1958,8 +1958,9 @@ const MerchantDetails = () => {
                               </div>
                             </div>
                           </div>
-                          <div className="bottomPadding">
-                            <div className="lightBlack fs-14 mb-20">
+                          <div className="bottomPadding d-flex flexColumn flex1 gap-20 justify-between">
+                            <div>
+                              <div className="lightBlack fs-14 mb-20">
                               {item?.message}
                             </div>
                             <div className="d-flex justify-between align-center gap-20 mb-8">
@@ -2037,6 +2038,7 @@ const MerchantDetails = () => {
                                   %
                                 </div>
                               </div>
+                            </div>
                             </div>
                             <div
                               className="btn btnSecondary w-100"

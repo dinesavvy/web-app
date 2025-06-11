@@ -72,7 +72,9 @@ const TeamMember = ({ merchantDetailsSelector, activeTab3, setActiveTab3 }) => {
               {merchantTeamsSelector?.data?.data?.records?.map(
                 (item, index) => {
                   return (
-                    <div className="card" key={index}>
+                    <div className="card justify-between position-relative flexColumn d-flex" key={index}>
+                      <div>
+
                       <div className="d-flex align-center gap-12">
                         <div className="initialName">
                           {item?.displayName
@@ -103,6 +105,7 @@ const TeamMember = ({ merchantDetailsSelector, activeTab3, setActiveTab3 }) => {
                       <div className="d-flex justify-between align-center gap-12 fs-14 mb-20">
                         <div className="">Nudges sent:</div>
                         <div className=" fw-500">{item?.nudgeCount}</div>
+                      </div>
                       </div>
                       <div className="d-flex align-center gap-10">
                         <div

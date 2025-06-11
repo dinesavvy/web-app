@@ -207,16 +207,20 @@ const Nudges = () => {
               )}
             </div>
           </div>
-          <div className="divider2"></div>
-          {merchantsListSelector?.data?.data?.records?.length && (
-            <CommonPagination
-              currentPage={pagination?.page}
-              pageSize={pagination?.limit}
-              totalCount={merchantsListSelector?.data?.data?.recordsCount}
-              currentCount={merchantsListSelector?.data?.data?.records?.length}
-              onPageChange={handlePaginationChange}
-              label="Merchants"
-            />
+          {merchantsListSelector?.data?.data?.records?.length>0 && (
+            <>
+              <div className="divider2"></div>
+              <CommonPagination
+                currentPage={pagination?.page}
+                pageSize={pagination?.limit}
+                totalCount={merchantsListSelector?.data?.data?.recordsCount}
+                currentCount={
+                  merchantsListSelector?.data?.data?.records?.length
+                }
+                onPageChange={handlePaginationChange}
+                label="Merchants"
+              />
+            </>
           )}
         </div>
 
@@ -264,7 +268,10 @@ const Nudges = () => {
                   nudgesListSelector?.data?.data?.records?.map(
                     (item, index) => {
                       return (
-                        <div className="merchantCard" key={index}>
+                        <div
+                          className="merchantCard position-relative flexColumn d-flex"
+                          key={index}
+                        >
                           <div className="position-relative">
                             <img
                               className="w-100 merchantImg"
@@ -291,7 +298,7 @@ const Nudges = () => {
                               </div>
                             </div>
                           </div>
-                          <div className="bottomPadding">
+                          <div className="bottomPadding d-flex flexColumn flex1 gap-20 justify-between">
                             <div>
                               <div className="lightBlack fs-14 mb-20">
                                 {item?.message || "-"}

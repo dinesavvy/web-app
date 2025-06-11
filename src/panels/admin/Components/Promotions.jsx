@@ -164,7 +164,7 @@ const Promotions = () => {
               <>
                 {adminPromotionList?.data?.data?.records?.map((item, index) => {
                   return (
-                    <div className="merchantCard position-relative" key={index}>
+                    <div className="merchantCard position-relative flexColumn d-flex" key={index}>
                       <div className="p-10">
                         {item?.redemptionPercentage > 50 && (
                           <div className="nailedIt active fs-14">
@@ -202,8 +202,9 @@ const Promotions = () => {
                         </div>
                       </div>
                       <div className="divider m-0"></div>
-                      <div className="bottomPadding">
-                        <div className="mb-16">
+                      <div className="bottomPadding d-flex flexColumn flex1 gap-20 justify-between">
+                        <div>
+                          <div className="mb-16">
                           <div className="fs-14 mb-4">Promotion title</div>
                           {/* <div className="fs-14 fw-600">
                             {item?.promotionTitle}{" "}
@@ -247,6 +248,7 @@ const Promotions = () => {
                               {item?.merchant?.quantity}
                             </div>
                           </div>
+                        </div>
                         </div>
                         <div
                           className="btn btnSecondary"

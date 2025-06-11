@@ -214,7 +214,7 @@ const Nudges = () => {
       setIsChecked(true);
     } else {
       navigate("/merchant/create-nudge");
-      localStorage.removeItem("promotionNudgeItem")
+      localStorage.removeItem("promotionNudgeItem");
     }
   };
 
@@ -541,7 +541,7 @@ const Nudges = () => {
                       businessNudgesListSelector?.data?.data?.map((item) => {
                         return (
                           <div
-                            className="merchantCard position-relative"
+                            className="merchantCard position-relative flexColumn d-flex"
                             key={item?.id}
                           >
                             <div>
@@ -578,47 +578,49 @@ const Nudges = () => {
                                 />
                               </div>
                             </div>
-                            <div className="bottomPadding">
-                              <div className="fs-16 fw-700 mb-8">
-                                {item?.title}
-                              </div>
-                              <div className="fs-14 mb-20">
-                                {item?.description}
-                                {/* {item?.description?.length > 120
+                            <div className="bottomPadding d-flex flexColumn flex1 gap-20 justify-between">
+                              <div>
+                                <div className="fs-16 fw-700 mb-8">
+                                  {item?.title}
+                                </div>
+                                <div className="fs-14 mb-20">
+                                  {item?.description}
+                                  {/* {item?.description?.length > 120
     ? `${item.description.slice(0, 120)}...`
     : item?.description} */}
-                              </div>
-                              {/* {item?.acceptedFollowerList?.length > 0 ? ( */}
-                              <>
-                                <div className="d-flex gap-8 align-center mb-20">
-                                  <div className="position-relative d-flex">
-                                    {item?.acceptedFollowerList?.map(
-                                      (itemFollower, index) => (
-                                        <div
-                                          className="imageCollaps"
-                                          key={index}
-                                        >
-                                          <img
-                                            // src={itemFollower?.photoURL}
-                                            src={noImageFound}
-                                            alt={item?.title}
-                                            className="w-100 h-100"
-                                          />
-                                        </div>
-                                      )
-                                    )}
-                                  </div>
-                                  {/* {item?.totalAcceptedFollowerList  && ( */}
-                                  <div className="fs-14 fw-700 gc">
-                                    {item?.totalAcceptedFollowerList} people
-                                    accepted
-                                  </div>
-                                  {/* )}  */}
                                 </div>
-                              </>
-                              {/* ) : (
+                                {/* {item?.acceptedFollowerList?.length > 0 ? ( */}
+                                <>
+                                  <div className="d-flex gap-8 align-center mb-20">
+                                    <div className="position-relative d-flex">
+                                      {item?.acceptedFollowerList?.map(
+                                        (itemFollower, index) => (
+                                          <div
+                                            className="imageCollaps"
+                                            key={index}
+                                          >
+                                            <img
+                                              // src={itemFollower?.photoURL}
+                                              src={noImageFound}
+                                              alt={item?.title}
+                                              className="w-100 h-100"
+                                            />
+                                          </div>
+                                        )
+                                      )}
+                                    </div>
+                                    {/* {item?.totalAcceptedFollowerList  && ( */}
+                                    <div className="fs-14 fw-700 gc">
+                                      {item?.totalAcceptedFollowerList} people
+                                      accepted
+                                    </div>
+                                    {/* )}  */}
+                                  </div>
+                                </>
+                                {/* ) : (
                                 <div className="mb-20 imageCollapsh32"></div>
                               )} */}
+                              </div>
 
                               <div className="d-flex gap-10">
                                 <div
@@ -662,7 +664,7 @@ const Nudges = () => {
                         (item) => {
                           return (
                             <div
-                              className="merchantCard position-relative"
+                              className="merchantCard position-relative flexColumn d-flex"
                               key={item?.id}
                             >
                               <div>
@@ -675,37 +677,39 @@ const Nudges = () => {
                                   />
                                 </div>
                               </div>
-                              <div className="bottomPadding">
-                                <div className="fs-16 fw-700 mb-8">
-                                  {item?.title}
-                                </div>
-                                <div className="fs-14 mb-20">
-                                  {item?.message}
-                                </div>
-                                <div className="d-flex gap-8 align-center mb-20">
-                                  <div className="position-relative d-flex">
-                                    {item?.reversNudgeUserList?.map(
-                                      (itemFollower, index) => (
-                                        <div
-                                          className="imageCollaps"
-                                          key={index}
-                                        >
-                                          <img
-                                            // src={itemFollower?.photoURL}
-                                            src={noImageFound}
-                                            alt={item?.title}
-                                            className="w-100 h-100"
-                                          />
-                                        </div>
-                                      )
+                              <div className="bottomPadding d-flex flexColumn flex1 gap-20 justify-between">
+                                <div>
+                                  <div className="fs-16 fw-700 mb-8">
+                                    {item?.title}
+                                  </div>
+                                  <div className="fs-14 mb-20">
+                                    {item?.message}
+                                  </div>
+                                  <div className="d-flex gap-8 align-center mb-20">
+                                    <div className="position-relative d-flex">
+                                      {item?.reversNudgeUserList?.map(
+                                        (itemFollower, index) => (
+                                          <div
+                                            className="imageCollaps"
+                                            key={index}
+                                          >
+                                            <img
+                                              // src={itemFollower?.photoURL}
+                                              src={noImageFound}
+                                              alt={item?.title}
+                                              className="w-100 h-100"
+                                            />
+                                          </div>
+                                        )
+                                      )}
+                                    </div>
+                                    {item?.reversNudgeUserList?.length > 0 && (
+                                      <div className="fs-14 fw-700 gc">
+                                        {item?.reversNudgeUserList?.length}{" "}
+                                        people accepted
+                                      </div>
                                     )}
                                   </div>
-                                  {item?.reversNudgeUserList?.length > 0 && (
-                                    <div className="fs-14 fw-700 gc">
-                                      {item?.reversNudgeUserList?.length} people
-                                      accepted
-                                    </div>
-                                  )}
                                 </div>
                                 <div className="d-flex gap-10">
                                   <div

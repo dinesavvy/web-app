@@ -1077,6 +1077,9 @@ input[type="checkbox"]:checked+.custom-radio-button {
   width: 100%;
   max-width: 100% !important;
 }
+.videoModal{
+   width: 938px !important;
+}
 .br10{
   border-radius: 10px;
   overflow: hidden;
@@ -2236,9 +2239,7 @@ textarea{
   height: 528px;
   width: 938px;
 }
-.videoModal{
-   width: 938px !important;
-}
+
 .merchantMiles{
   width: 140px;
   height: 40px;
@@ -2281,7 +2282,18 @@ textarea{
   margin: 0 !important;
   border: none !important;
 }
+.ant-select-single{
+  height: 40px;
+}
+.ant-pagination .ant-select-selector{
+  background-color:#F4F4F6 !important ;
+  border: none !important;
+  box-shadow: none !important;
+}
 @media (max-width: 1549.98px) {
+  .ant-select-single{
+    height:32px;
+  }
   .sidebarSavvynudge .minsavvynudgevideo {
     max-height: 140px;
     height: 140px;
@@ -2582,6 +2594,13 @@ textarea{
   }
   .h22 .rangePercentage{
     height: 9px;
+  }
+  .videoModal{
+   width: 700px !important;
+  }
+  .aspect-video {
+    height: 393px;
+    width: 700px;
   }
   .percentageAbsolute{
     line-height: 12px !important;
@@ -2926,7 +2945,13 @@ textarea{
   .twoSpace {
     grid-column: span 1;
   }
-
+  .videoModal{
+   width: 100% !important;
+  }
+  .aspect-video {
+    height: 300px;
+    width: 100%;
+  }
   .grid2 .twoSpace {
     grid-column: span 2;
   }
@@ -2950,6 +2975,7 @@ textarea{
     width: 30px !important;
     border-color: #F4F4F6 !important;
     padding: 0 !important;
+ 
   }
 
   .flexPagination {
@@ -3087,6 +3113,10 @@ textarea{
   }
   .flex575{
     flex-direction: column;
+  }  
+  .aspect-video {
+    height: 250px;
+    width: 100%;
   }
   .changeBrandImage {
     width: calc(100% - 32px);

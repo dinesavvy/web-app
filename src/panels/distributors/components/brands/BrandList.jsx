@@ -10,9 +10,7 @@ import SearchSelect from "../../../admin/Components/SearchSelect";
 import "../../../../assets/css/merchant.css";
 import BrandDetails from "./BrandDetails";
 import noImageFound from "../../../../assets/images/noImageFound.png";
-import {
-  brandListDistributorHandler,
-} from "../../../../redux/action/distributorsAction/brandListDistributor";
+import { brandListDistributorHandler } from "../../../../redux/action/distributorsAction/brandListDistributor";
 import useScrollToTop from "../../../../hooks/useScrollToTop";
 import CommonPagination from "../../../../common/pagination/CommonPagination";
 
@@ -26,8 +24,7 @@ const BrandsListDistributor = () => {
   const dispatch = useDispatch();
 
   // Scroll to top when the component mounts
-  useScrollToTop([pagination?.page,pagination?.limit]);
-
+  useScrollToTop([pagination?.page, pagination?.limit]);
 
   const getBrandListSelector = useSelector(
     (state) => state?.brandListDistributor
@@ -42,7 +39,7 @@ const BrandsListDistributor = () => {
 
   const handleSearchChange = (value) => {
     setSearchString(value);
-    setPagination((prev) => ({ ...prev, page: 1 })); 
+    setPagination((prev) => ({ ...prev, page: 1 }));
   };
 
   const handleSearchAreaChange = (selectedAreas) => {
@@ -66,7 +63,7 @@ const BrandsListDistributor = () => {
     let payload = {
       page: pagination?.page,
       limit: pagination?.limit,
-      searchString:searchString,
+      searchString: searchString,
     };
     dispatch(brandListDistributorHandler(payload));
   }, [pagination, deleteDistributorBrand]);
@@ -78,9 +75,8 @@ const BrandsListDistributor = () => {
 
   return (
     <>
-      {(getBrandListSelector?.isLoading || deleteDistributorBrand?.isLoading) && (
-        <Loader />
-      )}
+      {(getBrandListSelector?.isLoading ||
+        deleteDistributorBrand?.isLoading) && <Loader />}
       <div className="dashboard">
         <div className="tabPadding">
           <div className="d-flex justify-between align-center mb-20">
@@ -103,7 +99,10 @@ const BrandsListDistributor = () => {
                 {getBrandListSelector?.data?.data?.records?.map(
                   (item, index) => {
                     return (
-                      <div className="merchantCard" key={index}>
+                      <div
+                        className="merchantCard position-relative flexColumn d-flex"
+                        key={index}
+                      >
                         <div className="p-20">
                           <div className="text-center promotionImage">
                             <img
@@ -114,26 +113,34 @@ const BrandsListDistributor = () => {
                           </div>
                         </div>
                         <div className="divider m-0"></div>
-                        <div className="bottomPadding">
-                          <div className="fs-16 fw-700 mb-20">
-                            {item?.brandName
-                              ? item?.brandName.charAt(0).toUpperCase() +
-                                item?.brandName.slice(1)
-                              : ""}
-                          </div>
+                        <div className="bottomPadding d-flex flexColumn flex1 gap-20 justify-between">
+                          <div>
+                            <div className="fs-16 fw-700 mb-20">
+                              {item?.brandName
+                                ? item?.brandName.charAt(0).toUpperCase() +
+                                  item?.brandName.slice(1)
+                                : ""}
+                            </div>
 
-                          {/* <div className="fs-16 fw-600 roi green mb-20">
+                            {/* <div className="fs-16 fw-600 roi green mb-20">
                             Performance: 52%
                           </div> */}
-                          <div className={item?.performance > 50
-                              ? "fs-16 fw-600 roi green mb-20"
-                              : "fs-16 fw-600 roi blue mb-20"}>
-                            Performance: {item?.performance}%
+                            <div
+                              className={
+                                item?.performance > 50
+                                  ? "fs-16 fw-600 roi green mb-20"
+                                  : "fs-16 fw-600 roi blue mb-20"
+                              }
+                            >
+                              Performance: {item?.performance}%
+                            </div>
                           </div>
                           <div className="d-flex align-center gap-10">
                             <div
                               className="btn btnSecondary w-100 gap-8"
-                              onClick={() => navigate("/distributors/promotion")}
+                              onClick={() =>
+                                navigate("/distributors/promotion")
+                              }
                             >
                               {/* <img src={editMember} alt="" /> */}
                               Promote

@@ -96,7 +96,7 @@ const Brands = () => {
                 {getBrandListSelector?.data?.data?.records?.map(
                   (item, index) => {
                     return (
-                      <div className="merchantCard" key={index}>
+                      <div className="merchantCard position-relative flexColumn d-flex" key={index}>
                         <div className="p-20">
                           <div className="text-center promotionImage">
                             <img
@@ -107,14 +107,14 @@ const Brands = () => {
                           </div>
                         </div>
                         <div className="divider m-0"></div>
-                        <div className="bottomPadding">
-                          <div className="fs-16 fw-700 mb-20">
+                        <div className="bottomPadding d-flex flexColumn flex1 gap-20 justify-between">
+                          <div>
+                            <div className="fs-16 fw-700 mb-20">
                             {item?.brandName
                               ? item.brandName.charAt(0).toUpperCase() +
                                 item.brandName.slice(1).toLowerCase()
                               : ""}
                           </div>
-
                           <div
                             className={
                               item?.performance > 50
@@ -123,6 +123,7 @@ const Brands = () => {
                             }
                           >
                             Performance: {item?.performance}%
+                          </div>
                           </div>
                           <div className="d-flex align-center gap-10">
                             <div

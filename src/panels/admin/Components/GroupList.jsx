@@ -40,7 +40,7 @@ const GroupList = () => {
           <img src={searchIcon} alt="" className="absoluteImage" />
         </div>
         <div className="merchantGrid">
-          <div className="groupCard">
+          <div className="groupCard  position-relative flexColumn d-flex">
             <div className="groupImage">
               <div>
                 <img src={noImageFound} alt="" />
@@ -52,45 +52,47 @@ const GroupList = () => {
                 <img src={noImageFound} alt="" />
               </div>
             </div>
-            <div className="groupCardBottom">
-              <div className="d-flex justify-between">
-                <div>
-                  <div className="fs-16 fw-600">The Followed Foodies</div>
-                  <div className="fs-14 lightBlack">12 Merchants</div>
-                </div>
-                <div
-                  className="cursor-pointer position-relative h-fit"
-                  ref={dropdownRef}
-                >
-                  <div onClick={() => setIsOpen(!isOpen)}>
-                    <img src={groupCardDropdown} alt="" />
+            <div className="groupCardBottom d-flex flexColumn flex1  justify-between">
+              <div>
+                <div className="d-flex justify-between">
+                  <div>
+                    <div className="fs-16 fw-600">The Followed Foodies</div>
+                    <div className="fs-14 lightBlack">12 Merchants</div>
                   </div>
-                  {isOpen && (
-                    <div className="dropdownMenu fs-16 fw-500">
-                      <div className="dropdownItem ">
-                        <img src={editMerchantIcon} alt="" />
-                        Edit
-                      </div>
-                      <div
-                        className="dropdownItem "
-                        onClick={() => setIsDelete(true)}
-                      >
-                        <img src={deleteMerchantIcon} alt="" />
-                        Delete
-                      </div>
+                  <div
+                    className="cursor-pointer position-relative h-fit"
+                    ref={dropdownRef}
+                  >
+                    <div onClick={() => setIsOpen(!isOpen)}>
+                      <img src={groupCardDropdown} alt="" />
                     </div>
-                  )}
+                    {isOpen && (
+                      <div className="dropdownMenu fs-16 fw-500">
+                        <div className="dropdownItem ">
+                          <img src={editMerchantIcon} alt="" />
+                          Edit
+                        </div>
+                        <div
+                          className="dropdownItem "
+                          onClick={() => setIsDelete(true)}
+                        >
+                          <img src={deleteMerchantIcon} alt="" />
+                          Delete
+                        </div>
+                      </div>
+                    )}
+                  </div>
                 </div>
-              </div>
-              <div className="divider2"></div>
-              <div className="grid2 mb-20">
-                <div>
-                  <div className="fs-14 mb-4">Total Followers</div>
-                  <div className="fs-14 fw-600">256</div>
-                </div>
-                <div>
-                  <div className="fs-14 mb-4">Total Redeemed</div>
-                  <div className="fs-14 fw-600">11%</div>
+                <div className="divider2"></div>
+                <div className="grid2 mb-20">
+                  <div>
+                    <div className="fs-14 mb-4">Total Followers</div>
+                    <div className="fs-14 fw-600">256</div>
+                  </div>
+                  <div>
+                    <div className="fs-14 mb-4">Total Redeemed</div>
+                    <div className="fs-14 fw-600">11%</div>
+                  </div>
                 </div>
               </div>
               <div className="btn w-100">Promote</div>

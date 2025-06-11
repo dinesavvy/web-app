@@ -38,7 +38,7 @@ const Suppliers = () => {
   const dispatch = useDispatch();
 
   // Scroll to top when the component mounts
-  useScrollToTop([pagination?.page,pagination?.limit]);
+  useScrollToTop([pagination?.page, pagination?.limit]);
 
   const handlePaginationChange = (page, pageSize) => {
     setPagination({ page, limit: pageSize });
@@ -115,7 +115,7 @@ const Suppliers = () => {
                     return (
                       <div
                         key={index}
-                        className="merchantCard position-relative"
+                        className="merchantCard position-relative d-flex flexColumn"
                       >
                         <div className="topPadding">
                           <div className="merchantImage">
@@ -132,7 +132,7 @@ const Suppliers = () => {
                           </div>
                         </div>
                         <div className="divider2 m-0"></div>
-                        <div className="bottomPadding">
+                        <div className="bottomPadding d-flex flexColumn flex1 gap-20 justify-between ">
                           <div className="d-flex flexColumn gap-10">
                             <div className="d-flex align-center gap-12 fs-14">
                               <img src={userCard} className="h30" alt="User" />
@@ -170,26 +170,26 @@ const Suppliers = () => {
                               />
                               +{item?.contactPhoneNumber}
                             </div>
-                            <div className="d-flex align-center gap-10">
-                              <div
-                                className="btn btnSecondary w-100 gap-8"
-                                onClick={() => {
-                                  setIsDetailsOpen(true);
-                                  setSelectedSupplier(item);
-                                }}
-                              >
-                                <img src={editMember} alt="" />
-                                Edit
-                              </div>
-                              <div
-                                className="deleteBtn btn"
-                                onClick={() => {
-                                  setModal2Open(true);
-                                  setRemoveSupplier(item);
-                                }}
-                              >
-                                <img src={deleteMember} alt="" />
-                              </div>
+                          </div>
+                          <div className="d-flex align-center gap-10">
+                            <div
+                              className="btn btnSecondary w-100 gap-8"
+                              onClick={() => {
+                                setIsDetailsOpen(true);
+                                setSelectedSupplier(item);
+                              }}
+                            >
+                              <img src={editMember} alt="" />
+                              Edit
+                            </div>
+                            <div
+                              className="deleteBtn btn"
+                              onClick={() => {
+                                setModal2Open(true);
+                                setRemoveSupplier(item);
+                              }}
+                            >
+                              <img src={deleteMember} alt="" />
                             </div>
                           </div>
                         </div>

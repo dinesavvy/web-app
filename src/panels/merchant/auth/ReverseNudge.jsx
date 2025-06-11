@@ -24,7 +24,7 @@ const ReverseNudge = () => {
   const businessNudgeDetailsSelector = useSelector(
     (state) => state?.businessNudgeDetails
   );
-  const reverseNudgeSelector =  useSelector((state)=>state?.reverseNudge)
+  const reverseNudgeSelector = useSelector((state) => state?.reverseNudge);
   const reverseNudgeStatusUpdateSelector = useSelector(
     (state) => state?.reverseNudgeStatusUpdate
   );
@@ -50,8 +50,6 @@ const ReverseNudge = () => {
     };
   }, [isSidebarOpen]);
 
-
-
   useEffect(() => {
     dispatch(
       reverseNudgeListHandler({
@@ -60,7 +58,7 @@ const ReverseNudge = () => {
         locationId: getSelectedBusiness?._id,
       })
     );
-  }, [pagination,reverseNudgeStatusUpdateSelector]);
+  }, [pagination, reverseNudgeStatusUpdateSelector]);
 
   const toggleSidebar = (item) => {
     let payload = {
@@ -105,64 +103,69 @@ const ReverseNudge = () => {
             </div>
           </div>
           <div className="merchantGrid mb-20">
-            {reverseNudgListSelector?.data?.data?.records?.length>0 ? (
-<>
-              {reverseNudgListSelector?.data?.data?.records?.map(
-                (item, index) => {
-                  return (
-                    <div
-                      className="merchantCard position-relative"
-                      key={item?.id}
-                    >
-                      <div>
-                        <div className="text-center nudgeCardImage180">
-                          <img
-                            // src={noImageFound}
-                            src={item?.photoURL}
-                            alt=""
-                            className="h-100 w-100"
-                          />
-                        </div>
-                      </div>
-                      <div className="bottomPadding">
-                        <div className="fs-16 fw-700 mb-8">{item?.title}</div>
-                        <div className="fs-14 mb-20">{item?.message}</div>
-                        <div className="d-flex gap-8 align-center mb-20">
-                          <div className="position-relative d-flex">
-                            {item?.reversNudgeUserList?.map(
-                              (itemFollower, index) => (
-                                <div className="imageCollaps" key={index}>
-                                  <img
-                                    // src={itemFollower?.photoURL}
-                                    src={noImageFound}
-                                    alt={item?.title}
-                                    className="w-100 h-100"
-                                  />
-                                </div>
-                              )
-                            )}
+            {reverseNudgListSelector?.data?.data?.records?.length > 0 ? (
+              <>
+                {reverseNudgListSelector?.data?.data?.records?.map(
+                  (item, index) => {
+                    return (
+                      <div
+                        className="merchantCard position-relative flexColumn d-flex"
+                        key={item?.id}
+                      >
+                        <div>
+                          <div className="text-center nudgeCardImage180">
+                            <img
+                              // src={noImageFound}
+                              src={item?.photoURL}
+                              alt=""
+                              className="h-100 w-100"
+                            />
                           </div>
-                          {item?.reversNudgeUserList?.length > 0 && (
-                            <div className="fs-14 fw-700 gc">
-                              {item?.reversNudgeUserList?.length} people accepted
+                        </div>
+                        <div className="bottomPadding d-flex flexColumn flex1 gap-20 justify-between">
+                          <div>
+                            <div className="fs-16 fw-700 mb-8">
+                              {item?.title}
                             </div>
-                          )}
-                        </div>
-                        <div className="d-flex gap-10">
-                          <div
-                            className="btn btnSecondary w-100"
-                            onClick={() => toggleSidebar(item)}
-                          >
-                            View Details
+                            <div className="fs-14 mb-20">{item?.message}</div>
+                            <div className="d-flex gap-8 align-center mb-20">
+                              <div className="position-relative d-flex">
+                                {item?.reversNudgeUserList?.map(
+                                  (itemFollower, index) => (
+                                    <div className="imageCollaps" key={index}>
+                                      <img
+                                        // src={itemFollower?.photoURL}
+                                        src={noImageFound}
+                                        alt={item?.title}
+                                        className="w-100 h-100"
+                                      />
+                                    </div>
+                                  )
+                                )}
+                              </div>
+                              {item?.reversNudgeUserList?.length > 0 && (
+                                <div className="fs-14 fw-700 gc">
+                                  {item?.reversNudgeUserList?.length} people
+                                  accepted
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                          <div className="d-flex gap-10">
+                            <div
+                              className="btn btnSecondary w-100"
+                              onClick={() => toggleSidebar(item)}
+                            >
+                              View Details
+                            </div>
                           </div>
                         </div>
                       </div>
-                    </div>
-                  );
-                }
-              )}
+                    );
+                  }
+                )}
               </>
-            ):(
+            ) : (
               <div className="noDataFound">No data available</div>
             )}
 

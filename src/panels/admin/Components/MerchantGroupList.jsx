@@ -76,7 +76,7 @@ const MerchantGroupList = () => {
           <img src={searchIcon} alt="" className="absoluteImage" />
         </div>
         <div className="merchantGrid mb-20">
-          <div className="merchantCard position-relative">
+          <div className="merchantCard position-relative d-flex flexColumn ">
             <div className="topPadding">
               <div className="merchantImage">
                 <img src={noImageFound} alt="" />
@@ -92,7 +92,7 @@ const MerchantGroupList = () => {
               </label>
             </div>
             <div className="divider2 m-0"></div>
-            <div className="bottomPadding">
+            <div className=" bottomPadding d-flex flexColumn flex1 gap-20 justify-between">
               <div className="label greenLabel mb-20">Top performing</div>
 
               <div className="grid2 mb-20">

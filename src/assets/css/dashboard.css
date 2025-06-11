@@ -608,6 +608,7 @@ iframe{
       height: 30px !important;
       width: 30px !important;
       border-color: #F4F4F6 !important;
+      min-height: 32px;
   }
   .tab2 .tab-button{
     padding: 6px 10px;

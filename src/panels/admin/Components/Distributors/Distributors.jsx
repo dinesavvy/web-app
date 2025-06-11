@@ -42,7 +42,7 @@ const Distributors = () => {
   const dispatch = useDispatch();
 
   // Scroll to top when the component mounts
-  useScrollToTop([pagination?.page,pagination?.limit]);
+  useScrollToTop([pagination?.page, pagination?.limit]);
 
   const getDistributorListSelector = useSelector(
     (state) => state?.distributorsList
@@ -50,7 +50,7 @@ const Distributors = () => {
 
   const handleSearchChange = (value) => {
     setSearchString(value);
-    setPagination((prev) => ({ ...prev, page: 1 })); 
+    setPagination((prev) => ({ ...prev, page: 1 }));
   };
 
   const handleSearchAreaChange = (selectedAreas) => {
@@ -100,7 +100,10 @@ const Distributors = () => {
             <div className="fs-24 fw-600">Distributors</div>
             <div
               className="btn gap-8 addBtn"
-              onClick={() => {setIsDetailsOpen(true);setDistributorItems(null)}}
+              onClick={() => {
+                setIsDetailsOpen(true);
+                setDistributorItems(null);
+              }}
             >
               Add Distributors
               <img src={addBtn} alt="addBtn" />
@@ -119,7 +122,7 @@ const Distributors = () => {
                   (item, index) => {
                     return (
                       <>
-                        <div className="merchantCard position-relative">
+                        <div className="merchantCard position-relative flexColumn d-flex">
                           <div className="topPadding" key={index}>
                             <div className="merchantImage">
                               <img src={item?.logoUrl || noImageFound} alt="" />
@@ -140,7 +143,7 @@ const Distributors = () => {
                       </label>
                     </div> */}
                           <div className="divider2 m-0"></div>
-                          <div className="bottomPadding">
+                          <div className="bottomPadding  d-flex flexColumn flex1 gap-20 justify-between">
                             <div className="d-flex flexColumn gap-10">
                               <div className="d-flex align-center gap-12 fs-14">
                                 <img src={userCard} alt="" className="h30" />
@@ -163,29 +166,29 @@ const Distributors = () => {
                                 {item?.contactEmail}
                               </div>
                               <div className="d-flex align-center gap-12 fs-14">
-                                <img src={phoneCard} alt="" className="h30" />
-                               +{item?.contactPhoneNumber}
+                                <img src={phoneCard} alt="" className="h30" />+
+                                {item?.contactPhoneNumber}
                               </div>
-                              <div className="d-flex align-center gap-10">
-                                <div
-                                  className="btn btnSecondary w-100 gap-8"
-                                  onClick={() => {
-                                    setIsDetailsOpen(true);
-                                    setDistributorItems(item);
-                                  }}
-                                >
-                                  <img src={editMember} alt="" />
-                                  Edit
-                                </div>
-                                <div
-                                  className="deleteBtn btn"
-                                  onClick={() => {
-                                    setModal2Open(true);
-                                    setRemoveDistributor(item);
-                                  }}
-                                >
-                                  <img src={deleteMember} alt="" />
-                                </div>
+                            </div>
+                            <div className="d-flex align-center gap-10">
+                              <div
+                                className="btn btnSecondary w-100 gap-8"
+                                onClick={() => {
+                                  setIsDetailsOpen(true);
+                                  setDistributorItems(item);
+                                }}
+                              >
+                                <img src={editMember} alt="" />
+                                Edit
+                              </div>
+                              <div
+                                className="deleteBtn btn"
+                                onClick={() => {
+                                  setModal2Open(true);
+                                  setRemoveDistributor(item);
+                                }}
+                              >
+                                <img src={deleteMember} alt="" />
                               </div>
                             </div>
                           </div>
@@ -201,17 +204,29 @@ const Distributors = () => {
           </div>
           <div className="divider2"></div>
           {getDistributorListSelector?.data?.data?.records?.length > 0 && (
-                <CommonPagination
-                  currentPage={pagination?.page}
-                  pageSize={pagination?.limit}
-                  totalCount={getDistributorListSelector?.data?.data?.recordsCount}
-                  currentCount={
-                    getDistributorListSelector?.data?.data?.records?.length
-                  }
-                  onPageChange={handlePaginationChange}
-                  label="Distributors"
-                />
-              )}
+            <div className="d-flex align-center justify-between flexPagination">
+              <div className="fs-16">
+                {(() => {
+                  const start = (pagination.page - 1) * pagination.limit + 1;
+                  const end = Math.min(
+                    start +
+                      getDistributorListSelector?.data?.data?.records?.length -
+                      1,
+                    getDistributorListSelector?.data?.data?.recordsCount
+                  );
+                  return `Showing ${start} to ${end} of ${getDistributorListSelector?.data?.data?.recordsCount} Distributors`;
+                })()}
+              </div>
+              <Pagination
+                current={pagination?.page}
+                pageSize={pagination?.limit}
+                total={getDistributorListSelector?.data?.data?.recordsCount}
+                onChange={handlePaginationChange}
+                pageSizeOptions={["12", "20", "50", "100"]}
+                showSizeChanger={true}
+              />
+            </div>
+          )}
         </div>
       </div>
       {isDetailsOpen && (

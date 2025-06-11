@@ -144,7 +144,7 @@ const MerchantList = () => {
                       return (
                         <>
                           <div
-                            className="merchantCard position-relative"
+                            className="merchantCard position-relative d-flex flexColumn"
                             key={index}
                           >
                             <div className="topPadding">
@@ -168,8 +168,9 @@ const MerchantList = () => {
                               </label>
                             </div> */}
                             <div className="divider2 m-0"></div>
-                            <div className="bottomPadding">
-                              {parseInt(item?.performance) > 33 ? (
+                            <div className="bottomPadding d-flex flexColumn flex1 gap-20 justify-between">
+                              <div>
+                                {parseInt(item?.performance) > 33 ? (
                                 <div className="label greenLabel mb-20">
                                   Top performing
                                 </div>
@@ -250,6 +251,7 @@ const MerchantList = () => {
                                     }
                                   </div>
                                 </div>
+                              </div>
                               </div>
                               <div className="gridBtn">
                                 <div
